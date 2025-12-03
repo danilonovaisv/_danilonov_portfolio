@@ -4,7 +4,6 @@ Command: npx gltfjsx@6.5.3 public/media/torus_dan.glb --transform
 Files: public/media/torus_dan.glb [2.81MB] > /Users/danilonovais/_danilonov_portfolio/torus_dan-transformed.glb [270.01KB] (90%)
 */
 
-import React from 'react'
 import { useGLTF } from '@react-three/drei'
 
 export function Model(props) {

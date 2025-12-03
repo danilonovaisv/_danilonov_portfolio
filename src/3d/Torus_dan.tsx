@@ -44,8 +44,7 @@ export default function TorusDan(props: any) {
                      distortion={0.5} // Amplitude principal da distorção líquida.
                      distortionScale={0.9} // Frequência das ondas de distorção.
                      temporalDistortion={9.2} // Velocidade da animação automática da superfície.
-                     color={"#D929AA"} // Cor base do material (opcional).
-                     colorA={"#446FF2"} // Cor base do material (opcional).
+                    color={"#D929AA"} // Cor base do material (opcional).
                 />
             </mesh>
         </group>
