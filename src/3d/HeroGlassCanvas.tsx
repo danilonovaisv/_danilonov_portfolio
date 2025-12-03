@@ -9,25 +9,25 @@ const HeroGlassCanvas: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
-        dpr={[1, 2]} // Otimiza pixel ratio para performance
+        dpr={[1, 5]} // Otimiza pixel ratio para performance
         gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }}
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [3, 0, 7], fov: 25 }}
       >
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={45} />
 
           {/* Iluminação para realçar o vidro */}
           <ambientLight intensity={0.8} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} color="#ffffff" />
-          <pointLight position={[-10, -10, -10]} intensity={1} color="#0057FF" /> {/* Um toque de azul no reflexo */}
+          <spotLight position={[10, 10, 40]} angle={9.15} penumbra={1} intensity={2} color="##6F52D9" />
+          <pointLight position={[-10, -50, -10]} intensity={1} color="###D929AA" /> {/* Um toque de azul no reflexo */}
 
           {/* O Modelo Flutuando suavemente */}
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+          <Float speed={2} rotationIntensity={0.5} floatIntensity={9.5}>
             <TorusDan />
           </Float>
 
           {/* Ambiente para reflexos realistas */}
-          <Environment preset="warehouse" background={false} />
+          <Environment preset="sunset" background={false} />
         </Suspense>
       </Canvas>
     </div>

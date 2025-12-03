@@ -14,8 +14,8 @@ export default function TorusDan(props: any) {
     // Rotação suave constante para dar vida ao objeto
     useFrame((state, delta) => {
         if (meshRef.current) {
-            meshRef.current.rotation.x += delta * 0.2;
-            meshRef.current.rotation.y += delta * 0.3;
+            meshRef.current.rotation.x += delta * 0.5;
+            meshRef.current.rotation.y += delta * 1.0;
         }
     });
 
@@ -29,23 +29,23 @@ export default function TorusDan(props: any) {
 
     return (
         <group {...props} dispose={null}>
-            <mesh ref={meshRef} geometry={geometry} scale={viewport.width > 768 ? 3 : 2.2}>
+            <mesh ref={meshRef} geometry={geometry} scale={viewport.width > 440 ? 2:2}>
                 {/* CONFIGURAÇÃO DO VIDRO LÍQUIDO (Igual à HERO.jpg) */}
-                <MeshTransmissionMaterial
-                    backside={true}
-                    samples={16} // Qualidade da refração
-                    resolution={1024} // Resolução do vidro
-                    transmission={1} // Totalmente transparente
-                    roughness={0.0} // Totalmente liso (brilho máximo)
-                    thickness={1.2} // Espessura para distorcer o fundo
-                    ior={1.5} // Índice de refração (Vidro/Acrílico)
-                    chromaticAberration={0.6} // O "arco-íris" nas bordas
-                    anisotropy={0.5} // Ajuda no reflexo esticado
-                    distortion={0.4} // A distorção líquida
-                    distortionScale={0.5}
-                    temporalDistortion={0.1} // Movimento interno suave
-                    color="#ffffff" // Vidro claro
-                    background={new THREE.Color('#F4F5F7')} // Cor de fundo para mesclar
+            <MeshTransmissionMaterial
+                     backside={true} // Crucial para objetos fechados; renderiza a face interna.
+                     samples={16} // Qualidade da refração. Ajustar para performance se necessário.
+                     resolution={900} // Resolução do buffer de transmissão. Ajustar para performance.
+                     transmission={1} // Transparência total (100% de luz passa através do objeto).
+                     roughness={0.0} // Superfície perfeitamente lisa.
+                     thickness={2.5} // Espessura simulada do volume.
+                     ior={0.5} // Índice de Refração (Vidro padrão é 1.5).
+                     chromaticAberration={0.01} // Separação dos canais RGB nas bordas.
+                     anisotropy={0.1} // Alongamento dos reflexos especulares.
+                     distortion={0.5} // Amplitude principal da distorção líquida.
+                     distortionScale={0.9} // Frequência das ondas de distorção.
+                     temporalDistortion={9.2} // Velocidade da animação automática da superfície.
+                     color={"#D929AA"} // Cor base do material (opcional).
+                     colorA={"#446FF2"} // Cor base do material (opcional).
                 />
             </mesh>
         </group>
