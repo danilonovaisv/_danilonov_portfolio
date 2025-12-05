@@ -1,0 +1,102 @@
+@import url(https://fonts.bunny.net/css?family=bayon:400);
+@layer base, demo;
+
+@layer demo {
+	body{
+		font-family: 'Bayon', sans-serif;
+	}
+	.word {
+		--translate-distance: -1lh;
+		--trans-duration: 3000ms;
+		--trans-delay-factor: 20ms;
+		--trans-timimg-function: linear(0, 0.011 0.6%, 0.041 1.2%, 0.173 2.6%, 0.894 7.4%, 1.128 9.3%, 1.271 11.1%, 1.311 12%, 1.333 13%, 1.328 14.4%, 1.286 15.9%, 1.031 21%, 0.95 23%, 0.907 24.7%, 0.888 26.5%, 0.89 27.9%, 0.904 29.4%, 1.034 42.5%, 0.997 49.3%, 0.987 53.3%, 1.004 66.5%, 1);
+		--text-color-hover: rgb(0 132 209);
+		
+		
+		margin: 0;
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		display: flex;
+		overflow: hidden;
+		text-transform: uppercase;
+		
+		& > span{
+			--i: sibling-index();
+			--translate: calc(var(--translate-distance) * 2);
+			--trans-delay: calc(var(--i) * var(--trans-delay-factor));
+			text-shadow: 0 1lh var(--text-color-hover);
+			display: inline-block;
+			transition: translate var(--trans-duration) var(--trans-timimg-function) var(--trans-delay);
+		}
+		&:hover > span {
+			 translate: 0 var(--translate-distance);
+		}
+	}
+
+
+
+
+  
+  /* general styling not relevant for this demo */
+@layer base {
+	* {
+		box-sizing: border-box;
+	}
+	:root {
+		color-scheme: light dark;
+		--bg-dark: rgb(16, 24, 40);
+		--bg-light: rgb(255, 237, 212);
+		--txt-light: rgb(10, 10, 10);
+		--txt-dark: rgb(245, 245, 245););
+		--line-light: rgba(0 0 0 / .25);
+		--line-dark: rgba(255 255 255 / .25);
+    
+    --clr-bg: light-dark(var(--bg-light), var(--bg-dark));
+    --clr-txt: light-dark(var(--txt-light), var(--txt-dark));
+    --clr-lines: light-dark(var(--line-light), var(--line-dark));
+	}
+ 
+	body {
+		background-color: var(--clr-bg);
+		color: var(--clr-txt);
+		min-height: 100svh;
+		margin: 0;
+		padding: 2rem;
+		font-family: system-ui, sans-serif;
+		font-size: 1rem;
+		line-height: 1.5;
+    display: grid;
+    place-items: center;
+    gap: 2rem;
+		& > * {
+			/*outline: 1px dashed red;*/
+		}
+	}
+	h1 {
+		margin: 0;
+		font-size: 1.2rem;
+	}
+  /* screen-reader only */
+  .sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+    border: 0;
+  }
+	.msg-supports {
+		font-size: 0.8rem;
+		/*
+    @supports (animation-timeline: scroll()) {
+			display: none;
+		}
+    @supports (order:sibling-index()) {
+			display: none;
+		}
+    @supports (x: attr(x type(*))) {
+			display: none;
+		}
+    */
+	}
+}
