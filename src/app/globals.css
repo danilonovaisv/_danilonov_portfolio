@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --color-surface-main: #F4F5F7;
+  --color-text-main: #111111;
+  --color-accent-blue: #0057FF;
+
+  --font-sans: "Inter", sans-serif;
+}
+
+/* Custom Utilities if needed */
+.container-custom {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@layer utilities {
+  .bg-primary {
+    background-color: var(--color-accent-blue);
+  }
+
+  .text-primary {
+    color: var(--color-accent-blue);
+  }
+
+  .bg-surface-main {
+    background-color: var(--color-surface-main);
+  }
+
+  .text-text-main {
+    color: var(--color-text-main);
+  }
+}
