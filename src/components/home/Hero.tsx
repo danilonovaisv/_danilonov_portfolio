@@ -1,11 +1,16 @@
 "use client";
 
-import { useRef } from 'react';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import HeroGlassCanvas from '../three/HeroGlassCanvas';
-import { ArrowRight } from 'lucide-react';
-import { ASSETS } from '../../lib/constants';
+import { useRef } from "react";
+import {
+  motion,
+  useMotionValueEvent,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import type { Variants } from "framer-motion";
+import HeroGlassCanvas from "../three/HeroGlassCanvas";
+import { ArrowRight } from "lucide-react";
+import { ASSETS } from "../../lib/constants";
 
 // Componente para animar texto letra por letra (efeito "digitação/reveal")
 type AnimatedTextLineProps = {
@@ -15,7 +20,12 @@ type AnimatedTextLineProps = {
   colorClass?: string;
 };
 
-const AnimatedTextLine = ({ text, className, delay = 0, colorClass = "text-[#111111]" }: AnimatedTextLineProps) => {
+const AnimatedTextLine = ({
+  text,
+  className,
+  delay = 0,
+  colorClass = "text-[#111111]",
+}: AnimatedTextLineProps) => {
   // Separa o texto em caracteres
   const letters = text.split("");
 
@@ -25,8 +35,8 @@ const AnimatedTextLine = ({ text, className, delay = 0, colorClass = "text-[#111
       opacity: 1,
       transition: {
         staggerChildren: 0.03, // Stagger mais rápido para fluxo contínuo
-        delayChildren: delay
-      }
+        delayChildren: delay,
+      },
     },
   };
 
@@ -39,7 +49,7 @@ const AnimatedTextLine = ({ text, className, delay = 0, colorClass = "text-[#111
       y: 0,
       opacity: 1,
       // Curva "Premium": Rápida no início, muito suave no final
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] }
+      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
@@ -71,7 +81,7 @@ const Hero = () => {
   // Controle de Scroll para a animação da timeline
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   // Monitora o progresso do scroll para controlar o áudio do vídeo
@@ -96,8 +106,8 @@ const Hero = () => {
 
   // Video transitions
   const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.25, 1]);
-  const videoX = useTransform(scrollYProgress, [0, 0.25], ['35%', '0%']);
-  const videoY = useTransform(scrollYProgress, [0, 0.25], ['30%', '0%']);
+  const videoX = useTransform(scrollYProgress, [0, 0.25], ["35%", "0%"]);
+  const videoY = useTransform(scrollYProgress, [0, 0.25], ["30%", "0%"]);
   const videoRadius = useTransform(scrollYProgress, [0, 0.2], [12, 0]);
 
   return (
@@ -109,7 +119,6 @@ const Hero = () => {
     >
       {/* Container Sticky */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-
         {/* 1. BACKGROUND AMBIENT 3D LAYER (Absolute behind everything) */}
         <motion.div
           style={{ opacity: glassOrbOpacity, scale: glassOrbScale }}
@@ -136,25 +145,30 @@ const Hero = () => {
           </motion.div>
 
           <div className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl">
-
             {/* Título Principal */}
             <div className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-sans flex flex-col items-start gap-1">
               {/* Mobile: Fade In Simples */}
               <div className="md:hidden flex flex-col leading-[0.9]">
                 <motion.span
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
                   className="text-[#0057FF]"
                 >
                   Design,
                 </motion.span>
                 <motion.span
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
                   className="text-[#111111]"
                 >
                   não é só
                 </motion.span>
                 <motion.span
-                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
                   className="text-[#111111]"
                 >
                   estética.
@@ -163,9 +177,21 @@ const Hero = () => {
 
               {/* Desktop: Animação Letra por Letra */}
               <div className="hidden md:flex flex-col items-start gap-0">
-                <AnimatedTextLine text="Design," delay={0.2} colorClass="text-[#0057FF]" />
-                <AnimatedTextLine text="não é só" delay={0.4} colorClass="text-[#111111]" />
-                <AnimatedTextLine text="estética." delay={0.6} colorClass="text-[#111111]" />
+                <AnimatedTextLine
+                  text="Design,"
+                  delay={0.2}
+                  colorClass="text-[#0057FF]"
+                />
+                <AnimatedTextLine
+                  text="não é só"
+                  delay={0.4}
+                  colorClass="text-[#111111]"
+                />
+                <AnimatedTextLine
+                  text="estética."
+                  delay={0.6}
+                  colorClass="text-[#111111]"
+                />
               </div>
             </div>
 
@@ -191,8 +217,15 @@ const Hero = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.4 }}
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(0, 87, 255, 0.5)" }}
+                transition={{
+                  duration: 0.8,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 1.4,
+                }}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 10px 30px -10px rgba(0, 87, 255, 0.5)",
+                }}
                 whileTap={{ scale: 0.98 }}
                 className="group bg-[#0057FF] text-white rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg shadow-xl shadow-[#0057FF]/20 transition-all"
               >
@@ -227,7 +260,6 @@ const Hero = () => {
             />
           </div>
         </motion.div>
-
       </div>
     </section>
   );
