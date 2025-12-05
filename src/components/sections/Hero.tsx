@@ -134,8 +134,7 @@ const Hero: React.FC = () => {
             {/* Subtítulo */}
             <motion.div
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 1.8 }}
               className="mb-10 md:mb-14 relative"
             >

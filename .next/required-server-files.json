@@ -99,7 +99,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/danilonovais",
+    "outputFileTracingRoot": "/Users/danilonovais/_danilonov_portfolio",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -290,12 +290,12 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.js",
     "turbopack": {
-      "root": "/Users/danilonovais"
+      "root": "/Users/danilonovais/_danilonov_portfolio"
     },
     "distDirRoot": ".next"
   },
   "appDir": "/Users/danilonovais/_danilonov_portfolio",
-  "relativeAppDir": "_danilonov_portfolio",
+  "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",
     ".next/server/pages-manifest.json",
