@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import {
   motion,
-  useScroll,
-  useTransform,
   useMotionValueEvent,
+  useScroll,
   useSpring,
+  useTransform,
 } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { ASSETS } from '../../lib/constants';
@@ -14,41 +15,71 @@ import { ASSETS } from '../../lib/constants';
 type WordVariant = 'default' | 'accent';
 type WordSize = 'lg' | 'sm';
 
-const AnimatedWord: React.FC<{
+type AnimatedWordProps = {
   text: string;
   variant?: WordVariant;
   size?: WordSize;
   delayOffset?: number;
-}> = ({ text, variant = 'default', size = 'lg', delayOffset = 0 }) => {
+};
+
+const AnimatedWord = ({
+  text,
+  variant = 'default',
+  size = 'lg',
+  delayOffset = 0,
+}: AnimatedWordProps) => {
   const letters = text.split('');
+  const letterOccurrences = new Map<string, number>();
 
   return (
     <span
       className={`word ${variant === 'accent' ? 'blue-start' : ''} ${size === 'sm' ? 'small' : ''}`}
-      aria-label={text}
     >
-      {letters.map((letter, index) => (
-        <span
-          key={`${letter}-${index}`}
-          aria-hidden="true"
-          style={{ '--i': index + delayOffset } as React.CSSProperties}
-        >
-          {letter === ' ' ? '\u00A0' : letter}
-        </span>
-      ))}
+      <span className="sr-only">{text}</span>
+      <span className="word-letters" aria-hidden="true">
+        {letters.map((letter, order) => {
+          const occurrence = letterOccurrences.get(letter) ?? 0;
+          letterOccurrences.set(letter, occurrence + 1);
+          return (
+            <span
+              key={`${text}-${letter}-${occurrence}`}
+              style={{ '--i': order + delayOffset } as CSSProperties}
+            >
+              {letter === ' ' ? '\u00A0' : letter}
+            </span>
+          );
+        })}
+      </span>
     </span>
   );
 };
 
-const Hero: React.FC = () => {
+const SUBTITLE_SEQUENCE = (() => {
+  const occurrences = new Map<string, number>();
+  const tokens = ['É', 'intenção,', 'é', 'estratégia,', 'é', 'experiência.'];
+  return tokens.map((token) => {
+    const occurrence = occurrences.get(token) ?? 0;
+    occurrences.set(token, occurrence + 1);
+    return { token, occurrence };
+  });
+})();
+
+const BASE_EASE: [number, number, number, number] = [0.33, 1, 0.68, 1];
+const BASE_DURATION = 0.65;
+
+const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [parallaxEnabled, setParallaxEnabled] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [manualAudioOverride, setManualAudioOverride] = useState<
+    'muted' | 'unmuted' | null
+  >(null);
 
   // Trigger animation on mount/view
   useEffect(() => {
-    // Small delay to ensure render before animating
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
@@ -63,6 +94,40 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('resize', updateDeviceMode);
   }, []);
 
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const applyMuteState = (mute: boolean, resetOverride = false) => {
+    setIsMuted(mute);
+    if (resetOverride) {
+      setManualAudioOverride(null);
+    }
+    if (videoRef.current) {
+      videoRef.current.muted = mute;
+      if (!mute && videoRef.current.paused) {
+        videoRef.current.play().catch(() => null);
+      }
+    }
+  };
+
+  const handleAudioToggle = () => {
+    const nextMuted = !isMuted;
+    setManualAudioOverride(nextMuted ? 'muted' : 'unmuted');
+    applyMuteState(nextMuted);
+  };
+
   // Control Scroll for timeline animation
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -71,12 +136,14 @@ const Hero: React.FC = () => {
 
   // Monitor scroll for video audio
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (videoRef.current) {
-      if (latest > 0.01) {
-        videoRef.current.muted = false;
-      } else {
-        videoRef.current.muted = true;
-      }
+    const portfolioThreshold = 0.92;
+    if (latest <= 0.01 || latest >= portfolioThreshold) {
+      applyMuteState(true, true);
+      return;
+    }
+
+    if (manualAudioOverride === null) {
+      applyMuteState(false);
     }
   });
 
@@ -120,19 +187,22 @@ const Hero: React.FC = () => {
   };
 
   const titleFade = {
-    initial: { opacity: 0, y: 30 },
+    initial: { opacity: 0, y: 32 },
     animate: { opacity: 1, y: 0 },
   };
+
   const subTitleFade = {
-    initial: { opacity: 0, y: 30 },
+    initial: { opacity: 0, y: 32 },
     animate: { opacity: 1, y: 0 },
   };
+
   const ctaFade = {
-    initial: { opacity: 0, y: 30 },
+    initial: { opacity: 0, y: 32 },
     animate: { opacity: 1, y: 0 },
   };
 
   return (
+    /* biome-ignore lint/correctness/useUniqueElementIds: anchor needed for navigation */
     <section
       id="hero"
       ref={sectionRef}
@@ -164,13 +234,14 @@ const Hero: React.FC = () => {
         .sub-text {
           font-family: "Inter", sans-serif;
           font-weight: 500;
-          font-size: clamp(1rem, 2vw, 1.3rem);
-          display: flex;
+          font-size: clamp(1rem, 2vw, 1.35rem);
+          display: inline-flex;
           align-items: center;
           flex-wrap: wrap;
           gap: 0.35rem;
           color: #0057FF;
           margin-top: 0.5rem;
+          align-self: flex-start;
         }
 
         .word {
@@ -197,6 +268,11 @@ const Hero: React.FC = () => {
           --text-hover: #101010;
         }
 
+        .word .word-letters {
+          display: inline-flex;
+          gap: 0;
+        }
+
         .word.small {
           --font-size: inherit;
           line-height: 1.4;
@@ -204,7 +280,7 @@ const Hero: React.FC = () => {
           letter-spacing: normal;
         }
 
-        .word > span {
+        .word-letters > span {
           display: inline-block;
           translate: 0 var(--translate-distance);
           text-shadow: 0 1lh var(--text-hover);
@@ -212,11 +288,11 @@ const Hero: React.FC = () => {
             calc(var(--i) * var(--trans-delay-factor));
         }
 
-        .hero-text-visible .word > span {
+        .hero-text-visible .word-letters > span {
           translate: 0 0;
         }
 
-        .word:hover > span {
+        .word:hover .word-letters > span {
           translate: 0 var(--translate-distance);
         }
 
@@ -230,11 +306,25 @@ const Hero: React.FC = () => {
           margin-left: 2px;
           margin-right: 0;
         }
+
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
       `}</style>
 
       {/* Container Sticky */}
-      <div
+      <motion.div
         className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center"
+        role="presentation"
+        tabIndex={-1}
         onMouseMove={handleParallax}
         onMouseLeave={resetParallax}
       >
@@ -243,70 +333,81 @@ const Hero: React.FC = () => {
           style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
           className={`absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none ${isVisible ? 'hero-text-visible' : ''}`}
         >
-          {/* TAG LATERAL: BRAND AWARENESS */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.0, duration: 0.8 }}
-            className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 hidden md:block"
-          >
-            <span className="text-[#0057FF] font-medium tracking-widest text-lg md:text-xl">
-              [ BRAND AWARENESS ]
-            </span>
-          </motion.div>
-
           <motion.div
             style={{ x: textParallaxX, y: textParallaxY }}
-            className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl gap-8"
+            className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl gap-8 pointer-events-auto"
           >
             {/* Título Principal */}
-            <motion.div
+            <motion.h1
               initial={titleFade.initial}
               animate={isVisible ? titleFade.animate : titleFade.initial}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-              className="main-title"
+              transition={{
+                duration: BASE_DURATION,
+                ease: BASE_EASE,
+                delay: 0.2,
+              }}
+              className="main-title relative w-full"
             >
-              <div className="title-line">
-                <AnimatedWord text="Design," variant="accent" delayOffset={0} />
+              <div className="flex flex-col gap-2">
+                <div className="title-line">
+                  <AnimatedWord
+                    text="Design,"
+                    variant="accent"
+                    delayOffset={0}
+                  />
+                </div>
+                <div className="title-line">
+                  <AnimatedWord text="não" delayOffset={10} />
+                  <AnimatedWord text="é" delayOffset={12} />
+                  <AnimatedWord text="só" delayOffset={13} />
+                </div>
+                <div className="title-line">
+                  <AnimatedWord text="estética." delayOffset={18} />
+                </div>
               </div>
-              <div className="title-line">
-                <AnimatedWord text="não" delayOffset={10} />
-                <AnimatedWord text="é" delayOffset={12} />
-                <AnimatedWord text="só" delayOffset={13} />
-              </div>
-              <div className="title-line">
-                <AnimatedWord text="estética." delayOffset={18} />
-              </div>
-            </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  delay: 0.8,
+                  duration: BASE_DURATION,
+                  ease: BASE_EASE,
+                }}
+                className="hidden md:flex items-center justify-center absolute left-full ml-10 top-[38%]"
+                aria-hidden="true"
+              >
+                <span className="text-[#0057FF] font-semibold tracking-[0.3em] text-sm uppercase whitespace-nowrap">
+                  [ BRAND AWARENESS ]
+                </span>
+              </motion.div>
+            </motion.h1>
 
             {/* Subtítulo */}
             <motion.div
               initial={subTitleFade.initial}
               animate={isVisible ? subTitleFade.animate : subTitleFade.initial}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.35 }}
-              className="relative"
+              transition={{
+                duration: BASE_DURATION,
+                ease: BASE_EASE,
+                delay: 0.35,
+              }}
+              className="relative w-full"
             >
-              <div className="bg-white/80 backdrop-blur-lg rounded-full px-6 py-3 flex flex-wrap items-center gap-2 sub-text">
-                <span className="bracket" aria-hidden="true">
+              <div className="sub-text flex flex-wrap items-center gap-2">
+                <span className="bracket block" aria-hidden="true">
                   [
                 </span>
-                {[
-                  'É',
-                  'intenção,',
-                  'é',
-                  'estratégia,',
-                  'é',
-                  'experiência.',
-                ].map((word, index) => (
+                {SUBTITLE_SEQUENCE.map(({ token, occurrence }, index) => (
                   <AnimatedWord
-                    key={word + index}
-                    text={word}
+                    key={`${token}-${occurrence}`}
+                    text={token}
                     variant="accent"
                     size="sm"
                     delayOffset={index}
                   />
                 ))}
-                <span className="bracket" aria-hidden="true">
+                <span className="bracket block" aria-hidden="true">
                   ]
                 </span>
               </div>
@@ -316,7 +417,11 @@ const Hero: React.FC = () => {
             <motion.div
               initial={ctaFade.initial}
               animate={isVisible ? ctaFade.animate : ctaFade.initial}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.5 }}
+              transition={{
+                duration: BASE_DURATION,
+                ease: BASE_EASE,
+                delay: 0.5,
+              }}
               className="pointer-events-auto"
             >
               <motion.a
@@ -324,9 +429,10 @@ const Hero: React.FC = () => {
                 whileHover={{
                   scale: 1.04,
                   boxShadow: '0 20px 45px -25px rgba(0, 87, 255, 0.7)',
+                  backgroundColor: '#1A69FF',
                 }}
                 whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-10 py-5 text-white text-base md:text-lg font-semibold shadow-lg transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="group inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-10 py-5 text-white text-base md:text-lg font-semibold shadow-lg transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 get to know me better
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/25 group-hover:bg-white/35 transition-colors">
@@ -345,24 +451,47 @@ const Hero: React.FC = () => {
             y: videoY,
             borderRadius: videoRadius,
           }}
-          className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black pointer-events-none"
+          className="absolute z-40 w-full h-full flex items-center justify-center origin-center pointer-events-none"
         >
           <motion.div
             style={{ x: videoParallaxX, y: videoParallaxY }}
-            className="relative w-full h-full block group pointer-events-auto"
+            className="relative w-full h-full pointer-events-auto px-0"
           >
-            <video
-              ref={videoRef}
-              src={ASSETS.videoManifesto}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover transition-opacity duration-500"
-            />
+            <div className="absolute inset-0 bg-black">
+              {shouldLoad ? (
+                <video
+                  ref={videoRef}
+                  src={ASSETS.videoManifesto}
+                  autoPlay
+                  loop
+                  playsInline
+                  muted={isMuted}
+                  preload="none"
+                  className="w-full h-full object-cover transition-opacity duration-500"
+                  aria-label="Vídeo manifesto em destaque"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-[#e0e7ff] to-[#f4f7ff] animate-pulse" />
+              )}
+              <div className="absolute bottom-4 left-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleAudioToggle}
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/85 text-[#0057FF] text-xl shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  aria-pressed={!isMuted}
+                  aria-label={
+                    isMuted
+                      ? 'Ativar áudio do manifesto'
+                      : 'Silenciar áudio do manifesto'
+                  }
+                >
+                  {isMuted ? '🔇' : '🔊'}
+                </button>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

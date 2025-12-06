@@ -8,6 +8,30 @@
   --font-sans: 'Inter', sans-serif;
 }
 
+:focus-visible {
+  outline: 2px solid var(--color-accent-blue);
+  outline-offset: 4px;
+}
+
+a,
+button {
+  transition:
+    color 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--color-accent-blue);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
 /* Custom Utilities if needed */
 .container-custom {
   max-width: 1440px;
