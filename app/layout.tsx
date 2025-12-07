@@ -1,21 +1,24 @@
-import type { ReactNode } from 'react';
-import MainLayout from './_components/layout/MainLayout';
+import React from 'react';
+import type { Metadata, Viewport } from 'next';
+import MainLayout from '../components/layout/MainLayout';
 import './globals.css';
 
-export const metadata = {
-  applicationName: 'Portfólio Danilo Novais',
-  colorScheme: 'light',
-  openGraph: {
-    title: 'Danilo Novais | Portfólio',
-    description:
-      'Design, não é só estética. É intenção, é estratégia, é experiência.',
-    url: 'https://portfoliodanilo.com',
-    siteName: 'Portfólio Danilo Novais',
-    type: 'website',
-  },
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export const metadata: Metadata = {
+  title: 'Danilo Novais | Portfolio',
+  description:
+    'Design, não é só estética. É intenção, é estratégia, é experiência.',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="pt-BR">
       <body>

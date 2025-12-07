@@ -1,11 +1,14 @@
-import Hero from './_components/sections/Hero';
-import PortfolioShowcase from './_components/sections/PortfolioShowcase';
-import FeaturedProjects from './_components/sections/FeaturedProjects';
-import Clients from './_components/sections/Clients';
-import Contact from './_components/sections/Contact';
+import React from 'react';
+import Hero from '../components/sections/Hero';
+import PortfolioShowcase from '../components/home/PortfolioShowcase';
+import FeaturedProjects from '../components/home/FeaturedProjects';
+import Clients from '../components/home/Clients';
+import Contact from '../components/home/Contact';
 
-export const metadata = {
-  title: 'Danilo Novais | Portfólio',
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Danilo Novais | Portfolio',
   description:
     'Design, não é só estética. É intenção, é estratégia, é experiência.',
 };
