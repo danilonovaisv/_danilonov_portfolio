@@ -30,6 +30,7 @@ const PortfolioShowcaseSection: FC = () => {
 
   return (
     <section 
+      id="portfolio"
       aria-labelledby="portfolio-title"
       className="relative w-full bg-[#f5f5f5] py-24 overflow-hidden min-h-screen flex flex-col justify-center"
     >
@@ -70,11 +71,15 @@ const PortfolioShowcaseSection: FC = () => {
                     height: 0,
                     transition: { duration: 0.3 },
                   }}
-                  onClick={() => handleExpand(category.id)}
+                  // Semantic wrapper for each category
+                  role="region"
+                  aria-labelledby={`cat-${category.id}`}
                   className={`
                     relative border-b border-neutral-300 group cursor-pointer w-full
                     ${isExpanded ? 'border-none' : ''}
                   `}
+                  // Click handler on wrapper (acting as the accordion header trigger area)
+                  onClick={() => handleExpand(category.id)}
                   onMouseEnter={() => !isExpanded && setHoveredId(category.id)}
                   onMouseLeave={() => setHoveredId(null)}
                 >
@@ -127,21 +132,21 @@ const PortfolioShowcaseSection: FC = () => {
                         )}
                       </AnimatePresence>
 
-                      {/* Texto da Categoria - Fonte alterada para font-light (suave) */}
+                      {/* Texto da Categoria - H3 SEMÂNTICO */}
                       <div className="flex flex-col items-end text-right">
                         {isWebItem && !isExpanded ? (
-                          // Layout especial para o 3º item quando fechado
                           <motion.h3
                             layout="position"
+                            id={`cat-${category.id}`}
                             className="font-light text-[#111111] transition-all duration-300 tracking-tight leading-[1.0] text-3xl md:text-5xl lg:text-6xl group-hover:text-[#0057FF]"
                           >
                             <span className="block">Web Campaigns,</span>
                             <span className="block">Websites & Tech</span>
                           </motion.h3>
                         ) : (
-                          // Layout padrão
                           <motion.h3
                             layout="position"
+                            id={`cat-${category.id}`}
                             className={`
                               font-light text-[#111111] transition-all duration-300 tracking-tight leading-[1.1] group-hover:text-[#0057FF]
                               ${isExpanded ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl lg:text-6xl'}
@@ -152,13 +157,13 @@ const PortfolioShowcaseSection: FC = () => {
                         )}
                       </div>
 
-                      {/* Ícone Azul (Seta) - Agora à DIREITA do texto */}
+                      {/* Ícone Azul (Seta) */}
                       <motion.div
                         layout="position"
                         className={`
                           flex items-center justify-center rounded-full bg-[#0057FF] text-white shrink-0 transition-all duration-500 shadow-sm
                           ${isExpanded ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8 md:w-12 md:h-12'}
-                          ${isWebItem && !isExpanded ? 'self-end mb-1' : ''} /* Alinha ícone com a última linha no item 3 */
+                          ${isWebItem && !isExpanded ? 'self-end mb-1' : ''}
                         `}
                       >
                         <motion.div
@@ -181,7 +186,7 @@ const PortfolioShowcaseSection: FC = () => {
                         className="w-full mt-4 flex flex-col md:flex-row gap-8 md:gap-16"
                       >
                         {/* Imagem Grande */}
-                        <div className="w-full md:w-1/2 aspect-video rounded-lg overflow-hidden bg-gray-200 shadow-lg">
+                        <div className="w-full md:w-1/2 aspect-video rounded-3xl overflow-hidden bg-gray-200 shadow-lg relative"> {/* Updated rounded-3xl */}
                           <Image
                             src={category.thumbnailUrl}
                             alt={category.label}
