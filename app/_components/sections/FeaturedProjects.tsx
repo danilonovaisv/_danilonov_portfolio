@@ -38,7 +38,7 @@ const FeaturedProjects: React.FC = () => {
                   ease: [0.21, 0.47, 0.32, 0.98],
                   delay: index * 0.1,
                 }}
-                className={`group relative flex flex-col w-full ${isHero ? 'md:col-span-2' : ''}`}
+                className={`group relative flex flex-col w-full ${isHero ? 'md:col-span-2' : ''} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-white focus-visible:ring-[#0057FF]/70`}
               >
                 {/* Container da Imagem */}
                 <div
@@ -108,7 +108,7 @@ const FeaturedProjects: React.FC = () => {
               href="/portfolio"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 text-white shadow-xl hover:shadow-[#0057FF]/40 transition-all duration-300"
+              className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 text-white shadow-xl hover:shadow-[#0057FF]/40 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-offset-white focus-visible:ring-[#0057FF]/70"
             >
               <span className="text-lg font-bold tracking-wide">
                 view projects

@@ -7,7 +7,11 @@ import { ArrowRight } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 bg-[#F4F5F7]">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className="py-24 bg-[#F4F5F7]"
+    >
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <motion.div
@@ -15,7 +19,10 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#0057FF] mb-4 lowercase">
+            <h2
+              id="contact-title"
+              className="text-4xl md:text-5xl font-bold text-[#0057FF] mb-4 lowercase"
+            >
               contato
             </h2>
             <p className="text-xl text-dark mb-12">
@@ -27,7 +34,7 @@ const Contact: React.FC = () => {
                 <a
                   key={idx}
                   href={item.href}
-                  className="flex items-center gap-4 text-dark hover:text-primary transition-colors text-lg font-medium group"
+                  className="flex items-center gap-4 text-dark hover:text-primary transition-colors text-lg font-medium group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]/60"
                 >
                   <span className="p-3 bg-white rounded-full text-primary shadow-sm group-hover:scale-110 transition-transform">
                     {item.icon}
@@ -44,7 +51,7 @@ const Contact: React.FC = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white rounded-full text-dark hover:text-primary hover:scale-110 hover:opacity-80 transition-all shadow-sm duration-300"
+                  className="p-3 bg-white rounded-full text-dark hover:text-primary hover:scale-110 hover:opacity-80 transition-all shadow-sm duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]/60"
                   aria-label={social.platform}
                 >
                   {social.icon}
@@ -79,7 +86,7 @@ const Contact: React.FC = () => {
                   id="name"
                   name="name"
                   required
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   placeholder="João da Silva"
                 />
               </div>
@@ -96,7 +103,7 @@ const Contact: React.FC = () => {
                   id="email"
                   name="email"
                   required
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   placeholder="joao@empresa.com"
                 />
               </div>
@@ -113,7 +120,7 @@ const Contact: React.FC = () => {
                   id="phone"
                   name="phone"
                   required
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -130,14 +137,14 @@ const Contact: React.FC = () => {
                   name="message"
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white resize-none"
                   placeholder="Conte-me sobre seu projeto..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group"
+                className="w-full bg-primary text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]/70 focus-visible:ring-offset-white"
               >
                 Enviar Mensagem
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

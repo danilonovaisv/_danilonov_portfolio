@@ -4,15 +4,15 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CLIENT_LOGOS } from '@/src/lib/constants';
+import type { ClientLogo } from '@/src/lib/types';
 
 type ClientLogoItemProps = {
-  src: string;
-  index: number;
+  logo: ClientLogo;
 };
 
-const ClientLogoItem: React.FC<ClientLogoItemProps> = ({ src, index }) => {
+const ClientLogoItem: React.FC<ClientLogoItemProps> = ({ logo }) => {
   const [hasError, setHasError] = useState(false);
-  const fallbackLabel = `CLIENT ${index + 1}`;
+  const fallbackLabel = logo.name;
 
   if (hasError) {
     return (
@@ -26,7 +26,7 @@ const ClientLogoItem: React.FC<ClientLogoItemProps> = ({ src, index }) => {
 
   return (
     <Image
-      src={src}
+      src={logo.src}
       alt={fallbackLabel}
       width={160}
       height={80}
@@ -40,12 +40,17 @@ const ClientLogoItem: React.FC<ClientLogoItemProps> = ({ src, index }) => {
 
 const Clients: React.FC = () => {
   return (
-    <section id="clients" className="py-20 bg-[#0057FF] text-white">
+    <section
+      id="clients"
+      aria-labelledby="clients-title"
+      className="py-20 bg-[#0057FF] text-white"
+    >
       <div className="container mx-auto px-6 md:px-12 text-center">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          id="clients-title"
           className="text-3xl md:text-4xl font-bold mb-16"
         >
           marcas com as quais já trabalhei.
@@ -54,14 +59,14 @@ const Clients: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12 items-center justify-items-center">
           {CLIENT_LOGOS.map((logo, index) => (
             <motion.div
-              key={index}
+              key={logo.name}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.05 }}
               className="w-full max-w-[140px] opacity-70 hover:opacity-100 transition-opacity duration-300"
             >
-              <ClientLogoItem src={logo} index={index} />
+              <ClientLogoItem logo={logo} />
             </motion.div>
           ))}
         </div>

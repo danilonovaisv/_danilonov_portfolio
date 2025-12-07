@@ -1,2 +1,1 @@
-// Shared UI primitives and atoms can live here when needed.
-export {};
+export { default as PrimaryButton } from './PrimaryButton';

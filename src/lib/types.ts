@@ -27,3 +27,8 @@ export interface SocialLink {
   url: string;
   icon?: React.ReactNode;
 }
+
+export interface ClientLogo {
+  name: string;
+  src: string;
+}
