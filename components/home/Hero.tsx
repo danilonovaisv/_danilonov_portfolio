@@ -10,7 +10,9 @@ import {
   Variants,
 } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Button from '../ui/Button';
+import { BRAND_ASSETS } from '../../config/brand';
 
 const HeroGlassCanvas = dynamic(() => import('../three/HeroGlassCanvas'), {
   ssr: false,
@@ -155,6 +157,22 @@ const Hero = () => {
     >
       {/* Container Sticky */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        {/* Logo no canto superior esquerdo */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="absolute top-6 left-6 md:top-8 md:left-8 lg:top-10 lg:left-12 z-50"
+        >
+          <Image
+            src={BRAND_ASSETS.logo}
+            alt="Danilo Novais Logo"
+            width={120}
+            height={40}
+            priority
+            className="h-8 md:h-10 lg:h-12 w-auto"
+          />
+        </motion.div>
         {/* Main Content Layer */}
         <motion.div
           style={{

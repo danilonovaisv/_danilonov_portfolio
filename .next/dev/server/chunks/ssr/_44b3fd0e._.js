@@ -2109,16 +2109,8 @@ const Clients = ()=>{
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
                     role: "list",
-                    className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-16 items-center justify-items-center",
+                    className: "grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-8 md:gap-x-12 md:gap-y-10 items-center justify-items-center",
                     children: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CLIENT_LOGOS"].map((logo, index)=>{
-                        // Extrair nome da marca da URL se possível ou usar um fallback genérico com índice
-                        // Como as URLs são .../client1.svg, podemos inferir que o alt deve ser descritivo se tivéssemos os nomes.
-                        // O requisito pede: "alt de cada logo = nome da marca".
-                        // Como os dados atuais são apenas strings de URL (vide constants.tsx),
-                        // vou manter uma estratégia de 'Marca Parceira {index + 1}' para ser honesto com os dados que tenho,
-                        // ou tentar um split simples se o nome do arquivo ajudar, mas 'client1' não é muito descritivo.
-                        // Para cumprir "Acessibilidade: alt de cada logo = nome da marca", seria ideal ter um objeto { name, url }.
-                        // Vou ajustar o alt para ser semântico "Logo Cliente {n}" já que não tenho os nomes reais nas constantes.
                         const clientName = `Cliente Parceiro ${index + 1}`;
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].li, {
                             role: "listitem",
@@ -2134,38 +2126,38 @@ const Clients = ()=>{
                                 once: true
                             },
                             transition: {
-                                delay: index * 0.05,
-                                duration: 0.5
+                                delay: index * 0.03,
+                                duration: 0.4
                             },
                             className: "w-full flex justify-center",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "relative w-full h-32 flex items-center justify-center bg-white/10 rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 backdrop-blur-sm group cursor-default",
+                                className: "relative w-20 h-12 md:w-28 md:h-16 flex items-center justify-center group",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "relative w-full h-full opacity-70 group-hover:opacity-100 transition-opacity duration-300",
+                                    className: "relative w-full h-full opacity-60 group-hover:opacity-100 transition-opacity duration-300",
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                         src: logo,
                                         alt: `Logo ${clientName}`,
                                         fill: true,
-                                        sizes: "(max-width: 640px) 40vw, (max-width: 1024px) 25vw, 200px",
+                                        sizes: "(max-width: 640px) 60px, (max-width: 1024px) 80px, 112px",
                                         className: "object-contain brightness-0 invert"
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/Clients.tsx",
-                                        lineNumber: 53,
+                                        lineNumber: 45,
                                         columnNumber: 21
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/components/home/Clients.tsx",
-                                    lineNumber: 52,
+                                    lineNumber: 44,
                                     columnNumber: 19
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/components/home/Clients.tsx",
-                                lineNumber: 51,
+                                lineNumber: 43,
                                 columnNumber: 17
                             }, ("TURBOPACK compile-time value", void 0))
                         }, index, false, {
                             fileName: "[project]/components/home/Clients.tsx",
-                            lineNumber: 42,
+                            lineNumber: 34,
                             columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0));
                     })

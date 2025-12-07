@@ -103,17 +103,17 @@ export const HOMEPAGE_CONTENT: HomepageContent = {
       {
         id: "brand-campaigns",
         label: "Brand & Campaigns",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Magic-1.png"
+        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Magic-1.png",
       },
       {
         id: "videos-motions",
         label: "Videos & Motions",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Epic.png"
+        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Epic.png",
       },
       {
         id: "websites-webcampaigns-tech",
         label: "Websites, Web Campaigns & Tech",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Unilever.png"
+        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Unilever.png",
       },
     ],
     finalCtaLabel: "VEJA MAIS →",
