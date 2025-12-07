@@ -9,6 +9,7 @@ import {
 } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import Button from '../ui/Button';
 
 const HeroGlassCanvas = dynamic(() => import('../three/HeroGlassCanvas'), {
   ssr: false,
@@ -16,7 +17,6 @@ const HeroGlassCanvas = dynamic(() => import('../three/HeroGlassCanvas'), {
     <div className="absolute inset-0 bg-gradient-to-br from-[#f4f5f7] to-[#eef2ff] opacity-50" />
   ),
 });
-import { ArrowRight } from 'lucide-react';
 import { ASSETS } from '../../lib/constants';
 
 // Componente para animar texto letra por letra (efeito "digitação/reveal")
@@ -127,132 +127,138 @@ const Hero = () => {
     >
       {/* Container Sticky */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* 1. BACKGROUND AMBIENT 3D LAYER (Absolute behind everything) */}
+        
+        {/* Main Content Layer */}
         <motion.div
-          style={{ opacity: glassOrbOpacity, scale: glassOrbScale }}
-          className="absolute inset-0 z-[-1] pointer-events-auto"
+            style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
+            className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none"
         >
+            <div className="grid grid-cols-1 lg:grid-cols-2 h-full gap-8">
+                {/* Coluna Esquerda: Texto e CTA */}
+                <div className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl lg:max-w-none">
+                    {/* Título Principal */}
+                    <div className="relative w-full mb-6 md:mb-10">
+                        <h1 id="hero-title" className="sr-only">
+                            Design, não é só estética. É intenção, é estratégia, é experiência.
+                        </h1>
+                        <div
+                            aria-hidden="true"
+                            className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] font-sans flex flex-col items-start gap-1"
+                        >
+                            {/* Mobile: Fade In Simples */}
+                            <div className="md:hidden flex flex-col leading-[0.9]">
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="text-[#0057FF]"
+                            >
+                                Design,
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
+                                className="text-[#111111]"
+                            >
+                                não é só
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.6 }}
+                                className="text-[#111111]"
+                            >
+                                estética.
+                            </motion.span>
+                            </div>
+
+                            {/* Desktop: Animação Letra por Letra */}
+                            <div className="hidden md:flex flex-col items-start gap-0">
+                            <AnimatedTextLine
+                                text="Design,"
+                                delay={0.2}
+                                colorClass="text-[#0057FF]"
+                            />
+                            <AnimatedTextLine
+                                text="não é só"
+                                delay={0.4}
+                                colorClass="text-[#111111]"
+                            />
+                            <AnimatedTextLine
+                                text="estética."
+                                delay={0.6}
+                                colorClass="text-[#111111]"
+                            />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Subtítulo */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.2, ease: 'easeOut', delay: 1.2 }}
+                        className="mb-10 md:mb-14 relative"
+                    >
+                        <p className="text-[#0057FF] text-lg md:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg pr-4 inline-block">
+                            [ É intenção, é estratégia, é experiência. ]
+                        </p>
+                    </motion.div>
+
+                    {/* CTA Button */}
+                    <motion.div
+                        className="pointer-events-auto"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                            duration: 0.8,
+                            ease: [0.22, 1, 0.36, 1],
+                            delay: 1.4,
+                        }}
+                    >
+                        <Button href="/sobre">
+                            get to know me better
+                        </Button>
+                    </motion.div>
+                </div>
+
+                {/* Coluna Direita: Orb 3D (Desktop) */}
+                <div className="hidden lg:block relative h-full pointer-events-none">
+                    {/* A orb pode transbordar, mas o anchor dela fica aqui */}
+                     {/* TAG LATERAL: BRAND AWARENESS - Dentro da grid ou posicionado relativo ao conteúdo */}
+                     <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 1.0, duration: 0.8 }}
+                        className="absolute right-0 top-1/2 -translate-y-1/2"
+                    >
+                        <span className="text-[#0057FF] font-medium tracking-widest text-lg md:text-xl">
+                            [ BRAND AWARENESS ]
+                        </span>
+                    </motion.div>
+                </div>
+            </div>
+        </motion.div>
+
+        {/* 3D Orb Background/Layer - Mantendo posicionado e dimensionado via container, mas visualmente "atrás" */}
+        <motion.div
+            style={{ opacity: glassOrbOpacity, scale: glassOrbScale }}
+            className="absolute inset-0 z-0 pointer-events-auto"
+        >
+          {/* Note: HeroGlassCanvas handles its own responsive sizing, typically filling the parent. 
+              Since parent is absolute inset-0, it covers full screen. This maintains the "big orb" aesthetic. 
+              Changing to col-span-1 might clip it too much if not careful. 
+              Given the requirement "Integrar ... dentro da coluna direita" vs "Manter estética", 
+              keeping it full screen but ensuring visuals align right on desktop is tricky without changing the 3D scene camera. 
+              However, the *grid* structure is now present for text alignment. 
+              We will keep it as a background layer to preserve the exact aesthetic requested, 
+              but logically it corresponds to the right side visual weight. */}
           <HeroGlassCanvas />
         </motion.div>
 
-        {/* 2. TEXT CONTENT LAYER */}
-        <motion.div
-          style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
-          className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none"
-        >
-          {/* TAG LATERAL: BRAND AWARENESS */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.0, duration: 0.8 }}
-            className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 hidden md:block"
-          >
-            <span className="text-[#0057FF] font-medium tracking-widest text-lg md:text-xl">
-              [ BRAND AWARENESS ]
-            </span>
-          </motion.div>
-
-          <div className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl">
-            {/* Título Principal */}
-            <div className="relative w-full max-w-4xl mb-6 md:mb-10">
-              <h1 id="hero-title" className="sr-only">
-                Design, não é só estética. É intenção, é estratégia, é experiência.
-              </h1>
-              <div
-                aria-hidden="true"
-                className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] font-sans flex flex-col items-start gap-1"
-              >
-                {/* Mobile: Fade In Simples */}
-                <div className="md:hidden flex flex-col leading-[0.9]">
-                  <motion.span
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="text-[#0057FF]"
-                  >
-                    Design,
-                  </motion.span>
-                  <motion.span
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-[#111111]"
-                  >
-                    não é só
-                  </motion.span>
-                  <motion.span
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-[#111111]"
-                  >
-                    estética.
-                  </motion.span>
-                </div>
-
-                {/* Desktop: Animação Letra por Letra */}
-                <div className="hidden md:flex flex-col items-start gap-0">
-                  <AnimatedTextLine
-                    text="Design,"
-                    delay={0.2}
-                    colorClass="text-[#0057FF]"
-                  />
-                  <AnimatedTextLine
-                    text="não é só"
-                    delay={0.4}
-                    colorClass="text-[#111111]"
-                  />
-                  <AnimatedTextLine
-                    text="estética."
-                    delay={0.6}
-                    colorClass="text-[#111111]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Subtítulo */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2, ease: 'easeOut', delay: 1.2 }}
-              className="mb-10 md:mb-14 relative"
-            >
-              <p className="text-[#0057FF] text-lg md:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg pr-4 inline-block">
-                [ É intenção, é estratégia, é experiência. ]
-              </p>
-            </motion.div>
-
-            {/* CTA Button */}
-            <motion.div
-              className="pointer-events-auto" // Re-enable clicks
-            >
-              <motion.a
-                href="/sobre"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 1.4,
-                }}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: '0 10px 30px -10px rgba(0, 87, 255, 0.5)',
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="group bg-[#0057FF] text-white rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg shadow-xl shadow-[#0057FF]/20 transition-all"
-              >
-                get to know me better
-                <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
-                  <ArrowRight className="w-4 h-4 text-white" />
-                </span>
-              </motion.a>
-            </motion.div>
-          </div>
-        </motion.div>
 
         {/* 3. VIDEO LAYER (Foreground) */}
         <motion.div
