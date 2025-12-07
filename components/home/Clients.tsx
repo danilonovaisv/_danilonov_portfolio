@@ -48,15 +48,17 @@ const Clients: React.FC = () => {
                 transition={{ delay: index * 0.05, duration: 0.5 }}
                 className="w-full flex justify-center"
               >
-                <div className="relative w-full max-w-[160px] h-16 md:h-20 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                  <Image
-                    src={logo}
-                    alt={`Logo ${clientName}`}
-                    fill
-                    sizes="(max-width: 640px) 40vw, (max-width: 1024px) 25vw, 200px"
-                    className="object-contain brightness-0 invert"
-                    loading="lazy"
-                  />
+                <div className="relative w-full h-32 flex items-center justify-center bg-white/10 rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 backdrop-blur-sm group cursor-default">
+                  <div className="relative w-full h-full opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                    <Image
+                      src={logo}
+                      alt={`Logo ${clientName}`}
+                      fill
+                      sizes="(max-width: 640px) 40vw, (max-width: 1024px) 25vw, 200px"
+                      className="object-contain brightness-0 invert"
+                      // loading="lazy" // Next.js default is lazy
+                    />
+                  </div>
                 </div>
               </motion.li>
             );

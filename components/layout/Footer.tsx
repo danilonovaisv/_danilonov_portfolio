@@ -14,7 +14,12 @@ const Footer: React.FC = () => {
 
         <nav aria-label="Navegação de rodapé">
           <ul className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {NAV_LINKS.map((link) => (
+            {[
+              { label: 'home', href: '/' },
+              { label: 'sobre', href: '/sobre' },
+              { label: 'portfolio showcase', href: '#portfolio' },
+              { label: 'contato', href: '#contato' },
+            ].map((link) => (
               <li key={link.label}>
                 <a
                   href={link.href}

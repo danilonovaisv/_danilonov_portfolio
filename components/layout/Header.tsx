@@ -53,8 +53,8 @@ const Header: React.FC = () => {
       return;
     }
     if (pathname?.startsWith('/portfolio') && pathname !== '/') {
-        // Se estiver em /portfolio/algo, não queremos ativar "portfolio showcase" da home necessariamente,
-        // mas se for a lógica desejada, mantemos. O layout pede "portfolio showcase" como âncora na home.
+      // Se estiver em /portfolio/algo, não queremos ativar "portfolio showcase" da home necessariamente,
+      // mas se for a lógica desejada, mantemos. O layout pede "portfolio showcase" como âncora na home.
       setActiveSection('portfolio showcase');
       return;
     }
@@ -67,7 +67,8 @@ const Header: React.FC = () => {
             if (entry.isIntersecting) {
               if (entry.target.id === 'hero') setActiveSection('home');
               if (entry.target.id === 'contact') setActiveSection('contato');
-              if (entry.target.id === 'portfolio') setActiveSection('portfolio showcase');
+              if (entry.target.id === 'portfolio')
+                setActiveSection('portfolio showcase');
             }
           });
         },
@@ -75,9 +76,9 @@ const Header: React.FC = () => {
       );
 
       const sections = ['hero', 'contact', 'portfolio'];
-      sections.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) observer.observe(el);
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
       });
 
       return () => observer.disconnect();
@@ -142,18 +143,21 @@ const Header: React.FC = () => {
         <nav aria-label="Navegação principal" className="hidden md:block">
           <ul className="flex items-center space-x-2 lg:space-x-4">
             {NAV_ITEMS.map((link) => {
-              const isActive = activeSection === link.label || (link.href === pathname);
-              
+              const isActive =
+                activeSection === link.label || link.href === pathname;
+
               return (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    onClick={(e) => handleLinkClick(e, link.href, link.isAnchor)}
+                    onClick={(e) =>
+                      handleLinkClick(e, link.href, link.isAnchor)
+                    }
                     className={clsx(
-                      "relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]",
-                       isActive
-                          ? 'text-[#0057FF] bg-blue-50/50'
-                          : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'
+                      'relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]',
+                      isActive
+                        ? 'text-[#0057FF] bg-blue-50/50'
+                        : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'
                     )}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -191,7 +195,7 @@ const Header: React.FC = () => {
             <nav className="w-full max-w-sm" aria-label="Navegação mobile">
               <ul className="flex flex-col space-y-6 text-center">
                 {NAV_ITEMS.map((link, i) => {
-                   const isActive = activeSection === link.label;
+                  const isActive = activeSection === link.label;
                   return (
                     <motion.li
                       key={link.label}
@@ -201,7 +205,9 @@ const Header: React.FC = () => {
                     >
                       <Link
                         href={link.href}
-                        onClick={(e) => handleLinkClick(e, link.href, link.isAnchor)}
+                        onClick={(e) =>
+                          handleLinkClick(e, link.href, link.isAnchor)
+                        }
                         className={`
                           text-3xl font-medium transition-colors block lowercase
                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg px-4 py-2

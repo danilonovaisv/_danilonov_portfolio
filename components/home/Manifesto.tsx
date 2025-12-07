@@ -81,7 +81,8 @@ const Manifesto: React.FC = () => {
                     aria-label="Vídeo Manifesto do portfólio"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100/50">
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-300 border-t-[#0057FF]" />
                     <span className="sr-only">Carregando player...</span>
                   </div>
                 )

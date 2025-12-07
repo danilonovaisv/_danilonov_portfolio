@@ -14,7 +14,11 @@ import Button from '../ui/Button';
 
 const HeroGlassCanvas = dynamic(() => import('../three/HeroGlassCanvas'), {
   ssr: false,
-  loading: () => null,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center opacity-50">
+      <div className="w-[60vmin] h-[60vmin] rounded-full bg-gradient-to-br from-[#E0E5EC] to-[#FFFFFF] animate-pulse blur-3xl opacity-60 mix-blend-multiply" />
+    </div>
+  ),
 });
 import { ASSETS } from '../../lib/constants';
 
