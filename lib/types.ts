@@ -15,9 +15,9 @@ export interface Project {
   slug: string;
   title: string;
   category: string; // Used for filtering
-  displayCategory: string; // Used for UI tags
-  client: string;
-  year: string;
+  displayCategory?: string; // Used for UI tags
+  client?: string;
+  year?: string | number;
   imageUrl: string;
   isHero?: boolean;
 }
