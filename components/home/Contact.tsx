@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-white p-8 md:p-12 rounded-[2rem] shadow-xl shadow-black/5 ring-1 ring-black/5"
+            className="bg-white p-8 md:p-12 rounded-4xl shadow-xl shadow-black/5 ring-1 ring-black/5"
           >
             <form
               action="https://formsubmit.co/danilo@portfoliodanilo.com"

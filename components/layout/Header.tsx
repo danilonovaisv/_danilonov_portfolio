@@ -113,12 +113,12 @@ const Header: React.FC = () => {
           backdropFilter,
           boxShadow,
         }}
-        className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100"
+        className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="flex items-center shrink-0 relative z-[1000]">
+        <div className="flex items-center shrink-0 relative z-1000">
           <Link
             href="/"
             className="block relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg p-1"
@@ -169,7 +169,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <div className="md:hidden z-[1000]">
+        <div className="md:hidden z-1000">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="text-[#111111] p-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg"
@@ -190,7 +190,7 @@ const Header: React.FC = () => {
             animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
             exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[900] bg-[#F4F5F7] pt-32 px-6 md:hidden flex flex-col items-center"
+            className="fixed inset-0 z-900 bg-[#F4F5F7] pt-32 px-6 md:hidden flex flex-col items-center"
           >
             <nav className="w-full max-w-sm" aria-label="Navegação mobile">
               <ul className="flex flex-col space-y-6 text-center">

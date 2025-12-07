@@ -48,7 +48,7 @@ const ProjectCard = ({
     >
       <div
         className={`relative overflow-hidden rounded-[2.5rem] bg-gray-200 shadow-md ${
-          isHero ? 'aspect-[2.2/1]' : 'aspect-[4/3]'
+          isHero ? 'aspect-[2.2/1]' : 'aspect-4/3'
         }`}
       >
         <Image
