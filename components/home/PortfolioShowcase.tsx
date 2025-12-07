@@ -29,7 +29,7 @@ const PortfolioShowcaseSection: FC = () => {
   };
 
   return (
-    <section 
+    <section
       id="portfolio"
       aria-labelledby="portfolio-title"
       className="relative w-full bg-[#f5f5f5] py-24 overflow-hidden min-h-screen flex flex-col justify-center"
@@ -39,7 +39,10 @@ const PortfolioShowcaseSection: FC = () => {
         <div className="flex flex-col w-full mb-12">
           {/* Título Principal */}
           <div className="w-full flex justify-center mb-8">
-            <h2 id="portfolio-title" className="text-center text-4xl md:text-6xl font-bold tracking-tight">
+            <h2
+              id="portfolio-title"
+              className="text-center text-4xl md:text-6xl font-bold tracking-tight"
+            >
               <span className="text-[#0057FF]">portfólio</span>{' '}
               <span className="text-[#111111]">showcase</span>
             </h2>
@@ -186,7 +189,9 @@ const PortfolioShowcaseSection: FC = () => {
                         className="w-full mt-4 flex flex-col md:flex-row gap-8 md:gap-16"
                       >
                         {/* Imagem Grande */}
-                        <div className="w-full md:w-1/2 aspect-video rounded-3xl overflow-hidden bg-gray-200 shadow-lg relative"> {/* Updated rounded-3xl */}
+                        <div className="w-full md:w-1/2 aspect-video rounded-3xl overflow-hidden bg-gray-200 shadow-lg relative">
+                          {' '}
+                          {/* Updated rounded-3xl */}
                           <Image
                             src={category.thumbnailUrl}
                             alt={category.label}

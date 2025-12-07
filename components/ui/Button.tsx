@@ -11,16 +11,33 @@ interface ButtonProps extends HTMLMotionProps<'button'> {
   icon?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  ({ className = '', variant = 'primary', href, icon = true, children, ...props }, ref) => {
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(
+  (
+    {
+      className = '',
+      variant = 'primary',
+      href,
+      icon = true,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     // Base styles
-    const baseStyles = "group relative rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0057FF]/30";
-    
+    const baseStyles =
+      'group relative rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0057FF]/30';
+
     // Variants
     const variants = {
-      primary: "bg-[#0057FF] text-white shadow-xl shadow-[#0057FF]/20 hover:shadow-[#0057FF]/40",
-      secondary: "bg-[#111111] text-white shadow-xl shadow-black/20 hover:shadow-black/40",
-      outline: "bg-transparent border-2 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white"
+      primary:
+        'bg-[#0057FF] text-white shadow-xl shadow-[#0057FF]/20 hover:shadow-[#0057FF]/40',
+      secondary:
+        'bg-[#111111] text-white shadow-xl shadow-black/20 hover:shadow-black/40',
+      outline:
+        'bg-transparent border-2 border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white',
     };
 
     const styles = `${baseStyles} ${variants[variant]} ${className}`;
@@ -38,13 +55,17 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
 
     const animationProps = {
       whileHover: { scale: 1.05 },
-      whileTap: { scale: 0.98 }
+      whileTap: { scale: 0.98 },
     };
 
     if (href) {
       return (
         <motion.div {...animationProps} className="inline-block">
-          <Link href={href} className={styles} ref={ref as React.Ref<HTMLAnchorElement>}>
+          <Link
+            href={href}
+            className={styles}
+            ref={ref as React.Ref<HTMLAnchorElement>}
+          >
             {content}
           </Link>
         </motion.div>
@@ -52,9 +73,9 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     }
 
     return (
-      <motion.button 
+      <motion.button
         ref={ref as React.Ref<HTMLButtonElement>}
-        className={styles} 
+        className={styles}
         {...animationProps}
         {...props}
       >

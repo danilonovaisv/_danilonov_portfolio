@@ -377,9 +377,7 @@ const Hero = () => {
           style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
           className={textContainerClasses}
         >
-          <motion.div
-            className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 w-full max-w-5xl gap-8 lg:gap-10 pointer-events-auto px-1 sm:px-4"
-          >
+          <motion.div className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 w-full max-w-5xl gap-8 lg:gap-10 pointer-events-auto px-1 sm:px-4">
             {/* Título Principal */}
             <motion.h1
               initial={titleFade.initial}

@@ -9,7 +9,8 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Danilo Novais | Portfolio',
-  description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+  description:
+    'Design, não é só estética. É intenção, é estratégia, é experiência.',
 };
 
 export default function Home() {

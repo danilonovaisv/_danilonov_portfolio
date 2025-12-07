@@ -64,7 +64,7 @@ const ProjectCard = ({
           }
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-        
+
         {/* Overlay sutil ao hover para dar profundidade */}
         <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />
       </div>

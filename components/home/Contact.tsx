@@ -7,14 +7,13 @@ import { ArrowRight } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section 
-      id="contact" 
-      aria-labelledby="contact-title" 
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
       className="py-24 bg-[#F4F5F7]"
     >
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          
           {/* Informações de Contato */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -23,8 +22,8 @@ const Contact: React.FC = () => {
             className="flex flex-col gap-10"
           >
             <div>
-              <h2 
-                id="contact-title" 
+              <h2
+                id="contact-title"
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0057FF] mb-6 lowercase tracking-tight"
               >
                 contato

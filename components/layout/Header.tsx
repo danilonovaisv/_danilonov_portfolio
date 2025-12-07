@@ -30,7 +30,7 @@ const Header: React.FC = () => {
       setActiveSection('portfolio showcase');
       return;
     }
-    
+
     // 2. Se for Home, observa as seções para "home" e "contato"
     if (pathname === '/') {
       const observer = new IntersectionObserver(
@@ -53,11 +53,14 @@ const Header: React.FC = () => {
 
       return () => observer.disconnect();
     }
-    
+
     setActiveSection('');
   }, [pathname]);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     // Se for link âncora (#) e estivermos na home, scroll suave
     if (href.startsWith('#') && pathname === '/') {
       e.preventDefault();
@@ -110,8 +113,8 @@ const Header: React.FC = () => {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-center shrink-0 relative z-[1000]">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="block relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg p-1"
             onClick={(e) => handleLinkClick(e, '#hero')}
             aria-label="Ir para página inicial"
@@ -143,9 +146,11 @@ const Header: React.FC = () => {
                     className={`
                       relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full
                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]
-                      ${isActive 
-                        ? 'bg-[#111111] text-white shadow-md' 
-                        : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'}
+                      ${
+                        isActive
+                          ? 'bg-[#111111] text-white shadow-md'
+                          : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'
+                      }
                     `}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -161,7 +166,7 @@ const Header: React.FC = () => {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="text-[#111111] p-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg"
-            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
           >

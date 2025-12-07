@@ -7,9 +7,9 @@ import { CLIENT_LOGOS } from '../../lib/constants';
 
 const Clients: React.FC = () => {
   return (
-    <section 
-      id="clients" 
-      aria-labelledby="clients-title" 
+    <section
+      id="clients"
+      aria-labelledby="clients-title"
       className="py-24 bg-[#0057FF] text-white"
     >
       <div className="container mx-auto px-6 md:px-12 text-center max-w-7xl">
@@ -23,15 +23,15 @@ const Clients: React.FC = () => {
           marcas com as quais já trabalhei.
         </motion.h2>
 
-        <ul 
+        <ul
           role="list"
           className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-16 items-center justify-items-center"
         >
           {CLIENT_LOGOS.map((logo, index) => {
             // Extrair nome da marca da URL se possível ou usar um fallback genérico com índice
             // Como as URLs são .../client1.svg, podemos inferir que o alt deve ser descritivo se tivéssemos os nomes.
-            // O requisito pede: "alt de cada logo = nome da marca". 
-            // Como os dados atuais são apenas strings de URL (vide constants.tsx), 
+            // O requisito pede: "alt de cada logo = nome da marca".
+            // Como os dados atuais são apenas strings de URL (vide constants.tsx),
             // vou manter uma estratégia de 'Marca Parceira {index + 1}' para ser honesto com os dados que tenho,
             // ou tentar um split simples se o nome do arquivo ajudar, mas 'client1' não é muito descritivo.
             // Para cumprir "Acessibilidade: alt de cada logo = nome da marca", seria ideal ter um objeto { name, url }.

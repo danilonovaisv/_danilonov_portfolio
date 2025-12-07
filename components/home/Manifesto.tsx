@@ -38,7 +38,6 @@ const Manifesto: React.FC = () => {
     >
       <div className="container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
           {/* Coluna de Texto */}
           <div className="flex flex-col gap-6 order-1">
             <h2
@@ -53,8 +52,8 @@ const Manifesto: React.FC = () => {
             </p>
             {/* Mantendo o aviso sobre mobile, mas simplificado na UI */}
             <p className="text-sm text-[#111111]/60">
-              Em dispositivos móveis o áudio permanece desativado para respeitar o
-              ambiente do usuário.
+              Em dispositivos móveis o áudio permanece desativado para respeitar
+              o ambiente do usuário.
             </p>
           </div>
 
@@ -63,7 +62,7 @@ const Manifesto: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
             className="order-2 w-full"
           >
             <div className="relative w-full overflow-hidden rounded-2xl bg-[#e5e7eb] shadow-xl aspect-video">
@@ -89,7 +88,9 @@ const Manifesto: React.FC = () => {
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
                   <AlertCircle className="mb-3 h-10 w-10 opacity-50" />
-                  <p className="font-medium">Não foi possível carregar o vídeo.</p>
+                  <p className="font-medium">
+                    Não foi possível carregar o vídeo.
+                  </p>
                   <a
                     href={ASSETS.videoManifesto}
                     target="_blank"
@@ -102,7 +103,6 @@ const Manifesto: React.FC = () => {
               )}
             </div>
           </motion.div>
-          
         </div>
       </div>
     </section>
