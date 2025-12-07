@@ -15,6 +15,7 @@
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",
+    "clsx": "^2.1.1",
     "firebase": "^12.6.0",
     "framer-motion": "^12.23.25",
     "intersection-observer": "^0.12.2",

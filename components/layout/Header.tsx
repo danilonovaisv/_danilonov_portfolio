@@ -9,8 +9,16 @@ import {
 } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { NAV_LINKS, ASSETS } from '../../lib/constants';
+import { ASSETS } from '../../lib/constants';
 import { Menu, X } from 'lucide-react';
+import clsx from 'clsx';
+
+const NAV_ITEMS = [
+  { label: 'home', href: '/', isAnchor: false },
+  { label: 'sobre', href: '/sobre', isAnchor: false },
+  { label: 'portfolio showcase', href: '#portfolio', isAnchor: true },
+  { label: 'contato', href: '#contato', isAnchor: true },
+];
 
 const Header: React.FC = () => {
   const { scrollY } = useScroll();
@@ -18,67 +26,6 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
-
-  // Sincroniza o activeSection com a rota atual ou scroll
-  useEffect(() => {
-    // 1. Verifica rotas diretas
-    if (pathname === '/sobre') {
-      setActiveSection('sobre');
-      return;
-    }
-    if (pathname?.startsWith('/portfolio')) {
-      setActiveSection('portfolio showcase');
-      return;
-    }
-
-    // 2. Se for Home, observa as seções para "home" e "contato"
-    if (pathname === '/') {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              if (entry.target.id === 'hero') setActiveSection('home');
-              if (entry.target.id === 'contact') setActiveSection('contato');
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
-
-      const heroSection = document.getElementById('hero');
-      const contactSection = document.getElementById('contact');
-
-      if (heroSection) observer.observe(heroSection);
-      if (contactSection) observer.observe(contactSection);
-
-      return () => observer.disconnect();
-    }
-
-    setActiveSection('');
-  }, [pathname]);
-
-  const handleLinkClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    // Se for link âncora (#) e estivermos na home, scroll suave
-    if (href.startsWith('#') && pathname === '/') {
-      e.preventDefault();
-      const targetId = href.replace('#', '');
-      const element = document.getElementById(targetId);
-      if (element) {
-        // Fecha menu mobile se estiver aberto
-        setIsMobileMenuOpen(false);
-        // Scroll suave
-        element.scrollIntoView({ behavior: 'smooth' });
-        // Atualiza hash na URL sem pular
-        window.history.pushState(null, '', href);
-      }
-    } else {
-      // Comportamento padrão para outras páginas ou links
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   // Animações do Header no Scroll
   const headerHeight = useTransform(scrollY, [0, 50], ['6.875rem', '5rem']);
@@ -98,6 +45,64 @@ const Header: React.FC = () => {
     ['0 0 0 rgba(0,0,0,0)', '0 4px 30px rgba(0, 0, 0, 0.05)']
   );
 
+  // Sincroniza o activeSection com a rota atual ou scroll
+  useEffect(() => {
+    // 1. Verifica rotas diretas
+    if (pathname === '/sobre') {
+      setActiveSection('sobre');
+      return;
+    }
+    if (pathname?.startsWith('/portfolio') && pathname !== '/') {
+        // Se estiver em /portfolio/algo, não queremos ativar "portfolio showcase" da home necessariamente,
+        // mas se for a lógica desejada, mantemos. O layout pede "portfolio showcase" como âncora na home.
+      setActiveSection('portfolio showcase');
+      return;
+    }
+
+    // 2. Se for Home, observa as seções para "home" e "contato"
+    if (pathname === '/') {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              if (entry.target.id === 'hero') setActiveSection('home');
+              if (entry.target.id === 'contact') setActiveSection('contato');
+              if (entry.target.id === 'portfolio') setActiveSection('portfolio showcase');
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      const sections = ['hero', 'contact', 'portfolio'];
+      sections.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) observer.observe(el);
+      });
+
+      return () => observer.disconnect();
+    }
+  }, [pathname]);
+
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    isAnchor: boolean
+  ) => {
+    if (isAnchor && pathname === '/') {
+      e.preventDefault();
+      const targetId = href.replace('#', '');
+      const element = document.getElementById(targetId);
+      if (element) {
+        setIsMobileMenuOpen(false);
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', href);
+      }
+    } else {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <>
       <motion.header
@@ -107,7 +112,7 @@ const Header: React.FC = () => {
           backdropFilter,
           boxShadow,
         }}
-        className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform"
+        className="fixed top-0 left-0 right-0 z-[999] flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -116,7 +121,7 @@ const Header: React.FC = () => {
           <Link
             href="/"
             className="block relative group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg p-1"
-            onClick={(e) => handleLinkClick(e, '#hero')}
+            onClick={(e) => handleLinkClick(e, '#hero', true)}
             aria-label="Ir para página inicial"
           >
             {!logoError ? (
@@ -136,22 +141,20 @@ const Header: React.FC = () => {
 
         <nav aria-label="Navegação principal" className="hidden md:block">
           <ul className="flex items-center space-x-2 lg:space-x-4">
-            {NAV_LINKS.map((link) => {
-              const isActive = activeSection === link.label;
+            {NAV_ITEMS.map((link) => {
+              const isActive = activeSection === link.label || (link.href === pathname);
+              
               return (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    onClick={(e) => handleLinkClick(e, link.href)}
-                    className={`
-                      relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full
-                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]
-                      ${
-                        isActive
-                          ? 'bg-[#111111] text-white shadow-md'
+                    onClick={(e) => handleLinkClick(e, link.href, link.isAnchor)}
+                    className={clsx(
+                      "relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]",
+                       isActive
+                          ? 'text-[#0057FF] bg-blue-50/50'
                           : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'
-                      }
-                    `}
+                    )}
                     aria-current={isActive ? 'page' : undefined}
                   >
                     {link.label}
@@ -187,8 +190,8 @@ const Header: React.FC = () => {
           >
             <nav className="w-full max-w-sm" aria-label="Navegação mobile">
               <ul className="flex flex-col space-y-6 text-center">
-                {NAV_LINKS.map((link, i) => {
-                  const isActive = activeSection === link.label;
+                {NAV_ITEMS.map((link, i) => {
+                   const isActive = activeSection === link.label;
                   return (
                     <motion.li
                       key={link.label}
@@ -198,7 +201,7 @@ const Header: React.FC = () => {
                     >
                       <Link
                         href={link.href}
-                        onClick={(e) => handleLinkClick(e, link.href)}
+                        onClick={(e) => handleLinkClick(e, link.href, link.isAnchor)}
                         className={`
                           text-3xl font-medium transition-colors block lowercase
                           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg px-4 py-2

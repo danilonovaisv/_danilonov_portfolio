@@ -171,7 +171,7 @@ const Hero = () => {
                 </h1>
                 <div
                   aria-hidden="true"
-                  className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] font-sans flex flex-col items-start gap-1"
+                  className="text-[3.5rem] sm:text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] font-sans flex flex-col items-start gap-1"
                 >
                   {/* Mobile: Fade In Simples */}
                   <div className="md:hidden flex flex-col leading-[0.9]">
@@ -278,17 +278,12 @@ const Hero = () => {
             opacity: glassOrbOpacity,
             scale: shouldReduceMotion ? 1 : glassOrbScale,
           }}
-          className="absolute inset-0 z-0 pointer-events-auto"
+          className="absolute inset-0 z-0 pointer-events-auto flex items-center justify-center lg:justify-end"
         >
-          {/* Note: HeroGlassCanvas handles its own responsive sizing, typically filling the parent. 
-              Since parent is absolute inset-0, it covers full screen. This maintains the "big orb" aesthetic. 
-              Changing to col-span-1 might clip it too much if not careful. 
-              Given the requirement "Integrar ... dentro da coluna direita" vs "Manter estética", 
-              keeping it full screen but ensuring visuals align right on desktop is tricky without changing the 3D scene camera. 
-              However, the *grid* structure is now present for text alignment. 
-              We will keep it as a background layer to preserve the exact aesthetic requested, 
-              but logically it corresponds to the right side visual weight. */}
-          <HeroGlassCanvas />
+          {/* Container for the 3D canvas that mostly sits on the right in desktop */}
+          <div className="w-full h-full lg:w-3/5 lg:translate-x-20">
+            <HeroGlassCanvas />
+          </div>
         </motion.div>
 
         {/* 3. VIDEO LAYER (Foreground) */}

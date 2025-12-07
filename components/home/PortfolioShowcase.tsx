@@ -74,15 +74,16 @@ const PortfolioShowcaseSection: FC = () => {
                     height: 0,
                     transition: { duration: 0.3 },
                   }}
-                  // Semantic wrapper for each category
-                  role="region"
-                  aria-labelledby={`cat-${category.id}`}
-                  className={`
-                    relative border-b border-neutral-300 group cursor-pointer w-full
-                    ${isExpanded ? 'border-none' : ''}
-                  `}
-                  // Click handler on wrapper (acting as the accordion header trigger area)
-                  onClick={() => handleExpand(category.id)}
+                  // Semantic wrapper for each category (Accordion Header/Button behavior)
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={isExpanded}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleExpand(category.id);
+                    }
+                  }}
                   onMouseEnter={() => !isExpanded && setHoveredId(category.id)}
                   onMouseLeave={() => setHoveredId(null)}
                 >
