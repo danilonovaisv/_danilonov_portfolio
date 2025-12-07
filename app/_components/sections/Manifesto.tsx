@@ -9,16 +9,19 @@ const Manifesto: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [forceMute, setForceMute] = useState(true);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Mantém o áudio desativado em mobile
   useEffect(() => {
     const updateAudioPreference = () => {
       const isMobile = window.innerWidth < 768;
       setForceMute(isMobile);
       if (isMobile && videoRef.current) {
         videoRef.current.muted = true;
+      }
+      if (isMobile) {
+        setIsAudioEnabled(false);
       }
     };
 
@@ -27,7 +30,6 @@ const Manifesto: React.FC = () => {
     return () => window.removeEventListener('resize', updateAudioPreference);
   }, []);
 
-  // Lazy-load: só inicia carregamento quando a parte superior da seção se aproxima da viewport
   useEffect(() => {
     if (!sectionRef.current) return;
 
@@ -48,7 +50,8 @@ const Manifesto: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Controla áudio quando 100% do vídeo está visível
+  const isAudioAllowed = !forceMute && isAudioEnabled;
+
   useEffect(() => {
     if (!shouldLoad) return;
     const videoEl = videoRef.current;
@@ -56,32 +59,31 @@ const Manifesto: React.FC = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!videoRef.current) return;
+        if (!videoEl) return;
 
-        if (forceMute) {
-          videoRef.current.muted = true;
-          videoRef.current.pause();
+        if (!isAudioAllowed) {
+          videoEl.muted = true;
+          videoEl.pause();
           return;
         }
 
-        if (entry.intersectionRatio >= 0.999) {
-          videoRef.current.muted = false;
-          if (videoRef.current.paused) {
-            videoRef.current.play().catch(() => null);
+        if (entry.intersectionRatio >= 0.9) {
+          videoEl.muted = false;
+          if (videoEl.paused) {
+            videoEl.play().catch(() => null);
           }
         } else {
-          videoRef.current.muted = true;
-          videoRef.current.pause();
+          videoEl.muted = true;
+          videoEl.pause();
         }
       },
-      { threshold: [0, 1] }
+      { threshold: [0, 0.9, 1] }
     );
 
     observer.observe(videoEl);
     return () => observer.disconnect();
-  }, [forceMute, shouldLoad]);
+  }, [isAudioAllowed, shouldLoad]);
 
-  // Ao sair da sessão (mesmo parcialmente), silencia e pausa o vídeo
   useEffect(() => {
     if (!shouldLoad) return;
     const sectionEl = sectionRef.current;
@@ -102,7 +104,6 @@ const Manifesto: React.FC = () => {
     return () => observer.disconnect();
   }, [shouldLoad]);
 
-  // Pausa/muta quando a aba não está visível
   useEffect(() => {
     const handleVisibility = () => {
       if (document.visibilityState === 'hidden' && videoRef.current) {
@@ -120,25 +121,37 @@ const Manifesto: React.FC = () => {
     <section
       id="manifesto"
       ref={sectionRef}
-      aria-labelledby="video-manifesto-title"
-      aria-describedby="video-manifesto-description"
+      aria-labelledby="manifesto-title"
       className="w-full bg-[#F4F5F7] px-6 py-16"
     >
-      <div className="mx-auto flex max-w-5xl flex-col gap-4">
-        <div>
+      <div className="mx-auto flex max-w-5xl flex-col gap-6">
+        <div className="space-y-3">
           <h2
-            id="video-manifesto-title"
+            id="manifesto-title"
             className="text-2xl font-semibold text-[#111111]"
           >
             Vídeo Manifesto
           </h2>
-          <p
-            id="video-manifesto-description"
-            className="text-base text-[#111111]/80"
-          >
+          <p className="text-base text-[#111111]/80">
             Este vídeo apresenta meu manifesto em design. O áudio é ativado
             automaticamente quando visível em tela cheia.
           </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsAudioEnabled((prev) => !prev)}
+              disabled={forceMute}
+              aria-pressed={isAudioAllowed}
+              className="rounded-full border border-[#0057FF] px-5 py-2 text-sm font-semibold text-[#0057FF] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]/70 disabled:border-[#94b5ff]/60 disabled:text-[#94b5ff] disabled:opacity-70"
+            >
+              {isAudioAllowed ? 'Desativar áudio' : 'Ativar áudio'}
+            </button>
+            <span className="text-sm text-[#111111]/70">
+              {forceMute
+                ? 'Áudio desligado em dispositivos móveis.'
+                : 'Use o botão para ativar o áudio no desktop.'}
+            </span>
+          </div>
         </div>
 
         <motion.div
@@ -150,21 +163,20 @@ const Manifesto: React.FC = () => {
         >
           {!hasError ? (
             shouldLoad ? (
-              <video
-                ref={videoRef}
-                src={ASSETS.videoManifesto}
-                className="aspect-video h-full w-full max-w-full object-contain"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="none"
-                controls
-                // @ts-expect-error - atributo experimental ainda sem tipagem
-                loading="lazy"
-                onError={() => setHasError(true)}
-                aria-label="Vídeo Manifesto do portfólio"
-              />
+              <div className="relative">
+                <video
+                  ref={videoRef}
+                  src={ASSETS.videoManifesto}
+                  className="aspect-video h-full w-full max-w-full object-contain"
+                  autoPlay
+                  muted={!isAudioAllowed}
+                  loop
+                  playsInline
+                  preload="none"
+                  controls
+                  aria-label="Vídeo Manifesto do portfólio"
+                />
+              </div>
             ) : (
               <div className="flex aspect-video w-full items-center justify-center bg-gradient-to-br from-[#e4ebff] to-[#f5f8ff] text-sm text-[#5b6b7f]">
                 Preparando manifesto...
@@ -186,12 +198,10 @@ const Manifesto: React.FC = () => {
           )}
         </motion.div>
 
-        {forceMute && (
-          <p className="text-sm text-[#111111]/60">
-            Em dispositivos móveis o áudio permanece desativado para respeitar o
-            ambiente do usuário.
-          </p>
-        )}
+        <p className="text-sm text-[#111111]/60">
+          Em dispositivos móveis o áudio permanece desativado para respeitar o
+          ambiente do usuário.
+        </p>
       </div>
     </section>
   );

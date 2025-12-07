@@ -7,18 +7,15 @@ export const metadata = {
   colorScheme: 'light',
   openGraph: {
     title: 'Danilo Novais | Portfólio',
-    description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+    description:
+      'Design, não é só estética. É intenção, é estratégia, é experiência.',
     url: 'https://portfoliodanilo.com',
     siteName: 'Portfólio Danilo Novais',
     type: 'website',
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
       <body>

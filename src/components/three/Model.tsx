@@ -6,47 +6,58 @@ Source: https://sketchfab.com/3d-models/color-orb-4d5882be5eaa4214aa394ae96563f1
 Title: Color orb
 */
 
-import * as THREE from 'three'
-import React, { useRef, useMemo, useContext, createContext } from 'react'
-import { useGLTF, Merged, useAnimations } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
+import * as THREE from 'three';
+import React, { useRef, useMemo, useContext, createContext } from 'react';
+import { useGLTF, Merged, useAnimations } from '@react-three/drei';
+import { GLTF } from 'three-stdlib';
 
 type GLTFResult = GLTF & {
   nodes: {
-    Object_4: THREE.Mesh
-    Object_6: THREE.Mesh
-  }
+    Object_4: THREE.Mesh;
+    Object_6: THREE.Mesh;
+  };
   materials: {
-    material: THREE.MeshPhysicalMaterial
-    material_0: THREE.MeshPhysicalMaterial
-  }
-}
+    material: THREE.MeshPhysicalMaterial;
+    material_0: THREE.MeshPhysicalMaterial;
+  };
+};
 
-type ActionName = 'Animation'
-type GLTFActions = Record<ActionName, THREE.AnimationAction>
+type ActionName = 'Animation';
+type GLTFActions = Record<ActionName, THREE.AnimationAction>;
 
-const context = createContext<any>(null)
-export function Instances({ children, ...props }: Omit<React.ComponentProps<typeof Merged>, 'children' | 'meshes'> & { children: React.ReactNode }) {
-  const { nodes } = useGLTF('/media/color_orb.glb') as unknown as GLTFResult
+const context = createContext<any>(null);
+export function Instances({
+  children,
+  ...props
+}: Omit<React.ComponentProps<typeof Merged>, 'children' | 'meshes'> & {
+  children: React.ReactNode;
+}) {
+  const { nodes } = useGLTF('/media/color_orb.glb') as unknown as GLTFResult;
   const instances = useMemo(
     () => ({
       Object: nodes.Object_4,
       Object1: nodes.Object_6,
     }),
     [nodes]
-  )
+  );
   return (
     <Merged meshes={instances} {...props}>
-      {((instances: any) => <context.Provider value={instances} children={children} />) as any}
+      {
+        ((instances: any) => (
+          <context.Provider value={instances} children={children} />
+        )) as any
+      }
     </Merged>
-  )
+  );
 }
 
 export function Model(props: React.JSX.IntrinsicElements['group']) {
-  const instances = useContext(context)
-  const { animations } = useGLTF('/media/color_orb.glb') as unknown as GLTFResult
-  const group = useRef<THREE.Group>(null)
-  const { actions } = useAnimations(animations, group)
+  const instances = useContext(context);
+  const { animations } = useGLTF(
+    '/media/color_orb.glb'
+  ) as unknown as GLTFResult;
+  const group = useRef<THREE.Group>(null);
+  const { actions } = useAnimations(animations, group);
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
@@ -64,7 +75,7 @@ export function Model(props: React.JSX.IntrinsicElements['group']) {
         </group>
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/media/color_orb.glb')
+useGLTF.preload('/media/color_orb.glb');

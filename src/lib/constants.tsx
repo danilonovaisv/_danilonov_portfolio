@@ -1,9 +1,4 @@
-import {
-  NavLink,
-  Project,
-  ProjectCategory,
-  ClientLogo,
-} from './types';
+import { NavLink, Project, ProjectCategory, ClientLogo } from './types';
 import {
   Instagram,
   Facebook,

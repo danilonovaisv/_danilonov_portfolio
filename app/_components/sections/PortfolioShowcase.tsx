@@ -120,14 +120,14 @@ const PortfolioShowcaseSection: FC = () => {
                             }}
                             className="hidden md:block h-20 relative overflow-hidden rounded-md shrink-0 origin-right order-first"
                           >
-                          <Image
-                            src={category.thumbnailUrl}
-                            alt={category.label}
-                            fill
-                            sizes="(min-width: 768px) 12rem, 40vw"
-                            loading="lazy"
-                            className="absolute inset-0 object-cover"
-                          />
+                            <Image
+                              src={category.thumbnailUrl}
+                              alt={category.label}
+                              fill
+                              sizes="(min-width: 768px) 12rem, 40vw"
+                              loading="lazy"
+                              className="absolute inset-0 object-cover"
+                            />
                           </motion.div>
                         )}
                       </AnimatePresence>

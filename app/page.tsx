@@ -6,7 +6,8 @@ import Contact from './_components/sections/Contact';
 
 export const metadata = {
   title: 'Danilo Novais | Portfólio',
-  description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+  description:
+    'Design, não é só estética. É intenção, é estratégia, é experiência.',
 };
 
 export default function Home() {

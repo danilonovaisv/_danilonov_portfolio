@@ -119,14 +119,14 @@ const Hero = () => {
   const contentY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
 
   // Animação específica para o Glass Orb (Desaparece mais rápido para limpar o vídeo)
-  const glassOrbOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const glassOrbScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
+  const glassOrbOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.9]);
+  const glassOrbScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   // Video transitions
-  const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.25, 1]);
-  const videoX = useTransform(scrollYProgress, [0, 0.25], ['35%', '0%']);
-  const videoY = useTransform(scrollYProgress, [0, 0.25], ['30%', '0%']);
-  const videoRadius = useTransform(scrollYProgress, [0, 0.2], [12, 0]);
+  const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.92, 1]);
+  const videoX = useTransform(scrollYProgress, [0, 0.25], ['10%', '0%']);
+  const videoY = useTransform(scrollYProgress, [0, 0.25], ['20%', '0%']);
+  const videoRadius = useTransform(scrollYProgress, [0, 0.2], [6, 0]);
   const prefersReducedMotion = useReducedMotion();
   const textStyle = prefersReducedMotion
     ? { opacity: 1, scale: 1, y: 0 }
@@ -168,7 +168,21 @@ const Hero = () => {
         >
           <div className="relative h-full">
             <div className="grid h-full gap-12 md:gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <div className="pointer-events-auto flex flex-col gap-8">
+
+              <motion.div
+                className="pointer-events-auto flex flex-col gap-8"
+                initial={
+                  prefersReducedMotion
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 40 }
+                }
+                animate={{ opacity: 1, y: 0 }}
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
+                }
+              >
                 <span className="text-[#0057FF] font-medium tracking-widest text-base md:text-lg uppercase">
                   [ BRAND AWARENESS ]
                 </span>
@@ -207,14 +221,21 @@ const Hero = () => {
                 </p>
 
                 <div className="pointer-events-auto">
-                  <PrimaryButton href="/sobre" className="group">
+                  <MotionPrimaryButton
+                    href="/sobre"
+                    className="group"
+                    whileHover={
+                      prefersReducedMotion ? undefined : { y: -2, boxShadow: '0 15px 35px rgba(0, 87, 255, 0.3)' }
+                    }
+                    whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                  >
                     <span>get to know me better</span>
                     <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
                       <ArrowRight className="w-4 h-4 text-white" />
                     </span>
-                  </PrimaryButton>
+                  </MotionPrimaryButton>
                 </div>
-              </div>
+              </motion.div>
 
               <motion.div
                 style={videoStyle}
