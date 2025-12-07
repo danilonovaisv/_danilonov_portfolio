@@ -18,11 +18,11 @@ const ProjectCard = ({
   className = '',
 }: ProjectCardProps) => {
   const cardRef = useRef<HTMLAnchorElement>(null);
-  
+
   // Mouse Move Parallax Logic
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   // Smooth spring animation for the parallax
   const mouseX = useSpring(x, { stiffness: 50, damping: 20 });
   const mouseY = useSpring(y, { stiffness: 50, damping: 20 });
@@ -33,7 +33,7 @@ const ProjectCard = ({
     const xPos = e.clientX - rect.left - rect.width / 2;
     const yPos = e.clientY - rect.top - rect.height / 2;
     // Calculate parallax offset (inverted for depth effect)
-    x.set(xPos / 25); 
+    x.set(xPos / 25);
     y.set(yPos / 25);
   };
 
@@ -45,21 +45,24 @@ const ProjectCard = ({
   // Card Variants
   const cardVariants = {
     hidden: { opacity: 0, y: 24, scale: 0.96 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] as any }
+      transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] as any },
     },
-    hover: { 
+    hover: {
       y: -5,
-      transition: { duration: 0.3, ease: 'easeOut' as any }
-    }
+      transition: { duration: 0.3, ease: 'easeOut' as any },
+    },
   };
 
   // Image Variants
   const imageVariants = {
-    hover: { scale: 1.05, transition: { duration: 0.5, ease: 'easeOut' as any } }
+    hover: {
+      scale: 1.05,
+      transition: { duration: 0.5, ease: 'easeOut' as any },
+    },
   };
 
   return (
@@ -77,10 +80,9 @@ const ProjectCard = ({
     >
       {/* Image Container */}
       <div className="relative overflow-hidden rounded-[2.0rem] bg-[#E5E7EB] aspect-4/3 w-full transform-gpu shadow-sm group-hover:shadow-xl group-hover:shadow-blue-500/10 transition-shadow duration-300">
-        
         {/* Parallax Image Wrapper */}
-        <motion.div 
-          style={{ x: mouseX, y: mouseY, scale: 1.05 }} 
+        <motion.div
+          style={{ x: mouseX, y: mouseY, scale: 1.05 }}
           variants={imageVariants}
           className="w-full h-full relative"
         >
@@ -93,7 +95,7 @@ const ProjectCard = ({
             className="object-cover"
           />
         </motion.div>
-        
+
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 pointer-events-none" />
 
@@ -121,9 +123,9 @@ const ProjectCard = ({
 
           {/* Botão Circular com Seta */}
           <div className="shrink-0">
-             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0057FF] text-white transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-blue-500/30">
-               <ArrowRight className="w-5 h-5 group-hover:animate-pulse-horizontal" />
-             </div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0057FF] text-white transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-blue-500/30">
+              <ArrowRight className="w-5 h-5 group-hover:animate-pulse-horizontal" />
+            </div>
           </div>
         </div>
       </div>

@@ -1396,124 +1396,124 @@ __turbopack_context__.s([
 ]);
 const HOMEPAGE_CONTENT = {
     hero: {
-        tag: "[BRAND AWARENESS]",
-        title: "Design, não é só estética.",
-        subtitle: "[É intenção, é estratégia, é experiência.]",
-        ctaLabel: "get to know me better →",
-        ctaTargetId: "about"
+        tag: '[BRAND AWARENESS]',
+        title: 'Design, não é só estética.',
+        subtitle: '[É intenção, é estratégia, é experiência.]',
+        ctaLabel: 'get to know me better →',
+        ctaTargetId: 'about'
     },
     about: {
-        videoUrl: "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+        videoUrl: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4'
     },
     portfolioShowcase: {
-        title: "portfólio showcase",
+        title: 'portfólio showcase',
         categories: [
             {
-                id: "brand-campaigns",
-                label: "Brand & Campaigns",
-                thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Magic-1.png"
+                id: 'brand-campaigns',
+                label: 'Brand & Campaigns',
+                thumbnailUrl: 'https://loandbehold.studio/app/uploads/2025/04/Magic-1.png'
             },
             {
-                id: "videos-motions",
-                label: "Videos & Motions",
-                thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Epic.png"
+                id: 'videos-motions',
+                label: 'Videos & Motions',
+                thumbnailUrl: 'https://loandbehold.studio/app/uploads/2025/04/Epic.png'
             },
             {
-                id: "websites-webcampaigns-tech",
-                label: "Websites, Web Campaigns & Tech",
-                thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Unilever.png"
+                id: 'websites-webcampaigns-tech',
+                label: 'Websites, Web Campaigns & Tech',
+                thumbnailUrl: 'https://loandbehold.studio/app/uploads/2025/04/Unilever.png'
             }
         ],
-        finalCtaLabel: "VEJA MAIS →",
-        finalCtaHref: "/portfolio"
+        finalCtaLabel: 'VEJA MAIS →',
+        finalCtaHref: '/portfolio'
     },
     projectCards: [
         {
-            slug: "magic-radio-branding",
-            title: "Bringing the Magic Back to Radio",
-            category: "branding",
-            client: "Magic",
+            slug: 'magic-radio-branding',
+            title: 'Bringing the Magic Back to Radio',
+            category: 'branding',
+            client: 'Magic',
             year: 2023,
-            imageUrl: "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp"
+            imageUrl: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp'
         },
         {
-            slug: "branding-project-01",
-            title: "Shaping a Bold New Brand",
-            category: "branding",
-            client: "Client Name",
+            slug: 'branding-project-01',
+            title: 'Shaping a Bold New Brand',
+            category: 'branding',
+            client: 'Client Name',
             year: 2022,
-            imageUrl: "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp"
+            imageUrl: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp'
         },
         {
-            slug: "key-visual-campaign",
-            title: "Key Visual for Seasonal Campaign",
-            category: "campaign",
-            client: "Client Name",
+            slug: 'key-visual-campaign',
+            title: 'Key Visual for Seasonal Campaign',
+            category: 'campaign',
+            client: 'Client Name',
             year: 2021,
-            imageUrl: "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp"
+            imageUrl: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp'
         },
         {
-            slug: "webdesigner-motion",
-            title: "Web Experience in Motion",
-            category: "web/motion",
-            client: "Client Name",
+            slug: 'webdesigner-motion',
+            title: 'Web Experience in Motion',
+            category: 'web/motion',
+            client: 'Client Name',
             year: 2023,
-            imageUrl: "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif"
+            imageUrl: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif'
         }
     ],
     clients: {
-        title: "Marcas com quem colaborei",
+        title: 'Marcas com quem colaborei',
         logos: [
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client1.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client2.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client3.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client4.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client5.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client6.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client7.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client8.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client9.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client10.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client11.svg",
-            "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client12.svg"
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client1.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client2.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client3.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client4.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client5.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client6.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client7.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client8.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client9.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client10.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client11.svg',
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client12.svg'
         ]
     },
     contact: {
-        title: "Entre em Contato",
-        subtitle: "Tem uma pergunta ou quer trabalhar junto?",
+        title: 'Entre em Contato',
+        subtitle: 'Tem uma pergunta ou quer trabalhar junto?',
         form: {
-            action: "https://formsubmit.co/danilo@portfoliodanilo.com",
-            buttonLabel: "Enviar Mensagem"
+            action: 'https://formsubmit.co/danilo@portfoliodanilo.com',
+            buttonLabel: 'Enviar Mensagem'
         },
         links: {
-            phone: "tel:+5511983966838",
-            emailPrimary: "mailto:dannovaisv@gmail.com",
-            emailSecondary: "mailto:danilo@portfoliodanilo.com",
-            instagram: "https://instagram.com/danilo_novais",
-            facebook: "https://facebook.com/danilonovaisvilela",
-            linkedin: "https://linkedin.com/in/danilonovais",
-            portfolio: "https://portfoliodanilo.com",
-            twitter: "https://twitter.com/danilo_novais"
+            phone: 'tel:+5511983966838',
+            emailPrimary: 'mailto:dannovaisv@gmail.com',
+            emailSecondary: 'mailto:danilo@portfoliodanilo.com',
+            instagram: 'https://instagram.com/danilo_novais',
+            facebook: 'https://facebook.com/danilonovaisvilela',
+            linkedin: 'https://linkedin.com/in/danilonovais',
+            portfolio: 'https://portfoliodanilo.com',
+            twitter: 'https://twitter.com/danilo_novais'
         }
     },
     footer: {
-        copyright: "© 2025 Danilo Novais Vilela — Todos os direitos reservados.",
+        copyright: '© 2025 Danilo Novais Vilela — Todos os direitos reservados.',
         links: [
             {
-                label: "Home",
-                href: "#hero"
+                label: 'Home',
+                href: '#hero'
             },
             {
-                label: "Sobre",
-                href: "#about"
+                label: 'Sobre',
+                href: '#about'
             },
             {
-                label: "Portfolio",
-                href: "#portfolio-showcase"
+                label: 'Portfolio',
+                href: '#portfolio-showcase'
             },
             {
-                label: "Contact",
-                href: "#contact"
+                label: 'Contact',
+                href: '#contact'
             }
         ]
     }
@@ -1639,19 +1639,19 @@ const ProjectCard = ({ project, index, priority = false, className = '' })=>{
                             className: "object-cover"
                         }, void 0, false, {
                             fileName: "[project]/components/ui/ProjectCard.tsx",
-                            lineNumber: 87,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/components/ui/ProjectCard.tsx",
-                        lineNumber: 82,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 pointer-events-none"
                     }, void 0, false, {
                         fileName: "[project]/components/ui/ProjectCard.tsx",
-                        lineNumber: 98,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1661,18 +1661,18 @@ const ProjectCard = ({ project, index, priority = false, className = '' })=>{
                             children: project.category
                         }, void 0, false, {
                             fileName: "[project]/components/ui/ProjectCard.tsx",
-                            lineNumber: 102,
+                            lineNumber: 104,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/components/ui/ProjectCard.tsx",
-                        lineNumber: 101,
+                        lineNumber: 103,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ui/ProjectCard.tsx",
-                lineNumber: 79,
+                lineNumber: 82,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1687,7 +1687,7 @@ const ProjectCard = ({ project, index, priority = false, className = '' })=>{
                                     children: project.title
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/ProjectCard.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 114,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 project.client && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1695,13 +1695,13 @@ const ProjectCard = ({ project, index, priority = false, className = '' })=>{
                                     children: project.client
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/ProjectCard.tsx",
-                                    lineNumber: 116,
+                                    lineNumber: 118,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/ui/ProjectCard.tsx",
-                            lineNumber: 111,
+                            lineNumber: 113,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1712,34 +1712,34 @@ const ProjectCard = ({ project, index, priority = false, className = '' })=>{
                                     className: "w-5 h-5 group-hover:animate-pulse-horizontal"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ui/ProjectCard.tsx",
-                                    lineNumber: 125,
-                                    columnNumber: 16
+                                    lineNumber: 127,
+                                    columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/components/ui/ProjectCard.tsx",
-                                lineNumber: 124,
-                                columnNumber: 14
+                                lineNumber: 126,
+                                columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/components/ui/ProjectCard.tsx",
-                            lineNumber: 123,
+                            lineNumber: 125,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/ui/ProjectCard.tsx",
-                    lineNumber: 110,
+                    lineNumber: 112,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/components/ui/ProjectCard.tsx",
-                lineNumber: 109,
+                lineNumber: 111,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/components/ui/ProjectCard.tsx",
-        lineNumber: 66,
+        lineNumber: 69,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -1831,7 +1831,7 @@ const FeaturedProjects = ()=>{
                     whileInView: "visible",
                     viewport: {
                         once: true,
-                        margin: "-10%"
+                        margin: '-10%'
                     },
                     variants: {
                         hidden: {
@@ -1869,12 +1869,12 @@ const FeaturedProjects = ()=>{
                                         className: "md:aspect-4/3 aspect-[4/3.5]"
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                        lineNumber: 59,
+                                        lineNumber: 64,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                    lineNumber: 58,
+                                    lineNumber: 57,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 projects[1] && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1895,18 +1895,18 @@ const FeaturedProjects = ()=>{
                                         className: "md:aspect-[3.5/4] aspect-4/3"
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                        lineNumber: 64,
-                                        columnNumber: 18
+                                        lineNumber: 79,
+                                        columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                    lineNumber: 63,
+                                    lineNumber: 72,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/home/FeaturedProjects.tsx",
-                            lineNumber: 56,
+                            lineNumber: 55,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1927,12 +1927,12 @@ const FeaturedProjects = ()=>{
                                 className: "aspect-video md:aspect-[2.4/1]"
                             }, void 0, false, {
                                 fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                lineNumber: 72,
+                                lineNumber: 97,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/components/home/FeaturedProjects.tsx",
-                            lineNumber: 70,
+                            lineNumber: 89,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1955,12 +1955,12 @@ const FeaturedProjects = ()=>{
                                         index: 3
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 115,
                                         columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                    lineNumber: 79,
+                                    lineNumber: 108,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0)),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -1982,14 +1982,14 @@ const FeaturedProjects = ()=>{
                                                 "Like what",
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                                    lineNumber: 91,
+                                                    lineNumber: 129,
                                                     columnNumber: 17
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 "you see?"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                            lineNumber: 89,
+                                            lineNumber: 127,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].a, {
@@ -2008,7 +2008,7 @@ const FeaturedProjects = ()=>{
                                                     children: "view projects"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                                    lineNumber: 101,
+                                                    lineNumber: 139,
                                                     columnNumber: 17
                                                 }, ("TURBOPACK compile-time value", void 0)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2017,30 +2017,30 @@ const FeaturedProjects = ()=>{
                                                         className: "w-4 h-4 text-white group-hover:animate-pulse-horizontal"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                                        lineNumber: 105,
+                                                        lineNumber: 143,
                                                         columnNumber: 19
                                                     }, ("TURBOPACK compile-time value", void 0))
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                                    lineNumber: 104,
+                                                    lineNumber: 142,
                                                     columnNumber: 17
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                            lineNumber: 95,
+                                            lineNumber: 133,
                                             columnNumber: 15
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/home/FeaturedProjects.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 120,
                                     columnNumber: 13
                                 }, ("TURBOPACK compile-time value", void 0))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/home/FeaturedProjects.tsx",
-                            lineNumber: 77,
+                            lineNumber: 106,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]

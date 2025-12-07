@@ -1,4 +1,4 @@
-export type MainRouteId = "home" | "sobre" | "portfolio" | "contato";
+export type MainRouteId = 'home' | 'sobre' | 'portfolio' | 'contato';
 
 export interface RouteConfig {
   id: MainRouteId;
@@ -9,27 +9,27 @@ export interface RouteConfig {
 
 export const MAIN_ROUTES: RouteConfig[] = [
   {
-    id: "home",
-    path: "/",
-    label: "home",
-    anchor: "#hero",
+    id: 'home',
+    path: '/',
+    label: 'home',
+    anchor: '#hero',
   },
   {
-    id: "sobre",
-    path: "/sobre",
-    label: "sobre",
-    anchor: "#about",
+    id: 'sobre',
+    path: '/sobre',
+    label: 'sobre',
+    anchor: '#about',
   },
   {
-    id: "portfolio",
-    path: "/portfolio",
-    label: "portfólio showcase",
-    anchor: "#portfolio-showcase",
+    id: 'portfolio',
+    path: '/portfolio',
+    label: 'portfólio showcase',
+    anchor: '#portfolio-showcase',
   },
   {
-    id: "contato",
-    path: "/",
-    label: "contato",
-    anchor: "#contact",
+    id: 'contato',
+    path: '/',
+    label: 'contato',
+    anchor: '#contact',
   },
 ];

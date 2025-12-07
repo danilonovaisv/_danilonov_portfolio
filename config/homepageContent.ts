@@ -11,9 +11,9 @@ export interface AboutContent {
 }
 
 export type PortfolioCategoryId =
-  | "brand-campaigns"
-  | "videos-motions"
-  | "websites-webcampaigns-tech";
+  | 'brand-campaigns'
+  | 'videos-motions'
+  | 'websites-webcampaigns-tech';
 
 export interface PortfolioCategory {
   id: PortfolioCategoryId;
@@ -85,124 +85,126 @@ export interface HomepageContent {
 
 export const HOMEPAGE_CONTENT: HomepageContent = {
   hero: {
-    tag: "[BRAND AWARENESS]",
-    title: "Design, não é só estética.",
-    subtitle: "[É intenção, é estratégia, é experiência.]",
-    ctaLabel: "get to know me better →",
-    ctaTargetId: "about",
+    tag: '[BRAND AWARENESS]',
+    title: 'Design, não é só estética.',
+    subtitle: '[É intenção, é estratégia, é experiência.]',
+    ctaLabel: 'get to know me better →',
+    ctaTargetId: 'about',
   },
 
   about: {
     videoUrl:
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4",
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   },
 
   portfolioShowcase: {
-    title: "portfólio showcase",
+    title: 'portfólio showcase',
     categories: [
       {
-        id: "brand-campaigns",
-        label: "Brand & Campaigns",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Magic-1.png",
+        id: 'brand-campaigns',
+        label: 'Brand & Campaigns',
+        thumbnailUrl:
+          'https://loandbehold.studio/app/uploads/2025/04/Magic-1.png',
       },
       {
-        id: "videos-motions",
-        label: "Videos & Motions",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Epic.png",
+        id: 'videos-motions',
+        label: 'Videos & Motions',
+        thumbnailUrl: 'https://loandbehold.studio/app/uploads/2025/04/Epic.png',
       },
       {
-        id: "websites-webcampaigns-tech",
-        label: "Websites, Web Campaigns & Tech",
-        thumbnailUrl: "https://loandbehold.studio/app/uploads/2025/04/Unilever.png",
+        id: 'websites-webcampaigns-tech',
+        label: 'Websites, Web Campaigns & Tech',
+        thumbnailUrl:
+          'https://loandbehold.studio/app/uploads/2025/04/Unilever.png',
       },
     ],
-    finalCtaLabel: "VEJA MAIS →",
-    finalCtaHref: "/portfolio",
+    finalCtaLabel: 'VEJA MAIS →',
+    finalCtaHref: '/portfolio',
   },
 
   projectCards: [
     {
-      slug: "magic-radio-branding",
-      title: "Bringing the Magic Back to Radio",
-      category: "branding",
-      client: "Magic",
+      slug: 'magic-radio-branding',
+      title: 'Bringing the Magic Back to Radio',
+      category: 'branding',
+      client: 'Magic',
       year: 2023,
       imageUrl:
-        "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp",
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
     },
     {
-      slug: "branding-project-01",
-      title: "Shaping a Bold New Brand",
-      category: "branding",
-      client: "Client Name",
+      slug: 'branding-project-01',
+      title: 'Shaping a Bold New Brand',
+      category: 'branding',
+      client: 'Client Name',
       year: 2022,
       imageUrl:
-        "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp",
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
     },
     {
-      slug: "key-visual-campaign",
-      title: "Key Visual for Seasonal Campaign",
-      category: "campaign",
-      client: "Client Name",
+      slug: 'key-visual-campaign',
+      title: 'Key Visual for Seasonal Campaign',
+      category: 'campaign',
+      client: 'Client Name',
       year: 2021,
       imageUrl:
-        "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp",
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
     },
     {
-      slug: "webdesigner-motion",
-      title: "Web Experience in Motion",
-      category: "web/motion",
-      client: "Client Name",
+      slug: 'webdesigner-motion',
+      title: 'Web Experience in Motion',
+      category: 'web/motion',
+      client: 'Client Name',
       year: 2023,
       imageUrl:
-        "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif",
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
     },
   ],
 
   clients: {
-    title: "Marcas com quem colaborei",
+    title: 'Marcas com quem colaborei',
     logos: [
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client1.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client2.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client3.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client4.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client5.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client6.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client7.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client8.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client9.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client10.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client11.svg",
-      "https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client12.svg",
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client1.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client2.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client3.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client4.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client5.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client6.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client7.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client8.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client9.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client10.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client11.svg',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client12.svg',
     ],
   },
 
   contact: {
-    title: "Entre em Contato",
-    subtitle: "Tem uma pergunta ou quer trabalhar junto?",
+    title: 'Entre em Contato',
+    subtitle: 'Tem uma pergunta ou quer trabalhar junto?',
     form: {
-      action: "https://formsubmit.co/danilo@portfoliodanilo.com",
-      buttonLabel: "Enviar Mensagem",
+      action: 'https://formsubmit.co/danilo@portfoliodanilo.com',
+      buttonLabel: 'Enviar Mensagem',
     },
     links: {
-      phone: "tel:+5511983966838",
-      emailPrimary: "mailto:dannovaisv@gmail.com",
-      emailSecondary: "mailto:danilo@portfoliodanilo.com",
-      instagram: "https://instagram.com/danilo_novais",
-      facebook: "https://facebook.com/danilonovaisvilela",
-      linkedin: "https://linkedin.com/in/danilonovais",
-      portfolio: "https://portfoliodanilo.com",
-      twitter: "https://twitter.com/danilo_novais",
+      phone: 'tel:+5511983966838',
+      emailPrimary: 'mailto:dannovaisv@gmail.com',
+      emailSecondary: 'mailto:danilo@portfoliodanilo.com',
+      instagram: 'https://instagram.com/danilo_novais',
+      facebook: 'https://facebook.com/danilonovaisvilela',
+      linkedin: 'https://linkedin.com/in/danilonovais',
+      portfolio: 'https://portfoliodanilo.com',
+      twitter: 'https://twitter.com/danilo_novais',
     },
   },
 
   footer: {
-    copyright: "© 2025 Danilo Novais Vilela — Todos os direitos reservados.",
+    copyright: '© 2025 Danilo Novais Vilela — Todos os direitos reservados.',
     links: [
-      { label: "Home", href: "#hero" },
-      { label: "Sobre", href: "#about" },
-      { label: "Portfolio", href: "#portfolio-showcase" },
-      { label: "Contact", href: "#contact" },
+      { label: 'Home', href: '#hero' },
+      { label: 'Sobre', href: '#about' },
+      { label: 'Portfolio', href: '#portfolio-showcase' },
+      { label: 'Contact', href: '#contact' },
     ],
   },
 };
