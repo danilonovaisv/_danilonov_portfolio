@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "source": ".",
+    "source": ".next",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "frameworksBackend": {
       "region": "us-east1"
@@ -15,7 +15,7 @@
   },
   "apphosting": {
     "backendId": "portfoliodannovais",
-    "rootDir": "/",
+    "rootDir": ".next",
     "ignore": [
       "node_modules",
       ".git",

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ASSETS } from '../../lib/constants';
+import { ASSETS } from '@/src/lib/constants';
 import { AlertCircle } from 'lucide-react';
 
 const Manifesto: React.FC = () => {
@@ -27,7 +27,7 @@ const Manifesto: React.FC = () => {
     return () => window.removeEventListener('resize', updateAudioPreference);
   }, []);
 
-  // Lazy-load: só inicia carregamento quando metade da seção está visível
+  // Lazy-load: só inicia carregamento quando a parte superior da seção se aproxima da viewport
   useEffect(() => {
     if (!sectionRef.current) return;
 
@@ -38,7 +38,10 @@ const Manifesto: React.FC = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.5 }
+      {
+        threshold: 0.35,
+        rootMargin: '0px 0px 200px 0px',
+      }
     );
 
     observer.observe(sectionRef.current);

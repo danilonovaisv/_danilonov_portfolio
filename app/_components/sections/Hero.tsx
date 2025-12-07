@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 import {
   motion,
@@ -8,9 +9,22 @@ import {
   useTransform,
 } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import HeroGlassCanvas from '../three/HeroGlassCanvas';
 import { ArrowRight } from 'lucide-react';
-import { ASSETS } from '../../lib/constants';
+import { ASSETS } from '@/src/lib/constants';
+
+const HeroCanvasFallback = () => (
+  <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+    <div className="w-[32rem] h-[32rem] rounded-full bg-gradient-to-br from-[#d1e0ff] to-[#fefefe] opacity-70 blur-[160px]" />
+  </div>
+);
+
+const HeroGlassCanvas = dynamic(
+  () => import('@/src/components/three/HeroGlassCanvas'),
+  {
+    ssr: false,
+    loading: () => <HeroCanvasFallback />,
+  }
+);
 
 // Componente para animar texto letra por letra (efeito "digitação/reveal")
 type AnimatedTextLineProps = {
@@ -146,9 +160,14 @@ const Hero = () => {
 
           <div className="flex flex-col justify-center items-start h-full pt-24 md:pt-0 max-w-4xl">
             {/* Título Principal */}
-            <div className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-sans flex flex-col items-start gap-1">
+            <h1 className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-sans flex flex-col items-start gap-1">
+              <span className="sr-only">Design, não é só estética.</span>
+
               {/* Mobile: Fade In Simples */}
-              <div className="md:hidden flex flex-col leading-[0.9]">
+              <div
+                aria-hidden="true"
+                className="md:hidden flex flex-col leading-[0.9]"
+              >
                 <motion.span
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -176,7 +195,7 @@ const Hero = () => {
               </div>
 
               {/* Desktop: Animação Letra por Letra */}
-              <div className="hidden md:flex flex-col items-start gap-0">
+              <div aria-hidden="true" className="hidden md:flex flex-col items-start gap-0">
                 <AnimatedTextLine
                   text="Design,"
                   delay={0.2}
@@ -193,7 +212,7 @@ const Hero = () => {
                   colorClass="text-[#111111]"
                 />
               </div>
-            </div>
+            </h1>
 
             {/* Subtítulo */}
             <motion.div

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useState } from 'react';
 import {
   motion,
@@ -7,7 +8,7 @@ import {
   useTransform,
   AnimatePresence,
 } from 'framer-motion';
-import { NAV_LINKS, ASSETS } from '../../lib/constants';
+import { NAV_LINKS, ASSETS } from '@/src/lib/constants';
 import { Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -50,12 +51,17 @@ const Header: React.FC = () => {
         <div className="flex items-center shrink-0 relative z-[1000]">
           <a href="/" className="block relative group">
             {!logoError ? (
-              <img
-                src={ASSETS.logoDark}
-                alt="Danilo Novais"
-                className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                onError={() => setLogoError(true)}
-              />
+              <div className="relative h-8 md:h-10 w-[130px] md:w-[180px]">
+                <Image
+                  src={ASSETS.logoDark}
+                  alt="Danilo Novais"
+                  fill
+                  priority
+                  onError={() => setLogoError(true)}
+                  sizes="(min-width: 768px) 180px, 130px"
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
             ) : (
               <span className="text-2xl font-bold text-[#111111] tracking-tighter">
                 Danilo.

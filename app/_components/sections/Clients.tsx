@@ -1,8 +1,42 @@
 'use client';
 
-import React from 'react';
+import Image from 'next/image';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CLIENT_LOGOS } from '../../lib/constants';
+import { CLIENT_LOGOS } from '@/src/lib/constants';
+
+type ClientLogoItemProps = {
+  src: string;
+  index: number;
+};
+
+const ClientLogoItem: React.FC<ClientLogoItemProps> = ({ src, index }) => {
+  const [hasError, setHasError] = useState(false);
+  const fallbackLabel = `CLIENT ${index + 1}`;
+
+  if (hasError) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <span className="text-white font-bold text-xl opacity-50">
+          {fallbackLabel}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={fallbackLabel}
+      width={160}
+      height={80}
+      sizes="(min-width: 1024px) 12vw, 40vw"
+      loading="lazy"
+      className="w-full h-auto brightness-0 invert"
+      onError={() => setHasError(true)}
+    />
+  );
+};
 
 const Clients: React.FC = () => {
   return (
@@ -27,18 +61,7 @@ const Clients: React.FC = () => {
               transition={{ delay: index * 0.05 }}
               className="w-full max-w-[140px] opacity-70 hover:opacity-100 transition-opacity duration-300"
             >
-              <img
-                src={logo}
-                alt={`Client ${index + 1}`}
-                loading="lazy"
-                decoding="async"
-                sizes="(min-width: 1024px) 12vw, 40vw"
-                className="w-full h-auto brightness-0 invert"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML = `<div class="text-white font-bold text-xl opacity-50">CLIENT ${index + 1}</div>`;
-                }}
-              />
+              <ClientLogoItem src={logo} index={index} />
             </motion.div>
           ))}
         </div>

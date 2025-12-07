@@ -10,12 +10,12 @@ Uma página única refinada criada com React, TypeScript, Framer Motion e React 
 
 ## Arquitetura e pilha
 
-- **Bundler:** Vite + React (entrada em `index.tsx` carrega `src/app/page.tsx`).
+- **Arquitetura:** Next.js App Router (entrada em `app/page.tsx` monta as seções e aproveita `MainLayout`).
 - **Componentes principais:**
-  - `src/app/page.tsx` monta as seções `Hero`, `PortfolioShowcase`, `FeaturedProjects`, `Clients` e `Contact`.
-  - Seções com animações e layout estão em `src/components/home/*`.
-  - Layout estático (header/footer) vivos em `src/components/layout`.
-  - Cenas 3D encapsuladas em `src/components/three/HeroGlassCanvas.tsx` e `TorusDan.tsx`.
+  - `app/page.tsx` monta as seções `Hero`, `PortfolioShowcase`, `FeaturedProjects`, `Clients` e `Contact`.
+  - Seções com animações e layout vivem em `app/_components/sections/*`.
+  - Layout compartilhado (header/footer) em `app/_components/layout`.
+  - Cenas 3D continuam sob `src/components/three/HeroGlassCanvas.tsx` e `TorusDan.tsx`.
 - **Dados e assets controlados via `src/lib/constants.tsx`** (navegação, categorias, projetos em destaque, logos, contatos e links sociais).
 - **Estilo:** utilitários Tailwind configurados diretamente nos componentes; a tipografia e paleta seguem o guia da especificação.
 - **3D + animação:** `Hero` combina `framer-motion` + `useScroll`, `React Three Fiber` com `MeshTransmissionMaterial`, `Suspense` e `useFrame` para controlar rotação e feedback ao mouse.
@@ -27,7 +27,7 @@ Uma página única refinada criada com React, TypeScript, Framer Motion e React 
 ### Hero + Manifesto
 
 - Tag `[BRAND AWARENESS]`, título `Design, não é só estética.`, subtítulo `[É intenção, é estratégia, é experiência.]` conforme doc.
-- Vídeo manifesto (`ASSETS.videoManifesto`) aparece sobre o pano de fundo 3D; o componente `Manifesto` (ainda disponível em `src/components/home/Manifesto.tsx`) garante fallback com alerta quando o arquivo falhar.
+- Vídeo manifesto (`ASSETS.videoManifesto`) aparece sobre o pano de fundo 3D; o componente `Manifesto` (em `app/_components/sections/Manifesto.tsx`) garante fallback com alerta quando o arquivo falhar.
 - O canvas 3D (`HeroGlassCanvas`) usa `PerspectiveCamera`, `Environment` e `Lightformer` para iluminar o `TorusDan`.
 - `TorusDan` combina geometria procedural com `MeshTransmissionMaterial` e parabólica de scroll/mouse; o GLB original está em `public/media/torus_dan.glb` (gerado via `gltfjsx`).
 - Ajustes de performance: `samples`, `resolution` e `background` do material seguem os parâmetros recomendados (`512–1024`, `samples 6–16`, `transmission ~1`).
@@ -89,7 +89,7 @@ Uma página única refinada criada com React, TypeScript, Framer Motion e React 
 ## Observações para deploy
 
 - A saída do `npm run build` é uma SPA estática; hospede em Firebase Hosting, Netlify, Vercel ou outro host estático.
-- Se quiser reproduzir o layout App Router indicado no documento, mantenha o diretório `src/app` e invista em rotas adicionais (`/sobre`, `/portfolio`) usando componentes do `Home` como base.
+- Se quiser estender o layout, mantenha o diretório `app` e crie rotas adicionais (`/sobre`, `/portfolio`) usando os componentes existentes.
 - Antes de publicar, valide os ativos remotos (SVGs de clientes, vídeo manifesto, thumbnails, GLB). Eles estão referenciados e hospedados no bucket público do Supabase mencionado no documento técnico.
 
 ---

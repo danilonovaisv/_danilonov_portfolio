@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import React, { FC, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CATEGORIES } from '../../lib/constants';
+import { CATEGORIES } from '@/src/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const PortfolioShowcaseSection: FC = () => {
@@ -112,14 +113,14 @@ const PortfolioShowcaseSection: FC = () => {
                             }}
                             className="hidden md:block h-20 relative overflow-hidden rounded-md shrink-0 origin-right order-first"
                           >
-                            <img
-                              src={category.thumbnailUrl}
-                              alt=""
-                              loading="lazy"
-                              decoding="async"
-                              sizes="(min-width: 768px) 12rem, 40vw"
-                              className="absolute inset-0 w-full h-full object-cover"
-                            />
+                          <Image
+                            src={category.thumbnailUrl}
+                            alt=""
+                            fill
+                            sizes="(min-width: 768px) 12rem, 40vw"
+                            loading="lazy"
+                            className="absolute inset-0 object-cover"
+                          />
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -178,14 +179,14 @@ const PortfolioShowcaseSection: FC = () => {
                         className="w-full mt-4 flex flex-col md:flex-row gap-8 md:gap-16"
                       >
                         {/* Imagem Grande */}
-                        <div className="w-full md:w-1/2 aspect-video rounded-lg overflow-hidden bg-gray-200 shadow-lg">
-                          <img
+                        <div className="relative w-full md:w-1/2 aspect-video rounded-lg overflow-hidden bg-gray-200 shadow-lg">
+                          <Image
                             src={category.thumbnailUrl}
                             alt={category.label}
-                            loading="lazy"
-                            decoding="async"
+                            fill
                             sizes="(min-width: 1024px) 50vw, 100vw"
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                            loading="lazy"
+                            className="object-cover hover:scale-105 transition-transform duration-700"
                           />
                         </div>
 
