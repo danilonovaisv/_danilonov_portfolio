@@ -1,5 +1,10 @@
+/**
+ * We keep the existing sticky, scroll-aware header but ensure the logo
+ * renders through the Next.js Image component for better stability.
+ */
 'use client';
 
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import {
   motion,
@@ -15,6 +20,7 @@ import clsx from 'clsx';
 
 const NAV_ITEMS = [
   { label: 'home', href: '/', isAnchor: false },
+  { label: 'manifesto', href: '/manifesto', isAnchor: false },
   { label: 'sobre', href: '/sobre', isAnchor: false },
   { label: 'portfolio showcase', href: '#portfolio', isAnchor: true },
   { label: 'contato', href: '#contato', isAnchor: true },
@@ -126,12 +132,16 @@ const Header: React.FC = () => {
             aria-label="Ir para página inicial"
           >
             {!logoError ? (
-              <img
-                src={ASSETS.logoDark}
-                alt="Danilo Novais"
-                className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                onError={() => setLogoError(true)}
-              />
+              <span className="relative block h-8 w-32 transition-transform duration-300 group-hover:scale-105 md:h-10 md:w-[140px]">
+                <Image
+                  src={ASSETS.logoDark}
+                  alt="Logo Danilo Novais"
+                  sizes="140px"
+                  fill
+                  className="object-contain"
+                  onError={() => setLogoError(true)}
+                />
+              </span>
             ) : (
               <span className="text-2xl font-bold text-[#111111] tracking-tighter">
                 Danilo.

@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "keywords": [
-      "react",
-      "three",
-      "threejs",
-      "react-three-fiber"
-    ],
+    "react",
+    "three",
+    "threejs",
+    "react-three-fiber"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
