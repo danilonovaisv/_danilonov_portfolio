@@ -37,10 +37,10 @@ const PortfolioSection = ({ projects = featuredProjects }: PortfolioSectionProps
   const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
   const lenisFrame = useRef<number | null>(null);
 
-  const cardRefs = useMemo<RefObject<HTMLDivElement>[]>(
+  const cardRefs = useMemo(
     () => projects.map(() => createRef<HTMLDivElement>()),
     [projects]
-  );
+  ) as RefObject<HTMLDivElement>[];
 
   useEffect(() => {
     if (containerRef.current) {
