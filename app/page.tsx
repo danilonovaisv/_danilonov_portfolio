@@ -1,7 +1,7 @@
 import React from 'react';
 import Hero from '../components/home/Hero';
 import PortfolioShowcase from '../components/home/PortfolioShowcase';
-import FeaturedProjectsSection from './components/FeaturedProjectsSection';
+import PortfolioSection from './components/PortfolioSection';
 import Clients from '../components/home/Clients';
 import Contact from '../components/home/Contact';
 
@@ -18,7 +18,7 @@ export default function Home() {
     <>
       <Hero />
       <PortfolioShowcase />
-      <FeaturedProjectsSection />
+      <PortfolioSection />
       <Clients />
       <Contact />
     </>

@@ -10,6 +10,3 @@ chmod +x project-tools.sh
 ./project-tools.sh test
 ./project-tools.sh build-check
 ./project-tools.sh report
-
-
-

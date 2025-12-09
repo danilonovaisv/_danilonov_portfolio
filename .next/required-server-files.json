@@ -14,43 +14,19 @@
     "configOrigin": "next.config.mjs",
     "useFileSystemPublicRoutes": true,
     "generateEtags": true,
-    "pageExtensions": [
-      "tsx",
-      "ts",
-      "jsx",
-      "js"
-    ],
+    "pageExtensions": ["tsx", "ts", "jsx", "js"],
     "poweredByHeader": true,
     "compress": true,
     "images": {
-      "deviceSizes": [
-        640,
-        750,
-        828,
-        1080,
-        1200,
-        1920,
-        2048,
-        3840
-      ],
-      "imageSizes": [
-        32,
-        48,
-        64,
-        96,
-        128,
-        256,
-        384
-      ],
+      "deviceSizes": [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+      "imageSizes": [32, 48, 64, 96, 128, 256, 384],
       "path": "/_next/image",
       "loader": "default",
       "loaderFile": "",
       "domains": [],
       "disableStaticImages": false,
       "minimumCacheTTL": 14400,
-      "formats": [
-        "image/webp"
-      ],
+      "formats": ["image/webp"],
       "maximumRedirects": 3,
       "dangerouslyAllowLocalIP": false,
       "dangerouslyAllowSVG": true,
@@ -70,9 +46,7 @@
           "pathname": "/storage/v1/object/public/**"
         }
       ],
-      "qualities": [
-        75
-      ],
+      "qualities": [75],
       "unoptimized": false
     },
     "devIndicators": {
@@ -107,9 +81,7 @@
       }
     },
     "outputFileTracingRoot": "/Users/danilonovais/_danilonov_portfolio",
-    "allowedDevOrigins": [
-      "http://192.168.0.5:3000"
-    ],
+    "allowedDevOrigins": ["http://192.168.0.5:3000"],
     "cacheComponents": false,
     "cacheLife": {
       "default": {

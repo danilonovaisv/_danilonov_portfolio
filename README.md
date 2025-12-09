@@ -12,7 +12,7 @@ Uma página única refinada criada com React, TypeScript, Framer Motion e React 
 
 - **Bundler:** Vite + React (entrada em `index.tsx` carrega `src/app/page.tsx`).
 - **Componentes principais:**
-- `app/page.tsx` monta as seções `Hero`, `PortfolioShowcase`, `FeaturedProjectsSection`, `Clients` e `Contact`.
+- `app/page.tsx` monta as seções `Hero`, `PortfolioShowcase`, `PortfolioSection`, `Clients` e `Contact`.
   - Seções com animações e layout estão em `src/components/home/*`.
   - Layout estático (header/footer) vivos em `src/components/layout`.
   - Cenas 3D encapsuladas em `src/components/three/HeroGlassCanvas.tsx` e `TorusDan.tsx`.
@@ -35,7 +35,7 @@ Uma página única refinada criada com React, TypeScript, Framer Motion e React 
 ### Portfolio & Featured Projects
 
 - `PortfolioShowcase` renderiza `CATEGORIES` com layout dividido (alinhamento por linha), expansão de card, previews e CTA para `/portfolio`.
-- `FeaturedProjectsSection` mostra `featuredProjects` com grids responsivos, badges de categoria e bloco “Like what you see?”; os links apontam para rotas como `/portfolio/{slug}`.
+- `PortfolioSection` orquestra os mesmos projetos com um grid assimétrico, cards tridimensionais e um CTA inspirado em studios; os links continuam navegando para `/portfolio/{slug}`.
 
 ### Clients & Contact
 
