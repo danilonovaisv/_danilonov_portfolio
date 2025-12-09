@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  --color-surface-main: #f4f5f7;
-  --color-text-main: #111111;
+  --color-surface-main: #F4F4F5;
+  --color-text-main: #18181B;
   --color-accent-blue: #0057ff;
 
   /* Largura máxima fluida para manter espaçamento seguro em telas pequenas */
@@ -17,6 +17,7 @@ body {
   background: var(--color-surface-main);
   color: var(--color-text-main);
   text-rendering: optimizeLegibility;
+  letter-spacing: -0.02em;
 }
 
 /* Imagens e mídias fluidas para evitar overflow em telas estreitas */
@@ -66,6 +67,17 @@ button:hover {
   margin-right: auto;
   padding-left: var(--page-gutter);
   padding-right: var(--page-gutter);
+}
+
+/* Utility to hide scrollbars while preserving scroll behavior */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 @layer utilities {

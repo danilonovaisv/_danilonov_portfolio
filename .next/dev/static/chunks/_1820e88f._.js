@@ -427,8 +427,8 @@ const Header = ()=>{
         0,
         50
     ], [
-        'rgba(244, 245, 247, 0)',
-        'rgba(255, 255, 255, 0.85)'
+        'rgba(255, 255, 255, 0.7)',
+        'rgba(255, 255, 255, 0.95)'
     ]);
     const backdropFilter = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTransform"])(scrollY, [
         0,
@@ -520,7 +520,7 @@ const Header = ()=>{
                     backdropFilter,
                     boxShadow
                 },
-                className: "fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100",
+                className: "fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-6 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100 backdrop-blur-md bg-white/70",
                 initial: {
                     y: -100,
                     opacity: 0
@@ -618,7 +618,7 @@ const Header = ()=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "md:hidden z-1000",
+                        className: "md:hidden z-1000 flex items-center",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: ()=>setIsMobileMenuOpen(!isMobileMenuOpen),
                             className: "text-[#111111] p-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg",

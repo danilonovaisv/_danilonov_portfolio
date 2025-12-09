@@ -38,7 +38,7 @@ const Header: React.FC = () => {
   const backgroundColor = useTransform(
     scrollY,
     [0, 50],
-    ['rgba(244, 245, 247, 0)', 'rgba(255, 255, 255, 0.85)']
+    ['rgba(255, 255, 255, 0.7)', 'rgba(255, 255, 255, 0.95)']
   );
   const backdropFilter = useTransform(
     scrollY,
@@ -119,7 +119,7 @@ const Header: React.FC = () => {
           backdropFilter,
           boxShadow,
         }}
-        className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-4 sm:px-8 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100"
+        className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-6 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100 backdrop-blur-md bg-white/70"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -179,7 +179,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <div className="md:hidden z-1000">
+        <div className="md:hidden z-1000 flex items-center">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="text-[#111111] p-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-lg"

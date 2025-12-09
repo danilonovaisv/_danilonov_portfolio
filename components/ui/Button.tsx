@@ -48,7 +48,7 @@ const Button = React.forwardRef<
         {children}
         {icon && (
           <span className="flex items-center justify-center w-6 h-6 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
-            <ArrowRight className="w-4 h-4 text-current" />
+            <ArrowRight className="w-4 h-4 text-current transition-transform group-hover:translate-x-1" />
           </span>
         )}
       </>

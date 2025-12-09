@@ -1,66 +1,101 @@
 'use client';
 
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Environment, PerspectiveCamera, Lightformer } from '@react-three/drei';
+import React, { Suspense, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import {
+  Environment,
+  PerspectiveCamera,
+  PerformanceMonitor,
+} from '@react-three/drei';
+import { MotionValue } from 'framer-motion';
+import * as THREE from 'three';
 import TorusDan from './TorusDan';
 
-const HeroGlassCanvas: React.FC<{ className?: string }> = ({ className }) => {
+interface HeroGlassCanvasProps {
+  className?: string;
+  eventSource?: React.RefObject<HTMLElement | null>;
+  scrollYProgress?: MotionValue<number>;
+  prefersReducedMotion?: boolean;
+}
+
+const ResponsiveTorus = ({
+  scrollYProgress,
+  prefersReducedMotion,
+}: Omit<HeroGlassCanvasProps, 'className' | 'eventSource'>) => {
+  const orbitRef = useRef<THREE.Group>(null);
+  const { viewport } = useThree();
+
+  const scale = viewport.width < 4.5 ? 1.4 : 2.2;
+
+  useFrame((_, delta) => {
+    if (orbitRef.current && !prefersReducedMotion) {
+      orbitRef.current.rotation.y += delta * 0.08;
+    }
+  });
+
+  return (
+    <group ref={orbitRef} scale={[scale, scale, scale]}>
+      <TorusDan
+        scrollYProgress={scrollYProgress}
+        prefersReducedMotion={prefersReducedMotion}
+      />
+    </group>
+  );
+};
+
+const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
+  className,
+  eventSource,
+  scrollYProgress,
+  prefersReducedMotion,
+}) => {
+  const [dpr, setDpr] = useState(1.5);
+  const eventSourceNode = eventSource?.current ?? undefined;
+
   return (
     <div className={`w-full h-full ${className}`}>
       <Canvas
-        dpr={[1, 2]}
-        gl={{ alpha: true, antialias: true, toneMappingExposure: 1.2 }}
+        eventSource={eventSourceNode}
+        eventPrefix="client"
+        dpr={dpr}
+        gl={{ alpha: true, antialias: true, toneMappingExposure: 1.05 }}
       >
-        <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={30} />
-
-        {/* Lights designed to enhance glass reflection/refraction */}
-        {/* @ts-ignore */}
-        <ambientLight intensity={0.5} />
-        {/* @ts-ignore */}
-        <spotLight
-          position={[10, 10, 10]}
-          angle={0.15}
-          penumbra={1}
-          intensity={1}
+        <PerformanceMonitor
+          onDecline={({ factor }) =>
+            setDpr((prev) => Math.max(0.75, prev - (factor ?? 0.15)))
+          }
+          onIncline={({ factor }) =>
+            setDpr((prev) => Math.min(2, prev + (factor ?? 0.1)))
+          }
         />
-        {/* @ts-ignore */}
-        <pointLight position={[-10, -10, -10]} intensity={1} color="#0057FF" />
+        <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={32} />
+
+        <ambientLight intensity={0.3} color="#f8fafc" />
+        <directionalLight
+          position={[4, 6, 8]}
+          intensity={0.65}
+          color="#ffffff"
+        />
+        <spotLight
+          position={[-6, -4, -5]}
+          intensity={0.4}
+          angle={0.6}
+          penumbra={0.5}
+          color="#aacfff"
+        />
+        <hemisphereLight
+          color="#ffffff"
+          groundColor="#0f172a"
+          intensity={0.15}
+        />
 
         <Suspense fallback={null}>
-          <TorusDan />
+          <ResponsiveTorus
+            scrollYProgress={scrollYProgress}
+            prefersReducedMotion={prefersReducedMotion}
+          />
 
-          {/* Environment for realistic reflections */}
-          <Environment preset="city">
-            {/* Custom lightformers to add "studio" reflections to the glass */}
-            {/* @ts-ignore */}
-            <group rotation={[-Math.PI / 2, 0, 0]}>
-              <Lightformer
-                intensity={4}
-                rotation-x={Math.PI / 2}
-                position={[0, 5, -9]}
-                scale={[10, 10, 1]}
-              />
-              <Lightformer
-                intensity={2}
-                rotation-y={Math.PI / 2}
-                position={[-5, 1, -1]}
-                scale={[20, 0.1, 1]}
-              />
-              <Lightformer
-                intensity={2}
-                rotation-y={Math.PI / 2}
-                position={[-5, -1, -1]}
-                scale={[20, 0.5, 1]}
-              />
-              <Lightformer
-                intensity={2}
-                rotation-y={-Math.PI / 2}
-                position={[10, 1, 0]}
-                scale={[20, 1, 1]}
-              />
-            </group>
-          </Environment>
+          <Environment preset="city" blur={1} background={false} />
         </Suspense>
       </Canvas>
     </div>
