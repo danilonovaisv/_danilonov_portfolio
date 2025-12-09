@@ -4,7 +4,12 @@ import React, { useEffect, useMemo, useRef, RefObject } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, Variants, useInView } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { View, PerspectiveCamera, useTexture, shaderMaterial } from '@react-three/drei';
+import {
+  View,
+  PerspectiveCamera,
+  useTexture,
+  shaderMaterial,
+} from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { damp, damp3 } from 'maath/easing';
 import { Project } from '@/content/projects';
@@ -138,7 +143,12 @@ const ProjectCardScene = ({ project, trackRef, index }: ProjectSceneProps) => {
   );
 };
 
-const ProjectCard = ({ project, index, trackRef, className = '' }: ProjectCardProps) => {
+const ProjectCard = ({
+  project,
+  index,
+  trackRef,
+  className = '',
+}: ProjectCardProps) => {
   const router = useRouter();
   const articleRef = useRef<HTMLElement | null>(null);
   const isInView = useInView(articleRef, { amount: 0.25, once: true });
@@ -154,7 +164,10 @@ const ProjectCard = ({ project, index, trackRef, className = '' }: ProjectCardPr
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
-      whileHover={{ scale: 1.02, boxShadow: '0px 25px 45px rgba(15, 23, 42, 0.18)' }}
+      whileHover={{
+        scale: 1.02,
+        boxShadow: '0px 25px 45px rgba(15, 23, 42, 0.18)',
+      }}
       onClick={handleSelect}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {

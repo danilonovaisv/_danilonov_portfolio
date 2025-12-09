@@ -4,4 +4,17 @@ const compat = new FlatCompat({
   baseDirectory: new URL('.', import.meta.url).pathname,
 });
 
-export default [...compat.extends('next', 'next/core-web-vitals')];
+const sanitized = compat.extends('next/core-web-vitals').map((config) => {
+  if (!config.plugins) return config;
+
+  const plugins = Object.fromEntries(
+    Object.entries(config.plugins).map(([key, value]) => {
+      const { configs, ...rest } = value;
+      return [key, rest];
+    })
+  );
+
+  return { ...config, plugins };
+});
+
+export default [...sanitized];

@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 :root {
-  --color-surface-main: #F4F4F5;
-  --color-text-main: #18181B;
+  --color-surface-main: #f4f4f5;
+  --color-text-main: #18181b;
   --color-accent-blue: #0057ff;
 
   /* Largura máxima fluida para manter espaçamento seguro em telas pequenas */

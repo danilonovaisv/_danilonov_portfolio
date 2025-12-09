@@ -24,7 +24,7 @@ const TorusDan = ({
   const meshRef = useRef<THREE.Mesh>(null);
   const gltf = useGLTF('/models/torus_dan.glb');
   const { size } = useThree();
-  
+
   // Ajuste: Detecção mobile mais robusta ou via props
   const viewportMobile = isMobile ?? size.width < 600;
   const useLowQuality = lowRenderMode || viewportMobile;
@@ -45,12 +45,20 @@ const TorusDan = ({
     if (meshRef.current) {
       if (!prefersReducedMotion) {
         // Rotação base constante (líquido em movimento)
-        meshRef.current.rotation.y += delta * 0.1; 
-        
+        meshRef.current.rotation.y += delta * 0.1;
+
         // Mouse Parallax Suave
         const { x, y } = state.pointer;
-        meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, y * 0.1, 0.05);
-        meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, x * 0.1, 0.05);
+        meshRef.current.rotation.x = THREE.MathUtils.lerp(
+          meshRef.current.rotation.x,
+          y * 0.1,
+          0.05
+        );
+        meshRef.current.rotation.z = THREE.MathUtils.lerp(
+          meshRef.current.rotation.z,
+          x * 0.1,
+          0.05
+        );
       }
 
       // Scroll interaction
@@ -70,11 +78,7 @@ const TorusDan = ({
       floatingRange={[-0.15, 0.15]}
     >
       {/* @ts-ignore */}
-      <mesh
-        ref={meshRef}
-        geometry={geometry}
-        position={[0, 0, 0]}
-      >
+      <mesh ref={meshRef} geometry={geometry} position={[0, 0, 0]}>
         <MeshTransmissionMaterial
           backside
           background={new THREE.Color('#F4F5F7')}

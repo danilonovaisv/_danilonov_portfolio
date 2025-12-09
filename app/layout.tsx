@@ -11,10 +11,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'Danilo Novais | Portfolio',
-  description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+  description:
+    'Design, não é só estética. É intenção, é estratégia, é experiência.',
   openGraph: {
     title: 'Danilo Novais | Portfolio',
-    description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+    description:
+      'Design, não é só estética. É intenção, é estratégia, é experiência.',
     url: 'https://portfoliodanilo.com',
     siteName: 'Danilo Novais Portfolio',
     images: [
@@ -31,12 +33,14 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Danilo Novais | Portfolio',
-    description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+    description:
+      'Design, não é só estética. É intenção, é estratégia, é experiência.',
     creator: '@danilo_novais', // Verificado no arquivo .md
   },
   icons: {
     icon: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',
-    shortcut: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg',
+    shortcut:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg',
   },
 };
 

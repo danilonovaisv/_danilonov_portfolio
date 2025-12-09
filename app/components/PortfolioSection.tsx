@@ -32,7 +32,9 @@ type PortfolioSectionProps = {
   projects?: Project[];
 };
 
-const PortfolioSection = ({ projects = featuredProjects }: PortfolioSectionProps) => {
+const PortfolioSection = ({
+  projects = featuredProjects,
+}: PortfolioSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
   const lenisFrame = useRef<number | null>(null);
