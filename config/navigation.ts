@@ -18,7 +18,7 @@ export const MAIN_ROUTES: RouteConfig[] = [
     id: 'sobre',
     path: '/sobre',
     label: 'sobre',
-    anchor: '#about',
+    anchor: '#Sobre',
   },
   {
     id: 'portfolio',

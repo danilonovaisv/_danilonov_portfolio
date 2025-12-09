@@ -18,31 +18,13 @@ export const featuredProjects: Project[] = [
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
   },
   {
-    slug: 'bold-brand-redesign',
-    title: 'Shaping a Bold New Brand',
-    client: 'Studio Nova',
-    category: 'branding',
+    slug: 'taking-sportswear',
+    title: 'Taking Sportswear to the Skies',
+    client: 'Eurosport',
+    category: 'campaign',
     layout: 'medium',
     imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-  },
-  {
-    slug: 'seasonal-visual-campaign',
-    title: 'Key Visual for Seasonal Campaign',
-    client: 'Aurora Collective',
-    category: 'campaign',
-    layout: 'wide',
-    imageUrl:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-  },
-  {
-    slug: 'web-motion-experience',
-    title: 'Web Experience in Motion',
-    client: 'Flux Lab',
-    category: 'web/motion',
-    layout: 'rectangle',
-    imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
   },
   {
     slug: 'epic-look-campaign',
@@ -51,15 +33,15 @@ export const featuredProjects: Project[] = [
     category: 'branding',
     layout: 'wide',
     imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
   },
   {
     slug: 'fff-legal-identity',
-    title: 'Designing Trust for FFF Legal',
+    title: 'Designing Trust for FFF Legal Identity',
     client: 'FFF Legal',
     category: 'branding / website',
-    layout: 'medium',
+    layout: 'rectangle',
     imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
   },
 ];

@@ -73,9 +73,14 @@ export interface FooterContent {
   links: FooterLink[];
 }
 
+export interface VideoManifestoContent {
+  videoUrl: string;
+}
+
 export interface HomepageContent {
   hero: HeroContent;
   about: AboutContent;
+  videoManifesto: VideoManifestoContent;
   portfolioShowcase: PortfolioShowcaseContent;
   projectCards: ProjectCard[];
   clients: ClientsSectionContent;
@@ -93,6 +98,11 @@ export const HOMEPAGE_CONTENT: HomepageContent = {
   },
 
   about: {
+    videoUrl:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
+  },
+
+  videoManifesto: {
     videoUrl:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   },
@@ -202,7 +212,7 @@ export const HOMEPAGE_CONTENT: HomepageContent = {
     copyright: '© 2025 Danilo Novais Vilela — Todos os direitos reservados.',
     links: [
       { label: 'Home', href: '#hero' },
-      { label: 'Sobre', href: '#about' },
+      { label: 'Sobre', href: '#Sobre' },
       { label: 'Portfolio', href: '#portfolio-showcase' },
       { label: 'Contact', href: '#contact' },
     ],

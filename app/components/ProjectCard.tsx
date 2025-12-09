@@ -23,6 +23,7 @@ const cardVariants: Variants = {
 type ProjectCardProps = {
   project: Project;
   index: number;
+  className?: string;
 };
 
 const aspectClasses: Record<Project['layout'], string> = {
@@ -32,19 +33,12 @@ const aspectClasses: Record<Project['layout'], string> = {
   rectangle: 'aspect-[3/2]',
 };
 
-const spanClasses: Record<Project['layout'], string> = {
-  small: 'lg:col-span-1',
-  medium: 'lg:col-span-1',
-  wide: 'lg:col-span-2',
-  rectangle: 'lg:col-span-1',
-};
-
-const ProjectCard = ({ project, index }: ProjectCardProps) => {
+const ProjectCard = ({ project, index, className }: ProjectCardProps) => {
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { amount: 0.35, once: true });
   const aspectClass = aspectClasses[project.layout] ?? aspectClasses.medium;
-  const spanClass = spanClasses[project.layout] ?? spanClasses.medium;
+  const slotClass = className ?? '';
 
   const navigateToProject = () => {
     router.push(`/portfolio/${project.slug}`);
@@ -68,7 +62,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
         scale: 1.02,
         boxShadow: '0px 12px 30px rgba(15, 23, 42, 0.15)',
       }}
-      className={`relative overflow-hidden rounded-[1.5rem] bg-white shadow-sm transition-all duration-300 ${spanClass}`}
+      className={`relative overflow-hidden rounded-[1.5rem] bg-white shadow-sm transition-all duration-300 ${slotClass}`}
       onClick={navigateToProject}
       onKeyDown={handleKeyDown}
       role="button"
