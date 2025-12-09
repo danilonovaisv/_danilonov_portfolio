@@ -3,10 +3,12 @@
     "/_app": []
   },
   "devFiles": [],
-  "polyfillFiles": ["static/chunks/a6dad97d9634a72d.js"],
+  "polyfillFiles": [
+    "static/chunks/a6dad97d9634a72d.js"
+  ],
   "lowPriorityFiles": [
-    "static/oQAAboglwU1uoOYTzM5TP/_ssgManifest.js",
-    "static/oQAAboglwU1uoOYTzM5TP/_buildManifest.js"
+    "static/78oz2PPDdA1rAa8-Jz8B0/_ssgManifest.js",
+    "static/78oz2PPDdA1rAa8-Jz8B0/_buildManifest.js"
   ],
   "rootMainFiles": [
     "static/chunks/cbd55ab9639e1e66.js",
