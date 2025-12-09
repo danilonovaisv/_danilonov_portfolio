@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import {
   motion,
   useMotionValueEvent,
@@ -103,10 +103,22 @@ const AnimatedTextLine = ({
   );
 };
 
+const HERO_AUDIO_MUTE_THRESHOLD = 0.9;
+
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const shouldReduceMotion = useReducedMotion() ?? false;
+  const updateHeroAudioMute = useCallback(
+    (progress: number) => {
+      if (!videoRef.current) return;
+      const shouldMute = progress >= HERO_AUDIO_MUTE_THRESHOLD;
+      if (videoRef.current.muted !== shouldMute) {
+        videoRef.current.muted = shouldMute;
+      }
+    },
+    [videoRef]
+  );
 
   // Controle de Scroll para a animação da timeline
   const { scrollYProgress } = useScroll({
@@ -115,15 +127,10 @@ const Hero = () => {
   });
 
   // Monitora o progresso do scroll para controlar o áudio do vídeo
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (videoRef.current) {
-      if (latest > 0.01) {
-        videoRef.current.muted = false;
-      } else {
-        videoRef.current.muted = true;
-      }
-    }
-  });
+  useMotionValueEvent(scrollYProgress, 'change', updateHeroAudioMute);
+  useEffect(() => {
+    updateHeroAudioMute(scrollYProgress.get());
+  }, [scrollYProgress, updateHeroAudioMute]);
 
   // Animações Scroll-Driven
   // (Simplified or disabled if reduced motion is preferred could be handled here,
@@ -318,16 +325,23 @@ const Hero = () => {
           }}
           className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black pointer-events-none"
         >
-          <div className="relative w-full h-full block group pointer-events-auto">
-            <video
-              ref={videoRef}
-              src={ASSETS.videoManifesto}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover transition-opacity duration-500"
-            />
+          <div className="pointer-events-auto flex w-full justify-center px-4 sm:px-8">
+            <div className="w-[min(640px,92vw)]">
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-white/60 bg-[#050505] shadow-[0_25px_60px_rgba(2,6,23,0.65)]">
+                <div className="aspect-[16/9] w-full">
+                  <video
+                    ref={videoRef}
+                    src={ASSETS.videoManifesto}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover transition-opacity duration-500"
+                  />
+                </div>
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

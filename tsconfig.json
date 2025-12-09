@@ -16,6 +16,7 @@
       "@/*": ["./*"]
     },
     "allowImportingTsExtensions": true,
+    "declaration": true,
     "noEmit": true,
     "strict": false,
     "incremental": true,
