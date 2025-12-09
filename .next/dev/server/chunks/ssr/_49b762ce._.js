@@ -555,31 +555,60 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$layout$2f$Main
 ;
 const viewport = {
     width: 'device-width',
-    initialScale: 1
+    initialScale: 1,
+    themeColor: '#F4F5F7'
 };
 const metadata = {
     title: 'Danilo Novais | Portfolio',
-    description: 'Design, não é só estética. É intenção, é estratégia, é experiência.'
+    description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+    openGraph: {
+        title: 'Danilo Novais | Portfolio',
+        description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+        url: 'https://portfoliodanilo.com',
+        siteName: 'Danilo Novais Portfolio',
+        images: [
+            {
+                url: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+                width: 1200,
+                height: 630,
+                alt: 'Danilo Novais Portfolio Cover'
+            }
+        ],
+        locale: 'pt_BR',
+        type: 'website'
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Danilo Novais | Portfolio',
+        description: 'Design, não é só estética. É intenção, é estratégia, é experiência.',
+        creator: '@danilo_novais'
+    },
+    icons: {
+        icon: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',
+        shortcut: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg'
+    }
 };
 function RootLayout({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
         lang: "pt-BR",
+        className: "scroll-smooth antialiased",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
+            className: "bg-[#F4F5F7] text-[#111111]",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$layout$2f$MainLayout$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"], {
                 children: children
             }, void 0, false, {
                 fileName: "[project]/app/layout.tsx",
-                lineNumber: 25,
+                lineNumber: 51,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/layout.tsx",
-            lineNumber: 24,
+            lineNumber: 50,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/layout.tsx",
-        lineNumber: 23,
+        lineNumber: 49,
         columnNumber: 5
     }, this);
 }

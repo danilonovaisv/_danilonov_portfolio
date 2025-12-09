@@ -27,11 +27,23 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$bui
 ;
 ;
 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Gltf$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useGLTF"].preload('/models/torus_dan.glb');
-const TorusDan = ({ scrollYProgress, prefersReducedMotion })=>{
+const TorusDan = ({ scrollYProgress, prefersReducedMotion, lowRenderMode, isMobile })=>{
     const meshRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const gltf = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Gltf$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useGLTF"])('/models/torus_dan.glb');
     const { size } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$1eccaf1c$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__C__as__useThree$3e$__["useThree"])();
-    const resolution = size.width < 600 ? 512 : 1024;
+    // Ajuste: Detecção mobile mais robusta ou via props
+    const viewportMobile = isMobile ?? size.width < 600;
+    const useLowQuality = lowRenderMode || viewportMobile;
+    // Configuração Tiering de Performance
+    const config = useLowQuality ? {
+        resolution: 512,
+        samples: 4,
+        anisotropy: 0
+    } : {
+        resolution: 1024,
+        samples: 12,
+        anisotropy: 16
+    };
     const geometry = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         const mesh = gltf.scene.children.find((child)=>child.isMesh === true);
         return mesh?.geometry ?? new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TorusGeometry"](1, 0.4, 64, 128);
@@ -40,31 +52,29 @@ const TorusDan = ({ scrollYProgress, prefersReducedMotion })=>{
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$1eccaf1c$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"])((state, delta)=>{
         if (meshRef.current) {
-            const pointer = prefersReducedMotion ? {
-                x: 0,
-                y: 0
-            } : state.pointer;
-            const baseRotation = prefersReducedMotion ? 0.02 : 0.05;
-            meshRef.current.rotation.z += delta * baseRotation;
-            meshRef.current.rotation.x = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(meshRef.current.rotation.x, pointer.y * 0.2, prefersReducedMotion ? 0.01 : 0.05);
-            meshRef.current.rotation.y = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(meshRef.current.rotation.y, pointer.x * 0.2, prefersReducedMotion ? 0.01 : 0.05);
+            if (!prefersReducedMotion) {
+                // Rotação base constante (líquido em movimento)
+                meshRef.current.rotation.y += delta * 0.1;
+                // Mouse Parallax Suave
+                const { x, y } = state.pointer;
+                meshRef.current.rotation.x = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(meshRef.current.rotation.x, y * 0.1, 0.05);
+                meshRef.current.rotation.z = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(meshRef.current.rotation.z, x * 0.1, 0.05);
+            }
+            // Scroll interaction
             if (scrollYProgress) {
-                const scrollValue = scrollYProgress.get();
-                meshRef.current.rotation.x += scrollValue * 0.1;
-                meshRef.current.rotation.z += scrollValue * 0.05;
+                const scroll = scrollYProgress.get();
+                // Aumenta a distorção levemente ao rolar
+                meshRef.current.rotation.x += scroll * 0.02;
             }
         }
     });
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Float$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Float"], {
-        speed: prefersReducedMotion ? 0 : 1.5,
-        rotationIntensity: prefersReducedMotion ? 0 : 0.2,
-        floatIntensity: 0.5,
-        floatingRange: prefersReducedMotion ? [
-            0,
-            0
-        ] : [
-            -0.1,
-            0.1
+        speed: prefersReducedMotion ? 0 : 2,
+        rotationIntensity: prefersReducedMotion ? 0 : 0.5,
+        floatIntensity: 0.8,
+        floatingRange: [
+            -0.15,
+            0.15
         ],
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
             ref: meshRef,
@@ -74,43 +84,34 @@ const TorusDan = ({ scrollYProgress, prefersReducedMotion })=>{
                 0,
                 0
             ],
-            rotation: [
-                0,
-                0,
-                0
-            ],
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$MeshTransmissionMaterial$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MeshTransmissionMaterial"], {
                 backside: true,
-                samples: 4,
-                resolution: resolution,
-                transmission: 0.98,
-                roughness: 0.0,
-                clearcoat: 1,
-                clearcoatRoughness: 0,
-                thickness: 0.5,
-                ior: 1.4,
-                chromaticAberration: 0.05,
-                anisotropy: 0.1,
-                distortion: 0.4,
+                background: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Color"]('#F4F5F7'),
+                ...config,
+                transmission: 1,
+                thickness: 0.8,
+                roughness: 0.02,
+                ior: 1.25,
+                chromaticAberration: 0.06,
+                distortion: 0.5,
                 distortionScale: 0.4,
-                temporalDistortion: 0.1,
+                temporalDistortion: 0.25,
                 attenuationDistance: 0.5,
                 attenuationColor: "#ffffff",
-                color: "#ffffff",
-                background: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Color"]('#F4F5F7')
+                color: "#f0f5ff"
             }, void 0, false, {
                 fileName: "[project]/components/three/TorusDan.tsx",
-                lineNumber: 72,
+                lineNumber: 78,
                 columnNumber: 9
             }, ("TURBOPACK compile-time value", void 0))
         }, void 0, false, {
             fileName: "[project]/components/three/TorusDan.tsx",
-            lineNumber: 65,
+            lineNumber: 73,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/components/three/TorusDan.tsx",
-        lineNumber: 58,
+        lineNumber: 66,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -138,10 +139,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$three$2f$Torus
 ;
 ;
 ;
-const ResponsiveTorus = ({ scrollYProgress, prefersReducedMotion })=>{
+const ResponsiveTorus = ({ scrollYProgress, prefersReducedMotion, lowRenderMode })=>{
     const orbitRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const { viewport } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$1eccaf1c$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__C__as__useThree$3e$__["useThree"])();
-    const scale = viewport.width < 4.5 ? 1.4 : 2.2;
+    const isMobile = viewport.width < 4.5;
+    const scale = isMobile ? 1.4 : 2.2;
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$1eccaf1c$2e$esm$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"])((_, delta)=>{
         if (orbitRef.current && !prefersReducedMotion) {
             orbitRef.current.rotation.y += delta * 0.08;
@@ -156,20 +158,23 @@ const ResponsiveTorus = ({ scrollYProgress, prefersReducedMotion })=>{
         ],
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$three$2f$TorusDan$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
             scrollYProgress: scrollYProgress,
-            prefersReducedMotion: prefersReducedMotion
+            prefersReducedMotion: prefersReducedMotion,
+            lowRenderMode: lowRenderMode,
+            isMobile: isMobile
         }, void 0, false, {
             fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-            lineNumber: 38,
+            lineNumber: 46,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-        lineNumber: 37,
+        lineNumber: 45,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
 const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReducedMotion })=>{
     const [dpr, setDpr] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1.5);
+    const [lowRenderMode, setLowRenderMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const eventSourceNode = eventSource?.current ?? undefined;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `w-full h-full ${className}`,
@@ -184,11 +189,17 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
             },
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$PerformanceMonitor$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PerformanceMonitor"], {
-                    onDecline: ({ factor })=>setDpr((prev)=>Math.max(0.75, prev - (factor ?? 0.15))),
-                    onIncline: ({ factor })=>setDpr((prev)=>Math.min(2, prev + (factor ?? 0.1)))
+                    onDecline: ({ factor })=>{
+                        setDpr((prev)=>Math.max(0.75, prev - (factor ?? 0.15)));
+                        setLowRenderMode(true);
+                    },
+                    onIncline: ({ factor })=>{
+                        setDpr((prev)=>Math.min(2, prev + (factor ?? 0.1)));
+                        setLowRenderMode(false);
+                    }
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 63,
+                    lineNumber: 74,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$PerspectiveCamera$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PerspectiveCamera"], {
@@ -201,7 +212,7 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     fov: 32
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 71,
+                    lineNumber: 84,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ambientLight", {
@@ -209,7 +220,7 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     color: "#f8fafc"
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 73,
+                    lineNumber: 86,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -222,7 +233,7 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     color: "#ffffff"
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 74,
+                    lineNumber: 87,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("spotLight", {
@@ -237,7 +248,7 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     color: "#aacfff"
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 79,
+                    lineNumber: 92,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hemisphereLight", {
@@ -246,7 +257,7 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     intensity: 0.15
                 }, void 0, false, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 86,
+                    lineNumber: 99,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Suspense"], {
@@ -254,10 +265,11 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(ResponsiveTorus, {
                             scrollYProgress: scrollYProgress,
-                            prefersReducedMotion: prefersReducedMotion
+                            prefersReducedMotion: prefersReducedMotion,
+                            lowRenderMode: lowRenderMode
                         }, void 0, false, {
                             fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                            lineNumber: 93,
+                            lineNumber: 106,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Environment$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Environment"], {
@@ -266,24 +278,24 @@ const HeroGlassCanvas = ({ className, eventSource, scrollYProgress, prefersReduc
                             background: false
                         }, void 0, false, {
                             fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                            lineNumber: 98,
+                            lineNumber: 112,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-                    lineNumber: 92,
+                    lineNumber: 105,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-            lineNumber: 57,
+            lineNumber: 68,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/components/three/HeroGlassCanvas.tsx",
-        lineNumber: 56,
+        lineNumber: 67,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -421,79 +433,50 @@ const Hero = ()=>{
         1,
         0
     ]);
-    const textY = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
-        0,
-        0.2
-    ], [
-        0,
-        -30
-    ]);
     const textScale = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
         0.2
     ], [
         1,
-        0.97
+        0.95
     ]);
+    // Ajuste das transformações do vídeo para melhor comportamento responsivo
+    // Mobile: Começa maior e centralizado em baixo. Desktop: Canto direito.
     const videoWidth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
-        0.3
+        0.35
     ], [
-        '20vw',
+        '280px',
         '100vw'
     ]);
     const videoHeight = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
-        0.3
+        0.35
     ], [
-        '180px',
+        '160px',
         '100vh'
     ]);
-    const videoX = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
+    // Desktop positions (calculado em % para fluidez)
+    const desktopX = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
-        0.3
+        0.35
     ], [
-        '70vw',
+        '35vw',
         '0vw'
     ]);
-    const videoY = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
+    const desktopY = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
-        0.3
+        0.35
     ], [
-        '60vh',
+        '30vh',
         '0vh'
     ]);
     const videoRadius = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$value$2f$use$2d$transform$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTransform"])(scrollYProgress, [
         0,
-        0.3
+        0.35
     ], [
-        '1.5rem',
-        '0rem'
-    ]);
-    const videoStyle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        if (prefersReducedMotion) {
-            return {
-                width: '65vw',
-                height: '45vh',
-                borderRadius: '1.5rem',
-                x: '0vw',
-                y: '0vh'
-            };
-        }
-        return {
-            width: videoWidth,
-            height: videoHeight,
-            borderRadius: videoRadius,
-            x: videoX,
-            y: videoY
-        };
-    }, [
-        prefersReducedMotion,
-        videoWidth,
-        videoHeight,
-        videoX,
-        videoY,
-        videoRadius
+        '16px',
+        '0px'
     ]);
     const handleVideoExpand = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
         if ("TURBOPACK compile-time truthy", 1) return;
@@ -501,23 +484,15 @@ const Hero = ()=>{
         ;
         const target = undefined;
     }, []);
-    const motionButtonProps = prefersReducedMotion ? {} : {
-        whileHover: {
-            scale: 1.02
-        },
-        whileTap: {
-            scale: 0.98
-        }
-    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         id: "hero",
         ref: sectionRef,
-        className: "relative h-[200vh] w-full overflow-hidden bg-[#F4F4F7]",
+        className: "relative h-[250vh] w-full bg-[#F4F4F7]",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "sticky top-0 h-screen w-full",
+            className: "sticky top-0 h-screen w-full overflow-hidden",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "absolute inset-0 z-10 pointer-events-none",
+                    className: "absolute inset-0 z-0 pointer-events-none",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$three$2f$HeroGlassCanvas$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         className: "w-full h-full",
                         eventSource: sectionRef,
@@ -525,223 +500,204 @@ const Hero = ()=>{
                         prefersReducedMotion: prefersReducedMotion
                     }, void 0, false, {
                         fileName: "[project]/components/home/Hero.tsx",
-                        lineNumber: 68,
+                        lineNumber: 49,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/components/home/Hero.tsx",
-                    lineNumber: 67,
+                    lineNumber: 48,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "relative z-20 h-full w-full",
+                    className: "relative z-10 h-full w-full pointer-events-none",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "mx-auto flex h-full w-full max-w-6xl flex-col justify-center px-6 py-12 text-[#111111] lg:grid lg:grid-cols-[40%_60%] lg:items-center lg:gap-10",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
-                                style: {
-                                    opacity: textOpacity,
-                                    y: textY,
-                                    scale: textScale
-                                },
-                                className: "order-2 mt-6 lg:order-1",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "mb-4 inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/70 px-4 py-1 text-[0.65rem] uppercase tracking-[0.5em] text-[#0057FF] backdrop-blur-sm shadow-sm",
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "[ brand awareness ]"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/home/Hero.tsx",
-                                            lineNumber: 83,
-                                            columnNumber: 17
-                                        }, ("TURBOPACK compile-time value", void 0))
+                        className: "mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-6 lg:px-12",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                            style: {
+                                opacity: textOpacity,
+                                scale: textScale
+                            },
+                            className: "pointer-events-auto max-w-3xl",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mb-6 inline-flex items-center gap-3 rounded-full border border-black/5 bg-white/50 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#0057FF] backdrop-blur-md",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: "[ brand awareness ]"
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/Hero.tsx",
-                                        lineNumber: 82,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                        className: "text-4xl font-extrabold leading-[1.08] text-[#111111] sm:text-5xl md:text-[4.5rem] lg:text-[5rem]",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "block text-[#0057FF]",
-                                                children: "Design,"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/home/Hero.tsx",
-                                                lineNumber: 86,
-                                                columnNumber: 17
-                                            }, ("TURBOPACK compile-time value", void 0)),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "block",
-                                                children: "não é só"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/home/Hero.tsx",
-                                                lineNumber: 87,
-                                                columnNumber: 17
-                                            }, ("TURBOPACK compile-time value", void 0)),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                className: "block",
-                                                children: "estética."
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/home/Hero.tsx",
-                                                lineNumber: 88,
-                                                columnNumber: 17
-                                            }, ("TURBOPACK compile-time value", void 0))
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/components/home/Hero.tsx",
-                                        lineNumber: 85,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "mt-6 max-w-xl text-lg font-semibold text-[#0f172a]",
+                                        lineNumber: 66,
+                                        columnNumber: 17
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                }, void 0, false, {
+                                    fileName: "[project]/components/home/Hero.tsx",
+                                    lineNumber: 65,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                    className: "font-sans text-5xl font-extrabold leading-[0.95] tracking-tight text-[#111111] sm:text-7xl md:text-[5.5rem] lg:text-[7rem]",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "block text-[#0057FF]",
+                                            children: "Design,"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/home/Hero.tsx",
+                                            lineNumber: 70,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "block",
+                                            children: "não é só"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/home/Hero.tsx",
+                                            lineNumber: 71,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "block",
+                                            children: "estética."
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/home/Hero.tsx",
+                                            lineNumber: 72,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/home/Hero.tsx",
+                                    lineNumber: 69,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mt-8 max-w-lg rounded-lg bg-white/40 p-4 backdrop-blur-sm sm:bg-transparent sm:p-0 sm:backdrop-blur-none",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-lg font-medium leading-relaxed text-[#111111]/80 md:text-xl",
                                         children: "[É intenção, é estratégia, é experiência.]"
                                     }, void 0, false, {
                                         fileName: "[project]/components/home/Hero.tsx",
-                                        lineNumber: 90,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "mt-10 flex flex-col items-start gap-4 sm:flex-row",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                                variant: "primary",
-                                                href: "/sobre",
-                                                className: "uppercase tracking-[0.3em]",
-                                                children: "conhecer o manifesto"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/home/Hero.tsx",
-                                                lineNumber: 95,
-                                                columnNumber: 17
-                                            }, ("TURBOPACK compile-time value", void 0)),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
-                                                type: "button",
-                                                ...motionButtonProps,
-                                                onClick: handleVideoExpand,
-                                                className: "inline-flex items-center gap-3 rounded-full border border-[#0057FF]/60 px-6 py-3 text-xs font-semibold uppercase tracking-[0.5em] text-[#0057FF] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#0057FF]/70",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
-                                                        className: "h-4 w-4 text-[#0057FF]"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/components/home/Hero.tsx",
-                                                        lineNumber: 104,
-                                                        columnNumber: 19
-                                                    }, ("TURBOPACK compile-time value", void 0)),
-                                                    "manifesto em vídeo"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/components/home/Hero.tsx",
-                                                lineNumber: 98,
-                                                columnNumber: 17
-                                            }, ("TURBOPACK compile-time value", void 0))
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/components/home/Hero.tsx",
-                                        lineNumber: 94,
-                                        columnNumber: 15
+                                        lineNumber: 76,
+                                        columnNumber: 17
                                     }, ("TURBOPACK compile-time value", void 0))
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/home/Hero.tsx",
-                                lineNumber: 78,
-                                columnNumber: 13
-                            }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "order-1 lg:order-2",
-                                "aria-hidden": true,
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-sm font-semibold uppercase tracking-[0.7em] text-white/0 lg:text-transparent",
-                                    children: "visual immersion"
                                 }, void 0, false, {
                                     fileName: "[project]/components/home/Hero.tsx",
-                                    lineNumber: 111,
+                                    lineNumber: 75,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "mt-10 flex flex-wrap gap-4",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                        variant: "primary",
+                                        href: "/sobre",
+                                        className: "uppercase tracking-widest text-xs py-4 px-8",
+                                        children: "get to know me better →"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/home/Hero.tsx",
+                                        lineNumber: 82,
+                                        columnNumber: 17
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                }, void 0, false, {
+                                    fileName: "[project]/components/home/Hero.tsx",
+                                    lineNumber: 81,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
-                            }, void 0, false, {
-                                fileName: "[project]/components/home/Hero.tsx",
-                                lineNumber: 110,
-                                columnNumber: 13
-                            }, ("TURBOPACK compile-time value", void 0))
-                        ]
-                    }, void 0, true, {
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/home/Hero.tsx",
+                            lineNumber: 61,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    }, void 0, false, {
                         fileName: "[project]/components/home/Hero.tsx",
-                        lineNumber: 77,
+                        lineNumber: 60,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/components/home/Hero.tsx",
-                    lineNumber: 76,
+                    lineNumber: 58,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0)),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
-                    type: "button",
-                    ...motionButtonProps,
-                    tabIndex: 0,
-                    onClick: handleVideoExpand,
-                    "aria-label": "Expandir manifesto em vídeo",
-                    style: videoStyle,
-                    className: "absolute top-0 left-0 z-30 flex cursor-pointer flex-col overflow-hidden border border-white/50 bg-black/80 shadow-2xl transition-all duration-500",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
-                            src: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ASSETS"].videoManifesto,
-                            poster: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ASSETS"].heroManifestThumb,
-                            className: "h-full w-full object-cover",
-                            autoPlay: true,
-                            loop: true,
-                            muted: true,
-                            playsInline: true,
-                            preload: "metadata"
-                        }, void 0, false, {
-                            fileName: "[project]/components/home/Hero.tsx",
-                            lineNumber: 127,
-                            columnNumber: 11
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40"
-                        }, void 0, false, {
-                            fileName: "[project]/components/home/Hero.tsx",
-                            lineNumber: 138,
-                            columnNumber: 11
-                        }, ("TURBOPACK compile-time value", void 0)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "pointer-events-none absolute inset-0 flex items-center justify-center",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-2 rounded-full border border-white/60 bg-black/30 px-5 py-2 text-[0.625rem] font-semibold uppercase tracking-[0.5em] text-white shadow-md",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
-                                        className: "h-3 w-3 text-[#0057FF]"
-                                    }, void 0, false, {
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "absolute inset-0 z-20 flex items-center justify-center pointer-events-none",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].button, {
+                        type: "button",
+                        onClick: handleVideoExpand,
+                        style: {
+                            width: videoWidth,
+                            height: videoHeight,
+                            borderRadius: videoRadius,
+                            x: desktopX,
+                            y: desktopY
+                        },
+                        className: "pointer-events-auto absolute flex cursor-pointer overflow-hidden shadow-2xl origin-center",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "relative h-full w-full bg-black",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+                                    src: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ASSETS"].videoManifesto,
+                                    className: "h-full w-full object-cover opacity-90",
+                                    autoPlay: true,
+                                    loop: true,
+                                    muted: true,
+                                    playsInline: true
+                                }, void 0, false, {
+                                    fileName: "[project]/components/home/Hero.tsx",
+                                    lineNumber: 105,
+                                    columnNumber: 18
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "absolute inset-0 flex items-center justify-center bg-black/20 transition-colors hover:bg-black/10",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center gap-3 rounded-full bg-white/10 px-5 py-2 backdrop-blur-md border border-white/20",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$play$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Play$3e$__["Play"], {
+                                                className: "w-3 h-3 text-white fill-current"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/home/Hero.tsx",
+                                                lineNumber: 115,
+                                                columnNumber: 25
+                                            }, ("TURBOPACK compile-time value", void 0)),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-[10px] font-bold uppercase tracking-[0.2em] text-white",
+                                                children: "Manifesto"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/home/Hero.tsx",
+                                                lineNumber: 116,
+                                                columnNumber: 25
+                                            }, ("TURBOPACK compile-time value", void 0))
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/components/home/Hero.tsx",
-                                        lineNumber: 141,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    "manifesto"
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/home/Hero.tsx",
-                                lineNumber: 140,
-                                columnNumber: 13
-                            }, ("TURBOPACK compile-time value", void 0))
-                        }, void 0, false, {
+                                        lineNumber: 114,
+                                        columnNumber: 22
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                }, void 0, false, {
+                                    fileName: "[project]/components/home/Hero.tsx",
+                                    lineNumber: 113,
+                                    columnNumber: 19
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/components/home/Hero.tsx",
-                            lineNumber: 139,
-                            columnNumber: 11
+                            lineNumber: 104,
+                            columnNumber: 15
                         }, ("TURBOPACK compile-time value", void 0))
-                    ]
-                }, void 0, true, {
+                    }, void 0, false, {
+                        fileName: "[project]/components/home/Hero.tsx",
+                        lineNumber: 92,
+                        columnNumber: 13
+                    }, ("TURBOPACK compile-time value", void 0))
+                }, void 0, false, {
                     fileName: "[project]/components/home/Hero.tsx",
-                    lineNumber: 118,
+                    lineNumber: 91,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             ]
         }, void 0, true, {
             fileName: "[project]/components/home/Hero.tsx",
-            lineNumber: 66,
+            lineNumber: 46,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/components/home/Hero.tsx",
-        lineNumber: 61,
+        lineNumber: 41,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
