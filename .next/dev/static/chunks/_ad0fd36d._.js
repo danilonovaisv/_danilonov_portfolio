@@ -1496,7 +1496,7 @@ const aspectClasses = {
     wide: 'aspect-[2/1]',
     rectangle: 'aspect-[3/2]'
 };
-const ProjectCard = ({ project, index })=>{
+const ProjectCard = ({ project, index, className })=>{
     _s();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     const ref = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
@@ -1663,7 +1663,12 @@ const ctaVariant = {
         y: 0,
         transition: {
             duration: 0.6,
-            ease: 'easeOut'
+            ease: [
+                0.22,
+                1,
+                0.36,
+                1
+            ]
         }
     }
 };
@@ -1767,7 +1772,7 @@ const FeaturedProjectsSection = ({ projects = __TURBOPACK__imported__module__$5b
                                         once: true,
                                         amount: 0.6
                                     },
-                                    className: "flex min-h-[260px] w-full flex-col justify-between gap-6 rounded-[1.5rem] border border-[#E6E8EB] bg-white/80 p-8 shadow-[0_20px_45px_rgba(15,23,42,0.12)] transition-colors duration-300 hover:border-[#0057FF] hover:shadow-[0_20px_45px_rgba(0,87,255,0.25)]",
+                                    className: "flex min-h-[260px] w-full flex-col justify-between gap-6 rounded-[1.5rem] bg-[#F4F5F7] p-8",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             children: [

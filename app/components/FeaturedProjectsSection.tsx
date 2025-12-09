@@ -64,7 +64,7 @@ const FeaturedProjectsSection = ({ projects = featuredProjects }: FeaturedProjec
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.6 }}
-                className="flex min-h-[260px] w-full flex-col justify-between gap-6 rounded-[1.5rem] border border-[#E6E8EB] bg-white/80 p-8 shadow-[0_20px_45px_rgba(15,23,42,0.12)] transition-colors duration-300 hover:border-[#0057FF] hover:shadow-[0_20px_45px_rgba(0,87,255,0.25)]"
+                className="flex min-h-[260px] w-full flex-col justify-between gap-6 rounded-[1.5rem] bg-[#F4F5F7] p-8"
               >
                 <div>
                   <p className="text-sm uppercase tracking-[0.45em] text-[#7D8297]">portfolio</p>
