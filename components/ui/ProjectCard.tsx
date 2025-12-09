@@ -57,6 +57,18 @@ const ProjectCard = ({
     },
   };
 
+  const badgeValues = Array.from(
+    new Set(
+      project.category
+        .split(/[\s&,/]+/)
+        .map((segment) => segment.trim())
+        .filter(Boolean)
+    )
+  );
+
+  const badgeLabels =
+    badgeValues.length > 0 ? badgeValues.slice(0, 2) : [project.category];
+
   // Image Variants
   const imageVariants = {
     hover: {
@@ -100,10 +112,15 @@ const ProjectCard = ({
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500 pointer-events-none" />
 
         {/* Tags (Canto Superior) */}
-        <div className="absolute top-6 right-6 z-10 pointer-events-none">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold uppercase tracking-wider text-[#0057FF] shadow-sm ring-1 ring-white/50">
-            {project.category}
-          </span>
+        <div className="absolute top-6 right-6 z-10 flex flex-col items-end gap-2 pointer-events-none">
+          {badgeLabels.map((badge) => (
+            <span
+              key={`${badge}-${project.slug}`}
+              className="inline-flex px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#0057FF] shadow-sm ring-1 ring-white/50"
+            >
+              {badge}
+            </span>
+          ))}
         </div>
       </div>
 

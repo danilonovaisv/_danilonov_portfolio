@@ -4,7 +4,10 @@ import Image from 'next/image';
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { PROJECT_SHOWCASE_CARDS, ProjectShowcaseCard } from '../../lib/constants';
+import {
+  PROJECT_SHOWCASE_CARDS,
+  ProjectShowcaseCard,
+} from '../../lib/constants';
 
 const ProjectBlockCard = ({
   card,

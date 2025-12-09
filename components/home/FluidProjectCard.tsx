@@ -49,7 +49,7 @@ const FluidProjectCard: React.FC<FluidProjectCardProps> = ({
       ref={cardRef}
       className={clsx(
         'relative overflow-hidden border border-white/40 bg-white/20 shadow-[0_35px_65px_rgba(15,23,42,0.35)]',
-        className,
+        className
       )}
       style={{
         borderRadius: borderRadiusValue,
