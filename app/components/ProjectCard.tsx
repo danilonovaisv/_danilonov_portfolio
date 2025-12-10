@@ -17,10 +17,10 @@ import { Vector3 } from 'three';
 import * as THREE from 'three';
 
 const imageLayouts: Record<Project['layout'], string> = {
-  small: 'aspect-[4/5]',
+  small: 'aspect-4/5',
   medium: 'aspect-video',
-  wide: 'aspect-[2/1]',
-  rectangle: 'aspect-[3/2]',
+  wide: 'aspect-2/1',
+  rectangle: 'aspect-3/2',
 };
 
 const cardVariants: Variants = {
@@ -183,9 +183,9 @@ const ProjectCard = ({
     >
       <div
         ref={trackRef}
-        className={`relative w-full overflow-hidden rounded-[2rem] border border-slate-200/70 bg-slate-100/60 ${imageLayouts[project.layout]}`}
+        className={`relative w-full overflow-hidden rounded-4xl border border-slate-200/70 bg-slate-100/60 ${imageLayouts[project.layout]}`}
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-slate-100/70" />
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-white/40 to-slate-100/70" />
       </div>
 
       <div className="flex flex-col gap-3">

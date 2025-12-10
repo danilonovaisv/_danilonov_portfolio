@@ -127,7 +127,7 @@ const PortfolioShowcaseSection: FC = () => {
                           // Layout especial para o 3º item quando fechado
                           <motion.h3
                             layout="position"
-                            className="font-light text-[#111111] transition-all duration-300 tracking-tight leading-[1.0] text-3xl md:text-5xl lg:text-6xl group-hover:text-[#0057FF]"
+                            className="font-light text-[#111111] transition-all duration-300 tracking-tight leading-none text-3xl md:text-5xl lg:text-6xl group-hover:text-[#0057FF]"
                           >
                             <span className="block">Web Campaigns,</span>
                             <span className="block">Websites & Tech</span>
