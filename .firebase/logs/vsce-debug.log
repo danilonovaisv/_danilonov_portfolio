@@ -599,3 +599,5 @@ I1209 14:57:54.111583   63976 load.go:109] Finished reloading
 [debug] [2025-12-10T01:55:46.630Z] [Firebase Plugin] Received emulators shutdown notification.
 [debug] [2025-12-10T01:56:26.276Z] [Firebase Plugin] Received CLI notification.
 [debug] [2025-12-10T01:56:26.278Z] [Firebase Plugin] Received emulators shutdown notification.
+[info] [Firebase Plugin] Stopping Data Connect toolkit
+[warn] ⚠  Data Connect Emulator has exited upon receiving signal: SIGINT 
