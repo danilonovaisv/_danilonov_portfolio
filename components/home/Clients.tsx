@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { CLIENT_LOGOS } from '../../lib/constants';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
@@ -12,8 +12,8 @@ const Clients: React.FC = () => {
     ? {}
     : { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 } };
 
-  const listVariants = prefersReducedMotion
-    ? {}
+  const listVariants: Variants | undefined = prefersReducedMotion
+    ? undefined
     : {
         hidden: {},
         visible: {
@@ -22,8 +22,8 @@ const Clients: React.FC = () => {
           },
         },
       };
-  const itemVariants = prefersReducedMotion
-    ? {}
+  const itemVariants: Variants | undefined = prefersReducedMotion
+    ? undefined
     : {
         hidden: { opacity: 0, y: 10 },
         visible: { opacity: 1, y: 0 },
@@ -51,7 +51,7 @@ const Clients: React.FC = () => {
           whileInView={prefersReducedMotion ? undefined : 'visible'}
           viewport={prefersReducedMotion ? undefined : { once: true, amount: 0.2 }}
           variants={listVariants}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-6 gap-y-8 md:gap-x-10 md:gap-y-10 items-center justify-items-center py-6 md:py-8 px-2"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-10 md:gap-x-10 md:gap-y-12 items-center justify-items-center py-8 md:py-10 px-2"
         >
           {CLIENT_LOGOS.map((logo, index) => {
             return (

@@ -52,7 +52,7 @@ const PortfolioShowcaseSection: FC = () => {
             <div className="flex gap-3">
               <a
                 href="/portfolio"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0057FF] text-white px-6 py-3 text-sm font-semibold uppercase tracking-widest shadow-md shadow-[#0057FF]/20 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0057FF]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0057FF] text-white px-7 py-3 text-sm font-semibold uppercase tracking-widest shadow-md shadow-[#0057FF]/25 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0057FF]/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
               >
                 veja mais →
               </a>
@@ -103,7 +103,7 @@ const PortfolioShowcaseSection: FC = () => {
                     }
                     onMouseLeave={() => setHoveredId(null)}
                     className={`
-                      relative flex w-full cursor-pointer border-b border-neutral-300 transition duration-200 ease-out rounded-2xl
+                      relative flex w-full cursor-pointer border-b border-[#d8d9dc] transition duration-200 ease-out rounded-2xl
                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]
                       ${
                         isExpanded
@@ -122,14 +122,14 @@ const PortfolioShowcaseSection: FC = () => {
                     )}
 
                     {/* Container Principal do Item */}
-                      <motion.div
-                        layout="position"
-                        className={`flex w-full transition-all duration-200 ease-out
-                      ${isExpanded ? 'py-8 flex-col items-start gap-8' : 'py-8 md:py-12 items-center'}
+                    <motion.div
+                      layout="position"
+                      className={`flex w-full transition-all duration-200 ease-out
+                      ${isExpanded ? 'py-10 md:py-12 flex-col items-start gap-8' : 'py-10 md:py-12 items-center'}
                       ${!isExpanded ? alignmentClass : ''}
                       ${!isExpanded ? 'hover:scale-[1.005] focus-visible:scale-[1.005]' : ''}
                     `}
-                      >
+                    >
                       {/* Conteúdo do Item (Texto + Ícone) */}
                       <div
                         className={`flex items-center relative ${!isExpanded ? 'gap-5 md:gap-6' : 'gap-5 w-full'}`}
@@ -195,8 +195,8 @@ const PortfolioShowcaseSection: FC = () => {
                             <motion.h3
                               layout="position"
                               className={`
-                              font-bold text-[#111111] transition-all duration-300 tracking-tight leading-[1.1] group-hover:text-[#0057FF]
-                              text-xl md:text-2xl
+                              font-bold text-[#111111] transition-all duration-300 tracking-tight leading-[1.15] group-hover:text-[#0057FF]
+                              text-[22px] md:text-[28px]
                             `}
                             >
                               {category.label}
@@ -276,13 +276,13 @@ const PortfolioShowcaseSection: FC = () => {
                                     className="flex items-center gap-4 text-lg md:text-xl font-medium text-[#111111] group/item cursor-pointer"
                                   >
                                     <span className="w-2 h-2 rounded-full bg-[#0057FF] group-hover/item:scale-150 transition-transform" />
-                                    <span className="group-hover/item:translate-x-2 transition-transform">
-                                      Projeto Exemplo {i}
-                                    </span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
+                                  <span className="group-hover/item:translate-x-2 transition-transform">
+                                    Projeto Exemplo {i}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
 
                             <div className="flex gap-4">
                               <a
