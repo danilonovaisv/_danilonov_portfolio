@@ -1,11 +1,4 @@
-import { Metadata } from 'next';
 import React from 'react';
-
-export const metadata: Metadata = {
-  title: 'Portfolio | Danilo Novais',
-  description:
-    'Confira meus projetos recentes: Brand, Campaigns, Videos e Web.',
-};
 
 export default function PortfolioPage() {
   return (

@@ -7,10 +7,8 @@ Title: Color orb
 */
 
 import * as THREE from 'three'
-import { createContext, useContext, useMemo } from 'react'
-import type { ComponentProps, ComponentType, ReactNode } from 'react'
-import { Merged, useGLTF } from '@react-three/drei'
-import type { ThreeElements } from '@react-three/fiber'
+import React, { useRef, useMemo, useContext, createContext } from 'react'
+import { useGLTF, Merged, useAnimations } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 
 type GLTFResult = GLTF & {
@@ -24,21 +22,13 @@ type GLTFResult = GLTF & {
   }
 }
 
-type InstancesContextValue = {
-  Object: ComponentType<{ name: string }>
-  Object1: ComponentType<{ name: string }>
-}
+type ActionName = 'Animation'
+type GLTFActions = Record<ActionName, THREE.AnimationAction>
 
-const InstancesContext = createContext<InstancesContextValue | null>(null)
-
-type InstancesProps = {
-  children: ReactNode
-} & Omit<ComponentProps<typeof Merged>, 'children' | 'meshes'>
-
-export function Instances({ children, ...props }: InstancesProps) {
-  const gltf = useGLTF('/media/color_orb.glb') as unknown as GLTFResult
-  const { nodes } = gltf
-  const meshes = useMemo(
+const context = createContext()
+export function Instances({ children, ...props }) {
+  const { nodes } = useGLTF('/media/color_orb.glb') as GLTFResult
+  const instances = useMemo(
     () => ({
       Object: nodes.Object_4,
       Object1: nodes.Object_6,
@@ -46,26 +36,18 @@ export function Instances({ children, ...props }: InstancesProps) {
     [nodes]
   )
   return (
-    <Merged meshes={meshes} {...props}>
-      {(mergedInstances) => (
-        <InstancesContext.Provider value={mergedInstances as unknown as InstancesContextValue}>
-          {children}
-        </InstancesContext.Provider>
-      )}
+    <Merged meshes={instances} {...props}>
+      {(instances) => <context.Provider value={instances} children={children} />}
     </Merged>
   )
 }
 
-type GroupProps = ThreeElements['group']
-
-export function Model(props: GroupProps) {
-  const instances = useContext(InstancesContext)
-
-  if (!instances) {
-    return null
-  }
+export function Model(props: JSX.IntrinsicElements['group']) {
+  const instances = useContext(context)
+  const group = useRef<THREE.Group>()
+  const { actions } = useAnimations<GLTFActions>(animations, group)
   return (
-    <group {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group name="root">

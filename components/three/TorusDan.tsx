@@ -1,215 +1,81 @@
-'use client';
+"use client";
 
-import React, { useMemo, useRef } from 'react';
-import { MotionValue } from 'framer-motion';
+import React, { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { MeshTransmissionMaterial, Float, useGLTF } from '@react-three/drei';
+import { MeshTransmissionMaterial, Float } from '@react-three/drei';
 import * as THREE from 'three';
-import useIsMobile from '@/hooks/useIsMobile';
 
-interface TorusDanProps {
-  scrollYProgress?: MotionValue<number>;
-  prefersReducedMotion?: boolean;
-  lowRenderMode?: boolean;
-  isMobile?: boolean;
-}
-
-useGLTF.preload('/media/torus_dan.glb');
-
-const TorusDan = ({
-  scrollYProgress,
-  prefersReducedMotion,
-  lowRenderMode,
-  isMobile,
-}: TorusDanProps) => {
+const TorusDan = () => {
+  const { viewport } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
-  const gltf = useGLTF('/media/torus_dan.glb');
-  const { size } = useThree();
-  const persistedMobile = useIsMobile();
-  const viewportMobile = size.width < 768;
-  const isMobileDevice = (isMobile ?? persistedMobile) || viewportMobile;
-  const usePhysicalFallback = lowRenderMode;
-  const useTransmissionMaterial = !usePhysicalFallback;
-
-  const geometry = useMemo(() => {
-    const mesh = gltf.scene.children.find(
-      (child): child is THREE.Mesh => (child as THREE.Mesh).isMesh === true
-    );
-    return mesh?.geometry ?? new THREE.TorusGeometry(1, 0.4, 64, 128);
-  }, [gltf]);
-
-  const backgroundColor = useMemo(() => new THREE.Color('#F4F5F7'), []);
-  const transmissionQuality = useMemo(() => {
-    if (isMobileDevice) {
-      return {
-        resolution: 512,
-        samples: 5,
-        anisotropy: 0,
-        distortion: 0.32,
-        distortionScale: 0.22,
-        temporalDistortion: 0.14,
-      };
-    }
-
-    return {
-      resolution: 900,
-      samples: 12,
-      anisotropy: 0.1,
-      distortion: 0.5,
-      distortionScale: 0.36,
-      temporalDistortion: 0.2,
-    };
-  }, [isMobileDevice]);
-
-  const chromaticAberration = useMemo(
-    () => (isMobileDevice ? 0.04 : 0.06),
-    [isMobileDevice]
-  );
-
-  const transmissionMaterialProps = useMemo(
-    () => ({
-      backside: true,
-      background: backgroundColor,
-      transmission: 1,
-      thickness: 0.8,
-      roughness: 0.02,
-      ior: 1.25,
-      chromaticAberration,
-      attenuationDistance: 0.5,
-      attenuationColor: '#ffffff',
-      color: '#f0f5ff',
-      ...transmissionQuality,
-    }),
-    [backgroundColor, transmissionQuality, chromaticAberration]
-  );
-
-  const fallbackMaterialProps = useMemo(
-    () => ({
-      color: '#f0f5ff',
-      transparent: true,
-      opacity: 0.7,
-      roughness: 0.05,
-      metalness: 0.15,
-      reflectivity: 0.25,
-      clearcoat: 0.2,
-      clearcoatRoughness: 0.35,
-      transmission: 0.6,
-    }),
-    []
-  );
-
-  /* @ts-ignore */
-  const materialRef = useRef<any>(null);
 
   useFrame((state, delta) => {
-    if (!meshRef.current) return;
+    if (meshRef.current) {
+      // Continuous slow rotation
+      meshRef.current.rotation.z += delta * 0.05;
 
-    if (prefersReducedMotion) {
-      meshRef.current.rotation.x = THREE.MathUtils.damp(
+      // Mouse interaction (Parallax/Tilt)
+      const { x, y } = state.pointer;
+      
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(
         meshRef.current.rotation.x,
-        0,
-        6,
-        delta
+        y * 0.2, // Sensitivity
+        0.05 // Smoothness
       );
-      meshRef.current.rotation.y = THREE.MathUtils.damp(
+      
+      meshRef.current.rotation.y = THREE.MathUtils.lerp(
         meshRef.current.rotation.y,
-        0,
-        6,
-        delta
+        x * 0.2, // Sensitivity
+        0.05 // Smoothness
       );
-      meshRef.current.rotation.z = THREE.MathUtils.damp(
-        meshRef.current.rotation.z,
-        0,
-        6,
-        delta
-      );
-      meshRef.current.position.x = THREE.MathUtils.damp(
-        meshRef.current.position.x,
-        0,
-        4,
-        delta
-      );
-      meshRef.current.position.y = THREE.MathUtils.damp(
-        meshRef.current.position.y,
-        0,
-        4,
-        delta
-      );
-      return;
-    }
-
-    const pointerInfluence = isMobileDevice ? 0.1 : 0.18;
-    const pointerX = state.pointer.x * pointerInfluence;
-    const pointerY = state.pointer.y * pointerInfluence;
-    const scrollValue = scrollYProgress?.get?.() ?? 0;
-    const timeRotate = lowRenderMode ? 0 : state.clock.elapsedTime * 0.05;
-
-    const targetRotX = pointerY * 0.7;
-    const targetRotZ = pointerX * 0.7;
-    const targetRotY = scrollValue * Math.PI * 1.4 + timeRotate;
-
-    meshRef.current.rotation.x = THREE.MathUtils.damp(
-      meshRef.current.rotation.x,
-      targetRotX,
-      6,
-      delta
-    );
-    meshRef.current.rotation.z = THREE.MathUtils.damp(
-      meshRef.current.rotation.z,
-      targetRotZ,
-      6,
-      delta
-    );
-    meshRef.current.rotation.y = THREE.MathUtils.damp(
-      meshRef.current.rotation.y,
-      targetRotY,
-      4,
-      delta
-    );
-
-    const targetPosX = pointerX * 0.25;
-    const targetPosY = pointerY * 0.1;
-
-    meshRef.current.position.x = THREE.MathUtils.damp(
-      meshRef.current.position.x,
-      targetPosX,
-      4,
-      delta
-    );
-    meshRef.current.position.y = THREE.MathUtils.damp(
-      meshRef.current.position.y,
-      targetPosY,
-      4,
-      delta
-    );
-
-    if (scrollYProgress && useTransmissionMaterial) {
-      if (materialRef.current) {
-        materialRef.current.distortion = 0.32 + scrollValue * 0.32;
-        materialRef.current.chromaticAberration = 0.05 + scrollValue * 0.04;
-      }
     }
   });
 
+  // Responsive scale for procedural torus
+  const responsiveScale = viewport.width < 5 ? 2.5 : 3.0;
+
   return (
-    <Float
-      speed={prefersReducedMotion || lowRenderMode ? 0 : 2}
-      rotationIntensity={prefersReducedMotion || lowRenderMode ? 0 : 0.45}
-      floatIntensity={prefersReducedMotion || lowRenderMode ? 0 : 0.8}
-      floatingRange={[-0.15, 0.15]}
-    >
-      {/* @ts-ignore */}
-      <mesh ref={meshRef} geometry={geometry} position={[0, 0, 0]}>
-        {useTransmissionMaterial ? (
-          <MeshTransmissionMaterial
-            ref={materialRef}
-            {...transmissionMaterialProps}
+    // @ts-ignore
+    <group scale={responsiveScale}>
+      <Float 
+        speed={1.5} 
+        rotationIntensity={0.2} 
+        floatIntensity={0.5} 
+        floatingRange={[-0.1, 0.1]}
+      >
+        {/* @ts-ignore */}
+        <mesh 
+          ref={meshRef}
+          position={[0, 0, 0]}
+          rotation={[0, 0, 0]} 
+        >
+          {/* Procedural Geometry to replace missing GLB */}
+          {/* @ts-ignore */}
+          <torusGeometry args={[1, 0.4, 64, 128]} />
+          
+          <MeshTransmissionMaterial 
+            backside={true}
+            samples={6} 
+            resolution={512}
+            transmission={0.98}
+            roughness={0.0}
+            clearcoat={1}
+            clearcoatRoughness={0}
+            thickness={2.5}
+            ior={1.4}
+            chromaticAberration={0.04}
+            anisotropy={0} 
+            distortion={0.6}
+            distortionScale={0.4}
+            temporalDistortion={0.1}
+            attenuationDistance={0.5}
+            attenuationColor="#ffffff"
+            color="#ffffff"
+            background={new THREE.Color('#F4F5F7')}
           />
-        ) : (
-          <meshPhysicalMaterial ref={materialRef} {...fallbackMaterialProps} />
-        )}
-      </mesh>
-    </Float>
+        </mesh>
+      </Float>
+    </group>
   );
 };
 

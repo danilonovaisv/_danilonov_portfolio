@@ -1,50 +1,36 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 :root {
-  /* Colors */
-  --background: #f4f5f7;
-  --foreground: #111111;
-  --primary: #0057ff;
+  --color-surface-main: #F4F5F7;
+  --color-text-main: #111111;
+  --color-accent-blue: #0057FF;
 
-  /* Layout */
-  --max-width: 1440px;
+  --font-sans: "Inter", sans-serif;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Custom Utilities if needed */
+.container-custom {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }
 
-/* Headers use Display font */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-outfit), sans-serif;
-}
+@layer utilities {
+  .bg-primary {
+    background-color: var(--color-accent-blue);
+  }
 
-/* Base Styles */
-img,
-video {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+  .text-primary {
+    color: var(--color-accent-blue);
+  }
 
-/* Focus styles */
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
+  .bg-surface-main {
+    background-color: var(--color-surface-main);
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  html,
-  body {
-    scroll-behavior: auto;
+  .text-text-main {
+    color: var(--color-text-main);
   }
 }

@@ -1,80 +1,54 @@
 "use client";
 
-import { useRef } from 'react';
-import { motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import type { Variants } from 'framer-motion';
-import HeroGlassCanvas from '../three/HeroGlassCanvas';
+import React, { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { ASSETS } from '../../lib/constants';
 
-// Componente para animar texto letra por letra (efeito "digitação/reveal")
-type AnimatedTextLineProps = {
-  text: string;
-  className?: string;
-  delay?: number;
-  colorClass?: string;
-};
-
-const AnimatedTextLine = ({ text, className, delay = 0, colorClass = "text-[#111111]" }: AnimatedTextLineProps) => {
-  // Separa o texto em caracteres
+// Reference Animation Logic adapted for React
+// Uses the specific linear() easing from the provided CSS reference
+const RefAnimatedText: React.FC<{ 
+  text: string; 
+  className?: string; 
+  delayStart?: number; // offset index for stagger
+}> = ({ text, className, delayStart = 0 }) => {
   const letters = text.split("");
 
-  const container: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { 
-        staggerChildren: 0.03, // Stagger mais rápido para fluxo contínuo
-        delayChildren: delay 
-      }
-    },
-  };
-
-  const child: Variants = {
-    hidden: {
-      y: "110%", // Garante que saia totalmente da máscara
-      opacity: 0, 
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      // Curva "Premium": Rápida no início, muito suave no final
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] }
-    },
-  };
-
   return (
-    <motion.div
-      className={`flex overflow-hidden ${className}`} // overflow-hidden é crucial para o efeito de máscara
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
-      {letters.map((letter, index) => (
-        <motion.span 
-          key={`${letter}-${index}`}
-          variants={child} 
-          className={`block ${colorClass} leading-[0.9]`}
+    <p className={`ref-word-anim flex overflow-hidden leading-[0.9] ${className}`} aria-label={text}>
+      {letters.map((letter, i) => (
+        <span 
+          key={i} 
+          aria-hidden="true" 
+          style={{ '--i': i + delayStart } as React.CSSProperties}
+          className="block"
         >
           {letter === " " ? "\u00A0" : letter}
-        </motion.span>
+        </span>
       ))}
-    </motion.div>
+    </p>
   );
 };
 
-const Hero = () => {
+const Hero: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   
-  // Controle de Scroll para a animação da timeline
+  // Trigger animation on mount/view
+  useEffect(() => {
+    // Small delay to ensure render before animating
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Control Scroll for timeline animation
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"]
   });
 
-  // Monitora o progresso do scroll para controlar o áudio do vídeo
+  // Monitor scroll for video audio
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (videoRef.current) {
       if (latest > 0.01) {
@@ -85,14 +59,10 @@ const Hero = () => {
     }
   });
 
-  // Animações
+  // Animations
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const contentScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
   const contentY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
-
-  // Animação específica para o Glass Orb (Desaparece mais rápido para limpar o vídeo)
-  const glassOrbOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const glassOrbScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
 
   // Video transitions
   const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.25, 1]);
@@ -102,26 +72,39 @@ const Hero = () => {
 
   return (
     <section 
-      /* biome-ignore lint/correctness/useUniqueElementIds: Este ID precisa ser estático para anchors globais */
       id="hero" 
       ref={sectionRef}
       className="relative h-[450vh] w-full bg-[#F4F5F7]"
     >
+      {/* Inject specific CSS for the reference animation */}
+      <style>{`
+        .ref-word-anim {
+          --trans-duration: 3000ms; /* Updated to match reference exactly */
+          --trans-delay-factor: 20ms; /* Updated to match reference exactly */
+          /* The specific linear easing from the reference */
+          --trans-timing-function: linear(0, 0.011 0.6%, 0.041 1.2%, 0.173 2.6%, 0.894 7.4%, 1.128 9.3%, 1.271 11.1%, 1.311 12%, 1.333 13%, 1.328 14.4%, 1.286 15.9%, 1.031 21%, 0.95 23%, 0.907 24.7%, 0.888 26.5%, 0.89 27.9%, 0.904 29.4%, 1.034 42.5%, 0.997 49.3%, 0.987 53.3%, 1.004 66.5%, 1);
+        }
+        
+        .ref-word-anim span {
+          transform: translateY(110%);
+          opacity: 0;
+          transition: transform var(--trans-duration) var(--trans-timing-function), opacity var(--trans-duration) var(--trans-timing-function);
+          transition-delay: calc(var(--i) * var(--trans-delay-factor));
+        }
+
+        .hero-text-visible .ref-word-anim span {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      `}</style>
+
       {/* Container Sticky */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         
-        {/* 1. BACKGROUND AMBIENT 3D LAYER (Absolute behind everything) */}
-        <motion.div 
-          style={{ opacity: glassOrbOpacity, scale: glassOrbScale }}
-          className="absolute inset-0 z-[-1] pointer-events-auto"
-        >
-           <HeroGlassCanvas />
-        </motion.div>
-
-        {/* 2. TEXT CONTENT LAYER */}
+        {/* 1. TEXT CONTENT LAYER */}
         <motion.div 
           style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
-          className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none"
+          className={`absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none ${isVisible ? 'hero-text-visible' : ''}`}
         >
           {/* TAG LATERAL: BRAND AWARENESS */}
           <motion.div 
@@ -139,33 +122,12 @@ const Hero = () => {
             
               {/* Título Principal */}
               <div className="text-[4.5rem] md:text-7xl lg:text-[7.5rem] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-sans flex flex-col items-start gap-1">
-                 {/* Mobile: Fade In Simples */}
-                 <div className="md:hidden flex flex-col leading-[0.9]">
-                    <motion.span 
-                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                      className="text-[#0057FF]"
-                    >
-                      Design,
-                    </motion.span>
-                    <motion.span 
-                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                      className="text-[#111111]"
-                    >
-                      não é só
-                    </motion.span>
-                    <motion.span 
-                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
-                      className="text-[#111111]"
-                    >
-                      estética.
-                    </motion.span>
-                 </div>
-
-                 {/* Desktop: Animação Letra por Letra */}
-                 <div className="hidden md:flex flex-col items-start gap-0">
-                    <AnimatedTextLine text="Design," delay={0.2} colorClass="text-[#0057FF]" />
-                    <AnimatedTextLine text="não é só" delay={0.5} colorClass="text-[#111111]" />
-                    <AnimatedTextLine text="estética." delay={0.8} colorClass="text-[#111111]" />
+                 
+                 {/* Animação unificada (Mobile & Desktop) usando a referência CSS */}
+                 <div className="flex flex-col items-start gap-0">
+                    <RefAnimatedText text="Design," className="text-[#0057FF]" delayStart={0} />
+                    <RefAnimatedText text="não é só" className="text-[#111111]" delayStart={7} />
+                    <RefAnimatedText text="estética." className="text-[#111111]" delayStart={15} />
                  </div>
               </div>
               
@@ -174,7 +136,7 @@ const Hero = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: "easeOut", delay: 1.2 }}
+                transition={{ duration: 1.2, ease: "easeOut", delay: 1.8 }}
                 className="mb-10 md:mb-14 relative"
               >
                 <p className="text-[#0057FF] text-lg md:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg pr-4 inline-block">
@@ -191,7 +153,7 @@ const Hero = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.4 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 2.0 }}
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(0, 87, 255, 0.5)" }}
                   whileTap={{ scale: 0.98 }}
                   className="group bg-[#0057FF] text-white rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg shadow-xl shadow-[#0057FF]/20 transition-all"
@@ -205,7 +167,7 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* 3. VIDEO LAYER (Foreground) */}
+        {/* 2. VIDEO LAYER (Foreground) */}
         <motion.div
           style={{
             scale: videoScale,

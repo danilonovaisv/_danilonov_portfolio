@@ -1,119 +1,38 @@
-'use client';
+"use client";
 
-import React, { Suspense, useRef, useState } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Environment, PerformanceMonitor, Preload } from '@react-three/drei';
-import { MotionValue } from 'framer-motion';
-import * as THREE from 'three';
+import React, { Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Environment, PerspectiveCamera, Lightformer } from '@react-three/drei';
 import TorusDan from './TorusDan';
 
-interface HeroGlassCanvasProps {
-  className?: string;
-  scrollYProgress?: MotionValue<number>;
-  prefersReducedMotion?: boolean;
-}
-
-type ResponsiveTorusProps = {
-  scrollYProgress?: MotionValue<number>;
-  prefersReducedMotion?: boolean;
-  lowRenderMode?: boolean;
-};
-
-const ResponsiveTorus = ({
-  scrollYProgress,
-  prefersReducedMotion,
-  lowRenderMode,
-}: ResponsiveTorusProps) => {
-  const orbitRef = useRef<THREE.Group>(null);
-  const { size } = useThree();
-
-  // Responsividade:
-  // Mobile: Modelo menor e deslocado para cima ou centro (não bloqueia texto quebre)
-  // Desktop wide: Modelo à direita
-  // 3xl screens: Centralizado e maior
-
-  const isMobile = size.width < 768;
-  const isTablet = size.width >= 768 && size.width < 1024;
-
-  // Escala base do modelo
-  let scale = 2.4;
-  if (isMobile) scale = 1.6;
-  if (isTablet) scale = 2.0;
-
-  // Posição base do modelo [x, y, z]
-  let position: [number, number, number] = [1.6, 0.25, 0];
-  if (isMobile) position = [0, 1.4, 0]; // Mobile: mais acima
-  if (isTablet) position = [1.2, 0.1, 0];
-
-  useFrame((_, delta) => {
-    if (orbitRef.current && !prefersReducedMotion) {
-      orbitRef.current.rotation.y += delta * 0.05;
-    }
-  });
-
+const HeroGlassCanvas: React.FC<{ className?: string }> = ({ className }) => {
   return (
-    <group ref={orbitRef} scale={[scale, scale, scale]} position={position}>
-      <TorusDan
-        scrollYProgress={scrollYProgress}
-        prefersReducedMotion={prefersReducedMotion}
-        lowRenderMode={lowRenderMode}
-        isMobile={isMobile}
-      />
-    </group>
-  );
-};
-
-const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
-  className,
-  scrollYProgress,
-  prefersReducedMotion,
-}) => {
-  const [dpr, setDpr] = useState<[number, number] | number>(() => [1, 1.5]);
-  const [lowRenderMode, setLowRenderMode] = useState(false);
-  const eventSourceNode =
-    typeof window !== 'undefined' ? document.body : undefined;
-  const canvasEventSource = prefersReducedMotion ? undefined : eventSourceNode;
-  const wrapperClassName = className
-    ? `h-full w-full ${className}`
-    : 'h-full w-full';
-
-  return (
-    <div className={wrapperClassName}>
-      <Canvas
-        camera={{ position: [0, 0, 4.2], fov: 45 }}
-        dpr={dpr}
-        eventPrefix="client"
-        eventSource={canvasEventSource}
-        gl={{
-          alpha: true,
-          antialias: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.1,
-        }}
-      >
-        <PerformanceMonitor
-          onDecline={() => {
-            setDpr(1); // Downgrade resolution
-            setLowRenderMode(true);
-          }}
-          onIncline={() => {
-            setDpr([1, 1.5]);
-            setLowRenderMode(false);
-          }}
-        />
-        <ambientLight intensity={0.5} color="#ffffff" />
-        <directionalLight position={[5, 10, 7.5]} intensity={1.2} castShadow />
-        <spotLight position={[-5, 0, -5]} intensity={0.5} color="#0057FF" />
-
+    <div className={`w-full h-full ${className}`}>
+      <Canvas dpr={[1, 2]} gl={{ alpha: true, antialias: true, toneMappingExposure: 1.2 }}>
+        <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={30} />
+        
+        {/* Lights designed to enhance glass reflection/refraction */}
+        {/* @ts-ignore */}
+        <ambientLight intensity={0.5} />
+        {/* @ts-ignore */}
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+        {/* @ts-ignore */}
+        <pointLight position={[-10, -10, -10]} intensity={1} color="#0057FF" />
+        
         <Suspense fallback={null}>
-          <ResponsiveTorus
-            scrollYProgress={scrollYProgress}
-            prefersReducedMotion={prefersReducedMotion}
-            lowRenderMode={lowRenderMode}
-          />
-
-          <Environment preset="city" blur={1} background={false} />
-          <Preload all />
+          <TorusDan />
+          
+          {/* Environment for realistic reflections */}
+          <Environment preset="city">
+            {/* Custom lightformers to add "studio" reflections to the glass */}
+            {/* @ts-ignore */}
+            <group rotation={[-Math.PI / 2, 0, 0]}>
+              <Lightformer intensity={4} rotation-x={Math.PI / 2} position={[0, 5, -9]} scale={[10, 10, 1]} />
+              <Lightformer intensity={2} rotation-y={Math.PI / 2} position={[-5, 1, -1]} scale={[20, 0.1, 1]} />
+              <Lightformer intensity={2} rotation-y={Math.PI / 2} position={[-5, -1, -1]} scale={[20, 0.5, 1]} />
+              <Lightformer intensity={2} rotation-y={-Math.PI / 2} position={[10, 1, 0]} scale={[20, 1, 1]} />
+            </group>
+          </Environment>
         </Suspense>
       </Canvas>
     </div>
