@@ -51,7 +51,7 @@ const HERO_FADE_VARIANTS_REDUCED = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
+    transition: { duration: 0.35, ease: HERO_FADE_EASE },
   },
 };
 
@@ -97,7 +97,7 @@ const HERO_TITLE_LINE_VARIANTS_REDUCED = {
     y: 0,
     transition: {
       duration: 0.45,
-      ease: 'easeOut',
+      ease: HERO_TITLE_LINE_EASE,
     },
   },
 };
