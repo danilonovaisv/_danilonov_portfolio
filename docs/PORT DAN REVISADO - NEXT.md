@@ -538,7 +538,7 @@ _(Mantido como bloco técnico extra, mas não exigido como implementação princ
 
 **PRIMARY MESSAGE / HEADLINE:**
 
-- `TBD` (se houver título textual acima do vídeo).
+- `TBD` (Não existe nenum texto).
 
 **SECONDARY MESSAGE / SUPPORT TEXT:**
 

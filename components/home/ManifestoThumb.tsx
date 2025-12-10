@@ -21,7 +21,7 @@ const ManifestoThumb: React.FC<ManifestoThumbProps> = ({
       onClick={onClick}
       style={motionStyle}
       className="flex w-[240px] max-w-full cursor-pointer items-center overflow-hidden rounded-[16px] border-4 border-[#00c3ff] bg-white/20 shadow-xl transition-shadow hover:shadow-[0_30px_50px_rgba(0,0,0,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00c3ff] focus-visible:ring-offset-2"
-      aria-label="Abrir manifesto em vídeo"
+      aria-label="Thumb do vídeo manifesto do portfólio de Danilo Novais"
     >
       <div className="relative h-full w-full bg-black">
         <video

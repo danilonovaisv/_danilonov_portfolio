@@ -48,10 +48,10 @@ const TorusDan = ({
     if (isMobileDevice) {
       return {
         resolution: 512,
-        samples: 6,
+        samples: 5,
         anisotropy: 0,
-        distortion: 0.28,
-        distortionScale: 0.22,
+        distortion: 0.24,
+        distortionScale: 0.18,
         temporalDistortion: 0.12,
       };
     }
@@ -66,6 +66,11 @@ const TorusDan = ({
     };
   }, [isMobileDevice]);
 
+  const chromaticAberration = useMemo(
+    () => (isMobileDevice ? 0.04 : 0.06),
+    [isMobileDevice]
+  );
+
   const transmissionMaterialProps = useMemo(
     () => ({
       backside: true,
@@ -74,13 +79,13 @@ const TorusDan = ({
       thickness: 0.8,
       roughness: 0.02,
       ior: 1.25,
-      chromaticAberration: 0.06,
+      chromaticAberration,
       attenuationDistance: 0.5,
       attenuationColor: '#ffffff',
       color: '#f0f5ff',
       ...transmissionQuality,
     }),
-    [backgroundColor, transmissionQuality]
+    [backgroundColor, transmissionQuality, chromaticAberration]
   );
 
   const fallbackMaterialProps = useMemo(

@@ -102,7 +102,8 @@ const PortfolioSection: React.FC = () => {
       key={project.slug}
       {...motionProps}
       variants={cardVariants}
-      className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_25px_60px_rgba(15,23,42,0.15)] transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_35px_70px_rgba(15,23,42,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
+      viewport={{ once: true, margin: '-15% 0px' }}
+      className="group flex h-full flex-col overflow-hidden rounded-[28px] bg-white shadow-[0_18px_40px_rgba(15,23,42,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(0,87,255,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
     >
       <Link
         href={project.href}
@@ -110,16 +111,20 @@ const PortfolioSection: React.FC = () => {
         aria-label={`${project.title} — ${project.client}`}
       >
         <div className="relative overflow-hidden">
-          <div className="relative aspect-[4/3] w-full">
+          <motion.div
+            className="relative aspect-[4/3] w-full"
+            whileHover={{ scale: 1.03, y: -4 }}
+            transition={{ type: 'spring', stiffness: 180, damping: 16 }}
+          >
             <Image
               src={project.imageUrl}
               alt={project.imageAlt}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-500"
               loading="lazy"
             />
-          </div>
+          </motion.div>
           <div className="absolute inset-x-0 top-4 flex items-center justify-between px-4">
             <div className="flex gap-2">
               {project.tags.map((tag) => (
@@ -188,11 +193,17 @@ const PortfolioSection: React.FC = () => {
         <div className="flex justify-center md:justify-end">
           <Link
             href="/portfolio"
-            className="inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-6 py-3 text-sm font-medium text-white shadow-[0_12px_28px_rgba(0,87,255,0.35)] transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
+            className="inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-[0_12px_28px_rgba(0,87,255,0.35)] transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
             aria-label="view projects"
           >
-            view projects
-            <ArrowUpRight className="h-4 w-4" />
+            <span>view projects</span>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+              className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20"
+            >
+              <ArrowUpRight className="h-4 w-4" />
+            </motion.span>
           </Link>
         </div>
       </div>

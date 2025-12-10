@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import { motion, type Easing } from 'framer-motion';
+import { motion, type Easing, useScroll, useTransform } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 import { ASSETS } from '@/lib/constants';
@@ -21,6 +21,16 @@ const Manifesto: React.FC = () => {
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  const videoScale = prefersReducedMotion
+    ? undefined
+    : useTransform(scrollYProgress, [0, 0.5, 1], [1.02, 1, 0.98]);
+  const videoTranslateY = prefersReducedMotion
+    ? undefined
+    : useTransform(scrollYProgress, [0, 0.5, 1], [20, 0, -10]);
   const manifestoMotionProps = prefersReducedMotion
     ? {}
     : {
@@ -59,7 +69,7 @@ const Manifesto: React.FC = () => {
     if (shouldLoad && videoRef.current) {
       videoRef.current
         .play()
-        .then(() => setIsPlaying(true))
+        .then(() => setIsPlaying(!videoRef.current?.paused))
         .catch(() => setIsPlaying(false));
     }
   }, [shouldLoad]);
@@ -102,11 +112,16 @@ const Manifesto: React.FC = () => {
 
   useEffect(() => {
     if (!videoRef.current) return;
-    videoRef.current.muted = !isAudioEnabled;
+    const video = videoRef.current;
+    video.muted = !isAudioEnabled;
     if (isAudioEnabled) {
-      videoRef.current.volume = 0.7;
+      video.volume = 0.7;
     }
-  }, [isAudioEnabled]);
+    video
+      .play()
+      .then(() => setIsPlaying(!video.paused))
+      .catch(() => setIsPlaying(false));
+  }, [isAudioEnabled, shouldLoad]);
 
   const togglePlay = async () => {
     if (!videoRef.current) return;
@@ -153,7 +168,10 @@ const Manifesto: React.FC = () => {
 
           {/* Coluna de Vídeo */}
           <motion.div {...manifestoMotionProps} className="order-2 w-full">
-            <div className="relative w-full overflow-hidden rounded-2xl bg-[#e5e7eb] shadow-xl aspect-video">
+            <motion.div
+              style={{ scale: videoScale, y: videoTranslateY }}
+              className="relative w-full overflow-hidden rounded-2xl bg-[#e5e7eb] shadow-xl aspect-video"
+            >
               {hasError ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
                   <AlertCircle className="mb-3 h-10 w-10 opacity-50" />
@@ -207,7 +225,7 @@ const Manifesto: React.FC = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

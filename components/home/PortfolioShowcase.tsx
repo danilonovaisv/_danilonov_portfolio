@@ -39,14 +39,24 @@ const PortfolioShowcaseSection: FC = () => {
       <div className="container mx-auto px-4 md:px-8 max-w-[90%] md:max-w-7xl relative z-10">
         {/* Cabeçalho da Seção */}
         <div className="flex flex-col w-full mb-10">
-          <div className="w-full flex flex-col items-center gap-2">
-            <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-slate-600">
-              [ what we love working on ]
-            </span>
-            <h2 className="text-center text-4xl md:text-6xl font-bold tracking-tight">
-              <span className="text-[#0057FF]">portfólio</span>{' '}
-              <span className="text-[#111111]">showcase</span>
-            </h2>
+          <div className="w-full flex flex-col items-center md:items-start gap-3 md:flex-row md:justify-between">
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-slate-600">
+                [ what we love working on ]
+              </span>
+              <h2 className="text-center md:text-left text-2xl md:text-3xl font-bold tracking-tight text-[#0057FF] lowercase">
+                portfólio showcase
+              </h2>
+            </div>
+
+            <div className="flex gap-3">
+              <a
+                href="/portfolio"
+                className="inline-flex items-center gap-2 rounded-full bg-white text-[#0057FF] px-5 py-3 text-sm font-semibold uppercase tracking-widest shadow-md shadow-[#0057FF]/10 ring-1 ring-[#0057FF]/20 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0057FF]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
+              >
+                veja mais →
+              </a>
+            </div>
           </div>
         </div>
 
@@ -93,9 +103,9 @@ const PortfolioShowcaseSection: FC = () => {
                     }
                     onMouseLeave={() => setHoveredId(null)}
                     className={`
-                      relative flex w-full cursor-pointer border-b border-neutral-300 transition duration-150 ease-out
+                      relative flex w-full cursor-pointer border-b border-neutral-300 transition duration-150 ease-out rounded-2xl
                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]
-                      ${isExpanded ? 'border-none' : ''}
+                      ${isExpanded ? 'border-none' : 'hover:bg-white/60 hover:shadow-md hover:shadow-[#0057FF]/10'}
                     `}
                   >
                     {/* Subtítulo alinhado com o primeiro item (Desktop Only) */}
@@ -108,14 +118,14 @@ const PortfolioShowcaseSection: FC = () => {
                     )}
 
                     {/* Container Principal do Item */}
-                    <motion.div
-                      layout="position"
-                      className={`flex w-full transition-all duration-200 ease-out
+                      <motion.div
+                        layout="position"
+                        className={`flex w-full transition-all duration-200 ease-out
                       ${isExpanded ? 'py-8 flex-col items-start gap-8' : 'py-8 md:py-12 items-center'}
                       ${!isExpanded ? alignmentClass : ''}
-                      ${!isExpanded ? 'hover:scale-[1.02] hover:shadow-md focus-visible:scale-[1.02]' : ''}
+                      ${!isExpanded ? 'hover:scale-[1.01] focus-visible:scale-[1.01]' : ''}
                     `}
-                    >
+                      >
                       {/* Conteúdo do Item (Texto + Ícone) */}
                       <div
                         className={`flex items-center relative ${!isExpanded ? 'gap-5 md:gap-6' : 'gap-5 w-full'}`}
@@ -155,7 +165,7 @@ const PortfolioShowcaseSection: FC = () => {
                             >
                               <Image
                                 src={category.thumbnailUrl}
-                                alt={`${category.label} thumbnail`}
+                                alt={`Prévia visual da categoria ${category.label} do portfólio de Danilo Novais`}
                                 fill
                                 sizes="140px"
                                 className="absolute inset-0 object-cover"
@@ -171,7 +181,7 @@ const PortfolioShowcaseSection: FC = () => {
                             // Layout especial para o 3º item quando fechado
                             <motion.h3
                               layout="position"
-                              className="font-light text-[#111111] transition-all duration-300 tracking-tight leading-none text-3xl md:text-5xl lg:text-6xl group-hover:text-[#0057FF]"
+                              className="font-bold text-[#111111] transition-all duration-300 tracking-tight leading-none text-xl md:text-2xl group-hover:text-[#0057FF]"
                             >
                               <span className="block">Web Campaigns,</span>
                               <span className="block">Websites & Tech</span>
@@ -181,8 +191,8 @@ const PortfolioShowcaseSection: FC = () => {
                             <motion.h3
                               layout="position"
                               className={`
-                              font-light text-[#111111] transition-all duration-300 tracking-tight leading-[1.1] group-hover:text-[#0057FF]
-                              ${isExpanded ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl lg:text-6xl'}
+                              font-bold text-[#111111] transition-all duration-300 tracking-tight leading-[1.1] group-hover:text-[#0057FF]
+                              ${isExpanded ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'}
                             `}
                             >
                               {category.label}
@@ -230,7 +240,7 @@ const PortfolioShowcaseSection: FC = () => {
                           <div className="w-full md:w-1/2 aspect-video rounded-lg overflow-hidden bg-gray-200 shadow-lg relative">
                             <Image
                               src={category.thumbnailUrl}
-                              alt={category.label}
+                              alt={`Imagem destaque da categoria ${category.label} com projetos recentes de Danilo Novais`}
                               fill
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               className="absolute inset-0 object-cover hover:scale-105 transition-transform duration-700"

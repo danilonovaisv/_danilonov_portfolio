@@ -26,6 +26,7 @@ const ManifestoVideo: React.FC<ManifestoVideoProps> = ({
         preload="metadata"
         onError={onError}
         aria-label="Vídeo Manifesto do portfólio"
+        title="Vídeo manifesto do portfólio de Danilo Novais"
       />
     </>
   );

@@ -223,6 +223,8 @@ analise todo o detalhamento, monte um plano de execução, execute os ajustes e 
 
 ---
 analise todo o detalhamento, monte um plano de execução, execute os ajustes e após executar, confira se todas os ajustes foram feitos da maneira correta e estão funcionando. 
+
+
 ## 5. Featured Projects
 
 ### [Média] Padronizar Grid Responsivo e Interações dos Cards
@@ -249,6 +251,8 @@ analise todo o detalhamento, monte um plano de execução, execute os ajustes e 
 
 ---
 analise todo o detalhamento, monte um plano de execução, execute os ajustes e após executar, confira se todas os ajustes foram feitos da maneira correta e estão funcionando. 
+
+
 ## 6. Clients / Brands
 
 ### [Média] Garantir Grid de Logos Acessível e Animado com Suavidade

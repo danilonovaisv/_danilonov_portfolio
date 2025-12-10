@@ -25,7 +25,7 @@ const Clients: React.FC = () => {
           viewport={prefersReducedMotion ? undefined : { once: true }}
           className="text-3xl md:text-4xl lg:text-5xl font-bold mb-16 tracking-tight"
         >
-          marcas com as quais já trabalhei.
+          marcas com as quais já trabalhei
         </motion.h2>
 
         <ul

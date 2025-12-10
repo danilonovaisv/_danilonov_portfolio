@@ -156,75 +156,69 @@ const Hero: React.FC = () => {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-[200vh] bg-[#F4F5F7]"
+      className="relative min-h-screen bg-[#F4F5F7]"
     >
-      <div className="sticky top-0 min-h-screen flex items-center">
-        <div className="mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-6 py-16 lg:px-12 lg:py-20">
-          <motion.div
-            {...heroIntroMotionProps}
-            style={{ opacity: textOpacity, scale: textScale }}
-            className="pointer-events-auto w-full"
-          >
-            <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
-              <div className="relative z-10 space-y-6 md:space-y-8">
-                <motion.div
-                  variants={fadeVariants}
-                  className="inline-flex items-center gap-3 rounded-full border border-[#111111]/5 bg-white/60 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#0057FF] backdrop-blur-md"
+      <div className="mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-6 py-16 lg:px-12 lg:py-20">
+        <motion.div
+          {...heroIntroMotionProps}
+          style={{ opacity: textOpacity, scale: textScale }}
+          className="pointer-events-auto w-full"
+        >
+          <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
+            <div className="relative z-10 space-y-6 md:space-y-8">
+              <motion.h1
+                variants={headlineVariants}
+                className="font-display font-extrabold text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] tracking-tight text-[#111111]"
+              >
+                <motion.span variants={lineVariants} className="block text-[#0057FF]">
+                  Design,
+                </motion.span>
+                <motion.span variants={lineVariants} className="block">
+                  não é só
+                </motion.span>
+                <motion.span variants={lineVariants} className="block">
+                  estética.
+                </motion.span>
+              </motion.h1>
+
+              <motion.div
+                variants={fadeVariants}
+                className="max-w-xl rounded-xl bg-white/50 px-4 py-3 text-lg font-medium leading-relaxed text-[#111111]/85 backdrop-blur-md shadow-sm"
+              >
+                [É intenção, é estratégia, é experiência.]
+              </motion.div>
+
+              <motion.div variants={fadeVariants} className="flex flex-wrap gap-4">
+                <Button
+                  variant="primary"
+                  href="/sobre"
+                  className="text-base lowercase font-semibold px-8 py-4 rounded-full"
                 >
+                  get to know me better →
+                </Button>
+              </motion.div>
+            </div>
+
+            <div className="relative flex flex-col items-end gap-6 md:pl-6">
+              <motion.div
+                variants={fadeVariants}
+                className="w-full flex justify-end"
+              >
+                <div className="rounded-2xl bg-white/60 px-6 py-3 text-sm font-semibold tracking-[0.2em] uppercase text-[#0057FF] shadow-sm">
                   [ BRAND AWARENESS ]
-                </motion.div>
+                </div>
+              </motion.div>
 
-                <motion.h1
-                  variants={headlineVariants}
-                  className="font-display font-extrabold text-[clamp(3.5rem,10vw,8rem)] leading-[0.9] tracking-tight text-[#111111]"
-                >
-                  <motion.span
-                    variants={lineVariants}
-                    className="block text-[#0057FF]"
-                  >
-                    Design,
-                  </motion.span>
-                  <motion.span
-                    variants={lineVariants}
-                    className="block pl-12 md:pl-24"
-                  >
-                    não é só
-                  </motion.span>
-                  <motion.span variants={lineVariants} className="block">
-                    estética.
-                  </motion.span>
-                </motion.h1>
-
-                <motion.div
-                  variants={fadeVariants}
-                  className="max-w-lg rounded-xl bg-white/60 px-4 py-3 text-lg font-medium leading-relaxed text-[#111111]/80 backdrop-blur-md shadow-sm"
-                >
-                  [É intenção, é estratégia, é experiência.]
-                </motion.div>
-
-                <motion.div
-                  variants={fadeVariants}
-                  className="flex flex-wrap gap-4"
-                >
-                  <Button
-                    variant="primary"
-                    href="/sobre"
-                    className="uppercase tracking-widest text-xs py-5 px-10"
-                  >
-                    get to know me better →
-                  </Button>
-                </motion.div>
+              <div className="relative h-[440px] w-full overflow-visible">
+                <HeroGlassCanvas
+                  className="pointer-events-none absolute inset-0 h-full w-full"
+                  scrollYProgress={scrollYProgress}
+                  prefersReducedMotion={prefersReducedMotion}
+                />
               </div>
 
-              <div className="relative flex flex-col items-end gap-8 md:pl-6">
-                <div className="relative h-[440px] w-full overflow-visible">
-                  <HeroGlassCanvas
-                    className="pointer-events-none absolute inset-0 h-full w-full"
-                    scrollYProgress={scrollYProgress}
-                    prefersReducedMotion={prefersReducedMotion}
-                  />
-                </div>
-                <div className="flex w-full justify-end">
+              <div className="flex w-full justify-end pr-4">
+                <div className="flex flex-col items-end gap-2">
                   <ManifestoThumb
                     onClick={handleVideoExpand}
                     prefersReducedMotion={prefersReducedMotion}
@@ -238,8 +232,8 @@ const Hero: React.FC = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

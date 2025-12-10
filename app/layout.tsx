@@ -4,6 +4,13 @@ import { Inter, Outfit } from 'next/font/google';
 import MainLayout from '../components/layout/MainLayout';
 import './globals.css';
 
+const metaTitle = 'Portfólio — Danilo Novais | Design, não é só estética.';
+const metaDescription =
+  'Design estratégico, UX, motion design e experiências digitais em WebGL/3D. Portfólio de Danilo Novais com projetos que unem intenção, estratégia e experiência.';
+const metaImage =
+  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp';
+const metaUrl = 'https://portfoliodanilo.com';
+
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -23,18 +30,16 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Portfólio — Danilo Novais | Design, não é só estética.',
-  description:
-    'Design estratégico, UX, motion design e experiências digitais em WebGL/3D. Portfólio de Danilo Novais com projetos que unem intenção, estratégia e experiência.',
+  title: metaTitle,
+  description: metaDescription,
   openGraph: {
-    title: 'Portfólio — Danilo Novais | Design, não é só estética.',
-    description:
-      'Design estratégico, UX, motion design e experiências digitais em WebGL/3D. Portfólio de Danilo Novais.',
-    url: 'https://portfoliodanilo.com',
+    title: metaTitle,
+    description: metaDescription,
+    url: metaUrl,
     siteName: 'Danilo Novais Portfolio',
     images: [
       {
-        url: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+        url: metaImage,
         width: 1200,
         height: 630,
         alt: 'Capa do portfólio de Danilo Novais',
@@ -45,13 +50,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Portfólio — Danilo Novais | Design, não é só estética.',
-    description:
-      'Design estratégico, UX, motion design e experiências digitais em WebGL/3D. Portfólio de Danilo Novais com projetos que unem intenção, estratégia e experiência.',
+    title: metaTitle,
+    description: metaDescription,
     creator: '@danilo_novais',
-    images: [
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-    ],
+    images: [metaImage],
   },
   icons: {
     icon: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',

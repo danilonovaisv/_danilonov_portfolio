@@ -77,6 +77,7 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   const [lowRenderMode, setLowRenderMode] = useState(false);
   const eventSourceNode =
     typeof window !== 'undefined' ? document.body : undefined;
+  const canvasEventSource = prefersReducedMotion ? undefined : eventSourceNode;
 
   return (
     <div className={`w-full h-full ${className}`}>
@@ -84,7 +85,7 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
         camera={{ position: [0, 0, 4], fov: 45 }}
         dpr={dpr}
         eventPrefix="client"
-        eventSource={eventSourceNode}
+        eventSource={canvasEventSource}
         gl={{
           alpha: true,
           antialias: true,
@@ -106,7 +107,7 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
         <directionalLight position={[5, 10, 7.5]} intensity={1.2} castShadow />
         <spotLight position={[-5, 0, -5]} intensity={0.5} color="#0057FF" />
 
-        <ScrollControls pages={2} damping={0.45}>
+        <ScrollControls pages={2} damping={prefersReducedMotion ? 0 : 0.45}>
           <Suspense fallback={null}>
             <ResponsiveTorus
               scrollYProgress={scrollYProgress}
