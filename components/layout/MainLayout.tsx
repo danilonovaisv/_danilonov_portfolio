@@ -10,7 +10,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-[#F4F5F7] text-[#111111] font-sans selection:bg-[#0057FF] selection:text-white">
       <Header />
-      <main>{children}</main>
+      <main className="pb-32 md:pb-36">{children}</main>
       <Footer />
     </div>
   );

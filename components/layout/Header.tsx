@@ -11,6 +11,7 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  useMotionValueEvent,
 } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -21,7 +22,7 @@ import clsx from 'clsx';
 const NAV_ITEMS = NAV_LINKS.map((item) => ({
   label: item.label,
   href: item.href,
-  isAnchor: item.href.startsWith('#'),
+  isAnchor: item.href.includes('#'),
 }));
 
 const Header: React.FC = () => {
@@ -30,24 +31,29 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [isCondensed, setIsCondensed] = useState(false);
 
   // Animações do Header no Scroll
-  const headerHeight = useTransform(scrollY, [0, 50], ['6.875rem', '5rem']);
+  const paddingY = useTransform(scrollY, [0, 40], [24, 12]);
   const backgroundColor = useTransform(
     scrollY,
-    [0, 50],
-    ['rgba(255, 255, 255, 0.7)', 'rgba(255, 255, 255, 0.95)']
+    [0, 40],
+    ['rgba(255, 255, 255, 0.6)', 'rgba(255, 255, 255, 0.95)']
   );
   const backdropFilter = useTransform(
     scrollY,
-    [0, 50],
-    ['blur(0px)', 'blur(12px)']
+    [0, 40],
+    ['blur(0px)', 'blur(10px)']
   );
   const boxShadow = useTransform(
     scrollY,
-    [0, 50],
-    ['0 0 0 rgba(0,0,0,0)', '0 4px 30px rgba(0, 0, 0, 0.05)']
+    [0, 40],
+    ['0 0 0 rgba(0,0,0,0)', '0 10px 32px rgba(0, 0, 0, 0.08)']
   );
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setIsCondensed(latest > 40);
+  });
 
   // Sincroniza o activeSection com a rota atual ou scroll
   useEffect(() => {
@@ -96,12 +102,12 @@ const Header: React.FC = () => {
   ) => {
     if (isAnchor && pathname === '/') {
       e.preventDefault();
-      const targetId = href.replace('#', '');
+      const targetId = href.replace('/#', '').replace('#', '');
       const element = document.getElementById(targetId);
       if (element) {
         setIsMobileMenuOpen(false);
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.history.pushState(null, '', href);
+        window.history.pushState(null, '', `/#${targetId}`);
       }
     } else {
       setIsMobileMenuOpen(false);
@@ -111,17 +117,19 @@ const Header: React.FC = () => {
   return (
     <>
       <motion.header
-        style={{
-          height: headerHeight,
-          backgroundColor,
-          backdropFilter,
-          boxShadow,
-        }}
-        className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-6 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-neutral-100 backdrop-blur-md bg-white/70"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      >
+      style={{
+        backgroundColor,
+        backdropFilter,
+        boxShadow,
+        paddingTop: paddingY,
+        paddingBottom: paddingY,
+      }}
+      data-scrolled={isCondensed}
+      className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between px-5 lg:px-12 will-change-transform border-b border-transparent data-[scrolled=true]:border-[#e6e8ec]"
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
         <div className="flex items-center shrink-0 relative z-1000">
           <Link
             href="/"
@@ -130,18 +138,18 @@ const Header: React.FC = () => {
             aria-label="Ir para página inicial"
           >
             {!logoError ? (
-              <span className="relative block h-8 w-32 transition-transform duration-300 group-hover:scale-105 md:h-10 md:w-[140px]">
+              <span className="relative block h-8 w-28 transition-transform duration-300 group-hover:scale-105 md:h-9 md:w-[132px]">
                 <Image
                   src={ASSETS.logoDark}
                   alt="Logo Danilo Novais"
-                  sizes="140px"
+                  sizes="132px"
                   fill
                   className="object-contain"
                   onError={() => setLogoError(true)}
                 />
               </span>
             ) : (
-              <span className="text-2xl font-bold text-[#111111] tracking-tighter">
+              <span className="text-xl font-semibold text-[#111111] tracking-tight">
                 Danilo.
               </span>
             )}
@@ -162,9 +170,9 @@ const Header: React.FC = () => {
                       handleLinkClick(e, link.href, link.isAnchor)
                     }
                     className={clsx(
-                      'relative text-sm font-medium transition-all duration-300 lowercase tracking-wide block px-4 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white hover:underline underline-offset-8 decoration-2',
+                      'relative text-[13px] font-semibold transition-all duration-300 lowercase tracking-tight block px-3 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white hover:underline underline-offset-8 decoration-2',
                       isActive
-                        ? 'text-[#0057FF] bg-blue-50/50'
+                        ? 'text-[#0057FF] bg-blue-50/60'
                         : 'text-[#111111] hover:text-[#0057FF] hover:bg-black/5'
                     )}
                     aria-current={isActive ? 'page' : undefined}

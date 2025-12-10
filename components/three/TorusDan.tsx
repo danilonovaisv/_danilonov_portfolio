@@ -7,7 +7,6 @@ import {
   MeshTransmissionMaterial,
   Float,
   useGLTF,
-  useScroll,
 } from '@react-three/drei';
 import * as THREE from 'three';
 import useIsMobile from '@/hooks/useIsMobile';
@@ -50,18 +49,18 @@ const TorusDan = ({
         resolution: 512,
         samples: 5,
         anisotropy: 0,
-        distortion: 0.24,
-        distortionScale: 0.18,
-        temporalDistortion: 0.12,
+        distortion: 0.32,
+        distortionScale: 0.22,
+        temporalDistortion: 0.14,
       };
     }
 
     return {
-      resolution: 1024,
+      resolution: 900,
       samples: 12,
-      anisotropy: 16,
+      anisotropy: 0.1,
       distortion: 0.5,
-      distortionScale: 0.38,
+      distortionScale: 0.36,
       temporalDistortion: 0.2,
     };
   }, [isMobileDevice]);
@@ -106,8 +105,6 @@ const TorusDan = ({
   /* @ts-ignore */
   const materialRef = useRef<any>(null);
 
-  const scroll = useScroll();
-
   useFrame((state, delta) => {
     if (!meshRef.current) return;
 
@@ -148,12 +145,12 @@ const TorusDan = ({
     const pointerInfluence = isMobileDevice ? 0.1 : 0.18;
     const pointerX = state.pointer.x * pointerInfluence;
     const pointerY = state.pointer.y * pointerInfluence;
-    const scrollOffset = scroll.offset ?? 0;
+    const scrollValue = scrollYProgress?.get?.() ?? 0;
     const timeRotate = lowRenderMode ? 0 : state.clock.elapsedTime * 0.05;
 
     const targetRotX = pointerY * 0.7;
     const targetRotZ = pointerX * 0.7;
-    const targetRotY = scrollOffset * Math.PI * 1.6 + timeRotate;
+    const targetRotY = scrollValue * Math.PI * 1.4 + timeRotate;
 
     meshRef.current.rotation.x = THREE.MathUtils.damp(
       meshRef.current.rotation.x,
@@ -191,9 +188,8 @@ const TorusDan = ({
     );
 
     if (scrollYProgress && useTransmissionMaterial) {
-      const scrollValue = scrollYProgress.get();
       if (materialRef.current) {
-        materialRef.current.distortion = 0.4 + scrollValue * 0.35;
+        materialRef.current.distortion = 0.32 + scrollValue * 0.32;
         materialRef.current.chromaticAberration = 0.05 + scrollValue * 0.04;
       }
     }

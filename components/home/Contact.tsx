@@ -19,7 +19,7 @@ const Contact: React.FC = () => {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="py-20 md:py-24 bg-[#F4F5F7]"
+      className="py-20 md:py-24 bg-white"
     >
       <div className="container mx-auto px-4 sm:px-6 md:px-12 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-start">
@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
                 <a
                   key={idx}
                   href={item.href}
-                  className="flex items-center gap-5 text-[#111111] hover:text-[#0057FF] transition-colors text-lg md:text-xl font-medium group w-fit rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
+                  className="flex items-center gap-4 text-[#111111] hover:text-[#0057FF] transition-colors text-lg md:text-xl font-medium group w-fit rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                 >
                   <span className="p-4 bg-white rounded-full text-[#0057FF] shadow-sm group-hover:scale-110 transition-transform ring-1 ring-black/5">
                     {item.icon}
@@ -63,8 +63,8 @@ const Contact: React.FC = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-4 bg-white rounded-full text-[#111111] hover:text-[#0057FF] hover:scale-110 hover:shadow-md transition-all shadow-sm ring-1 ring-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
-                  aria-label={social.platform}
+                  className="p-3 bg-[#F4F5F7] rounded-full text-[#111111] hover:text-[#0057FF] hover:scale-110 hover:shadow-md transition-all shadow-sm ring-1 ring-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  aria-label={`Abrir perfil no ${social.platform} em nova aba`}
                 >
                   {social.icon}
                 </a>
@@ -76,7 +76,7 @@ const Contact: React.FC = () => {
           <motion.div
             {...motionFormProps}
             viewport={prefersReducedMotion ? undefined : { once: true }}
-            className="bg-white p-8 md:p-12 rounded-4xl shadow-xl shadow-black/5 ring-1 ring-black/5"
+            className="bg-[#F4F5F7] p-8 md:p-12 rounded-[32px] shadow-xl shadow-black/5 ring-1 ring-black/5"
           >
             <form
               action="https://formsubmit.co/danilo@portfoliodanilo.com"
@@ -99,7 +99,7 @@ const Contact: React.FC = () => {
                   name="name"
                   required
                   aria-required="true"
-                  className="w-full px-5 py-3 bg-[#F4F5F7] border-transparent rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] transition-all"
+                  className="w-full px-5 py-3 bg-white border border-[#d7d9de] rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] focus:ring-offset-2 focus:ring-offset-[#F4F5F7] transition-all"
                   placeholder="João da Silva"
                 />
               </div>
@@ -117,7 +117,7 @@ const Contact: React.FC = () => {
                   name="email"
                   required
                   aria-required="true"
-                  className="w-full px-5 py-3 bg-[#F4F5F7] border-transparent rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] transition-all"
+                  className="w-full px-5 py-3 bg-white border border-[#d7d9de] rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] focus:ring-offset-2 focus:ring-offset-[#F4F5F7] transition-all"
                   placeholder="joao@empresa.com"
                 />
               </div>
@@ -135,7 +135,7 @@ const Contact: React.FC = () => {
                   name="phone"
                   required
                   aria-required="true"
-                  className="w-full px-5 py-3 bg-[#F4F5F7] border-transparent rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] transition-all"
+                  className="w-full px-5 py-3 bg-white border border-[#d7d9de] rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] focus:ring-offset-2 focus:ring-offset-[#F4F5F7] transition-all"
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -153,7 +153,7 @@ const Contact: React.FC = () => {
                   required
                   aria-required="true"
                   rows={4}
-                  className="w-full px-5 py-3 bg-[#F4F5F7] border-transparent rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] transition-all resize-none"
+                  className="w-full px-5 py-3 bg-white border border-[#d7d9de] rounded-xl text-[#111111] placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0057FF] focus:ring-offset-2 focus:ring-offset-[#F4F5F7] transition-all resize-none"
                   placeholder="Conte-me sobre seu projeto..."
                 />
               </div>

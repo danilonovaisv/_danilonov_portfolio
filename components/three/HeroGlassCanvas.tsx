@@ -2,12 +2,7 @@
 
 import React, { Suspense, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import {
-  Environment,
-  PerformanceMonitor,
-  Preload,
-  ScrollControls,
-} from '@react-three/drei';
+import { Environment, PerformanceMonitor, Preload } from '@react-three/drei';
 import { MotionValue } from 'framer-motion';
 import * as THREE from 'three';
 import TorusDan from './TorusDan';
@@ -46,9 +41,9 @@ const ResponsiveTorus = ({
   if (isTablet) scale = 2.0;
 
   // Posição base do modelo [x, y, z]
-  let position: [number, number, number] = [3, 0, 0];
-  if (isMobile) position = [0, 1.5, 0]; // Mobile: mais acima
-  if (isTablet) position = [2, 0, 0];
+  let position: [number, number, number] = [1.6, 0.25, 0];
+  if (isMobile) position = [0, 1.4, 0]; // Mobile: mais acima
+  if (isTablet) position = [1.2, 0.1, 0];
 
   useFrame((_, delta) => {
     if (orbitRef.current && !prefersReducedMotion) {
@@ -78,11 +73,14 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   const eventSourceNode =
     typeof window !== 'undefined' ? document.body : undefined;
   const canvasEventSource = prefersReducedMotion ? undefined : eventSourceNode;
+  const wrapperClassName = className
+    ? `h-full w-full ${className}`
+    : 'h-full w-full';
 
   return (
-    <div className={`w-full h-full ${className}`}>
+    <div className={wrapperClassName}>
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 45 }}
+        camera={{ position: [0, 0, 4.2], fov: 45 }}
         dpr={dpr}
         eventPrefix="client"
         eventSource={canvasEventSource}
@@ -107,18 +105,16 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
         <directionalLight position={[5, 10, 7.5]} intensity={1.2} castShadow />
         <spotLight position={[-5, 0, -5]} intensity={0.5} color="#0057FF" />
 
-        <ScrollControls pages={2} damping={prefersReducedMotion ? 0 : 0.45}>
-          <Suspense fallback={null}>
-            <ResponsiveTorus
-              scrollYProgress={scrollYProgress}
-              prefersReducedMotion={prefersReducedMotion}
-              lowRenderMode={lowRenderMode}
-            />
+        <Suspense fallback={null}>
+          <ResponsiveTorus
+            scrollYProgress={scrollYProgress}
+            prefersReducedMotion={prefersReducedMotion}
+            lowRenderMode={lowRenderMode}
+          />
 
-            <Environment preset="city" blur={1} />
-            <Preload all />
-          </Suspense>
-        </ScrollControls>
+          <Environment preset="city" blur={1} background={false} />
+          <Preload all />
+        </Suspense>
       </Canvas>
     </div>
   );

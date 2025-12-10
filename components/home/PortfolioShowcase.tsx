@@ -1,350 +1,96 @@
 'use client';
 
-import React, { FC, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
+import React, { FC } from 'react';
+import { motion } from 'framer-motion';
 import { CATEGORIES } from '../../lib/constants';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 const PortfolioShowcaseSection: FC = () => {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
-  const shouldAnimate = !prefersReducedMotion;
-
-  const handleExpand = (id: string) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  };
-
-  // Função para determinar o alinhamento do container do item na linha
-  const getItemAlignment = (index: number) => {
-    switch (index) {
-      case 0:
-        return 'justify-end'; // 1. Direita (Brand)
-      case 1:
-        return 'justify-center'; // 2. Centro (Videos)
-      case 2:
-        return 'justify-start'; // 3. Esquerda (Web)
-      default:
-        return 'justify-start';
-    }
-  };
+  const stripeVariants = prefersReducedMotion
+    ? undefined
+    : {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+      };
+  const pulseClass = prefersReducedMotion ? '' : 'animate-pulse';
 
   return (
     <section
       id="portfolio-showcase"
-      className="relative w-full bg-[#f5f5f5] py-20 md:py-24 overflow-hidden min-h-screen flex flex-col justify-center"
+      className="relative w-full bg-[#F4F5F7] py-20 md:py-24"
     >
-      <div className="container mx-auto px-4 md:px-8 max-w-[90%] md:max-w-7xl relative z-10">
-        {/* Cabeçalho da Seção */}
-        <div className="flex flex-col w-full mb-10">
-          <div className="w-full flex flex-col items-center md:items-start gap-3 md:flex-row md:justify-between">
-            <div className="flex flex-col items-center md:items-start gap-2">
-              <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-slate-600">
-                [ what we love working on ]
-              </span>
-              <h2 className="text-center md:text-left text-2xl md:text-3xl font-bold tracking-tight text-[#0057FF] lowercase">
-                portfólio showcase
-              </h2>
-            </div>
+      <div className="mx-auto max-w-6xl px-6 md:px-8">
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] uppercase tracking-[0.35em] text-slate-600">
+              [ what we love working on ]
+            </span>
+          </div>
 
-            <div className="flex gap-3">
-              <a
-                href="/portfolio"
-                className="inline-flex items-center gap-2 rounded-full bg-[#0057FF] text-white px-7 py-3 text-sm font-semibold uppercase tracking-widest shadow-md shadow-[#0057FF]/25 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0057FF]/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
-              >
-                veja mais →
-              </a>
-            </div>
+          <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:gap-4">
+            <h2 className="text-3xl md:text-4xl font-semibold lowercase tracking-tight text-[#0057FF]">
+              <span className="text-[#0057FF]">portfólio</span>{' '}
+              <span className="font-normal text-[#111111]">showcase</span>
+            </h2>
+            <a
+              href="/portfolio"
+              className="inline-flex items-center gap-2 rounded-full bg-[#0057FF] px-6 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-md shadow-[#0057FF]/25 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#0057FF]/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
+            >
+              veja mais →
+            </a>
           </div>
         </div>
 
-        {/* Lista de Categorias */}
-        <div className="flex flex-col w-full border-t border-neutral-300">
-          <AnimatePresence mode="popLayout">
-            {CATEGORIES.map((category, index) => {
-              const isExpanded = expandedId === category.id;
-              const isHidden = expandedId !== null && !isExpanded;
-              const isHovered = hoveredId === category.id;
-              const alignmentClass = getItemAlignment(index);
-
-              // Verifica se é o 3º item para formatação especial
-              const isWebItem = category.id === 'websites-webcampaigns-tech';
-
-              if (isHidden) return null;
-
-              return (
-                <motion.div
-                  key={category.id}
-                  layout={shouldAnimate}
-                  initial={
-                    shouldAnimate ? { opacity: 0, height: 0 } : undefined
-                  }
-                  animate={
-                    shouldAnimate ? { opacity: 1, height: 'auto' } : undefined
-                  }
-                  exit={
-                    shouldAnimate
-                      ? {
-                          opacity: 0,
-                          height: 0,
-                          transition: { duration: 0.3 },
-                        }
-                      : undefined
-                  }
-                  className="relative"
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleExpand(category.id)}
-                    onMouseEnter={() =>
-                      !isExpanded && setHoveredId(category.id)
-                    }
-                    onMouseLeave={() => setHoveredId(null)}
-                    className={`
-                      relative flex w-full cursor-pointer border-b border-[#d8d9dc] transition duration-200 ease-out rounded-2xl
-                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]
-                      ${
-                        isExpanded
-                          ? 'border-none'
-                          : 'hover:bg-[#F4F5F7] hover:shadow-md hover:shadow-blue-500/10'
-                      }
-                    `}
-                  >
-                    {/* Subtítulo alinhado com o primeiro item (Desktop Only) */}
-                    {index === 0 && !isExpanded && (
-                      <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
-                        <span className="text-[10px] md:text-xs text-slate-600 font-medium tracking-[0.25em] uppercase">
-                          [ what we love working on ]
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Container Principal do Item */}
-                    <motion.div
-                      layout="position"
-                      className={`flex w-full transition-all duration-200 ease-out
-                      ${isExpanded ? 'py-10 md:py-12 flex-col items-start gap-8' : 'py-10 md:py-12 items-center'}
-                      ${!isExpanded ? alignmentClass : ''}
-                      ${!isExpanded ? 'hover:scale-[1.005] focus-visible:scale-[1.005]' : ''}
-                    `}
-                    >
-                      {/* Conteúdo do Item (Texto + Ícone) */}
-                      <div
-                        className={`flex items-center relative ${!isExpanded ? 'gap-5 md:gap-6' : 'gap-5 w-full'}`}
-                      >
-                        {/* Thumbnail Animada (Slide-in on Hover - aparece à esquerda do texto) */}
-                        <AnimatePresence>
-                          {isHovered && !isExpanded && (
-                            <motion.div
-                              initial={
-                                shouldAnimate
-                                  ? { width: 0, opacity: 0, marginRight: 0 }
-                                  : undefined
-                              }
-                              animate={
-                                shouldAnimate
-                                  ? {
-                                      width: 140,
-                                      opacity: 1,
-                                      marginRight: 24,
-                                    }
-                                  : undefined
-                              }
-                              exit={
-                                shouldAnimate
-                                  ? { width: 0, opacity: 0, marginRight: 0 }
-                                  : undefined
-                              }
-                              transition={
-                                shouldAnimate
-                                  ? {
-                                      duration: 0.4,
-                                      ease: [0.33, 1, 0.68, 1],
-                                    }
-                                  : undefined
-                              }
-                              className="hidden md:block h-20 relative overflow-hidden rounded-md shrink-0 origin-right order-first"
-                            >
-                              <Image
-                                src={category.thumbnailUrl}
-                                alt={`Prévia visual da categoria ${category.label} do portfólio de Danilo Novais`}
-                                fill
-                                sizes="140px"
-                                className="absolute inset-0 object-cover"
-                                loading="lazy"
-                              />
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-
-                        {/* Texto da Categoria - Fonte alterada para font-light (suave) */}
-                        <div className="flex flex-col items-end text-right">
-                          {isWebItem && !isExpanded ? (
-                            // Layout especial para o 3º item quando fechado
-                            <motion.h3
-                              layout="position"
-                              className="font-bold text-[#111111] transition-all duration-300 tracking-tight leading-none text-xl md:text-2xl group-hover:text-[#0057FF]"
-                            >
-                              <span className="block">Web Campaigns,</span>
-                              <span className="block">Websites & Tech</span>
-                            </motion.h3>
-                          ) : (
-                            // Layout padrão
-                            <motion.h3
-                              layout="position"
-                              className={`
-                              font-bold text-[#111111] transition-all duration-300 tracking-tight leading-[1.15] group-hover:text-[#0057FF]
-                              text-[22px] md:text-[28px]
-                            `}
-                            >
-                              {category.label}
-                            </motion.h3>
-                          )}
-                        </div>
-
-                        {/* Ícone Azul (Seta) - Agora à DIREITA do texto */}
-                        <motion.div
-                          layout="position"
-                          className={`
-                          flex items-center justify-center rounded-full bg-[#0057FF] text-white shrink-0 transition-all duration-500 shadow-sm
-                          ${isExpanded ? 'w-12 h-12 md:w-16 md:h-16' : 'w-8 h-8 md:w-12 md:h-12'}
-                          ${isWebItem && !isExpanded ? 'self-end mb-1' : ''} /* Alinha ícone com a última linha no item 3 */
-                        `}
-                        >
-                          <motion.div
-                            animate={{ rotate: isExpanded ? 90 : 0 }}
-                            transition={{ duration: 0.4 }}
-                          >
-                            <ArrowRight
-                              className={`${isExpanded ? 'w-6 h-6' : 'w-4 h-4 md:w-6 md:h-6'}`}
-                            />
-                          </motion.div>
-                        </motion.div>
-                      </div>
-
-                      {/* Conteúdo Expandido (Detalhes) */}
-                      {isExpanded && (
-                        <motion.div
-                          initial={
-                            shouldAnimate ? { opacity: 0, y: 20 } : undefined
-                          }
-                          animate={
-                            shouldAnimate ? { opacity: 1, y: 0 } : undefined
-                          }
-                          transition={
-                            shouldAnimate
-                              ? { delay: 0.2, duration: 0.5 }
-                              : undefined
-                          }
-                          className="w-full mt-3 flex flex-col md:flex-row gap-6 md:gap-12"
-                        >
-                          {/* Imagem Grande */}
-                          <div className="w-full md:w-1/2 aspect-video rounded-lg overflow-hidden bg-gray-200 shadow-lg relative">
-                            <Image
-                              src={category.thumbnailUrl}
-                              alt={`Imagem destaque da categoria ${category.label} com projetos recentes de Danilo Novais`}
-                              fill
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              className="absolute inset-0 object-cover hover:scale-105 transition-transform duration-700"
-                              loading="lazy"
-                            />
-                          </div>
-
-                          {/* Texto descritivo / Links */}
-                          <div className="w-full md:w-1/2 flex flex-col justify-between py-2">
-                            <div>
-                              <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-10 font-light">
-                                Explorando os limites da criatividade em{' '}
-                                <span className="text-[#0057FF] font-medium">
-                                  {category.label
-                                    .replace(',', '')
-                                    .toLowerCase()}
-                                </span>
-                                . Nossos projetos combinam estratégia e design
-                                para criar experiências memoráveis.
-                              </p>
-
-                              <h4 className="text-sm uppercase tracking-widest text-gray-500 mb-6 font-bold border-b border-gray-100 pb-2">
-                                Destaques
-                              </h4>
-                              <ul className="space-y-4 mb-10">
-                                {[1, 2, 3].map((i) => (
-                                  <li
-                                    key={i}
-                                    className="flex items-center gap-4 text-lg md:text-xl font-medium text-[#111111] group/item cursor-pointer"
-                                  >
-                                    <span className="w-2 h-2 rounded-full bg-[#0057FF] group-hover/item:scale-150 transition-transform" />
-                                  <span className="group-hover/item:translate-x-2 transition-transform">
-                                    Projeto Exemplo {i}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                            <div className="flex gap-4">
-                              <a
-                                href={`/portfolio?category=${category.id}`}
-                                className="inline-flex items-center gap-3 text-[#0057FF] font-bold text-lg md:text-xl hover:underline underline-offset-8 decoration-2"
-                              >
-                                Ver todos os projetos
-                                <ArrowUpRight className="w-6 h-6" />
-                              </a>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  </button>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+        <div className="overflow-hidden rounded-[28px] border border-[#dfe1e5] bg-white/70 shadow-[0_24px_60px_rgba(15,23,42,0.06)] backdrop-blur">
+          <div className="divide-y divide-[#dfe1e5]">
+            {CATEGORIES.map((category, index) => (
+              <motion.a
+                key={category.id}
+                href={`/portfolio?category=${category.id}`}
+                initial={stripeVariants ? 'hidden' : undefined}
+                whileInView={stripeVariants ? 'visible' : undefined}
+                viewport={prefersReducedMotion ? undefined : { once: true }}
+                variants={stripeVariants}
+                className="group relative flex items-center justify-between px-6 py-8 transition hover:bg-[#F4F5F7] md:px-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-white"
+                aria-label={`Abrir categoria ${category.label}`}
+              >
+                <div className="flex flex-col gap-1">
+                  <p className="text-lg md:text-2xl font-medium leading-tight text-[#111111] group-hover:text-[#0057FF]">
+                    {category.label}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="hidden text-[11px] uppercase tracking-[0.3em] text-slate-500 md:inline">
+                    [ explore ]
+                  </span>
+                  <span
+                    className={`h-4 w-4 rounded-full bg-[#0057FF] ring-4 ring-[#0057FF]/25 transition duration-300 group-hover:scale-110 group-hover:ring-opacity-60 ${pulseClass}`}
+                  />
+                </div>
+              </motion.a>
+            ))}
+          </div>
         </div>
 
-        {/* CTA Inferior */}
-        {!expandedId && (
-          <motion.div
-            initial={shouldAnimate ? { opacity: 0, y: 20 } : undefined}
-            animate={shouldAnimate ? { opacity: 1, y: 0 } : undefined}
-            className="mt-16 md:mt-24 flex justify-center w-full"
+        <div className="mt-12 flex justify-center">
+          <motion.a
+            href="/#contact"
+            whileHover={
+              prefersReducedMotion ? undefined : { scale: 1.03, y: -2 }
+            }
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+            className="group relative inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-10 py-4 text-white shadow-[0_18px_40px_rgba(0,87,255,0.28)] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
           >
-            <motion.a
-              href="/#contact"
-              whileHover={shouldAnimate ? { scale: 1.05 } : undefined}
-              whileTap={shouldAnimate ? { scale: 0.95 } : undefined}
-              className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 md:px-12 md:py-6 text-white shadow-xl shadow-[#0057FF]/20 hover:shadow-[#0057FF]/40 transition-all duration-300"
-            >
-              <span className="text-lg md:text-xl font-semibold tracking-wide">
-                let’s build something great →
-              </span>
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 group-hover:bg-white text-[#0057FF] transition-colors duration-300">
-                <ArrowUpRight className="w-4 h-4 text-white group-hover:text-[#0057FF]" />
-              </span>
-            </motion.a>
-          </motion.div>
-        )}
-
-        {/* Botão para fechar expansão */}
-        {expandedId && (
-          <motion.div
-            initial={shouldAnimate ? { opacity: 0 } : undefined}
-            animate={shouldAnimate ? { opacity: 1 } : undefined}
-            className="mt-12 flex justify-start border-t border-neutral-200 pt-6"
-          >
-            <button
-              onClick={() => setExpandedId(null)}
-              className="text-gray-500 hover:text-[#0057FF] text-sm tracking-widest uppercase font-bold flex items-center gap-3 group"
-            >
-              <span className="group-hover:-translate-x-1 transition-transform">
-                ←
-              </span>{' '}
-              Voltar para a lista
-            </button>
-          </motion.div>
-        )}
+            <span className="text-base font-semibold lowercase">
+              let’s build something great →
+            </span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white transition group-hover:bg-white group-hover:text-[#0057FF]">
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
+          </motion.a>
+        </div>
       </div>
     </section>
   );
