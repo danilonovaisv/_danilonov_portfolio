@@ -420,7 +420,7 @@ _(Mantido como bloco técnico extra, mas não exigido como implementação princ
 
 **CALL TO ACTION (if any):**
 
-- `TBD` — foco principal é assistir o vídeo; não há CTA textual obrigatório.
+- `TBD` — foco principal é assistir o vídeo; sem textos nem icones.
 
 **LINKS GLOBAIS:**
 
@@ -454,7 +454,7 @@ _(Mantido como bloco técnico extra, mas não exigido como implementação princ
 
 **TYPOGRAPHY (any overrides for headings/body in this section):**
 
-- Microtexto manifesto: fonte pequena, alta legibilidade sobre fundo escuro.
+sem nada.
 
 **IMAGERY (what to show: photos, illustrations, icons, logos):**
 
