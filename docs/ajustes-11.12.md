@@ -1,856 +1,441 @@
-# ✅ Auditoria Técnica de Portfólio — Home (Next.js + R3F + Drei + Framer Motion + Tailwind)
-
-Referências obrigatórias:
-- Layout final: docs/HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg
-- Documento funcional: docs/PORT DAN REVISADO - NEXT.pdf
-- Repo: https://github.com/danilonovaisv/_danilonov_portfolio
-- Site: https://portfoliodanilo.com
-
-IMPORTANTE
-- Manter 100% do conteúdo textual original e a imagem [HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg](títulos, botões, ordem de seções).
-- Ajustes aqui são exclusivamente técnicos, estruturais e visuais.
-
-------------------------------------------------------------
-## 1) Visão Geral
-
-- **Alinhamento geral** com o layout: bom — mesmas seções, ordem, paleta e tipografia compatíveis com o mock esperado.
-- **Home** respeita as seções definidas no documento técnico:
-  1. Header  
-  2. Hero  
-  3. Manifesto (vídeo)  
-  4. Portfolio Showcase  
-  5. Featured Projects  
-  6. Clients / Brands  
-  7. Contact  
-  8. Footer  
-- **Principais desvios em relação ao layout de referência (HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg):**
-  - Hero não está configurada como **bloco sticky em 200vh** com progressão clara da thumb/vídeo manifesto no scroll.
-  - Elemento 3D de vidro não está **espacialmente isolado na coluna direita**; visualmente, se aproxima demais do H1 em alguns breakpoints.
-  - Header não evidencia um estado “**condensado + blur**” após ~40px de scroll, com redução de padding e leve sombra.
-  - CTA / navegação “**sobre**” não está garantida de forma consistente como rota direta `/sobre` (há âncoras que podem gerar ambiguidade).
-  - Footer não se comporta como **fixo** (fixed bottom-0) e há **inconsistência de ano** (2023 vs 2025).
-- **Integração 3D/GLB**:
-  - Há um elemento 3D de vidro coerente com o conceito (“bola de vidro” / torus), porém:
-    - Não há garantia de uso de `Environment preset="city"` com `blur={1}` para reflexos realistas.
-    - Parallax por mouse/scroll não está claramente presente ou é sutil demais.
-    - Falta tiering de qualidade para mobile + respeito a `prefers-reduced-motion`.
-- **Performance**:
-  - O uso de materiais de transmissão (MeshTransmissionMaterial) é pesado.
-  - O Canvas poderia limitar `dpr` e aplicar tiering de `samples` / `resolution`.
-  - Mídias (Supabase) podem se beneficiar de `next/image` com domains configurados.
-
-**Resumo:**  
-A base estrutural está sólida e a comunicação visual é coerente com o mock. O principal ganho virá de um polimento técnico: Hero sticky com 3D/parallax + progressão do vídeo, header condensável, acessibilidade (motion reduction/foco) e otimização WebGL/mídias.
-
-------------------------------------------------------------
-## 2) Diagnóstico por Dimensão
-
-### UX
-
-- Fluxos principais bem definidos:
-  - Hero com proposta clara e CTA “**get to know me better →**”.
-  - Stripes de categorias em **Portfolio Showcase**, preparando mentalmente as áreas.
-  - **Featured Projects** com cards clicáveis e CTA “view projects”.
-  - Seção **Contact** completa (dados + formulário).
-- Pontos de ajuste:
-  - Garantir que o CTA da Hero leve sempre a **`/sobre`** (não a anchors ambíguas).
-  - Thumb do manifesto: reforçar que o clique leva a `#manifesto`, com cursor/hover claros.
-  - Footer: links devem espelhar a navegação principal de forma consistente (`home`, `portfólio showcase`, `sobre`, `contato`).
-
-### UI
-
-- **Tipografia e cor**:
-  - Uso de azul `#0057FF` como cor de marca está coerente.
-  - Hierarquia tipográfica condizente: H1 forte na Hero, títulos de seção evidentes.
-- **Hero**:
-  - Precisa respeitar com mais rigor o grid 2 colunas:
-    - Esquerda: Tag `[BRAND AWARENESS]`, H1 (“Design, não é só estética.”), subtítulo `[É intenção, é estratégia, é experiência.]` e CTA.
-    - Direita: Elemento 3D + tag lateral + thumb de vídeo manifesto.
-- **Portfolio Showcase**:
-  - Título `portfólio showcase` está ok.
-  - **Microtexto lateral** `[what we love working on]` deve estar sempre visível, respeitando layout.
-  - Stripes necessitam de ritmo melhor de espaçamentos (`py`, `gap`) para chegar mais próximo do mock.
-- **Clients / Brands**:
-  - Faixa azul com logos monocromáticos brancos.
-  - Garantir aplicação de `filter brightness-0 invert` ou assets já invertidos.
-
-### Animação
-
-- **Hero**:
-  - Esperado: seção **h-[200vh]** com inner `sticky top-0 min-h-screen`.
-  - Título com entrada “3D flip” (rotateX + translateY + opacity) com `stagger`.
-  - Elemento 3D com rotação contínua sutil + parallax pelo mouse.
-  - Thumb do vídeo manifesto animando com `scrollYProgress` (escala, X, Y, border-radius).
-- **Header**:
-  - Esperado comportamento condensado:
-    - De `py-4` para `py-2` após ~40px.
-    - Adição de `bg-white/95`, `backdrop-blur` e sombra sutil.
-- **Outras seções**:
-  - Reveal on scroll para Portfolio Showcase stripes, Featured Projects cards e Clients logos.
-- **Prefers-reduced-motion**:
-  - Rotação contínua do 3D, parallax e animações complexas no título e thumb devem ter fallback simples (fades + pequenas translates).
-
-### Acessibilidade
-
-- **Foco visível**:
-  - Garantir `focus-visible` em:
-    - Links do header e footer.
-    - CTAs da hero, stripes, cards de projetos, ícones sociais, botões do formulário.
-- **Alt text**:
-  - Imagens de projetos e logos de clientes devem ter `alt` descritivo:
-    - Ex.: `"Logo cliente 1"` ou o nome real da marca, quando permitido.
-- **ARIA / motion**:
-  - `aria-label` em:
-    - Links de navegação (“Ir para página Sobre”, “Ir para seção Contato”).
-    - Ícones sociais (“Abrir perfil no LinkedIn em nova aba”).
-    - Botão play/pause do manifesto.
-  - `useReducedMotion` do Framer Motion aplicado à Hero e às reveals.
-- **Vídeo manifesto**:
-  - `muted playsInline autoPlay loop` para não reproduzir som automaticamente.
-  - Idealmente, legenda ou transcrição em página dedicada (sugestão futura).
-
-### Performance
-
-- **3D**:
-  - Limitar `dpr` do Canvas: `dpr={[1, 1.5]}`.
-  - MeshTransmissionMaterial com **tiering**:
-    - Desktop: `samples ≈ 12`, `resolution 768–1024`.
-    - Mobile: `samples ≈ 4–6`, `resolution 512`, menor `anisotropy`.
-  - `Environment preset="city" blur={1}` com `background={false}`.
-- **Mídias (Supabase)**:
-  - Usar `next/image` com domínio do Supabase configurado.
-  - Garantir formatos `.webp` quando possível.
-- **DOM/Animações**:
-  - Todas animações via Framer Motion em `transform` / `opacity`.
-  - Evitar mudanças de layout (height, width) durante animação.
-
-### Arquitetura / Organização
-
-- **App Router**:
-  - Seções em **componentes dedicados**:
-    - `SiteHeader.tsx`
-    - `Hero.tsx` (+ `HeroGlassCanvas.tsx` / `Hero3D.tsx`)
-    - `HeroVideoThumb.tsx`
-    - `ManifestoSection.tsx`
-    - `PortfolioShowcase.tsx`
-    - `FeaturedProjects.tsx`
-    - `ClientsBrands.tsx`
-    - `ContactSection.tsx`
-    - `SiteFooter.tsx`
-- **3D**:
-  - Cadeia clara: `Hero` → `HeroGlassCanvas` → `TorusDan` / `GlassOrb` → GLB em `public/media/torus_dan.glb`.
-  - Carregamento de GLB via `useGLTF('/media/torus_dan.glb')`.
-- **Conteúdo**:
-  - Conteúdos globais (links, slugs, labels, URLs de mídia) preferencialmente centralizados em objeto `HOMEPAGE_CONTENT` ou similar.
-
-------------------------------------------------------------
-## 3) Análise Detalhada por Seção (Home)
-
-### 3.1 Header (SiteHeader)
-
-- **OK**:
-  - Logo light carregada via Supabase.
-  - 4 links principais: `home`, `sobre`, `portfolio showcase`, `contato`.
-- **Ajustes sugeridos**:
-  - Tornar o header **condensável** via Framer Motion (`useScroll` + `useTransform`).
-  - Implementar `backdrop-blur` no estado scrolado.
-  - Link “sobre” deve sempre apontar para `/sobre` (não `#clients`).
-- **Acessibilidade**:
-  - `aria-label` para logo e links.
-  - Foco visível com `focus-visible:ring`.
-
-### 3.2 Hero
-
-- **Conteúdo (não alterar):**
-  - Tag: `[BRAND AWARENESS]`
-  - Título: `Design, não é só estética.`
-  - Subtítulo: `[É intenção, é estratégia, é experiência.]`
-  - CTA label: `get to know me better →` → `/sobre`
-  - Modelo 3D: `/media/abstract_element.glb` ou `/media/torus_dan.glb`
-- **Layout esperado**:
-  - Seção com altura ≈ `200vh`, `bg-[#F4F5F7]`.
-  - Container interno sticky: `sticky top-0 min-h-screen`.
-  - 2 colunas em desktop:
-    - Esquerda: textos + CTA.
-    - Direita: Canvas 3D + thumb de vídeo manifesto.
-- **3D / interação**:
-  - `Canvas` com:
-    - `dpr={[1, 1.5]}`
-    - `camera={{ position: [0, 0, 4.2], fov: 45 }}`
-    - `Environment preset="city" blur={1} background={false}`
-    - Luzes: `ambientLight` + `directionalLight`.
-  - Parallax:
-    - Rotação do mesh reagindo ao `state.pointer` (mouse).
-    - Scroll pode modular leve variação de `distortion`/`chromaticAberration`.
-- **Thumb do vídeo manifesto**:
-  - Inicialmente pequena, na borda direita superior do bloco 3D.
-  - Com o scroll, escala e se desloca (X/Y) em direção ao header, com borda arredondada que vai reduzindo.
-  - Clique: scroll suave até `#manifesto`.
-  - Respeitar `prefers-reduced-motion` (thumb estática com fade simples).
-
-### 3.3 Manifesto (Vídeo)
-
-- **URL**:
-  - `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4`
-- **Comportamento**:
-  - Vídeo centralizado, autoplay, `muted`, `loop`, `playsInline`.
-  - Overlay inferior com gradiente escuro + microtexto/badge.
-  - Botão de play/pause com `aria-label` claro.
-- **Animação**:
-  - Entrada via fade + leve scale.
-  - Badge de play com micro-movimento em hover.
-
-### 3.4 Portfolio Showcase
-
-- **Conteúdo (não alterar):**
-  - Título: `portfólio showcase`
-  - Microtexto lateral: `[what we love working on]`
-  - Stripes:
-    1. `Brand & Campaigns`
-    2. `Videos & Motions`
-    3. `Web Campaigns, Websites & Tech`
-  - CTAs:
-    - `VEJA MAIS →` → `/portfolio`
-    - `let’s build something great →` → `/#contact`
-- **Layout**:
-  - Fundo `#F4F5F7`.
-  - Microtexto lateral alinhado à esquerda da coluna.
-  - Stripes como grandes linhas clicáveis, com divisor (`border-b`) entre elas.
-- **Interação**:
-  - Clique na stripe → `/portfolio?category=<id>` (ex.: `brand-campaigns`).
-  - Bolinha azul (ícone circular) com pulso leve (loop longo).
-
-### 3.5 Featured Projects
-
-- **Conteúdo**:
-  - Slugs, títulos, categorias, clientes, anos e URLs conforme especificação (`magic-radio-branding`, `branding-project-01`, etc.).
-- **Layout**:
-  - Grid responsivo (1–3 colunas) com cards.
-  - Card especial “Like what you see? view projects” com CTA para `/portfolio`.
-- **Animação**:
-  - Reveal on scroll com `staggerChildren`.
-  - Hover:
-    - Card: leve elevação + sombra.
-    - Imagem: `scale` + leve translateY.
-- **Acessibilidade**:
-  - `next/image` com alt descritivo.
-  - Card inteiro clicável (`role="link"` / `<Link>`).
-
-### 3.6 Clients / Brands
-
-- **Conteúdo (não alterar)**:
-  - Título: `marcas com as quais já trabalhei`
-  - 12 logos via Supabase (`client1.svg` … `client12.svg`).
-- **Layout**:
-  - Faixa inteira azul `bg-[#0057FF]`.
-  - Título centralizado.
-  - Grid de logos com spacing consistente.
-- **Interação**:
-  - Hover leve nos logos (`scale` + `brightness`).
-  - Reveal com `stagger` em Framer Motion.
-
-### 3.7 Contact
-
-- **Conteúdo (não alterar)**:
-  - Título: `contato`
-  - Subtítulo: `Tem uma pergunta ou quer trabalhar junto?`
-  - Form action: `https://formsubmit.co/danilo@portfoliodanilo.com`
-  - Dados de contato + redes sociais conforme especificação.
-- **Layout**:
-  - Duas colunas em desktop (info + form), uma no mobile.
-  - Fundo branco.
-- **Formulário**:
-  - Inputs com `label` associado.
-  - Foco visível (`ring-2 ring-blue-500`).
-  - Botão “Enviar Mensagem” com microinterações (`whileHover`, `whileTap`).
-- **Acessibilidade**:
-  - Inputs com `aria-invalid`/mensagens em estados de erro (futuro).
-  - Navegável 100% por teclado.
-
-### 3.8 Footer
-
-- **Conteúdo**:
-  - Copyright:
-    - Unificar para: `© 2025 Danilo Novais Vilela — todos os direitos reservados.`
-  - Links:
-    - `home` → `#hero`
-    - `portfólio showcase` → `#portfolio-showcase`
-    - `sobre` → **/sobre** (ajuste recomendado)
-    - `contato` → `#contact`
-- **Layout**:
-  - Barra fixa (`fixed bottom-0 left-0 right-0`).
-  - Fundo azul `bg-[#0057FF]`, texto branco.
-- **Interação**:
-  - Hover com sublinhado animado (matching ao header).
-  - Ícones sociais com leve `scale` + mudança de opacidade.
-
-------------------------------------------------------------
-## 4) Lista de Problemas (Severidade)
-
-### Alta
-
-1. **Hero sem comportamento sticky 200vh**:
-   - Falta `h-[200vh]` com container interno `sticky top-0 min-h-screen`.
-   - Thumb do manifesto não progride de forma clara com o scroll.
-2. **Elemento 3D sem parallax/scroll robusto**:
-   - Rotação e parallax não estão totalmente alinhados ao conceito de “bola de vidro líquido” descrito no anexo.
-   - Ausência clara de Environment “city” com `blur={1}`.
-3. **Header sem estado condensado + blur**:
-   - Não há transição suave de padding/background/sombra após ~40px.
-
-### Média
-
-4. **Rota “sobre” inconsistente**:
-   - Em parte do fluxo (footer), `sobre` aponta para `#clients` — o recomendado é `/sobre`.
-5. **Footer não fixo e ano inconsistente**:
-   - Footer não está fixo em todas as views.
-   - Anos 2023 / 2025 misturados.
-6. **Prefers-reduced-motion não aplicado globalmente**:
-   - Animações da Hero (título, 3D, thumb) e reveals não respeitam claramente `useReducedMotion`.
-
-### Baixa
-
-7. **Microtexto `[what we love working on]` ausente/ fraco** na Portfolio Showcase.
-8. **Gaps/paddings** levemente divergentes do mock entre stripes, CTAs e cards.
-9. **Alt de imagens/logos** genéricos ou ausentes.
-10. **Hover/foco** inconsistente em stripes, logos e ícones sociais.
-
-------------------------------------------------------------
-## 5) Recomendações Prioritárias
-
-1. **Implementar Hero sticky + parallax 3D + animação da thumb do manifesto**:
-   - Estruturar seção com `h-[200vh]` e inner sticky.
-   - Integrar R3F + Drei + Framer Motion para título, 3D e thumb.
-2. **Implementar Header condensado com blur no scroll**:
-   - `useScroll` + `useTransform` para `padding`, `backgroundColor` e `boxShadow`.
-3. **Otimizar WebGL / MeshTransmissionMaterial**:
-   - Aplicar tiering (desktop vs mobile).
-   - Limitar `dpr`.
-   - Adicionar `Environment preset="city" blur={1}`.
-4. **Endereçar Acessibilidade e Motion-Reduction**:
-   - Foco visível em todas as interações.
-   - `useReducedMotion` aplicado à Hero, stripes, cards e logos.
-5. **Ajustes de navegação e rotas**:
-   - Garantir CTA “get to know me better →” → `/sobre`.
-   - Ajustar link de `sobre` no footer para `/sobre`.
-6. **Polimento visual em Showcase/Featured/Clients**:
-   - Microtexto lateral, ícones circulares, hovers, stagger, uso consistente de `next/image`.
-
-------------------------------------------------------------
-## 6) Prompts Técnicos de Ajuste (com código)
-
-### 6.1 Header condensável no scroll (Framer Motion + Tailwind)
-
-```tsx
-'use client'
-
-import { motion, useScroll, useTransform } from 'framer-motion'
-import Link from 'next/link'
-
-export function SiteHeader() {
-  const { scrollY } = useScroll()
-  const bg = useTransform(scrollY, [0, 40], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.95)'])
-  const py = useTransform(scrollY, [0, 40], ['1rem', '0.5rem']) // py-4 → py-2
-  const shadow = useTransform(
-    scrollY,
-    [0, 40],
-    ['0 0 0 rgba(0,0,0,0)', '0 4px 24px rgba(0,0,0,0.06)'],
-  )
-
-  return (
-    <motion.header
-      style={{
-        backgroundColor: bg,
-        paddingTop: py,
-        paddingBottom: py,
-        boxShadow: shadow,
-        backdropFilter: 'blur(8px)',
-      }}
-      className="fixed inset-x-0 top-0 z-50"
-    >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4">
-        <Link
-          href="/"
-          aria-label="Ir para Home"
-          className="focus:outline-none focus-visible:ring ring-blue-500 rounded"
-        >
-          <img
-            src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg"
-            alt="Danilo Novais — logo"
-            className="h-6"
-          />
-        </Link>
-        <ul className="flex items-center gap-6 text-sm text-gray-700">
-          <li>
-            <Link
-              href="/#hero"
-              aria-label="Ir para seção Hero"
-              className="hover:text-[#0057FF] transition-colors"
-            >
-              home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/sobre"
-              aria-label="Ir para página Sobre"
-              className="hover:text-[#0057FF] transition-colors"
-            >
-              sobre
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/portfolio"
-              aria-label="Ir para página Portfólio"
-              className="hover:text-[#0057FF] transition-colors"
-            >
-              portfolio showcase
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/#contact"
-              aria-label="Ir para seção Contato"
-              className="hover:text-[#0057FF] transition-colors"
-            >
-              contato
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </motion.header>
-  )
-}
-6.2 Hero sticky 200vh + Canvas + parallax + animação da thumb
-'use client'
-
-import * as React from 'react'
-import type { Mesh } from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, MeshTransmissionMaterial, Html, useProgress } from '@react-three/drei'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-
-function Loader() {
-  const { progress } = useProgress()
-  return (
-    <Html center>
-      <div className="rounded bg-black/70 px-3 py-1 text-xs text-white">
-        Carregando {progress.toFixed(0)}%
-      </div>
-    </Html>
-  )
-}
-
-function GlassOrb() {
-  const ref = React.useRef<Mesh | null>(null)
-
-  useFrame((state) => {
-    const r = ref.current
-    if (!r) return
-    const { x, y } = state.pointer
-    // parallax suave com damp
-    const targetY = x * 0.6
-    const targetX = y * 0.4
-    r.rotation.y += (targetY - r.rotation.y) * 0.08
-    r.rotation.x += (targetX - r.rotation.x) * 0.08
-  })
-
-  const isMobile =
-    typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
-
-  const quality = isMobile
-    ? { samples: 6, resolution: 512, anisotropy: 0 }
-    : { samples: 12, resolution: 768, anisotropy: 0.2 }
-
-  return (
-    <mesh ref={ref}>
-      <icosahedronGeometry args={[1.1, 24]} />
-      <MeshTransmissionMaterial
-        transmission={1}
-        thickness={0.6}
-        roughness={0.08}
-        ior={1.25}
-        chromaticAberration={0.05}
-        distortion={0.5}
-        distortionScale={0.36}
-        temporalDistortion={0.22}
-        backside
-        {...quality}
-      />
-    </mesh>
-  )
-}
-
-export function HeroSection() {
-  const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-
-  // animação da thumb do manifesto
-  const thumbScale = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [0.9, 1.05, 1.25, 1.4])
-  const thumbY = useTransform(scrollYProgress, [0, 0.5, 1], [0, -120, -260])
-  const thumbX = useTransform(scrollYProgress, [0, 1], [0, -120])
-  const thumbRadius = useTransform(scrollYProgress, [0, 1], [16, 0])
-
-  return (
-    <section id="hero" className="relative h-[200vh] bg-[#F4F5F7]">
-      <div className="sticky top-0 grid min-h-screen grid-cols-1 items-center gap-8 px-6 py-8 md:grid-cols-2">
-        {/* Coluna Esquerda - Texto */}
-        <div className="z-10">
-          <div className="mb-2 text-sm font-medium text-[#0057FF]">[ BRAND AWARENESS ]</div>
-          <h1 className="text-5xl font-extrabold leading-tight text-[#111111] md:text-7xl">
-            <motion.span
-              initial={{ opacity: 0, y: reduce ? 0 : 26, rotateX: reduce ? 0 : -35 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="block"
-            >
-              Design,
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: reduce ? 0 : 26, rotateX: reduce ? 0 : -35 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.05 }}
-              className="block"
-            >
-              não é só
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: reduce ? 0 : 26, rotateX: reduce ? 0 : -35 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="block"
-            >
-              estética.
-            </motion.span>
-          </h1>
-          <p className="mt-4 inline-block rounded-md bg-white/70 px-3 py-2 text-[#0057FF] backdrop-blur">
-            [ É intenção, é estratégia, é experiência. ]
-          </p>
-          <div className="mt-6">
-            <motion.a
-              href="/sobre"
-              aria-label="Ir para página Sobre"
-              whileHover={reduce ? {} : { y: -2, scale: 1.02 }}
-              whileTap={reduce ? {} : { y: 0, scale: 0.98 }}
-              className="inline-flex items-center gap-2 rounded-full bg-[#0057FF] px-5 py-3 text-sm font-medium text-white shadow transition will-change-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0057FF]"
-            >
-              get to know me better →
-            </motion.a>
-          </div>
-        </div>
-
-        {/* Coluna Direita - 3D + Thumb */}
-        <div className="relative">
-          <div className="h-[380px] w-full rounded-2xl md:h-[520px]">
-            <Canvas
-              dpr={[1, 1.5]}
-              camera={{ position: [0, 0, 4.2], fov: 45 }}
-              eventSource={typeof document !== 'undefined' ? document.body : undefined}
-            >
-              <React.Suspense fallback={<Loader />}>
-                <Environment preset="city" blur={1} background={false} />
-                {!reduce && <GlassOrb />}
-                {reduce && (
-                  <Html center>
-                    <div className="rounded bg-white/80 px-3 py-1 text-xs text-[#111]">
-                      Elemento 3D
-                    </div>
-                  </Html>
-                )}
-                <ambientLight intensity={0.15} />
-                <directionalLight position={[4, 6, 6]} intensity={1.1} />
-              </React.Suspense>
-            </Canvas>
-          </div>
-
-          {/* Thumb do vídeo manifesto */}
-          <motion.button
-            type="button"
-            onClick={() => {
-              const el = document.getElementById('manifesto')
-              if (el) el.scrollIntoView({ behavior: 'smooth' })
-            }}
-            aria-label="Ir para o vídeo Manifesto"
-            className="pointer-events-auto absolute right-2 top-2 md:right-4 md:top-4"
-            style={
-              reduce
-                ? {}
-                : {
-                    scale: thumbScale,
-                    y: thumbY,
-                    x: thumbX,
-                    borderRadius: thumbRadius,
-                  }
-            }
-          >
-            <video
-              src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
-              autoPlay
-              playsInline
-              muted
-              loop
-              className="h-28 w-44 rounded-xl object-cover shadow-lg"
-            />
-          </motion.button>
-        </div>
-      </div>
-    </section>
-  )
-}
-6.3 Cadeia Hero → HeroGlassCanvas → GLB (gltfjsx)
-# gerar componente jsx/tSX a partir do GLB
-npx gltfjsx public/media/torus_dan.glb --transform
-// components/TorusDan.tsx
-'use client'
-
-import * as React from 'react'
-import { useGLTF, MeshTransmissionMaterial } from '@react-three/drei'
-
-type GLTFResult = {
-  nodes: {
-    Torus: THREE.Mesh
-  }
-} & THREE.Group
-
-export function TorusDan(props: JSX.IntrinsicElements['group']) {
-  const { nodes } = useGLTF('/media/torus_dan.glb') as unknown as GLTFResult
-
-  return (
-    <group {...props} dispose={null}>
-      <mesh geometry={nodes.Torus.geometry}>
-        <MeshTransmissionMaterial
-          transmission={1}
-          thickness={0.6}
-          ior={1.25}
-          roughness={0.08}
-          chromaticAberration={0.05}
-          distortion={0.5}
-          distortionScale={0.36}
-          temporalDistortion={0.22}
-          samples={12}
-          resolution={768}
-          backside
-        />
-      </mesh>
-    </group>
-  )
-}
-
-useGLTF.preload('/media/torus_dan.glb')
-6.4 Prefers-reduced-motion global
-import { useReducedMotion } from 'framer-motion'
-
-export function useMotionSettings() {
-  const reduce = useReducedMotion()
-
-  const fadeInUp = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 } }
-    : { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
-
-  return { reduce, fadeInUp }
-}
-6.5 Footer fixo com ano unificado
-import Link from 'next/link'
-
-export function SiteFooter() {
-  return (
-    <footer className="fixed inset-x-0 bottom-0 z-40 bg-[#0057FF] text-white">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 text-sm">
-        <p>© 2025 Danilo Novais Vilela — todos os direitos reservados.</p>
-        <nav aria-label="Navegação de rodapé">
-          <ul className="flex items-center gap-4">
-            <li>
-              <Link
-                href="/#hero"
-                aria-label="Ir para seção Hero"
-                className="relative inline-flex items-center gap-1 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-              >
-                home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/#portfolio-showcase"
-                aria-label="Ir para seção Portfolio Showcase"
-                className="relative inline-flex items-center gap-1 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-              >
-                portfólio showcase
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/sobre"
-                aria-label="Ir para página Sobre"
-                className="relative inline-flex items-center gap-1 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-              >
-                sobre
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/#contact"
-                aria-label="Ir para seção Contato"
-                className="relative inline-flex items-center gap-1 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
-              >
-                contato
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </footer>
-  )
-}
-6.6 next/image + Supabase
-import Image from 'next/image'
-
-type ProjectCardProps = {
-  title: string
-  client: string
-  year: string
-  category: string
-  href: string
-  imageUrl: string
-}
-
-export function ProjectCard({ title, client, year, category, href, imageUrl }: ProjectCardProps) {
-  return (
-    <a
-      href={href}
-      className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
-    >
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
-        <Image
-          src={imageUrl}
-          alt={`Projeto ${title} — ${category}`}
-          fill
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.03] group-hover:-translate-y-1"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      </div>
-      <div className="space-y-1 px-4 pb-4 pt-3">
-        <p className="text-xs uppercase tracking-wide text-slate-500">
-          {client} • {year} • {category}
-        </p>
-        <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-      </div>
-    </a>
-  )
-}
-6.7 Formulário de contato (labels + focus-visible)
-export function ContactForm() {
-  return (
-    <form
-      action="https://formsubmit.co/danilo@portfoliodanilo.com"
-      method="POST"
-      className="space-y-4"
-    >
-      <div>
-        <label className="mb-1 block text-sm font-medium text-slate-800" htmlFor="name">
-          Nome
-        </label>
-        <input
-          id="name"
-          name="name"
-          required
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-sm font-medium text-slate-800" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-sm font-medium text-slate-800" htmlFor="message">
-          Mensagem
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows={5}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-        />
-      </div>
-      <button
-        type="submit"
-        className="inline-flex items-center justify-center rounded-full bg-[#0057FF] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition will-change-transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-      >
-        Enviar Mensagem
-      </button>
-    </form>
-  )
-}
-7) Reforço — Uso Obrigatório da Imagem de Referência
-Todas as decisões visuais (posicionamento, grid, espaçamentos, proporções, cores, hierarquia, tamanho da Hero, posição da thumb, ritmo das stripes, etc.) devem seguir estritamente o arquivo docs/HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg como fonte de verdade.
-
-O PDF PORT DAN REVISADO - NEXT.pdf orienta lógica, ordem das seções e copy; a imagem final é a régua de fidelidade visual.
-
-8) Checklist de Aceite (Home)
-
-
-Header “condensado + blur” após scroll, com transição suave.
-
-
-
-Hero com h-[200vh] + bloco interno sticky (sticky top-0 min-h-screen).
-
-
-
-Título da Hero animado (flip/fade) com fallback prefers-reduced-motion.
-
-
-
-Elemento 3D com Environment preset="city" blur={1}, parallax (mouse/scroll), tiering de qualidade e dpr limitado.
-
-
-
-Thumb do manifesto animando com scroll (scale/pos/borda), clicável e com autoplay mudo.
-
-
-
-Portfolio Showcase com microtexto lateral [what we love working on] e 3 stripes com hover/ícone.
-
-
-
-Featured Projects com hover sutil, imagens otimizadas (next/image) e alt descritivos.
-
-
-
-Clients/Brands com faixa azul, logos invertidos e reveal staggered.
-
-
-
-Contact com labels, focus-visible, action correta e microinterações.
-
-
-
-Footer fixo, ano unificado © 2025 ... e links corretos (incluindo /sobre).
-
-9) Próximos Passos Sugeridos
-S1: Implementar Hero sticky + parallax/scroll (3D + thumb) e Header condensado.
-
-S2: Otimizar WebGL/mídias (tiering MeshTransmissionMaterial + next/image + headers de cache no Firebase).
-
-S3: Endereçar acessibilidade (focus-visible + motion-reduction + alt/aria).
-
-S4: Polir UI/UX (gaps, microtexto, hovers) e unificar rotas/ano em todo o site.
-
-10) Observações Finais
-A base atual já comunica bem a proposta de valor e utiliza um stack moderno (Next.js App Router + R3F + Drei + Framer Motion + Tailwind).
-
-O próximo salto de qualidade vem da fidelidade fina ao layout da Home, da Hero 3D sticky com narrativa de scroll e da camada de performance e acessibilidade.
-
-As recomendações acima mantêm 100% do conteúdo textual original, focando exclusivamente em melhorias técnicas, estruturais e visuais. */
+
+# Auditoria & Prompts de Sessão — Home do Portfólio (Next.js + R3F + Tailwind + Framer Motion)
+
+## 0. Como usar este documento
+
+- Este arquivo é um _prompt de sistema_ para um agente de IA que corrige e evolui a **Home do portfólio**.
+- O fluxo recomendado é **trabalhar por sessão**, escolhendo um dos prompts de sessão abaixo (Prompt 1, 2, 3…) e colando apenas a seção daquela sessão no chat do agente, junto com os arquivos relevantes do projeto.
+- Cada sessão é **focada**, com:
+  - Objetivo principal
+  - Contexto técnico
+  - Checklist de saída
+  - Arquivos-alvo / áreas do código
+
+---
+
+## 1. Contexto do projeto (resumo consolidado)
+
+A Home atual está próxima do layout esperado: hierarquia de seções, grid de Featured Projects, faixa de marcas e seção de contato coerentes. [oai_citation:0‡ajustes-11.12.md](sediment://file_000000006a5c71f58012d87a0e5d0432)  
+
+Os principais problemas se concentram em:
+
+- **Hero**  
+  - Fidelidade do bloco principal (heading, subtítulo com _pill_, CTA).
+  - Integração do 3D (_orb_ de vidro) com o layout e com o scroll.
+  - Transição da **thumb de vídeo na Hero → seção Manifesto** via scroll.
+- **Animações & Motion**
+  - Uso consistente de Framer Motion para reveals por scroll.
+  - Respeito a `prefers-reduced-motion`. [oai_citation:1‡ajustes-11.12.md](sediment://file_000000006a5c71f58012d87a0e5d0432)
+- **Acessibilidade**
+  - `alt` em imagens.
+  - Vídeos com `playsInline`, `muted`, `loop`, `aria-label` claros. [oai_citation:2‡ajustes-11.12.md](sediment://file_000000006a5c71f58012d87a0e5d0432)
+- **Performance**
+  - GLB 3D com tiering (DPR, samples) e pattern “distorted glass” baseado em MeshTransmissionMaterial + Environment.
+  - Imagens remotas da Supabase configuradas em `next/image` via `remotePatterns`.
+- **Arquitetura**
+  - Separar cena 3D e materiais em `components/hero3d/…`.
+  - Canvas isolado e preparado para App Router (Client Components apenas onde necessário).
+
+Estrutura de pastas alvo para a Home: [oai_citation:3‡ajustes-11.12.md](sediment://file_000000006a5c71f58012d87a0e5d0432)
+
+```txt
+src/
+  app/
+    page.tsx
+    layout.tsx
+  components/
+    layout/SiteHeader.tsx
+    hero/Hero.tsx
+    hero/HeroThumbToManifesto.tsx
+    hero3d/HeroGlassCanvas.tsx
+    hero3d/TorusDan.tsx
+  hooks/
+    usePrefersReducedMotion.ts
+public/
+  media/torus_dan.glb
+
+
+⸻
+
+2. Diagnóstico consolidado
+
+2.1 Severidade (resumida)
+    •    Alta
+    •    Hero não é sticky em 200vh com transição da thumb → Manifesto.
+    •    Integração 3D sem tiering de performance (DPR alto / samples excessivos / sem fallback motion-reduced).
+    •    Imagens Supabase sem remotePatterns de next/image.
+    •    Média
+    •    Subtítulo da Hero sem pill translúcido.
+    •    Header possivelmente sem condensação/backdrop-blur em scroll; foco/ARIA da navegação a revisar.
+    •    Faltam alt e opções adequadas em vídeos (playsInline, muted, loop).
+    •    Baixa
+    •    Microinterações (hover nas stripes, pontos azuis, sombra de cards, loop de seta em CTA).
+    •    Uniformização de tokens (#0057FF, tipografia, tamanhos).
+
+2.2 Recomendações prioritárias (resumo) ￼
+    1.    Hero sticky + transição de vídeo
+    •    Implementar Hero com 200vh, bloco interno sticky.
+    •    Animação da thumb de vídeo → Manifesto com Framer Motion (useScroll, useTransform), respeitando prefers-reduced-motion.
+    2.    Orb de vidro 3D
+    •    Consolidar o “orb” com MeshTransmissionMaterial + Environment e pipeline GLB via gltfjsx (controle fino de materiais).
+    3.    Tiering de performance
+    •    dpr={[1, 1.5]}.
+    •    Reduzir samples/resolution em mobile.
+    •    Fallback para material físico mais simples se prefers-reduced-motion ativo.
+    4.    Imagens remotas (Supabase)
+    •    Configurar next/image com remotePatterns.
+    •    Substituir <img> por <Image> quando possível.
+    5.    Acessibilidade
+    •    alt em todas as imagens.
+    •    Vídeos com playsInline, muted, loop e aria-label/title adequado.
+    •    Navegação com foco visível (header/footer/clients).
+    6.    Header sticky
+    •    Condensar padding após ~40px de scroll, com backdrop-blur.
+    •    Estado ativo / underline animado por rota/âncora.
+    7.    Ajustes visuais
+    •    Subtítulo da Hero em pill translúcido.
+    •    Hovers nos stripes de “portfolio showcase”.
+    •    Loop sutil no ícone seta do CTA.
+
+⸻
+
+3. Regras globais para o agente (todas as sessões)
+
+Quando qualquer sessão deste documento for usada como prompt:
+    1.    Stack & Arquitetura
+    •    Next.js App Router.
+    •    React + TypeScript (não usar any; preferir tipos gerados pelo gltfjsx para GLB). ￼
+    •    Tailwind CSS para layout/responsividade.
+    •    Framer Motion para animações.
+    •    React Three Fiber + Drei para 3D.
+    2.    Código
+    •    Não usar any (exceto se explicitamente instruído a manter código legado ao descrever problema).
+    •    Componentes 3D em components/hero3d/* como Client Components.
+    •    hooks/* sempre como Client ('use client' no topo quando necessário).
+    3.    UX / UI
+    •    Fidelidade visual à referência HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg. ￼
+    •    Garantir que a narrativa Hero → Manifesto funcione fluida e legível.
+    4.    Acessibilidade
+    •    aria-label em links ícones / botões sem texto.
+    •    Foco visível em navegação e CTAs.
+    •    Respeitar prefers-reduced-motion via hook dedicado.
+    5.    Performance
+    •    Usar Suspense para GLB, com fallback leve (null ou skeleton).
+    •    DPR controlado por dpr={[1, 1.5]}.
+    •    Props de MeshTransmissionMaterial balanceadas para não explodir custo em mobile.
+
+⸻
+
+4. Prompts por sessão (para colar no agente)
+
+Instrução: para usar, copie apenas uma sessão por vez (Prompt 1, 2, 3…) junto com os arquivos relevantes do repo.
+
+⸻
+
+Prompt 1 — Next/Image + Supabase (remotePatterns)
+
+Objetivo da sessão
+    •    Configurar corretamente next/image para servir todas as imagens remotas vindas da Supabase, usando remotePatterns.
+
+Contexto técnico
+    •    Host Supabase utilizado atualmente:
+    •    aymuvxysygrwoicsjgxj.supabase.co.
+
+Instruções para o agente
+    1.    Abrir e revisar next.config.js.
+    2.    Garantir que:
+    •    images.remotePatterns inclui o host Supabase correto.
+    •    Tipagem do config usa JSDoc ou NextConfig comentado para ajudar o TS. ￼
+    3.    Revisar componentes que usam imagens na Home (Hero, Portfolio, Clients, etc.) e:
+    •    Substituir <img> por <Image> de next/image, preservando alt, sizes e fill/width/height adequados.
+    4.    Verificar que imagens do bucket Supabase usado para thumbs/vídeos/clients funcionam sem warnings na build.
+
+Checklist de saída
+    •    next.config.js com remotePatterns corretos para o domínio Supabase.
+    •    Todas as imagens da Home usando next/image.
+    •    alt informativo para cada imagem.
+
+Arquivos-alvo
+    •    next.config.js
+    •    src/components/hero/*
+    •    src/components/portfolio/*
+    •    src/components/clients/*
+
+⸻
+
+Prompt 2 — Hook usePrefersReducedMotion
+
+Objetivo da sessão
+    •    Implementar um hook usePrefersReducedMotion robusto (SSR-safe, tipado, sem any) e aplicá-lo nas animações relevantes.
+
+Contexto técnico
+    •    O hook já aparece no documento com um esboço de implementação, mas precisa:
+    •    De proteção para SSR (typeof window === 'undefined').
+    •    De tipagem explícita boolean.
+    •    De uso consistente em cena 3D, Hero e animações de scroll.
+
+Instruções para o agente
+    1.    Criar ou revisar src/hooks/usePrefersReducedMotion.ts com:
+    •    'use client';
+    •    export function usePrefersReducedMotion(): boolean;
+    •    useEffect que usa window.matchMedia('(prefers-reduced-motion: reduce)'), com fallback seguro. ￼
+    2.    Usar esse hook:
+    •    Na cena 3D (TorusDan) para desativar rotações/parallax quando reduced === true. ￼
+    •    Na Hero e/ou animações de scroll para oferecer versão com menos movimento (ex: sem deslocamento de vídeo).
+
+Checklist de saída
+    •    Hook tipado, sem any, SSR-safe.
+    •    Chamada do hook nos pontos críticos (3D, Hero, thumb→Manifesto).
+    •    Quando prefers-reduced-motion, a página continua legível, sem animações exageradas.
+
+Arquivos-alvo
+    •    src/hooks/usePrefersReducedMotion.ts
+    •    src/components/hero3d/TorusDan.tsx
+    •    src/components/hero/Hero.tsx
+    •    src/components/hero/HeroThumbToManifesto.tsx
+
+⸻
+
+Prompt 3 — Canvas 3D da Hero (HeroGlassCanvas)
+
+Objetivo da sessão
+    •    Isolar o Canvas 3D da Hero em um componente dedicado, seguindo boas práticas de R3F/Drei e configurando DPR/câmera/eventSource corretamente.
+
+Contexto técnico
+    •    A cena 3D deve:
+    •    Usar Canvas em Client Component.
+    •    Rodar um GLB “orb” com material de vidro (MeshTransmissionMaterial).
+    •    Aplicar Environment com preset (ex.: city).
+    •    Usar Suspense para carregamento com fallback.
+
+Instruções para o agente
+    1.    Estruturar HeroGlassCanvas em src/components/hero3d/HeroGlassCanvas.tsx:
+    •    'use client';
+    •    Componente memoizado (memo) que rende o Canvas.
+    •    Subcomponente HeroGlassScene com:
+    •    <Suspense fallback={null}>
+    •    <TorusDan />
+    •    <Environment preset="city" background={false} blur={1} />
+    •    ambientLight e directionalLight leves.
+    •    Canvas com:
+    •    dpr={[1, 1.5]}
+    •    camera={{ fov: 40, position: [0, 0, 6] }}
+    •    eventSource={typeof document !== 'undefined' ? document.body : undefined}.
+    2.    Garantir que o Canvas se posiciona corretamente na Hero:
+    •    Geralmente como background absoluto (absolute inset-0 -z-10 pointer-events-none).
+
+Checklist de saída
+    •    HeroGlassCanvas isolado, usando R3F/Drei e Suspense corretamente.
+    •    DPR configurado com tiering.
+    •    Cena 3D acende de forma previsível e suave.
+
+Arquivos-alvo
+    •    src/components/hero3d/HeroGlassCanvas.tsx
+    •    src/components/hero3d/TorusDan.tsx (em leitura, para integração)
+
+⸻
+
+Prompt 4 — Modelo GLB + “distorted glass” (TorusDan)
+
+Objetivo da sessão
+    •    Implementar o modelo TorusDan carregando o GLB via useGLTF, tipado, com material de vidro configurado e animação de rotação/parallax que respeita reduced motion.
+
+Contexto técnico
+    •    GLB está em public/media/torus_dan.glb. ￼
+    •    Queremos pattern de “distorted glass”:
+    •    MeshTransmissionMaterial com props como thickness, ior, chromaticAberration, distortion, samples, resolution.
+    •    Tiering:
+    •    Menos samples/resolution em mobile; mais em desktop.
+
+Instruções para o agente
+    1.    Gerar tipos para o GLB via gltfjsx (idealmente com --types) e tipar o retorno de useGLTF, evitando as any.
+    2.    Implementar o componente:
+    •    type Props = GroupProps & { rotationScroll?: number }.
+    •    Carregar nodes com useGLTF('/media/torus_dan.glb').
+    •    useRef<THREE.Mesh>(null!) para mesh principal.
+    •    usePrefersReducedMotion() para controlar animação.
+    •    useFrame para:
+    •    Rodar o torus em Y com MathUtils.damp.
+    •    Oscilar levemente X.
+    •    Desativar rotação se reduced === true.
+    •    useMemo para props do MeshTransmissionMaterial, parametrizando samples/resolution em função de isMobile e reduced.
+    •    useGLTF.preload('/media/torus_dan.glb'); no final.
+    3.    Expor o componente como default e integrá-lo à cena 3D via HeroGlassCanvas.
+
+Checklist de saída
+    •    TorusDan tipado, sem any.
+    •    Material de vidro configurado conforme padrão “distorted glass”.
+    •    Animação suave, desativada em reduced motion.
+    •    Preload do GLB configurado.
+
+Arquivos-alvo
+    •    src/components/hero3d/TorusDan.tsx
+    •    Arquivo de tipos gerados por gltfjsx (separado ou inline)
+
+⸻
+
+Prompt 5 — Thumb de vídeo → Manifesto (HeroThumbToManifesto)
+
+Objetivo da sessão
+    •    Implementar animação de scroll que:
+    •    Começa com uma thumb pequena de vídeo na Hero.
+    •    Faz o vídeo crescer e se deslocar até ocupar a seção Manifesto.
+
+Contexto técnico
+    •    A versão atual usa useScroll + useTransform com transformações em scale, x, y e borderRadius. ￼
+    •    URL de vídeo hospedado na Supabase já está definida no documento. ￼
+
+Instruções para o agente
+    1.    Em HeroThumbToManifesto:
+    •    'use client';
+    •    useRef<HTMLDivElement> + useScroll com target: ref e offset: ['start end', 'end start'].
+    •    useTransform para:
+    •    scale (ex: [1, 3.2]).
+    •    x (ex: '0vw' → '-12vw').
+    •    y (ex: '0vh' → '-18vh').
+    •    borderRadius (ex: 16px → 0px para efeito full bleed). ￼
+    2.    Garantir acessibilidade:
+    •    autoPlay, muted, loop, playsInline.
+    •    aria-label="Vídeo manifesto" (ou similar).
+    3.    Integrar com Manifesto:
+    •    Garantir que a posição final do vídeo coincide visualmente com a seção Manifesto (ver layout ou IDs da seção).
+    4.    Adicionar respeito a prefers-reduced-motion (via usePrefersReducedMotion):
+    •    Se reduced === true, usar versão sem deslocamentos / transformações, apenas um vídeo estático.
+
+Checklist de saída
+    •    Animação de thumb → Manifesto funcionando na rolagem.
+    •    Fallback amigável para reduced motion.
+    •    Vídeo acessível e com boas práticas de reprodução.
+
+Arquivos-alvo
+    •    src/components/hero/HeroThumbToManifesto.tsx
+    •    src/components/manifesto/ManifestoSection.tsx (para integração visual)
+
+⸻
+
+Prompt 6 — Hero sticky 200vh + integração com Canvas 3D
+
+Objetivo da sessão
+    •    Transformar a Hero em um bloco com 200vh, conteúdo sticky, Canvas 3D desacoplado e animações de entrada do heading.
+
+Contexto técnico
+    •    Hero alvo:
+    •    <section id="hero" className="relative bg-[#F4F5F7] h-[200vh]">
+    •    Wrapper sticky: <div className="sticky top-0 min-h-screen overflow-hidden">
+    •    Canvas 3D como background.
+    •    Bloco textual com H1, tag [BRAND AWARENESS], subtítulo em pill, CTA principal e link “get to know me better → /sobre”.
+
+Instruções para o agente
+    1.    Em Hero.tsx:
+    •    Montar estrutura sticky 200vh.
+    •    Incluir HeroGlassCanvas como background (absoluto).
+    •    Usar motion.h1 com animação de entrada (ex.: initial={{ y: 24, opacity: 0 }} → animate={{ y: 0, opacity: 1 }}). ￼
+    •    Garantir que o subtítulo esteja em um pill translúcido (bg semitransparente + borda arredondada), conforme diagnóstico.
+    2.    Conectar CTA:
+    •    Link href="/sobre" para “get to know me better →”.
+    3.    Integrar HeroThumbToManifesto no canto inferir direito do bloco.
+    4.    Usar usePrefersReducedMotion (opcional) para:
+    •    Ajustar animação do heading em reduced motion (ex.: fade simples).
+
+Checklist de saída
+    •    Hero com 200vh e bloco interno sticky.
+    •    Heading animado com Framer Motion.
+    •    Subtítulo em pill translúcido.
+    •    CTA funcionando /sobre.
+    •    Thumb do vídeo conectada com scroll → Manifesto.
+
+Arquivos-alvo
+    •    src/components/hero/Hero.tsx
+    •    src/components/hero/HeroGlassCanvas.tsx
+    •    src/components/hero/HeroThumbToManifesto.tsx
+
+⸻
+
+Prompt 7 — Header sticky com condensação + blur
+
+Objetivo da sessão
+    •    Implementar header sticky que:
+    •    Reduz padding após ~40px de scroll.
+    •    Aplica backdrop-blur e sombra sutil.
+    •    Tem estados de foco, hover e “ativo” (underline animado).
+
+Contexto técnico
+    •    Os requisitos apontam:
+    •    Links: home → #hero; sobre → /sobre; portfolio showcase → /portfolio; contato → #contact. ￼
+    •    Código atual do documento já esboça um SiteHeader usando Framer Motion + useScroll para condensação. ￼
+
+Instruções para o agente
+    1.    Em SiteHeader.tsx:
+    •    'use client';
+    •    Usar useScroll + useTransform para derivar headerY / headerPadding / backdropOpacity.
+    •    motion.header sticky com:
+    •    className="fixed inset-x-0 top-0 z-50" (ou similar).
+    •    Variar padding (py-5 → py-2, por exemplo) em função do scroll.
+    •    backdrop-blur + bg-white/80 ao rolar.
+    2.    Navegação:
+    •    Mapear itens de menu (home, sobre, portfolio showcase, contato) em um array de config.
+    •    Usar next/link.
+    •    Adicionar underline animado no item ativo (por rota/âncora).
+    3.    Acessibilidade:
+    •    Focus ring consistente em links.
+    •    aria-label para o logo (ex.: “Ir para o topo”).
+
+Checklist de saída
+    •    Header sticky com transição suave de padding.
+    •    Blur e sombra aplicados após scroll.
+    •    Itens de navegação corretos e acessíveis.
+    •    Hover/active state coerentes com o design (incl. azul #0057FF). ￼
+
+Arquivos-alvo
+    •    src/components/layout/SiteHeader.tsx
+    •    src/app/layout.tsx (para incluir o header)
+
+⸻
+
+Prompt 8 — Estrutura de arquivos & checklist visual final
+
+Objetivo da sessão
+    •    Validar a organização de pastas e a fidelidade visual final da Home, garantindo que todos os prompts anteriores convergem num resultado consistente.
+
+Contexto técnico
+    •    Estrutura alvo já foi definida (ver seção 1).
+    •    Anexos de referência incluem:
+    •    Ecossistema R3F/Drei + gltfjsx.
+    •    Pattern de “distorted glass”.
+    •    Animações por scroll com R3F.
+    •    Exemplo de MeshTransmissionMaterial com GLB.
+
+Instruções para o agente
+    1.    Validar que a estrutura de pastas da Home bate com a esperada:
+    •    app/layout.tsx e app/page.tsx.
+    •    components/layout, components/hero, components/hero3d, hooks, etc.
+    2.    Revisar se:
+    •    The Hero corresponde visualmente à imagem de referência.
+    •    O orb 3D está posicionado corretamente em relação ao heading.
+    •    A transição da thumb → Manifesto está suave e alinhada ao layout.
+    3.    Verificar as demais seções (Manifesto, Portfolio Showcase, Featured Projects, Clients, Contact, Footer) de forma rápida, aplicando:
+    •    Hovers/coerência de tokens.
+    •    alt em imagens.
+    •    Navegação fluida por teclado.
+
+Checklist de saída
+    •    Estrutura de pastas conforme especificado.
+    •    Home reproduz o layout de referência.
+    •    Navegação e narrativa Hero → Manifesto → Portfolio → Contact coerentes.
+    •    Acessibilidade básica garantida.
+
+Arquivos-alvo
+    •    src/app/layout.tsx
+    •    src/app/page.tsx
+    •    src/components/**/*
+    •    src/hooks/usePrefersReducedMotion.ts
+
+⸻
+
+5. Nota final
+
+Este documento substitui versões anteriores com entradas duplicadas ou contraditórias.
+Use apenas os prompts estruturados acima por sessão.
+Se um código “completo” anterior divergir deste texto, considere este documento como fonte de verdade de requisitos e intenções para o agente.
+
+```m

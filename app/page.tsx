@@ -1,20 +1,20 @@
 import React from 'react';
-import Hero from '@/components/hero/Hero';
-import ManifestoSection from '@/components/manifesto/ManifestoSection';
-import PortfolioShowcaseSection from '@/components/portfolio/PortfolioShowcaseSection';
-import FeaturedProjectsSection from '@/components/projects/FeaturedProjectsSection';
-import ClientsBrandsSection from '@/components/clients/ClientsBrandsSection';
-import ContactSection from '@/components/contact/ContactSection';
+import Hero from '../components/sections/Hero';
+import Manifesto from '../components/home/Manifesto';
+import PortfolioShowcase from '../components/home/PortfolioShowcase';
+import FeaturedProjects from '../components/home/FeaturedProjects';
+import Clients from '../components/home/Clients';
+import Contact from '../components/home/Contact';
 
-export default function HomePage() {
+export default function Home() {
   return (
     <>
       <Hero />
-      <ManifestoSection />
-      <PortfolioShowcaseSection />
-      <FeaturedProjectsSection />
-      <ClientsBrandsSection />
-      <ContactSection />
+      <Manifesto />
+      <PortfolioShowcase />
+      <FeaturedProjects />
+      <Clients />
+      <Contact />
     </>
   );
 }

@@ -1,25 +1,41 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 
-export function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
+// Combina o hook do Framer Motion com matchMedia para funcionar
+// tanto em contextos com/sem AnimatePresence quanto no SSR.
+export function useReducedMotionPreference(): boolean {
+  const framerPrefersReduce = useReducedMotion();
+  const [prefersReduce, setPrefersReduce] = useState<boolean>(
+    framerPrefersReduce ?? false
+  );
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-    const onChange = () => {
-      setReduced(mq.matches);
-    };
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePreference = () =>
+      setPrefersReduce(
+        framerPrefersReduce !== undefined
+          ? Boolean(framerPrefersReduce)
+          : mediaQuery.matches
+      );
 
-    onChange();
-    mq.addEventListener?.('change', onChange);
+    updatePreference();
 
-    return () => {
-      mq.removeEventListener?.('change', onChange);
-    };
-  }, []);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', updatePreference);
+      return () => mediaQuery.removeEventListener('change', updatePreference);
+    }
 
-  return reduced;
+    mediaQuery.addListener?.(updatePreference);
+    return () => mediaQuery.removeListener?.(updatePreference);
+  }, [framerPrefersReduce]);
+
+  return prefersReduce;
 }
+
+export default useReducedMotionPreference;

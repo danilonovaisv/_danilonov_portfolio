@@ -1,13 +1,7 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import Header from '../components/layout/Header';
+import Footer from '../components/layout/Footer';
 import './globals.css';
-import SiteHeader from '@/components/layout/SiteHeader';
-import SiteFooter from '@/components/layout/SiteFooter';
-
-export const metadata: Metadata = {
-  title: 'Portfólio — Danilo Novais',
-  description: 'Portfólio institucional de Danilo Novais Vilela.',
-};
 
 export default function RootLayout({
   children,
@@ -16,10 +10,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className="bg-[#F4F5F7] text-[#111111] antialiased">
-        <SiteHeader />
-        <main className="pt-24 pb-24">{children}</main>
-        <SiteFooter />
+      <body>
+        <div className="min-h-screen bg-[#F4F5F7] text-[#111111] font-sans selection:bg-[#0057FF] selection:text-white">
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
