@@ -1,8 +1,8 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, PerspectiveCamera, Lightformer } from '@react-three/drei';
+import { Environment, OrbitControls } from '@react-three/drei';
 import TorusDan from './TorusDan';
 
 type HeroGlassCanvasProps = {
@@ -14,8 +14,15 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   className,
   reduceMotion = false,
 }) => {
+  const torus = useMemo(
+    () => <TorusDan reduceMotion={reduceMotion} />,
+    [reduceMotion]
+  );
+
   return (
-    <div className={`w-full h-full ${className ?? ''}`}>
+    <div
+      className={`relative flex h-full w-full items-center justify-center ${className ?? ''}`}
+    >
       <Canvas
         frameloop={reduceMotion ? 'demand' : 'always'}
         dpr={[1, reduceMotion ? 1.5 : 2]}
@@ -76,6 +83,7 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
             )}
           </Environment>
         </Suspense>
+        <OrbitControls enableZoom={false} enablePan={false} />
       </Canvas>
     </div>
   );
