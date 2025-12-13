@@ -85,6 +85,12 @@
       "namedRegex": "^/api/admin/posts(?:/)?$"
     },
     {
+      "page": "/build",
+      "regex": "^/build(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/build(?:/)?$"
+    },
+    {
       "page": "/portfolio",
       "regex": "^/portfolio(?:/)?$",
       "routeKeys": {},

@@ -8,6 +8,7 @@
   "/admin/posts/new/page": "/admin/posts/new",
   "/admin/posts/page": "/admin/posts",
   "/api/admin/posts/route": "/api/admin/posts",
+  "/build/page": "/build",
   "/page": "/",
   "/portfolio/page": "/portfolio",
   "/sobre/page": "/sobre"

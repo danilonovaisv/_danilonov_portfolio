@@ -3,8 +3,74 @@
     "source": ".",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "frameworksBackend": {
-      "region": "us-east1"
-    }
+      "region": "us-east1",
+      "backendId": "portfoliodannovais"
+    },
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "build-info.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "workbox-*.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store, max-age=0"
+          }
+        ]
+      },
+      {
+        "source": "_next/static/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.{js,css,ico,png,jpg,jpeg,gif,webp,svg,woff,woff2,ttf,eot,otf,glb,gltf,bin,hdr,mp4,webm}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ]
   },
   "remoteconfig": {
     "template": "remoteconfig.template.json"
@@ -49,10 +115,6 @@
         "npm --prefix \"$RESOURCE_DIR\" run build"
       ],
       "source": "functions"
-    },
-    {
-      "source": ".firebase/portfolio-danilo-novais/functions",
-      "codebase": "firebase-frameworks-portfolio-danilo-novais"
     }
   ],
   "storage": {

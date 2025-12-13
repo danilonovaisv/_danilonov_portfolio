@@ -9,9 +9,12 @@
     "threejs",
     "react-three-fiber"
   ],
+  "engines": {
+    "node": "24"
+  },
   "dependencies": {
-    "@dataconnect/admin-generated": "file:dataconnect-admin-generated-0.0.1.tgz",
-    "@dataconnect/generated": "file:dataconnect-generated-1.0.0.tgz",
+    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "@google-cloud/storage": "^7.18.0",
     "@hookform/resolvers": "^5.2.2",
     "@react-three/drei": "^10.7.7",
@@ -42,8 +45,5 @@
   "overrides": {
     "test-exclude": "7.0.1"
   },
-  "main": "server.js",
-  "engines": {
-    "node": "20"
-  }
+  "main": "server.js"
 }

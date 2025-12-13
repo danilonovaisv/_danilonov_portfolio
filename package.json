@@ -10,10 +10,11 @@
     "react-three-fiber"
   ],
   "engines": {
-    "node": ">=20"
+    "node": "24"
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/generate-build-info.cjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --ext .js,.ts,.tsx .",
