@@ -43,29 +43,6 @@ export default function PortfolioMosaicGrid({ rows }: PortfolioMosaicGridProps) 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white pointer-events-none" />
 
       <div className="relative mx-auto max-w-6xl px-0 pb-28 pt-8 sm:px-6 sm:pt-14 lg:px-10">
-        <div className="px-6 sm:px-0">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={cardTransition}
-            className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0057FF]">
-                [ Mosaic / 3 · 2 · 1 ]
-              </p>
-              <h2 className="text-2xl font-bold tracking-tight text-[#0f172a] sm:text-3xl">
-                Uma parede de highlights sem texto — só visual.
-              </h2>
-            </div>
-            <p className="text-sm text-[#475569] max-w-md">
-              Ordem determinística com seed fixa para evitar hydration mismatch.
-              Cada linha mistura 3, 2 e 1 cards colados, sem gaps.
-            </p>
-          </motion.div>
-        </div>
-
         <div className="overflow-hidden rounded-3xl border border-white/40 bg-white shadow-[0_30px_60px_-45px_rgba(0,0,0,0.35)]">
           {rows.map((row) => (
             <div key={row.id} className="flex w-full flex-wrap sm:flex-nowrap">

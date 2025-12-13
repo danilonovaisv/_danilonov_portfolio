@@ -1,4 +1,3 @@
-
 # Portfolio Admin Panel
 
 This is a Headless CMS Admin Panel built with Next.js App Router, Supabase, and Tailwind CSS.

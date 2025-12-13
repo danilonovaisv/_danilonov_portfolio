@@ -1,11 +1,10 @@
-
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
-  })
+  });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,36 +12,39 @@ export async function updateSession(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll()
+          return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
-          )
+          );
           supabaseResponse = NextResponse.next({
             request,
-          })
+          });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
-          )
+          );
         },
       },
     }
-  )
+  );
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   // Protect /admin routes
-  if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
+  if (
+    request.nextUrl.pathname.startsWith('/admin') &&
+    !request.nextUrl.pathname.startsWith('/admin/login')
+  ) {
     if (!user) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/admin/login'
-      return NextResponse.redirect(url)
+      const url = request.nextUrl.clone();
+      url.pathname = '/admin/login';
+      return NextResponse.redirect(url);
     }
-    // Ideally check for role = 'admin' here if using custom claims or a table lookup, 
-    // but for now Supabase Auth user existence is the base. 
+    // Ideally check for role = 'admin' here if using custom claims or a table lookup,
+    // but for now Supabase Auth user existence is the base.
     // The prompt says "Apenas usuários com role = 'admin' podem acessar".
     // This usually requires checking public.users table or custom claims.
     // For simplicity I will assume checking user existence first.
@@ -51,5 +53,5 @@ export async function updateSession(request: NextRequest) {
     // Or if Supabase jwt has role.
   }
 
-  return supabaseResponse
+  return supabaseResponse;
 }

@@ -1,43 +1,45 @@
+'use client';
 
-'use client'
-
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
-import { Loader2 } from 'lucide-react'
+import React from 'react';
+import { useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
-  const supabase = createClient()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
+    });
 
     if (error) {
-      setError(error.message)
-      setLoading(false)
+      setError(error.message);
+      setLoading(false);
     } else {
-      router.push('/admin/dashboard')
-      router.refresh()
+      router.push('/admin/dashboard');
+      router.refresh();
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-lg shadow-xl p-8">
-        <h1 className="text-2xl font-bold text-white mb-6 text-center">Admin Login</h1>
-        
+        <h1 className="text-2xl font-bold text-white mb-6 text-center">
+          Admin Login
+        </h1>
+
         {error && (
           <div className="bg-red-900/50 border border-red-900 text-red-200 p-3 rounded mb-4 text-sm">
             {error}
@@ -46,7 +48,9 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              Email
+            </label>
             <input
               type="email"
               value={email}
@@ -57,7 +61,9 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              Password
+            </label>
             <input
               type="password"
               value={password}
@@ -78,5 +84,5 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

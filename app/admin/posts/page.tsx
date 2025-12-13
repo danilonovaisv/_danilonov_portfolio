@@ -1,18 +1,24 @@
-
-import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
-import { Plus, Edit } from 'lucide-react'
-import { DeletePostButton } from '@/components/admin/DeletePostButton'
+import React from 'react';
+import { createClient } from '@/lib/supabase/server';
+import Link from 'next/link';
+import { Plus, Edit } from 'lucide-react';
+import { DeletePostButton } from '@/components/admin/DeletePostButton';
 
 export default async function PostsPage() {
-  const supabase = await createClient()
-  const { data: posts } = await supabase.from('posts').select('*').order('created_at', { ascending: false })
+  const supabase = await createClient();
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('*')
+    .order('created_at', { ascending: false });
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">Posts</h1>
-        <Link href="/admin/posts/new" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+        <Link
+          href="/admin/posts/new"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+        >
           <Plus size={20} />
           New Post
         </Link>
@@ -33,9 +39,13 @@ export default async function PostsPage() {
             {posts?.map((post) => (
               <tr key={post.id} className="hover:bg-gray-900 transition-colors">
                 <td className="p-4 font-medium text-white">{post.title}</td>
-                <td className="p-4 text-gray-400 font-mono text-sm">{post.slug}</td>
+                <td className="p-4 text-gray-400 font-mono text-sm">
+                  {post.slug}
+                </td>
                 <td className="p-4">
-                  <span className={`px-2 py-1 rounded text-xs uppercase font-bold tracking-wider ${post.published ? 'bg-green-950 text-green-400 border border-green-900' : 'bg-yellow-950 text-yellow-400 border border-yellow-900'}`}>
+                  <span
+                    className={`px-2 py-1 rounded text-xs uppercase font-bold tracking-wider ${post.published ? 'bg-green-950 text-green-400 border border-green-900' : 'bg-yellow-950 text-yellow-400 border border-yellow-900'}`}
+                  >
                     {post.published ? 'Published' : 'Draft'}
                   </span>
                 </td>
@@ -44,7 +54,11 @@ export default async function PostsPage() {
                 </td>
                 <td className="p-4 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <Link href={`/admin/posts/${post.id}`} className="p-2 text-blue-400 hover:bg-blue-900/30 rounded transition-colors" title="Edit Post">
+                    <Link
+                      href={`/admin/posts/${post.id}`}
+                      className="p-2 text-blue-400 hover:bg-blue-900/30 rounded transition-colors"
+                      title="Edit Post"
+                    >
                       <Edit size={18} />
                     </Link>
                     <DeletePostButton id={post.id} />
@@ -63,5 +77,5 @@ export default async function PostsPage() {
         </table>
       </div>
     </div>
-  )
+  );
 }

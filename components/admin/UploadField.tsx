@@ -1,47 +1,48 @@
+'use client';
 
-'use client'
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { Upload, X, Loader2 } from 'lucide-react'
-import Image from 'next/image'
+import React from 'react';
+import { useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Upload, X, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 interface UploadFieldProps {
-  value?: string
-  onChange: (_url: string) => void
-  label: string
+  value?: string;
+  onChange: (_url: string) => void;
+  label: string;
 }
 
 export function UploadField({ value, onChange, label }: UploadFieldProps) {
-  const [uploading, setUploading] = useState(false)
-  const supabase = createClient()
+  const [uploading, setUploading] = useState(false);
+  const supabase = createClient();
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setUploading(true)
-      const file = e.target.files?.[0]
-      if (!file) return
+      setUploading(true);
+      const file = e.target.files?.[0];
+      if (!file) return;
 
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('images')
-        .upload(filePath, file)
+        .upload(filePath, file);
 
       if (uploadError) {
-        throw uploadError
+        throw uploadError;
       }
 
-      const { data } = supabase.storage.from('images').getPublicUrl(filePath)
-      onChange(data.publicUrl)
+      const { data } = supabase.storage.from('images').getPublicUrl(filePath);
+      onChange(data.publicUrl);
     } catch (error) {
-      console.error(error)
-      alert('Error uploading image')
+      console.error(error);
+      alert('Error uploading image');
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-2">
@@ -61,9 +62,9 @@ export function UploadField({ value, onChange, label }: UploadFieldProps) {
         ) : (
           <div className="flex flex-col items-center justify-center py-8 text-center text-gray-500">
             {uploading ? (
-               <Loader2 className="animate-spin mb-2" size={24} />
+              <Loader2 className="animate-spin mb-2" size={24} />
             ) : (
-               <Upload className="mb-2" size={24} />
+              <Upload className="mb-2" size={24} />
             )}
             <p className="text-sm">
               {uploading ? 'Uploading...' : 'Click to upload image'}
@@ -79,5 +80,5 @@ export function UploadField({ value, onChange, label }: UploadFieldProps) {
         )}
       </div>
     </div>
-  )
+  );
 }
