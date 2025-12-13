@@ -27,6 +27,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@hookform/resolvers": "^5.2.2",
     "@react-three/drei": "^10.7.7",
