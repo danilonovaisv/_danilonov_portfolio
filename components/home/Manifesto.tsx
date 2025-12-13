@@ -71,16 +71,17 @@ const Manifesto: React.FC = () => {
         transition={{ duration: 0.9, ease: 'easeOut' }}
         className="mx-auto w-full max-w-6xl overflow-hidden rounded-3xl bg-gray-100 shadow-sm"
       >
-        <div className="relative w-full overflow-hidden aspect-video sm:aspect-21/9">
+        <div className="relative w-full overflow-hidden aspect-[16/9] bg-black">
           {!hasError ? (
             <motion.video
               ref={videoRef}
               src={ASSETS.videoManifesto}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-contain"
               autoPlay
               muted={isMuted}
               loop
               playsInline
+              preload="metadata"
               controls
               onError={() => setHasError(true)}
               aria-label="Vídeo Manifesto do Portfólio"

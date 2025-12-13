@@ -31,9 +31,9 @@ const PortfolioShowcaseSection: FC = () => {
   const getTextAlignment = (index: number) => {
     switch (index) {
       case 0:
-        return 'items-end text-right md:items-end md:text-right';
+        return 'items-start text-left md:items-end md:text-right';
       case 1:
-        return 'items-center text-center md:items-center md:text-center';
+        return 'items-start text-left md:items-center md:text-center';
       case 2:
       default:
         return 'items-start text-left md:items-start md:text-left';
@@ -117,7 +117,7 @@ const PortfolioShowcaseSection: FC = () => {
                       className={`relative w-full ${
                         isExpanded
                           ? 'flex flex-col items-center gap-6 w-full md:flex-row md:items-start'
-                          : 'flex items-center flex-row flex-wrap justify-between gap-3'
+                          : 'flex items-center flex-row justify-between gap-6 flex-nowrap'
                       }`}
                     >
                       {/* Thumbnail Animada (Slide-in on Hover - aparece à esquerda do texto) */}
@@ -147,7 +147,7 @@ const PortfolioShowcaseSection: FC = () => {
                       </AnimatePresence>
 
                       {/* Texto da Categoria - Fonte alterada para font-light (suave) */}
-                      <div className={`flex flex-1 flex-col ${textAlignClass}`}>
+                      <div className={`flex flex-1 flex-col min-w-0 ${textAlignClass}`}>
                         {isWebItem && !isExpanded ? (
                           // Layout especial para o 3º item quando fechado
                           <motion.h3

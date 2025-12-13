@@ -13,8 +13,8 @@
     "node": "24"
   },
   "dependencies": {
-    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
-    "@dataconnect/generated": "file:src/dataconnect-generated",
+    "@dataconnect/admin-generated": "file:dataconnect-admin-generated-0.0.1.tgz",
+    "@dataconnect/generated": "file:dataconnect-generated-1.0.0.tgz",
     "@google-cloud/storage": "^7.18.0",
     "@hookform/resolvers": "^5.2.2",
     "@react-three/drei": "^10.7.7",
