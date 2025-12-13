@@ -170,7 +170,9 @@ const FeaturedProjects: React.FC = () => {
   return (
     <section
       id="featured-projects"
-      className="relative w-full bg-[#F4F5F7] text-[#0b0b0b] py-16 md:py-24"
+      className={`relative w-full bg-[#F4F5F7] text-[#0b0b0b] py-16 md:py-24 ${
+        prefersReducedMotion ? '' : 'md:cursor-none'
+      }`}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => handleHover(null)}
     >

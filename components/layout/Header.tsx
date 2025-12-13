@@ -11,9 +11,10 @@ import {
 } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { NAV_LINKS, ASSETS } from '../../lib/constants';
+import type { NavLink } from '../../lib/types';
 import { Menu, X } from 'lucide-react';
 
-const Header: React.FC = () => {
+function Header(): React.ReactElement {
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const router = useRouter();
@@ -21,7 +22,7 @@ const Header: React.FC = () => {
   const [logoError, setLogoError] = useState(false);
   const [isCondensed, setIsCondensed] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const navItems = useMemo(() => NAV_LINKS, []);
+  const navItems = useMemo<NavLink[]>(() => NAV_LINKS, []);
 
   // Padding animado para compressão suave ao scroll
   const paddingY = useTransform(scrollY, [0, 40], [16, 8]);
@@ -82,7 +83,8 @@ const Header: React.FC = () => {
   };
 
   const handleNavClick =
-    (href: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    (href: string) =>
+    (event: React.MouseEvent<HTMLAnchorElement>): void => {
       const isHashLink = href.startsWith('#');
 
       if (isHashLink && pathname !== '/') {
@@ -165,7 +167,7 @@ const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="rounded-full p-2 text-[#111111] transition-colors duration-200 hover:text-[#0057FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-              aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -212,6 +214,6 @@ const Header: React.FC = () => {
       </AnimatePresence>
     </>
   );
-};
+}
 
 export default Header;
