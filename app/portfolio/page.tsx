@@ -1,3 +1,4 @@
+import React from 'react';
 import PortfolioHero from '../../components/portfolio/PortfolioHero';
 import PortfolioMosaicGrid from '../../components/portfolio/PortfolioMosaicGrid';
 import type { MosaicItem, MosaicRow } from '../../components/portfolio/types';

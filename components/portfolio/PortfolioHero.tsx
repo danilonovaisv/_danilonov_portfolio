@@ -101,8 +101,8 @@ export default function PortfolioHero() {
         </motion.div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-6 pb-10 pt-2 lg:px-8">
-        <p className="text-3xl font-bold lowercase tracking-tight text-[#111111]">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-6 px-6 pb-10 pt-2 lg:px-8 sm:flex-row">
+        <p className="text-3xl font-bold lowercase tracking-tight text-[#111111] text-center sm:text-left">
           <span className="text-[#0057FF]">portfólio</span>{' '}
           <span className="text-[#111111]">showcase</span>
         </p>

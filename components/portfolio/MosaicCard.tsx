@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { MosaicItem } from './types';
@@ -39,7 +40,7 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
       viewport={{ once: true, amount: 0.35 }}
       variants={entryVariants}
       transition={{ duration: 0.45, ease: easing }}
-      className="relative overflow-hidden rounded-[28px] border border-white/30 bg-[#0f172a]/5"
+      className="relative overflow-hidden rounded-none border border-white/30 bg-[#0f172a]/5"
     >
       <div className="relative aspect-[16/10] w-full">
         <div
