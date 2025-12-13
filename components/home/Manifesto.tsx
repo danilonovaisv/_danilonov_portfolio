@@ -16,7 +16,7 @@ const Manifesto: React.FC = () => {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
-        className="relative w-full aspect-video md:aspect-[21/9] overflow-hidden bg-gray-100 shadow-sm rounded-3xl"
+        className="relative w-full aspect-video md:aspect-21/9 overflow-hidden bg-gray-100 shadow-sm rounded-3xl"
       >
         {!hasError ? (
           <motion.video

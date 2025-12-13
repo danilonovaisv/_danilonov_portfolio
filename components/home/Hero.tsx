@@ -250,9 +250,7 @@ const Hero = () => {
             </motion.div>
 
             {/* CTA Button */}
-            <motion.div
-              className="pointer-events-auto"
-            >
+            <motion.div className="pointer-events-auto">
               <motion.a
                 href="/sobre"
                 initial={{ opacity: 0, y: 20 }}

@@ -168,7 +168,7 @@ const Hero = () => {
         </motion.a>
       </div>
 
-      <div className="md:hidden relative w-screen -mx-6 mt-8 aspect-[375/330] min-h-[300px] overflow-hidden">
+      <div className="md:hidden relative w-screen -mx-6 mt-8 aspect-375/330 min-h-[300px] overflow-hidden">
         <video
           src={ASSETS.videoManifesto}
           autoPlay

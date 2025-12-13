@@ -121,7 +121,10 @@ const FeaturedProjects: React.FC = () => {
             whileHover={
               prefersReducedMotion
                 ? undefined
-                : { scale: 1.08, boxShadow: '0 10px 24px -12px rgba(0,87,255,0.65)' }
+                : {
+                    scale: 1.08,
+                    boxShadow: '0 10px 24px -12px rgba(0,87,255,0.65)',
+                  }
             }
             whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
@@ -159,9 +162,7 @@ const FeaturedProjects: React.FC = () => {
         </div>
 
         {/* Segunda linha: card horizontal full width */}
-        <div className="w-full">
-          {card3 && <ProjectCard project={card3} />}
-        </div>
+        <div className="w-full">{card3 && <ProjectCard project={card3} />}</div>
 
         {/* Terceira linha: card + CTA lateral */}
         <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-5">
@@ -176,7 +177,10 @@ const FeaturedProjects: React.FC = () => {
             </h3>
             <motion.a
               href="/portfolio"
-              whileHover={{ scale: 1.05, boxShadow: '0 14px 36px -18px rgba(0,87,255,0.6)' }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: '0 14px 36px -18px rgba(0,87,255,0.6)',
+              }}
               whileTap={{ scale: 0.97 }}
               className="group inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-6 py-3 text-white text-sm font-semibold shadow-lg shadow-[#0057FF]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF]"
             >
@@ -199,7 +203,6 @@ const FeaturedProjects: React.FC = () => {
           </div>
         </div>
       </motion.div>
-
     </section>
   );
 };
