@@ -24,6 +24,11 @@ export default [
       'config/**/*.{ts,tsx,js,jsx,mjs,cjs}',
       'functions/src/**/*.{ts,tsx,js,jsx,mjs,cjs}',
       'pages/**/*.{ts,tsx,js,jsx,mjs,cjs}',
+      'content/**/*.{ts,tsx,js,jsx,mjs,cjs}',
+      'test/**/*.{ts,tsx,js,jsx,mjs,cjs}',
+      'validations/**/*.{ts,tsx,js,jsx,mjs,cjs}',
+      'middleware.ts',
+      'tailwind.config.ts',
     ],
     languageOptions: {
       parser,
