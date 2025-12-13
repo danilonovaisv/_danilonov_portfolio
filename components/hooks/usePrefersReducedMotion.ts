@@ -5,7 +5,7 @@ import { useReducedMotion } from 'framer-motion';
 
 // Combina o hook do Framer Motion com matchMedia para funcionar
 // tanto em contextos com/sem AnimatePresence quanto no SSR.
-export function useReducedMotionPreference(): boolean {
+export function usePrefersReducedMotion(): boolean {
   const framerPrefersReduce = useReducedMotion();
   const [prefersReduce, setPrefersReduce] = useState<boolean>(
     framerPrefersReduce ?? false
@@ -38,4 +38,4 @@ export function useReducedMotionPreference(): boolean {
   return prefersReduce;
 }
 
-export default useReducedMotionPreference;
+export default usePrefersReducedMotion;

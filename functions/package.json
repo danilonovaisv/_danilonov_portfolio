@@ -16,6 +16,7 @@
     "node": "24"
   },
   "dependencies": {
+    "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@genkit-ai/firebase": "^1.26.0",
     "@genkit-ai/google-genai": "^1.26.0",
     "express": "^5.2.1",

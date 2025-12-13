@@ -31,17 +31,20 @@ const PortfolioShowcaseSection: FC = () => {
   const getTextAlignment = (index: number) => {
     switch (index) {
       case 0:
-        return 'md:items-end md:text-right';
+        return 'items-end text-right md:items-end md:text-right';
       case 1:
-        return 'md:items-center md:text-center';
+        return 'items-center text-center md:items-center md:text-center';
       case 2:
       default:
-        return 'md:items-start md:text-left';
+        return 'items-start text-left md:items-start md:text-left';
     }
   };
 
   return (
-    <section className="relative w-full bg-[#f5f5f5] py-24 overflow-hidden min-h-screen flex flex-col justify-center items-center">
+    <section
+      id="portfolio-showcase"
+      className="relative w-full bg-[#f5f5f5] py-24 overflow-hidden min-h-screen flex flex-col justify-center items-center"
+    >
       <div className="container mx-auto px-5 md:px-8 max-w-[92%] md:max-w-7xl relative z-10">
         {/* Cabeçalho da Seção */}
         <div className="flex flex-col w-full mb-12 items-center text-center">
@@ -101,13 +104,21 @@ const PortfolioShowcaseSection: FC = () => {
                   <motion.div
                     layout="position"
                     className={`flex w-full transition-all duration-500 ease-out
-                      ${isExpanded ? 'py-8 flex-col items-center md:items-start gap-8' : 'py-10 md:py-14 gap-6 md:gap-0 flex-col md:flex-row items-center'}
-                      ${!isExpanded ? `justify-center md:${alignmentClass}` : ''}
+                      ${
+                        isExpanded
+                          ? 'py-8 flex-col items-center md:items-start gap-8'
+                          : 'py-10 md:py-14 gap-6 md:gap-0 flex-row items-center justify-between md:justify-start'
+                      }
+                      ${!isExpanded ? `md:${alignmentClass}` : ''}
                     `}
                   >
                     {/* Conteúdo do Item (Texto + Ícone) */}
                     <div
-                      className={`flex items-center relative ${!isExpanded ? 'gap-6 md:gap-8' : 'gap-6 w-full'} flex-col md:flex-row text-center`}
+                      className={`relative w-full ${
+                        isExpanded
+                          ? 'flex flex-col items-center gap-6 w-full md:flex-row md:items-start'
+                          : 'flex items-center flex-row flex-wrap justify-between gap-3'
+                      }`}
                     >
                       {/* Thumbnail Animada (Slide-in on Hover - aparece à esquerda do texto) */}
                       <AnimatePresence>
@@ -136,9 +147,7 @@ const PortfolioShowcaseSection: FC = () => {
                       </AnimatePresence>
 
                       {/* Texto da Categoria - Fonte alterada para font-light (suave) */}
-                      <div
-                        className={`flex flex-col items-center text-center ${textAlignClass}`}
-                      >
+                      <div className={`flex flex-1 flex-col ${textAlignClass}`}>
                         {isWebItem && !isExpanded ? (
                           // Layout especial para o 3º item quando fechado
                           <motion.h3

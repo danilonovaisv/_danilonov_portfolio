@@ -1,26 +1,21 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Float, MeshTransmissionMaterial, useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 type TorusDanProps = {
   reduceMotion?: boolean;
+  isMobile?: boolean;
 };
 
-const TorusDan = ({ reduceMotion = false }: TorusDanProps) => {
+const TorusDan = ({
+  reduceMotion = false,
+  isMobile = false,
+}: TorusDanProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const { nodes } = useGLTF('/media/torus_dan.glb');
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const update = () => setIsMobile(window.innerWidth < 768);
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
   const geometry =
     (nodes as any).Torus?.geometry ||
     (nodes as any).Torus002?.geometry ||
@@ -30,19 +25,44 @@ const TorusDan = ({ reduceMotion = false }: TorusDanProps) => {
     return null;
   }
 
-  const materialConfig = useMemo(
-    () => ({
-      transmission: 1,
-      thickness: 0.65,
-      roughness: 0.08,
+  const materialConfig = useMemo(() => {
+    const common = {
       ior: 1.25,
       chromaticAberration: 0.06,
       backside: true,
-      samples: isMobile ? 8 : 14,
-      resolution: isMobile ? 420 : 720,
-    }),
-    [isMobile]
-  );
+    };
+
+    if (reduceMotion) {
+      return {
+        ...common,
+        transmission: 0.9,
+        roughness: 0.15,
+        thickness: 0.35,
+        samples: 2,
+        resolution: 256,
+      };
+    }
+
+    if (isMobile) {
+      return {
+        ...common,
+        transmission: 1,
+        roughness: 0.08,
+        thickness: 0.45,
+        samples: 4,
+        resolution: 512,
+      };
+    }
+
+    return {
+      ...common,
+      transmission: 1,
+      roughness: 0.05,
+      thickness: 0.55,
+      samples: 12,
+      resolution: 1024,
+    };
+  }, [isMobile, reduceMotion]);
 
   useFrame((_, delta) => {
     if (reduceMotion || !groupRef.current) return;

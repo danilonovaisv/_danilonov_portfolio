@@ -44,7 +44,7 @@ export default function PortfolioHero() {
   return (
     <section
       id="portfolio-hero"
-      className="w-screen bg-[#f5f5f5] text-[#0f172a] pt-[96px]"
+      className="w-full bg-[#f5f5f5] text-[#0f172a] pt-[96px] overflow-hidden"
     >
       <div className="relative mb-2">
         <motion.div
@@ -101,15 +101,15 @@ export default function PortfolioHero() {
         </motion.div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 px-10 pb-10 pt-2 lg:px-8 sm:flex-row">
-        <p className="text-3xl font-bold lowercase tracking-tight text-[#111111] text-center sm:text-left">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-6 px-6 pb-10 pt-6 sm:flex-row sm:items-center sm:gap-8 lg:px-8">
+        <p className="text-3xl font-bold lowercase tracking-tight text-[#111111] text-left">
           <span className="text-[#0057FF]">portfólio</span>{' '}
           <span className="text-[#111111]">showcase</span>
         </p>
 
         <a
           href="#contact"
-          className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0057FF] px-10 py-4 text-lg font-semibold tracking-wide text-white shadow-[0_18px_30px_-15px_rgba(0,87,255,0.8)] transition duration-200 hover:bg-[#0046CC] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0057FF]/50"
+          className="group inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-[#0057FF] px-8 py-4 text-lg font-semibold tracking-wide text-white shadow-[0_18px_30px_-15px_rgba(0,87,255,0.8)] transition duration-200 hover:bg-[#0046CC] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0057FF]/50 sm:w-auto sm:max-w-none"
         >
           vamos trabalhar juntos
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white transition duration-200 group-hover:bg-white/30">

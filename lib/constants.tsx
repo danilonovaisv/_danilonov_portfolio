@@ -9,6 +9,7 @@ import {
   Globe,
 } from 'lucide-react';
 import React from 'react';
+import { MAIN_ROUTES } from '../components/config/navigation';
 
 // Assets
 export const ASSETS = {
@@ -26,12 +27,13 @@ export const ASSETS = {
 };
 
 // Navigation
-export const NAV_LINKS: NavLink[] = [
-  { label: 'home', href: '#hero' },
-  { label: 'sobre', href: '/sobre' },
-  { label: 'portfolio showcase', href: '/portfolio' },
-  { label: 'contato', href: '#contact' },
-];
+export const NAV_LINKS: NavLink[] = MAIN_ROUTES.map((route) => {
+  const anchor = route.anchor ?? '';
+  return {
+    label: route.label,
+    href: anchor ? `${route.path}${anchor}` : route.path,
+  };
+});
 
 export type ProjectViewport = 'desktop' | 'tablet' | 'mobile';
 

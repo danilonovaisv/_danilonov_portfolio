@@ -3,7 +3,7 @@ import { NAV_LINKS, SOCIALS } from '../../lib/constants';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50 bg-[#0057FF] text-white border-t border-white/20">
+    <footer className="relative z-50 bg-[#0057FF] text-white border-t border-white/20 md:fixed md:bottom-0 md:left-0 md:right-0">
       <div className="container mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left text-sm text-white">
           <p>

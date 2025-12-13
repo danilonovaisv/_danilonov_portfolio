@@ -1,8 +1,22 @@
 'use client';
 
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import React, {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, PerspectiveCamera, Lightformer } from '@react-three/drei';
+import {
+  Environment,
+  PerspectiveCamera,
+  Lightformer,
+  useProgress,
+} from '@react-three/drei';
+import useIsMobile from '../hooks/useIsMobile';
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 
 const TorusDan = lazy(() => import('./TorusDan'));
 
@@ -11,35 +25,73 @@ type HeroGlassCanvasProps = {
   reduceMotion?: boolean;
 };
 
+type ProgressObserverProps = {
+  onProgress: (_value: number) => void;
+};
+
+const ProgressObserver: React.FC<ProgressObserverProps> = ({ onProgress }) => {
+  const { progress } = useProgress();
+
+  useEffect(() => {
+    onProgress(progress);
+  }, [progress, onProgress]);
+
+  return null;
+};
+
 const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   className,
   reduceMotion = false,
 }) => {
   const [mounted, setMounted] = useState(false);
+  const [eventSource, setEventSource] = useState<HTMLElement | undefined>();
+  const [preloaderProgress, setPreloaderProgress] = useState(0);
+  const [overlayUnmounted, setOverlayUnmounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceMotion = reduceMotion || prefersReducedMotion;
+  const handleProgressUpdate = useCallback((value: number) => {
+    setPreloaderProgress(value);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const eventSource =
-    typeof document !== 'undefined'
-      ? (document.body as HTMLElement)
-      : undefined;
+  useEffect(() => {
+    if (!mounted || typeof document === 'undefined') return;
+    const heroElement = document.getElementById('hero');
+    if (heroElement) {
+      setEventSource(heroElement);
+    } else if (containerRef.current) {
+      setEventSource(containerRef.current);
+    } else {
+      setEventSource(document.body);
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (preloaderProgress >= 100) {
+      const timer = setTimeout(() => setOverlayUnmounted(true), 600);
+      return () => clearTimeout(timer);
+    }
+    setOverlayUnmounted(false);
+    return undefined;
+  }, [preloaderProgress]);
+
+  const containerClassName = `relative flex h-full w-full items-center justify-center pointer-events-none ${className ?? ''}`;
 
   if (!mounted) {
     return (
-      <div
-        className={`relative flex h-full w-full items-center justify-center ${className ?? ''}`}
-      >
+      <div className={containerClassName}>
         <div className="absolute inset-0 bg-transparent" />
       </div>
     );
   }
 
   return (
-    <div
-      className={`relative flex h-full w-full items-center justify-center ${className ?? ''}`}
-    >
+    <div ref={containerRef} className={containerClassName}>
       <Suspense
         fallback={
           <div className="absolute inset-0 flex items-center justify-center text-sm text-white/70 bg-transparent">
@@ -48,17 +100,18 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
         }
       >
         <Canvas
-          frameloop={reduceMotion ? 'demand' : 'always'}
+          frameloop={shouldReduceMotion ? 'demand' : 'always'}
           dpr={[1, 1.5]}
           gl={{
             alpha: true,
-            antialias: !reduceMotion,
+            antialias: !shouldReduceMotion,
             toneMappingExposure: 1.05,
           }}
           camera={{ position: [0, 0, 3.5], fov: 42 }}
           eventSource={eventSource}
           eventPrefix="client"
         >
+          <ProgressObserver onProgress={handleProgressUpdate} />
           <PerspectiveCamera makeDefault position={[0, 0, 3.5]} fov={42} />
 
           {/* Lights designed to enhance glass reflection/refraction */}
@@ -90,11 +143,11 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
               </mesh>
             }
           >
-            <TorusDan reduceMotion={reduceMotion} />
+            <TorusDan reduceMotion={shouldReduceMotion} isMobile={isMobile} />
 
             {/* Environment for realistic reflections */}
             <Environment preset="city" background={false} blur={0.9}>
-              {!reduceMotion && (
+              {!shouldReduceMotion && (
                 // @ts-ignore
                 <group rotation={[-Math.PI / 2, 0, 0]}>
                   <Lightformer
@@ -127,6 +180,29 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
           </Suspense>
         </Canvas>
       </Suspense>
+      {!overlayUnmounted && (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-[#050509]/90 to-transparent text-white transition-opacity duration-500 ${
+            preloaderProgress >= 100 ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <span className="text-xs uppercase tracking-[0.3em] text-white/80">
+            carregando orb 3D
+          </span>
+          <span className="text-sm font-medium tracking-wide">
+            {Math.min(Math.max(Math.round(preloaderProgress), 0), 100)}%
+          </span>
+          <div className="h-[2px] w-28 overflow-hidden rounded-full bg-white/20">
+            <div
+              className="h-full bg-white transition-all duration-300"
+              style={{
+                width: `${Math.min(Math.max(preloaderProgress, 0), 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

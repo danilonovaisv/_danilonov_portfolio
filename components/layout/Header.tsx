@@ -76,7 +76,7 @@ function Header(): React.ReactElement {
     if (href.startsWith('/portfolio') && pathname.startsWith('/portfolio')) {
       return 'page';
     }
-    if (href === '#hero' && pathname === '/') {
+    if (href === '/#hero' && pathname === '/') {
       return 'page';
     }
     return undefined;
