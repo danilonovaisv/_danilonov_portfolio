@@ -22,10 +22,13 @@ const Manifesto: React.FC = () => {
     }
   }, []);
 
-  const toggleMuteManual = useCallback((e?: React.MouseEvent) => {
-    e?.stopPropagation(); 
-    updateMute(!isMuted);
-  }, [isMuted, updateMute]);
+  const toggleMuteManual = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      updateMute(!isMuted);
+    },
+    [isMuted, updateMute]
+  );
 
   useEffect(() => {
     if (!manifestRef.current) return;
@@ -61,8 +64,8 @@ const Manifesto: React.FC = () => {
         transition={{ duration: 0.9, ease: 'easeOut' }}
         className="mx-auto w-full max-w-6xl flex flex-col gap-4"
       >
-        <div 
-          className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm cursor-pointer group" 
+        <div
+          className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm cursor-pointer group"
           onClick={toggleMuteManual}
         >
           <div className="w-full aspect-video relative bg-black">
@@ -87,7 +90,9 @@ const Manifesto: React.FC = () => {
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
                 <AlertCircle className="w-10 h-10 mb-3 opacity-50" />
-                <p className="font-medium">Não foi possível carregar o vídeo.</p>
+                <p className="font-medium">
+                  Não foi possível carregar o vídeo.
+                </p>
                 <a
                   href={ASSETS.videoManifesto}
                   target="_blank"
@@ -103,15 +108,17 @@ const Manifesto: React.FC = () => {
 
         {/* Controls / Status Below Video */}
         <div className="flex items-center justify-between px-2 text-sm font-medium text-gray-500">
-           <span>Manifesto</span>
-           <button 
-             onClick={toggleMuteManual}
-             className="flex items-center gap-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded px-2 py-1"
-             aria-label={isMuted ? "Ligar som" : "Desligar som"}
-           >
-             <span className={`w-2 h-2 rounded-full ${isMuted ? 'bg-gray-400' : 'bg-[#0057FF] animate-pulse'}`} />
-             {isMuted ? 'Som desligado' : 'Som ligado'}
-           </button>
+          <span>Manifesto</span>
+          <button
+            onClick={toggleMuteManual}
+            className="flex items-center gap-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded px-2 py-1"
+            aria-label={isMuted ? 'Ligar som' : 'Desligar som'}
+          >
+            <span
+              className={`w-2 h-2 rounded-full ${isMuted ? 'bg-gray-400' : 'bg-[#0057FF] animate-pulse'}`}
+            />
+            {isMuted ? 'Som desligado' : 'Som ligado'}
+          </button>
         </div>
       </motion.div>
     </section>

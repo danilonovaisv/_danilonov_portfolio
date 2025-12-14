@@ -175,7 +175,9 @@ const PortfolioShowcaseSection: FC = () => {
                             {!isExpanded && (
                               <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.6em] text-[#0057FF]">
                                 <span className="h-3 w-3 rounded-full bg-[#0057FF]" />
-                                <span className="text-[10px] leading-none">·</span>
+                                <span className="text-[10px] leading-none">
+                                  ·
+                                </span>
                               </span>
                             )}
                           </>

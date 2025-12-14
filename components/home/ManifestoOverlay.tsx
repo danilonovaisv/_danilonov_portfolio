@@ -16,7 +16,7 @@ export default function ManifestoOverlay({
   isOpen,
   onClose,
   layoutId = 'manifesto-video-main',
-  defaultMuted = false
+  defaultMuted = false,
 }: ManifestoOverlayProps) {
   const [isMuted, setIsMuted] = useState(defaultMuted);
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -26,7 +26,7 @@ export default function ManifestoOverlay({
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       // Ensure video plays unmuted (if allowed) or respects user choice
-      setIsMuted(false); 
+      setIsMuted(false);
     } else {
       document.body.style.overflow = '';
       setIsMuted(true);
@@ -53,7 +53,7 @@ export default function ManifestoOverlay({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/95 backdrop-blur-sm"
       onClick={onClose} // Click outside to close
       role="dialog"
       aria-modal="true"
@@ -80,14 +80,18 @@ export default function ManifestoOverlay({
         />
 
         {/* Controls Overlay */}
-        <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-start z-10 bg-gradient-to-b from-black/60 to-transparent pointer-events-none">
-           {/* Sound Toggle - Pointer events re-enabled */}
-           <button
+        <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-start z-10 bg-linear-to-b from-black/60 to-transparent pointer-events-none">
+          {/* Sound Toggle - Pointer events re-enabled */}
+          <button
             onClick={() => setIsMuted(!isMuted)}
             className="pointer-events-auto p-3 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 text-white transition-colors group"
-            aria-label={isMuted ? "Unmute" : "Mute"}
+            aria-label={isMuted ? 'Unmute' : 'Mute'}
           >
-            {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+            {isMuted ? (
+              <VolumeX className="w-6 h-6" />
+            ) : (
+              <Volume2 className="w-6 h-6" />
+            )}
           </button>
 
           {/* Close Button - Pointer events re-enabled */}

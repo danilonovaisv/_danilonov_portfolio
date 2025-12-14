@@ -36,7 +36,7 @@ describe('tsconfig.json', () => {
 
   it('should include necessary library types', () => {
     const requiredLibs = ['ES2022', 'DOM', 'DOM.Iterable'];
-    requiredLibs.forEach(lib => {
+    requiredLibs.forEach((lib) => {
       expect(tsconfig.compilerOptions.lib).toContain(lib);
     });
   });
