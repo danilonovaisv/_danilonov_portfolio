@@ -4,7 +4,6 @@ import React, { FC, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
-import { ProjectCategory } from '@/lib/types';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -16,7 +15,9 @@ const PortfolioShowcaseSection: FC = () => {
 
   const handleExpand = (id: string): void => {
     setHoveredId(null);
-    setExpandedId((prev: string | null): string | null => (prev === id ? null : id));
+    setExpandedId((prev: string | null): string | null =>
+      prev === id ? null : id
+    );
   };
 
   const fadeInUp = {
@@ -47,7 +48,7 @@ const PortfolioShowcaseSection: FC = () => {
   const itemVariants = {
     hidden: (i: number) => {
       if (shouldReduceMotion) return { opacity: 0, x: 0, y: 0 };
-      
+
       // Define a direção de entrada baseada no alinhamento do item
       switch (i) {
         case 0: // Alinhado à direita -> Entra da direita
@@ -60,15 +61,15 @@ const PortfolioShowcaseSection: FC = () => {
           return { opacity: 0, y: 32 };
       }
     },
-    visible: { 
-      opacity: 1, 
-      x: 0, 
+    visible: {
+      opacity: 1,
+      x: 0,
       y: 0,
-      transition: { 
+      transition: {
         duration: 1.0, // Duração mais longa para "cinematic feel"
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
-      }
-    }
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      },
+    },
   } as const;
 
   return (
@@ -79,11 +80,11 @@ const PortfolioShowcaseSection: FC = () => {
     >
       <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-420 relative z-10">
         {/* Cabeçalho da Seção */}
-        <motion.div 
+        <motion.div
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-10%" }}
+          viewport={{ once: true, margin: '-10%' }}
           variants={fadeInUp}
         >
           {/* Título Principal */}
@@ -96,7 +97,7 @@ const PortfolioShowcaseSection: FC = () => {
         </motion.div>
 
         {/* Lista de Categorias */}
-        <motion.div 
+        <motion.div
           className="flex flex-col w-full border-t border-neutral-300"
           initial="hidden"
           whileInView="visible"
@@ -113,7 +114,10 @@ const PortfolioShowcaseSection: FC = () => {
 
               if (isHidden) return null;
 
-              const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, id: string): void => {
+              const handleKeyDown = (
+                e: React.KeyboardEvent<HTMLDivElement>,
+                id: string
+              ): void => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   handleExpand(id);
@@ -321,9 +325,11 @@ const PortfolioShowcaseSection: FC = () => {
                         <div className="w-full md:w-2/3 aspect-video rounded-xl overflow-hidden bg-gray-200 shadow-xl">
                           <video
                             src={category.thumbnailUrl}
-                            poster={category.thumbnailUrl.replace(/\.[^.]+$/, '.jpg')} // Usa uma imagem como preview
+                            poster={category.thumbnailUrl.replace(
+                              /\.[^.]+$/,
+                              '.jpg'
+                            )} // Usa uma imagem como preview
                             preload="metadata"
-                            loading="lazy"
                             playsInline
                             autoPlay={false}
                             muted
@@ -361,10 +367,10 @@ const PortfolioShowcaseSection: FC = () => {
                                   key={i}
                                   initial={{ opacity: 0, x: -20 }}
                                   animate={{ opacity: 1, x: 0 }}
-                                  transition={{ 
+                                  transition={{
                                     delay: 0.1 * i,
                                     duration: 0.5,
-                                    ease: [0.22, 1, 0.36, 1]
+                                    ease: [0.22, 1, 0.36, 1],
                                   }}
                                   className="flex items-center gap-4 text-base md:text-lg font-medium text-[#111111] group/item cursor-pointer py-1"
                                 >

@@ -11,7 +11,7 @@ const baseConfig = {
     '^.+\\.[tj]sx?$': ['ts-jest', tsJestConfig],
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   testMatch: ['**/test/**/*.test.{ts,tsx,js}'],
 };

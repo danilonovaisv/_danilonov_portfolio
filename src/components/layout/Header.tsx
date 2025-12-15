@@ -168,7 +168,9 @@ function Header(): React.ReactElement {
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-white/70 backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
               aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-              {...(isMobileMenuOpen ? { 'aria-expanded': true } : { 'aria-expanded': false })}
+              {...(isMobileMenuOpen
+                ? { 'aria-expanded': true }
+                : { 'aria-expanded': false })}
               aria-controls="menu-principal"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}

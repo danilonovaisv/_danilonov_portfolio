@@ -13,14 +13,17 @@ import { ASSETS } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
 
 // Dynamically import the 3D component with SSR disabled
-const HeroGlassCanvas = dynamic(() => import('@/components/three/HeroGlassCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-full w-full flex items-center justify-center">
-      <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 animate-pulse" />
-    </div>
-  ),
-});
+const HeroGlassCanvas = dynamic(
+  () => import('@/components/three/HeroGlassCanvas'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center">
+        <div className="h-16 w-16 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600 animate-pulse" />
+      </div>
+    ),
+  }
+);
 
 // Componente para animar texto letra por letra (efeito "digitação/reveal")
 type AnimatedTextLineProps = {
