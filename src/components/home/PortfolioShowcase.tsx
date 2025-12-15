@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
-import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const PortfolioShowcaseSection: FC = () => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -20,16 +20,16 @@ const PortfolioShowcaseSection: FC = () => {
 
   const fadeInUp = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.8, 
+      transition: {
+        duration: 0.8,
         ease: [0.22, 1, 0.36, 1] as const,
-        when: "beforeChildren",
-        staggerChildren: 0.1
-      }
-    }
+        when: 'beforeChildren',
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const containerVariants = {
@@ -38,21 +38,21 @@ const PortfolioShowcaseSection: FC = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.18,
-        delayChildren: 0.25
-      }
-    }
+        delayChildren: 0.25,
+      },
+    },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 32 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.7, 
-        ease: [0.22, 1, 0.36, 1] as const 
-      }
-    }
+      transition: {
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
   };
 
   return (
@@ -63,11 +63,11 @@ const PortfolioShowcaseSection: FC = () => {
     >
       <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-[1680px] relative z-10">
         {/* Cabeçalho da Seção */}
-        <motion.div 
+        <motion.div
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-10%" }}
+          viewport={{ once: true, margin: '-10%' }}
           variants={fadeInUp}
         >
           {/* Título Principal */}
@@ -80,7 +80,7 @@ const PortfolioShowcaseSection: FC = () => {
         </motion.div>
 
         {/* Lista de Categorias */}
-        <motion.div 
+        <motion.div
           className="flex flex-col w-full border-t border-neutral-300"
           initial="hidden"
           whileInView="visible"
@@ -92,7 +92,7 @@ const PortfolioShowcaseSection: FC = () => {
               const isExpanded = expandedId === category.id;
               const isHidden = expandedId !== null && !isExpanded;
               const isHovered = hoveredId === category.id;
-              
+
               const isWebItem = category.id === 'websites-webcampaigns-tech';
 
               if (isHidden) return null;
@@ -219,11 +219,14 @@ const PortfolioShowcaseSection: FC = () => {
                         `}
                       >
                         <motion.div
-                          animate={{ 
-                            rotate: isExpanded ? 90 : (isHovered ? 45 : 0),
-                            scale: isHovered ? 1.1 : 1
+                          animate={{
+                            rotate: isExpanded ? 90 : isHovered ? 45 : 0,
+                            scale: isHovered ? 1.1 : 1,
                           }}
-                          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }}
+                          transition={{
+                            duration: 0.4,
+                            ease: [0.22, 1, 0.36, 1] as const,
+                          }}
                         >
                           <ArrowRight
                             className={`${isExpanded ? 'w-6 h-6' : 'w-4 h-4 md:w-6 md:h-6'}`}
@@ -236,13 +239,21 @@ const PortfolioShowcaseSection: FC = () => {
                     <AnimatePresence>
                       {isHovered && !isExpanded && (
                         <motion.div
-                          initial={{ width: 0, opacity: 0, x: index === 0 ? -20 : (index === 2 ? 20 : 0) }}
-                          animate={{
-                            width: 320, 
-                            opacity: 1,
-                            x: 0
+                          initial={{
+                            width: 0,
+                            opacity: 0,
+                            x: index === 0 ? -20 : index === 2 ? 20 : 0,
                           }}
-                          exit={{ width: 0, opacity: 0, x: index === 0 ? -20 : (index === 2 ? 20 : 0) }}
+                          animate={{
+                            width: 320,
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          exit={{
+                            width: 0,
+                            opacity: 0,
+                            x: index === 0 ? -20 : index === 2 ? 20 : 0,
+                          }}
                           transition={{
                             duration: 0.6,
                             ease: [0.22, 1, 0.36, 1] as const,
@@ -259,8 +270,12 @@ const PortfolioShowcaseSection: FC = () => {
                           style={{
                             /* Fine tune positioning based on reference */
                             ...(index === 1 ? { left: '50%', zIndex: 0 } : {}),
-                            ...(index === 0 ? { right: 'calc(100% + 1.5rem)' } : {}),
-                            ...(index === 2 ? { left: 'calc(100% + 1.5rem)' } : {}),
+                            ...(index === 0
+                              ? { right: 'calc(100% + 1.5rem)' }
+                              : {}),
+                            ...(index === 2
+                              ? { left: 'calc(100% + 1.5rem)' }
+                              : {}),
                           }}
                         >
                           <img
@@ -278,7 +293,11 @@ const PortfolioShowcaseSection: FC = () => {
                       <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.25, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
+                        transition={{
+                          delay: 0.25,
+                          duration: 0.7,
+                          ease: [0.22, 1, 0.36, 1] as const,
+                        }}
                         className="w-full mt-6 flex flex-col md:flex-row gap-8 md:gap-12 text-center md:text-left"
                       >
                         {/* Imagem Grande */}
@@ -299,7 +318,8 @@ const PortfolioShowcaseSection: FC = () => {
                               <span className="text-[#0057FF] font-medium tracking-tight">
                                 {category.label.replace(',', '').toLowerCase()}
                               </span>
-                              . Nossos projetos combinam estratégia e design para criar experiências memoráveis.
+                              . Nossos projetos combinam estratégia e design
+                              para criar experiências memoráveis.
                             </p>
 
                             <h4 className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-6 font-bold border-b border-gray-100 pb-3">

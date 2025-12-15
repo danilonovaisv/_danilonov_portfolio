@@ -6,7 +6,7 @@ import type { Variants } from 'framer-motion';
 import HeroGlassCanvas from '../three/HeroGlassCanvas';
 import { ArrowRight } from 'lucide-react';
 import { ASSETS } from '../../lib/constants';
-import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Componente para animar texto letra por letra (efeito "digitação/reveal")
 type AnimatedTextLineProps = {
