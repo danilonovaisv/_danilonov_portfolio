@@ -44,15 +44,30 @@ const PortfolioShowcaseSection: FC = () => {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 32 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1] as const,
-      },
+    hidden: (i: number) => {
+      if (shouldReduceMotion) return { opacity: 0, x: 0, y: 0 };
+      
+      // Define a direção de entrada baseada no alinhamento do item
+      switch (i) {
+        case 0: // Alinhado à direita -> Entra da direita
+          return { opacity: 0, x: 100, y: 0 };
+        case 1: // Centralizado -> Entra de baixo
+          return { opacity: 0, x: 0, y: 100 };
+        case 2: // Alinhado à esquerda -> Entra da esquerda
+          return { opacity: 0, x: -100, y: 0 };
+        default:
+          return { opacity: 0, y: 32 };
+      }
     },
+    visible: { 
+      opacity: 1, 
+      x: 0, 
+      y: 0,
+      transition: { 
+        duration: 1.0, // Duração mais longa para "cinematic feel"
+        ease: [0.22, 1, 0.36, 1] as const 
+      }
+    }
   };
 
   return (
@@ -107,6 +122,7 @@ const PortfolioShowcaseSection: FC = () => {
               return (
                 <motion.div
                   key={category.id}
+                  custom={index}
                   layout
                   variants={itemVariants}
                   exit={{ opacity: 0, transition: { duration: 0.2 } }}

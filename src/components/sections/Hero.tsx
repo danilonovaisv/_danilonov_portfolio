@@ -87,7 +87,9 @@ const Hero = () => {
   // Monitora o progresso do scroll para controlar o áudio do vídeo
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (videoRef.current) {
-      if (latest > 0.01) {
+      // Toca o áudio apenas durante a exibição principal do vídeo (entre 1% e 90% do scroll)
+      // Issoarante que ao chegar no Portfolio Showcase (final do scroll), o áudio corte.
+      if (latest > 0.01 && latest < 0.9) {
         videoRef.current.muted = false;
       } else {
         videoRef.current.muted = true;
