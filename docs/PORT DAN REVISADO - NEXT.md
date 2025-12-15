@@ -782,8 +782,7 @@ em ~0.6s, easing suave.
 
 **DATA HOOKS / TRACKING (events to track in analytics):**
 
-* `manifesto_video_play`.
-* `manifesto_video_pause`.
+* `manifesto_video_auto_play`.
 * `manifesto_video_complete`.
 * `manifesto_audio_unmuted_auto` (ao entrar na seção).
 * `manifesto_audio_muted_on_leave` (ao sair da seção).
