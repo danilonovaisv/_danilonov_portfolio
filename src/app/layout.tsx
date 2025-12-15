@@ -20,9 +20,17 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-surface-main text-text-main selection:bg-[#0057FF] selection:text-white`}
       >
+        <a
+          href="#conteudo"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-full focus:bg-black focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-[#0057FF]"
+        >
+          Pular para o conteúdo
+        </a>
         <div className="min-h-screen font-sans">
           <Header />
-          <main className="pb-32">{children}</main>
+          <main id="conteudo" className="pb-32">
+            {children}
+          </main>
           <Footer />
         </div>
       </body>

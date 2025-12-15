@@ -166,9 +166,10 @@ function Header(): React.ReactElement {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               type="button"
-              className="rounded-full p-2 text-[#111111] transition-colors duration-200 hover:text-[#0057FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-white/70 backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
               aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-              aria-expanded={isMobileMenuOpen}
+              aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
+              aria-controls="menu-principal"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -187,6 +188,7 @@ function Header(): React.ReactElement {
             role="dialog"
             aria-modal="true"
             aria-label="Menu principal"
+            id="menu-principal"
             ref={menuRef}
           >
             <nav className="w-full max-w-sm">
