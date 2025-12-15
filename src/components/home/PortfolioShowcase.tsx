@@ -4,6 +4,7 @@ import React, { FC, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ProjectCategory } from '@/lib/types';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -13,9 +14,9 @@ const PortfolioShowcaseSection: FC = () => {
   const shouldReduceMotion = usePrefersReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const handleExpand = (id: string) => {
+  const handleExpand = (id: string): void => {
     setHoveredId(null);
-    setExpandedId((prev) => (prev === id ? null : id));
+    setExpandedId((prev: string | null): string | null => (prev === id ? null : id));
   };
 
   const fadeInUp = {
@@ -25,12 +26,12 @@ const PortfolioShowcaseSection: FC = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.22, 1, 0.36, 1] as const,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         when: 'beforeChildren',
         staggerChildren: 0.1,
       },
     },
-  };
+  } as const;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -41,7 +42,7 @@ const PortfolioShowcaseSection: FC = () => {
         delayChildren: 0.25,
       },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: (i: number) => {
@@ -65,10 +66,10 @@ const PortfolioShowcaseSection: FC = () => {
       y: 0,
       transition: { 
         duration: 1.0, // Duração mais longa para "cinematic feel"
-        ease: [0.22, 1, 0.36, 1] as const 
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
       }
     }
-  };
+  } as const;
 
   return (
     <section
@@ -76,7 +77,7 @@ const PortfolioShowcaseSection: FC = () => {
       ref={sectionRef}
       className="relative w-full bg-[#F4F5F7] py-20 md:py-24 overflow-hidden min-h-screen flex flex-col justify-center items-center"
     >
-      <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-[1680px] relative z-10">
+      <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-420 relative z-10">
         {/* Cabeçalho da Seção */}
         <motion.div 
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
@@ -112,7 +113,7 @@ const PortfolioShowcaseSection: FC = () => {
 
               if (isHidden) return null;
 
-              const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+              const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, id: string): void => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   handleExpand(id);
@@ -241,7 +242,7 @@ const PortfolioShowcaseSection: FC = () => {
                           }}
                           transition={{
                             duration: 0.4,
-                            ease: [0.22, 1, 0.36, 1] as const,
+                            ease: [0.22, 1, 0.36, 1],
                           }}
                         >
                           <ArrowRight
@@ -272,7 +273,7 @@ const PortfolioShowcaseSection: FC = () => {
                           }}
                           transition={{
                             duration: 0.6,
-                            ease: [0.22, 1, 0.36, 1] as const,
+                            ease: [0.22, 1, 0.36, 1],
                           }}
                           className={`hidden md:block absolute h-[120%] top-1/2 -translate-y-1/2 overflow-hidden rounded-lg z-0 pointer-events-none shadow-lg
                             ${
@@ -312,7 +313,7 @@ const PortfolioShowcaseSection: FC = () => {
                         transition={{
                           delay: 0.25,
                           duration: 0.7,
-                          ease: [0.22, 1, 0.36, 1] as const,
+                          ease: [0.22, 1, 0.36, 1],
                         }}
                         className="w-full mt-6 flex flex-col md:flex-row gap-8 md:gap-12 text-center md:text-left"
                       >
@@ -350,7 +351,7 @@ const PortfolioShowcaseSection: FC = () => {
                                   transition={{ 
                                     delay: 0.1 * i,
                                     duration: 0.5,
-                                    ease: [0.22, 1, 0.36, 1] as const
+                                    ease: [0.22, 1, 0.36, 1]
                                   }}
                                   className="flex items-center gap-4 text-base md:text-lg font-medium text-[#111111] group/item cursor-pointer py-1"
                                 >
