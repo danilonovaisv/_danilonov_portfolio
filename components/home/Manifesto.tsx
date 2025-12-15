@@ -11,18 +11,15 @@ const Manifesto: React.FC = () => {
   // Inline video state (Tumblr/Preview mode): Muted by default
   const [isMuted, setIsMuted] = useState(true);
   const [showOverlay, setShowOverlay] = useState(false);
-  
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const manifestRef = useRef<HTMLDivElement>(null);
 
   // Toggle Manual Mute for Inline Video
-  const toggleMuteManual = useCallback(
-    (e?: React.MouseEvent) => {
-      e?.stopPropagation();
-      setIsMuted((prev) => !prev);
-    },
-    []
-  );
+  const toggleMuteManual = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setIsMuted((prev) => !prev);
+  }, []);
 
   // Sync state with video element
   useEffect(() => {
@@ -37,12 +34,12 @@ const Manifesto: React.FC = () => {
   // Intersection Observer to handle "return to multi/mute" when scrolling away
   useEffect(() => {
     if (!manifestRef.current) return;
-    
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         // If we leave the view, we ensure it goes back to Muted (Multi state)
         if (!entry.isIntersecting) {
-           setIsMuted(true);
+          setIsMuted(true);
         }
         // We do NOT auto-unmute on entry to respect "Tumblr" (passive) feel unless user interacts
         // The user can unmute manually.
@@ -96,13 +93,13 @@ const Manifesto: React.FC = () => {
                   controls={false}
                   onError={() => setHasError(true)}
                 />
-                 {/* Hover Overlay Hint */}
-                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-black/20">
-                    <div className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2">
-                      <Maximize2 className="w-4 h-4" />
-                      Expandir
-                    </div>
-                 </div>
+                {/* Hover Overlay Hint */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-black/20">
+                  <div className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full font-medium text-sm flex items-center gap-2">
+                    <Maximize2 className="w-4 h-4" />
+                    Expandir
+                  </div>
+                </div>
               </motion.div>
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
@@ -127,8 +124,8 @@ const Manifesto: React.FC = () => {
         <div className="flex items-center justify-between px-2 text-sm font-medium text-gray-500">
           <span>Manifesto</span>
           <div className="flex items-center gap-4">
-             {/* Mute Toggle for Inline */}
-             <button
+            {/* Mute Toggle for Inline */}
+            <button
               onClick={toggleMuteManual}
               className="flex items-center gap-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded px-2 py-1"
               aria-label={isMuted ? 'Ligar som' : 'Desligar som'}

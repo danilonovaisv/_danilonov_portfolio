@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useMemo, useRef } from 'react';
-import {
-  Float,
-  MeshTransmissionMaterial,
-  useGLTF,
-
-} from '@react-three/drei';
+import { Float, MeshTransmissionMaterial, useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 

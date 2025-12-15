@@ -51,9 +51,9 @@ const AnimatedTextLine = ({
       y: 0,
       opacity: 1,
       // Curva "Premium": Rápida no início, muito suave no final
-      transition: { 
-        duration: shouldReduceMotion ? 0.5 : 1.0, 
-        ease: [0.22, 1, 0.36, 1] 
+      transition: {
+        duration: shouldReduceMotion ? 0.5 : 1.0,
+        ease: [0.22, 1, 0.36, 1],
       },
     },
   };
@@ -89,12 +89,24 @@ const Hero = () => {
   });
 
   // Thumb Animations linked to scroll (Disabled if reduced motion)
-  const thumbScale = useTransform(scrollYProgress, [0, 1], [1, shouldReduceMotion ? 1 : 1.08]);
-  const thumbY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -24]);
+  const thumbScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [1, shouldReduceMotion ? 1 : 1.08]
+  );
+  const thumbY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, shouldReduceMotion ? 0 : -24]
+  );
 
   // Text Animations linked to scroll (Opacity fade is usually fine for reduced motion, but movement isn't)
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.2]);
-  const textY = useTransform(scrollYProgress, [0, 0.7], [0, shouldReduceMotion ? 0 : -24]);
+  const textY = useTransform(
+    scrollYProgress,
+    [0, 0.7],
+    [0, shouldReduceMotion ? 0 : -24]
+  );
 
   const scrollToManifesto = () => {
     const manifestoSection = document.getElementById('manifesto');
@@ -133,14 +145,14 @@ const Hero = () => {
                   colorClass="text-[#0057FF]"
                   shouldReduceMotion={Boolean(shouldReduceMotion)}
                 />
-                <AnimatedTextLine 
-                  text="não é só" 
-                  delay={0.4} 
+                <AnimatedTextLine
+                  text="não é só"
+                  delay={0.4}
                   shouldReduceMotion={Boolean(shouldReduceMotion)}
                 />
-                <AnimatedTextLine 
-                  text="estética." 
-                  delay={0.6} 
+                <AnimatedTextLine
+                  text="estética."
+                  delay={0.6}
                   shouldReduceMotion={Boolean(shouldReduceMotion)}
                 />
               </div>
@@ -233,13 +245,11 @@ const Hero = () => {
                   className="w-full group"
                 >
                   {/* Layout Morphing Container */}
-                  <div
-                    className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 shadow-[0_30px_50px_-20px_rgba(0,0,0,0.3)] backdrop-blur-md transition-transform duration-500"
-                  >
-                     {/* Glass Effect Card Backing */}
-                     <div className="absolute -inset-2 bg-linear-to-br from-white/40 to-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                  <div className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 shadow-[0_30px_50px_-20px_rgba(0,0,0,0.3)] backdrop-blur-md transition-transform duration-500">
+                    {/* Glass Effect Card Backing */}
+                    <div className="absolute -inset-2 bg-linear-to-br from-white/40 to-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                      <div className="relative aspect-4/5 w-full overflow-hidden">
+                    <div className="relative aspect-4/5 w-full overflow-hidden">
                       <motion.video
                         src={ASSETS.videoManifesto}
                         autoPlay
