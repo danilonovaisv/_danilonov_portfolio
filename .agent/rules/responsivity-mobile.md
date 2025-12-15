@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-activation: always_on
----
+
+## activation: always_on
 
 # Responsividade Mobile (RWD)
 

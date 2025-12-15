@@ -24,7 +24,7 @@
     "eslnt:ci": "eslint .",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false --strict --jsx react",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false --strict --jsx react-jsx",
     "typegen": "tsc --emitDeclarationOnly",
     "analyze": "npm run lint && npm run typecheck",
     "analyze:deps": "depcheck",

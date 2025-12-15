@@ -3,9 +3,11 @@ trigger: always_on
 ---
 
 ---
+
 activation:
-  type: glob
-  pattern: "**/*Canvas*|**/*r3f*|**/*.glb"
+type: glob
+pattern: "**/_Canvas_|**/_r3f_|\*_/_.glb"
+
 ---
 
 Para vidro líquido:
@@ -17,6 +19,7 @@ Para vidro líquido:
 - FPS < 30 → fallback MeshPhysicalMaterial
 
 Canvas:
+
 - position: fixed
 - pointer-events: none
 - eventSource={document.body}

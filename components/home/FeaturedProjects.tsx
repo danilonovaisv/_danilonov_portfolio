@@ -22,13 +22,18 @@ const FeaturedProjects: React.FC = () => {
   };
 
   return (
-    <section id="featured-projects" ref={containerRef} className="relative z-10 w-full overflow-hidden bg-[#F4F5F7] py-24">
+    <section
+      id="featured-projects"
+      ref={containerRef}
+      className="relative z-10 w-full overflow-hidden bg-[#F4F5F7] py-24"
+    >
       <div className="container relative z-10 mx-auto max-w-7xl px-4 md:px-8">
-        
         <div className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2">
           {featuredProjects.map((project, index) => {
             const isWide = project.layout === 'wide';
-            const aspectRatioClass = isWide ? 'aspect-video md:aspect-[2.35/1]' : 'aspect-[4/3]';
+            const aspectRatioClass = isWide
+              ? 'aspect-video md:aspect-[2.35/1]'
+              : 'aspect-[4/3]';
 
             return (
               <motion.a
@@ -41,14 +46,23 @@ const FeaturedProjects: React.FC = () => {
                 variants={fadeIn}
                 className={`group relative flex w-full flex-col ${isWide ? 'md:col-span-2' : ''}`}
               >
-                <div className={`relative mb-6 w-full overflow-hidden rounded-2xl bg-gray-200 shadow-sm transition-shadow duration-500 hover:shadow-md ${aspectRatioClass}`}>
+                <div
+                  className={`relative mb-6 w-full overflow-hidden rounded-2xl bg-gray-200 shadow-sm transition-shadow duration-500 hover:shadow-md ${aspectRatioClass}`}
+                >
                   <div className="absolute inset-0 z-10 bg-black/0 transition-colors duration-500 group-hover:bg-black/5" />
-                  <img src={project.imageUrl} alt={project.imageAlt} className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
-                  
+                  <img
+                    src={project.imageUrl}
+                    alt={project.imageAlt}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+
                   {/* Tags Pill Container */}
                   <div className="absolute top-6 right-6 z-20 flex items-center justify-end gap-2">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="rounded-full bg-white/95 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[#111111] shadow-sm backdrop-blur-md transition-colors group-hover:bg-white group-hover:text-[#0057FF]">
+                      <span
+                        key={tag}
+                        className="rounded-full bg-white/95 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[#111111] shadow-sm backdrop-blur-md transition-colors group-hover:bg-white group-hover:text-[#0057FF]"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -66,7 +80,10 @@ const FeaturedProjects: React.FC = () => {
                   </div>
                   <div className="mb-1 shrink-0">
                     <div className="flex h-10 w-10 transform items-center justify-center rounded-full bg-[#0057FF] text-white shadow-lg transition-transform duration-300 group-hover:scale-110 md:h-12 md:w-12">
-                      <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                      <ArrowRight
+                        size={20}
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      />
                     </div>
                   </div>
                 </div>
@@ -83,20 +100,25 @@ const FeaturedProjects: React.FC = () => {
             variants={fadeIn}
             className="flex min-h-[300px] flex-col items-center justify-center text-center p-6"
           >
-            <h3 className="mb-8 text-4xl font-light leading-tight text-[#111111] md:text-5xl">Like what<br />you see?</h3>
+            <h3 className="mb-8 text-4xl font-light leading-tight text-[#111111] md:text-5xl">
+              Like what
+              <br />
+              you see?
+            </h3>
             <motion.a
               href="/portfolio"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-8 py-4 text-white shadow-xl transition-all duration-300 hover:shadow-[#0057FF]/40"
             >
-              <span className="text-base font-bold tracking-wide">view projects</span>
+              <span className="text-base font-bold tracking-wide">
+                view projects
+              </span>
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-[#0057FF] transition-colors duration-300 group-hover:bg-white group-hover:text-[#0057FF]">
                 <ArrowUpRight className="h-4 w-4 text-white group-hover:text-[#0057FF]" />
               </span>
             </motion.a>
           </motion.div>
-        
         </div>
       </div>
     </section>

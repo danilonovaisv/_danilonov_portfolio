@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-activation: always_on
----
+
+## activation: always_on
 
 Stack obrigatória:
 
@@ -20,6 +20,7 @@ Stack obrigatória:
 - Supabase (assets)
 
 Padrões:
+
 - Server Components por padrão
 - Client Components apenas quando necessário (motion, canvas, scroll)
 - Separar claramente UI / Motion / Logic

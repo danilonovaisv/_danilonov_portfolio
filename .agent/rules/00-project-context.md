@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-activation: always_on
----
+
+## activation: always_on
 
 Este projeto é o Portfólio Institucional de Danilo Novais.
 
@@ -16,6 +16,7 @@ Fonte de verdade:
 @PORT DAN REVISADO - NEXT.md
 
 O Agent deve:
+
 - Tratar o documento como especificação técnica vinculante
 - Não simplificar comportamentos descritos
 - Não “inventar” UI, animações ou fluxos não documentados

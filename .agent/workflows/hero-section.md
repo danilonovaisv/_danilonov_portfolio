@@ -1,5 +1,5 @@
 ---
-description: 
+description:
 ---
 
 # Hero Section Workflow

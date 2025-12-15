@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-activation: always_on
----
+
+## activation: always_on
 
 O Agent NÃO PODE:
 
@@ -15,6 +15,7 @@ O Agent NÃO PODE:
 - Ignorar estados de fallback
 
 Obrigatório:
+
 - Vídeo da Hero SEMPRE mudo
 - Som ativo apenas no Manifesto (em viewport)
 - 3D com fallback em motion-reduced

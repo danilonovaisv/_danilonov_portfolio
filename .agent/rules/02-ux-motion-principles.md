@@ -3,8 +3,8 @@ trigger: always_on
 ---
 
 ---
-activation: always_on
----
+
+## activation: always_on
 
 Princípios de animação:
 
@@ -15,6 +15,7 @@ Princípios de animação:
 - Nada de easings exagerados ou overshoot
 
 Obrigatório:
+
 - whileInView para reveals
 - useScroll + useTransform para parallax
 - prefers-reduced-motion SEMPRE respeitado

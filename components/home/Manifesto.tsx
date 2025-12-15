@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -18,8 +18,12 @@ const Manifesto: React.FC = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             // Entrou na tela: Toca e tira o mudo
-            // eslint-disable-next-line no-console
-            videoElement.play().catch((e) => console.log('Autoplay blocked:', e));
+            videoElement
+              .play()
+              .catch((e) => {
+                // eslint-disable-next-line no-console
+                console.log('Autoplay blocked:', e);
+              });
             videoElement.muted = false;
             // eslint-disable-next-line no-console
             console.log('manifesto_video_auto_play');
@@ -54,7 +58,7 @@ const Manifesto: React.FC = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 1.0, ease: "easeOut" }}
+        transition={{ duration: 1.0, ease: 'easeOut' }}
         className="relative w-full aspect-video md:aspect-21/9 overflow-hidden bg-gray-100 shadow-sm"
       >
         {!hasError ? (
@@ -71,9 +75,9 @@ const Manifesto: React.FC = () => {
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
             <AlertCircle className="w-10 h-10 mb-3 opacity-50" />
             <p className="font-medium">Não foi possível carregar o vídeo.</p>
-            <a 
-              href={ASSETS.videoManifesto} 
-              target="_blank" 
+            <a
+              href={ASSETS.videoManifesto}
+              target="_blank"
               rel="noopener noreferrer"
               className="mt-2 text-primary text-sm hover:underline underline-offset-4"
             >
