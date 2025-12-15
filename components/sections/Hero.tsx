@@ -5,6 +5,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useReducedMotion,
 } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import HeroGlassCanvas from '../three/HeroGlassCanvas';
@@ -17,6 +18,7 @@ type AnimatedTextLineProps = {
   className?: string;
   delay?: number;
   colorClass?: string;
+  shouldReduceMotion?: boolean;
 };
 
 const AnimatedTextLine = ({
@@ -24,6 +26,7 @@ const AnimatedTextLine = ({
   className,
   delay = 0,
   colorClass = 'text-[#111111]',
+  shouldReduceMotion = false,
 }: AnimatedTextLineProps) => {
   // Separa o texto em caracteres
   const letters = text.split('');
@@ -33,7 +36,7 @@ const AnimatedTextLine = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.03, // Stagger mais rápido para fluxo contínuo
+        staggerChildren: shouldReduceMotion ? 0 : 0.03, // Remove stagger if reduced motion
         delayChildren: delay,
       },
     },
@@ -41,14 +44,17 @@ const AnimatedTextLine = ({
 
   const child: Variants = {
     hidden: {
-      y: '110%', // Garante que saia totalmente da máscara
+      y: shouldReduceMotion ? 0 : '110%', // Garante que saia totalmente da máscara
       opacity: 0,
     },
     visible: {
       y: 0,
       opacity: 1,
       // Curva "Premium": Rápida no início, muito suave no final
-      transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
+      transition: { 
+        duration: shouldReduceMotion ? 0.5 : 1.0, 
+        ease: [0.22, 1, 0.36, 1] 
+      },
     },
   };
 
@@ -74,6 +80,7 @@ const AnimatedTextLine = ({
 
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   // Parallax / Scroll Animations
   const { scrollYProgress } = useScroll({
@@ -81,13 +88,13 @@ const Hero = () => {
     offset: ['start start', 'end start'],
   });
 
-  // Thumb Animations linked to scroll
-  const thumbScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
-  const thumbY = useTransform(scrollYProgress, [0, 1], [0, -24]);
+  // Thumb Animations linked to scroll (Disabled if reduced motion)
+  const thumbScale = useTransform(scrollYProgress, [0, 1], [1, shouldReduceMotion ? 1 : 1.08]);
+  const thumbY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -24]);
 
-  // Text Animations linked to scroll
+  // Text Animations linked to scroll (Opacity fade is usually fine for reduced motion, but movement isn't)
   const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.2]);
-  const textY = useTransform(scrollYProgress, [0, 0.7], [0, -24]);
+  const textY = useTransform(scrollYProgress, [0, 0.7], [0, shouldReduceMotion ? 0 : -24]);
 
   const scrollToManifesto = () => {
     const manifestoSection = document.getElementById('manifesto');
@@ -119,35 +126,44 @@ const Hero = () => {
               </div>
 
               <div className="flex flex-col gap-0 font-sans text-[clamp(3rem,8vw,7rem)] font-extrabold leading-[0.85] tracking-[-0.04em]">
-                {/* Sequence: Tag(0.1) -> H1(0.2) -> Sub(0.6) -> CTA(0.8) */}
+                {/* Sequence: Headline(0.2) -> Sub(0.8) -> CTA(1.0) */}
                 <AnimatedTextLine
                   text="Design,"
                   delay={0.2}
                   colorClass="text-[#0057FF]"
+                  shouldReduceMotion={Boolean(shouldReduceMotion)}
                 />
-                <AnimatedTextLine text="não é só" delay={0.45} />
-                <AnimatedTextLine text="estética." delay={0.7} />
+                <AnimatedTextLine 
+                  text="não é só" 
+                  delay={0.4} 
+                  shouldReduceMotion={Boolean(shouldReduceMotion)}
+                />
+                <AnimatedTextLine 
+                  text="estética." 
+                  delay={0.6} 
+                  shouldReduceMotion={Boolean(shouldReduceMotion)}
+                />
               </div>
 
               <motion.p
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.6 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.8 }}
                 className="text-base font-medium tracking-widest text-[#0057FF] md:text-lg uppercase"
               >
                 [ É intenção, é estratégia, é experiência. ]
               </motion.p>
 
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut', delay: 0.8 }}
+                transition={{ duration: 0.8, ease: 'easeOut', delay: 1.0 }}
                 className="flex w-full justify-center md:justify-start pt-4"
               >
                 <motion.a
                   href="/sobre"
-                  whileHover={{ y: -4 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={shouldReduceMotion ? {} : { y: -4 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
                   className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-[#0057FF] px-8 py-4 text-base font-semibold text-white shadow-[0_20px_40px_-15px_rgba(0,87,255,0.6)] transition-transform duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#0057FF]/30"
                 >
                   <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-white/10 via-white/40 to-white/10 transition-transform duration-500 group-hover:translate-x-full group-focus-visible:translate-x-full" />
@@ -164,9 +180,9 @@ const Hero = () => {
             <div className="hidden md:flex md:col-span-4 h-full items-center justify-end relative min-h-[600px] pointer-events-none z-10">
               {/* Orb position slight adjustment to visual center */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.0, ease: 'easeOut' }}
+                transition={{ duration: 1.2, ease: 'easeOut', delay: 1.2 }}
                 className="absolute w-[240%] aspect-square flex items-center justify-center top-[45%] left-[55%] -translate-x-1/2 -translate-y-1/2"
               >
                 <div className="relative w-full h-full">
@@ -183,9 +199,9 @@ const Hero = () => {
             >
               {/* Tag - Vertically Centered Relative to Section */}
               <motion.span
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.4 }}
+                transition={{ duration: 0.7, ease: 'easeOut', delay: 0.8 }}
                 className="absolute top-1/2 -translate-y-1/2 right-0 text-xs font-bold uppercase tracking-[0.25em] text-[#0057FF] md:text-sm text-right whitespace-nowrap"
               >
                 [ BRAND AWARENESS ]
@@ -193,9 +209,9 @@ const Hero = () => {
 
               {/* Decorative Arrow pointing to thumb */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
+                transition={{ duration: 0.5, delay: 1.4 }}
                 className="mb-4 text-[#0057FF]"
               >
                 <ArrowUpRight className="w-6 h-6" />
@@ -210,10 +226,10 @@ const Hero = () => {
                 aria-label="Ir para manifesto em vídeo"
               >
                 <motion.div // Entry Animation
-                  initial={{ opacity: 0, scale: 1.05 }}
+                  initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.7, ease: 'easeOut', delay: 0.9 }}
-                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.7, ease: 'easeOut', delay: 1.5 }}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
                   className="w-full group"
                 >
                   {/* Layout Morphing Container */}
