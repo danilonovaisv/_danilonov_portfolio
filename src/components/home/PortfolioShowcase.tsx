@@ -317,13 +317,26 @@ const PortfolioShowcaseSection: FC = () => {
                         }}
                         className="w-full mt-6 flex flex-col md:flex-row gap-8 md:gap-12 text-center md:text-left"
                       >
-                        {/* Imagem Grande */}
+                        {/* Vídeo Grande com otimizações de carregamento */}
                         <div className="w-full md:w-2/3 aspect-video rounded-xl overflow-hidden bg-gray-200 shadow-xl">
-                          <img
+                          <video
                             src={category.thumbnailUrl}
-                            alt={category.label}
+                            poster={category.thumbnailUrl.replace(/\.\w+$/, '.jpg')} // Usa uma imagem como preview
+                            preload="metadata"
                             loading="lazy"
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                            playsInline
+                            autoPlay={false}
+                            muted
+                            loop
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
+                            onClick={(e) => {
+                              const video = e.currentTarget;
+                              if (video.paused) {
+                                video.play();
+                              } else {
+                                video.pause();
+                              }
+                            }}
                           />
                         </div>
 
