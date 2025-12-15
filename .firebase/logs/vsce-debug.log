@@ -4855,3 +4855,5 @@ I1215 04:25:46.668087   38596 load.go:109] Finished reloading
 [debug] [2025-12-15T07:51:10.046Z] <<< [apiv2][status] GET http://127.0.0.1:4400/emulators 200
 [debug] [2025-12-15T07:51:10.047Z] <<< [apiv2][body] GET http://127.0.0.1:4400/emulators {"hub":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"name":"hub","host":"127.0.0.1","port":4400},"logging":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"name":"logging","host":"127.0.0.1","port":4500},"apphosting":{"listen":[{"address":"127.0.0.1","family":"IPv4","port":5002}],"name":"apphosting","host":"localhost","port":5002}}
 [debug] [2025-12-15T07:52:59.814Z] [Firebase Plugin] Received emulators shutdown notification.
+[info] [Firebase Plugin] Stopping Data Connect toolkit
+[warn] ⚠  Data Connect Emulator has exited upon receiving signal: SIGINT 
