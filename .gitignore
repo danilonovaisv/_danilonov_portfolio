@@ -1,53 +1,42 @@
 ```
-# Dependencies
-node_modules/
-
-# Environment variables
-.env
-.env.local
-.env.*
-
-# Next.js
-.next/
-out/
-
-# Firebase
-.firebase/
-
-# Build outputs
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
 dist/
 build/
-public/build/
+target/
 
-# Logs
+# Dependencies
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+*.env.*
+
+# Logs and temp files
 *.log
-.firebase/logs/
-
-# Temporary files
 *.tmp
 *.swp
-*.swo
 
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# IDE specific
+# Editors
 .vscode/
 .idea/
 
-# Compressed archives
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing and coverage
+.coverage
+coverage/
+htmlcov/
+.mypy_cache/
+.pytest_cache/
+
+# Compressed files
 *.zip
 *.gz
 *.tar
@@ -66,4 +55,8 @@ __pycache__/
 *.Z
 *.lz
 *.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
 ```
