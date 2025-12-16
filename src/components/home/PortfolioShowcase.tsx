@@ -273,13 +273,17 @@ const PortfolioShowcaseSection: FC = () => {
                   <div className="w-full md:w-2/3 aspect-video rounded-xl overflow-hidden bg-gray-200 shadow-xl">
                     <video
                       src={category.thumbnailUrl}
-                      poster={category.posterUrl || category.thumbnailUrl.replace(/\.[^.]+$/, '.jpg')} // Usa uma imagem como preview
+                      poster={
+                        category.posterUrl ||
+                        // Fallback seguro se não houver posterUrl (evita 404 de regex em URLs desconhecidas)
+                        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+                      }
                       preload="metadata"
                       playsInline
                       autoPlay={false}
                       muted
                       loop
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer bg-gray-100"
                       onClick={(e) => {
                         const video = e.currentTarget;
                         if (video.paused) {
