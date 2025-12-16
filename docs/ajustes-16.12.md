@@ -1,392 +1,340 @@
-// ============================================================================
-// FILE: components/hero/HeroGlassOrb.tsx
-// ============================================================================
+// app/page.tsx
+import Hero from '@/components/home/Hero'
 
+export default function HomePage() {
+  return (
+    <main className="min-h-dvh bg-[#f3f3f3] text-neutral-950">
+      <Hero />
+    </main>
+  )
+}
+
+// components/home/Hero.tsx
 'use client'
 
-import * as React from 'react'
-import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import {
-  CubeCamera,
-  Environment,
-  MeshRefractionMaterial,
-  PerspectiveCamera,
-  useGLTF,
-} from '@react-three/drei'
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
-import type { GLTF } from 'three-stdlib'
 
-/**
- * HERO GLASS ORB (Next.js App Router + R3F + Drei + Tailwind + Framer Motion)
- *
- * --------------------------------------------------------------------------
- * PROBLEMAS ENCONTRADOS NO CÓDIGO ANTERIOR (comuns nesse setup)
- * --------------------------------------------------------------------------
- * 1) <color attach="background" args={['transparent']} />:
- *    - THREE.Color NÃO suporta alpha; "transparent" não é uma cor válida no three.
- *    - Resultado comum: background fica preto / warnings / comportamento confuso.
- *    - Correção: manter alpha no renderer e setar clearColor com alpha 0 no onCreated.
- *
- * 2) CubeCamera com frames=Infinity:
- *    - Muito caro para um Hero (captura cubemap todo frame).
- *    - Correção: frames=1 (captura uma vez). Visual permanece “glass-like” e performance melhora.
- *
- * 3) Preload em module-scope (useGLTF.preload fora de efeitos):
- *    - Em alguns setups, pode causar erro em build/hidratação se algo tentar tocar window/document.
- *    - Correção: preload dentro de useEffect (client-only) e/ou guardas.
- *
- * 4) Falta de clearColor alpha:
- *    - Mesmo com gl.alpha=true, alguns drivers deixam fundo visível sem setClearColor(…, 0).
- *
- * 5) Interação/scroll sem throttle:
- *    - Scroll listener é OK, mas mantemos escrito para atualizar ref (sem setState) -> sem rerender.
- *
- * --------------------------------------------------------------------------
- * COMPORTAMENTOS (animação/interação)
- * --------------------------------------------------------------------------
- * - LOAD: container (Framer Motion) entra com opacity + scale + y
- * - ORB (R3F):
- *   - autoSpin (leve, futurista)
- *   - parallax via cursor (pointer.x/y)
- *   - scroll influencia um float vertical + tilt
- * - Reduced motion:
- *   - remove autoSpin forte, reduz amplitudes e limita custos (CubeCamera frames=1 sempre)
- *
- * Asset:
- * - default: /media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb (coloque em public/media)
- * - ou Supabase Storage public URL via prop modelUrl
- */
+const HeroOrbCanvas = dynamic(() => import('./HeroOrbCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div
+      aria-hidden="true"
+      className="h-[min(520px,58svh)] w-full rounded-3xl bg-gradient-to-br from-white/70 to-white/20 shadow-[0_30px_120px_rgba(0,0,0,0.12)] ring-1 ring-black/5 backdrop-blur-sm"
+    />
+  ),
+})
 
-type HeroGlassOrbProps = {
-  modelUrl?: string
-  className?: string
-}
-
-function clamp01(n: number) {
-  return Math.min(1, Math.max(0, n))
-}
-
-function damp(current: number, target: number, lambda: number, dt: number) {
-  // aproximação estável para lerp com base no delta time
-  return THREE.MathUtils.lerp(current, target, 1 - Math.exp(-lambda * dt))
-}
-
-function getScrollProgress() {
-  if (typeof window === 'undefined') return 0
-  const doc = document.documentElement
-  const max = Math.max(1, doc.scrollHeight - window.innerHeight)
-  return clamp01(window.scrollY / max)
-}
-
-class WebGLErrorBoundary extends React.Component<
-  { fallback?: React.ReactNode; children: React.ReactNode },
-  { hasError: boolean; message?: string }
-> {
-  state = { hasError: false as boolean, message: undefined as string | undefined }
-
-  static getDerivedStateFromError(error: unknown) {
-    const message = error instanceof Error ? error.message : 'Erro desconhecido'
-    return { hasError: true, message }
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        this.props.fallback ?? (
-          <div className="flex h-full w-full items-center justify-center rounded-xl bg-black/5 p-6 text-center text-xs text-black/50">
-            WebGL indisponível: {this.state.message}
-          </div>
-        )
-      )
-    }
-    return this.props.children
-  }
-}
-
-function GlassOrbMesh({
-  geometry,
-  scrollRef,
-  reducedMotion,
-}: {
-  geometry: THREE.BufferGeometry
-  scrollRef: React.MutableRefObject<number>
-  reducedMotion: boolean
-}) {
-  const groupRef = React.useRef<THREE.Group>(null!)
-  const hoveredRef = React.useRef(false)
-
-  const baseRotation = React.useMemo(() => new THREE.Euler(0.05, 0.15, 0), [])
-  const basePosition = React.useMemo(() => new THREE.Vector3(0, 0, 0), [])
-
-  useFrame((state, dt) => {
-    const g = groupRef.current
-    if (!g) return
-
-    const t = state.clock.elapsedTime
-    const sp = scrollRef.current
-
-    // autoSpin mais “premium” quando hover (desktop)
-    const hoverBoost = hoveredRef.current && !reducedMotion ? 1.25 : 1
-    const autoSpin = reducedMotion ? 0 : t * 0.22 * hoverBoost
-
-    const pointerX = reducedMotion ? 0 : state.pointer.x
-    const pointerY = reducedMotion ? 0 : state.pointer.y
-
-    // float leve (idle) + scrollFloat (page)
-    const idleFloat = reducedMotion ? 0 : Math.sin(t * 0.85) * 0.04
-    const scrollFloat = reducedMotion ? 0 : (sp - 0.15) * 0.55
-
-    const targetPosY = basePosition.y + idleFloat + scrollFloat
-    g.position.y = damp(g.position.y, targetPosY, 4.5, dt)
-
-    const targetRotX = baseRotation.x + pointerY * 0.22 + sp * 0.24
-    const targetRotY = baseRotation.y + pointerX * 0.34 + autoSpin
-    const targetRotZ = baseRotation.z + pointerX * 0.08
-
-    g.rotation.x = damp(g.rotation.x, targetRotX, 6.5, dt)
-    g.rotation.y = damp(g.rotation.y, targetRotY, 6.5, dt)
-    g.rotation.z = damp(g.rotation.z, targetRotZ, 6.5, dt)
-
-    // entrada (scale) – começa menor e chega em 1
-    const targetScale = 1
-    g.scale.x = damp(g.scale.x, targetScale, 5.5, dt)
-    g.scale.y = damp(g.scale.y, targetScale, 5.5, dt)
-    g.scale.z = damp(g.scale.z, targetScale, 5.5, dt)
-  })
+export default function Hero() {
+  const reduceMotion = useReducedMotion()
 
   return (
-    <group ref={groupRef} scale={0.78}>
-      <CubeCamera resolution={256} frames={1}>
-        {(texture) => (
-          <mesh
-            geometry={geometry}
-            castShadow={false}
-            receiveShadow={false}
-            onPointerOver={() => {
-              hoveredRef.current = true
-            }}
-            onPointerOut={() => {
-              hoveredRef.current = false
-            }}
-          >
-            <MeshRefractionMaterial
-              envMap={texture}
-              ior={1.12}
-              bounces={2}
-              fresnel={0.18}
-              aberrationStrength={0.085}
-              fastChroma
-              color="#ffffff"
-              toneMapped={false}
-            />
-          </mesh>
-        )}
-      </CubeCamera>
-    </group>
-  )
-}
-
-function GlassOrbModel({
-  modelUrl,
-  scrollRef,
-  reducedMotion,
-}: {
-  modelUrl: string
-  scrollRef: React.MutableRefObject<number>
-  reducedMotion: boolean
-}) {
-  const gltf = useGLTF(modelUrl) as GLTF
-
-  const geometry = React.useMemo(() => {
-    let firstGeom: THREE.BufferGeometry | null = null
-    gltf.scene.traverse((obj) => {
-      const mesh = obj as THREE.Mesh
-      if (!firstGeom && (mesh as any).isMesh && mesh.geometry) firstGeom = mesh.geometry
-    })
-    // clone para evitar edge-cases de dispose/overrides em caches
-    return firstGeom ? firstGeom.clone() : null
-  }, [gltf])
-
-  if (!geometry) return null
-
-  // Em algumas exports, normals podem vir “fracas”; garantimos algo utilizável.
-  // (computeVertexNormals é seguro, mas pode ser caro em geometria muito alta.
-  // aqui é 1x no mount, OK pro Hero.)
-  React.useEffect(() => {
-    if (!geometry.attributes.normal) geometry.computeVertexNormals()
-  }, [geometry])
-
-  return <GlassOrbMesh geometry={geometry} scrollRef={scrollRef} reducedMotion={reducedMotion} />
-}
-
-function GlassOrbCanvas({
-  modelUrl = '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb',
-  className,
-}: {
-  modelUrl?: string
-  className?: string
-}) {
-  const reducedMotionPref = useReducedMotion()
-  const reducedMotion = !!reducedMotionPref
-
-  const scrollRef = React.useRef(0)
-  const eventSourceRef = React.useRef<HTMLDivElement>(null)
-  const [eventSource, setEventSource] = React.useState<HTMLElement | undefined>(undefined)
-
-  React.useEffect(() => {
-    setEventSource(eventSourceRef.current ?? undefined)
-  }, [])
-
-  React.useEffect(() => {
-    const onScroll = () => {
-      scrollRef.current = getScrollProgress()
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  React.useEffect(() => {
-    // preload client-only (evita edge cases em build/SSR)
-    if (typeof window !== 'undefined') useGLTF.preload(modelUrl)
-  }, [modelUrl])
-
-  return (
-    <div ref={eventSourceRef} className={className}>
-      <WebGLErrorBoundary>
-        <Canvas
-          dpr={reducedMotion ? 1 : [1, 1.75]}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-          eventSource={eventSource}
-          eventPrefix="client"
-          style={{ background: 'transparent', touchAction: 'none' }}
-          onCreated={(state) => {
-            // garante alpha real no clear
-            state.gl.setClearColor(0x000000, 0)
-          }}
-          fallback={
-            <div className="flex h-full w-full items-center justify-center text-xs text-black/40">
-              WebGL indisponível
-            </div>
-          }
-        >
-          <PerspectiveCamera makeDefault position={[0, 0, 4.2]} fov={42} />
-
-          {/* luzes minimalistas (clean + futurista) */}
-          <ambientLight intensity={0.62} />
-          <directionalLight position={[4, 6, 2]} intensity={1.1} />
-          <directionalLight position={[-4, -2, 3]} intensity={0.32} />
-
-          {/* ambiente para refração */}
-          <Environment preset="city" background={false} />
-
-          <React.Suspense fallback={null}>
-            <GlassOrbModel
-              modelUrl={modelUrl}
-              scrollRef={scrollRef}
-              reducedMotion={reducedMotion}
-            />
-          </React.Suspense>
-        </Canvas>
-      </WebGLErrorBoundary>
-    </div>
-  )
-}
-
-export default function HeroGlassOrb({ modelUrl, className }: HeroGlassOrbProps) {
-  return (
-    <section className={['relative w-full bg-[#f3f3f3]', className].filter(Boolean).join(' ')}>
-      {/* Header minimalista (logo + menu) */}
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 pt-6">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded bg-white/70 ring-1 ring-black/10" aria-hidden="true" />
-          <span className="text-sm font-semibold tracking-tight text-black/80">danilo</span>
-        </div>
-
-        <button
-          type="button"
-          className="grid h-10 w-10 place-items-center rounded bg-white/70 ring-1 ring-black/10 transition hover:bg-white"
-          aria-label="Abrir menu"
-        >
-          <span className="block h-[2px] w-5 bg-black/70" />
-          <span className="mt-1 block h-[2px] w-5 bg-black/70" />
-        </button>
+    <section
+      aria-label="Hero"
+      className="relative isolate overflow-hidden px-4 pt-24 sm:px-6 lg:px-10"
+    >
+      {/* Background */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -left-20 top-24 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute right-[-120px] top-[-80px] h-96 w-96 rounded-full bg-cyan-400/10 blur-3xl" />
       </div>
 
-      {/* Hero */}
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-6 pb-16 pt-10 lg:grid-cols-2 lg:items-center lg:pb-24 lg:pt-14">
-        {/* Texto */}
-        <div className="relative z-10">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_minmax(360px,520px)] lg:gap-14">
+        {/* Copy */}
+        <div className="relative">
           <motion.h1
-            initial={{ opacity: 0, y: 14 }}
+            className="text-balance text-[clamp(44px,6vw,88px)] font-extrabold leading-[0.95] tracking-tight"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            className="text-balance text-[44px] font-black leading-[0.95] tracking-tight text-black sm:text-[64px] lg:text-[74px]"
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <span className="text-[#0b57ff]">Design</span>, não é só estética.
+            <span className="text-blue-600">Design,</span>
+            <br />
+            <span className="text-neutral-950">não é só</span>
+            <br />
+            <span className="text-neutral-950">estética.</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
+            className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-blue-700/90"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 text-balance text-lg font-medium text-[#0b57ff] sm:text-xl"
+            transition={{ duration: 0.6, delay: 0.05, ease: 'easeOut' }}
           >
             [É intenção, é estratégia, é experiência.]
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+            initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8"
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
           >
-            <a
-              href="#portfolio"
-              className="inline-flex items-center gap-3 rounded-full bg-[#0b57ff] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
+            <Link
+              href="/sobre"
+              className="inline-flex h-12 items-center justify-center gap-3 rounded-full bg-blue-600 px-6 text-base font-medium text-white shadow-[0_18px_55px_rgba(37,99,235,0.35)] ring-1 ring-blue-700/20 transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f3f3]"
+              aria-label="Ir para a seção sobre"
             >
-              get to know me better
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-white/15 ring-1 ring-white/20">
-                <span className="text-base leading-none">↗</span>
-              </span>
-            </a>
+              get to know me better <span aria-hidden="true">↗</span>
+            </Link>
+
+            <Link
+              href="/portfolio"
+              className="inline-flex h-12 items-center justify-center rounded-full px-6 text-base font-medium text-blue-700 ring-1 ring-blue-700/20 transition hover:bg-blue-600/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f3f3f3]"
+              aria-label="Ver portfólio"
+            >
+              portfolio showcase
+            </Link>
           </motion.div>
         </div>
 
-        {/* Orb (posicionamento e responsividade) */}
-        <div className="relative z-0">
-          <div className="pointer-events-none absolute -inset-x-10 -inset-y-8 blur-3xl">
-            <div className="h-full w-full bg-gradient-to-tr from-[#0b57ff]/10 via-fuchsia-500/10 to-emerald-400/10" />
+        {/* 3D Orb */}
+        <div className="relative">
+          <div
+            className="relative h-[min(520px,58svh)] w-full overflow-hidden rounded-3xl bg-white/40 ring-1 ring-black/5"
+            aria-hidden="true"
+          >
+            {/* IMPORTANT:
+               - Canvas precisa de um parent com width/height válidos para renderizar (se o container colapsa, o Canvas fica 0x0 e “some”).
+               - Referência: Canvas é responsivo ao tamanho do parent.  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6MH0"}
+            */}
+            <HeroOrbCanvas />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto aspect-square w-full max-w-[520px]"
-          >
-            <GlassOrbCanvas modelUrl={modelUrl ?? '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb'} className="h-full w-full" />
-          </motion.div>
+          <div className="pointer-events-none absolute left-6 top-6 rounded-2xl bg-white/55 px-5 py-3 text-sm font-semibold tracking-[0.18em] text-blue-700/90 ring-1 ring-black/5 backdrop-blur">
+            [ BRAND AWARENESS ]
+          </div>
         </div>
       </div>
+
+      {/* Spacer to ensure Hero has breathing room and avoids CLS from late-loading fonts/canvas */}
+      <div className="h-14 sm:h-20" />
     </section>
   )
 }
 
-// ============================================================================
-// FILE: app/page.tsx (EXEMPLO DE USO)
-// ============================================================================
+// components/home/HeroOrbCanvas.tsx
+'use client'
 
-export function PageExample() {
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import * as THREE from 'three'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Environment, MeshTransmissionMaterial, Text, useGLTF } from '@react-three/drei'
+
+/**
+ * DIAGNÓSTICO (resumo dentro do código, para manter o formato de saída):
+ * - Sintoma: hero/orb “some” ao carregar ou após interações.
+ * - Causas mais comuns nesse setup:
+ *   1) R3F rodando em Server Component/SSR → falha de hidratação ou render nulo.
+ *      Correção: dynamic import com ssr:false (como no tutorial) + "use client".  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6MX0"}
+ *   2) Canvas com parent sem altura/largura (0x0) por colapso de layout/overflow/position.
+ *      Correção: container com h-* explícito (ver Hero.tsx) e Canvas com className w-full h-full.  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6Mn0"}
+ *   3) Asset GLB falhando (404/CORS) → promise rejeita e a cena pode parar.
+ *      Correção: ErrorBoundary + fallback 3D simples.
+ *
+ * Referência técnica do material/transmission e setup: MeshTransmissionMaterial aplicado em um mesh do GLB + Environment/light.  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6M30"}
+ */
+
+type ErrorBoundaryProps = {
+  children: React.ReactNode
+  fallback: React.ReactNode
+}
+
+type ErrorBoundaryState = { hasError: boolean }
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  state: ErrorBoundaryState = { hasError: false }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: unknown) {
+    // eslint-disable-next-line no-console
+    console.error('[HeroOrbCanvas] R3F error:', error)
+  }
+
+  render() {
+    if (this.state.hasError) return this.props.fallback
+    return this.props.children
+  }
+}
+
+function isWebGLAvailable() {
+  try {
+    const canvas = document.createElement('canvas')
+    const gl =
+      canvas.getContext('webgl', { failIfMajorPerformanceCaveat: true }) ||
+      canvas.getContext('experimental-webgl', { failIfMajorPerformanceCaveat: true })
+    return !!gl
+  } catch {
+    return false
+  }
+}
+
+function GlassOrbModel({ modelUrl = '/medias/torrus.glb' }: { modelUrl?: string }) {
+  const { nodes } = useGLTF(modelUrl) as unknown as {
+    nodes: Record<string, THREE.Mesh>
+  }
+
+  const meshRef = useRef<THREE.Mesh | null>(null)
+  const { viewport, size } = useThree()
+
+  const isSmall = size.width < 768
+
+  // Material tuned for a premium “glass + distortion” look (MeshTransmissionMaterial).
+  // Based on tutorial structure (GLB mesh + transmission + Environment).  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6NH0"}
+  const materialProps = useMemo(() => {
+    const mobile = isSmall
+    return {
+      thickness: mobile ? 0.18 : 0.25,
+      roughness: mobile ? 0.05 : 0.02,
+      transmission: 1,
+      ior: 1.2,
+      chromaticAberration: mobile ? 0.01 : 0.03,
+      distortion: mobile ? 0.15 : 0.25,
+      distortionScale: mobile ? 0.2 : 0.35,
+      temporalDistortion: mobile ? 0.08 : 0.15,
+      anisotropicBlur: mobile ? 0.05 : 0.12,
+      backside: true,
+      samples: mobile ? 6 : 10,
+      resolution: mobile ? 256 : 512,
+      transparent: true,
+    } as const
+  }, [isSmall])
+
+  useFrame((state, delta) => {
+    const m = meshRef.current
+    if (!m) return
+    m.rotation.y += delta * 0.35
+    m.rotation.x += delta * 0.12
+    m.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.04
+  })
+
+  const scale = viewport.width / 3.8
+
+  // Try to find a torus mesh from the GLB, otherwise fallback to first node mesh.
+  const torusNode =
+    (nodes.Torus002 as THREE.Mesh | undefined) ||
+    (nodes.Torus as THREE.Mesh | undefined) ||
+    (Object.values(nodes).find((n) => (n as any)?.isMesh) as THREE.Mesh | undefined)
+
+  if (!torusNode) return <FallbackOrb />
+
   return (
-    <main>
-      <HeroGlassOrb modelUrl="/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb" />
-      <div style={{ height: 1200 }} />
-    </main>
+    <group scale={scale}>
+      {/* WebGL text ensures distortion is visible through refraction (matches tutorial approach).  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6NX0"} */}
+      <Text
+        position={[0, 0, -1.1]}
+        fontSize={0.55}
+        color="#111827"
+        anchorX="center"
+        anchorY="middle"
+      >
+        danilo
+      </Text>
+
+      <mesh ref={meshRef} geometry={torusNode.geometry} position={[0, 0, 0]}>
+        <MeshTransmissionMaterial {...materialProps} />
+      </mesh>
+    </group>
   )
 }
 
-// ============================================================================
-// FIM
-// ============================================================================
+function FallbackOrb() {
+  const ref = useRef<THREE.Mesh | null>(null)
+  const { viewport, size } = useThree()
+  const isSmall = size.width < 768
+
+  useFrame((state, delta) => {
+    if (!ref.current) return
+    ref.current.rotation.y += delta * 0.35
+    ref.current.rotation.x += delta * 0.12
+    ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.04
+  })
+
+  return (
+    <group scale={viewport.width / 4}>
+      <Text
+        position={[0, 0, -1.1]}
+        fontSize={0.55}
+        color="#111827"
+        anchorX="center"
+        anchorY="middle"
+      >
+        danilo
+      </Text>
+      <mesh ref={ref}>
+        <torusKnotGeometry args={[0.85, 0.28, 220, 24]} />
+        <MeshTransmissionMaterial
+          thickness={isSmall ? 0.18 : 0.25}
+          roughness={isSmall ? 0.06 : 0.03}
+          transmission={1}
+          ior={1.2}
+          chromaticAberration={isSmall ? 0.01 : 0.03}
+          distortion={isSmall ? 0.15 : 0.25}
+          distortionScale={isSmall ? 0.2 : 0.35}
+          temporalDistortion={isSmall ? 0.08 : 0.15}
+          anisotropicBlur={isSmall ? 0.05 : 0.12}
+          backside
+          samples={isSmall ? 6 : 10}
+          resolution={isSmall ? 256 : 512}
+          transparent
+        />
+      </mesh>
+    </group>
+  )
+}
+
+export default function HeroOrbCanvas() {
+  const [webglOk, setWebglOk] = useState(true)
+
+  useEffect(() => {
+    setWebglOk(isWebGLAvailable())
+  }, [])
+
+  // Preload GLB (if you are using this path). If it 404s, ErrorBoundary + fallback handles it.
+  useEffect(() => {
+    try {
+      useGLTF.preload('/medias/torrus.glb')
+    } catch {
+      // no-op
+    }
+  }, [])
+
+  if (!webglOk) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-white/40">
+        <div className="text-sm text-neutral-700">WebGL indisponível neste dispositivo.</div>
+      </div>
+    )
+  }
+
+  return (
+    <Canvas
+      className="h-full w-full"
+      // Ensures transparency over the hero card background
+      gl={{
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+        preserveDrawingBuffer: false,
+      }}
+      dpr={[1, 1.5]}
+      camera={{ position: [0, 0, 4.2], fov: 45, near: 0.1, far: 100 }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 0)
+      }}
+    >
+      <ErrorBoundary fallback={<FallbackOrb />}>
+        <Suspense fallback={<FallbackOrb />}>
+          <ambientLight intensity={0.6} />
+          <directionalLight intensity={2} position={[0.5, 2.2, 3.2]} />
+          <Environment preset="city" />
+          <GlassOrbModel modelUrl="/medias/torrus.glb" />
+        </Suspense>
+      </ErrorBoundary>
+    </Canvas>
+  )
+}
