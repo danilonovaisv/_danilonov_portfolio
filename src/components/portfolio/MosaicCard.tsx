@@ -31,6 +31,8 @@ const textVariants = {
 };
 
 export default function MosaicCard({ item, priority = false }: MosaicCardProps) {
+  const [imageError, setImageError] = React.useState(false);
+
   return (
     <motion.article
       initial="rest"
@@ -51,7 +53,7 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
           aria-hidden="true"
         />
 
-        {item.imageSrc && (
+        {item.imageSrc && !imageError ? (
           <Image
             src={item.imageSrc}
             alt={item.title}
@@ -59,6 +61,13 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             priority={priority}
             className="absolute inset-0 h-full w-full object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          // Fallback gradient/blur effect when no image or image fails to load
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 backdrop-blur-sm"
+            aria-hidden="true"
           />
         )}
 
