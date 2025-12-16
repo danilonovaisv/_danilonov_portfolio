@@ -7,8 +7,10 @@ const nextConfig = {
   allowedDevOrigins: ['http://192.168.0.14:3000'],
   images: {
     // Firebase Hosting/App Hosting não está servindo a rota /_next/image;
-    // desabilitamos o otimizador para servir os assets diretamente das URLs remotas.
-    unoptimized: false, // Changed to allow optimization
+    // Utilizamos um loader customizado para usar as transformações de imagem do Supabase.
+    // unoptimized: true, // Removido para permitir otimização via loader
+    loader: 'custom',
+    loaderFile: './src/lib/supabase/image-loader.ts',
     remotePatterns: [
       {
         protocol: 'https',
@@ -18,9 +20,9 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'formsubmit.co',
+        hostname: 'aymuvxysygrwoicsjgxj.supabase.co',
         port: '',
-        pathname: '/**',
+        pathname: '/storage/v1/render/image/public/**', // Permitir URL de renderização também
       },
     ],
     dangerouslyAllowSVG: true,
