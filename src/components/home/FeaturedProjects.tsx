@@ -1,222 +1,116 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import { motion, type Variants, useReducedMotion } from 'framer-motion';
-import Image from 'next/image';
-import { FEATURED_PROJECTS } from '@/lib/constants';
-import { Button } from '@/components/ui/Button';
+import React, { useRef } from 'react';
+import { motion } from 'framer-motion';
+import { FEATURED_PROJECTS } from '../../lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: 'easeOut',
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.75, ease: 'easeOut' },
-  },
-};
-
-const textVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut', delay: 0.05 },
-  },
-};
-
-type Project = (typeof FEATURED_PROJECTS)[number];
-
 const FeaturedProjects: React.FC = () => {
-  const prefersReducedMotion = useReducedMotion();
-
-  const cardAspectClass = 'aspect-[4/3] sm:aspect-[3/2] md:aspect-[16/9]';
-
-  const ProjectCard = ({
-    project,
-    className,
-  }: {
-    project: Project;
-    className?: string;
-  }) => {
-    const tags = useMemo(() => {
-      const items: string[] = [];
-      if (project.category) items.push(project.category);
-      if (
-        project.displayCategory &&
-        project.displayCategory !== project.category
-      ) {
-        items.push(
-          ...project.displayCategory
-            .split('&')
-            .map((tag) => tag.trim())
-            .filter(Boolean)
-        );
-      }
-      return Array.from(new Set(items));
-    }, [project.category, project.displayCategory]);
-
-    return (
-      <motion.a
-        key={project.slug}
-        href={`/portfolio/${project.slug}`}
-        variants={cardVariants}
-        className="group relative flex w-full flex-col gap-4 outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7]"
-      >
-        <div
-          className={`relative w-full overflow-hidden rounded-[8px] bg-[#0f0f11] ${
-            className || cardAspectClass
-          }`}
-        >
-          <motion.div
-            className="absolute inset-0"
-            whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Image
-              src={project.imageUrl}
-              alt={project.title}
-              fill
-              sizes="(min-width: 1280px) 60vw, (min-width: 1024px) 70vw, (min-width: 768px) 90vw, 100vw"
-              className="object-cover brightness-[0.98]"
-              priority={project.isHero}
-            />
-          </motion.div>
-
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent" />
-
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-          >
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white transition duration-300">
-              <span className="h-3 w-3 translate-x-0.5 border-l-[6px] border-l-white border-y-[6px] border-y-transparent" />
-            </span>
-          </div>
-
-          <div className="absolute right-3 top-3 z-10 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-white/18 px-3 py-1 text-[10px] font-light uppercase tracking-[0.14em] text-white backdrop-blur-sm"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <motion.h3
-              variants={textVariants}
-              className="text-base md:text-lg font-semibold text-[#111111] tracking-tight"
-            >
-              {project.title}
-            </motion.h3>
-            <motion.p
-              variants={textVariants}
-              className="text-sm font-light uppercase tracking-[0.12em] text-neutral-600"
-            >
-              {project.client || '—'}
-            </motion.p>
-          </div>
-
-          <motion.span
-            whileHover={
-              prefersReducedMotion
-                ? undefined
-                : {
-                    scale: 1.08,
-                    boxShadow: '0 10px 24px -12px rgba(0,87,255,0.65)',
-                  }
-            }
-            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-[#0057FF] text-white shadow-md"
-          >
-            <ArrowRight size={18} />
-          </motion.span>
-        </div>
-      </motion.a>
-    );
-  };
-
-  const [card1, card2, card3, card4] = FEATURED_PROJECTS;
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section
-      id="featured-projects"
-      className="relative w-full bg-[#F4F5F7] text-[#0b0b0b] py-24 md:py-32"
+    <section 
+      id="featured-projects" 
+      ref={containerRef}
+      className="relative py-24 bg-[#F4F5F7] overflow-hidden"
     >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        className="container mx-auto flex flex-col gap-16 px-6 md:px-12"
-      >
-        {/* Primeira linha: dois cards verticais alinhados pela base */}
-        <div className="grid grid-cols-1 items-end gap-x-12 gap-y-16 md:grid-cols-5">
-          <div className="md:col-span-2">
-            {card1 && (
-              <ProjectCard
-                project={card1}
-                className="aspect-[4/3] sm:aspect-[3/2] md:aspect-[4/5]"
-              />
-            )}
-          </div>
-          <div className="md:col-span-3">
-            {card2 && <ProjectCard project={card2} />}
-          </div>
-        </div>
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-10">
+        
+        {/* Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+          
+          {FEATURED_PROJECTS.map((project, index) => {
+             const isHero = project.isHero;
+             
+             // Define o aspect ratio: Hero é wide, cards normais são portrait
+             const aspectRatioClass = isHero 
+                ? 'aspect-video md:aspect-[2.2/1]' 
+                : 'aspect-[4/5]';
 
-        {/* Segunda linha: card horizontal full width */}
-        <div className="w-full">
-          {card3 && (
-            <ProjectCard
-              project={card3}
-              className="aspect-[4/3] sm:aspect-[3/2] md:aspect-[21/9]"
-            />
-          )}
-        </div>
+             return (
+              <motion.a
+                key={project.slug}
+                href={`/portfolio/${project.slug}`}
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98], delay: index * 0.1 }}
+                className={`group relative flex flex-col w-full ${isHero ? 'md:col-span-2' : ''}`}
+              >
+                {/* Container da Imagem */}
+                <div className={`relative overflow-hidden rounded-2xl bg-gray-200 w-full ${aspectRatioClass} mb-6 shadow-sm`}>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
+                    
+                    <img 
+                        src={project.imageUrl} 
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    
+                    {/* Badges de Categoria */}
+                    <div className="absolute top-6 right-6 z-20 flex flex-col gap-2 items-end">
+                        <span className="bg-white/95 backdrop-blur-md text-[#0057FF] text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                            {project.category}
+                        </span>
+                        {project.displayCategory !== project.category && (
+                           <span className="bg-[#111111]/80 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm">
+                             {project.displayCategory.split('&')[1] || 'Design'}
+                           </span>
+                        )}
+                    </div>
+                </div>
 
-        {/* Terceira linha: card + CTA lateral */}
-        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-5">
-          <div className="md:col-span-3">
-            {card4 && <ProjectCard project={card4} />}
-          </div>
-          <div className="md:col-span-2 flex flex-col items-center justify-center gap-4 rounded-[10px] bg-[#F4F5F7] px-8 py-10 text-center">
-            <h3 className="text-2xl md:text-3xl font-light text-[#111111] leading-tight">
-              Like what
-              <br />
-              you see?
-            </h3>
-            <Button
-              href="/portfolio"
-              className="group rounded-full shadow-lg shadow-[#0057FF]/25 focus-visible:ring-offset-[#F4F5F7] px-6 py-3 h-auto"
-            >
-              view projects
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 transition-colors duration-300 group-hover:bg-white/80 ml-2">
-                <ArrowUpRight className="h-4 w-4 text-white" />
-              </span>
-            </Button>
-          </div>
+                {/* Informações do Projeto */}
+                <div className="flex justify-between items-end px-2">
+                    <div className="flex flex-col gap-1 pr-4">
+                        <h3 className="text-2xl md:text-3xl font-bold text-[#111111] leading-tight group-hover:text-[#0057FF] transition-colors duration-300">
+                            {project.title}
+                        </h3>
+                        <p className="text-gray-500 text-sm uppercase tracking-widest font-bold">
+                            {project.client}
+                        </p>
+                    </div>
+
+                    {/* Botão de Seta */}
+                    <div className="mb-1 shrink-0">
+                        <div className="w-12 h-12 rounded-full bg-[#0057FF] text-white flex items-center justify-center transform translate-x-0 group-hover:translate-x-2 transition-all duration-300 shadow-lg group-hover:scale-110">
+                            <ArrowRight size={20} />
+                        </div>
+                    </div>
+                </div>
+              </motion.a>
+             );
+          })}
+
+          {/* Bloco "Like what you see?" - Ocupa o último espaço do grid */}
+          <motion.div 
+             initial={{ opacity: 0, x: 20 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8, delay: 0.2 }}
+             className="flex flex-col justify-center items-center text-center min-h-[400px]"
+          >
+              <h3 className="text-4xl md:text-5xl font-light text-[#111111] mb-8 leading-tight">
+                  Like what<br/>you see?
+              </h3>
+              
+              <motion.a 
+                href="/portfolio"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 text-white shadow-xl hover:shadow-[#0057FF]/40 transition-all duration-300"
+              >
+                <span className="text-lg font-bold tracking-wide">view projects</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 group-hover:bg-white text-[#0057FF] transition-colors duration-300">
+                   <ArrowUpRight className="w-4 h-4 text-white group-hover:text-[#0057FF]" />
+                </span>
+              </motion.a>
+              
+          </motion.div>
+
         </div>
-      </motion.div>
+      </div>
+
     </section>
   );
 };

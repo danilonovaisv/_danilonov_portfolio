@@ -22,7 +22,7 @@ Ele atua como **engenheiro frontend sênior** e **automação de manutenção de
   - Componentes organizados em:
     - `src/components/sections/**` → seções de página (ex.: `Hero.tsx`)
     - `src/components/three/**` → componentes 3D, cenas, modelos e hooks
-  - Assets públicos em `public/**` (ex.: `public/media//media/torus_dan.glb`).
+  - Assets públicos em `public/**` (ex.: `public/media//media/Torus_dan.glb`).
 - Estilo visual: **minimalista + futurista**, referência:
   - Glass orb / glass torus com efeito de refração/vidro
   - Hero com grid 3 colunas (texto / orb 3D / card lateral)
@@ -95,7 +95,7 @@ Este agente deve ser capaz de:
   - Uso de:
     - `<Canvas>` de `@react-three/fiber`.
     - `Environment`, `useGLTF`, `MeshTransmissionMaterial`, etc. de `@react-three/drei`.
-  - Modelos GLTF via `useGLTF('/media//media/torus_dan.glb')` (ou URL pública do Supabase).
+  - Modelos GLTF via `useGLTF('/media//media/Torus_dan.glb')` (ou URL pública do Supabase).
   - Animações com `useFrame` + `THREE.MathUtils.lerp`.
 
 - **Framer Motion**
@@ -116,7 +116,7 @@ Este agente deve ser capaz de:
 - **Uso:**
   - Buscar contexto de código, componentes existentes, hooks, configs.
   - Sempre que precisar entender uma parte do projeto, procurar primeiro no vector store antes de “inventar” estrutura.
-  - Encontrar implementações atuais de `Hero`, `HeroGlassCanvas`, `GlassOrb`, `TorusDan`, etc.
+  - Encontrar implementações atuais de `Hero`, `OrbCanvas`, `GlassOrb`, `TorusDan`, etc.
 
 ### 4.2. codeInterpreterTool
 
@@ -160,7 +160,7 @@ O agente deve ser capaz de lidar com:
    - Criar/atualizar:
      - `src/app/page.tsx`
      - `src/components/sections/Hero.tsx`
-     - `src/components/three/HeroGlassCanvas.tsx`
+     - `src/components/three/OrbCanvas.tsx`
      - `src/components/three/GlassOrb.tsx`
      - `src/components/three/TorusDan.tsx`
    - Garantir que tudo compile e esteja tipado.
@@ -197,7 +197,7 @@ O agente deve ser capaz de lidar com:
 
 1. Usar `fileSearchTool` para localizar:
    - `Hero.tsx`
-   - `HeroGlassCanvas.tsx`
+   - `OrbCanvas.tsx`
    - `GlassOrb.tsx`
    - `TorusDan.tsx`
 2. Comparar código atual com a versão “desejada” (fornecida pelo usuário ou definida em template).
@@ -206,7 +206,7 @@ O agente deve ser capaz de lidar com:
    - Ajuste de imports.
 4. Verificar consistência:
    - `src/app/page.tsx` usa `<Hero />`.
-   - Modelo `/media/torus_dan.glb` está em `public/media`.
+   - Modelo `/media/Torus_dan.glb` está em `public/media`.
 
 ---
 

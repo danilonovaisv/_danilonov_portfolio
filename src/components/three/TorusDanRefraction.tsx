@@ -81,7 +81,7 @@ const TorusDanRefraction: React.FC<TorusDanRefractionProps> = ({
                 aberrationStrength={0.015}
                 ior={2.2}
                 fresnel={0.12}
-                color="#ffc3faff"
+                color="#ffffff"
                 fastChroma
                 toneMapped={false}
               />

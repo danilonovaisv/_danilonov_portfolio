@@ -2,48 +2,69 @@
 
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { ContactShadows, Environment, Html } from '@react-three/drei';
-import { TorusDan } from './TorusDan';
+import {
+  AdaptiveDpr,
+  AdaptiveEvents,
+  Environment,
+  Lightformer,
+} from '@react-three/drei';
+import TorusDan from './TorusDan';
+import TorusDanRefraction from './TorusDanRefraction';
 
 type HeroGlassCanvasProps = {
-  /** 0–1, vindo do scroll da Hero (opcional) */
-  scrollIntensity?: number | import('framer-motion').MotionValue<number>;
+  className?: string;
+  /** transmission (default) = MeshTransmissionMaterial, refraction = MeshRefractionMaterial */
+  variant?: 'transmission' | 'refraction';
+  /** 0..1 – controla força da animação (scroll, etc.) */
+  scrollIntensity?: number;
 };
 
-export default function HeroGlassCanvas({
-  scrollIntensity = 0,
-}: HeroGlassCanvasProps) {
+const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
+  className,
+  variant = 'transmission',
+  scrollIntensity = 1,
+}) => {
+  const OrbComponent = variant === 'refraction' ? TorusDanRefraction : TorusDan;
+
   return (
-    <Canvas
-      dpr={[1, 1.7]}
-      gl={{ antialias: true, alpha: true }}
-      camera={{ position: [0, 0, 4.5], fov: 35 }}
-    >
-      <color attach="background" args={['#F4F5F7']} />
-
-      <Suspense
-        fallback={
-          <Html center>
-            <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-400/40 to-indigo-500/40 blur-xl" />
-          </Html>
-        }
+    <div className={className}>
+      <Canvas
+        camera={{ position: [0, 0, 6], fov: 30 }}
+        dpr={[1, 1.8]}
+        gl={{ antialias: true }}
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={1.8} />
-        <directionalLight position={[-4, -2, -4]} intensity={0.4} />
+        <color attach="background" args={['#f4f5f7']} />
 
-        <Environment preset="city" resolution={1024} />
+        <Suspense fallback={null}>
+          {/* Luzes básicas */}
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[4, 8, 6]} intensity={2.4} />
 
-        <TorusDan variant="refraction" scrollIntensity={scrollIntensity} />
+          {/* Environment tipo “studio” para highlights bonitos no vidro */}
+          <Environment preset="studio">
+            <Lightformer
+              form="ring"
+              intensity={3}
+              position={[0, 2, 6]}
+              scale={6}
+            />
+            <Lightformer
+              form="rect"
+              intensity={1.8}
+              position={[-3, -1, -6]}
+              scale={[6, 3, 1]}
+            />
+          </Environment>
 
-        <ContactShadows
-          position={[0, -1.4, 0]}
-          opacity={0.35}
-          blur={2.5}
-          scale={8}
-          far={4}
-        />
-      </Suspense>
-    </Canvas>
+          <OrbComponent scrollIntensity={scrollIntensity} />
+
+          {/* Performance helpers */}
+          <AdaptiveDpr pixelated />
+          <AdaptiveEvents />
+        </Suspense>
+      </Canvas>
+    </div>
   );
-}
+};
+
+export default HeroGlassCanvas;

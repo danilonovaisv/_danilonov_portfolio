@@ -243,10 +243,10 @@
         "isDefault": true
       }
     ],
-    "HeroGlassCanvas": [
+    "OrbCanvas": [
       {
-        "name": "HeroGlassCanvas",
-        "path": "/Users/danilonovais/_danilonov_portfolio/components/three/HeroGlassCanvas.tsx",
+        "name": "OrbCanvas",
+        "path": "/Users/danilonovais/_danilonov_portfolio/components/three/OrbCanvas.tsx",
         "isDefault": true
       }
     ],

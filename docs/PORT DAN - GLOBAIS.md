@@ -39,7 +39,7 @@
 - CTA label: `get to know me better →`
 - CTA target ID secundário (scroll): `#manifesto`
 - Model 3D path: `/media/abstract_element.glb` (ou
-`/public/models//media/torus_dan.glb`)
+`/public/models//media/Torus_dan.glb`)
 - **Manifesto (Vídeo)**
 - Vídeo URL:
 `https://aymuvxysygrwoicsjgxj.supabase

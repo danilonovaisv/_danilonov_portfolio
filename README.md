@@ -26,9 +26,9 @@ Home page interativa do portfólio institucional alinhada ao briefing em `docs/P
 - `components/sections/Hero.tsx` — hero sticky, lógica de scroll, vídeo manifesto e CTA.
 - `components/home/` — `PortfolioShowcase`, `FeaturedProjects`, `Clients`, `Contact` e manifesto auxiliar.
 - `components/layout/` — `Header` (condensa no scroll, menu mobile acessível) e `Footer`.
-- `components/three/` — `HeroGlassCanvas` (Canvas + luzes), `TorusDan` (orb com material transmissivo) e hooks.
+- `components/three/` — `OrbCanvas` (Canvas + luzes), `TorusDan` (orb com material transmissivo) e hooks.
 - `lib/constants.tsx` — textos, thumbs, logos, links e assets (Supabase) centralizados.
-- `public/media//media/torus_dan.glb` — modelo 3D usado no hero (gerado via `gltfjsx`).
+- `public/media//media/Torus_dan.glb` — modelo 3D usado no hero (gerado via `gltfjsx`).
 
 ## Conteúdo e assets
 

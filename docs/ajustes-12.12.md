@@ -226,10 +226,10 @@ Garantir que o Hero esteja fiel ao mock: grid 2 colunas (desktop), sticky ~200vh
 
 **Contexto:**  
 Next.js App Router + Tailwind + Framer Motion + R3F/Drei.  
-Integração obrigatória: `Hero.tsx → HeroGlassCanvas.tsx → GlassOrb/Orb → GLB`.
+Integração obrigatória: `Hero.tsx → OrbCanvas.tsx → GlassOrb/Orb → GLB`.
 
 **Código:**  
-Usar o código selecionado no editor (ex.: `components/Hero.tsx`, `components/HeroGlassCanvas.tsx`, `components/GlassOrb.tsx`).
+Usar o código selecionado no editor (ex.: `components/Hero.tsx`, `components/OrbCanvas.tsx`, `components/GlassOrb.tsx`).
 
 **Restrições:**  
 - Não mudar nenhum texto: `[BRAND AWARENESS]`, `Design, não é só estética.`, `[É intenção, é estratégia, é experiência.]`, `get to know me better !`.  
@@ -245,7 +245,7 @@ Usar o código selecionado no editor (ex.: `components/Hero.tsx`, `components/He
   - `Canvas` com `dpr={[1, 1.5]}` e `eventSource={document.body}`.
   - Tiering mobile: reduzir `samples/resolution` do vidro.
   - `Environment preset="city"` para highlights no vidro.
-  - Validar path do GLB: preferir `/media//media/torus_dan.glb`.
+  - Validar path do GLB: preferir `/media//media/Torus_dan.glb`.
 
 > Atenção: há um exemplo de GLB carregando via `useGLTF("/medias/torrus.glb")`  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6MX0"} — conferir se no projeto existe divergência entre `/media` e `/medias` e corrigir para o path real do asset.
 
@@ -256,7 +256,7 @@ import { Environment, MeshTransmissionMaterial, useGLTF } from "@react-three/dre
 import { Suspense, useMemo } from "react";
 
 function GlassModel() {
-  const { nodes } = useGLTF("/media//media/torus_dan.glb");
+  const { nodes } = useGLTF("/media//media/Torus_dan.glb");
   const mat = useMemo(
     () => ({
       transmission: 1,
@@ -278,7 +278,7 @@ function GlassModel() {
   );
 }
 
-export function HeroGlassCanvas() {
+export function OrbCanvas() {
   return (
     <Canvas
       dpr={[1, 1.5]}
@@ -297,7 +297,7 @@ export function HeroGlassCanvas() {
 }
 
 // opcional: preload para reduzir pop-in
-useGLTF.preload("/media//media/torus_dan.glb");
+useGLTF.preload("/media//media/Torus_dan.glb");
 ~~~~
 
 > Dica: `useGLTF.preload(...)` é um padrão recomendado para reduzir tempo de resposta/percepção de loading  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6Mn0"}.
@@ -526,7 +526,7 @@ Usar arquivo selecionado (ex.: `components/Footer.tsx`).
 ### PROMPT (INFOS AGENT)
 **Objetivo:**  
 Validar e corrigir a integração de arquivos do Hero 3D, garantindo a cadeia:
-`Hero.tsx` → `HeroGlassCanvas.tsx` → `GlassOrb/Orb` → `useGLTF("/media//media/torus_dan.glb")`.
+`Hero.tsx` → `OrbCanvas.tsx` → `GlassOrb/Orb` → `useGLTF("/media//media/Torus_dan.glb")`.
 
 **Código:**  
 Abrir e auditar os arquivos reais que compõem a Hero 3D.
@@ -545,7 +545,7 @@ Abrir e auditar os arquivos reais que compõem a Hero 3D.
 - Implementar `prefers-reduced-motion`:
   - parar rotação contínua e parallax.
 - Preload:
-  - `useGLTF.preload("/media//media/torus_dan.glb")` (padrão recomendado)  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6NX0"}.
+  - `useGLTF.preload("/media//media/Torus_dan.glb")` (padrão recomendado)  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6NX0"}.
 
 ---
 
@@ -556,7 +556,7 @@ O executor deve usar **HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg** como referência ab
 
 Como usar este componente:
 
-Garanta que o GLB esteja em public/models//media/torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
+Garanta que o GLB esteja em public/models//media/Torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
 ‌
 .
  Ajuste o projeto utilizando as etapas essenciais para execução:
@@ -709,7 +709,7 @@ export default function SiteHeader() {
   )
 }
 
-// FILE: src/components/home/HeroGlassCanvas.tsx
+// FILE: src/components/home/OrbCanvas.tsx
 'use client'
 
 import { Canvas } from '@react-three/fiber'
@@ -733,7 +733,7 @@ function HeroLights() {
   )
 }
 
-export default function HeroGlassCanvas({ scrollYProgress, className }: Props) {
+export default function OrbCanvas({ scrollYProgress, className }: Props) {
   const dpr = useMemo(() => [1, 1.5] as [number, number], [])
 
   return (
@@ -790,7 +790,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
   })
 
   // GLB (não altera o conteúdo textual do site; é apenas o asset 3D)
-  const gltf = useGLTF('/models//media/torus_dan.glb') as any
+  const gltf = useGLTF('/models//media/Torus_dan.glb') as any
 
   const geometry = useMemo(() => {
     const scene: THREE.Object3D | undefined = gltf?.scene
@@ -887,7 +887,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
   )
 }
 
-useGLTF.preload('/models//media/torus_dan.glb')
+useGLTF.preload('/models//media/Torus_dan.glb')
 
 // FILE: src/components/home/Hero.tsx
 'use client'
@@ -903,7 +903,7 @@ import {
   useMotionValueEvent,
 } from 'framer-motion'
 
-const HeroGlassCanvas = dynamic(() => import('./HeroGlassCanvas'), {
+const OrbCanvas = dynamic(() => import('./OrbCanvas'), {
   ssr: false,
   loading: () => (
     <div className="h-full w-full rounded-[28px] bg-white/40 backdrop-blur-sm" />
@@ -1057,7 +1057,7 @@ export default function Hero() {
             <div className="relative h-[560px] w-full lg:h-[680px]">
               {/* 3D Canvas */}
               <div className="absolute inset-0">
-                <HeroGlassCanvas className="h-full w-full" scrollYProgress={scrollYProgress} />
+                <OrbCanvas className="h-full w-full" scrollYProgress={scrollYProgress} />
               </div>
 
               {/* Tag (bloco translúcido) */}
