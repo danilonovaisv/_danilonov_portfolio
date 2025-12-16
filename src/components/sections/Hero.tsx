@@ -11,7 +11,6 @@ import {
 import type { Variants } from 'framer-motion';
 import { ASSETS } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
-import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 import { Button } from '@/components/ui/Button';
 
 // Dynamically import the 3D component with SSR disabled
@@ -90,7 +89,6 @@ const AnimatedTextLine = ({
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Scroll Progress
   const { scrollYProgress } = useScroll({
