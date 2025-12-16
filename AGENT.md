@@ -22,7 +22,7 @@ Ele atua como **engenheiro frontend sênior** e **automação de manutenção de
   - Componentes organizados em:
     - `src/components/sections/**` → seções de página (ex.: `Hero.tsx`)
     - `src/components/three/**` → componentes 3D, cenas, modelos e hooks
-  - Assets públicos em `public/**` (ex.: `public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`).
+  - Assets públicos em `public/**` (ex.: `public/media//media/torus_dan.glb`).
 - Estilo visual: **minimalista + futurista**, referência:
   - Glass orb / glass torus com efeito de refração/vidro
   - Hero com grid 3 colunas (texto / orb 3D / card lateral)
@@ -95,7 +95,7 @@ Este agente deve ser capaz de:
   - Uso de:
     - `<Canvas>` de `@react-three/fiber`.
     - `Environment`, `useGLTF`, `MeshTransmissionMaterial`, etc. de `@react-three/drei`.
-  - Modelos GLTF via `useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb')` (ou URL pública do Supabase).
+  - Modelos GLTF via `useGLTF('/media//media/torus_dan.glb')` (ou URL pública do Supabase).
   - Animações com `useFrame` + `THREE.MathUtils.lerp`.
 
 - **Framer Motion**
@@ -206,7 +206,7 @@ O agente deve ser capaz de lidar com:
    - Ajuste de imports.
 4. Verificar consistência:
    - `src/app/page.tsx` usa `<Hero />`.
-   - Modelo `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb` está em `public/media`.
+   - Modelo `/media/torus_dan.glb` está em `public/media`.
 
 ---
 

@@ -67,7 +67,7 @@ export type HeroOrbProps = {
   modelUrl?: string;
 };
 
-const HeroOrbCanvas = dynamic(() => import("./HeroOrbCanvas"), {
+const HeroGlassCanvas = dynamic(() => import("./HeroGlassCanvas"), {
   ssr: false,
   loading: () => (
     <div
@@ -79,7 +79,7 @@ const HeroOrbCanvas = dynamic(() => import("./HeroOrbCanvas"), {
 
 export default function HeroOrb({
   className,
-  modelUrl = "/media/hero-orb.glb",
+  modelUrl = "/media/torus_dan.glb",
 }: HeroOrbProps) {
   return (
     <div
@@ -92,12 +92,12 @@ export default function HeroOrb({
         className ?? "",
       ].join(" ")}
     >
-      <HeroOrbCanvas modelUrl={modelUrl} />
+      <HeroGlassCanvas modelUrl={modelUrl} />
     </div>
   );
 }
 
-// src/components/hero/HeroOrbCanvas.tsx
+// src/components/hero/HeroGlassCanvas.tsx
 "use client";
 
 import React, { Suspense, useMemo, useState } from "react";
@@ -105,7 +105,7 @@ import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr, Environment, Preload } from "@react-three/drei";
 import GlassOrb from "./orb/GlassOrb";
 
-type HeroOrbCanvasProps = {
+type HeroGlassCanvasProps = {
   modelUrl: string;
 };
 
@@ -141,7 +141,7 @@ function OrbFallback() {
   );
 }
 
-export default function HeroOrbCanvas({ modelUrl }: HeroOrbCanvasProps) {
+export default function HeroGlassCanvas({ modelUrl }: HeroGlassCanvasProps) {
   // DPR adaptativo simples (boa relação qualidade/perf em mobile)
   const [dpr, setDpr] = useState<[number, number]>([1, 1.75]);
 
@@ -188,7 +188,7 @@ export default function HeroOrbCanvas({ modelUrl }: HeroOrbCanvasProps) {
   );
 }
 
-// src/components/hero/orb/GlassOrb.tsx
+// src/components/three/orb/GlassOrb.tsx
 "use client";
 
 import React, { memo, useMemo, useRef } from "react";
@@ -272,7 +272,7 @@ function GlassOrbImpl({ modelUrl, procedural, meshName }: GlassOrbProps) {
 
   // IMPORTANTE: aqui é onde normalmente “some” se o path do GLB estiver errado (404).
   // Garanta que modelUrl exista em /public (ex.: /media/...) e o nome do mesh esteja correto.
-  const gltf = useGLTF(modelUrl ?? "/media/hero-orb.glb") as unknown as GLTFLike;
+  const gltf = useGLTF(modelUrl ?? "/media/torus_dan.glb") as unknown as GLTFLike;
 
   const pickedMesh = useMemo(() => {
     if (!gltf?.nodes) return null;
@@ -310,7 +310,7 @@ function GlassOrbImpl({ modelUrl, procedural, meshName }: GlassOrbProps) {
 export default memo(GlassOrbImpl);
 
 // Opcional: preload do asset (melhora tempo de pintura se o path estiver correto)
-// useGLTF.preload("/media/hero-orb.glb");
+// useGLTF.preload("/media/torus_dan.glb");
 
 
 // EXEMPLO DE USO (snippet) — NÃO altera seu texto do Hero, só adiciona a orb.
@@ -319,11 +319,11 @@ export default memo(GlassOrbImpl);
 "use client";
 
 import React from "react";
-import HeroOrb from "@/components/hero/HeroOrb";
+import HeroOrb from "@/components/three/HeroOrb";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[#f4f4f4] min-h-[100svh]">
+    <section className="relative overflow-hidden bg-[#f4f4f4] min-h-svh">
       <div className="mx-auto max-w-[1440px] px-6 lg:px-12 pt-24 lg:pt-28">
         <div className="relative grid items-center gap-10 lg:grid-cols-[1.1fr_.9fr]">
           <div className="relative z-10">
@@ -331,8 +331,8 @@ export default function Hero() {
           </div>
 
           <div className="relative z-0">
-            <div className="relative aspect-[16/12] w-full">
-              <HeroOrb modelUrl="/media/hero-orb.glb" />
+            <div className="relative aspect-16/12 w-full">
+              <HeroOrb modelUrl="/media/torus_dan.glb" />
             </div>
           </div>
         </div>
@@ -349,7 +349,7 @@ Crie os arquivos exatamente nestes caminhos:
 
 src/components/hero/HeroOrb.tsx
 
-src/components/hero/HeroOrbCanvas.tsx
+src/components/hero/HeroGlassCanvas.tsx
 
 src/components/hero/orb/GlassOrb.tsx
 

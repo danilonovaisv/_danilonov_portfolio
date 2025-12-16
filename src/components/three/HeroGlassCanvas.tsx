@@ -1,80 +1,89 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import {
-  Environment,
-  ContactShadows,
-  OrbitControls,
-  Html,
-} from '@react-three/drei';
-import { TorusDan } from './TorusDan';
+import { AdaptiveDpr, Environment, Preload } from '@react-three/drei';
+import GlassOrb from './orb/GlassOrb';
 
 type HeroGlassCanvasProps = {
-  className?: string;
-  /**
-   * transmission → MeshTransmissionMaterial
-   * refraction   → MeshRefractionMaterial
-   */
-  variant?: 'transmission' | 'refraction';
-  /** 0–1, usado para intensificar a animação com o scroll */
-  scrollIntensity?: number;
+  modelUrl: string;
 };
 
-export default function HeroGlassCanvas({
-  className,
-  variant = 'transmission',
-  scrollIntensity = 0,
-}: HeroGlassCanvasProps) {
+class OrbErrorBoundary extends React.Component<
+  React.PropsWithChildren<{ fallback: React.ReactNode }>,
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch() {
+    // Mantido propositalmente silencioso para não “derrubar” a Hero.
+    // Se quiser, você pode logar para Sentry aqui.
+  }
+
+  render() {
+    if (this.state.hasError) return this.props.fallback;
+    return this.props.children;
+  }
+}
+
+function OrbFallback() {
   return (
-    <div
-      className={`relative h-full w-full ${className ?? ''}`}
-      aria-hidden="true"
+    <group>
+      <ambientLight intensity={0.6} />
+      <directionalLight intensity={1.4} position={[2, 2, 3]} />
+      <GlassOrb procedural />
+      <Environment preset="city" />
+    </group>
+  );
+}
+
+export default function HeroGlassCanvas({ modelUrl }: HeroGlassCanvasProps) {
+  // DPR adaptativo simples (boa relação qualidade/perf em mobile)
+  const [dpr, setDpr] = useState<[number, number]>([1, 1.75]);
+
+  const camera = useMemo(
+    () => ({
+      position: [0, 0, 3.2] as [number, number, number],
+      fov: 35,
+      near: 0.1,
+      far: 100,
+    }),
+    []
+  );
+
+  return (
+    <Canvas
+      className="h-full w-full"
+      camera={camera}
+      dpr={dpr}
+      gl={{
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+      }}
+      // Para a orb animar continuamente (rotações/distortion temporal)
+      frameloop="always"
     >
-      <Canvas
-        dpr={[1, 1.7]}
-        gl={{ antialias: true, alpha: true }}
-        camera={{ position: [0, 0, 5.5], fov: 35 }}
-      >
-        {/* Fundo neutro (aproxima do bg do hero) */}
-        <color attach="background" args={['#F4F5F7']} />
+      <color attach="background" args={['#00000000']} />
 
-        <Suspense
-          fallback={
-            <Html center>
-              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-blue-400/40 to-indigo-500/40 blur-xl" />
-            </Html>
-          }
-        >
-          {/* Luzes principais */}
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[5, 5, 5]} intensity={1.8} castShadow />
-          <directionalLight position={[-6, -4, -4]} intensity={0.5} />
+      <AdaptiveDpr pixelated />
 
-          {/* Environment para reflexos/refração */}
-          <Environment preset="city" resolution={1024} />
+      <ambientLight intensity={0.35} />
+      <directionalLight intensity={2} position={[0, 2, 3]} />
+      <directionalLight intensity={1} position={[-2, -1, 2]} />
 
-          {/* Orb 3D */}
-          <TorusDan variant={variant} scrollIntensity={scrollIntensity} />
+      <Environment preset="city" />
 
-          {/* Sombra macia abaixo da orb */}
-          <ContactShadows
-            position={[0, -1.4, 0]}
-            opacity={0.35}
-            blur={2.5}
-            scale={8}
-            far={4}
-          />
+      <OrbErrorBoundary fallback={<OrbFallback />}>
+        <Suspense fallback={<OrbFallback />}>
+          <GlassOrb modelUrl={modelUrl} />
+          <Preload all />
         </Suspense>
-
-        {/* Controles opcionais – desabilitamos zoom/pan
-            para manter o layout consistente */}
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          enableRotate={true}
-        />
-      </Canvas>
-    </div>
+      </OrbErrorBoundary>
+    </Canvas>
   );
 }

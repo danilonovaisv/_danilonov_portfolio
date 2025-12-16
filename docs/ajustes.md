@@ -138,8 +138,8 @@ A base estrutural está sólida e a comunicação visual é coerente com o mock.
     - `ContactSection.tsx`
     - `SiteFooter.tsx`
 - **3D**:
-  - Cadeia clara: `Hero` → `HeroGlassCanvas` → `TorusDan` / `GlassOrb` → GLB em `public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`.
-  - Carregamento de GLB via `useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb')`.
+  - Cadeia clara: `Hero` → `HeroGlassCanvas` → `TorusDan` / `GlassOrb` → GLB em `public/media//media/torus_dan.glb`.
+  - Carregamento de GLB via `useGLTF('/media//media/torus_dan.glb')`.
 - **Conteúdo**:
   - Conteúdos globais (links, slugs, labels, URLs de mídia) preferencialmente centralizados em objeto `HOMEPAGE_CONTENT` ou similar.
 
@@ -166,7 +166,7 @@ A base estrutural está sólida e a comunicação visual é coerente com o mock.
   - Título: `Design, não é só estética.`
   - Subtítulo: `[É intenção, é estratégia, é experiência.]`
   - CTA label: `get to know me better →` → `/sobre`
-  - Modelo 3D: `/media/abstract_element.glb` ou `/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`
+  - Modelo 3D: `/media/abstract_element.glb` ou `/media//media/torus_dan.glb`
 - **Layout esperado**:
   - Seção com altura ≈ `200vh`, `bg-[#F4F5F7]`.
   - Container interno sticky: `sticky top-0 min-h-screen`.
@@ -603,7 +603,7 @@ export function HeroSection() {
 }
 6.3 Cadeia Hero → HeroGlassCanvas → GLB (gltfjsx)
 # gerar componente jsx/tSX a partir do GLB
-npx gltfjsx public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb --transform
+npx gltfjsx public/media//media/torus_dan.glb --transform
 // components/TorusDan.tsx
 'use client'
 
@@ -617,7 +617,7 @@ type GLTFResult = {
 } & THREE.Group
 
 export function TorusDan(props: JSX.IntrinsicElements['group']) {
-  const { nodes } = useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb') as unknown as GLTFResult
+  const { nodes } = useGLTF('/media//media/torus_dan.glb') as unknown as GLTFResult
 
   return (
     <group {...props} dispose={null}>
@@ -640,7 +640,7 @@ export function TorusDan(props: JSX.IntrinsicElements['group']) {
   )
 }
 
-useGLTF.preload('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb')
+useGLTF.preload('/media//media/torus_dan.glb')
 6.4 Prefers-reduced-motion global
 import { useReducedMotion } from 'framer-motion'
 

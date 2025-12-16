@@ -105,10 +105,7 @@ const Hero = () => {
     offset: ['start start', 'end end'],
   });
 
-  // valor numérico de scroll para passar ao R3F (orb reage a scroll)
-  const [scrollIntensity, setScrollIntensity] = useState(0);
-
-  // controla áudio do vídeo + envia scroll pro estado (orb)
+  // controla áudio do vídeo
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (videoRef.current) {
       if (latest > 0.01 && latest < 0.9) {
@@ -117,9 +114,6 @@ const Hero = () => {
         videoRef.current.muted = true;
       }
     }
-
-    // clamp simples (0–1) para usar na orb
-    setScrollIntensity(Math.max(0, Math.min(1, latest)));
   });
 
   // animações de scroll do conteúdo
@@ -149,10 +143,7 @@ const Hero = () => {
         {/* Orb 3D mobile */}
         <div className="relative w-full flex justify-center -mb-8">
           <div className="relative h-[280px] w-[280px]">
-            <HeroGlassCanvas
-              variant="transmission"
-              scrollIntensity={scrollIntensity}
-            />
+            <HeroGlassCanvas modelUrl="/media/torus_dan.glb" />
           </div>
         </div>
 
@@ -232,10 +223,7 @@ const Hero = () => {
           }}
           className="pointer-events-none absolute inset-0 z-[-1]"
         >
-          <HeroGlassCanvas
-            variant="refraction" // aqui usamos a variante MeshRefractionMaterial
-            scrollIntensity={scrollIntensity}
-          />
+          <HeroGlassCanvas modelUrl="/media/torus_dan.glb" />
         </motion.div>
 
         {/* 2. TEXTOS + CTA */}

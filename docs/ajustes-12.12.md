@@ -245,7 +245,7 @@ Usar o código selecionado no editor (ex.: `components/Hero.tsx`, `components/He
   - `Canvas` com `dpr={[1, 1.5]}` e `eventSource={document.body}`.
   - Tiering mobile: reduzir `samples/resolution` do vidro.
   - `Environment preset="city"` para highlights no vidro.
-  - Validar path do GLB: preferir `/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`.
+  - Validar path do GLB: preferir `/media//media/torus_dan.glb`.
 
 > Atenção: há um exemplo de GLB carregando via `useGLTF("/medias/torrus.glb")`  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6MX0"} — conferir se no projeto existe divergência entre `/media` e `/medias` e corrigir para o path real do asset.
 
@@ -256,7 +256,7 @@ import { Environment, MeshTransmissionMaterial, useGLTF } from "@react-three/dre
 import { Suspense, useMemo } from "react";
 
 function GlassModel() {
-  const { nodes } = useGLTF("/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb");
+  const { nodes } = useGLTF("/media//media/torus_dan.glb");
   const mat = useMemo(
     () => ({
       transmission: 1,
@@ -297,7 +297,7 @@ export function HeroGlassCanvas() {
 }
 
 // opcional: preload para reduzir pop-in
-useGLTF.preload("/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb");
+useGLTF.preload("/media//media/torus_dan.glb");
 ~~~~
 
 > Dica: `useGLTF.preload(...)` é um padrão recomendado para reduzir tempo de resposta/percepção de loading  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6Mn0"}.
@@ -526,7 +526,7 @@ Usar arquivo selecionado (ex.: `components/Footer.tsx`).
 ### PROMPT (INFOS AGENT)
 **Objetivo:**  
 Validar e corrigir a integração de arquivos do Hero 3D, garantindo a cadeia:
-`Hero.tsx` → `HeroGlassCanvas.tsx` → `GlassOrb/Orb` → `useGLTF("/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb")`.
+`Hero.tsx` → `HeroGlassCanvas.tsx` → `GlassOrb/Orb` → `useGLTF("/media//media/torus_dan.glb")`.
 
 **Código:**  
 Abrir e auditar os arquivos reais que compõem a Hero 3D.
@@ -545,7 +545,7 @@ Abrir e auditar os arquivos reais que compõem a Hero 3D.
 - Implementar `prefers-reduced-motion`:
   - parar rotação contínua e parallax.
 - Preload:
-  - `useGLTF.preload("/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb")` (padrão recomendado)  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6NX0"}.
+  - `useGLTF.preload("/media//media/torus_dan.glb")` (padrão recomendado)  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6NX0"}.
 
 ---
 
@@ -556,7 +556,7 @@ O executor deve usar **HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg** como referência ab
 
 Como usar este componente:
 
-Garanta que o GLB esteja em public/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
+Garanta que o GLB esteja em public/models//media/torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
 ‌
 .
  Ajuste o projeto utilizando as etapas essenciais para execução:
@@ -790,7 +790,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
   })
 
   // GLB (não altera o conteúdo textual do site; é apenas o asset 3D)
-  const gltf = useGLTF('/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb') as any
+  const gltf = useGLTF('/models//media/torus_dan.glb') as any
 
   const geometry = useMemo(() => {
     const scene: THREE.Object3D | undefined = gltf?.scene
@@ -887,7 +887,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
   )
 }
 
-useGLTF.preload('/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb')
+useGLTF.preload('/models//media/torus_dan.glb')
 
 // FILE: src/components/home/Hero.tsx
 'use client'

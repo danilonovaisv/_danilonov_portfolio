@@ -2,6 +2,7 @@
 
 import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 import { Mesh } from 'three';
 import {
   MeshTransmissionMaterial,
@@ -40,7 +41,7 @@ export function TorusDan({
   }, [nodes]);
 
   // Carrega o environment map explicitamente para garantir que o material tenha acesso. 319b3
-  const envMap = useEnvironment({ preset: 'city', resolution: 1024 });
+  const envMap = useEnvironment({ preset: 'city' });
 
   // animação contínua + leve resposta ao scroll
   useFrame((state, delta) => {
@@ -60,15 +61,14 @@ export function TorusDan({
   if (!geometry) return null;
 
   return (
-    <group position={[0.5, 0.2, 0]} scale={50}>
+    <group position={[0.5, 0.2, 0]} scale={1.2}>
       <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
         {variant === 'refraction' ? (
           // Variante inspirada na doc de MeshRefractionMaterial
           <MeshRefractionMaterial
             envMap={envMap}
-            envMapIntensity={1.2}
             aberrationStrength={0.02}
-            color="#ffffffff"
+            color="#ffffff"
             ior={2.1}
             fresnel={1}
             bounces={2}

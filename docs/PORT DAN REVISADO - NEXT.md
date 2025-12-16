@@ -39,7 +39,7 @@
 - CTA label: `get to know me better →`
 - CTA target ID secundário (scroll): `#manifesto`
 - Model 3D path: `/media/abstract_element.glb` (ou
-`/public/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`)
+`/public/models//media/torus_dan.glb`)
 - **Manifesto (Vídeo)**
 - Vídeo URL:
 `https://aymuvxysygrwoicsjgxj.supabase
@@ -412,7 +412,7 @@ em ~0.6s, easing suave.
 
 **IMAGERY (what to show: photos, illustrations, icons, logos):**
 
-* Modelo 3D `/public/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`.
+* Modelo 3D `/public/models//media/torus_dan.glb`.
 * Thumb do vídeo manifesto (frame do próprio vídeo, sem overlay).
 
 ---
@@ -1461,12 +1461,12 @@ mouse, inputs).
 • carrega geometria, texturas, animações e hierarquias em um único arquivo
 binário.
 • Porém, carregar apenas com:
-const { scene } = useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb');
+const { scene } = useGLTF('/media//media/torus_dan.glb');
 <primitive object={scene} />
 dificulta customizar materiais em nível de mesh.
 3.2. Ferramenta gltfjsx
 • gltfjsx percorre o GLB e gera um componente React:
-npx gltfjsx public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb --transform
+npx gltfjsx public/media//media/torus_dan.glb --transform
 • Saída (simplificada):
 import { useGLTF } from '@react-three/drei';
 export function TorusDan(props: JSX.IntrinsicElements['group']) {
@@ -1581,7 +1581,7 @@ delta
 • @react-three/drei
 • framer-motion
 2. Ativo 3D
-• Salvar https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb em public/media.
+• Salvar /media/torus_dan.glb em public/media.
 • Rodar gltfjsx com --transform.
 3. Cena Principal
 • Criar componente HeroGlassScene.tsx com <Canvas> + <Environment> +
@@ -1658,6 +1658,6 @@ delta
 });
 ⸻
 9.2. Caminho do Arquivo GLB
-• Arquivo físico: public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb
+• Arquivo físico: public/media//media/torus_dan.glb
 • Caminho de carregamento em R3F:
-useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb');
+useGLTF('/media//media/torus_dan.glb');

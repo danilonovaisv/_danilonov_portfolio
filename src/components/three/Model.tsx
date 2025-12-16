@@ -37,9 +37,7 @@ type InstancesProps = {
 } & Omit<ComponentProps<typeof Merged>, 'children' | 'meshes'>;
 
 export function Instances({ children, ...props }: InstancesProps) {
-  const gltf = useGLTF(
-    '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb'
-  ) as unknown as GLTFResult;
+  const gltf = useGLTF('/torus_dan.glb') as unknown as GLTFResult;
   const { nodes } = gltf;
   const meshes = useMemo(
     () => ({
@@ -89,6 +87,4 @@ export function Model(props: GroupProps) {
   );
 }
 
-useGLTF.preload(
-  '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb'
-);
+useGLTF.preload('/torus_dan.glb');
