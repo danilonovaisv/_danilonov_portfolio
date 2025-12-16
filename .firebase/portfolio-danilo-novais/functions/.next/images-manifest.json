@@ -20,9 +20,9 @@
       256,
       384
     ],
-    "path": "/_next/image",
-    "loader": "default",
-    "loaderFile": "",
+    "path": "/_next/image/",
+    "loader": "custom",
+    "loaderFile": "/Users/danilonovais/_danilonov_portfolio/src/lib/supabase/image-loader.ts",
     "domains": [],
     "disableStaticImages": false,
     "minimumCacheTTL": 14400,
@@ -49,9 +49,9 @@
       },
       {
         "protocol": "https",
-        "hostname": "^(?:^(?:formsubmit\\.co)$)$",
+        "hostname": "^(?:^(?:aymuvxysygrwoicsjgxj\\.supabase\\.co)$)$",
         "port": "",
-        "pathname": "^(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?))$"
+        "pathname": "^(?:\\/storage\\/v1\\/render\\/image\\/public(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$"
       }
     ],
     "qualities": [

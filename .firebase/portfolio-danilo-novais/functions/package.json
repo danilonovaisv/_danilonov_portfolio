@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@dataconnect/admin-generated": "file:dataconnect-admin-generated-0.0.1.tgz",
-    "@dataconnect/generated": "file:src/dataconnect-generated",
+    "@dataconnect/generated": "file:dataconnect-generated-1.0.0.tgz",
     "@genkit-ai/firebase": "^1.26.0",
     "@genkit-ai/google-genai": "^1.26.0",
     "@hookform/resolvers": "^5.2.2",

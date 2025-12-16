@@ -401,7 +401,7 @@ function buildMosaicRows(category) {
 }
 async function PortfolioPage(props) {
     const searchParams = await props.searchParams;
-    let category = searchParams.category;
+    let { category } = searchParams;
     // Handle case where category might be an array
     if (Array.isArray(category)) {
         category = category[0] || 'all';
