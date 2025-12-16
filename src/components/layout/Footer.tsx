@@ -7,8 +7,7 @@ const Footer: React.FC = () => {
       <div className="container mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left text-sm text-white">
           <p>
-            © {new Date().getFullYear()} Danilo Novais Vilela. Todos os direitos
-            reservados.
+            © 2025 Danilo Novais Vilela — todos os direitos reservados.
           </p>
         </div>
 
