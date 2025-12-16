@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { motion, type Variants, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { FEATURED_PROJECTS } from '@/lib/constants';
+import { Button } from '@/components/ui/Button';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const containerVariants: Variants = {
@@ -44,7 +45,13 @@ const FeaturedProjects: React.FC = () => {
 
   const cardAspectClass = 'aspect-[4/3] sm:aspect-[3/2] md:aspect-[16/9]';
 
-  const ProjectCard = ({ project }: { project: Project }) => {
+  const ProjectCard = ({
+    project,
+    className,
+  }: {
+    project: Project;
+    className?: string;
+  }) => {
     const tags = useMemo(() => {
       const items: string[] = [];
       if (project.category) items.push(project.category);
@@ -70,7 +77,9 @@ const FeaturedProjects: React.FC = () => {
         className="group relative flex w-full flex-col gap-4 outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7]"
       >
         <div
-          className={`relative w-full overflow-hidden rounded-[8px] bg-[#0f0f11] ${cardAspectClass}`}
+          className={`relative w-full overflow-hidden rounded-[8px] bg-[#0f0f11] ${
+            className || cardAspectClass
+          }`}
         >
           <motion.div
             className="absolute inset-0"
@@ -151,19 +160,24 @@ const FeaturedProjects: React.FC = () => {
   return (
     <section
       id="featured-projects"
-      className="relative w-full bg-[#F4F5F7] text-[#0b0b0b] py-16 md:py-24"
+      className="relative w-full bg-[#F4F5F7] text-[#0b0b0b] py-24 md:py-32"
     >
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        className="mx-auto flex max-w-6xl flex-col gap-12 px-6 md:px-10"
+        className="container mx-auto flex flex-col gap-16 px-6 md:px-12"
       >
         {/* Primeira linha: dois cards verticais alinhados pela base */}
-        <div className="grid grid-cols-1 items-end gap-8 md:grid-cols-5">
+        <div className="grid grid-cols-1 items-end gap-x-12 gap-y-16 md:grid-cols-5">
           <div className="md:col-span-2">
-            {card1 && <ProjectCard project={card1} />}
+            {card1 && (
+              <ProjectCard
+                project={card1}
+                className="aspect-[4/3] sm:aspect-[3/2] md:aspect-[4/5]"
+              />
+            )}
           </div>
           <div className="md:col-span-3">
             {card2 && <ProjectCard project={card2} />}
@@ -171,7 +185,14 @@ const FeaturedProjects: React.FC = () => {
         </div>
 
         {/* Segunda linha: card horizontal full width */}
-        <div className="w-full">{card3 && <ProjectCard project={card3} />}</div>
+        <div className="w-full">
+          {card3 && (
+            <ProjectCard
+              project={card3}
+              className="aspect-[4/3] sm:aspect-[3/2] md:aspect-[21/9]"
+            />
+          )}
+        </div>
 
         {/* Terceira linha: card + CTA lateral */}
         <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-5">
@@ -184,31 +205,15 @@ const FeaturedProjects: React.FC = () => {
               <br />
               you see?
             </h3>
-            <motion.a
+            <Button
               href="/portfolio"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: '0 14px 36px -18px rgba(0,87,255,0.6)',
-              }}
-              whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center gap-3 rounded-full bg-[#0057FF] px-6 py-3 text-white text-sm font-semibold shadow-lg shadow-[#0057FF]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF]"
+              className="group rounded-full shadow-lg shadow-[#0057FF]/25 focus-visible:ring-offset-[#F4F5F7] px-6 py-3 h-auto"
             >
               view projects
-              <motion.span
-                variants={{
-                  hover: { x: 6, rotate: 15 },
-                  tap: { x: 2 },
-                  initial: { x: 0, rotate: 0 },
-                }}
-                initial="initial"
-                animate="initial"
-                whileHover="hover"
-                whileTap="tap"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 transition-colors duration-300 group-hover:bg-white/80"
-              >
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 transition-colors duration-300 group-hover:bg-white/80 ml-2">
                 <ArrowUpRight className="h-4 w-4 text-white" />
-              </motion.span>
-            </motion.a>
+              </span>
+            </Button>
           </div>
         </div>
       </motion.div>

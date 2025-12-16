@@ -4,6 +4,7 @@ import React, { FC, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ProjectCategory } from '@/lib/types';
@@ -357,17 +358,17 @@ const PortfolioShowcaseSection: FC = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <motion.a
+                      <Button
                         href={`/portfolio?category=${category.id}`}
+                        variant="link"
+                        className="justify-start gap-3 text-base md:text-lg pl-0 h-auto"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        whileHover={{ x: 5 }}
-                        className="inline-flex items-center gap-3 text-[#0057FF] font-bold text-base md:text-lg hover:underline underline-offset-4 decoration-2"
                       >
                         Ver todos os projetos
                         <ArrowUpRight className="w-5 h-5" />
-                      </motion.a>
+                      </Button>
                     </div>
                   </div>
                 </motion.div>
@@ -423,11 +424,10 @@ const PortfolioShowcaseSection: FC = () => {
             variants={fadeInUp}
             className="mt-24 md:mt-32 flex justify-center w-full"
           >
-            <motion.a
+            <Button
               href="/#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 md:px-12 md:py-6 text-white shadow-xl hover:shadow-[#0057FF]/40 transition-all duration-300"
+              size="xl"
+              className="group rounded-full shadow-xl hover:shadow-[#0057FF]/40 gap-4"
             >
               <span className="text-lg md:text-xl font-semibold tracking-wide">
                 let’s build something great
@@ -435,7 +435,7 @@ const PortfolioShowcaseSection: FC = () => {
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 group-hover:bg-white text-[#0057FF] transition-colors duration-300">
                 <ArrowUpRight className="w-4 h-4 text-white group-hover:text-[#0057FF]" />
               </span>
-            </motion.a>
+            </Button>
           </motion.div>
         )}
 
@@ -447,15 +447,17 @@ const PortfolioShowcaseSection: FC = () => {
             transition={{ delay: 0.3 }}
             className="mt-16 flex justify-start border-t border-neutral-200 pt-8"
           >
-            <button
+            <Button
               onClick={() => setExpandedId(null)}
-              className="text-gray-500 hover:text-[#0057FF] text-sm tracking-widest uppercase font-bold flex items-center gap-3 group"
+              variant="ghost"
+              size="sm"
+              className="text-gray-500 hover:text-[#0057FF] hover:bg-transparent tracking-widest uppercase font-bold gap-3 group pl-0"
             >
               <span className="group-hover:-translate-x-1 transition-transform">
                 ←
               </span>{' '}
               Voltar para a lista
-            </button>
+            </Button>
           </motion.div>
         )}
       </div>

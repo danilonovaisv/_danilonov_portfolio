@@ -26,16 +26,115 @@ type HeroGlassCanvasProps = {
   scale?: number;
 };
 
-// ... (ProgressObserver definition remains unchanged)
+type ProgressObserverProps = {
+  onProgress: (_value: number) => void;
+};
+
+const ProgressObserver: React.FC<ProgressObserverProps> = ({ onProgress }) => {
+  const { progress } = useProgress();
+
+  useEffect(() => {
+    onProgress(progress);
+  }, [progress, onProgress]);
+
+  return null;
+};
 
 const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   className,
   reduceMotion = false,
   scale = 3.2,
 }) => {
-  // ... (hooks remain unchanged)
+  const [mounted, setMounted] = useState(false);
+  const [eventSource, setEventSource] = useState<HTMLElement | undefined>();
+  const [preloaderProgress, setPreloaderProgress] = useState(0);
+  const [overlayUnmounted, setOverlayUnmounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceMotion = reduceMotion || prefersReducedMotion;
+  const handleProgressUpdate = useCallback((value: number) => {
+    setPreloaderProgress(value);
+  }, []);
 
-  // ...
+  const devicePixelRatio: [number, number] = isMobile ? [0.85, 1.1] : [1, 1.6];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || typeof document === 'undefined') return;
+    const heroElement = document.getElementById('hero');
+    if (heroElement) {
+      setEventSource(heroElement);
+    } else if (containerRef.current) {
+      setEventSource(containerRef.current);
+    } else {
+      setEventSource(document.body);
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (preloaderProgress >= 100) {
+      const timer = setTimeout(() => setOverlayUnmounted(true), 600);
+      return () => clearTimeout(timer);
+    }
+    setOverlayUnmounted(false);
+    return undefined;
+  }, [preloaderProgress]);
+
+  const containerClassName = `relative flex h-full w-full items-center justify-center pointer-events-none ${className ?? ''}`;
+
+  if (!mounted) {
+    return (
+      <div className={containerClassName}>
+        <div className="absolute inset-0 bg-transparent" />
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className={containerClassName}>
+      <Suspense
+        fallback={
+          <div className="absolute inset-0 flex items-center justify-center text-sm text-white/70 bg-transparent">
+            Carregando orb 3D...
+          </div>
+        }
+      >
+        <Canvas
+          frameloop={shouldReduceMotion ? 'demand' : 'always'}
+          dpr={devicePixelRatio}
+          gl={{
+            alpha: true,
+            antialias: !shouldReduceMotion && !isMobile,
+            powerPreference: 'high-performance',
+            toneMappingExposure: 1.05,
+          }}
+          camera={{ position: [0, 0, 3.5], fov: 42 }}
+          eventSource={eventSource}
+          eventPrefix="client"
+        >
+          <ProgressObserver onProgress={handleProgressUpdate} />
+          <PerspectiveCamera makeDefault position={[0, 0, 3.5]} fov={42} />
+
+          {/* Lights designed to enhance glass reflection/refraction */}
+          {/* @ts-ignore */}
+          <ambientLight intensity={0.42} />
+          {/* @ts-ignore */}
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.18}
+            penumbra={1}
+            intensity={0.85}
+          />
+          {/* @ts-ignore */}
+          <pointLight
+            position={[-10, -10, -10]}
+            intensity={0.8}
+            color="#0057FF"
+          />
 
           <Suspense
             fallback={
@@ -49,13 +148,11 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
               </mesh>
             }
           >
-            <TorusDan 
-              reduceMotion={shouldReduceMotion} 
-              isMobile={isMobile} 
-              scale={scale} 
+            <TorusDan
+              reduceMotion={shouldReduceMotion}
+              isMobile={isMobile}
+              scale={scale}
             />
-
-            {/* Environment for realistic reflections */}
 
             {/* Environment for realistic reflections */}
             <Environment preset="city" background={false} blur={0.9}>

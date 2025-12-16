@@ -12,6 +12,7 @@ import type { Variants } from 'framer-motion';
 import { ASSETS } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
+import { Button } from '@/components/ui/Button';
 
 // Dynamically import the 3D component with SSR disabled
 const HeroGlassCanvas = dynamic(
@@ -135,7 +136,7 @@ const Hero = () => {
       <div className="md:hidden flex flex-col items-center text-center px-6 pt-24 pb-16 gap-10">
         {/* 3D Element - Increased Presence */}
         <div className="relative w-[85vw] h-[85vw] max-w-[360px] max-h-[360px] -mt-8">
-          <HeroGlassCanvas />
+          <HeroGlassCanvas scale={2.4} />
         </div>
 
         {/* Text Content */}
@@ -178,140 +179,164 @@ const Hero = () => {
         </div>
 
         {/* CTA */}
-        <motion.a
+        <Button
           href="/sobre"
+          size="lg"
+          className="group w-full md:w-auto shadow-[0_10px_24px_-12px_rgba(0,87,255,0.6)]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0057FF] px-10 py-5 text-base font-semibold text-white shadow-[0_10px_24px_-12px_rgba(0,87,255,0.6)] transition-all active:scale-95"
         >
           get to know me better
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </motion.a>
+        </Button>
 
         {/* Video Thumb (Mobile Bottom) */}
         <div className="w-full mt-8 rounded-2xl overflow-hidden shadow-2xl aspect-video relative">
           <video
-             src={ASSETS.videoManifesto}
-             autoPlay
-             muted
-             loop
-             playsInline
-             className="w-full h-full object-cover"
+            src={ASSETS.videoManifesto}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
           />
         </div>
       </div>
 
       {/* --- DESKTOP LAYOUT (md+) --- */}
       <div className="hidden md:block sticky top-0 h-screen w-full overflow-hidden">
-         {/* Container Grid */}
-         <div className="container mx-auto h-full grid grid-cols-12 px-6 lg:px-12 gap-8 items-center">
+        {/* Container Grid */}
+        <div className="container mx-auto h-full grid grid-cols-12 px-6 lg:px-12 gap-8 items-center">
+          {/* LEFT COLUMN: TEXT CONTENT (Span 7) */}
+          <motion.div
+            style={{ opacity: contentOpacity, y: contentY }}
+            className="col-span-12 lg:col-span-7 flex flex-col items-start justify-center relative z-20 pl-4 lg:pl-12"
+          >
+            {/* Headline */}
+            <div className="flex flex-col items-start font-extrabold tracking-[-0.04em] text-[clamp(3.5rem,5.5vw,7.5rem)] leading-[0.95] mb-8 lg:mb-12">
+              <AnimatedTextLine
+                text="Design,"
+                delay={0.2}
+                colorClass="text-[#0057FF]"
+              />
+              <AnimatedTextLine
+                text="não é só"
+                delay={0.35}
+                colorClass="text-[#111111]"
+              />
+              <AnimatedTextLine
+                text="estética."
+                delay={0.5}
+                colorClass="text-[#111111]"
+              />
+            </div>
 
-            {/* LEFT COLUMN: TEXT CONTENT (Span 7) */}
+            {/* Subtitle */}
             <motion.div
-               style={{ opacity: contentOpacity, y: contentY }}
-               className="col-span-12 lg:col-span-7 flex flex-col items-start justify-center relative z-20 pl-4 lg:pl-12"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="mb-12"
             >
-               {/* Headline */}
-               <div className="flex flex-col items-start font-extrabold tracking-[-0.04em] text-[clamp(3.5rem,5.5vw,7.5rem)] leading-[0.95] mb-8 lg:mb-12">
-                  <AnimatedTextLine
-                    text="Design,"
-                    delay={0.2}
-                    colorClass="text-[#0057FF]"
-                  />
-                  <AnimatedTextLine
-                    text="não é só"
-                    delay={0.35}
-                    colorClass="text-[#111111]"
-                  />
-                  <AnimatedTextLine
-                    text="estética."
-                    delay={0.5}
-                    colorClass="text-[#111111]"
-                  />
-               </div>
-
-               {/* Subtitle */}
-               <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-                  className="mb-12"
-               >
-                  <p className="text-[#0057FF] text-lg lg:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg inline-block">
-                    [ É intenção, é estratégia, é experiência. ]
-                  </p>
-               </motion.div>
-
-               {/* CTA */}
-               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 transition={{ duration: 0.8, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-               >
-                  <a
-                    href="/sobre"
-                    className="group bg-[#0057FF] text-white rounded-full pl-10 pr-8 py-5 flex items-center gap-4 font-semibold text-lg shadow-xl shadow-[#0057FF]/20 hover:shadow-[#0057FF]/40 hover:scale-105 transition-all duration-300"
-                  >
-                    get to know me better
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors">
-                      <ArrowRight className="w-5 h-5 text-white" />
-                    </span>
-                  </a>
-               </motion.div>
+              <p className="text-[#0057FF] text-lg lg:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg inline-block">
+                [ É intenção, é estratégia, é experiência. ]
+              </p>
             </motion.div>
 
-            {/* RIGHT COLUMN: VISUALS (Span 5) */}
-            <div className="col-span-12 lg:col-span-5 relative h-full flex items-center justify-center lg:justify-end z-10">
-               {/* 3D Orb - Floating/Parallax */}
-               <motion.div
-                  style={{ y: orbY, scale: orbScale }}
-                  className="absolute inset-0 lg:right-[-10%] lg:w-[120%] lg:h-full pointer-events-none"
-               >
-                  <HeroGlassCanvas />
-               </motion.div>
+            {/* CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.8,
+                delay: 0.9,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <Button
+                href="/sobre"
+                size="lg"
+                className="group pl-10 pr-8 py-6 h-auto text-lg shadow-xl shadow-[#0057FF]/20 hover:shadow-[#0057FF]/40"
+              >
+                get to know me better
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors ml-2">
+                  <ArrowRight className="w-5 h-5 text-white" />
+                </span>
+              </Button>
+            </motion.div>
+          </motion.div>
 
-               {/* Video Thumb - Floating with offset */}
-               <motion.div
-                  initial={{ opacity: 0, scale: 0.8, x: 50 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  transition={{ duration: 1.0, delay: 1.2, ease: "easeOut" }}
-                  style={{ y: thumbY, scale: thumbScale }}
-                  className="relative z-20 w-[280px] lg:w-[320px] aspect-[9/16] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 translate-y-24 lg:translate-y-32 lg:translate-x-12 backdrop-blur-md"
-               >
-                  <video
-                    ref={videoRef}
-                    src={ASSETS.videoManifesto}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
-                  />
-                  {/* Brand Tag on Thumb */}
-                  <div className="absolute bottom-6 left-6 right-6">
-                     <span className="text-[10px] uppercase tracking-[0.3em] text-white/80 font-bold block mb-1">
-                        Showcase
-                     </span>
-                     <span className="text-white text-sm font-medium leading-tight block">
-                        Visual Manifesto
-                     </span>
-                  </div>
-               </motion.div>
+          {/* RIGHT COLUMN: VISUALS (Span 5) */}
+          <div className="col-span-12 lg:col-span-5 relative h-full flex items-center justify-center lg:justify-end z-10">
+            {/* 3D Orb - Floating/Parallax */}
+            <motion.div
+              style={{ y: orbY, scale: orbScale }}
+              className="absolute inset-0 lg:right-[-10%] lg:w-[120%] lg:h-full pointer-events-none"
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 1.2,
+                  delay: 0.2,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="w-full h-full"
+              >
+                <HeroGlassCanvas scale={3.5} />
+              </motion.div>
+            </motion.div>
 
-               {/* Brand Awareness Tag (Floating) */}
-               <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.4, duration: 0.8 }}
-                  className="absolute top-1/4 right-0 lg:-right-8 hidden lg:block"
-               >
-                 <span className="text-[#0057FF]/40 font-bold tracking-widest text-sm writing-mode-vertical rotate-180">
-                   [ BRAND AWARENESS ]
-                 </span>
-               </motion.div>
-            </div>
-         </div>
+            {/* Video Thumb - Floating with offset */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 50 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{
+                duration: 1.0,
+                delay: 1.1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{ y: thumbY, scale: thumbScale }}
+              className="relative z-20 w-[280px] lg:w-[320px] aspect-[9/16] lg:aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 translate-y-24 lg:translate-y-32 lg:translate-x-12 backdrop-blur-md"
+            >
+              <video
+                ref={videoRef}
+                src={ASSETS.videoManifesto}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
+              />
+              {/* Brand Tag on Thumb */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-white/80 font-bold block mb-1">
+                  Showcase
+                </span>
+                <span className="text-white text-sm font-medium leading-tight block">
+                  Visual Manifesto
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Brand Awareness Tag (Floating) */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.4, duration: 0.8 }}
+              className="absolute top-1/4 right-0 lg:-right-8 hidden lg:block"
+            >
+              <span className="text-[#0057FF]/40 font-bold tracking-widest text-sm writing-mode-vertical rotate-180">
+                [ BRAND AWARENESS ]
+              </span>
+            </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
