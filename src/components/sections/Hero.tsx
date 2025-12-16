@@ -14,14 +14,15 @@ import { ASSETS } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
-// Dynamically import the 3D component with SSR disabled
+// ==== Dynamic 3D hero orb (R3F) ====
 const HeroGlassCanvas = dynamic(
   () => import('@/components/three/HeroGlassCanvas'),
   {
     ssr: false,
     loading: () => (
-      <div className="h-full w-full flex items-center justify-center">
-        <div className="h-[60vw] w-[60vw] max-w-[300px] max-h-[300px] rounded-full bg-gradient-to-br from-blue-400/30 to-indigo-600/30 blur-3xl animate-pulse" />
+      <div className="flex h-full w-full items-center justify-center">
+        {/* fallback suave, tipo glow da orb */}
+        <div className="h-[60vw] w-[60vw] max-h-[300px] max-w-[300px] rounded-full bg-gradient-to-br from-blue-400/30 to-indigo-600/30 blur-3xl animate-pulse" />
       </div>
     ),
   }
@@ -29,7 +30,8 @@ const HeroGlassCanvas = dynamic(
 
 const MotionLink = motion.create(Link);
 
-// Componente para animar texto letra por letra (efeito "digitação/reveal")
+// ========= AnimatedTextLine =========
+
 type AnimatedTextLineProps = {
   text: string;
   className?: string;
@@ -43,7 +45,6 @@ const AnimatedTextLine = ({
   delay = 0,
   colorClass = 'text-[#111111]',
 }: AnimatedTextLineProps) => {
-  // Separa o texto em caracteres
   const letters = text.split('');
 
   const container: Variants = {
@@ -51,7 +52,7 @@ const AnimatedTextLine = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.03, // Stagger mais rápido para fluxo contínuo
+        staggerChildren: 0.03,
         delayChildren: delay,
       },
     },
@@ -71,7 +72,7 @@ const AnimatedTextLine = ({
 
   return (
     <motion.div
-      className={`flex overflow-hidden ${className}`}
+      className={`flex overflow-hidden ${className ?? ''}`}
       variants={container}
       initial="hidden"
       whileInView="visible"
@@ -81,7 +82,7 @@ const AnimatedTextLine = ({
         <motion.span
           key={`${letter}-${index}`}
           variants={child}
-          className={`block ${colorClass} leading-[0.9]`}
+          className={`block leading-[0.9] ${colorClass}`}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </motion.span>
@@ -90,19 +91,24 @@ const AnimatedTextLine = ({
   );
 };
 
+// ============= Hero =============
+
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Controle de Scroll para a animação da timeline
+  // scroll progress para animações
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  // Monitora o progresso do scroll para controlar o áudio do vídeo
+  // valor numérico de scroll para passar ao R3F (orb reage a scroll)
+  const [scrollIntensity, setScrollIntensity] = useState(0);
+
+  // controla áudio do vídeo + envia scroll pro estado (orb)
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     if (videoRef.current) {
       if (latest > 0.01 && latest < 0.9) {
@@ -111,54 +117,46 @@ const Hero = () => {
         videoRef.current.muted = true;
       }
     }
+
+    // clamp simples (0–1) para usar na orb
+    setScrollIntensity(Math.max(0, Math.min(1, latest)));
   });
 
-  // Animações Scroll
+  // animações de scroll do conteúdo
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const contentScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
   const contentY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
 
-  // Animação específica para o Glass Orb (para framer-motion container)
+  // orb 3D (background)
   const glassOrbOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const glassOrbScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
 
-  // Video transitions
+  // vídeo manifesto (foreground)
   const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.25, 1]);
   const videoX = useTransform(scrollYProgress, [0, 0.25], ['35%', '0%']);
   const videoY = useTransform(scrollYProgress, [0, 0.25], ['30%', '0%']);
   const videoRadius = useTransform(scrollYProgress, [0, 0.2], [12, 0]);
-
-  // Intensidade da animação interna da ORB (usada dentro do Canvas)
-  const orbIntensityMotion = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [0.3, 1, 0.3]
-  );
-  const [orbIntensity, setOrbIntensity] = useState(1);
-
-  useMotionValueEvent(orbIntensityMotion, 'change', (latest) => {
-    if (!prefersReducedMotion) {
-      setOrbIntensity(latest);
-    }
-  });
 
   return (
     <section
       id="hero"
       ref={sectionRef}
       className="relative w-full bg-[#F4F5F7] md:h-[450vh]"
+      aria-labelledby="hero-heading"
     >
-      {/* Mobile layout */}
+      {/* ========== MOBILE HERO ========== */}
       <div className="md:hidden flex flex-col items-center text-center px-4 pt-16 pb-12 gap-8">
+        {/* Orb 3D mobile */}
         <div className="relative w-full flex justify-center -mb-8">
           <div className="relative h-[280px] w-[280px]">
             <HeroGlassCanvas
-              variant="transmission" // mude para "refraction" se quiser testar
-              scrollIntensity={1}
+              variant="transmission"
+              scrollIntensity={scrollIntensity}
             />
           </div>
         </div>
 
+        {/* Título mobile */}
         <div className="flex flex-col items-center gap-0 leading-[0.95] text-[2.75rem] sm:text-[3.5rem] font-extrabold tracking-[-0.04em] text-[#111111]">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -170,34 +168,47 @@ const Hero = () => {
               <span className="text-[#0057FF]">Design,</span>
               <span className="text-[#111111]">não é</span>
             </div>
-            <span className="text-[#111111]">só estética.</span>
+            <span id="hero-heading" className="text-[#111111]">
+              só estética.
+            </span>
           </motion.div>
         </div>
 
+        {/* Subtítulo mobile */}
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="text-[#0057FF] text-xs font-semibold tracking-widest uppercase mt-2"
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.2,
+          }}
+          className="mt-2 text-xs font-semibold uppercase tracking-widest text-[#0057FF]"
         >
           [ É intenção, é estratégia, é experiência. ]
         </motion.p>
 
+        {/* CTA mobile */}
         <MotionLink
           href="/sobre"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-          className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0057FF] px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgba(0,87,255,0.6)] transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 mt-2"
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.3,
+          }}
+          className="group mt-2 inline-flex items-center justify-center gap-3 rounded-full bg-[#0057FF] px-8 py-4 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgba(0,87,255,0.6)] transition-transform duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2"
         >
           get to know me better
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[#0057FF] shadow-sm transition-transform duration-300 group-hover:translate-x-0.5">
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="h-3.5 w-3.5" />
           </span>
         </MotionLink>
       </div>
 
-      <div className="md:hidden relative w-screen -mx-6 mt-8 aspect-375/330 min-h-[300px] overflow-hidden">
+      {/* Vídeo manifesto mobile */}
+      <div className="md:hidden relative -mx-6 mt-8 w-screen aspect-[375/330] min-h-[300px] overflow-hidden">
         <video
           src={ASSETS.videoManifesto}
           autoPlay
@@ -208,9 +219,9 @@ const Hero = () => {
         />
       </div>
 
-      {/* Container Sticky Desktop */}
-      <div className="hidden md:flex sticky top-0 h-screen w-full overflow-hidden items-center justify-center">
-        {/* 1. BACKGROUND AMBIENT 3D LAYER */}
+      {/* ========== DESKTOP HERO (sticky) ========== */}
+      <div className="hidden md:flex sticky top-0 h-screen w-full items-center justify-center overflow-hidden">
+        {/* 1. LAYER 3D (background orb) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -219,40 +230,43 @@ const Hero = () => {
             opacity: prefersReducedMotion ? 1 : glassOrbOpacity,
             scale: prefersReducedMotion ? 1 : glassOrbScale,
           }}
-          className="absolute inset-0 z-[-1] pointer-events-none"
+          className="pointer-events-none absolute inset-0 z-[-1]"
         >
           <HeroGlassCanvas
-            variant="transmission" // mude para "refraction" para usar MeshRefractionMaterial
-            scrollIntensity={prefersReducedMotion ? 0.7 : orbIntensity}
+            variant="refraction" // aqui usamos a variante MeshRefractionMaterial
+            scrollIntensity={scrollIntensity}
           />
         </motion.div>
 
-        {/* 2. TEXT CONTENT LAYER */}
+        {/* 2. TEXTOS + CTA */}
         <motion.div
           style={{
             opacity: prefersReducedMotion ? 1 : contentOpacity,
             scale: prefersReducedMotion ? 1 : contentScale,
             y: prefersReducedMotion ? 0 : contentY,
           }}
-          className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none flex"
+          className="pointer-events-none absolute inset-0 container mx-auto flex h-full px-6 md:px-12 lg:px-16"
         >
-          {/* TAG LATERAL: BRAND AWARENESS */}
+          {/* Label lateral BRAND AWARENESS */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 hidden md:block"
+            transition={{
+              delay: 0.8,
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="absolute right-6 top-1/2 hidden -translate-y-1/2 md:right-12 md:block"
           >
-            <span className="text-[#0057FF] font-medium tracking-widest text-lg md:text-xl">
+            <span className="text-lg font-medium tracking-widest text-[#0057FF] md:text-xl">
               [ BRAND AWARENESS ]
             </span>
           </motion.div>
 
-          <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left h-full pt-24 md:pt-0 max-w-4xl mx-auto md:mx-0 gap-6 md:gap-0">
-            {/* Título Principal */}
-            <div className="text-[clamp(3rem,7vw,7.5rem)] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-sans flex flex-col items-center md:items-start gap-1">
-              {/* Desktop: Animação Letra por Letra */}
-              <div className="hidden md:flex flex-col items-start gap-0">
+          <div className="mx-auto flex h-full max-w-4xl flex-col items-center gap-6 pt-24 text-center md:mx-0 md:items-start md:gap-0 md:pt-0 md:text-left">
+            {/* Título principal */}
+            <div className="mb-6 flex flex-col items-center gap-1 font-sans text-[clamp(3rem,7vw,7.5rem)] font-extrabold tracking-[-0.04em] md:mb-10 md:items-start">
+              <div className="hidden flex-col items-start gap-0 md:flex">
                 <AnimatedTextLine
                   text="Design,"
                   delay={0.2}
@@ -281,15 +295,15 @@ const Hero = () => {
                 ease: [0.22, 1, 0.36, 1],
                 delay: 0.8,
               }}
-              className="mb-10 md:mb-14 relative w-full flex justify-center md:justify-start"
+              className="relative mb-10 flex w-full justify-center md:mb-14 md:justify-start"
             >
-              <p className="text-[#0057FF] text-lg md:text-xl font-medium tracking-wide bg-white/5 backdrop-blur-sm rounded-lg pr-4 inline-block">
+              <p className="inline-block rounded-lg bg-white/5 px-0 pr-4 text-lg font-medium tracking-wide text-[#0057FF] backdrop-blur-sm md:text-xl">
                 [ É intenção, é estratégia, é experiência. ]
               </p>
             </motion.div>
 
-            {/* CTA Button */}
-            <motion.div className="pointer-events-auto w-full flex justify-center md:justify-start">
+            {/* CTA desktop */}
+            <motion.div className="pointer-events-auto flex w-full justify-center md:justify-start">
               <MotionLink
                 href="/sobre"
                 initial={{ opacity: 0, y: 20 }}
@@ -305,18 +319,18 @@ const Hero = () => {
                   boxShadow: '0 10px 30px -10px rgba(0, 87, 255, 0.5)',
                 }}
                 whileTap={{ scale: 0.98 }}
-                className="group bg-[#0057FF] text-white rounded-full pl-8 pr-6 py-4 flex items-center gap-3 font-semibold text-base md:text-lg shadow-xl shadow-[#0057FF]/20 transition-all"
+                className="group flex items-center gap-3 rounded-full bg-[#0057FF] px-8 py-4 text-base font-semibold text-white shadow-xl shadow-[#0057FF]/20 transition-all md:text-lg"
               >
                 get to know me better
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[#0057FF] shadow-sm transition-transform duration-300 group-hover:translate-x-0.5">
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </MotionLink>
             </motion.div>
           </div>
         </motion.div>
 
-        {/* 3. VIDEO LAYER (Foreground) */}
+        {/* 3. VÍDEO MANIFESTO (foreground) */}
         <motion.div
           style={{
             scale: prefersReducedMotion ? 1 : videoScale,
@@ -324,9 +338,9 @@ const Hero = () => {
             y: prefersReducedMotion ? '0%' : videoY,
             borderRadius: prefersReducedMotion ? 0 : videoRadius,
           }}
-          className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black pointer-events-none"
+          className="pointer-events-none absolute flex h-full w-full items-center justify-center overflow-hidden bg-black shadow-2xl"
         >
-          <div className="relative w-full h-full block group pointer-events-auto">
+          <div className="pointer-events-auto relative block h-full w-full">
             <video
               ref={videoRef}
               src={ASSETS.videoManifesto}
@@ -334,7 +348,7 @@ const Hero = () => {
               muted
               loop
               playsInline
-              className="w-full h-full object-cover transition-opacity duration-500"
+              className="h-full w-full object-cover transition-opacity duration-500"
             />
           </div>
         </motion.div>

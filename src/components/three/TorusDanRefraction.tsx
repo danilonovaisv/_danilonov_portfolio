@@ -18,8 +18,7 @@ type GLTFResult = {
   nodes: Record<string, THREE.Mesh>;
 };
 
-const MODEL_PATH =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb';
+const MODEL_PATH = '/media/torus_dan.glb';
 
 const TorusDanRefraction: React.FC<TorusDanRefractionProps> = ({
   scrollIntensity = 1,
