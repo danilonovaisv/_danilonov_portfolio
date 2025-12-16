@@ -54,7 +54,7 @@ import type { GLTF } from 'three-stdlib'
  *   - remove autoSpin forte, reduz amplitudes e limita custos (CubeCamera frames=1 sempre)
  *
  * Asset:
- * - default: /media/Torus_dan.glb (coloque em public/media)
+ * - default: /media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb (coloque em public/media)
  * - ou Supabase Storage public URL via prop modelUrl
  */
 
@@ -221,7 +221,7 @@ function GlassOrbModel({
 }
 
 function GlassOrbCanvas({
-  modelUrl = '/media/Torus_dan.glb',
+  modelUrl = '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb',
   className,
 }: {
   modelUrl?: string
@@ -366,7 +366,7 @@ export default function HeroGlassOrb({ modelUrl, className }: HeroGlassOrbProps)
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="relative mx-auto aspect-square w-full max-w-[520px]"
           >
-            <GlassOrbCanvas modelUrl={modelUrl ?? '/media/Torus_dan.glb'} className="h-full w-full" />
+            <GlassOrbCanvas modelUrl={modelUrl ?? '/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb'} className="h-full w-full" />
           </motion.div>
         </div>
       </div>
@@ -381,7 +381,7 @@ export default function HeroGlassOrb({ modelUrl, className }: HeroGlassOrbProps)
 export function PageExample() {
   return (
     <main>
-      <HeroGlassOrb modelUrl="/media/Torus_dan.glb" />
+      <HeroGlassOrb modelUrl="/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb" />
       <div style={{ height: 1200 }} />
     </main>
   )

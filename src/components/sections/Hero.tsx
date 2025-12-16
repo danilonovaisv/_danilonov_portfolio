@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
@@ -59,20 +59,19 @@ const AnimatedTextLine = ({
 
   const child: Variants = {
     hidden: {
-      y: '100%', // Changed from 110% to 100% for slight optimization
+      y: '100%',
       opacity: 0,
     },
     visible: {
       y: 0,
       opacity: 1,
-      // Curva "Premium": Rápida no início, muito suave no final
       transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] },
     },
   };
 
   return (
     <motion.div
-      className={`flex overflow-hidden ${className}`} // overflow-hidden é crucial para o efeito de máscara
+      className={`flex overflow-hidden ${className}`}
       variants={container}
       initial="hidden"
       whileInView="visible"
@@ -116,26 +115,32 @@ const Hero = () => {
 
   // Animações Scroll
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  // Removed contentScale to avoid layout thrashing, though scale is transform so it's fine.
-  // Prompt asked to avoid motion on width/height/top/left.
-  // We keep transform animations.
   const contentScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
   const contentY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
 
-  // Animação específica para o Glass Orb
+  // Animação específica para o Glass Orb (para framer-motion container)
   const glassOrbOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
   const glassOrbScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
 
   // Video transitions
   const videoScale = useTransform(scrollYProgress, [0, 0.25], [0.25, 1]);
-  // x/y are transforms, safe.
   const videoX = useTransform(scrollYProgress, [0, 0.25], ['35%', '0%']);
   const videoY = useTransform(scrollYProgress, [0, 0.25], ['30%', '0%']);
-  // borderRadius triggers paint, which is acceptable but heavier. Prompt #08 says "Avoid motion in layout".
-  // BorderRadius is NOT layout, it's paint/composite in some browsers, but can trigger layout in others.
-  // We will keep it but be mindful. If strict, we would remove it.
-  // Given "Premium feel", borderRadius animation is very common. I'll keep it.
   const videoRadius = useTransform(scrollYProgress, [0, 0.2], [12, 0]);
+
+  // Intensidade da animação interna da ORB (usada dentro do Canvas)
+  const orbIntensityMotion = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [0.3, 1, 0.3]
+  );
+  const [orbIntensity, setOrbIntensity] = useState(1);
+
+  useMotionValueEvent(orbIntensityMotion, 'change', (latest) => {
+    if (!prefersReducedMotion) {
+      setOrbIntensity(latest);
+    }
+  });
 
   return (
     <section
@@ -147,7 +152,10 @@ const Hero = () => {
       <div className="md:hidden flex flex-col items-center text-center px-4 pt-16 pb-12 gap-8">
         <div className="relative w-full flex justify-center -mb-8">
           <div className="relative h-[280px] w-[280px]">
-            <HeroGlassCanvas />
+            <HeroGlassCanvas
+              variant="transmission" // mude para "refraction" se quiser testar
+              scrollIntensity={1}
+            />
           </div>
         </div>
 
@@ -155,7 +163,7 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} // Premium easing
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-center"
           >
             <div className="flex flex-row justify-center gap-[0.2em] whitespace-nowrap">
@@ -167,7 +175,7 @@ const Hero = () => {
         </div>
 
         <motion.p
-          initial={{ opacity: 0, y: 10 }} // Added y for consistency
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="text-[#0057FF] text-xs font-semibold tracking-widest uppercase mt-2"
@@ -204,7 +212,7 @@ const Hero = () => {
       <div className="hidden md:flex sticky top-0 h-screen w-full overflow-hidden items-center justify-center">
         {/* 1. BACKGROUND AMBIENT 3D LAYER */}
         <motion.div
-          initial={{ opacity: 0 }} // Simplified initial state
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           style={{
@@ -213,7 +221,10 @@ const Hero = () => {
           }}
           className="absolute inset-0 z-[-1] pointer-events-none"
         >
-          <HeroGlassCanvas />
+          <HeroGlassCanvas
+            variant="transmission" // mude para "refraction" para usar MeshRefractionMaterial
+            scrollIntensity={prefersReducedMotion ? 0.7 : orbIntensity}
+          />
         </motion.div>
 
         {/* 2. TEXT CONTENT LAYER */}
@@ -227,7 +238,7 @@ const Hero = () => {
         >
           {/* TAG LATERAL: BRAND AWARENESS */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }} // Changed from x to y as requested
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 hidden md:block"
@@ -262,7 +273,7 @@ const Hero = () => {
 
             {/* Subtítulo */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }} // Added y
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{

@@ -28,7 +28,7 @@ Home page interativa do portfólio institucional alinhada ao briefing em `docs/P
 - `components/layout/` — `Header` (condensa no scroll, menu mobile acessível) e `Footer`.
 - `components/three/` — `HeroGlassCanvas` (Canvas + luzes), `TorusDan` (orb com material transmissivo) e hooks.
 - `lib/constants.tsx` — textos, thumbs, logos, links e assets (Supabase) centralizados.
-- `public/media/torus_dan.glb` — modelo 3D usado no hero (gerado via `gltfjsx`).
+- `public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb` — modelo 3D usado no hero (gerado via `gltfjsx`).
 
 ## Conteúdo e assets
 

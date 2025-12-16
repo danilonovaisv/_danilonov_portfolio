@@ -124,7 +124,7 @@
 
 **IMAGERY (what to show: photos, illustrations, icons, logos):**
 
-* Modelo 3D `/public/models/torus_dan.glb`.
+* Modelo 3D `/public/models/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb`.
 * Thumb do vídeo manifesto (frame do próprio vídeo, sem overlay).
 
 ---

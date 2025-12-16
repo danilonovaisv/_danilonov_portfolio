@@ -5,7 +5,7 @@ Visão Geral
 
   - Página home usa components/sections/Hero.tsx (não o components/home/
     Hero.tsx), sem o canvas 3D e com um scroll sticky de 450vh que não bate
-    com o layout-alvo de 2 colunas. GLB existe em public/media/torus_dan.glb,
+    com o layout-alvo de 2 colunas. GLB existe em public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb,
     mas não é carregado em nenhum lugar; o HeroGlassCanvas que renderiza a
     torus procedural está fora da página usada.
   - Referências de assets e layout estão documentadas em docs/HOME-PORTFOLIO-
@@ -45,8 +45,8 @@ Visão Geral
     HeroGlassCanvas. Resultado: sem orb de vidro e sem coluna direita. Precisa
     reintroduzir o canvas + GLB na metade direita mantendo texto alinhado à
     esquerda conforme HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg.
-  - Integração: Pipeline esperado Hero → HeroGlassCanvas → Torus_dan.glb não
-    está ativo; GLB está em public/media/torus_dan.glb, mas o componente usa
+  - Integração: Pipeline esperado Hero → HeroGlassCanvas → https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb não
+    está ativo; GLB está em public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb, mas o componente usa
     geometria procedural e está desconectado da página.
   - Vídeo: Está em foreground fullscreen; mock indica thumb/área dedicada
     à direita, não cobrindo toda a viewport. Controle de áudio automático
@@ -59,7 +59,7 @@ Visão Geral
 
   - Alta: Hero renderizado sem 3D nem GLB; layout em tela cheia não segue
     colunas da referência (components/sections/Hero.tsx, app/page.tsx).
-  - Alta: GLB public/media/torus_dan.glb nunca carregado; HeroGlassCanvas
+  - Alta: GLB public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb nunca carregado; HeroGlassCanvas
     desconectado da rota principal.
   - Alta: Vídeo auto-desmuta via scroll (useMotionValueEvent), risco de
     bloqueio/autoplay e má experiência.
@@ -78,7 +78,7 @@ Visão Geral
 
   1. Reativar o pipeline Hero → Canvas → GLB na página real, mantendo layout 2
      colunas conforme HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg.
-  2. Substituir geometria procedural pelo GLB em public/media/torus_dan.glb
+  2. Substituir geometria procedural pelo GLB em public/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb
      usando useGLTF, cache/memo e fallback leve.
   3. Refatorar o Hero para remover o h-[450vh] e alinhar texto/CTA/tag à
      esquerda, orb+vídeo à direita (grid responsivo).
@@ -107,7 +107,7 @@ Visão Geral
   import { useMemo } from 'react';
 
   const TorusDan = () => {
-    const { scene } = useGLTF('/media/torus_dan.glb');
+    const { scene } = useGLTF('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb');
     const cloned = useMemo(() => scene.clone(), [scene]);
     return (
       <Float speed={1.4} rotationIntensity={0.2} floatIntensity={0.4}>
@@ -115,7 +115,7 @@ Visão Geral
       </Float>
     );
   };
-  useGLTF.preload('/media/torus_dan.glb');
+  useGLTF.preload('/media/https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb');
 
   - Manter MeshTransmissionMaterial se precisar aplicar material custom (usar
     traverse no clone).

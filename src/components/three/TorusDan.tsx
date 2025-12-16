@@ -1,133 +1,99 @@
 'use client';
 
-import React, { useMemo, useRef, memo } from 'react';
+import React, { useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Float, MeshTransmissionMaterial, useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 type TorusDanProps = {
-  reduceMotion?: boolean;
-  isMobile?: boolean;
-  scale?: number | [number, number, number];
-  position?: [number, number, number];
+  /** 0..1 – controla intensidade da animação (scroll, etc.) */
+  scrollIntensity?: number;
 };
 
-const TorusDan = memo(
-  ({
-    reduceMotion = false,
-    isMobile = false,
-    scale = 3.2,
-    position = [0, 0, 0],
-  }: TorusDanProps) => {
-    const groupRef = useRef<THREE.Group>(null);
-    const GLTF_PATH = '/media/torus_dan.glb';
-    const { nodes } = useGLTF(GLTF_PATH);
+type GLTFResult = {
+  nodes: Record<string, THREE.Mesh>;
+};
 
-    const geometry =
-      (nodes as any).Torus?.geometry ||
-      (nodes as any).Torus002?.geometry ||
-      (nodes as any).Mesh?.geometry;
+const MODEL_PATH =
+  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/model/torus_dan.glb';
 
-    if (!geometry) {
-      return null;
-    }
+const TorusDan: React.FC<TorusDanProps> = ({ scrollIntensity = 1 }) => {
+  const group = useRef<THREE.Group>(null);
+  const { viewport } = useThree();
+  const gltf = useGLTF(MODEL_PATH) as unknown as GLTFResult;
 
-    const materialConfig = useMemo(() => {
-      const common = {
-        ior: 1.25,
-        chromaticAberration: 0.06,
-        backside: true,
-      };
+  const baseMesh =
+    (gltf.nodes && (gltf.nodes as any).Torus) ||
+    (gltf.nodes && Object.values(gltf.nodes)[0]);
 
-      if (reduceMotion) {
-        return {
-          ...common,
-          transmission: 0.9,
-          roughness: 0.15,
-          thickness: 0.35,
-          samples: 2,
-          resolution: 256,
-        };
-      }
+  useFrame((state, delta) => {
+    if (!group.current || !baseMesh) return;
 
-      if (isMobile) {
-        return {
-          ...common,
-          transmission: 1,
-          roughness: 0.1,
-          thickness: 0.4,
-          samples: 3,
-          resolution: 320,
-        };
-      }
+    const t = state.clock.getElapsedTime();
+    const { x, y } = state.pointer; // -1..1 (normalizado pelo R3F)
 
-      return {
-        ...common,
-        transmission: 1,
-        roughness: 0.05,
-        thickness: 0.55,
-        samples: 6, // Reduced from 12 to 6 for better performance without much visual loss
-        resolution: 512, // Reduced from 1024 to 512 for better performance
-      };
-    }, [isMobile, reduceMotion]);
+    // spin base
+    group.current.rotation.z += delta * 0.15 * scrollIntensity;
 
-    useFrame((_, delta) => {
-      if (reduceMotion || !groupRef.current) return;
-      groupRef.current.rotation.y += delta * 0.35;
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(
-        groupRef.current.rotation.x,
-        0.15,
-        0.05
-      );
-    });
+    // tilt controlado pelo mouse
+    const targetRotX = y * 0.3 * scrollIntensity;
+    const targetRotY = x * 0.4 * scrollIntensity + t * 0.1;
 
-    const mesh = (
-      // @ts-ignore
-      <mesh geometry={geometry}>
-        <MeshTransmissionMaterial {...materialConfig} />
-      </mesh>
+    group.current.rotation.x = THREE.MathUtils.damp(
+      group.current.rotation.x,
+      targetRotX,
+      4,
+      delta
+    );
+    group.current.rotation.y = THREE.MathUtils.damp(
+      group.current.rotation.y,
+      targetRotY,
+      4,
+      delta
     );
 
-    if (reduceMotion) {
-      return (
-        // @ts-ignore
-        <group
-          ref={groupRef}
-          dispose={null}
-          scale={scale}
-          position={position}
-          rotation={[0.18, Math.PI / 5, 0]}
-        >
-          {mesh}
-        </group>
-      );
-    }
+    // escala responsiva
+    const baseScale = viewport.width < 6 ? 1.6 : 2.1;
+    const targetScale = baseScale * (0.9 + 0.15 * scrollIntensity);
+    const currentScale = group.current.scale.x || 1;
+    const s = THREE.MathUtils.damp(currentScale, targetScale, 4, delta);
+    group.current.scale.setScalar(s);
+  });
 
-    return (
-      // @ts-ignore
-      <group
-        ref={groupRef}
-        dispose={null}
-        scale={scale}
-        position={position}
-        rotation={[0.18, Math.PI / 5, 0]}
+  if (!baseMesh) return null;
+
+  return (
+    <group ref={group}>
+      <Float
+        speed={1.2}
+        floatIntensity={0.6}
+        rotationIntensity={0.4}
+        floatingRange={[-0.15, 0.15]}
       >
-        <Float
-          speed={1.4}
-          rotationIntensity={0.2}
-          floatIntensity={0.35}
-          floatingRange={[-0.1, 0.2]}
-        >
-          {mesh}
-        </Float>
-      </group>
-    );
-  }
-);
+        <mesh geometry={baseMesh.geometry} castShadow receiveShadow>
+          <MeshTransmissionMaterial
+            transmission={1}
+            ior={1.25}
+            thickness={2}
+            roughness={0.1}
+            chromaticAberration={0.04}
+            anisotropy={0.12}
+            distortion={0.3}
+            distortionScale={0.4}
+            temporalDistortion={0.2}
+            samples={10}
+            resolution={256}
+            color="#ffffff"
+            attenuationColor="#9ab5ff"
+            attenuationDistance={1.5}
+            backside
+          />
+        </mesh>
+      </Float>
+    </group>
+  );
+};
 
-TorusDan.displayName = 'TorusDan';
-
-// Preload ensuring absolute path
-useGLTF.preload('/media/torus_dan.glb');
+useGLTF.preload(MODEL_PATH);
 
 export default TorusDan;
