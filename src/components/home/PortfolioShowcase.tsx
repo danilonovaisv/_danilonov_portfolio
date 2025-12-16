@@ -292,6 +292,17 @@ const PortfolioShowcaseSection: FC = () => {
                           video.pause();
                         }
                       }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          const video = e.currentTarget;
+                          if (video.paused) {
+                            video.play();
+                          } else {
+                            video.pause();
+                          }
+                        }
+                      }}
                     />
                   </div>
 
