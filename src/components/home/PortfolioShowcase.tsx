@@ -4,6 +4,7 @@ import React, { FC, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES } from '@/lib/constants';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ProjectCategory } from '@/lib/types';
@@ -109,6 +110,7 @@ const PortfolioShowcaseSection: FC = () => {
             className={`
           relative border-b border-neutral-300 group cursor-pointer w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-inset
           ${isExpanded ? 'border-none' : ''}
+          ${isHovered ? 'z-30' : 'z-10'}
         `}
             onMouseEnter={() => !isExpanded && setHoveredId(category.id)}
             onMouseLeave={() => setHoveredId(null)}
@@ -223,7 +225,7 @@ const PortfolioShowcaseSection: FC = () => {
                     />
                   </motion.div>
                 </motion.div>
-                {/* Thumbnail Animada (Slide-in on Hover - Atrás do texto) */}
+                {/* Thumbnail Animada (Slide-in on Hover - Side relative to text) */}
                 <AnimatePresence>
                   {isHovered && !isExpanded && (
                     <motion.div
@@ -235,13 +237,25 @@ const PortfolioShowcaseSection: FC = () => {
                         duration: 0.5,
                         ease: [0.25, 1, 0.5, 1],
                       }}
-                      className="hidden md:block absolute right-full top-1/2 -translate-y-1/2 mr-8 overflow-hidden rounded-lg z-[-1] pointer-events-none shadow-lg origin-right"
+                      className={`hidden md:block absolute top-1/2 -translate-y-1/2 h-[180px] overflow-hidden rounded-lg z-[-1] pointer-events-none shadow-lg
+                        ${
+                          index >= 2
+                            ? 'left-full ml-8 origin-left' // Text is on left -> Thumb goes to Right
+                            : 'right-full mr-8 origin-right' // Text is on right/center -> Thumb goes to Left
+                        }
+                      `}
                     >
                       <motion.div
                         className="w-[320px] h-full relative"
-                        initial={{ x: 20, scale: 1.1 }}
+                        initial={{
+                          x: index >= 2 ? -20 : 20,
+                          scale: 1.1,
+                        }}
                         animate={{ x: 0, scale: 1 }}
-                        exit={{ x: 20, opacity: 0 }}
+                        exit={{
+                          x: index >= 2 ? -20 : 20,
+                          opacity: 0,
+                        }}
                         transition={{
                           duration: 0.5,
                           ease: [0.25, 1, 0.5, 1],
@@ -333,17 +347,17 @@ const PortfolioShowcaseSection: FC = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <motion.a
+                      <Button
                         href={`/portfolio?category=${category.id}`}
+                        variant="link"
+                        className="justify-start gap-3 text-base md:text-lg pl-0 h-auto"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        whileHover={{ x: 5 }}
-                        className="inline-flex items-center gap-3 text-[#0057FF] font-bold text-base md:text-lg hover:underline underline-offset-4 decoration-2"
                       >
                         Ver todos os projetos
                         <ArrowUpRight className="w-5 h-5" />
-                      </motion.a>
+                      </Button>
                     </div>
                   </div>
                 </motion.div>
@@ -359,7 +373,7 @@ const PortfolioShowcaseSection: FC = () => {
     <section
       id="portfolio-showcase"
       ref={sectionRef}
-      className="relative w-full bg-[#F4F5F7] py-20 md:py-24 overflow-hidden min-h-screen flex flex-col justify-center items-center"
+      className="relative w-full bg-[#F4F5F7] py-24 md:py-40 overflow-hidden min-h-screen flex flex-col justify-center items-center"
     >
       <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-420 relative z-10">
         {/* Cabeçalho da Seção */}
@@ -399,11 +413,10 @@ const PortfolioShowcaseSection: FC = () => {
             variants={fadeInUp}
             className="mt-24 md:mt-32 flex justify-center w-full"
           >
-            <motion.a
+            <Button
               href="/#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative inline-flex items-center gap-4 rounded-full bg-[#0057FF] px-10 py-5 md:px-12 md:py-6 text-white shadow-xl hover:shadow-[#0057FF]/40 transition-all duration-300"
+              size="xl"
+              className="group rounded-full shadow-xl hover:shadow-[#0057FF]/40 gap-4"
             >
               <span className="text-lg md:text-xl font-semibold tracking-wide">
                 let’s build something great
@@ -411,7 +424,7 @@ const PortfolioShowcaseSection: FC = () => {
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 group-hover:bg-white text-[#0057FF] transition-colors duration-300">
                 <ArrowUpRight className="w-4 h-4 text-white group-hover:text-[#0057FF]" />
               </span>
-            </motion.a>
+            </Button>
           </motion.div>
         )}
 
@@ -423,15 +436,17 @@ const PortfolioShowcaseSection: FC = () => {
             transition={{ delay: 0.3 }}
             className="mt-16 flex justify-start border-t border-neutral-200 pt-8"
           >
-            <button
+            <Button
               onClick={() => setExpandedId(null)}
-              className="text-gray-500 hover:text-[#0057FF] text-sm tracking-widest uppercase font-bold flex items-center gap-3 group"
+              variant="ghost"
+              size="sm"
+              className="text-gray-500 hover:text-[#0057FF] hover:bg-transparent tracking-widest uppercase font-bold gap-3 group pl-0"
             >
               <span className="group-hover:-translate-x-1 transition-transform">
                 ←
               </span>{' '}
               Voltar para a lista
-            </button>
+            </Button>
           </motion.div>
         )}
       </div>

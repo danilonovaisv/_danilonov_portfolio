@@ -3,11 +3,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CONTACT_INFO, SOCIALS } from '@/lib/constants';
+import { Button } from '@/components/ui/Button';
 import { ArrowRight } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="bg-[#F4F5F7] py-20 md:py-24">
+    <section id="contact" className="bg-[#F4F5F7] py-24 md:py-32">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-16">
           <motion.div
@@ -24,31 +25,34 @@ const Contact: React.FC = () => {
 
             <div className="space-y-6 mb-12 flex flex-col items-center md:items-start">
               {CONTACT_INFO.map((item, idx) => (
-                <a
+                <Button
                   key={idx}
                   href={item.href}
-                  className="group flex items-center gap-4 text-lg font-medium text-dark transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7] justify-center md:justify-start"
+                  variant="ghost"
+                  className="justify-start text-lg font-medium text-dark hover:text-primary gap-4 h-auto py-3 px-4"
                 >
-                  <span className="rounded-full bg-white p-3 text-primary shadow-sm transition-transform group-hover:scale-110">
+                  <span className="rounded-full bg-white p-2 text-primary shadow-sm group-hover:scale-110 transition-transform">
                     {item.icon}
                   </span>
                   {item.label}
-                </a>
+                </Button>
               ))}
             </div>
 
             <div className="flex gap-4 justify-center md:justify-start">
               {SOCIALS.map((social) => (
-                <a
+                <Button
                   key={social.platform}
+                  asExternal
                   href={social.url}
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full bg-white p-3 text-dark shadow-sm transition-all duration-300 hover:scale-110 hover:opacity-80 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7]"
+                  variant="secondary"
+                  size="icon"
+                  className="rounded-full bg-white text-dark shadow-sm hover:text-primary h-12 w-12"
                   aria-label={social.platform}
                 >
                   {social.icon}
-                </a>
+                </Button>
               ))}
             </div>
           </motion.div>
@@ -137,17 +141,16 @@ const Contact: React.FC = () => {
                 />
               </div>
 
-              <motion.button
+              <Button
                 type="submit"
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 font-bold text-white transition-colors hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/20"
-                aria-label="Open contact form"
+                variant="primary"
+                size="lg"
+                className="w-full gap-2 rounded-xl py-4 font-bold"
+                aria-label="Send message"
               >
                 Enviar Mensagem
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              </Button>
             </form>
           </motion.div>
         </div>

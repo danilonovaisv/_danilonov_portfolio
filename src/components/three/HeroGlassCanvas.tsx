@@ -23,6 +23,7 @@ const TorusDan = lazy(() => import('./TorusDan'));
 type HeroGlassCanvasProps = {
   className?: string;
   reduceMotion?: boolean;
+  scale?: number;
 };
 
 type ProgressObserverProps = {
@@ -42,6 +43,7 @@ const ProgressObserver: React.FC<ProgressObserverProps> = ({ onProgress }) => {
 const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
   className,
   reduceMotion = false,
+  scale = 3.2,
 }) => {
   const [mounted, setMounted] = useState(false);
   const [eventSource, setEventSource] = useState<HTMLElement | undefined>();
@@ -146,7 +148,11 @@ const HeroGlassCanvas: React.FC<HeroGlassCanvasProps> = ({
               </mesh>
             }
           >
-            <TorusDan reduceMotion={shouldReduceMotion} isMobile={isMobile} />
+            <TorusDan
+              reduceMotion={shouldReduceMotion}
+              isMobile={isMobile}
+              scale={scale}
+            />
 
             {/* Environment for realistic reflections */}
             <Environment preset="city" background={false} blur={0.9}>
