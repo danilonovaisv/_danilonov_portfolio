@@ -143,16 +143,18 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-0 leading-[0.95] text-[3.5rem] font-extrabold tracking-[-0.04em] text-[#111111]">
+        <div className="flex flex-col items-center gap-0 leading-[0.95] text-[2.75rem] sm:text-[3.5rem] font-extrabold tracking-[-0.04em] text-[#111111]">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="flex flex-col items-center"
           >
-            <span className="text-[#0057FF]">Design,</span>
-            <span className="text-[#111111]">não é só</span>
-            <span className="text-[#111111]">estética.</span>
+            <div className="flex flex-row justify-center gap-[0.2em] whitespace-nowrap">
+              <span className="text-[#0057FF]">Design,</span>
+              <span className="text-[#111111]">não é</span>
+            </div>
+            <span className="text-[#111111]">só estética.</span>
           </motion.div>
         </div>
 
