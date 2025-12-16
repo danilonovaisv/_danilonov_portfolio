@@ -4,4 +4,3 @@ const connectorConfig = {
   location: 'southamerica-west1',
 };
 exports.connectorConfig = connectorConfig;
-
