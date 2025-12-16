@@ -9,28 +9,193 @@ import { CATEGORIES } from '../../src/lib/constants';
 // Mock do Framer Motion para evitar complexidade de animação nos testes
 jest.mock('framer-motion', () => ({
   motion: {
-    section: ({ children, className, ...props }: any) => 
-      <section className={className} {...props}>{children}</section>,
-    div: ({ children, className, ...props }: any) => 
-      <div className={className} {...props}>{children}</div>,
-    h2: ({ children, className, ...props }: any) => 
-      <h2 className={className} {...props}>{children}</h2>,
-    h3: ({ children, className, ...props }: any) => 
-      <h3 className={className} {...props}>{children}</h3>,
-    p: ({ children, className, ...props }: any) => 
-      <p className={className} {...props}>{children}</p>,
-    span: ({ children, className, ...props }: any) => 
-      <span className={className} {...props}>{children}</span>,
-    li: ({ children, className, ...props }: any) => 
-      <li className={className} {...props}>{children}</li>,
-    a: ({ children, className, ...props }: any) => 
-      <a className={className} {...props}>{children}</a>,
-    button: ({ children, className, ...props }: any) => 
-      <button className={className} {...props}>{children}</button>,
-    ul: ({ children, className, ...props }: any) => 
-      <ul className={className} {...props}>{children}</ul>,
-    video: ({ children, className, ...props }: any) => 
-      <video className={className} {...props}>{children}</video>,
+    section: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <section {...validProps}>{children}</section>;
+    },
+    div: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <div {...validProps}>{children}</div>;
+    },
+    h2: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <h2 {...validProps}>{children}</h2>;
+    },
+    h3: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <h3 {...validProps}>{children}</h3>;
+    },
+    p: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <p {...validProps}>{children}</p>;
+    },
+    span: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <span {...validProps}>{children}</span>;
+    },
+    li: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <li {...validProps}>{children}</li>;
+    },
+    a: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <a {...validProps}>{children}</a>;
+    },
+    button: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <button {...validProps}>{children}</button>;
+    },
+    ul: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <ul {...validProps}>{children}</ul>;
+    },
+    video: ({ children, ...props }: any) => {
+      const validProps = { ...props };
+      [
+        'initial',
+        'whileInView',
+        'viewport',
+        'variants',
+        'animate',
+        'transition',
+        'exit',
+        'layout',
+        'custom',
+        'whileHover',
+        'whileTap',
+      ].forEach((prop) => delete validProps[prop]);
+      return <video {...validProps}>{children}</video>;
+    },
   },
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
@@ -55,15 +220,20 @@ describe('PortfolioShowcaseSection Component', () => {
 
   it('deve renderizar o título da seção corretamente', () => {
     render(<PortfolioShowcaseSection />);
-    
-    const titleElement = screen.getByText('portfólio showcase');
-    expect(titleElement).toBeInTheDocument();
-    expect(titleElement.closest('h2')).toBeInTheDocument();
+
+    // Check for both parts of the title separately since they are in different span elements
+    expect(screen.getByText('portfólio')).toBeInTheDocument();
+    expect(screen.getByText('showcase')).toBeInTheDocument();
+
+    // Check that they are both inside an h2 element
+    const heading = screen.getByRole('heading', { level: 2 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent('portfólio showcase');
   });
 
   it('deve renderizar todas as categorias', () => {
     render(<PortfolioShowcaseSection />);
-    
+
     CATEGORIES.forEach((category) => {
       // Para a categoria especial 'websites-webcampaigns-tech', verificamos o texto dividido
       if (category.id === 'websites-webcampaigns-tech') {

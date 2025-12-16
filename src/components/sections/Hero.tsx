@@ -204,9 +204,9 @@ const Hero = () => {
           initial={{ opacity: 0, y: 12, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
-          style={{ 
-            opacity: prefersReducedMotion ? 1 : glassOrbOpacity, 
-            scale: prefersReducedMotion ? 1 : glassOrbScale 
+          style={{
+            opacity: prefersReducedMotion ? 1 : glassOrbOpacity,
+            scale: prefersReducedMotion ? 1 : glassOrbScale,
           }}
           className="absolute inset-0 z-[-1] pointer-events-auto"
         >
@@ -215,10 +215,10 @@ const Hero = () => {
 
         {/* 2. TEXT CONTENT LAYER */}
         <motion.div
-          style={{ 
-            opacity: prefersReducedMotion ? 1 : contentOpacity, 
-            scale: prefersReducedMotion ? 1 : contentScale, 
-            y: prefersReducedMotion ? 0 : contentY 
+          style={{
+            opacity: prefersReducedMotion ? 1 : contentOpacity,
+            scale: prefersReducedMotion ? 1 : contentScale,
+            y: prefersReducedMotion ? 0 : contentY,
           }}
           className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none flex"
         >

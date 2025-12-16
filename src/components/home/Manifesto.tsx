@@ -22,14 +22,6 @@ const Manifesto: React.FC = () => {
     }
   }, []);
 
-  const toggleMuteManual = useCallback(
-    (e?: React.MouseEvent) => {
-      e?.stopPropagation();
-      updateMute(!isMuted);
-    },
-    [isMuted, updateMute]
-  );
-
   useEffect(() => {
     if (!manifestRef.current) return;
     const observer = new IntersectionObserver(
@@ -64,9 +56,7 @@ const Manifesto: React.FC = () => {
         transition={{ duration: 0.9, ease: 'easeOut' }}
         className="mx-auto w-full max-w-6xl"
       >
-        <div
-          className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm"
-        >
+        <div className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm">
           <div className="w-full aspect-video relative bg-black">
             {!hasError ? (
               <motion.video

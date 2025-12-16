@@ -5,7 +5,7 @@ import PortfolioMosaicGrid from '@/components/portfolio/PortfolioMosaicGrid';
 import type { MosaicItem, MosaicRow } from '@/components/portfolio/types';
 import Clients from '@/components/home/Clients';
 import Contact from '@/components/home/Contact';
-import { CATEGORIES } from '@/lib/constants';
+
 
 const MOSAIC_SEED = 'portfolio-mosaic-v1';
 
@@ -281,10 +281,11 @@ function buildMosaicRows(category: string): MosaicRow[] {
 }
 
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default function PortfolioPage({ searchParams }: Props) {
+export default async function PortfolioPage(props: Props) {
+  const searchParams = await props.searchParams;
   const category = (searchParams.category as string) || 'all';
   
   // Validate category

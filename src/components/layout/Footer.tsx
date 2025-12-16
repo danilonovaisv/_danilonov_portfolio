@@ -6,9 +6,7 @@ const Footer: React.FC = () => {
     <footer className="relative z-50 bg-[#0057FF] text-white border-t border-white/20 md:fixed md:bottom-0 md:left-0 md:right-0">
       <div className="container mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left text-sm text-white">
-          <p>
-            © 2025 Danilo Novais Vilela — todos os direitos reservados.
-          </p>
+          <p>© 2025 Danilo Novais Vilela — todos os direitos reservados.</p>
         </div>
 
         <nav>
