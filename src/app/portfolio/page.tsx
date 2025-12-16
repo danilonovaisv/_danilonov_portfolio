@@ -320,22 +320,22 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
+
+const VALID_CATEGORIES = ['all', 'brand-campaigns', 'videos-motions', 'websites-webcampaigns-tech'] as const;
+type Category = (typeof VALID_CATEGORIES)[number];
+
 export default async function PortfolioPage(props: Props) {
   const searchParams = await props.searchParams;
-  let category = searchParams.category;
+  const rawCategory = searchParams.category;
   
   // Handle case where category might be an array
-  if (Array.isArray(category)) {
-    category = category[0] || 'all';
-  }
+  const categoryString = Array.isArray(rawCategory) ? rawCategory[0] : rawCategory;
   
-  category = (category as string) || 'all';
-  
-  // Validate category
-  const validCategories = ['all', 'brand-campaigns', 'videos-motions', 'websites-webcampaigns-tech'];
-  if (!validCategories.includes(category)) {
-    category = 'all';
-  }
+  // Validate category against strict constant
+  const category: Category = VALID_CATEGORIES.includes(categoryString as any)
+    ? (categoryString as Category)
+    : 'all';
+
 
   const rows = buildMosaicRows(category);
 

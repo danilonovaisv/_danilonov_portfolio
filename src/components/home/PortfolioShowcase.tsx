@@ -360,7 +360,7 @@ const PortfolioShowcaseSection: FC = () => {
       ref={sectionRef}
       className="relative w-full bg-[#F4F5F7] py-20 md:py-24 overflow-hidden min-h-screen flex flex-col justify-center items-center"
     >
-      <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-420 relative z-10">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         {/* Cabeçalho da Seção */}
         <motion.div
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
