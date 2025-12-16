@@ -62,11 +62,10 @@ const Manifesto: React.FC = () => {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.9, ease: 'easeOut' }}
-        className="mx-auto w-full max-w-6xl flex flex-col gap-4"
+        className="mx-auto w-full max-w-6xl"
       >
         <div
-          className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm cursor-pointer group"
-          onClick={toggleMuteManual}
+          className="relative w-full overflow-hidden rounded-3xl bg-gray-100 shadow-sm"
         >
           <div className="w-full aspect-video relative bg-black">
             {!hasError ? (
@@ -81,7 +80,7 @@ const Manifesto: React.FC = () => {
                 preload="metadata"
                 controls={false}
                 onError={() => setHasError(true)}
-                aria-label="Vídeo Manifesto do Portfólio. Clique para ligar/desligar o som."
+                aria-label="Vídeo Manifesto do Portfólio"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -104,21 +103,6 @@ const Manifesto: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
-
-        {/* Controls / Status Below Video */}
-        <div className="flex items-center justify-between px-2 text-sm font-medium text-gray-500">
-          <span>Manifesto</span>
-          <button
-            onClick={toggleMuteManual}
-            className="flex items-center gap-2 hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded px-2 py-1"
-            aria-label={isMuted ? 'Ligar som' : 'Desligar som'}
-          >
-            <span
-              className={`w-2 h-2 rounded-full ${isMuted ? 'bg-gray-400' : 'bg-[#0057FF] animate-pulse'}`}
-            />
-            {isMuted ? 'Som desligado' : 'Som ligado'}
-          </button>
         </div>
       </motion.div>
     </section>

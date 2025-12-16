@@ -11,6 +11,7 @@ import {
 import type { Variants } from 'framer-motion';
 import { ASSETS } from '@/lib/constants';
 import { ArrowRight } from 'lucide-react';
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
 
 // Dynamically import the 3D component with SSR disabled
 const HeroGlassCanvas = dynamic(
@@ -90,6 +91,8 @@ const AnimatedTextLine = ({
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Controle de Scroll para a animação da timeline
   const { scrollYProgress } = useScroll({
@@ -201,7 +204,10 @@ const Hero = () => {
           initial={{ opacity: 0, y: 12, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
-          style={{ opacity: glassOrbOpacity, scale: glassOrbScale }}
+          style={{ 
+            opacity: prefersReducedMotion ? 1 : glassOrbOpacity, 
+            scale: prefersReducedMotion ? 1 : glassOrbScale 
+          }}
           className="absolute inset-0 z-[-1] pointer-events-auto"
         >
           <HeroGlassCanvas />
@@ -209,7 +215,11 @@ const Hero = () => {
 
         {/* 2. TEXT CONTENT LAYER */}
         <motion.div
-          style={{ opacity: contentOpacity, scale: contentScale, y: contentY }}
+          style={{ 
+            opacity: prefersReducedMotion ? 1 : contentOpacity, 
+            scale: prefersReducedMotion ? 1 : contentScale, 
+            y: prefersReducedMotion ? 0 : contentY 
+          }}
           className="absolute inset-0 container mx-auto px-6 md:px-12 lg:px-16 h-full z-10 pointer-events-none flex"
         >
           {/* TAG LATERAL: BRAND AWARENESS */}
@@ -321,10 +331,10 @@ const Hero = () => {
         {/* 3. VIDEO LAYER (Foreground) */}
         <motion.div
           style={{
-            scale: videoScale,
-            x: videoX,
-            y: videoY,
-            borderRadius: videoRadius,
+            scale: prefersReducedMotion ? 1 : videoScale,
+            x: prefersReducedMotion ? '0%' : videoX,
+            y: prefersReducedMotion ? '0%' : videoY,
+            borderRadius: prefersReducedMotion ? 0 : videoRadius,
           }}
           className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black pointer-events-none"
         >
