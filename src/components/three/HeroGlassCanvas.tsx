@@ -43,7 +43,7 @@ function OrbFallback() {
 
 export default function HeroGlassCanvas({ modelUrl }: HeroGlassCanvasProps) {
   // DPR adaptativo simples (boa relação qualidade/perf em mobile)
-  const [dpr, setDpr] = useState<[number, number]>([1, 1.75]);
+  const [dpr] = useState<[number, number]>([1, 1.75]);
 
   const camera = useMemo(
     () => ({
