@@ -16,8 +16,3 @@ export default function Home() {
     </>
   );
 }
-import GlassGlobeScene from './components/GlassGlobeScene';
-
-export default function Page() {
-  return <GlassGlobeScene />;
-}
