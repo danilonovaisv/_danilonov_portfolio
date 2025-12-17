@@ -39,11 +39,11 @@ export default function HeroScene({
         <directionalLight position={[3, 3, 2]} intensity={1.2} />
 
         {/* HDRI */}
-        <Environment files="/media/royal_esplanade_1k.hdr" />
+        <Environment preset="city" />
 
         {/* Orb */}
         <GlassOrb
-          modelUrl="/media/Torus_dan.glb"
+          modelUrl="/models/torus_dan.glb"
           materialVariant="transmission"
           mouseX={mouseX}
           mouseY={mouseY}

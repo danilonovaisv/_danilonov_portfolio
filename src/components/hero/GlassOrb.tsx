@@ -40,20 +40,21 @@ export default function GlassOrb({
   const { viewport } = useThree();
 
   const extracted = React.useMemo<ExtractedMesh>(() => {
-    let found: THREE.Mesh | null = null;
+    const meshes: THREE.Mesh[] = [];
     gltf.scene.traverse((o) => {
-      if (!found && (o as any).isMesh) found = o as THREE.Mesh;
+      if ((o as any).isMesh) meshes.push(o as THREE.Mesh);
     });
+    const found = meshes[0];
 
     if (!found?.geometry) {
-      const fallback = new THREE.TorusGeometry(1, 0.35, 64, 128);
+      const fallback = new THREE.TorusGeometry(1, 0.35, 64, 80);
       fallback.computeVertexNormals();
       fallback.computeBoundingSphere();
       return {
         geometry: fallback,
         position: new THREE.Vector3(0, 0, 0),
         rotation: new THREE.Euler(0, 0, 0),
-        scale: new THREE.Vector3(1, 1, 1),
+        scale: new THREE.Vector3(0.5, 0.5, 0.5),
       };
     }
 
@@ -64,15 +65,16 @@ export default function GlassOrb({
     // Preserve node transform from GLB (important for fidelity)
     const position = found.position?.clone?.() ?? new THREE.Vector3();
     const rotation = found.rotation?.clone?.() ?? new THREE.Euler();
-    const scale = found.scale?.clone?.() ?? new THREE.Vector3(1, 1, 1);
+    const scale = found.scale?.clone?.() ?? new THREE.Vector3(0.5, 0.5, 0.5);
 
     return { geometry, position, rotation, scale };
   }, [gltf.scene]);
 
   const baseScale = React.useMemo(() => {
     // Responsive scale similar ao tutorial do Olivier (viewport-based)
-    const s = viewport.width / 3.6;
-    return THREE.MathUtils.clamp(s, 0.72, 1.25);
+    // Increased divisor to make the orb smaller
+    const s = viewport.width / 4.4;
+    return THREE.MathUtils.clamp(s, 0.5, 1.0);
   }, [viewport.width]);
 
   const basePosition = React.useMemo(() => {
@@ -111,19 +113,19 @@ export default function GlassOrb({
     group.current.rotation.x = THREE.MathUtils.damp(
       group.current.rotation.x,
       targetRotX,
-      7.5,
+      4.5,
       delta
     );
     group.current.rotation.y = THREE.MathUtils.damp(
       group.current.rotation.y,
       targetRotY,
-      7.5,
+      4.5,
       delta
     );
     group.current.rotation.z = THREE.MathUtils.damp(
       group.current.rotation.z,
       targetRotZ,
-      7.5,
+      4.5,
       delta
     );
 
@@ -227,4 +229,4 @@ export default function GlassOrb({
   );
 }
 
-useGLTF.preload('/media/torus_dan.glb');
+useGLTF.preload('/models/torus_dan.glb');
