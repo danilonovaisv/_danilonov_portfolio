@@ -9,7 +9,6 @@ import {
   OrbitControls,
   EnvironmentProps,
 } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
 import { useControls } from 'leva';
 
 // Definição das props para o componente de iluminação
@@ -26,14 +25,13 @@ export default function GlassSceneLighting({
   enableControls = false,
   reduceMotion = false,
 }: GlassSceneLightingProps) {
-  const { camera } = useThree(); // Acesso à câmera principal se necessário
   const causticsRef = useRef<any>(null);
 
   // Controles Leva para ajustar parâmetros de iluminação, efeitos, transformações do modelo e bloom
   const lightingConfig = useControls('Glass Lighting', {
     // --- Transformações do Modelo ---
     modelPosition: { x: 0, y: 0, z: 0 }, // Posição do modelo
-    modelScale: { value: 1, min: 0.1, max: 3, step: 0.1 }, // Escala do modelo
+    modelScale: { value: 5, min: 5, max: 10, step: 5 }, // Escala do modelo
 
     // --- Iluminação ---
     ambientIntensity: { value: 0.5 * Math.PI, min: 0, max: 5, step: 0.1 },
@@ -125,13 +123,13 @@ export default function GlassSceneLighting({
         {/* Efeito de cáusticas envolto ao modelo */}
         <Caustics
           ref={causticsRef}
-          backfaces
+          causticsOnly={false}
+          backside={false}
           color={lightingConfig.causticsColor}
           position={[0, -0.5, 0]} // Ajuste a posição das cáusticas
           lightSource={[5, 5, -10]} // Alinhe com a luz principal
           worldRadius={lightingConfig.causticsWorldRadius}
           ior={lightingConfig.causticsIor}
-          backfaceIor={lightingConfig.causticsBackfaceIor}
           intensity={lightingConfig.causticsIntensity}
         >
           {/* O modelo filho será renderizado aqui dentro do efeito de cáustica */}
@@ -141,12 +139,14 @@ export default function GlassSceneLighting({
 
       {/* Efeito de Bloom (Brilho) */}
       {lightingConfig.bloomEnabled && ( // Renderiza o Bloom apenas se estiver habilitado
-        <Bloom
-          intensity={lightingConfig.bloomIntensity}
-          radius={lightingConfig.bloomRadius}
-          threshold={lightingConfig.bloomThreshold}
-          mipmapBlur // Opcional: ativa o blur de mipmap para um efeito mais suave
-        />
+        <EffectComposer>
+          <Bloom
+            intensity={lightingConfig.bloomIntensity}
+            radius={lightingConfig.bloomRadius}
+            threshold={lightingConfig.bloomThreshold}
+            mipmapBlur // Opcional: ativa o blur de mipmap para um efeito mais suave
+          />
+        </EffectComposer>
       )}
 
       {/* Controles Orbit (opcional, útil para debug) */}

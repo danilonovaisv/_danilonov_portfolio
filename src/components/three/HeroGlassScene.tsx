@@ -3,7 +3,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, MeshTransmissionMaterial } from '@react-three/drei';
 import { useControls } from 'leva';
 import GlassSceneLighting from './GlassSceneLighting'; // Importe o novo componente
 
@@ -13,8 +13,26 @@ export default function HeroGlassScene({
 }: {
   reduceMotion: boolean;
 }) {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 50 }}
+      style={{
+        background: 'transparent',
+        width: '100%',
+        height: '100%',
+      }}
+      shadows
+    >
+      <SceneContent reduceMotion={reduceMotion} />
+    </Canvas>
+  );
+}
+
+function SceneContent({ reduceMotion }: { reduceMotion: boolean }) {
   const torusRef = useRef<any>(null);
-  const { viewport } = useThree();
+
+  // Removed unused viewport destructuring
+  // const { viewport } = useThree();
 
   // Controles apenas para o MATERIAL DE VIDRO (separado da iluminação e transformações)
   const materialProps = useControls('Glass Material', {
@@ -31,8 +49,8 @@ export default function HeroGlassScene({
     resolution: { value: 1024, min: 256, max: 2048, step: 256 }, // Resolução do material
   });
 
-  // Carrega o modelo GLB
-  const { nodes } = useGLTF('/models/torus_dan.glb');
+  // Carrega o modelo GLB (Corrected path)
+  const { nodes } = useGLTF('/media/torus_dan.glb');
 
   // Animação de rotação contínua (agora aplicada ao mesh referenciado)
   useFrame(() => {
@@ -43,15 +61,7 @@ export default function HeroGlassScene({
   });
 
   return (
-    <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
-      style={{
-        background: 'transparent',
-        width: '100%',
-        height: '100%',
-      }}
-      shadows
-    >
+    <>
       {/* Passa o modelo como filho para o componente de iluminação */}
       <GlassSceneLighting reduceMotion={reduceMotion} environment="city">
         {' '}
@@ -59,7 +69,7 @@ export default function HeroGlassScene({
         {/* O modelo é renderizado aqui dentro do grupo de transformação */}
         <mesh ref={torusRef} {...nodes.Torus002}>
           {/* Aplica o material de vidro refinado */}
-          <meshPhysicalMaterial
+          <MeshTransmissionMaterial
             {...materialProps}
             transmission={materialProps.transmission}
             roughness={materialProps.roughness}
@@ -73,18 +83,12 @@ export default function HeroGlassScene({
             side={materialProps.backside ? undefined : 0} // Usa o lado correto se backside for verdadeiro
             envMapIntensity={1} // Intensidade do ambiente no material
           />
-          {/* OU use MeshTransmissionMaterial se preferir */}
-          {/* <MeshTransmissionMaterial
-            {...materialProps}
-            resolution={materialProps.resolution}
-            toneMapped={false}
-          /> */}
         </mesh>
       </GlassSceneLighting>
 
       {/* Adiciona interação de parallax com o mouse (opcional, conforme especificação) */}
       <ParallaxMouseInteraction reduceMotion={reduceMotion} />
-    </Canvas>
+    </>
   );
 }
 
