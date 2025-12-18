@@ -168,9 +168,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$config$2f$navigation$
 ;
 const ASSETS = {
     logoLight: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',
-    logoDark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg',
+    logoDark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon.svg',
+    favicon: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg',
     videoManifesto: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
-    heroAbstractModel: '/media/torus_dan.glb',
+    heroAbstractModel: '/media/abstract_element.glb',
     heroManifestThumb: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/videos-motions-thumb.webp',
     manifestoPoster: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/videos-motions-thumb.webp'
 };
@@ -424,7 +425,7 @@ const SOCIALS = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 269,
+            lineNumber: 271,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -435,7 +436,7 @@ const SOCIALS = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 274,
+            lineNumber: 276,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -446,7 +447,7 @@ const SOCIALS = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 279,
+            lineNumber: 281,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -457,7 +458,7 @@ const SOCIALS = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 284,
+            lineNumber: 286,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     }
@@ -470,7 +471,7 @@ const CONTACT_INFO = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 292,
+            lineNumber: 294,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -481,7 +482,7 @@ const CONTACT_INFO = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 297,
+            lineNumber: 299,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -492,7 +493,7 @@ const CONTACT_INFO = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 302,
+            lineNumber: 304,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     },
@@ -503,7 +504,7 @@ const CONTACT_INFO = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/lib/constants.tsx",
-            lineNumber: 307,
+            lineNumber: 309,
             columnNumber: 11
         }, ("TURBOPACK compile-time value", void 0))
     }
