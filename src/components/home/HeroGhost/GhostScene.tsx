@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
+import React, { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
 interface GhostSceneProps {
   onLightMove: (data: {
@@ -29,11 +29,10 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
       /* ================= CONTEXTO WEBGL ================= */
 
       const gl =
-          canvas.getContext("webgl") ||
-          canvas.getContext("experimental-webgl");
+        canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
 
       if (!gl) {
-        console.warn("WebGL not supported");
+        console.warn('WebGL not supported');
         return;
       }
 
@@ -42,10 +41,10 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
       const scene = new THREE.Scene();
 
       const camera = new THREE.PerspectiveCamera(
-          70,
-          window.innerWidth / window.innerHeight,
-          0.1,
-          100
+        70,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        100
       );
       camera.position.z = 12;
 
@@ -56,11 +55,11 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
           canvas,
           alpha: true,
           antialias: true,
-          powerPreference: "high-performance",
-          precision: "mediump", // 🔥 EVITA CRASH DE PRECISION
+          powerPreference: 'high-performance',
+          precision: 'mediump', // 🔥 EVITA CRASH DE PRECISION
         });
       } catch (e) {
-        console.error("Failed to create WebGLRenderer", e);
+        console.error('Failed to create WebGLRenderer', e);
         return;
       }
 
@@ -94,9 +93,7 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
       for (let i = 0; i < pos.length; i += 3) {
         if (pos[i + 1] < -0.2) {
           pos[i + 1] =
-              -2 +
-              Math.sin(pos[i] * 5) * 0.35 +
-              Math.cos(pos[i + 2] * 4) * 0.25;
+            -2 + Math.sin(pos[i] * 5) * 0.35 + Math.cos(pos[i + 2] * 4) * 0.25;
         }
       }
       geo.computeVertexNormals();
@@ -113,7 +110,7 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
         target.x = (e.clientX / window.innerWidth) * 2 - 1;
         target.y = -(e.clientY / window.innerHeight) * 2 + 1;
       };
-      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener('mousemove', onMouseMove);
 
       /* ================= RESIZE ================= */
 
@@ -122,7 +119,7 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
       };
-      window.addEventListener("resize", onResize);
+      window.addEventListener('resize', onResize);
 
       /* ================= LOOP ================= */
 
@@ -160,8 +157,8 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
 
       return () => {
         disposed = true;
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("resize", onResize);
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('resize', onResize);
         renderer.dispose();
         geo.dispose();
         ghostMat.dispose();
@@ -174,10 +171,10 @@ const GhostScene: React.FC<GhostSceneProps> = ({ onLightMove }) => {
   }, [onLightMove]);
 
   return (
-      <canvas
-          ref={canvasRef}
-          className="absolute inset-0 z-30 w-full h-full pointer-events-none"
-      />
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 z-30 w-full h-full pointer-events-none"
+    />
   );
 };
 

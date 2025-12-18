@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import Link from 'next/link';
+import Image from 'next/image';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   motion,
   useScroll,
   useTransform,
   AnimatePresence,
   useMotionValueEvent,
-} from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
-import { NAV_LINKS, ASSETS } from "@/lib/constants";
-import type { NavLink } from "@/lib/types";
-import { Menu, X } from "lucide-react";
+} from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
+import { NAV_LINKS, ASSETS } from '@/lib/constants';
+import type { NavLink } from '@/lib/types';
+import { Menu, X } from 'lucide-react';
 
 function Header(): React.ReactElement {
   const { scrollY } = useScroll();
@@ -28,23 +28,23 @@ function Header(): React.ReactElement {
   // Padding & Height transitions
   const paddingY = useTransform(scrollY, [0, 40], [16, 8]); // py-4 (16px) to py-2 (8px)
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
+  useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsCondensed(latest >= 40);
   });
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         setIsMobileMenuOpen(false);
         return;
       }
-      if (event.key !== "Tab") return;
+      if (event.key !== 'Tab') return;
       const focusable = menuRef.current?.querySelectorAll<HTMLElement>(
-        "a[href], button:not([disabled])"
+        'a[href], button:not([disabled])'
       );
       if (!focusable || focusable.length === 0) return;
       const first = focusable[0];
@@ -61,35 +61,35 @@ function Header(): React.ReactElement {
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    menuRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    document.addEventListener('keydown', handleKeyDown);
+    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus();
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
 
-  const getAriaCurrent = (href: string): "page" | undefined => {
+  const getAriaCurrent = (href: string): 'page' | undefined => {
     // Exact match for root or specific paths
-    if (href === pathname) return "page";
+    if (href === pathname) return 'page';
     // Helper for section links if needed, but simple strict matching is safer for now
-    if (href.startsWith("/#") && pathname === "/") return undefined; // Should logic handle hash?
-    if (pathname.startsWith(href) && href !== "/") return "page";
+    if (href.startsWith('/#') && pathname === '/') return undefined; // Should logic handle hash?
+    if (pathname.startsWith(href) && href !== '/') return 'page';
     return undefined;
   };
 
   const handleNavClick =
     (href: string) =>
     (event: React.MouseEvent<HTMLAnchorElement>): void => {
-      const isHashLink = href.includes("#");
+      const isHashLink = href.includes('#');
 
       // If closing mobile menu
       setIsMobileMenuOpen(false);
 
       if (isHashLink) {
-        const [path, hash] = href.split("#");
-        if (pathname === path || (path === "/" && pathname === "/")) {
+        const [path, hash] = href.split('#');
+        if (pathname === path || (path === '/' && pathname === '/')) {
           // If on same page, let native behavior or smooth scroll handle it
           // But Next.js Link might need help if purely hash
           // We'll let default Link behavior work for hash if on same page
@@ -108,7 +108,7 @@ function Header(): React.ReactElement {
           paddingBottom: paddingY,
         }}
         className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-          isCondensed ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-white"
+          isCondensed ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-white'
         }`}
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -172,7 +172,7 @@ function Header(): React.ReactElement {
           <nav className="hidden md:block" aria-label="Navegação principal">
             <ul className="flex items-center space-x-6">
               {navItems.map((link) => {
-                const isActive = getAriaCurrent(link.href) === "page";
+                const isActive = getAriaCurrent(link.href) === 'page';
 
                 return (
                   <li key={link.label}>
@@ -182,11 +182,11 @@ function Header(): React.ReactElement {
                       className={`relative block text-base font-normal transition-colors duration-200 
                         ${
                           isActive
-                            ? "text-[#0057FF]"
-                            : "text-gray-700 hover:text-[#0057FF]"
+                            ? 'text-[#0057FF]'
+                            : 'text-gray-700 hover:text-[#0057FF]'
                         }
                       `}
-                      aria-current={isActive ? "page" : undefined}
+                      aria-current={isActive ? 'page' : undefined}
                     >
                       {link.label}
                       {/* Animated functional underline */}
@@ -210,7 +210,7 @@ function Header(): React.ReactElement {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               type="button"
               className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#0057FF]"
-              aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+              aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
               aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -223,9 +223,9 @@ function Header(): React.ReactElement {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
+            initial={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+            animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
+            exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white md:hidden"
             role="dialog"

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Canvas } from "@react-three/fiber";
-import { MotionValue } from "framer-motion";
+import React from 'react';
+import { Canvas } from '@react-three/fiber';
+import { MotionValue } from 'framer-motion';
 
 interface HeroSceneProps {
   mouseX: MotionValue<number>;

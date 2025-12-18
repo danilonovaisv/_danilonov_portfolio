@@ -1,4 +1,4 @@
-import { useReducedMotion } from "framer-motion";
+import { useReducedMotion } from 'framer-motion';
 
 const usePrefersReducedMotion = () => {
   const shouldReduceMotion = useReducedMotion();

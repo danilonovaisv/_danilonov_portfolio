@@ -1,17 +1,17 @@
-import * as THREE from "https://esm.sh/three";
+import * as THREE from 'https://esm.sh/three';
 
 /* PRELOADER */
-const preloader = document.getElementById("preloader");
-setTimeout(() => preloader.classList.add("fade-out"), 1200);
+const preloader = document.getElementById('preloader');
+setTimeout(() => preloader.classList.add('fade-out'), 1200);
 
 /* SCENE */
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-    70,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
+  70,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  100
 );
 camera.position.z = 12;
 
@@ -32,18 +32,15 @@ const material = new THREE.MeshStandardMaterial({
   opacity: 0.9,
 });
 
-const ghost = new THREE.Mesh(
-    new THREE.SphereGeometry(2, 40, 40),
-    material
-);
+const ghost = new THREE.Mesh(new THREE.SphereGeometry(2, 40, 40), material);
 scene.add(ghost);
 
 /* TEXT */
-const quote = document.querySelector(".quote");
+const quote = document.querySelector('.quote');
 
 /* INPUT */
 const mouse = new THREE.Vector2();
-window.addEventListener("mousemove", e => {
+window.addEventListener('mousemove', (e) => {
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 });

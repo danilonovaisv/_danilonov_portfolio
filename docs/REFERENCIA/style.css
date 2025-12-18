@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Boldonse&display=swap");
 @font-face {
-  font-family: 'PPSupplyMono';
-  src: url('https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2')
-    format('woff2');
+  font-family: "PPSupplyMono";
+  src: url("https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2") format("woff2");
   font-weight: 100 900;
   font-style: normal;
 }
@@ -60,7 +59,7 @@ body {
 .ghost-svg {
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
   -webkit-animation: ghostFloat 3s ease-in-out infinite;
-  animation: ghostFloat 3s ease-in-out infinite;
+          animation: ghostFloat 3s ease-in-out infinite;
 }
 
 .ghost-body {
@@ -71,23 +70,22 @@ body {
 .ghost-eye {
   fill: black;
   -webkit-animation: eyePulse 2s ease-in-out infinite;
-  animation: eyePulse 2s ease-in-out infinite;
+          animation: eyePulse 2s ease-in-out infinite;
   transform-origin: center;
 }
 
 .left-eye {
   -webkit-animation-delay: 0s;
-  animation-delay: 0s;
+          animation-delay: 0s;
 }
 
 .right-eye {
   -webkit-animation-delay: 0.1s;
-  animation-delay: 0.1s;
+          animation-delay: 0.1s;
 }
 
 @-webkit-keyframes ghostFloat {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0px);
   }
   50% {
@@ -96,8 +94,7 @@ body {
 }
 
 @keyframes ghostFloat {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0px);
   }
   50% {
@@ -105,8 +102,7 @@ body {
   }
 }
 @-webkit-keyframes eyePulse {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
   }
   50% {
@@ -114,8 +110,7 @@ body {
   }
 }
 @keyframes eyePulse {
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
   }
   50% {
@@ -129,18 +124,17 @@ body {
 }
 
 .loading-text {
-  font-family: 'PPSupplyMono', monospace;
+  font-family: "PPSupplyMono", monospace;
   font-size: 12px;
   text-transform: uppercase;
   opacity: 1;
   margin-bottom: 12px;
   -webkit-animation: textPulse 2s ease-in-out infinite;
-  animation: textPulse 2s ease-in-out infinite;
+          animation: textPulse 2s ease-in-out infinite;
 }
 
 @-webkit-keyframes textPulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
   }
   50% {
@@ -149,8 +143,7 @@ body {
 }
 
 @keyframes textPulse {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 1;
   }
   50% {
@@ -201,7 +194,7 @@ body {
 }
 
 .quote {
-  font-family: 'Boldonse', system-ui;
+  font-family: "Boldonse", system-ui;
   font-size: 6vw;
   line-height: 1.3;
   font-weight: 400;
@@ -211,7 +204,7 @@ body {
 }
 
 .author {
-  font-family: 'PPSupplyMono', monospace;
+  font-family: "PPSupplyMono", monospace;
   font-size: 12px;
   text-transform: uppercase;
   opacity: 0.7;

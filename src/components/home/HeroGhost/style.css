@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Boldonse&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Boldonse&display=swap');
 
 * {
   margin: 0;
@@ -6,7 +6,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -45,7 +46,7 @@ html, body {
 }
 
 .quote {
-  font-family: "Boldonse", system-ui;
+  font-family: 'Boldonse', system-ui;
   font-size: clamp(3rem, 8vw, 7rem);
   text-transform: uppercase;
   color: #f0f0f0;
@@ -56,7 +57,7 @@ html, body {
   -webkit-mask-size: 0 0;
   mask-size: 0 0;
 
-  text-shadow: 0 0 25px rgba(255,255,255,0.08);
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
 }
 
 .author {
