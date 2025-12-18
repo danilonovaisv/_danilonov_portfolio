@@ -25,11 +25,11 @@ export default function HeroScene({
       className="h-full w-full"
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      camera={{ position: [0, 0, 5.25], fov: 50, near: 0.1, far: 30 }}
+      camera={{ position: [0, 0, 6], fov: 45, near: 0.1, far: 100 }}
       onCreated={({ gl }) => {
         gl.outputColorSpace = THREE.SRGBColorSpace;
         gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 5.05;
+        gl.toneMappingExposure = 1.2; // Adjusted exposure
         gl.setClearColor(0x000000, 0);
       }}
     >

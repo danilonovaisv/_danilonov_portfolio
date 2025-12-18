@@ -54,13 +54,13 @@ Checklist:
 
 ### Performance (Web + WebGL)
 Checklist:
-- R3F: limitar `dpr`, reduzir custo de `MeshTransmissionMaterial` em mobile.
+- R3F: limitar `dpr`, reduzir custo de `MeshTransmissionMaterial = Props` em mobile.
 - Lazy-load/dynamic import do Canvas/3D (não bloquear o LCP).
 - Imagens com `next/image` quando possível; evitar layout shift (dimensões fixas/aspect ratio).
 - Vídeo manifesto: preload adequado (`metadata`), poster, e evitar download agressivo em 3G.
 - GLB: compressão (draco/meshopt) quando aplicável; `useGLTF.preload`.
 
-> Observação: existe um exemplo de modelo R3F usando `useGLTF("/medias/torrus.glb")` + `MeshTransmissionMaterial` e ainda `leva/useControls`  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6MH0"}. Isso é um alerta para: (1) conferir o path correto (`/media/...` vs `/medias/...`), (2) evitar `leva` em produção ou condicionar a DEV, e (3) revisar custo do vidro no mobile.
+> Observação: existe um exemplo de modelo R3F usando `useGLTF("/medias/torrus.glb")` + `MeshTransmissionMaterial = Props` e ainda `leva/useControls`  :OaiMdDirective_Annotations_f4eeh{attrs="eyJpbmRleCI6MH0"}. Isso é um alerta para: (1) conferir o path correto (`/media/...` vs `/medias/...`), (2) evitar `leva` em produção ou condicionar a DEV, e (3) revisar custo do vidro no mobile.
 
 ### Animações (Framer Motion + R3F)
 Checklist:
@@ -98,7 +98,7 @@ Checklist (precisa bater com o documento):
 - Âncoras/IDs incorretos (ex.: `#manifesto`, `#contact`, `#hero`) ou `scroll` quebrado por header fixo.
 - CTA “get to know me better !” não indo para `/sobre`.
 - Thumb do manifesto não indo para `#manifesto`.
-- 3D pesado travando mobile (uso irrestrito de `MeshTransmissionMaterial`).
+- 3D pesado travando mobile (uso irrestrito de `MeshTransmissionMaterial = Props`).
 - Vídeo manifesto carregando com áudio, sem `playsInline`, ou bloqueando LCP.
 
 ### Média severidade
@@ -252,7 +252,7 @@ Usar o código selecionado no editor (ex.: `components/Hero.tsx`, `components/Or
 **Trecho de referência (R3F/vidro — exemplo):**
 ~~~~tsx
 import { Canvas } from "@react-three/fiber";
-import { Environment, MeshTransmissionMaterial, useGLTF } from "@react-three/drei";
+import { Environment, MeshTransmissionMaterial = Props, useGLTF } from "@react-three/drei";
 import { Suspense, useMemo } from "react";
 
 function GlassModel() {
@@ -273,7 +273,7 @@ function GlassModel() {
 
   return (
     <mesh geometry={(nodes as any).Torus?.geometry || (nodes as any).Torus002?.geometry}>
-      <MeshTransmissionMaterial {...mat} />
+      <MeshTransmissionMaterial = {...mat} />
     </mesh>
   );
 }
@@ -556,7 +556,7 @@ O executor deve usar **HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg** como referência ab
 
 Como usar este componente:
 
-Garanta que o GLB esteja em public/models//media/Torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
+Garanta que o GLB esteja em public/models//media/Torus_dan.glb e que o vídeo remoto esteja acessível (URL Supabase já está no código). O padrão useGLTF + MeshTransmissionMaterial = segue a referência de uso típico do Drei em exemplo com GLB + material de vidro 
 ‌
 .
  Ajuste o projeto utilizando as etapas essenciais para execução:
@@ -760,7 +760,7 @@ export default function OrbCanvas({ scrollYProgress, className }: Props) {
 
 import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
-import { MeshTransmissionMaterial, useGLTF } from '@react-three/drei'
+import { MeshTransmissionMaterial = Props, useGLTF } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
 import { useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import type { MotionValue } from 'framer-motion'
@@ -848,7 +848,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
       <group ref={groupRef} scale={baseScale} position={[0.3, 0.15, 0]}>
         <mesh>
           <torusKnotGeometry args={[1, 0.36, 220, 24]} />
-          <MeshTransmissionMaterial
+          <MeshTransmissionMaterial = Props
             ref={materialRef}
             thickness={0.22}
             roughness={0.02}
@@ -869,7 +869,7 @@ export default function GlassOrb({ scrollYProgress }: Props) {
   return (
     <group ref={groupRef} scale={baseScale} position={[0.45, 0.15, 0]}>
       <mesh geometry={geometry}>
-        <MeshTransmissionMaterial
+        <MeshTransmissionMaterial = Props
           ref={materialRef}
           thickness={0.22}
           roughness={0.02}

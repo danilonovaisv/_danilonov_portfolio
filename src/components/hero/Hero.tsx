@@ -27,8 +27,8 @@ const RefAnimatedText: React.FC<{
   const letters = text.split('');
 
   return (
-    <p
-      className={`ref-word-anim flex overflow-hidden leading-[0.9] ${className}`}
+    <span
+      className={`ref-word-anim flex overflow-hidden leading-[1.15] ${className}`}
       aria-label={text}
     >
       {letters.map((letter, i) => (
@@ -41,7 +41,7 @@ const RefAnimatedText: React.FC<{
           {letter === ' ' ? '\u00A0' : letter}
         </span>
       ))}
-    </p>
+    </span>
   );
 };
 
@@ -180,23 +180,23 @@ const Hero: React.FC = () => {
             {/* Título Principal */}
             <div className="text-[clamp(3.5rem,10vw,7.5rem)] font-extrabold tracking-[-0.04em] mb-6 md:mb-10 font-display flex flex-col items-start gap-1">
               {/* Animação unificada (Mobile & Desktop) usando a referência CSS */}
-              <div className="flex flex-col items-start gap-0">
+              <h1 className="flex flex-col items-start gap-2">
                 <RefAnimatedText
-                  text="Design,"
+                  text="DESIGN,"
                   className="text-[#0057FF]"
                   delayStart={0}
                 />
                 <RefAnimatedText
-                  text="não é só"
+                  text="NÃO É SÓ"
                   className="text-[#111111]"
                   delayStart={7}
                 />
                 <RefAnimatedText
-                  text="estética."
+                  text="ESTÉTICA."
                   className="text-[#111111]"
                   delayStart={15}
                 />
-              </div>
+              </h1>
             </div>
 
             {/* Subtítulo */}
@@ -250,7 +250,7 @@ const Hero: React.FC = () => {
             y: videoY,
             borderRadius: videoRadius,
           }}
-          className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black pointer-events-none"
+          className="absolute z-40 w-full h-full flex items-center justify-center overflow-hidden shadow-2xl origin-center bg-black/5 pointer-events-none"
         >
           <div className="relative w-full h-full block group pointer-events-auto">
             <video

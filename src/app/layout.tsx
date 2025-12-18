@@ -1,5 +1,6 @@
 import React from 'react';
 import { Inter, Outfit } from 'next/font/google';
+import { Metadata } from 'next';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -16,6 +17,28 @@ const outfit = Outfit({
   display: 'swap',
   variable: '--font-outfit',
 });
+
+export const metadata: Metadata = {
+  title: 'Danilo Novais | Motion & Interactive Developer',
+  description:
+    'Portfólio de Danilo Novais - Designer e Desenvolvedor focado em Motion, 3D e Experiências Interativas.',
+  openGraph: {
+    title: 'Danilo Novais | Motion & Interactive Developer',
+    description:
+      'Design, não é só estética. É intenção, estratégia e experiência.',
+    url: 'https://danilonovais.com',
+    siteName: 'Danilo Novais Portfolio',
+    locale: 'pt_BR',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function RootLayout({
   children,

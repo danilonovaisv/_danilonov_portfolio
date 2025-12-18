@@ -12,7 +12,7 @@ pattern: "**/_Canvas_|**/_r3f_|\*_/_.glb"
 
 Para vidro líquido:
 
-- Usar MeshTransmissionMaterial
+- Usar MeshTransmissionMaterial = Props
 - Environment obrigatório (preset ou HDR)
 - Desktop: samples ≥ 12
 - Mobile: samples ≤ 4

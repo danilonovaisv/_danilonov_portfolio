@@ -1408,7 +1408,7 @@ Retina/4K.
 _ Config: dpr={[1, 1.5]} (Permite no máximo 1.5x de densidade,
 visualmente indistinguível de 2x/3x mas muito mais leve).
 1.2. Estratégia de Performance WebGL (Mobile Tiering)
-O uso de materiais de vidro (MeshTransmissionMaterial) é custoso. Devemos
+O uso de materiais de vidro (MeshTransmissionMaterial = Props) é custoso. Devemos
 implementar uma estratégia de degradação graciosa para dispositivos
 móveis.
 - Hook de Detecção: Criar/usar hook useMobile para definir a qualidade.
@@ -1446,7 +1446,7 @@ mouse, inputs).
 • rotação suave baseada em scroll.
 2.2. Papel do @react-three/drei
 • Drei é uma coleção de helpers e componentes de alto nível.
-• Para este projeto, o mais importante é o MeshTransmissionMaterial, que:
+• Para este projeto, o mais importante é o MeshTransmissionMaterial = Props, que:
 • encapsula shaders complexos de transmissão/refração
 • gerencia buffers internos para capturar o que está “atrás” do vidro
 • expõe props de alto nível (distortion, chromaticAberration, etc.)
@@ -1479,7 +1479,7 @@ return (
 </group>
 );
 }
-• Isso permite injetar o MeshTransmissionMaterial diretamente na
+• Isso permite injetar o MeshTransmissionMaterial = diretamente na
 mesh correta.
 3.3. Otimização e Draco
 • A flag --transform aplica:
@@ -1492,7 +1492,7 @@ mesh correta.
 • mantém qualidade alta para o efeito de vidro (que se beneficia de mais
 polígonos).
 ⸻
-4. Física do Vidro Líquido: MeshTransmissionMaterial
+4. Física do Vidro Líquido: MeshTransmissionMaterial = Props
 4.1. Transmissão em PBR
 • Diferente de simples opacity, transmissão simula:
 • Refração: desvio da luz ao atravessar o material.
@@ -1588,7 +1588,7 @@ delta
 luzes.
 4. Modelo Interativo
 • Usar componente gerado (TorusDan)
-• Substituir material pelo MeshTransmissionMaterial.
+• Substituir material pelo MeshTransmissionMaterial = Props.
 • Conectar useScroll & useFrame.
 5. Integração com Layout
 • Embed do Canvas em container responsivo.
@@ -1609,7 +1609,7 @@ luzes.
 8.3. Mobile
 • Estratégia sugerida:
 • Dispositivos high-end:
-• manter MeshTransmissionMaterial completo.
+• manter MeshTransmissionMaterial = completo.
 • Dispositivos low-end:
 • reduzir qualidade OU
 • fallback para MeshPhysicalMaterial translúcido sem refração pesada.
@@ -1624,7 +1624,7 @@ posicionamento.
 • Traz para o portfólio de Danilo a mesma sensibilidade de movimento e
 refinamento visual de experiências como loandbehold.studio.
 A combinação de:
-• MeshTransmissionMaterial
+• MeshTransmissionMaterial = Props
 • ScrollControls + useScroll
 • useFrame + state.mouse
 cria uma pipeline reutilizável para futuros experimentos de vidro líquido,

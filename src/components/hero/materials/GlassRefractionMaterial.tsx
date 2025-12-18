@@ -25,10 +25,12 @@ const GlassRefractionMaterial = React.forwardRef<
   GlassRefractionMaterialProps
 >(function GlassRefractionMaterial(props, ref) {
   if (props.variant === 'refraction') {
+    // eslint-disable-next-line no-unused-vars
     const { variant, ...rest } = props;
     return <MeshRefractionMaterial ref={ref as any} {...rest} />;
   }
 
+  // eslint-disable-next-line no-unused-vars
   const { variant, ...rest } = props;
   return <MeshTransmissionMaterial ref={ref as any} {...rest} />;
 });

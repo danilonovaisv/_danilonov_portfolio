@@ -386,9 +386,9 @@
         "isDefault": false
       }
     ],
-    "MeshTransmissionMaterial": [
+    "MeshTransmissionMaterial = Props": [
       {
-        "name": "MeshTransmissionMaterial",
+        "name": "MeshTransmissionMaterial = Props",
         "module": "@react-three/drei",
         "isDefault": false
       }

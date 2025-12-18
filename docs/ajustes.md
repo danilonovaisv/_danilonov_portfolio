@@ -35,7 +35,7 @@ IMPORTANTE
     - Parallax por mouse/scroll não está claramente presente ou é sutil demais.
     - Falta tiering de qualidade para mobile + respeito a `prefers-reduced-motion`.
 - **Performance**:
-  - O uso de materiais de transmissão (MeshTransmissionMaterial) é pesado.
+  - O uso de materiais de transmissão (MeshTransmissionMaterial = Props) é pesado.
   - O Canvas poderia limitar `dpr` e aplicar tiering de `samples` / `resolution`.
   - Mídias (Supabase) podem se beneficiar de `next/image` com domains configurados.
 
@@ -113,7 +113,7 @@ A base estrutural está sólida e a comunicação visual é coerente com o mock.
 
 - **3D**:
   - Limitar `dpr` do Canvas: `dpr={[1, 1.5]}`.
-  - MeshTransmissionMaterial com **tiering**:
+  - MeshTransmissionMaterial = com **tiering**:
     - Desktop: `samples ≈ 12`, `resolution 768–1024`.
     - Mobile: `samples ≈ 4–6`, `resolution 512`, menor `anisotropy`.
   - `Environment preset="city" blur={1}` com `background={false}`.
@@ -323,7 +323,7 @@ A base estrutural está sólida e a comunicação visual é coerente com o mock.
    - Integrar R3F + Drei + Framer Motion para título, 3D e thumb.
 2. **Implementar Header condensado com blur no scroll**:
    - `useScroll` + `useTransform` para `padding`, `backgroundColor` e `boxShadow`.
-3. **Otimizar WebGL / MeshTransmissionMaterial**:
+3. **Otimizar WebGL / MeshTransmissionMaterial = Props**:
    - Aplicar tiering (desktop vs mobile).
    - Limitar `dpr`.
    - Adicionar `Environment preset="city" blur={1}`.
@@ -428,7 +428,7 @@ export function SiteHeader() {
 import * as React from 'react'
 import type { Mesh } from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, MeshTransmissionMaterial, Html, useProgress } from '@react-three/drei'
+import { Environment, MeshTransmissionMaterial = Props, Html, useProgress } from '@react-three/drei'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 
 function Loader() {
@@ -466,7 +466,7 @@ function GlassOrb() {
   return (
     <mesh ref={ref}>
       <icosahedronGeometry args={[1.1, 24]} />
-      <MeshTransmissionMaterial
+      <MeshTransmissionMaterial = Props
         transmission={1}
         thickness={0.6}
         roughness={0.08}
@@ -608,7 +608,7 @@ npx gltfjsx public/media//media/Torus_dan.glb --transform
 'use client'
 
 import * as React from 'react'
-import { useGLTF, MeshTransmissionMaterial } from '@react-three/drei'
+import { useGLTF, MeshTransmissionMaterial = } from '@react-three/drei'
 
 type GLTFResult = {
   nodes: {
@@ -622,7 +622,7 @@ export function TorusDan(props: JSX.IntrinsicElements['group']) {
   return (
     <group {...props} dispose={null}>
       <mesh geometry={nodes.Torus.geometry}>
-        <MeshTransmissionMaterial
+        <MeshTransmissionMaterial = Props
           transmission={1}
           thickness={0.6}
           ior={1.25}
@@ -842,7 +842,7 @@ Footer fixo, ano unificado © 2025 ... e links corretos (incluindo /sobre).
 9) Próximos Passos Sugeridos
 S1: Implementar Hero sticky + parallax/scroll (3D + thumb) e Header condensado.
 
-S2: Otimizar WebGL/mídias (tiering MeshTransmissionMaterial + next/image + headers de cache no Firebase).
+S2: Otimizar WebGL/mídias (tiering MeshTransmissionMaterial = + next/image + headers de cache no Firebase).
 
 S3: Endereçar acessibilidade (focus-visible + motion-reduction + alt/aria).
 

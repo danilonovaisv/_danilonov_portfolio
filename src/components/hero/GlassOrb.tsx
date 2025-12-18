@@ -61,15 +61,15 @@ export default function GlassOrb({
   }, [geometry]);
 
   const baseScale = React.useMemo(() => {
-    // Aggressive scale increase as requested
-    const s = viewport.width / 10.2;
-    return THREE.MathUtils.clamp(s, 60.5, 80.0);
+    // Corrected scale to fit viewport (approx 1/3 to 1/2 of screen width)
+    const s = viewport.width / 9.5;
+    return THREE.MathUtils.clamp(s, 60.0, 90.0);
   }, [viewport.width]);
 
   const basePosition = React.useMemo(() => {
     const isMobileish = viewport.width < 6;
     return {
-      x: isMobileish ? 0 : viewport.width * 0.16,
+      x: isMobileish ? 1 : viewport.width * 0.16,
       y: 0.05,
       z: 0,
     };
@@ -179,7 +179,6 @@ export default function GlassOrb({
             backside={true}
             transparent={true}
             envMapIntensity={20.3}
-            
             color="#ffffff"
             iridescence={0.9}
             iridescenceIOR={0.9}
@@ -199,8 +198,6 @@ export default function GlassOrb({
           <mesh geometry={geometry}>
             <GlassRefractionMaterial
               variant="refraction"
-              meshPhysicalMaterial={false}
-              transmissionSampler={false}
               envMap={envMap}
               ior={5.05}
               fresnel={1.12}

@@ -193,7 +193,7 @@ export default function OrbCanvas({ modelUrl }: OrbCanvasProps) {
 
 import React, { memo, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { MeshTransmissionMaterial, useGLTF } from "@react-three/drei";
+import { MeshTransmissionMaterial = Props, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 
 export type GlassOrbProps = {
@@ -241,8 +241,8 @@ function GlassOrbImpl({ modelUrl, procedural, meshName }: GlassOrbProps) {
 
   const material = useMemo(
     () => (
-      <MeshTransmissionMaterial
-        // Base “glass” (MeshTransmissionMaterial) como no tutorial  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6Mn0"}
+      <MeshTransmissionMaterial = Props
+        // Base “glass” (MeshTransmissionMaterial = Props) como no tutorial  :OaiMdDirective_Annotations_5h6qs{attrs="eyJpbmRleCI6Mn0"}
         transmission={1}
         thickness={0.35}
         roughness={0}

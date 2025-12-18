@@ -4,7 +4,7 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import {
-  MeshTransmissionMaterial,
+  MeshTransmissionMaterial = Props,
   MeshRefractionMaterial,
   useGLTF,
 } from '@react-three/drei';
@@ -77,8 +77,8 @@ export function TorusDan({
             fastChroma
           />
         ) : (
-          // Variante “glass líquido” MeshTransmissionMaterial
-          <MeshTransmissionMaterial
+          // Variante “glass líquido” MeshTransmissionMaterial = Props
+          <MeshTransmissionMaterial = Props
             backside
             samples={16}
             resolution={1024}

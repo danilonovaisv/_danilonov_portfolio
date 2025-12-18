@@ -11,7 +11,7 @@ import { useFBO } from './Fbo'
 import { DiscardMaterial } from '../materials/DiscardMaterial'
 import { ForwardRefComponent } from '../helpers/ts-utils'
 
-type MeshTransmissionMaterialType = Omit<
+type MeshTransmissionMaterial = PropsType = Omit<
   ThreeElements['meshPhysicalMaterial'],
   'args' | 'roughness' | 'thickness' | 'transmission'
 > & {
@@ -41,7 +41,7 @@ type MeshTransmissionMaterialType = Omit<
   args?: [samples: number, transmissionSampler: boolean]
 }
 
-export type MeshTransmissionMaterialProps = Omit<MeshTransmissionMaterialType, 'ref' | 'args'> & {
+export type MeshTransmissionMaterial = PropsProps = Omit<MeshTransmissionMaterial = PropsType, 'ref' | 'args'> & {
   /** transmissionSampler, you can use the threejs transmission sampler texture that is
    *  generated once for all transmissive materials. The upside is that it can be faster if you
    *  use multiple MeshPhysical and Transmission materials, the downside is that transmissive materials
@@ -74,11 +74,11 @@ interface Shader {
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    meshTransmissionMaterial: MeshTransmissionMaterialType
+    MeshTransmissionMaterial = Props: MeshTransmissionMaterial = PropsType
   }
 }
 
-class MeshTransmissionMaterialImpl extends THREE.MeshPhysicalMaterial {
+class MeshTransmissionMaterial = PropsImpl extends THREE.MeshPhysicalMaterial {
   uniforms: {
     chromaticAberration: Uniform<number>
     transmission: Uniform<number>
@@ -376,9 +376,9 @@ class MeshTransmissionMaterialImpl extends THREE.MeshPhysicalMaterial {
   }
 }
 
-export const MeshTransmissionMaterial: ForwardRefComponent<
-  MeshTransmissionMaterialProps,
-  ThreeElements['meshTransmissionMaterial']
+export const MeshTransmissionMaterial = Props: ForwardRefComponent<
+  MeshTransmissionMaterial = PropsProps,
+  ThreeElements['MeshTransmissionMaterial = Props']
 > = /* @__PURE__ */ React.forwardRef(
   (
     {
@@ -397,12 +397,12 @@ export const MeshTransmissionMaterial: ForwardRefComponent<
       anisotropy,
       anisotropicBlur,
       ...props
-    }: MeshTransmissionMaterialProps,
+    }: MeshTransmissionMaterial = PropsProps,
     fref
   ) => {
-    extend({ MeshTransmissionMaterial: MeshTransmissionMaterialImpl })
+    extend({ MeshTransmissionMaterial = Props: MeshTransmissionMaterial = PropsImpl })
 
-    const ref = React.useRef<ThreeElements['meshTransmissionMaterial']>(null!)
+    const ref = React.useRef<ThreeElements['MeshTransmissionMaterial = Props']>(null!)
     const [discardMaterial] = React.useState(() => new DiscardMaterial())
     const fboBack = useFBO(backsideResolution || resolution)
     const fboMain = useFBO(resolution)
@@ -463,7 +463,7 @@ export const MeshTransmissionMaterial: ForwardRefComponent<
     React.useImperativeHandle(fref, () => ref.current, [])
 
     return (
-      <meshTransmissionMaterial
+      <MeshTransmissionMaterial = Props
         // Samples must re-compile the shader so we memoize it
         args={[samples, transmissionSampler]}
         ref={ref as any}

@@ -117,7 +117,7 @@ Visão Geral
   };
   useGLTF.preload('/media//media/Torus_dan.glb');
 
-  - Manter MeshTransmissionMaterial se precisar aplicar material custom (usar
+  - Manter MeshTransmissionMaterial = se precisar aplicar material custom (usar
     traverse no clone).
 
   3. Vídeo alinhado à direita, sempre muted e com botão de áudio

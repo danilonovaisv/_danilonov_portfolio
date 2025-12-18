@@ -32,7 +32,7 @@ REVISÃO (PROBLEMAS ENCONTRADOS) + O QUE FOI CORRIGIDO/MELHORADO
 
 OBS:
 - Mantive o wrapper `GlassRefractionMaterial` com `variant="transmission" | "refraction"`,
-  exatamente para cumprir o objetivo de integrar MeshTransmissionMaterial e MeshRefractionMaterial.
+  exatamente para cumprir o objetivo de integrar MeshTransmissionMaterial = e MeshRefractionMaterial.
 ========================================================================== */
 
 
@@ -404,7 +404,7 @@ export default function GlassOrb({
     }
   })
 
-  // Render path: Transmission = simple mesh + MeshTransmissionMaterial
+  // Render path: Transmission = simple mesh + MeshTransmissionMaterial = Props
   if (materialVariant === 'transmission') {
     return (
       <group ref={group} renderOrder={2}>
@@ -479,9 +479,9 @@ useGLTF.preload('/media/Torus_dan.glb')
 
 import * as React from 'react'
 import * as THREE from 'three'
-import { MeshRefractionMaterial, MeshTransmissionMaterial } from '@react-three/drei'
+import { MeshRefractionMaterial, MeshTransmissionMaterial = } from '@react-three/drei'
 
-type TransmissionProps = React.ComponentProps<typeof MeshTransmissionMaterial> & {
+type TransmissionProps = React.ComponentProps<typeof MeshTransmissionMaterial = Props> & {
   variant: 'transmission'
 }
 
@@ -502,7 +502,7 @@ const GlassRefractionMaterial = React.forwardRef<any, GlassRefractionMaterialPro
   }
 
   const { variant, ...rest } = props
-  return <MeshTransmissionMaterial ref={ref as any} {...rest} />
+  return <MeshTransmissionMaterial = ref={ref as any} {...rest} />
 })
 
 export default GlassRefractionMaterial
@@ -565,7 +565,7 @@ export function useOrbInteraction({ mouseX, mouseY, scrollYProgress }: Args) {
 import React, { Suspense, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, MeshTransmissionMaterial, OrbitControls } from '@react-three/drei'
+import { Environment, MeshTransmissionMaterial = Props, OrbitControls } from '@react-three/drei'
 import { Leva, useControls } from 'leva'
 import { motion } from 'framer-motion'
 
@@ -601,7 +601,7 @@ function GlassGlobe() {
     rotateSpeed: { value: 0.6, min: 0, max: 5, step: 0.01 },
   })
 
-  // Configuração do material (mantendo o padrão do projeto com MeshTransmissionMaterial + Leva)
+  // Configuração do material (mantendo o padrão do projeto com MeshTransmissionMaterial = + Leva)
   const materialProps = useControls('Material (Vidro)', {
     thickness: { value: 0.2, min: 0, max: 3, step: 0.01 },
     roughness: { value: 0, min: 0, max: 1, step: 0.01 },
@@ -630,7 +630,7 @@ function GlassGlobe() {
     >
       <mesh ref={meshRef}>
         <sphereGeometry args={[1, 128, 128]} />
-        <MeshTransmissionMaterial {...materialProps} />
+        <MeshTransmissionMaterial = {...materialProps} />
       </mesh>
     </group>
   )
@@ -776,6 +776,6 @@ Abra o painel do Leva (UI → showLeva) e ajuste:
 Iluminação (intensidades/cores/posições das luzes)
 
 Globo de Vidro (posição + scale/tamanho + rotação)
-O material segue o padrão já usado no seu Model.js com MeshTransmissionMaterial + useControls 
+O material segue o padrão já usado no seu Model.js com MeshTransmissionMaterial = + useControls 
 ‌
 

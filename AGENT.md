@@ -94,7 +94,7 @@ Este agente deve ser capaz de:
   - Cenas sempre em componentes dentro de `src/components/three/**`.
   - Uso de:
     - `<Canvas>` de `@react-three/fiber`.
-    - `Environment`, `useGLTF`, `MeshTransmissionMaterial`, etc. de `@react-three/drei`.
+    - `Environment`, `useGLTF`, `MeshTransmissionMaterial = Props`, etc. de `@react-three/drei`.
   - Modelos GLTF via `useGLTF('/media//media/Torus_dan.glb')` (ou URL pública do Supabase).
   - Animações com `useFrame` + `THREE.MathUtils.lerp`.
 

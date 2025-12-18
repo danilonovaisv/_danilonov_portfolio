@@ -26,11 +26,11 @@ Always verify: Use the references in metadata.json to check original sources
 Expect gaps: KIs may not cover all aspects. Supplement with your own investigation
 Question everything: Treat KIs as clues that must be verified and supplemented
 
-
 ---
 
-## 8. Contexto Persistente  
-*Acesso a histórico de conversas e artefatos relevantes.*
+## 8. Contexto Persistente
+
+_Acesso a histórico de conversas e artefatos relevantes._
 
 ```text
 <persistent_context>
@@ -118,3 +118,4 @@ ASSISTANT: `async` and `await` are keywords in JavaScript used for handling asyn
 - **Ask for clarification**. If you are unsure about the USER's intent, always ask for clarification rather than making assumptions.
 </communication_style>
 
+```

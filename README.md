@@ -16,7 +16,7 @@ Home page interativa do portfólio institucional alinhada ao briefing em `docs/P
 - **Framework:** Next.js 16 (App Router) + React 19 + TypeScript.
 - **Estilos:** Tailwind CSS 4 (`app/globals.css`) com tokens de cor e tipografia Inter.
 - **Animações:** Framer Motion (reveals, sticky/scroll interactions, microinterações) com fallback a `prefers-reduced-motion`.
-- **3D:** React Three Fiber + Drei (Canvas fixo, `MeshTransmissionMaterial`, `Environment` preset city) para o orb de vidro.
+- **3D:** React Three Fiber + Drei (Canvas fixo, `MeshTransmissionMaterial = Props`, `Environment` preset city) para o orb de vidro.
 - **Ícones/UX:** Lucide, anchors suaves e foco visível em navegação.
 - **Formulário:** envio via FormSubmit; links sociais e de contato em `lib/constants.tsx`.
 
