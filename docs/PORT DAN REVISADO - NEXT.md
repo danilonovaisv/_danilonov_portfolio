@@ -317,6 +317,17 @@ em ~0.6s, easing suave.
 
 ---
 
+implemente essa animção seguinto a seguintes alterações em toda a extrutura da hero.  
+01 - Retirar a animção de bora de vidro;
+02 - Centralizar o texto, deixar sem enhuma animação e com a cor #d9dade e seguindo essa ordem de linhas:
+[BRAND AWARENESS]
+Design, não 
+é só estética.
+[É intenção, é estratégia, é experiência.]
+03 - alterar o BG da Hero para a seguinte cor, #06071f
+04 - Adicionar a animação do arquivo, deixando que organizo as animações depois [" "], utilizando a referencia desse link:'https://codepen.io/filipz/pen/GgpMOEq'
+05 - A Thumb do video Manifesto não altera nada;
+
 **KEY CONTENT ELEMENTS (bullets, stats, quotes, etc.):**
 
 * Tag `[BRAND AWARENESS]` alinhada ao H1.
