@@ -1,0 +1,29 @@
+name: 🔍 Project Audit
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # toda segunda-feira às 3h UTC
+  workflow_dispatch: # execução manual
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # necessário para acessar todas as branches
+
+      - name: ⚙️ Instalar dependências
+        run: npm ci
+
+      - name: 🔍 Rodar auditoria
+        run: npm run audit:project
+
+      - name: 💾 Commit do relatório
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add project-audit-report.md
+          git commit -m "📊 Atualização automática: auditoria do projeto"
+          git push

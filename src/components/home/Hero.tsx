@@ -3,9 +3,9 @@
 import React, { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkles } from '@react-three/drei';
 import { ASSETS } from '../../lib/constants';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import GhostScene from './GhostScene';
 
 // Lazy load Canvas for performance and SSR avoidance
 const Canvas = dynamic(
@@ -20,15 +20,9 @@ export default function Hero() {
   const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
 
-  // Optimization: fewer particles on mobile
-  // "Partículas visíveis apenas em telas > 768px" logic combined with "const sparklesCount = isMobile ? 50 : 150"
-  // If the requirement is strictly "visíveis apenas em telas > 768px", then mobile count should be 0 or hidden.
-  // But Item 5 says: "redzir count para 50". I will strictly follow Item 5 as it is "OTIMIZAÇÕES TÉCNICAS".
-  const sparklesCount = isMobile ? 50 : 150;
-
   return (
     <section
-      className="relative h-screen overflow-hidden bg-[#06071f]"
+      className="relative h-screen w-full overflow-hidden bg-[#06071f]"
       aria-label="Hero section com partículas animadas"
     >
       {/* BG estático + WebGL */}
@@ -38,18 +32,16 @@ export default function Hero() {
             <Canvas
               dpr={[1, 2]}
               performance={{ min: 0.7 }}
-              camera={{ position: [0, 0, 30], fov: 60 }}
+              camera={{ position: [0, 0, 12], fov: 45 }} // Adjusted camera for ghost size
               className="absolute inset-0 z-0"
+              gl={{
+                antialias: false,
+                alpha: false,
+                stencil: false,
+                depth: true,
+              }} // Optimizations for post-processing
             >
-              <color attach="background" args={['#06071f']} />
-              <Sparkles
-                count={sparklesCount}
-                size={0.8}
-                scale={[10, 5, 10]}
-                color="#5d8cff" // Azul principal
-                noise={2}
-                speed={0.3}
-              />
+              <GhostScene />
             </Canvas>
           </Suspense>
         )}
@@ -80,24 +72,29 @@ export default function Hero() {
         `}</style>
       </div>
 
-      {/* Conteúdo principal - Estático */}
-      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto px-4">
-        <p className="text-[#d9dade] text-lg md:text-xl tracking-wider uppercase mb-6">
+      {/* Conteúdo principal - Estático e Centralizado */}
+      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center max-w-5xl mx-auto px-4 pointer-events-none">
+        {/* Brand Awareness */}
+        <p className="text-[#d9dade] text-lg md:text-xl tracking-wider uppercase mb-8 font-[PPSupplyMono]">
           [BRAND AWARENESS]
         </p>
-        <h1 className="text-[#d9dade] text-4xl md:text-6xl font-bold leading-tight mb-8">
+
+        {/* Título */}
+        <h1 className="text-[#d9dade] text-4xl md:text-7xl font-bold leading-tight mb-8 font-[PPSupplyMono]">
           Design, não
           <br />é só estética.
         </h1>
-        <p className="text-[#d9dade] text-2xl md:text-3xl italic">
+
+        {/* Subtítulo */}
+        <p className="text-[#d9dade] text-xl md:text-3xl italic font-[PPSupplyMono] opacity-80">
           [É intenção, é estratégia, é experiência.]
         </p>
       </div>
 
-      {/* Vídeo manifesto (posição fixa direita/baixo) */}
-      <div className="absolute z-20 bottom-8 right-8 w-full max-w-[280px] md:max-w-[320px] px-4 md:px-0">
+      {/* Vídeo manifesto (posição fixa direita/baixo) - Pointer events auto para interatividade */}
+      <div className="absolute z-20 bottom-8 right-8 w-full max-w-[280px] md:max-w-[320px] px-4 md:px-0 pointer-events-auto">
         <motion.div
-          className="relative rounded-lg overflow-hidden shadow-lg border border-white/5 bg-black/20"
+          className="relative rounded-lg overflow-hidden shadow-2xl border border-white/10 bg-black/40"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}

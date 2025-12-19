@@ -11,13 +11,11 @@ interface ReportSection {
 const projectRoot = process.cwd();
 const report: ReportSection[] = [];
 
-// Função utilitária
 function logSection(title: string, content: string[]) {
   report.push({ title, content });
   console.log(`✅ ${title}`);
 }
 
-// 1️⃣ Listar estrutura de pastas
 function listFiles(dir: string, allFiles: string[] = []): string[] {
   const files = fs.readdirSync(dir);
   files.forEach((file) => {
@@ -31,7 +29,6 @@ function listFiles(dir: string, allFiles: string[] = []): string[] {
   return allFiles;
 }
 
-// 2️⃣ Analisar dependências
 function analyzeDependencies() {
   const pkgPath = path.join(projectRoot, "package.json");
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
@@ -40,14 +37,13 @@ function analyzeDependencies() {
 
   const files = listFiles(projectRoot);
   const unusedDeps = deps.filter(
-    (dep) => !files.some((file) => fs.readFileSync(file, "utf8").includes(dep))
+      (dep) => !files.some((file) => fs.readFileSync(file, "utf8").includes(dep))
   );
 
   logSection("📦 Dependências não utilizadas", unusedDeps.length ? unusedDeps : ["Nenhuma dependência inútil detectada"]);
   logSection("🧱 Dependências de desenvolvimento", devDeps);
 }
 
-// 3️⃣ Encontrar arquivos e componentes não usados
 function findUnusedFiles() {
   const srcPath = path.join(projectRoot, "app");
   if (!fs.existsSync(srcPath)) return;
@@ -55,26 +51,21 @@ function findUnusedFiles() {
   const allFiles = listFiles(srcPath);
   const tsxFiles = allFiles.filter((f) => f.endsWith(".tsx") || f.endsWith(".ts"));
 
-  const imports = tsxFiles
-    .map((file) => fs.readFileSync(file, "utf8"))
-    .join("\n");
+  const imports = tsxFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n");
 
   const unused = tsxFiles.filter(
-    (f) => !imports.includes(path.basename(f).replace(/\.(tsx|ts)$/, ""))
+      (f) => !imports.includes(path.basename(f).replace(/\.(tsx|ts)$/, ""))
   );
 
   logSection("🧹 Componentes / arquivos possivelmente não usados", unused);
 }
 
-// 4️⃣ Ramificações do Git
 function analyzeGitBranches() {
   try {
     const branches = execSync("git branch -a --sort=-committerdate", { encoding: "utf8" })
-      .split("\n")
-      .filter(Boolean);
-
+        .split("\n")
+        .filter(Boolean);
     const oldBranches = branches.filter((b) => b.includes("remotes/") && !b.includes("main") && !b.includes("master"));
-
     logSection("🌿 Branches no repositório", branches);
     logSection("🪓 Branches potencialmente obsoletas", oldBranches);
   } catch {
@@ -82,14 +73,13 @@ function analyzeGitBranches() {
   }
 }
 
-// 5️⃣ Gerar relatório final
 function generateReport() {
   const output = [
     "# 🧩 Auditoria do Projeto Danilo Novais Portfolio",
     `Gerado em: ${new Date().toLocaleString()}`,
     "---",
     ...report.map(
-      (s) => `## ${s.title}\n${s.content.map((c) => `- ${c}`).join("\n")}\n`
+        (s) => `## ${s.title}\n${s.content.map((c) => `- ${c}`).join("\n")}\n`
     ),
   ].join("\n\n");
 
@@ -97,7 +87,6 @@ function generateReport() {
   console.log("\n📘 Relatório gerado: project-audit-report.md");
 }
 
-// Executar
 console.log("🚀 Iniciando auditoria...");
 listFiles(projectRoot);
 analyzeDependencies();

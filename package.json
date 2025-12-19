@@ -28,6 +28,7 @@
     "analyze": "npm run lint && npm run typecheck",
     "analyze:deps": "depcheck",
     "analyze:graph": "node scripts/analyze-graph.cjs",
+    "audit:project": "npx ts-node scripts/analyze-project.ts",
     "test": "npm run eslint:ci && npm run typecheck && npm run prettier && npm run jest && (cd test/e2e; ./e2e.sh 0.180)",
     "jest": "jest",
     "type-check": "tsc --noEmit",
