@@ -36,18 +36,18 @@ export default function supabaseLoader({
     if (supabaseUrl && !src.startsWith(supabaseUrl)) {
       return src;
     }
-    // If supabaseUrl is not defined, strictly we can't know for sure, 
+    // If supabaseUrl is not defined, strictly we can't know for sure,
     // but we can look for the standard path structure /storage/v1/...
   }
 
   // 4 & 5. Transform object URL to render URL
   // Object URL: .../storage/v1/object/public/...
   // Render URL: .../storage/v1/render/image/public/...
-  
+
   // Use URL object to parse and modify (handles query params automatically)
   try {
     const url = new URL(urlStr);
-    
+
     // Check if it is a Supabase Storage URL
     if (url.pathname.includes('/storage/v1/object/public/')) {
       url.pathname = url.pathname.replace(
@@ -59,15 +59,14 @@ export default function supabaseLoader({
     // Only append params if it is a render URL (either originally or after transformation)
     // The test implies we modify valid supabase paths.
     if (url.pathname.includes('/storage/v1/render/image/public/')) {
-        url.searchParams.set('width', width.toString());
-        url.searchParams.set('quality', (quality || 75).toString());
-        return url.toString();
+      url.searchParams.set('width', width.toString());
+      url.searchParams.set('quality', (quality || 75).toString());
+      return url.toString();
     }
-    
+
     // If it was a supabase URL but didn't match the patterns (e.g. invalid path?),
     // or we decided it wasn't a supabase URL above, return as is.
     return src;
-
   } catch {
     // If URL parsing fails (shouldn't given logic above), return original
     return src;

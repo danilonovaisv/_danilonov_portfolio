@@ -49,7 +49,6 @@ export default function Hero() {
                 color="#5d8cff" // Azul principal
                 noise={2}
                 speed={0.3}
-                depthTest={false}
               />
             </Canvas>
           </Suspense>

@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'PPSupplyMono';
+  src: url('https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
 :root {
   --color-surface-main: #f4f5f7;
   --color-text-main: #111111;
