@@ -25,8 +25,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 async function updateSession(request) {
-    let supabaseResponse = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next({
-        request
+    let response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next({
+        request: {
+            headers: request.headers
+        }
     });
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$ssr$2f$dist$2f$module$2f$createServerClient$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["createServerClient"])(("TURBOPACK compile-time value", "https://aymuvxysygrwoicsjgxj.supabase.co"), ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bXV2eHlzeWdyd29pY3NqZ3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyNjMxODcsImV4cCI6MjA3NjgzOTE4N30.llUGf7oRZnxD2U7riZ6AIfQDvQGwIOyIS-ML_8xpBRU"), {
         cookies: {
@@ -35,31 +37,18 @@ async function updateSession(request) {
             },
             setAll (cookiesToSet) {
                 cookiesToSet.forEach(({ name, value })=>request.cookies.set(name, value));
-                supabaseResponse = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next({
-                    request
+                response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next({
+                    request: {
+                        headers: request.headers
+                    }
                 });
-                cookiesToSet.forEach(({ name, value, options })=>supabaseResponse.cookies.set(name, value, options));
+                cookiesToSet.forEach(({ name, value, options })=>response.cookies.set(name, value, options));
             }
         }
     });
-    const { data: { user } } = await supabase.auth.getUser();
-    // Protect /admin routes
-    if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
-        if (!user) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/admin/login';
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(url);
-        }
-        // Check for admin role in app_metadata
-        // Only check app_metadata as it is secure and not editable by the user
-        const userRole = user.app_metadata?.role || 'user';
-        if (userRole !== 'admin') {
-            const url = request.nextUrl.clone();
-            url.pathname = '/';
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].redirect(url);
-        }
-    }
-    return supabaseResponse;
+    // refreshing the auth token
+    await supabase.auth.getUser();
+    return response;
 }
 }),
 "[project]/src/middleware.ts [middleware-edge] (ecmascript)", ((__turbopack_context__) => {
