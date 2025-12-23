@@ -1,13 +1,6 @@
-# Port Dan (Next.js + R3F)
+# [webgl/threejs] ❍ Spooky Spectral Ghost
 
-## Dev
-```bash
-npm i
-npm run dev
-```
+A Pen created on CodePen.
 
-## Deploy (Firebase Hosting - frameworks)
-```bash
-firebase init hosting
-firebase deploy
-```
+Original URL: [https://codepen.io/danilonovaisv/pen/azZbdQo](https://codepen.io/danilonovaisv/pen/azZbdQo).
+

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
 import { Button } from '@/ui/Button';
-import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ProjectCategory } from '@/lib/types';
 import CategoryStripe from './CategoryStripe';
 
