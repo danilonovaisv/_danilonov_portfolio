@@ -4,7 +4,7 @@ import React, { FC, useState, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ProjectCategory } from '@/lib/types';
 import CategoryStripe from './CategoryStripe';

@@ -6,7 +6,7 @@
   "static/chunks/0459c_framer-motion_dist_es_67ad99c2._.js",
   "static/chunks/3cf09_motion-dom_dist_es_c8ba178c._.js",
   "static/chunks/node_modules__pnpm_ec1ef67a._.js",
-  "static/chunks/src_63abe551._.js"
+  "static/chunks/src_c81be840._.js"
 ],
     source: "dynamic"
 });

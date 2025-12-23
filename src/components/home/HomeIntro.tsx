@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Volume2, VolumeX } from 'lucide-react';
+
 import HeroPreloader from './HeroPreloader';
 import HeroCopy from './HeroCopy';
 import GhostStage from './GhostStage';

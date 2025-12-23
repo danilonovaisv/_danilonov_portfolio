@@ -1,9 +1,9 @@
 import React from 'react';
 import localFont from 'next/font/local';
 import { Metadata } from 'next';
-import SmoothScroll from '@/layouts/SmoothScroll';
-import Header from '@/layouts/Header';
-import Footer from '@/layouts/Footer';
+import SmoothScroll from '@/components/layout/SmoothScroll';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 import { ASSETS } from '@/lib/constants';
 import './globals.css';
 

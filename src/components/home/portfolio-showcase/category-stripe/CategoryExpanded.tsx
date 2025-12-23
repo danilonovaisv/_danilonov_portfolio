@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { ProjectCategory } from '@/lib/types';
 
 interface CategoryExpandedProps {

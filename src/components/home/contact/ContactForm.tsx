@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { ArrowRight } from 'lucide-react';
+import { InputField, TextAreaField } from './FormFields';
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -36,7 +37,6 @@ const ContactForm: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -49,7 +49,6 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate all fields
     const newErrors: Record<string, string> = {};
     Object.entries(formData).forEach(([key, value]) => {
       const error = validateField(key, value);
@@ -64,7 +63,6 @@ const ContactForm: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Submit to FormSubmit service
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         formDataToSend.append(key, value);
@@ -131,103 +129,54 @@ const ContactForm: React.FC = () => {
           <input type="text" name="_honey" style={{ display: 'none' }} />
           <input type="hidden" name="_captcha" value="false" />
 
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-semibold text-gray-600 mb-2"
-            >
-              Seu nome
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              autoComplete="name"
-              className={`w-full rounded-xl border ${
-                errors.name ? 'border-red-500' : 'border-gray-200'
-              } bg-gray-50 px-4 py-3 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
-              placeholder="João da Silva"
-            />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-            )}
-          </div>
+          <InputField
+            label="Seu nome"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            error={errors.name}
+            required
+            autoComplete="name"
+            placeholder="João da Silva"
+          />
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-gray-600 mb-2"
-            >
-              Seu email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              autoComplete="email"
-              className={`w-full rounded-xl border ${
-                errors.email ? 'border-red-500' : 'border-gray-200'
-              } bg-gray-50 px-4 py-3 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
-              placeholder="joao@empresa.com"
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-            )}
-          </div>
+          <InputField
+            label="Seu email"
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+            required
+            autoComplete="email"
+            placeholder="joao@empresa.com"
+          />
 
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-semibold text-gray-600 mb-2"
-            >
-              Telefone
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              autoComplete="tel"
-              className={`w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-                errors.phone ? 'focus-visible:ring-red-500' : ''
-              }`}
-              placeholder="(11) 99999-9999"
-            />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
-            )}
-          </div>
+          <InputField
+            label="Telefone"
+            id="phone"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            error={errors.phone}
+            autoComplete="tel"
+            placeholder="(11) 99999-9999"
+          />
 
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-sm font-semibold text-gray-600 mb-2"
-            >
-              Sua mensagem
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows={4}
-              className={`w-full resize-none rounded-xl border ${
-                errors.message ? 'border-red-500' : 'border-gray-200'
-              } bg-gray-50 px-4 py-3 transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white`}
-              placeholder="Conte-me sobre seu projeto..."
-            />
-            {errors.message && (
-              <p className="mt-1 text-sm text-red-500">{errors.message}</p>
-            )}
-          </div>
+          <TextAreaField
+            label="Sua mensagem"
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            error={errors.message}
+            required
+            rows={4}
+            placeholder="Conte-me sobre seu projeto..."
+          />
 
           {errors.submit && (
             <p className="text-sm text-red-500">{errors.submit}</p>

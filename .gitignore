@@ -1,54 +1,48 @@
-```
-# Compiled and build artifacts
-*.pyc
-__pycache__/
-*.o
-*.obj
-dist/
+# Next.js
+.next/
+out/
 build/
-target/
 
 # Dependencies
 node_modules/
-venv/
-.venv/
-.env
-.env.local
-.env.*
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+pubsub-debug.log
+ui-debug.log
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
-
-# Editors
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS generated files
+*.vsix
 .DS_Store
 Thumbs.db
 
+# Environments
+.env
+.env.local
+.env.production
+.env.development
+.env.*.local
+
 # Coverage
 coverage/
-htmlcov/
 .coverage
 
-# Python specific
-.mypy_cache/
-.pytest_cache/
+# Typescript
+*.tsbuildinfo
 
-# Node.js specific
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
-*.out
-*.exe
-*.dll
-*.so
-*.a
-```
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

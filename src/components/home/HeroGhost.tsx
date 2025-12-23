@@ -4,8 +4,9 @@ import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
-import Ghost from './webgl/Ghost';
-import { AnalogDecayEffect } from './webgl/postprocessing/AnalogDecayPass';
+
+import Ghost from '@/components/canvas/webgl/Ghost';
+import { AnalogDecayEffect } from '@/components/canvas/webgl/postprocessing/AnalogDecayPass';
 
 /**
  * HeroGhost renders the 3D spectral ghost within an R3F Canvas.
