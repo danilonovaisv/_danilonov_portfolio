@@ -31,7 +31,7 @@ const PortfolioShowcase: FC = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.22, 1, 0.36, 1], // Revisado Spec Smooth Easing
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number], // Revisado Spec Smooth Easing
         when: 'beforeChildren',
         staggerChildren: 0.1,
       },
@@ -60,7 +60,7 @@ const PortfolioShowcase: FC = () => {
         y: 0,
         transition: {
           duration: 0.8,
-          ease: [0.22, 1, 0.36, 1],
+          ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         },
       },
     }),

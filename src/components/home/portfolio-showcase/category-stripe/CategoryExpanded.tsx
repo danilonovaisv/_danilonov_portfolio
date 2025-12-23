@@ -14,7 +14,7 @@ const CategoryExpanded: FC<CategoryExpandedProps> = ({ category }) => {
       transition={{
         delay: 0.1,
         duration: 0.5,
-        ease: [0.25, 1, 0.5, 1],
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
       }}
       className="w-full mt-6 flex flex-col md:flex-row gap-8 md:gap-12 text-center md:text-left"
     >
@@ -62,7 +62,7 @@ const CategoryExpanded: FC<CategoryExpandedProps> = ({ category }) => {
                 transition={{
                   delay: 0.1 * i,
                   duration: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
+                  ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
                 }}
                 className="flex items-center gap-4 text-base md:text-lg font-medium text-[#111111] group/item cursor-pointer py-1"
               >
