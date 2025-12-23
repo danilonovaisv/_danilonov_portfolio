@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="bg-[#F4F5F7] py-24 md:py-32">
+    <section id="contact" className="bg-white py-24 md:py-32">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-16">
           <motion.div
@@ -106,10 +106,10 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#0057FF] mb-4 lowercase text-center md:text-left">
-              contato
+            <h2 className="text-4xl md:text-5xl font-bold text-[#0057FF] mb-4 text-center md:text-left">
+              Contato
             </h2>
-            <p className="text-xl text-dark mb-12 text-center md:text-left">
+            <p className="text-xl text-[#111111] mb-12 text-center md:text-left">
               Tem uma pergunta ou quer trabalhar junto?
             </p>
 

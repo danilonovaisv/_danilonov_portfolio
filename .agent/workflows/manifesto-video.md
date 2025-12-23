@@ -1,5 +1,5 @@
 ---
-description:
+description: 
 ---
 
 # Workflow: Seção Manifesto (Expand to Fullscreen)
@@ -36,4 +36,20 @@ return (
     className="w-full h-full object-cover"
   />
 );
+
+Validação (@Auditor):
+
+A animação é suave (60fps)? Se não, usar will-change: transform.
+
+O vídeo mantém a proporção correta ou corta partes importantes? (Testar object-fit).
+
+Em Mobile, a expansão funciona ou o vídeo já deve começar maior? (Recomendado: Mobile já começa quase full width).
+
+---
+
+### Dica para o Agente @Architect
+Como essa funcionalidade cria uma dependência forte entre `Hero` e `Manifesto`, instrua o agente a criar um componente pai chamado **`HomeIntro.tsx`** que gerencia ambas as seções.
+
+**Novo Comando Sugerido:**
+> `@TechLead` Crie um componente `HomeIntro.tsx` que englobe a Hero e o Manifesto. Implemente a lógica de "Scroll-to-Expand" onde o vídeo da Hero cresce até cobrir a tela, removendo o texto, usando Framer Motion e `useScroll`.
 ```

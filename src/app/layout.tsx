@@ -21,27 +21,29 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL('https://portfoliodanilo.com'),
   title: {
-    default: 'Danilo Novais | Motion & Interactive Developer',
+    default: 'Danilo Novais | Creative Developer',
     template: '%s | Danilo Novais',
   },
   description:
     'Portfólio de Danilo Novais - Designer e Desenvolvedor focado em Motion, 3D e Experiências Interativas.',
   keywords: [
+    'Creative Developer',
+    'WebGL',
+    'R3F',
+    'Next.js',
     'Motion Design',
     'Interactive Developer',
-    'Creative Developer',
     'Web Design',
     '3D',
-    'Frontend',
     'React',
-    'Next.js',
+    'Brazil',
     'Danilo Novais',
   ],
   authors: [{ name: 'Danilo Novais', url: 'https://portfoliodanilo.com' }],
   creator: 'Danilo Novais',
   publisher: 'Danilo Novais',
   openGraph: {
-    title: 'Danilo Novais | Motion & Interactive Developer',
+    title: 'Danilo Novais | Creative Developer',
     description:
       'Design, não é só estética. É intenção, estratégia e experiência.',
     url: 'https://portfoliodanilo.com',
@@ -51,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Danilo Novais | Motion & Interactive Developer',
+    title: 'Danilo Novais | Creative Developer',
     description:
       'Design, não é só estética. É intenção, estratégia e experiência.',
     creator: '@danilo_novais',
@@ -100,6 +102,23 @@ export default function RootLayout({
             <Footer />
           </div>
         </SmoothScroll>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: 'Danilo Novais',
+              url: 'https://portfoliodanilo.com',
+              jobTitle: 'Creative Developer',
+              sameAs: [
+                'https://linkedin.com/in/danilonovais',
+                'https://instagram.com/danilo_novais',
+                'https://twitter.com/danilo_novais',
+              ],
+            }),
+          }}
+        />
       </body>
     </html>
   );
