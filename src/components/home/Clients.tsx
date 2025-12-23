@@ -9,7 +9,7 @@ const Clients: React.FC = () => {
   return (
     <section
       id="clients"
-      className="bg-[#050505] py-24 md:py-32 border-t border-white/5"
+      className="bg-[#0057FF] py-24 md:py-32 border-t border-white/10"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <motion.div
@@ -18,10 +18,10 @@ const Clients: React.FC = () => {
           viewport={{ once: true, amount: 0.2 }}
           className="mb-16 md:mb-24 flex flex-col items-center text-center"
         >
-          <span className="text-[#0057FF] text-xs font-bold uppercase tracking-[0.4em] mb-4">
+          <span className="text-white/80 text-xs font-bold uppercase tracking-[0.4em] mb-4">
             Trusted By
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold font-sans tracking-tight text-[#F0F0F0]">
+          <h2 className="text-3xl md:text-4xl font-bold font-sans tracking-tight text-white">
             Marcas com as quais já trabalhei.
           </h2>
         </motion.div>

@@ -22,8 +22,8 @@ export default function ManifestoThumb() {
   const nextSectionEnteringRef = useRef(false);
 
   const scale = useTransform(progress, [0, 0.12, 0.46], [1, 1, 2.4]);
-  const translateX = useTransform(progress, [0, 0.12, 0.46], [0, 0, -120]);
-  const translateY = useTransform(progress, [0, 0.12, 0.46], [0, 0, -90]);
+  const translateX = useTransform(progress, [0, 0.12, 0.46], [0, -10, -80]);
+  const translateY = useTransform(progress, [0, 0.12, 0.46], [0, 0, -65]);
   const borderRadius = useTransform(progress, [0, 0.46], [24, 6]);
 
   useEffect(() => {
@@ -88,14 +88,17 @@ export default function ManifestoThumb() {
 
   return (
     <motion.div
-      style={{ x: translateX, y: translateY, scale }}
+      style={{ x: translateX, y: translateY }}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: EASING }}
+      transition={{
+        duration: 1.2,
+        ease: EASING as [number, number, number, number],
+      }}
       className="relative z-20 flex flex-col items-end"
     >
       <motion.div
-        style={{ borderRadius }}
+        style={{ scale, borderRadius, transformOrigin: 'bottom right' }}
         className="relative mb-2 w-48 md:w-64 aspect-video overflow-hidden shadow-2xl border border-white/10 bg-black/60"
       >
         <video

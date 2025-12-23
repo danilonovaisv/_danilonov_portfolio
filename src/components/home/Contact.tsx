@@ -8,7 +8,7 @@ const Contact: React.FC = () => {
   return (
     <section
       id="contact"
-      className="bg-[#050505] py-24 md:py-32 border-t border-white/5"
+      className="bg-white py-24 md:py-32 border-t border-black/5"
     >
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-24">

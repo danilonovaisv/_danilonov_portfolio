@@ -4,7 +4,7 @@
 import dynamic from 'next/dynamic';
 import { MotionValue } from 'framer-motion';
 
-const GhostCanvas = dynamic(() => import('./webgl/GhostCanvas'), {
+const GhostCanvas = dynamic(() => import('./home-hero/GhostCanvas'), {
   ssr: false,
   loading: () => <div className="absolute inset-0 z-0 bg-[#050505]" />,
 });
