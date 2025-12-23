@@ -1,5 +1,5 @@
 ---
-description: 
+description:
 ---
 
 # Workflow: Seção Manifesto (Expand to Fullscreen)

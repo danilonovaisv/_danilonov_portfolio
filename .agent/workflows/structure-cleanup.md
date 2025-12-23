@@ -1,5 +1,5 @@
 ---
-description: 
+description:
 ---
 
 # Workflow: Auditoria e Limpeza Estrutural
@@ -17,6 +17,7 @@ Manter a sanidade do repositório, garantindo que a estrutura de pastas siga o p
 O agente deve primeiro listar e categorizar a estrutura atual sem fazer alterações.
 
 ### Checklist de Verificação:
+
 1.  **Validação do `src/`:**
     - Todo código-fonte (componentes, libs, hooks, utils) está dentro de `src/`?
     - Existem arquivos de configuração (exceto `next.config.mjs`, `tailwind.config.ts`, etc.) perdidos na raiz?
@@ -34,17 +35,19 @@ O agente deve primeiro listar e categorizar a estrutura atual sem fazer alteraç
 O agente deve propor movimentações baseadas nestas regras estritas:
 
 ### A. Estrutura de Componentes (`src/components/`)
+
 Adotar estrutura por **Funcionalidade (Feature-based)** para seções grandes e **Tipo** para genéricos.
 
-* **`src/components/ui/`**: Componentes primitivos reutilizáveis (Buttons, Inputs, Cards). Sem lógica de negócio.
-* **`src/components/home/`**: Componentes exclusivos da Home Page (Hero, Manifesto, Grid).
-* **`src/components/layout/`**: Header, Footer, Wrappers de Grid.
-* **`src/components/canvas/`**: Cenas WebGL/R3F isoladas (ex: `GhostScene.tsx`, `Torus.tsx`). *Não misturar DOM com Canvas.*
+- **`src/components/ui/`**: Componentes primitivos reutilizáveis (Buttons, Inputs, Cards). Sem lógica de negócio.
+- **`src/components/home/`**: Componentes exclusivos da Home Page (Hero, Manifesto, Grid).
+- **`src/components/layout/`**: Header, Footer, Wrappers de Grid.
+- **`src/components/canvas/`**: Cenas WebGL/R3F isoladas (ex: `GhostScene.tsx`, `Torus.tsx`). _Não misturar DOM com Canvas._
 
 ### B. Utilitários e Hooks
-* **`src/hooks/`**: Apenas Custom Hooks (ex: `useScrollProgress`).
-* **`src/lib/`**: Configurações de terceiros (Supabase, Three.js helpers, Utils puros).
-* **`src/styles/`**: Se houver CSS Modules ou globals além do Tailwind.
+
+- **`src/hooks/`**: Apenas Custom Hooks (ex: `useScrollProgress`).
+- **`src/lib/`**: Configurações de terceiros (Supabase, Three.js helpers, Utils puros).
+- **`src/styles/`**: Se houver CSS Modules ou globals além do Tailwind.
 
 ---
 
@@ -82,5 +85,6 @@ Se aprovado pelo usuário, executar sequencialmente:
 ## 4. Validação Final
 
 Após a reorganização:
+
 1.  Rodar `npm run build` para garantir que nenhum import foi quebrado.
 2.  Verificar se o tamanho do repositório diminuiu (remoção de assets pesados indevidos).
