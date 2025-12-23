@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, expect, it, jest } from '@jest/globals';
 import PortfolioShowcaseSection from '../../src/components/home/PortfolioShowcase';
-import { CATEGORIES } from '../../src/lib/constants';
+import { HOME_CONTENT } from '../../src/config/content';
 
 // Mock do Framer Motion para evitar complexidade de animação nos testes
 jest.mock('framer-motion', () => ({
@@ -271,7 +271,7 @@ describe('PortfolioShowcaseSection Component', () => {
   it('deve renderizar todas as categorias', () => {
     render(<PortfolioShowcaseSection />);
 
-    CATEGORIES.forEach((category) => {
+    HOME_CONTENT.showcase.categories.forEach((category) => {
       // Para a categoria especial 'websites-webcampaigns-tech', verificamos o texto dividido
       if (category.id === 'websites-webcampaigns-tech') {
         expect(screen.getByText('Web Campaigns,')).toBeInTheDocument();

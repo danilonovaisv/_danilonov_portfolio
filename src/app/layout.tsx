@@ -5,6 +5,7 @@ import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { BRAND } from '@/config/brand';
+import { SOCIALS } from '@/config/navigation';
 import './globals.css';
 
 const ttNorms = localFont({
@@ -42,8 +43,8 @@ const ttNorms = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://portfoliodanilo.com'),
   title: {
-    default: 'Danilo Novais | Creative Developer',
-    template: '%s | Danilo Novais',
+    default: `${BRAND.name} | Creative Developer`,
+    template: `%s | ${BRAND.name}`,
   },
   description:
     'Portfólio de Danilo Novais - Designer e Desenvolvedor focado em Motion, 3D e Experiências Interativas.',
@@ -60,21 +61,21 @@ export const metadata: Metadata = {
     'Brazil',
     'Danilo Novais',
   ],
-  authors: [{ name: 'Danilo Novais', url: 'https://portfoliodanilo.com' }],
-  creator: 'Danilo Novais',
-  publisher: 'Danilo Novais',
+  authors: [{ name: BRAND.name, url: 'https://portfoliodanilo.com' }],
+  creator: BRAND.name,
+  publisher: BRAND.name,
   openGraph: {
-    title: 'Danilo Novais | Creative Developer',
+    title: `${BRAND.name} | Creative Developer`,
     description:
       'Design, não é só estética. É intenção, estratégia e experiência.',
     url: 'https://portfoliodanilo.com',
-    siteName: 'Danilo Novais Portfolio',
+    siteName: `${BRAND.name} Portfolio`,
     locale: 'pt_BR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Danilo Novais | Creative Developer',
+    title: `${BRAND.name} | Creative Developer`,
     description:
       'Design, não é só estética. É intenção, estratégia e experiência.',
     creator: '@danilo_novais',
@@ -131,14 +132,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Person',
-              name: 'Danilo Novais',
+              name: BRAND.name,
               url: 'https://portfoliodanilo.com',
               jobTitle: 'Creative Developer',
-              sameAs: [
-                'https://linkedin.com/in/danilonovais',
-                'https://instagram.com/danilo_novais',
-                'https://twitter.com/danilo_novais',
-              ],
+              sameAs: SOCIALS.map((s) => s.url),
             }),
           }}
         />

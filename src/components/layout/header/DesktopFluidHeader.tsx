@@ -56,9 +56,7 @@ export default function DesktopFluidHeader() {
                 key={link.label}
                 href={link.href}
                 className={`relative text-sm font-medium lowercase tracking-wide transition-colors duration-200 ${
-                  isActive
-                    ? 'text-[#0057FF]'
-                    : 'text-white/85 hover:text-white'
+                  isActive ? 'text-[#0057FF]' : 'text-white/85 hover:text-white'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >
