@@ -1,5 +1,5 @@
 import React from 'react';
-import { Inter, Outfit } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Metadata } from 'next';
 import SmoothScroll from '@/layouts/SmoothScroll';
 import Header from '@/layouts/Header';
@@ -7,16 +7,36 @@ import Footer from '@/layouts/Footer';
 import { ASSETS } from '@/lib/constants';
 import './globals.css';
 
-const inter = Inter({
-  subsets: ['latin'],
+const ttNorms = localFont({
+  src: [
+    {
+      path: '../fonts/TT Norms Pro Thin.woff2',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/TT Norms Pro Light.woff2',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/TT Norms Pro Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/TT Norms Pro Medium.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/TT Norms Pro Bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-tt-norms',
   display: 'swap',
-  variable: '--font-inter',
-});
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-outfit',
 });
 
 export const metadata: Metadata = {
@@ -86,9 +106,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${outfit.variable}`}>
+    <html lang="pt-BR" className={`${ttNorms.variable}`}>
       <body
-        className={`${inter.className} bg-surface-main text-text-main selection:bg-[#0057FF] selection:text-white`}
+        className={`${ttNorms.className} bg-surface-main text-text-main selection:bg-[#0057FF] selection:text-white`}
       >
         <SmoothScroll>
           <a
