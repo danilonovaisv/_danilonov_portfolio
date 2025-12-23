@@ -1,55 +1,45 @@
----
-description:
----
-
-# Workflow: Seção Manifesto (Expand to Fullscreen)
+# Workflow: Seção Manifesto (Scroll Expansion)
 
 **Conceito Visual:**
-O vídeo que começou como uma "Thumb" na Hero cresce conforme o usuário desce a página até ocupar **toda a viewport (100vw/100vh)**. Neste estado "Full", não há textos, botões ou sobreposições. O vídeo é a mensagem.
-
-**Mecânica de Animação (Scroll-Linked):**
-
-1. **Estratégia Técnica (Recomendada: Framer Motion + Scroll):**
-   - Usar `useScroll` para monitorar a posição Y.
-   - Mapear o scroll (`useTransform`) para propriedades de escala e tamanho.
-   - **Estado Inicial (Scroll 0):** Tamanho "Thumb" (definido na Hero).
-   - **Estado Final (Scroll ~500px):** `width: 100%`, `height: 100vh`, `borderRadius: 0px`.
-
-2. **Limpeza de Interface:**
-   - Enquanto o vídeo expande, aplicar `opacity: 0` em todos os elementos da Hero (Título, Menu, etc.).
-   - Quando o vídeo estiver Full Screen, garantir que nenhum elemento de UI (exceto talvez um botão de "Skip" ou "Menu" discreto, se exigido depois) esteja visível.
-
-3. **Implementação do Componente `Manifesto.tsx`:**
-   - Deve envolver o vídeo em uma `section` com altura fixa (ex: `300vh`) para dar espaço ao usuário "sentir" a expansão (efeito "Pin").
-   - Usar `position: sticky` para manter o vídeo na tela enquanto ele expande.
-
-**Exemplo de Lógica (Pseudocódigo):**
-
-```tsx
-const { scrollYProgress } = useScroll({ target: containerRef });
-const scale = useTransform(scrollYProgress, [0, 1], [0.4, 1]); // De 40% a 100%
-const radius = useTransform(scrollYProgress, [0, 0.9], [24, 0]); // De rounded a square
-
-return (
-  <motion.video
-    style={{ scale, borderRadius: radius }}
-    className="w-full h-full object-cover"
-  />
-);
-
-Validação (@Auditor):
-
-A animação é suave (60fps)? Se não, usar will-change: transform.
-
-O vídeo mantém a proporção correta ou corta partes importantes? (Testar object-fit).
-
-Em Mobile, a expansão funciona ou o vídeo já deve começar maior? (Recomendado: Mobile já começa quase full width).
+A transição entre Hero e Manifesto acontece através da expansão fluida do vídeo thumbnail. O vídeo, inicialmente um elemento da composição da Hero, cresce até ocupar **100% da viewport** (100vw/100vh), tornando-se a seção Manifesto.
 
 ---
 
-### Dica para o Agente @Architect
-Como essa funcionalidade cria uma dependência forte entre `Hero` e `Manifesto`, instrua o agente a criar um componente pai chamado **`HomeIntro.tsx`** que gerencia ambas as seções.
+**Estratégia de Implementação (`HomeIntro.tsx`):**
 
-**Novo Comando Sugerido:**
-> `@TechLead` Crie um componente `HomeIntro.tsx` que englobe a Hero e o Manifesto. Implemente a lógica de "Scroll-to-Expand" onde o vídeo da Hero cresce até cobrir a tela, removendo o texto, usando Framer Motion e `useScroll`.
-```
+1. **Orquestrador Central (`HomeIntro.tsx`):**
+    - Este componente gerencia o espaço vertical total (ex: `250vh` ou `300vh`) para permitir o scroll.
+    - Utiliza `position: sticky` para fixar a Hero/Vídeo enquanto o usuário rola.
+    - **Hook:** `useScroll` do Framer Motion.
+
+2. **Estados do Vídeo (`ManifestoThumb.tsx`):**
+    - **Estado Inicial (Hero):**
+        - Tamanho: Thumbnail (~25-30% da tela ou tamanho fixo harmônico).
+        - Posição: Integrado ao layout da Hero (ex: canto inferior direito ou centralizado abaixo do texto).
+        - Border-Radius: Arredondado (ex: `16px` ou `24px`).
+        - Audio: Muted.
+    - **Estado Final (Manifesto):**
+        - Tamanho: Fullscreen (`width: 100%`, `height: 100vh`).
+        - Posição: `inset-0` (cobre tudo).
+        - Border-Radius: `0px`.
+        - Audio: Unmuted (opcional/interativo).
+
+3. **Transição Hero -> Manifesto:**
+    - Conforme `scrollYProgress` avança (0 -> 0.25+):
+        - **Hero Text:** Fade out (`opacity: 1 -> 0`) e Scale down (`scale: 1 -> 0.9`).
+        - **Video Thumb:** Scale up, Radius -> 0, Position -> Center.
+    - O vídeo deve cobrir completamente a Hero ao final da transição.
+
+4. **Componente de Vídeo:**
+    - Tag `<video>` nativa otimizada.
+    - Props: `autoplay`, `loop`, `muted`, `playsinline`.
+    - `layoutId="manifesto-video"` (se usar AnimatePresence, caso contrário, use `style` transforms diretos para performance).
+
+---
+
+**Non-Negotiables:**
+
+- **Performance:** Use `useTransform` e `motion.div` para garantir 60fps. Evite re-renders de estado React durante o scroll.
+- **Fluidez:** A expansão não deve ter "pulos". Deve ser diretamente atrelada ao scroll (`scrub`).
+- **Limpeza:** Quando Fullscreen, nenhum texto da Hero deve ser visível ou clicável por baixo.
+- **Acessibilidade:** Botão de Mute/Unmute visualmente claro se o som ativar automaticamente.

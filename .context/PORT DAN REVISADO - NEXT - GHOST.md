@@ -427,83 +427,145 @@ z-0  → WebGL Hero Canvas
 
 ---
 
-# **SECTION NAME: Hero**
+### PROPÓSITO DA SEÇÃO
 
-## SECTION PURPOSE
-
-- Criar impacto visual inicial
+- Criar impacto visual imediato
+- Estabelecer tom premium e experimental
 - Comunicar posicionamento estratégico
-- Introduzir linguagem digital experimental
-- Direcionar o usuário ao Manifesto
+- Usar WebGL como atmosfera narrativa, **não como espetáculo**
 
 ---
 
-## CONTEÚDO (FIXO — SEM ANIMAÇÃO)
+## CONTEÚDO EDITORIAL (ESTÁTICO — NÃO ANIMADO)
 
-Cor do texto: `#d9dade`
+**Cor base do texto**: `#d9dade`
 
 ```
 [BRAND AWARENESS]
+
 Design, não
 é só estética.
+
 [É intenção, é estratégia, é experiência.]
 ```
 
-**Regras absolutas**
+### 🚫 REGRAS ABSOLUTAS
 
-- Texto 100% estático
-- Sem glassmorphism
-- Sem blur
-- Sem reveal
-- Sem scroll binding
+- ❌ Nenhuma animação no texto  
+- ❌ Nenhum blur  
+- ❌ Nenhum glassmorphism  
+- ❌ Nenhum reveal por scroll  
+- ❌ Nenhum binding com mouse ou WebGL  
+- ❌ Nenhuma opacidade dinâmica aplicada ao texto  
+
+> O texto **não reage ao usuário**.  
+> Ele **existe** — o ambiente **reage ao redor dele**.
 
 ---
 
-## BACKGROUND
+## BACKGROUND DA HERO
 
-- Cor base: `#06071f`
-- Gradiente opcional:
+- **Cor base sólida**: `#06071f`
+- **Gradiente opcional muito sutil**:
 
 ```css
-radial-gradient(circle at center, #0b0d3a 0%, #06071f 60%)
+background: radial-gradient(
+  circle at center,
+  #0b0d3a 0%,
+  #06071f 60%
+);
 ```
 
 ---
 
-**CALL TO ACTION (if any):**
+## WEBGL ATMOSFÉRICO — GHOST (BLUE)
 
-- Texto: `get to know me better →`
-- Destino: `/sobre`.
+### CONCEITO
+
+- O ghost é uma **entidade etérea**
+- Atua como **fonte de luz narrativa**
+- Seu *glow* **ilumina o texto**, criando legibilidade progressiva
+- Ele **não toca**, **não empurra**, **não anima** o texto
+- Apenas **revela pelo contraste**
 
 ---
 
-**LINKS GLOBAIS:**
+## POSICIONAMENTO VISUAL (CRÍTICO)
 
-- CTA → `/sobre`.
-- Thumb → `#manifesto`.
+### Z-INDEX HIERARQUIA
 
-## WEBGL ATMOSFÉRICO (GHOST)
+- `z-0` → Canvas WebGL  
+- `z-10` → Ghost (mesh + glow)  
+- `z-20` → Texto (HeroCopy)  
 
-### Conceito
+### 📍 POSIÇÃO DO GHOST
 
-- WebGL atua como **atmosfera**
-- Elemento etéreo (“ghost”) abstrato
-- Glow, bloom e ruído analógico
-- Inspirado em: https://codepen.io/filipz/pen/GgpMOEq
+- Sempre **ACIMA** do bloco de texto  
+- Eixo Y positivo  
+- Flutuação lenta  
+- **Nunca cruza o texto**
 
-### Componentes
+---
 
-- Ghost (mesh simples + emissive)
-- Background Veil (shader fullscreen)
-- Pós-processamento:
-  - UnrealBloomPass
-  - Analog Decay (grain, scanlines, jitter)
+## COR & LUZ DO GHOST (AJUSTE OBRIGATÓRIO)
 
-### Interação
+### 🎨 COR PRINCIPAL
 
-- Follow sutil do mouse (desktop)
-- Pulso temporal leve
-- Nenhuma interação com texto
+```ts
+color: 'blue'
+```
+
+### 🌟 EMISSIVE / GLOW
+
+```ts
+emissive: new THREE.Color('#2f6bff')
+emissiveIntensity: 1.4
+```
+
+### BLOOM
+
+- Cor predominante: **azul**
+- Intensidade **média**
+- **Sem estourar highlights**
+- Deve “lavar” levemente o texto quando próximo
+
+---
+
+## COMPORTAMENTO DO GHOST
+
+### MOVIMENTO
+
+- Follow do mouse **sutil**
+- **Desktop apenas**
+- **Mobile** → posição fixa
+
+### ANIMAÇÃO
+
+- Pulso lento no emissive  
+- Movimento orgânico (senoidal)  
+- Nenhuma rotação agressiva  
+
+### `prefers-reduced-motion`
+
+- ❌ Follow desativado  
+- ❌ Pulso desativado  
+- Ghost fica **estático**
+
+---
+
+## EFEITO DE “REVELAÇÃO” DO TEXTO
+
+> ⚠️ **IMPORTANTE**:  
+> O texto **não anima**, **não muda opacidade**.
+
+O efeito acontece por:
+
+- Contraste dinâmico do *glow* azul  
+- Leve *veil* escuro no fundo  
+- Bloom que “beija” as letras  
+
+> O usuário **sente** que o texto aparece,  
+> mas tecnicamente ele **sempre esteve lá**.
 
 ---
 
@@ -519,87 +581,78 @@ components/home/
      ├─ GhostCanvas.tsx
      ├─ Ghost.tsx
      ├─ BackgroundVeil.tsx
-     └─ postprocessing/AnalogDecayPass.ts
+     └─ postprocessing/
+         └─ AnalogDecayPass.ts
 ```
 
 ---
-
-## Z-INDEX
-
-- z-0 → Canvas WebGL
-- z-20 → Conteúdo (texto + thumb)
 
 ## RESPONSABILIDADE DE CADA ARQUIVO
 
 ### `HomeHero.tsx`
 
-- Container da Hero
-- Controla camadas (WebGL / Conteúdo)
-- Define altura mínima (100vh desktop / 85vh mobile)
-
-### `HeroCopy.tsx`
-
-- Renderiza texto estático
-- Centralização absoluta
-- Nenhuma dependência de animação
-
-### `GhostStage.tsx`
-
-- Boundary client-only
-- Import dinâmico do Canvas
-- Evita SSR
-
-### `GhostCanvas.tsx`
-
-- `<Canvas />` fullscreen
-- Setup de câmera
-- Postprocessing
-- Loop de animação
-
-### `Ghost.tsx`
-
-- Mesh principal
-- Follow do mouse
-- Pulso leve de emissive
-
-### `BackgroundVeil.tsx`
-
-- Plano fullscreen
-- Shader de revelação
-- Usa posição do ghost como uniform
-
-### `AnalogDecayPass.ts`
-
-- Shader custom
-- Grain
-- Scanlines
-- Jitter temporal
+- Container principal  
+- Define altura mínima  
+- Controla z-index das camadas  
 
 ---
 
-## CAMADAS VISUAIS (Z-INDEX)
+### `HeroCopy.tsx`
 
-```
-z-0   → WebGL Canvas
-z-10  → Overlay gradiente (opcional)
-z-20  → Conteúdo (texto + thumb)
-```
+- Renderiza texto **100% estático**  
+- Centralização absoluta  
+- Nenhuma dependência de animação  
+
+---
+
+### `GhostStage.tsx`
+
+- Boundary `client-only`  
+- Dynamic import do Canvas  
+- Evita SSR e layout shift  
+
+---
+
+### `GhostCanvas.tsx`
+
+- Canvas fullscreen  
+- Setup de câmera  
+- Bloom azul  
+- Analog decay  
+- DPR ≤ 2  
+
+---
+
+### `Ghost.tsx`
+
+- Mesh do fantasma  
+- Cor azul  
+- Emissive pulsante  
+- Follow sutil do mouse  
+
+---
+
+### `BackgroundVeil.tsx`
+
+- Plano fullscreen  
+- Shader escuro  
+- Amplifica contraste do glow  
 
 ---
 
 ## MANIFESTO — VÍDEO
 
-### Regras Mantidas
+### REGRAS INVIOLÁVEIS
 
-- Mesmo arquivo da Hero
-- Autoplay
-- Loop
-- Muted por padrão
-- Áudio apenas quando em foco
-- Sem overlays
-- Sem fullscreen forçado
+- Mesmo arquivo da Hero  
+- Autoplay  
+- Loop  
+- Muted por padrão  
+- Áudio somente quando em foco  
+- ❌ Nenhum overlay  
+- ❌ Nenhum texto sobreposto  
 
-URL:
+### URL
 
 ```
 https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4
@@ -609,60 +662,52 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos
 
 ## INTERAÇÃO HERO → MANIFESTO
 
-- Clique na thumb:
-  - Scroll suave até `#manifesto`
-- Nenhuma transição visual agressiva
-- Thumb mantém animação própria (hover/scale)
+- Clique na thumb:  
+  - Scroll suave até `#manifesto`  
+  - Nenhuma transição agressiva  
+  - Thumb mantém hover leve (`scale`)
+
+---
+
+## PERFORMANCE
+
+- Canvas isolado  
+- DPR máximo: **2**  
+- Bloom controlado  
+- Fallback estático se WebGL falhar  
+- **Zero CLS**
 
 ---
 
 ## ACESSIBILIDADE
 
-- Contraste AA garantido (#d9dade sobre #06071f)
-- `prefers-reduced-motion`
-  - Desativa follow
-  - Desativa bloom intenso
-- `aria-label` em CTA e thumb
-- Vídeo sempre inicia mudo
-
----
-
-## PERFORMANCE & ACESSIBILIDADE (HERO)
-
-- Canvas isolado (client-only)
-- DPR máximo: 2
-- Fallback CSS se WebGL falhar
-- Contraste AA garantido
-- `prefers-reduced-motion` respeitado
+- Contraste **AA garantido**  
+- `prefers-reduced-motion` respeitado  
+- Texto sempre legível  
+- Vídeo inicia sempre **mudo**  
+- `aria-label` em CTAs  
 
 ---
 
 ## NÃO NEGOCIÁVEL
 
-- ❌ Sem glassmorphism
-- ❌ Sem texto animado
-- ❌ Sem 3D tradicional
-- ❌ Sem overlays sobre vídeo
-- ✅ WebGL como atmosfera
-- ✅ Texto como âncora editorial
+- ❌ Sem glassmorphism  
+- ❌ Sem texto animado  
+- ❌ Sem 3D tradicional  
+- ❌ Sem overlays sobre vídeo  
+- ✅ Ghost azul como fonte de luz  
+- ✅ Texto como âncora editorial  
+- ✅ WebGL como atmosfera  
 
 ---
 
 ## RESULTADO ESPERADO
 
-- Hero silenciosa, editorial e forte
-- Animação como pano de fundo vivo
-- Narrativa clara
-- Base escalável para futuras interações
-
-# **THUMB VIDEO Manifesto (VERSÃO FULL)**
-
-- Autoplay
-- Loop
-- Muted por padrão
-- Áudio apenas enquanto em foco (IntersectionObserver)
-- Sem overlays
-- Mesmo arquivo da Hero
+- Hero **silenciosa**, **forte** e **editorial**  
+- Fantasma azul **flutuando acima do texto**  
+- Glow **revelando o discurso**  
+- Experiência **premium**, **não chamativa**  
+- Base **escalável** para futuras camadas narrativas
 
 ---
 
