@@ -58,9 +58,7 @@ export default function HomeHero() {
                 <HeroCopy className="lg:pl-16" />
               </motion.div>
             </div>
-            <div className="absolute right-6 bottom-10 z-20">
-              <ManifestoThumb />
-            </div>
+            <ManifestoThumb />
           </div>
 
           {/* 6. Analog Decay Overlay Global (Scanlines/Noise) */}

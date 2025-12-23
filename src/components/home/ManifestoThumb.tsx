@@ -1,17 +1,11 @@
 // src/components/home/ManifestoThumb.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import {
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useTransform,
-} from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, useTransform, useMotionValue, useInView } from 'framer-motion';
 import { BRAND } from '@/config/brand';
 import { useScrollContext } from '@/contexts/ScrollContext';
-
-const EASING = [0.22, 1, 0.36, 1];
+import { Play, Volume2, VolumeX } from 'lucide-react';
 
 export default function ManifestoThumb() {
   const { scrollYProgress } = useScrollContext();
@@ -19,128 +13,108 @@ export default function ManifestoThumb() {
   const progress = scrollYProgress ?? fallbackProgress;
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const nextSectionEnteringRef = useRef(false);
-  const isFullScreenRef = useRef(false);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMuted, setIsMuted] = useRef(true);
+  const isInView = useInView(containerRef, { once: false, margin: "-100px" });
 
-  const scale = useTransform(progress, [0, 0.12, 0.46], [1, 1, 1]);
-  const translateX = useTransform(progress, [0, 0.12, 0.46], [0, -10, 0]);
-  const translateY = useTransform(progress, [0, 0.12, 0.46], [0, 0, -30]);
-  const borderRadius = useTransform(progress, [0, 0.46], [24, 0]);
-  const width = useTransform(
-    progress,
-    [0, 0.12, 0.46],
-    ['192px', '192px', '100vw']
-  );
-  const height = useTransform(
-    progress,
-    [0, 0.12, 0.46],
-    ['120px', '120px', '100vh']
-  );
+  // Animation Transforms
+  // Start: 192x120px, Bottom 40px, Right 24px
+  // End: 100%x100%, Bottom 0px, Right 0px
+  const width = useTransform(progress, [0, 0.46], ['192px', '100%']);
+  const height = useTransform(progress, [0, 0.46], ['120px', '100%']);
+  const right = useTransform(progress, [0, 0.46], ['24px', '0px']);
+  const bottom = useTransform(progress, [0, 0.46], ['40px', '0px']);
+  const borderRadius = useTransform(progress, [0, 0.46], ['12px', '0px']);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const section = document.getElementById('manifesto');
-    if (!section) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        nextSectionEnteringRef.current = entry.intersectionRatio >= 0.2;
-      },
-      { threshold: [0.2] }
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
-  }, []);
+  // Opacity fade of the overlay/border to cleaner look when full
+  const borderOpacity = useTransform(progress, [0.3, 0.46], [0.1, 0]);
+  
+  // Scale effect for the play button as it expands
+  const playButtonScale = useTransform(progress, [0, 0.4], [1, 0]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    
+    // Ensure muted autoplay for reliability
     video.muted = true;
-    video.volume = 0;
-  }, []);
-
-  useMotionValueEvent(progress, 'change', (latest) => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const shouldMute =
-      latest < 0.46 ||
-      latest >= 0.78 ||
-      nextSectionEnteringRef.current ||
-      !videoRef.current;
-    if (shouldMute) {
-      video.muted = true;
-      video.volume = 0;
-      return;
-    }
-
-    const shouldBeFull =
-      latest >= 0.46 && latest < 0.78 && !nextSectionEnteringRef.current;
-    if (isFullScreenRef.current !== shouldBeFull) {
-      isFullScreenRef.current = shouldBeFull;
-      setIsFullScreen(shouldBeFull);
-    }
-
-    if (shouldBeFull) {
-      if (video.muted) {
-        video.muted = false;
-        video.volume = 1;
-      }
-
-      const attemptPlay = video.play();
-      if (attemptPlay && typeof attemptPlay.then === 'function') {
-        attemptPlay.catch((error) => {
-          if (process.env.NODE_ENV === 'development') {
-            // eslint-disable-next-line no-console
-            console.debug('Manifesto autoplay blocked', error);
-          }
-          video.muted = true;
-          video.volume = 0;
-        });
+    
+    // Only play if the component is in view
+    if (isInView) {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(e => console.log('Autoplay blocked', e));
       }
     }
-  });
+  }, [isInView]);
 
-  const containerPositionStyle: React.CSSProperties = isFullScreen
-    ? { position: 'fixed', inset: 0, padding: 0 }
-    : { position: 'absolute', bottom: 40, right: 24 };
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   return (
     <motion.div
-      style={{ ...containerPositionStyle, x: translateX, y: translateY } as any}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1 }}
-      transition={{
-        duration: 1.2,
-        ease: EASING as [number, number, number, number],
+      ref={containerRef}
+      style={{
+        width,
+        height,
+        right,
+        bottom,
+        position: 'absolute',
+        borderRadius,
+        zIndex: 50, // Ensure it sits above everything when expanded
+        transformOrigin: 'bottom right',
       }}
-      className="relative z-20 flex flex-col items-end"
+      className="overflow-hidden shadow-2xl bg-black"
+      aria-label="Manifesto video thumbnail"
+      role="button"
+      tabIndex={0}
     >
       <motion.div
-        style={{
-          width,
-          height,
-          scale,
-          borderRadius,
-          transformOrigin: 'bottom right',
-        }}
-        className="relative mb-2 overflow-hidden shadow-2xl border border-white/10 bg-black/60"
+        className="absolute inset-0 border border-white"
+        style={{ opacity: borderOpacity, borderRadius }}
+      />
+
+      <video
+        ref={videoRef}
+        src={BRAND.video.manifesto}
+        className="absolute inset-0 h-full w-full object-cover"
+        muted
+        loop
+        playsInline
+        autoPlay
+        preload="metadata"
+        aria-label="Manifesto video"
+      />
+
+      {/* Play Icon Overlay */}
+      <motion.div 
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+        style={{ scale: playButtonScale }}
       >
-        <video
-          ref={videoRef}
-          src={BRAND.video.manifesto}
-          className="absolute inset-0 h-full w-full object-cover"
-          muted
-          loop
-          playsInline
-          autoPlay
-          preload="metadata"
-        />
+        <div className="bg-black/50 backdrop-blur-sm rounded-full p-3">
+          <Play className="w-6 h-6 text-white" aria-hidden="true" />
+        </div>
       </motion.div>
+
+      {/* Mute Toggle Button */}
+      <motion.button
+        className="absolute bottom-3 right-3 z-20 p-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center"
+        onClick={toggleMute}
+        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {isMuted ? (
+          <VolumeX className="w-4 h-4" aria-hidden="true" />
+        ) : (
+          <Volume2 className="w-4 h-4" aria-hidden="true" />
+        )}
+      </motion.button>
     </motion.div>
   );
 }
