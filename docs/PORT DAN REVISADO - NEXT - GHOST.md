@@ -452,16 +452,21 @@ radial-gradient(circle at center, #0b0d3a 0%, #06071f 60%)
 
 ### Conceito
 - WebGL atua como **atmosfera**
+- Conceito: O WebGL não é um objeto sólido, é uma manifestação de energia azul (#0057FF HDR) que flutua ao fundo. Referência: Comportamento atmosférico (Noise/Grain) inspirado em CodePen, mas com estética Azul.
 - Elemento etéreo (“ghost”) abstrato
 - Glow, bloom e ruído analógico
 - Inspirado em: https://codepen.io/filipz/pen/GgpMOEq
 
-### Componentes
-- Ghost (mesh simples + emissive)
+### Componentes R3F (src/components/home/webgl/):
+- GhostCanvas.tsx: Setup da cena, câmera fixa [0, 0, 7], fundo transparente (alpha: true).
 - Background Veil (shader fullscreen)
+- FresnelMaterial (Shader):
+   - Cor Base: Azul Profundo HDR.
+   - Rim Light (Borda): Azul Ciano/Branco explosivo.
+- Sparkles: Partículas flutuantes na cor #0057FF.   
 - Pós-processamento:
-  - UnrealBloomPass
-  - Analog Decay (grain, scanlines, jitter)
+  - UnrealBloomPass: Intensidade alta para o "Glow".
+  - AnalogDecay (Custom): Noise, scanlines sutis, vinheta.
 
 ### Interação
 - Follow sutil do mouse (desktop)
@@ -470,66 +475,58 @@ radial-gradient(circle at center, #0b0d3a 0%, #06071f 60%)
 
 ---
 
-## ARQUITETURA DE ARQUIVOS (HERO)
+## **ARQUITETURA DE ARQUIVOS (HERO)
 
-```
-components/home/
- ├─ HomeHero.tsx
- ├─ HeroCopy.tsx
- ├─ ManifestoThumb.tsx
- ├─ GhostStage.tsx
- └─ webgl/
-     ├─ GhostCanvas.tsx
-     ├─ Ghost.tsx
-     ├─ BackgroundVeil.tsx
-     └─ postprocessing/AnalogDecayPass.ts
-```
+A ordem de renderização é crítica para este layout.
+
+## **Z-INDEX
+
+| Z-Index | Elemento | Descrição |
+| :--- | :--- | :--- |
+| **z-0** | **WebGL Canvas** | O universo 3D (Ghost + Noise + Bloom). Fica ao fundo. |
+| **z-10** | **Overlay** | Gradiente radial opcional para vinheta e integração visual. |
+| **z-20** | **Conteúdo** | Texto H1, Tagline e Thumb do Vídeo. Interativo e legível. |
 
 ---
 
-## Z-INDEX
-- z-0 → Canvas WebGL
-- z-20 → Conteúdo (texto + thumb)
+## **COMPONENTES & ARQUITETURA DE ARQUIVOS
+
+Estrutura obrigatória em `src/components/home/`:
 
 
-## RESPONSABILIDADE DE CADA ARQUIVO
+home/
+ ├─ HomeHero.tsx         <-- Orchestrator (Gerencia os Z-index)
+ ├─ HeroCopy.tsx         <-- Texto Estático (Sem animação de entrada)
+ ├─ ManifestoThumb.tsx   <-- Vídeo Pequeno (Expandível)
+ ├─ GhostStage.tsx       <-- Boundary Client-Side para o R3F
+ └─ webgl/
+     ├─ GhostCanvas.tsx  <-- Cena R3F Principal
+     ├─ Ghost.tsx        <-- Mesh Etéreo (Emissive)
+     ├─ BackgroundVeil.tsx <-- Shader de fundo (Void)
+     └─ postprocessing/
+         └─ AnalogDecayPass.ts <-- Efeitos (Grain, Scanlines, Jitter)
 
-### `HomeHero.tsx`
-- Container da Hero
-- Controla camadas (WebGL / Conteúdo)
-- Define altura mínima (100vh desktop / 85vh mobile)
+---
 
-### `HeroCopy.tsx`
-- Renderiza texto estático
-- Centralização absoluta
-- Nenhuma dependência de animação
+## **DETALHAMENTO TÉCNICO
 
-### `GhostStage.tsx`
-- Boundary client-only
-- Import dinâmico do Canvas
-- Evita SSR
+A. HomeHero.tsx (Layout)
+Background: Cor base #06071f (Deep Void Blue).
 
-### `GhostCanvas.tsx`
-- `<Canvas />` fullscreen
-- Setup de câmera
-- Postprocessing
-- Loop de animação
+Altura: 100vh (Desktop) / 85vh (Mobile).
 
-### `Ghost.tsx`
-- Mesh principal
-- Follow do mouse
-- Pulso leve de emissive
+Posicionamento: Flexbox centralizado para o conteúdo.
 
-### `BackgroundVeil.tsx`
-- Plano fullscreen
-- Shader de revelação
-- Usa posição do ghost como uniform
+B. Conteúdo (HeroCopy.tsx)
+Cor do Texto: #d9dade (Off-white/Grey).
 
-### `AnalogDecayPass.ts`
-- Shader custom
-- Grain
-- Scanlines
-- Jitter temporal
+Regras:
+
+100% Estático (Zero framer-motion de entrada).
+
+Sem glassmorphism.
+
+Sem blur.
 
 ---
 
