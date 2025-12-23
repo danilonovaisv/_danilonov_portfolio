@@ -87,33 +87,18 @@ export default function HomeIntro() {
         </motion.div>
 
         {/* Manifesto Video Thumb -> Fullscreen */}
-        <div className="absolute inset-0 z-20 flex flex-col justify-center items-center pointer-events-none">
-          {/* 
-                Structure:
-                We position the thumb initially below text (handled by flex-col in parent effectively, 
-                but we need absolute freedom for full expansion).
-                
-                Better approach: Absolute positioning initialized to match the visual design, 
-                then animating to full coverage.
-                
-                Initial Design from previous HomeHero:
-                Flex Col: Text \n Thumb.
-                
-                Let's emulate that with absolute positioning relative to center.
-                Text is centered. Thumb is 'mt-8' below it.
-             */}
-
+        <div className="absolute inset-0 z-20 flex flex-col justify-end items-center pointer-events-none">
           <motion.div
-            className="relative z-20 overflow-hidden shadow-2xl origin-center pointer-events-auto"
+            className="relative z-20 overflow-hidden shadow-2xl origin-bottom pointer-events-auto"
             style={{
               width: thumbWidth,
               height: thumbHeight,
               borderRadius: thumbRadius,
-              marginTop: useTransform(
+              marginBottom: useTransform(
                 smoothProgress,
-                [0, 0.15],
-                ['2rem', '0rem']
-              ), // smooth removal of margin
+                [0, 0.2], // Faster transition to 0 to lock in fullscreen
+                ['3rem', '0rem']
+              ),
             }}
           >
             <ManifestoThumb className="w-full h-full" />

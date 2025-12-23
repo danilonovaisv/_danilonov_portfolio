@@ -30,8 +30,8 @@ const PortfolioShowcase: FC = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: [0.25, 1, 0.5, 1] as [number, number, number, number],
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1], // Revisado Spec Smooth Easing
         when: 'beforeChildren',
         staggerChildren: 0.1,
       },
@@ -59,8 +59,8 @@ const PortfolioShowcase: FC = () => {
         opacity: 1,
         y: 0,
         transition: {
-          duration: 0.6,
-          ease: [0.25, 1, 0.5, 1] as [number, number, number, number],
+          duration: 0.8,
+          ease: [0.22, 1, 0.36, 1],
         },
       },
     }),
@@ -100,7 +100,7 @@ const PortfolioShowcase: FC = () => {
       ref={sectionRef}
       className="relative w-full bg-[#F4F5F7] py-24 md:py-40 overflow-hidden min-h-screen flex flex-col justify-center items-center"
     >
-      <div className="container mx-auto px-[clamp(1.25rem,5vw,6rem)] max-w-[92%] xl:max-w-420 relative z-10">
+      <div className="mx-auto w-full px-[clamp(1.5rem,5vw,6rem)] max-w-[1680px] relative z-10">
         <motion.div
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
           initial="hidden"
