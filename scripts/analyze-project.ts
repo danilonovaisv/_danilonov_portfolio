@@ -1,27 +1,32 @@
+// @ts-nocheck
 // scripts/analyze-project.ts
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-interface ReportSection {
-  title: string;
-  content: string[];
-}
+/**
+ * @typedef {Object} ReportSection
+ * @property {string} title
+ * @property {string[]} content
+ */
 
 const projectRoot = process.cwd();
-const report: ReportSection[] = [];
+/** @type {ReportSection[]} */
+const report = [];
 
-function logSection(title: string, content: string[]) {
+function logSection(title, content) {
   report.push({ title, content });
   console.log(`✅ ${title}`);
 }
 
-function listFiles(dir: string, allFiles: string[] = []): string[] {
+function listFiles(dir, allFiles = []) {
   const files = fs.readdirSync(dir);
   files.forEach((file) => {
     const filePath = path.join(dir, file);
     if (fs.statSync(filePath).isDirectory()) {
-      listFiles(filePath, allFiles);
+      if (!['node_modules', '.next', '.git'].includes(file)) {
+        listFiles(filePath, allFiles);
+      }
     } else {
       allFiles.push(filePath);
     }

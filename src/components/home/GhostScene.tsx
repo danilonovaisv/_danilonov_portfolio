@@ -32,9 +32,9 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 class AnalogDecayEffect extends Effect {
   constructor() {
     super('AnalogDecayEffect', fragmentShader, {
-      uniforms: new Map([
-        ['time', { value: 0 }],
-        ['intensity', { value: 0.6 }],
+      uniforms: new Map<string, THREE.Uniform>([
+        ['time', new THREE.Uniform(0)],
+        ['intensity', new THREE.Uniform(0.6)],
       ]),
     });
   }
@@ -155,12 +155,7 @@ function Fireflies() {
   return (
     <points ref={points}>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          array={positions}
-          count={positions.length / 3}
-          itemSize={3}
-        />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial size={0.08} color="#6aa9ff" transparent opacity={0.85} />
     </points>
@@ -171,6 +166,8 @@ function Fireflies() {
    SCENE
 ========================= */
 export default function GhostScene() {
+  const analogDecayEffect = useMemo(() => new AnalogDecayEffect(), []);
+
   return (
     <Canvas
       dpr={[1, 2]}
@@ -195,7 +192,7 @@ export default function GhostScene() {
           luminanceThreshold={0}
           luminanceSmoothing={0.9}
         />
-        <primitive object={new AnalogDecayEffect()} />
+        <primitive object={analogDecayEffect} />
       </EffectComposer>
     </Canvas>
   );
