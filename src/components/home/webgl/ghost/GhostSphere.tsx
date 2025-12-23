@@ -1,4 +1,4 @@
-'use client';
+''use client';
 
 import { useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
@@ -11,7 +11,7 @@ export function GhostSphere() {
   const group = useRef<THREE.Group>(null);
   const bodyRef = useRef<THREE.Mesh>(null);
 
-  const [mouse] = useState(() => new THREE.Vector2(0, 0));
+  const [mouse] = useState(() => new THREE.Vector2(0, 0));'
   const target = useRef(new THREE.Vector2(0, 0));
   const ghostPos = useMemo(() => new THREE.Vector3(0, 0, 0), []);
 

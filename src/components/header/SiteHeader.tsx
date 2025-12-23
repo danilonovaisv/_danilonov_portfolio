@@ -1,57 +1,93 @@
 'use client';
 
-import DesktopFluidHeader from './DesktopFluidHeader';
-import StaggeredMenu from './StaggeredMenu';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ASSETS } from '@/lib/constants';
+import { usePathname } from 'next/navigation';
+import { useMotionValueEvent, useScroll } from 'framer-motion';
+import { NAV_LINKS, ASSETS } from '@/lib/constants';
+import StaggeredMenu from './StaggeredMenu';
+
+// Workflow: Header (SiteHeader)
+// Visual Specification:
+// - Position: Fixed top-0 left-0 right-0 z-50
+// - Background: Solid White
+// - Dimensions: max-w-6xl centered
+// - Padding: Initial py-4, Condensed py-2
+// - Logo: logoDark
+// - interactions: Hover blue text + underline
 
 export default function SiteHeader() {
+  const { scrollY } = useScroll();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // Update scroll state for compact mode
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    // Threshold > 40px as per workflow
+    setIsScrolled(latest > 40);
+  });
+
+  // Determines if a link is active
+  const isLinkActive = (href: string) => {
+    if (href === '/#hero' && pathname === '/') return true;
+    if (href !== '/#hero' && pathname.startsWith(href)) return true;
+    return false;
+  };
+
   return (
-    <>
-      {/* Desktop View (>= 1024px) */}
-      <div className="hidden lg:block">
-        <DesktopFluidHeader />
-      </div>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
+        isScrolled
+          ? 'py-2 border-b border-gray-100 shadow-sm'
+          : 'py-4 border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+        {/* Left: Logo */}
+        <Link href="/" className="relative block w-24 h-8 shrink-0 group">
+          <Image
+            src={ASSETS.logoDark}
+            alt="Danilo Novais"
+            fill
+            className="object-contain object-left transition-opacity duration-300 group-hover:opacity-80"
+            sizes="(max-width: 768px) 100vw, 120px"
+            priority
+          />
+        </Link>
 
-      {/* Mobile/Tablet View (< 1024px) */}
-      <div className="lg:hidden">
-        <MobileHeader />
-      </div>
-    </>
-  );
-}
+        {/* Right: Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <ul className="flex items-center gap-6">
+            {NAV_LINKS.map((link) => {
+              const active = isLinkActive(link.href);
+              return (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className={`relative text-sm font-medium lowercase tracking-wide transition-colors duration-200 group ${
+                      active
+                        ? 'text-[#0057FF]'
+                        : 'text-gray-700 hover:text-[#0057FF]'
+                    }`}
+                  >
+                    {link.label}
+                    {/* Animated Underline */}
+                    <span
+                      className={`absolute left-0 bottom-[-4px] h-[2px] w-full bg-[#0057FF] origin-left transition-transform duration-300 ${
+                        active
+                          ? 'scale-x-100'
+                          : 'scale-x-0 group-hover:scale-x-100'
+                      }`}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
-function MobileHeader() {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between p-6 pointer-events-none">
-      {/* Logo - Clickable */}
-      <Link href="/" className="pointer-events-auto relative w-24 h-8">
-        <Image
-          src={ASSETS.logoDark} // Check if background needs light/dark. Usually website is light/dark?
-          // Site context: Hero is Dark (#06071f). Footer is Blue. Content?
-          // "Contexto do Projeto: Home" -> Header remains visible.
-          // On Hero (Dark), valid.
-          // On Portfolio (Light bg?).
-          // For safety on Mobile (which has no glass pill background usually, strict overlay),
-          // we might need a mix-blend-mode or just assume contrast.
-          // Let's stick to logoDark for now, assuming light sections or white bg header?
-          // Wait, Mobile Header usually has a background or is transparent?
-          // "Mobile & Tablet: Staggered Menu"
-          // If transparent, we need to ensure contrast.
-          // Hero is Dark. Project Showcase is Light (#F4F5F7).
-          // A simple solution: Backdrop filter strip or blend mode.
-          // Or just dynamic color based on section (complex).
-          // Let's implement a glass strip for mobile too? Or just transparent?
-          // "Mobile & Tablet: O header é funcional e minimalista."
-          alt="Danilo Novais"
-          fill
-          className="object-contain object-left invert md:invert-0"
-          // Invert trick if needed for dark hero
-        />
-      </Link>
-
-      <div className="pointer-events-auto">
+        {/* Right: Mobile Menu */}
         <StaggeredMenu />
       </div>
     </header>

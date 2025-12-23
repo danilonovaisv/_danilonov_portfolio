@@ -22,10 +22,10 @@ export default function StaggeredMenu() {
   }, [isOpen]);
 
   return (
-    <div className="fixed top-4 right-4 z-50 md:hidden" ref={containerRef}>
+    <div className="md:hidden" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative z-50 flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-md shadow-sm text-black"
+        className="relative z-50 flex items-center justify-center w-10 h-10 rounded-full text-gray-700 hover:bg-gray-100 transition-colors"
         aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}

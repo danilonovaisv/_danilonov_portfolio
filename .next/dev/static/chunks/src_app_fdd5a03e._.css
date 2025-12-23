@@ -669,6 +669,10 @@
     bottom: calc(var(--spacing) * 12);
   }
 
+  .bottom-\[-4px\] {
+    bottom: -4px;
+  }
+
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
@@ -979,6 +983,10 @@
     height: calc(var(--spacing) * 16);
   }
 
+  .h-\[2px\] {
+    height: 2px;
+  }
+
   .h-\[100vh\] {
     height: 100vh;
   }
@@ -1205,6 +1213,11 @@
 
   .scale-x-0 {
     --tw-scale-x: 0%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+
+  .scale-x-100 {
+    --tw-scale-x: 100%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
 
@@ -2818,6 +2831,13 @@
   }
 
   @media (hover: hover) {
+    .group-hover\:scale-x-100:is(:where(.group):hover *) {
+      --tw-scale-x: 100%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+  }
+
+  @media (hover: hover) {
     .group-hover\:scale-\[1\.03\]:is(:where(.group):hover *) {
       scale: 1.03;
     }
@@ -2876,6 +2896,12 @@
   @media (hover: hover) {
     .group-hover\:text-\[\#0057FF\]:is(:where(.group):hover *) {
       color: #0057ff;
+    }
+  }
+
+  @media (hover: hover) {
+    .group-hover\:opacity-80:is(:where(.group):hover *) {
+      opacity: .8;
     }
   }
 
@@ -2983,6 +3009,12 @@
       .hover\:bg-black\/70:hover {
         background-color: color-mix(in oklab, var(--color-black) 70%, transparent);
       }
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-gray-100:hover {
+      background-color: var(--color-gray-100);
     }
   }
 
@@ -3303,6 +3335,12 @@
   @media (min-width: 48rem) {
     .md\:block {
       display: block;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .md\:flex {
+      display: flex;
     }
   }
 
