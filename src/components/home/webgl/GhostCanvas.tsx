@@ -1,81 +1,79 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import React, { Suspense, useRef, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
-import Ghost from './Ghost';
-import AtmosphereVeil from './AtmosphereVeil';
-import Particles from './Particles';
-import Fireflies from './Fireflies';
-import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 
-function MouseFollower({ children }: { children: React.ReactNode }) {
-  const reducedMotion = usePrefersReducedMotion();
-  const ghostRef = useRef<THREE.Group>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const { size } = useThree();
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const handleMove = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / size.width) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / size.height) * 2 + 1;
-    };
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
-  }, [reducedMotion, size]);
-
-  useFrame(() => {
-    if (reducedMotion || !ghostRef.current) return;
-    ghostRef.current.position.x +=
-      (mouseRef.current.x * 8 - ghostRef.current.position.x) * 0.05;
-    ghostRef.current.position.y +=
-      (mouseRef.current.y * 5 - ghostRef.current.position.y) * 0.05;
-  });
-
-  return <group ref={ghostRef}>{children}</group>;
-}
+import { GhostSphere } from './ghost/GhostSphere';
+import { AtmosphereVeil } from './AtmosphereVeil';
+import { Particles } from './Particles';
+import { Fireflies } from './Fireflies';
+import { AnalogDecayEffect } from './postprocessing/AnalogDecayPass';
+import { GhostParams } from './ghost/GhostParams';
 
 export default function GhostCanvas() {
+  const ghostPosRef = useRef(new THREE.Vector3(0, 0, 0));
+  const [isGhostMoving, setIsGhostMoving] = useState(false);
+  const [movementSpeed, setMovementSpeed] = useState(0);
+
+  const handleMovementUpdate = (moving: boolean, speed: number) => {
+    setIsGhostMoving(moving);
+    setMovementSpeed(speed);
+  };
+
   return (
-    <Canvas
-      camera={{ position: [0, 0, 7], fov: 45 }}
-      dpr={[1, 2]}
-      gl={{ antialias: false, alpha: true }}
-      className="absolute inset-0 z-0"
-      style={{ 
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-      }}
-    >
-      <color attach="background" args={['#06071f']} />
-
-      <ambientLight intensity={0.08} color="#0a0a2e" />
-
-      <AtmosphereVeil />
-
-      <MouseFollower>
-        <Ghost />
-        <Particles />
-      </MouseFollower>
-
-      <Fireflies />
-
-      <EffectComposer>
-        <Bloom
-          intensity={2.8}
-          luminanceThreshold={0.1}
-          luminanceSmoothing={0.9}
-          radius={0.6}
-        />
-        <AnalogDecayPass />
-        <Vignette eskil={false} offset={0.1} darkness={0.4} />
-      </EffectComposer>
-    </Canvas>
+    <div className="fixed inset-0 z-0 pointer-events-none">
+      <Canvas
+        dpr={[1, 2]}
+        camera={{ position: [0, 0, 20], fov: 75 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 0.9,
+        }}
+      >
+        <Suspense fallback={null}>
+          <color attach="background" args={['#000000']} />{' '}
+          {/* Fallback dark bg, or remove for transparent */}
+          {/* Lights */}
+          <ambientLight intensity={0.08} color="#0a0a2e" />
+          <directionalLight
+            position={[-8, 6, -4]}
+            intensity={GhostParams.rimLightIntensity}
+            color="#4a90e2"
+          />
+          <directionalLight
+            position={[8, -4, -6]}
+            intensity={GhostParams.rimLightIntensity * 0.7}
+            color="#50e3c2"
+          />
+          {/* Scene Components */}
+          <GhostSphere
+            positionRef={ghostPosRef}
+            onMovementUpdate={handleMovementUpdate}
+          />
+          <AtmosphereVeil ghostPosition={ghostPosRef} />
+          <Particles
+            ghostPosition={ghostPosRef}
+            isGhostMoving={isGhostMoving}
+            movementSpeed={movementSpeed}
+          />
+          <Fireflies />
+          {/* Post Processing */}
+          <EffectComposer disableNormalPass>
+            <Bloom
+              luminanceThreshold={0.0}
+              mipmapBlur
+              intensity={0.3}
+              radius={0.5} // Ajuste fino pode ser necessário aqui
+            />
+            <AnalogDecayEffect />
+          </EffectComposer>
+        </Suspense>
+      </Canvas>
+    </div>
   );
 }

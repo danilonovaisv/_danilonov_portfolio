@@ -1,93 +1,131 @@
-import { shaderMaterial } from '@react-three/drei';
-import { extend, useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
-import * as THREE from 'three';
-import { ShaderPass } from 'three-stdlib';
+'use client';
 
-// Register ShaderPass with R3F
-extend({ ShaderPass });
+import React, { forwardRef, useMemo } from 'react';
+import { Uniform } from 'three';
+import { Effect } from 'postprocessing';
+import { wrapEffect } from '@react-three/postprocessing';
+import { GhostParams } from '../ghost/GhostParams';
 
-const AnalogDecayShader = shaderMaterial(
-  {
-    tDiffuse: new THREE.Texture(),
-    uTime: 0,
-    uIntensity: 0.7,
-    uGrain: 0.4,
-    uScanlines: 1.0,
-    uJitter: 0.5,
-  },
-  /* glsl */ `
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+const fragmentShader = `
+  uniform float uTime;
+  uniform float uAnalogGrain;
+  uniform float uAnalogBleeding;
+  uniform float uAnalogVSync;
+  uniform float uAnalogScanlines;
+  uniform float uAnalogVignette;
+  uniform float uAnalogJitter;
+  uniform float uAnalogIntensity;
+  uniform float uLimboMode;
+
+  float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+  }
+
+  float random(float x) {
+    return fract(sin(x) * 43758.5453123);
+  }
+
+  float gaussian(float z, float u, float o) {
+    return (1.0 / (o * sqrt(2.0 * 3.1415))) * exp(-(((z - u) * (z - u)) / (2.0 * (o * o))));
+  }
+
+  vec3 grain(vec2 uv, float time, float intensity) {
+    float seed = dot(uv, vec2(12.9898, 78.233));
+    float noise = fract(sin(seed) * 43758.5453 + time * 2.0);
+    noise = gaussian(noise, 0.0, 0.5 * 0.5);
+    return vec3(noise) * intensity;
+  }
+
+  void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+    float time = uTime * 1.8;
+    vec2 jitteredUV = uv;
+
+    // Analog Jitter
+    if (uAnalogJitter > 0.01) {
+      float jitterAmount = (random(vec2(floor(time * 60.0))) - 0.5) * 0.003 * uAnalogJitter * uAnalogIntensity;
+      jitteredUV.x += jitterAmount;
+      jitteredUV.y += (random(vec2(floor(time * 30.0) + 1.0)) - 0.5) * 0.001 * uAnalogJitter * uAnalogIntensity;
     }
-  `,
-  /* glsl */ `
-    uniform sampler2D tDiffuse;
-    uniform float uTime;
-    uniform float uIntensity;
-    uniform float uGrain;
-    uniform float uScanlines;
-    uniform float uJitter;
-    varying vec2 vUv;
 
-    float rand(vec2 co) {
-      return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+    // VHS VSync Roll
+    if (uAnalogVSync > 0.01) {
+      float vsyncRoll = sin(time * 2.0 + uv.y * 100.0) * 0.02 * uAnalogVSync * uAnalogIntensity;
+      float vsyncChance = step(0.95, random(vec2(floor(time * 4.0))));
+      jitteredUV.y += vsyncRoll * vsyncChance;
     }
 
-    void main() {
-      vec2 uv = vUv;
+    vec4 color = texture2D(inputBuffer, jitteredUV);
+
+    // Color Bleeding
+    if (uAnalogBleeding > 0.01) {
+      float bleedAmount = 0.012 * uAnalogBleeding * uAnalogIntensity;
+      float offsetPhase = time * 1.5 + uv.y * 20.0;
+      vec2 redOffset = vec2(sin(offsetPhase) * bleedAmount, 0.0);
+      vec2 blueOffset = vec2(-sin(offsetPhase * 1.1) * bleedAmount * 0.8, 0.0);
       
-      // Jitter sutil
-      if (uJitter > 0.01) {
-        uv += (rand(vec2(uTime)) - 0.5) * uJitter * 0.002;
-      }
-
-      vec4 color = texture2D(tDiffuse, uv);
-
-      // Grain
-      if (uGrain > 0.01) {
-        float grain = rand(uv + uTime) * 2.0 - 1.0;
-        color.rgb += grain * uGrain * 0.08 * uIntensity;
-      }
-
-      // Scanlines
-      if (uScanlines > 0.01) {
-        float scan = sin(uv.y * 1200.0 + uTime * 2.0) * 0.5 + 0.5;
-        color.rgb *= mix(1.0, 0.97, scan * uScanlines * uIntensity);
-      }
-
-      gl_FragColor = color;
+      float r = texture2D(inputBuffer, jitteredUV + redOffset).r;
+      float g = texture2D(inputBuffer, jitteredUV).g;
+      float b = texture2D(inputBuffer, jitteredUV + blueOffset).b;
+      
+      color = vec4(r, g, b, color.a);
     }
-  `
-);
 
-extend({ AnalogDecayShader });
-
-// Add types for the extended elements
-/* eslint-disable no-unused-vars */
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      shaderPass: any;
+    // Grain
+    if (uAnalogGrain > 0.01) {
+      vec3 grainEffect = grain(uv, time, 0.075 * uAnalogGrain * uAnalogIntensity);
+      grainEffect *= (1.0 - color.rgb);
+      color.rgb += grainEffect;
     }
+
+    // Scanlines
+    if (uAnalogScanlines > 0.01) {
+      float scanlineFreq = 600.0 + uAnalogScanlines * 400.0;
+      float scanlinePattern = sin(uv.y * scanlineFreq) * 0.5 + 0.5;
+      float scanlineIntensity = 0.1 * uAnalogScanlines * uAnalogIntensity;
+      color.rgb *= (1.0 - scanlinePattern * scanlineIntensity);
+      
+      float horizontalLines = sin(uv.y * scanlineFreq * 0.1) * 0.02 * uAnalogScanlines * uAnalogIntensity;
+      color.rgb *= (1.0 - horizontalLines);
+    }
+
+    // Vignette
+    if (uAnalogVignette > 0.01) {
+      vec2 vignetteUV = (uv - 0.5) * 2.0;
+      float vignette = 1.0 - dot(vignetteUV, vignetteUV) * 0.3 * uAnalogVignette * uAnalogIntensity;
+      color.rgb *= vignette;
+    }
+
+    // Limbo Mode
+    if (uLimboMode > 0.5) {
+      float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+      color.rgb = vec3(gray);
+    }
+
+    outputColor = color;
+  }
+`;
+
+class AnalogDecayEffectImpl extends Effect {
+  constructor() {
+    super('AnalogDecayEffect', fragmentShader, {
+      uniforms: new Map([
+        ['uTime', new Uniform(0)],
+        ['uAnalogGrain', new Uniform(GhostParams.analogGrain)],
+        ['uAnalogBleeding', new Uniform(GhostParams.analogBleeding)],
+        ['uAnalogVSync', new Uniform(GhostParams.analogVSync)],
+        ['uAnalogScanlines', new Uniform(GhostParams.analogScanlines)],
+        ['uAnalogVignette', new Uniform(GhostParams.analogVignette)],
+        ['uAnalogJitter', new Uniform(GhostParams.analogJitter)],
+        ['uAnalogIntensity', new Uniform(GhostParams.analogIntensity)],
+        ['uLimboMode', new Uniform(GhostParams.limboMode)],
+      ]),
+    });
+  }
+
+  update(renderer: any, inputBuffer: any, deltaTime: number) {
+    const time = this.uniforms.get('uTime');
+    if (time) time.value += deltaTime;
   }
 }
-/* eslint-enable no-unused-vars */
 
-export default function AnalogDecayPass() {
-  const shader = useMemo(() => new AnalogDecayShader(), []);
-  const toggleRef = useRef<any>(null);
-
-  useFrame((state) => {
-    if (shader.uniforms) {
-      shader.uniforms.uTime.value = state.clock.elapsedTime;
-    }
-  });
-
-  return (
-    // @ts-ignore
-    <shaderPass ref={toggleRef} args={[shader]} />
-  ) as any;
-}
+export const AnalogDecayEffect = wrapEffect(AnalogDecayEffectImpl);

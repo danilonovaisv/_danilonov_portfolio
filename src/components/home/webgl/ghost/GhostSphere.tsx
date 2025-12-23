@@ -1,125 +1,144 @@
-''use client';
+'use client';
 
-import { useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { DEFAULT, fluorescent } from './GhostParams';
-import { GhostBackgroundVeil } from './GhostBackgroundVeil';
+import { GhostParams, FluorescentColors } from './GhostParams';
+import { Eyes } from '../Eyes';
 
-export function GhostSphere() {
-  const group = useRef<THREE.Group>(null);
-  const bodyRef = useRef<THREE.Mesh>(null);
+interface GhostSphereProps {
+  positionRef: React.MutableRefObject<THREE.Vector3>;
+  onMovementUpdate: (isMoving: boolean, speed: number) => void;
+}
 
-  const [mouse] = useState(() => new THREE.Vector2(0, 0));'
-  const target = useRef(new THREE.Vector2(0, 0));
-  const ghostPos = useMemo(() => new THREE.Vector3(0, 0, 0), []);
+export function GhostSphere({
+  positionRef,
+  onMovementUpdate,
+}: GhostSphereProps) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const { pointer, viewport } = useThree();
 
-  // material
-  const mat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: 0x0f2027,
-        transparent: true,
-        opacity: 0.88,
-        emissive: new THREE.Color(fluorescent[DEFAULT.glowColor]),
-        emissiveIntensity: DEFAULT.emissiveIntensity,
-        roughness: 0.02,
-        metalness: 0.0,
-        side: THREE.DoubleSide,
-      }),
-    []
-  );
+  // Estado para controle de brilho dos olhos
+  const [eyeOpacity, setEyeOpacity] = useState(0);
+  const currentMovementRef = useRef(0);
 
+  // Criar geometria deformada uma única vez
   const geometry = useMemo(() => {
-    const g = new THREE.SphereGeometry(2, 40, 40);
-    const pos = g.getAttribute('position');
-    const arr = pos.array as Float32Array;
-    for (let i = 0; i < arr.length; i += 3) {
-      // y
-      if (arr[i + 1] < -0.2) {
-        const x = arr[i];
-        const z = arr[i + 2];
+    const geo = new THREE.SphereGeometry(2, 40, 40);
+    const positions = geo.attributes.position.array;
+
+    // Aplicar deformação "wavy" na parte inferior
+    for (let i = 0; i < positions.length; i += 3) {
+      if (positions[i + 1] < -0.2) {
+        const x = positions[i];
+        const z = positions[i + 2];
         const noise1 = Math.sin(x * 5) * 0.35;
         const noise2 = Math.cos(z * 4) * 0.25;
         const noise3 = Math.sin((x + z) * 3) * 0.15;
-        arr[i + 1] = -2.0 + (noise1 + noise2 + noise3);
+        positions[i + 1] = -2.0 + (noise1 + noise2 + noise3);
       }
     }
-    g.computeVertexNormals();
-    return g;
+    geo.computeVertexNormals();
+    return geo;
   }, []);
 
-  useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
-      target.current.set(x, y);
-    };
-    window.addEventListener('pointermove', onMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onMove);
-  }, []);
+  useFrame((state, delta) => {
+    if (!groupRef.current || !meshRef.current) return;
 
-  useFrame(({ clock }) => {
-    if (!group.current) return;
+    const time = state.clock.elapsedTime;
 
-    // Smooth pointer
-    mouse.lerp(target.current, 0.1);
+    // --- Movimento (Mouse Follow) ---
+    // Converter pointer (-1 a 1) para coordenadas do mundo baseadas no viewport
+    // Ajuste os multiplicadores (11 e 7 no original) conforme o tamanho do seu viewport
+    const targetX = pointer.x * (viewport.width / 2) * 0.8;
+    const targetY = pointer.y * (viewport.height / 2) * 0.8;
 
-    const targetX = mouse.x * 11;
-    const targetY = mouse.y * 7;
+    const prevPos = groupRef.current.position.clone();
 
-    group.current.position.x +=
-      (targetX - group.current.position.x) * DEFAULT.followSpeed;
-    group.current.position.y +=
-      (targetY - group.current.position.y) * DEFAULT.followSpeed;
+    // Lerp suave para posição do mouse
+    groupRef.current.position.x +=
+      (targetX - groupRef.current.position.x) * GhostParams.followSpeed;
+    groupRef.current.position.y +=
+      (targetY - groupRef.current.position.y) * GhostParams.followSpeed;
 
-    // Float
-    const t = clock.getElapsedTime();
-    group.current.position.y +=
-      Math.sin(t * 1.6) * 0.03 + Math.cos(t * 1.12) * 0.018;
+    // Atualizar ref global para outros componentes (atmosfera, partículas)
+    positionRef.current.copy(groupRef.current.position);
 
-    ghostPos.copy(group.current.position);
+    // --- Flutuação ---
+    const float1 = Math.sin(time * GhostParams.floatSpeed * 1.5) * 0.03;
+    const float2 = Math.cos(time * GhostParams.floatSpeed * 0.7) * 0.018;
+    const float3 = Math.sin(time * GhostParams.floatSpeed * 2.3) * 0.008;
+    groupRef.current.position.y += float1 + float2 + float3;
 
-    // Wobble
-    if (bodyRef.current) {
-      bodyRef.current.rotation.y =
-        Math.sin(t * 1.4) * 0.05 * DEFAULT.wobbleAmount;
-      const scale =
-        1 +
-        Math.sin(t * 2.1) * 0.025 * DEFAULT.wobbleAmount +
-        Math.sin(t * 0.8) * 0.012;
-      bodyRef.current.scale.setScalar(scale);
-    }
+    // --- Rotação e Tilt ---
+    const mouseDirection = new THREE.Vector2(
+      targetX - groupRef.current.position.x,
+      targetY - groupRef.current.position.y
+    ).normalize();
 
-    // Pulse
-    mat.emissiveIntensity =
-      DEFAULT.emissiveIntensity +
-      Math.sin(t * 1.6) * 0.6 +
-      Math.sin(t * 0.6) * 0.12;
+    const tiltStrength = 0.1 * GhostParams.wobbleAmount;
+    const tiltDecay = 0.95;
+
+    meshRef.current.rotation.z =
+      meshRef.current.rotation.z * tiltDecay +
+      -mouseDirection.x * tiltStrength * (1 - tiltDecay);
+    meshRef.current.rotation.x =
+      meshRef.current.rotation.x * tiltDecay +
+      mouseDirection.y * tiltStrength * (1 - tiltDecay);
+    meshRef.current.rotation.y =
+      Math.sin(time * 1.4) * 0.05 * GhostParams.wobbleAmount;
+
+    // --- Escala (Respiração) ---
+    const pulse1 =
+      Math.sin(time * GhostParams.pulseSpeed) * GhostParams.pulseIntensity;
+    const scaleVariation =
+      1 +
+      Math.sin(time * 2.1) * 0.025 * GhostParams.wobbleAmount +
+      pulse1 * 0.015;
+    const scaleBreath = 1 + Math.sin(time * 0.8) * 0.012;
+    const finalScale = scaleVariation * scaleBreath;
+    meshRef.current.scale.set(finalScale, finalScale, finalScale);
+
+    // --- Material Pulsing ---
+    const breathe = Math.sin(time * 0.6) * 0.12;
+    const mat = meshRef.current.material as THREE.MeshStandardMaterial;
+    mat.emissiveIntensity = GhostParams.emissiveIntensity + pulse1 + breathe;
+
+    // --- Eye Logic ---
+    const movementAmount = prevPos.distanceTo(groupRef.current.position);
+    currentMovementRef.current =
+      currentMovementRef.current * GhostParams.eyeGlowDecay +
+      movementAmount * (1 - GhostParams.eyeGlowDecay);
+
+    const isMoving = currentMovementRef.current > GhostParams.movementThreshold;
+    const targetGlow = isMoving ? 1.0 : 0.0;
+    const glowChangeSpeed = isMoving
+      ? GhostParams.eyeGlowResponse * 2
+      : GhostParams.eyeGlowResponse;
+
+    setEyeOpacity((prev) => prev + (targetGlow - prev) * glowChangeSpeed);
+
+    // Notificar pai sobre movimento para partículas
+    onMovementUpdate(isMoving, movementAmount * 100); // Scale up movement for logic
   });
 
   return (
-    <>
-      <ambientLight intensity={0.08} color={0x0a0a2e} />
-      <directionalLight
-        position={[-8, 6, -4]}
-        intensity={1.8}
-        color={0x4a90e2}
-      />
-      <directionalLight
-        position={[8, -4, -6]}
-        intensity={1.26}
-        color={0x50e3c2}
-      />
-
-      <group ref={group}>
-        <Float speed={0.3} rotationIntensity={0.05} floatIntensity={0.2}>
-          <mesh ref={bodyRef} geometry={geometry} material={mat} />
-        </Float>
-      </group>
-
-      <GhostBackgroundVeil ghostPos={ghostPos} />
-    </>
+    <group ref={groupRef}>
+      <mesh ref={meshRef} geometry={geometry}>
+        <meshStandardMaterial
+          color={GhostParams.bodyColor}
+          transparent
+          opacity={GhostParams.ghostOpacity}
+          emissive={GhostParams.glowColor}
+          emissiveIntensity={GhostParams.emissiveIntensity}
+          roughness={0.02}
+          metalness={0.0}
+          side={THREE.DoubleSide}
+          alphaTest={0.1}
+        />
+      </mesh>
+      <Eyes eyeOpacity={eyeOpacity} />
+    </group>
   );
 }

@@ -1,62 +1,89 @@
-import { useRef, useMemo } from 'react';
+'use client';
+
+import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { GhostParams } from './ghost/GhostParams';
 
-export default function Fireflies() {
-  const groupRef = useRef<THREE.Group>(null);
+export function Fireflies() {
   const count = 20;
+  const groupRef = useRef<THREE.Group>(null);
 
-  const fireflies = useMemo(
-    () =>
-      new Array(count).fill(0).map(() => ({
-        pos: new THREE.Vector3(
-          (Math.random() - 0.5) * 40,
-          (Math.random() - 0.5) * 30,
-          (Math.random() - 0.5) * 20
-        ),
-        velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.09,
-          (Math.random() - 0.5) * 0.09,
-          (Math.random() - 0.5) * 0.09
-        ),
-      })),
-    []
-  );
+  // Dados estáticos iniciais
+  const initialData = useMemo(() => {
+    return new Array(count).fill(0).map(() => ({
+      position: new THREE.Vector3(
+        (Math.random() - 0.5) * 40,
+        (Math.random() - 0.5) * 30,
+        (Math.random() - 0.5) * 20
+      ),
+      velocity: new THREE.Vector3(
+        (Math.random() - 0.5) * GhostParams.fireflySpeed,
+        (Math.random() - 0.5) * GhostParams.fireflySpeed,
+        (Math.random() - 0.5) * GhostParams.fireflySpeed
+      ),
+      phase: Math.random() * Math.PI * 2,
+      pulseSpeed: 2 + Math.random() * 3,
+    }));
+  }, []);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!groupRef.current) return;
-    groupRef.current.children.forEach((child, i) => {
-      const data = fireflies[i];
-      // Keep them moving
-      child.position.add(data.velocity);
+    const time = state.clock.elapsedTime;
 
-      // Simple wrap around to keep them in view?
-      // For now, let's just let them drift as per original code
-      // If they drift too far, we could reset, but original didn't have explicit bounds in the snippet shown
-      // Adding a simple bound check to avoid empty screen eventually
-      if (child.position.x > 25) child.position.x = -25;
-      if (child.position.x < -25) child.position.x = 25;
-      if (child.position.y > 20) child.position.y = -20;
-      if (child.position.y < -20) child.position.y = 20;
+    groupRef.current.children.forEach((child, i) => {
+      const data = initialData[i];
+      const firefly = child as THREE.Mesh;
+      const glow = firefly.children[0] as THREE.Mesh;
+      const light = firefly.children[1] as THREE.PointLight;
+
+      // Pulse
+      const pulsePhase = time + data.phase;
+      const pulse = Math.sin(pulsePhase * data.pulseSpeed) * 0.4 + 0.6;
+
+      // Update Opacity & Intensity
+      const glowMat = glow.material as THREE.MeshBasicMaterial;
+      const flyMat = firefly.material as THREE.MeshBasicMaterial;
+
+      glowMat.opacity = GhostParams.fireflyGlowIntensity * 0.4 * pulse;
+      flyMat.opacity = GhostParams.fireflyGlowIntensity * 0.9 * pulse;
+      light.intensity = GhostParams.fireflyGlowIntensity * 0.8 * pulse;
+
+      // Random Walk
+      data.velocity.x += (Math.random() - 0.5) * 0.001;
+      data.velocity.y += (Math.random() - 0.5) * 0.001;
+      data.velocity.z += (Math.random() - 0.5) * 0.001;
+      data.velocity.clampLength(0, GhostParams.fireflySpeed);
+
+      firefly.position.add(data.velocity);
+
+      // Bounds check
+      if (Math.abs(firefly.position.x) > 30) data.velocity.x *= -0.5;
+      if (Math.abs(firefly.position.y) > 20) data.velocity.y *= -0.5;
+      if (Math.abs(firefly.position.z) > 15) data.velocity.z *= -0.5;
     });
   });
 
   return (
     <group ref={groupRef}>
-      {fireflies.map((f, i) => (
-        <mesh key={i} position={f.pos}>
-          <sphereGeometry args={[0.02, 4, 4]} />
-          <meshBasicMaterial color={0xffff44} transparent opacity={0.9} />
-          <pointLight color={0xffff44} intensity={0.8} distance={3} decay={2} />
+      {initialData.map((data, i) => (
+        <mesh key={i} position={data.position}>
+          <sphereGeometry args={[0.02, 2, 2]} />
+          <meshBasicMaterial color="#ffff44" transparent opacity={0.9} />
+
+          {/* Glow */}
           <mesh>
             <sphereGeometry args={[0.08, 8, 8]} />
             <meshBasicMaterial
-              color={0xffff88}
+              color="#ffff88"
               transparent
               opacity={0.4}
               side={THREE.BackSide}
             />
           </mesh>
+
+          {/* Light */}
+          <pointLight color="#ffff44" distance={3} decay={2} intensity={0.8} />
         </mesh>
       ))}
     </group>

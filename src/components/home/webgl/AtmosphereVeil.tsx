@@ -1,63 +1,74 @@
-import { useRef } from 'react';
+'use client';
+
+import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { GhostParams } from './ghost/GhostParams';
 
-const PARAMS = {
-  revealRadius: 37,
-  fadeStrength: 1.7,
-  baseOpacity: 0.9,
-  revealOpacity: 0.05,
-};
+interface AtmosphereVeilProps {
+  ghostPosition: React.MutableRefObject<THREE.Vector3>;
+}
 
-const AtmosphereShader = {
-  uniforms: {
-    ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
-    revealRadius: { value: PARAMS.revealRadius },
-    fadeStrength: { value: PARAMS.fadeStrength },
-    baseOpacity: { value: PARAMS.baseOpacity },
-    revealOpacity: { value: PARAMS.revealOpacity },
-    time: { value: 0 },
-  },
-  vertexShader: `
-      varying vec2 vUv;
-      varying vec3 vWorldPosition;
-      void main() {
-        vUv = uv;
-        vec4 worldPos = modelMatrix * vec4(position, 1.0);
-        vWorldPosition = worldPos.xyz;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-  fragmentShader: `
-      uniform vec3 ghostPosition;
-      uniform float revealRadius;
-      uniform float fadeStrength;
-      uniform float baseOpacity;
-      uniform float revealOpacity;
-      uniform float time;
-      varying vec2 vUv;
-      varying vec3 vWorldPosition;
-      
-      void main() {
-        float dist = distance(vWorldPosition.xy, ghostPosition.xy);
-        float dynamicRadius = revealRadius + sin(time * 2.0) * 5.0;
-        float reveal = smoothstep(dynamicRadius * 0.2, dynamicRadius, dist);
-        reveal = pow(reveal, fadeStrength);
-        float opacity = mix(revealOpacity, baseOpacity, reveal);
-        gl_FragColor = vec4(0.001, 0.001, 0.002, opacity); // Ultra-low RGB
-      }
-    `,
-};
+const vertexShader = `
+  varying vec2 vUv;
+  varying vec3 vWorldPosition;
+  void main() {
+    vUv = uv;
+    vec4 worldPos = modelMatrix * vec4(position, 1.0);
+    vWorldPosition = worldPos.xyz;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
 
-export default function AtmosphereVeil() {
+const fragmentShader = `
+  uniform vec3 ghostPosition;
+  uniform float revealRadius;
+  uniform float fadeStrength;
+  uniform float baseOpacity;
+  uniform float revealOpacity;
+  uniform float time;
+  varying vec2 vUv;
+  varying vec3 vWorldPosition;
+  
+  void main() {
+    float dist = distance(vWorldPosition.xy, ghostPosition.xy);
+    
+    // Pulsing reveal radius
+    float dynamicRadius = revealRadius + sin(time * 2.0) * 5.0;
+    
+    // Create smooth reveal gradient
+    float reveal = smoothstep(dynamicRadius * 0.2, dynamicRadius, dist);
+    reveal = pow(reveal, fadeStrength);
+    
+    // Mix between revealed and base opacity
+    float opacity = mix(revealOpacity, baseOpacity, reveal);
+    
+    // EXTREMELY low RGB values to avoid bloom interference
+    gl_FragColor = vec4(0.001, 0.001, 0.002, opacity);
+  }
+`;
+
+export function AtmosphereVeil({ ghostPosition }: AtmosphereVeilProps) {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+
+  const uniforms = useMemo(
+    () => ({
+      ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
+      revealRadius: { value: GhostParams.revealRadius },
+      fadeStrength: { value: GhostParams.fadeStrength },
+      baseOpacity: { value: GhostParams.baseOpacity },
+      revealOpacity: { value: GhostParams.revealOpacity },
+      time: { value: 0 },
+    }),
+    []
+  );
 
   useFrame((state) => {
     if (materialRef.current) {
       materialRef.current.uniforms.time.value = state.clock.elapsedTime;
-      // In the full implementation, we might want to feed the actual ghost position here
-      // For now, assuming ghost stays roughly central (0,0,0) or we accept the static reveals
-      // materialRef.current.uniforms.ghostPosition.value.copy(ghostPosition);
+      materialRef.current.uniforms.ghostPosition.value.copy(
+        ghostPosition.current
+      );
     }
   });
 
@@ -66,7 +77,9 @@ export default function AtmosphereVeil() {
       <planeGeometry args={[300, 300]} />
       <shaderMaterial
         ref={materialRef}
-        args={[AtmosphereShader]}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+        uniforms={uniforms}
         transparent
         depthWrite={false}
       />
