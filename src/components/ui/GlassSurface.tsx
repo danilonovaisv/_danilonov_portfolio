@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useId } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useId } from 'react';
 
 export interface GlassSurfaceProps {
   children?: React.ReactNode;
@@ -81,6 +81,11 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
 
   const isDarkMode = useDarkMode();
   const isBrowser = typeof window !== 'undefined';
+  const [featureSupport, setFeatureSupport] = useState({
+    svg: false,
+    backdrop: false,
+    ready: false,
+  });
 
   const generateDisplacementMap = () => {
     const rect = containerRef.current?.getBoundingClientRect();
@@ -171,7 +176,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     setTimeout(updateDisplacementMap, 0);
   }, [width, height]);
 
-  const supportsSVGFilters = () => {
+  const supportsSVGFilters = useCallback(() => {
     if (!isBrowser) return false;
     const isWebkit =
       /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
@@ -184,12 +189,21 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
     const div = document.createElement('div');
     div.style.backdropFilter = `url(#${filterId})`;
     return div.style.backdropFilter !== '';
-  };
+  }, [isBrowser, filterId]);
 
-  const supportsBackdropFilter = () => {
+  const supportsBackdropFilter = useCallback(() => {
     if (!isBrowser) return false;
     return CSS.supports('backdrop-filter', 'blur(10px)');
-  };
+  }, [isBrowser]);
+
+  useEffect(() => {
+    if (!isBrowser) return;
+    setFeatureSupport({
+      svg: supportsSVGFilters(),
+      backdrop: supportsBackdropFilter(),
+      ready: true,
+    });
+  }, [isBrowser, supportsBackdropFilter, supportsSVGFilters]);
 
   const getContainerStyles = (): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
@@ -201,8 +215,9 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       '--glass-saturation': saturation,
     } as React.CSSProperties;
 
-    const svgSupported = supportsSVGFilters();
-    const backdropFilterSupported = supportsBackdropFilter();
+    const svgSupported = featureSupport.ready && featureSupport.svg;
+    const backdropFilterSupported =
+      featureSupport.ready && featureSupport.backdrop;
 
     if (svgSupported) {
       return {

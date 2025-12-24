@@ -1,7 +1,7 @@
 // src/components/home/HomeHero.tsx
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import HeroCopy from './HeroCopy';
 import ManifestoThumb from './ManifestoThumb';
@@ -20,8 +20,14 @@ import { ScrollProvider } from '@/contexts/ScrollContext';
  */
 export default function HomeHero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: isMounted ? containerRef : undefined,
     offset: ['start start', 'end start'],
   });
 
