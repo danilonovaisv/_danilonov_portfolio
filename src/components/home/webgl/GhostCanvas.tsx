@@ -1,7 +1,7 @@
 // src/components/home/webgl/GhostCanvas.tsx
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -54,14 +54,14 @@ function GhostScene() {
     const scrollX = scroll * 8; // Move right
     const scrollScale = 1 - scroll * 0.4;
 
-    // Base Positioning (Offset to the left)
-    const baseLX = -4;
+    // Base Positioning (Centered - no offset per reference)
+    const baseLX = 0;
 
-    // Calculate Mouse Offset
-    const targetMouseX = reducedMotion ? 0 : mouseRef.current.x * 4;
-    const targetMouseY = reducedMotion ? 0 : mouseRef.current.y * 2;
+    // Calculate Mouse Offset (stronger follow per reference: 11x, 7y)
+    const targetMouseX = reducedMotion ? 0 : mouseRef.current.x * 11;
+    const targetMouseY = reducedMotion ? 0 : mouseRef.current.y * 7;
 
-    // Apply Smooth Interpolation to Ghost Group
+    // Apply Smooth Interpolation to Ghost Group (slower for "ethereal" feel)
     ghostGroupRef.current.position.x +=
       (baseLX + targetMouseX + scrollX - ghostGroupRef.current.position.x) *
       0.05;
@@ -87,13 +87,25 @@ function GhostScene() {
 export default function GhostCanvas() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 7], fov: 45 }}
+      camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={[1, 1.5]}
-      gl={{ antialias: false, alpha: true }}
-      className="absolute inset-0 z-0"
+      gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
+      className="absolute inset-0"
+      style={{ background: 'transparent' }}
     >
-      <color attach="background" args={['#050505']} />
-      <ambientLight intensity={0.1} color="#0a0a2e" />
+      {/* No solid background - fully transparent canvas */}
+      <ambientLight intensity={0.08} color="#0a0a2e" />
+      {/* Rim lights for ghost glow (per reference) */}
+      <directionalLight
+        position={[-8, 6, -4]}
+        intensity={1.8}
+        color="#4a90e2"
+      />
+      <directionalLight
+        position={[8, -4, -6]}
+        intensity={1.3}
+        color="#50e3c2"
+      />
       <GhostScene />
       <Fireflies count={15} />
       <EffectComposer>

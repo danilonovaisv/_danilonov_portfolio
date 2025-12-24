@@ -27,12 +27,14 @@
 ---
 
 ### 2. Assets Globais
-- **Logo Light:**  
+- **Logo Light:**  ["./src/assets/logos/LogoLight.svg"]
   https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg
-- **Logo Dark:**  
+- **Logo Dark:**  ["./src/assets/logos/LogoDark.svg"]
   https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon.svg
-- **Favicon:**  
+- **Favicon:**  ["./src/assets/logos/Favicon.svg"]
   https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg
+ - **Favicon Light:**  ["./src/assets/logos/FaviconLight.svg"]
+https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logoHeaderClaro.svg
 
 ---
 

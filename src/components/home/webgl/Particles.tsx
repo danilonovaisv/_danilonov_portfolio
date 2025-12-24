@@ -12,45 +12,58 @@ export default function Particles({ count = 100 }) {
   const particles = useMemo(() => {
     const temp = [];
     for (let i = 0; i < count; i++) {
-      const t = Math.random() * 100;
-      const factor = 20 + Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
-      const xFactor = -50 + Math.random() * 100;
-      const yFactor = -50 + Math.random() * 100;
-      const zFactor = -50 + Math.random() * 100;
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
+      // Particles closer to ghost origin (per reference: scatterRange 3.5)
+      const xFactor = (Math.random() - 0.5) * 3.5;
+      const yFactor = (Math.random() - 0.5) * 3.5 - 0.8; // Offset down
+      const zFactor = -0.8 - Math.random() * 0.6; // Behind ghost
+      const speed = 0.003 + Math.random() * 0.005;
+      const decay = Math.random() * 0.003 + 0.005;
+      const phase = Math.random() * Math.PI * 2;
+      temp.push({
+        xFactor,
+        yFactor,
+        zFactor,
+        speed,
+        decay,
+        phase,
+        life: Math.random(), // Stagger initial life
+        velocity: {
+          x: (Math.random() - 0.5) * 0.012,
+          y: (Math.random() - 0.5) * 0.012 - 0.002,
+          z: (Math.random() - 0.5) * 0.012 - 0.006,
+        },
+      });
     }
     return temp;
   }, [count]);
 
-  useFrame((_state) => {
-    particles.forEach((particle, i) => {
-      const { factor, speed, xFactor, yFactor, zFactor } = particle;
-      let { t } = particle;
-      t = particle.t = t + speed / 2;
-      const a = Math.cos(t) + Math.sin(t * 1) / 10;
-      const b = Math.sin(t) + Math.cos(t * 2) / 10;
-      const s = Math.cos(t);
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
 
+    particles.forEach((particle, i) => {
+      // Update life and reset when dead
+      particle.life -= particle.decay;
+      if (particle.life <= 0) {
+        particle.life = 1.0;
+        particle.xFactor = (Math.random() - 0.5) * 3.5;
+        particle.yFactor = (Math.random() - 0.5) * 3.5 - 0.8;
+        particle.zFactor = -0.8 - Math.random() * 0.6;
+      }
+
+      // Position with swirling motion
+      const swirl = Math.cos(t * 1.8 + particle.phase) * 0.3;
       dummy.position.set(
-        (particle.mx / 10) * a +
-          xFactor +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b +
-          yFactor +
-          Math.sin((t / 10) * factor) +
-          (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b +
-          zFactor +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 3) * factor) / 10
+        particle.xFactor + swirl + particle.velocity.x * t * 10,
+        particle.yFactor + particle.velocity.y * t * 10,
+        particle.zFactor + particle.velocity.z * t * 10
       );
 
-      // Scale down particles
-      const scale = (s * 2 + 3) * 0.05;
+      // Scale based on life (fade out)
+      const scale = (0.02 + Math.random() * 0.03) * particle.life;
       dummy.scale.set(scale, scale, scale);
-      dummy.rotation.set(s * 5, s * 5, s * 5);
+
+      // Rotation animation
+      dummy.rotation.set(t * 0.5, t * 0.3, t * 0.2);
       dummy.updateMatrix();
 
       if (meshRef.current) {
@@ -65,8 +78,8 @@ export default function Particles({ count = 100 }) {
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 8, 8]} />
-      <meshBasicMaterial color="#8a2be2" transparent opacity={0.6} />
+      <sphereGeometry args={[1, 6, 6]} />
+      <meshBasicMaterial color="#8a2be2" transparent opacity={0.7} />
     </instancedMesh>
   );
 }

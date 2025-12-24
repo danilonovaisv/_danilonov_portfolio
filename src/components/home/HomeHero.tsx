@@ -18,7 +18,7 @@ import { BRAND } from '@/config/brand';
 const GhostStage = dynamic(() => import('@/components/canvas/GhostStage'), {
   ssr: false,
   loading: () => (
-    <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_#0b0d3a_0%,_#050505_60%)]" />
+    <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,#0b0d3a_0%,#050505_60%)]" />
   ),
 });
 
@@ -120,8 +120,8 @@ export default function HomeHero() {
 
       {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Layer 0: WebGL Atmosphere */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Layer 2: WebGL Atmosphere - ABOVE text */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage />
         </div>
 
@@ -143,28 +143,23 @@ export default function HomeHero() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="mb-6"
           >
-            <span className="text-[#0057FF] font-medium tracking-widest text-sm uppercase">
+            <span className="text-white/70 font-medium tracking-widest text-sm uppercase">
               [ BRAND AWARENESS ]
             </span>
           </motion.div>
 
-          {/* Main Title */}
+          {/* Main Title - bigger font, two lines */}
           <div className="text-center mb-6 pointer-events-auto">
-            <div className="text-[clamp(2.5rem,8vw,6rem)] font-extrabold tracking-[-0.04em] flex flex-col items-center gap-1">
+            <div className="text-[clamp(3rem,10vw,8rem)] font-extrabold tracking-[-0.04em] flex flex-col items-center gap-0 leading-[1.05]">
               <AnimatedText
-                text="Design,"
-                className="text-[#0057FF]"
+                text="Design, não"
+                className="text-white"
                 delayStart={0}
               />
               <AnimatedText
-                text="não é só"
-                className="text-[#d9dade]"
-                delayStart={7}
-              />
-              <AnimatedText
-                text="estética."
-                className="text-[#d9dade]"
-                delayStart={15}
+                text="é só estética."
+                className="text-white"
+                delayStart={10}
               />
             </div>
           </div>
@@ -174,7 +169,7 @@ export default function HomeHero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.5, duration: 1 }}
-            className="text-[#888888] text-base md:text-lg mb-10 text-center"
+            className="text-white/60 text-base md:text-lg mb-10 text-center"
           >
             [ É intenção, é estratégia, é experiência. ]
           </motion.p>

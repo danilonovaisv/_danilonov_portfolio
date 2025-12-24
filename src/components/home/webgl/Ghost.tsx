@@ -34,23 +34,33 @@ export default function Ghost() {
     const t = state.clock.elapsedTime;
     const material = meshRef.current.material as THREE.MeshStandardMaterial;
 
-    // Pulsing emissive
-    material.emissiveIntensity = 3.5 + Math.sin(t * 1.6) * 0.6;
+    // Pulsing emissive intensity (per reference: 5.8 base, pulse 0.6)
+    const pulse = Math.sin(t * 1.6) * 0.6;
+    const breathe = Math.sin(t * 0.6) * 0.12;
+    material.emissiveIntensity = 5.8 + pulse + breathe;
 
-    // Floating animation
-    meshRef.current.position.y = Math.sin(t * 1.2) * 0.15;
+    // Floating animation (per reference: floatSpeed 1.6)
+    const float1 = Math.sin(t * 1.5 * 1.6) * 0.03;
+    const float2 = Math.cos(t * 0.7 * 1.6) * 0.018;
+    const float3 = Math.sin(t * 2.3 * 1.6) * 0.008;
+    meshRef.current.position.y = float1 + float2 + float3;
 
-    // Gentle wobble
-    meshRef.current.rotation.y = Math.sin(t * 0.4) * 0.1;
+    // Gentle wobble (per reference: wobbleAmount 0.35)
+    meshRef.current.rotation.y = Math.sin(t * 1.4) * 0.05 * 0.35;
+    meshRef.current.rotation.z = Math.sin(t * 0.8) * 0.03 * 0.35;
+
+    // Scale breathing variation
+    const scaleBreath = 1 + Math.sin(t * 0.8) * 0.012;
+    meshRef.current.scale.setScalar(scaleBreath);
   });
 
   return (
-    <group>
+    <group scale={1.6}>
       <mesh ref={meshRef} geometry={geometry}>
         <meshStandardMaterial
           color="#06071f"
           emissive={ghostColor}
-          emissiveIntensity={3.5}
+          emissiveIntensity={5.8}
           transparent
           opacity={0.88}
           roughness={0.02}

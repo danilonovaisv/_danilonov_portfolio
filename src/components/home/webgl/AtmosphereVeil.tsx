@@ -17,8 +17,8 @@ export default function AtmosphereVeil({
       ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
       revealRadius: { value: 37 },
       fadeStrength: { value: 1.7 },
-      baseOpacity: { value: 0.9 },
-      revealOpacity: { value: 0.1 },
+      baseOpacity: { value: 0.3 }, // Reduced from 0.9 to keep text visible
+      revealOpacity: { value: 0.02 }, // Reduced from 0.1 for subtler effect
       time: { value: 0 },
     },
     vertexShader: `
@@ -55,7 +55,8 @@ export default function AtmosphereVeil({
         // Mix between revealed and base opacity
         float opacity = mix(revealOpacity, baseOpacity, reveal);
         
-        gl_FragColor = vec4(0.0, 0.0, 0.0, opacity);
+        // Very dark overlay with low alpha for subtle effect
+        gl_FragColor = vec4(0.02, 0.02, 0.03, opacity);
       }
     `,
   };
