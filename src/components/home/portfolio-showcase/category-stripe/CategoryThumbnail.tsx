@@ -67,7 +67,7 @@ const CategoryThumbnail: FC<CategoryThumbnailProps> = ({
                     thumb ||
                     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
                   }
-                  alt=""
+                  alt="Visual representation of the project category"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

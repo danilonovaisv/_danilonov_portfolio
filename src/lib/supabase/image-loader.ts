@@ -66,7 +66,9 @@ export default function supabaseLoader({
         '/storage/v1/render/image/public/'
       );
       const separator = transformed.includes('?') ? '&' : '?';
-      return transformed + `${separator}width=${width}&quality=${quality || 75}`;
+      return (
+        transformed + `${separator}width=${width}&quality=${quality || 75}`
+      );
     }
 
     return src;

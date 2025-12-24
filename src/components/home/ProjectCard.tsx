@@ -50,7 +50,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, index }) => {
         </div>
 
         {/* Legend / Info (Bottom) */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 items-center text-center md:items-start md:text-left">
           <h3 className="text-xl md:text-2xl font-bold font-sans tracking-tight text-[#111111] leading-tight group-hover:text-[#0057FF] transition-colors duration-300">
             {project.title}
           </h3>

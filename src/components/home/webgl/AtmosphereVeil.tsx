@@ -15,7 +15,7 @@ export default function AtmosphereVeil({
   const atmosphereMaterial = {
     uniforms: {
       ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
-      revealRadius: { value: 0.7 },
+      revealRadius: { value: 0.2 },
       fadeStrength: { value: 1.7 },
       baseOpacity: { value: 0.03 }, // Reduced from 0.9 to keep text visible
       revealOpacity: { value: 0.001 }, // Reduced from 0.1 for subtler effect
@@ -73,7 +73,7 @@ export default function AtmosphereVeil({
 
   return (
     <mesh ref={meshRef} position={[0, 0, -40]} renderOrder={-100}>
-      <planeGeometry args={[200, 200]} />
+      <planeGeometry args={[300, 300]} />
       <shaderMaterial
         args={[atmosphereMaterial]}
         transparent

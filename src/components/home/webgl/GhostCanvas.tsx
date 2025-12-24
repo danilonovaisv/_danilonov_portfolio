@@ -1,7 +1,7 @@
 // src/components/home/webgl/GhostCanvas.tsx
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -12,65 +12,78 @@ import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 
-// Ghost Scene Orchestrator - now uses window scroll directly
+// Ghost Scene Orchestrator
 function GhostScene() {
   const reducedMotion = usePrefersReducedMotion();
   const ghostGroupRef = useRef<THREE.Group>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
-  const scrollRef = useRef(0);
   const ghostPosRef = useRef(new THREE.Vector3(0, 0, 0));
-  const { size } = useThree();
+  const { size, camera } = useThree();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     if (reducedMotion) return;
 
     const handleMove = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / size.width) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / size.height) * 2 + 1;
-    };
-
-    const handleScroll = () => {
-      // Calculate scroll progress (0 to 1 based on first 200vh)
-      const scrollY = window.scrollY;
-      const maxScroll = window.innerHeight * 2; // 200vh
-      scrollRef.current = Math.min(scrollY / maxScroll, 1);
+      if (window.innerWidth >= 1024) {
+        mouseRef.current.x = (e.clientX / size.width) * 2 - 1;
+        mouseRef.current.y = -(e.clientY / size.height) * 2 + 1;
+      }
     };
 
     window.addEventListener('mousemove', handleMove);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
     return () => {
       window.removeEventListener('mousemove', handleMove);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkMobile);
     };
   }, [reducedMotion, size]);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!ghostGroupRef.current) return;
+    const t = state.clock.elapsedTime;
 
-    // Calculate Scroll Offset
-    const scroll = scrollRef.current;
-    const scrollY = scroll * -15; // Move up out of screen
-    const scrollX = scroll * 8; // Move right
-    const scrollScale = 1 - scroll * 0.4;
+    let targetX = 0;
+    let targetY = 0;
 
-    // Base Positioning (Centered - no offset per reference)
-    const baseLX = 0;
+    if (isMobile) {
+      // Automatic organic movement for mobile (Sine/Cosine loop)
+      targetX = Math.sin(t * 0.4) * 8;
+      targetY = Math.cos(t * 0.3) * 5;
+    } else {
+      // Mouse tracking for desktop
+      targetX = mouseRef.current.x * 12;
+      targetY = mouseRef.current.y * 8;
+    }
 
-    // Calculate Mouse Offset (stronger follow per reference: 11x, 7y)
-    const targetMouseX = reducedMotion ? 0 : mouseRef.current.x * 11;
-    const targetMouseY = reducedMotion ? 0 : mouseRef.current.y * 7;
-
-    // Apply Smooth Interpolation to Ghost Group (slower for "ethereal" feel)
+    // Smooth dampening
     ghostGroupRef.current.position.x +=
-      (baseLX + targetMouseX + scrollX - ghostGroupRef.current.position.x) *
-      0.05;
+      (targetX - ghostGroupRef.current.position.x) * 0.05;
     ghostGroupRef.current.position.y +=
-      (targetMouseY + scrollY - ghostGroupRef.current.position.y) * 0.05;
-    ghostGroupRef.current.scale.setScalar(scrollScale);
+      (targetY - ghostGroupRef.current.position.y) * 0.05;
 
-    // Sync World Position to Ghost Pos Ref for Veil
+    // Scale adjustment for mobile
+    const baseScale = isMobile ? 0.8 : 1.3;
+    ghostGroupRef.current.scale.setScalar(baseScale);
+
+    // Sync Ref for Veil
     ghostPosRef.current.copy(ghostGroupRef.current.position);
+
+    // PROJECT POSITION TO SCREEN FOR MASKING
+    // Convert 3D position to Screen Coordinates (0-100%)
+    const vector = ghostGroupRef.current.position.clone();
+    vector.project(camera);
+
+    // Convert (-1 to 1) to (0% to 100%)
+    const screenX = (vector.x * 0.5 + 0.5) * 100;
+    const screenY = (1 - (vector.y * 0.5 + 0.5)) * 100;
+
+    // Update CSS variables for DOM text masking
+    document.documentElement.style.setProperty('--gx', `${screenX}%`);
+    document.documentElement.style.setProperty('--gy', `${screenY}%`);
   });
 
   return (
@@ -78,7 +91,7 @@ function GhostScene() {
       <AtmosphereVeil ghostPosRef={ghostPosRef} />
       <group ref={ghostGroupRef}>
         <Ghost />
-        <Particles count={60} />
+        <Particles count={isMobile ? 30 : 60} />
       </group>
     </>
   );
@@ -87,35 +100,32 @@ function GhostScene() {
 export default function GhostCanvas() {
   return (
     <Canvas
-      camera={{ position: [1, 0, 20], fov: 75 }}
+      camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={[1, 1.5]}
       gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
       className="absolute inset-0"
       style={{ background: 'transparent' }}
     >
-      {/* No solid background - fully transparent canvas */}
-      <ambientLight intensity={0.01} color="#020214" />
-      {/* Rim lights for ghost glow (per reference) */}
+      <ambientLight intensity={0.02} color="#020214" />
       <directionalLight
         position={[-8, 6, -4]}
-        intensity={0.8}
-        color="#b9e24a"
+        intensity={1.5}
+        color="#4a90e2"
       />
-      <directionalLight
-        position={[8, -4, -6]}
-        intensity={1.3}
-        color="#ed1cdf"
-      />
+      <directionalLight position={[8, -4, -6]} intensity={2} color="#0057ff" />
+
       <GhostScene />
-      <Fireflies count={35} />
+      <Fireflies count={40} />
+
       <EffectComposer>
         <Bloom
-          intensity={3.8}
-          luminanceThreshold={0.4}
-          luminanceSmoothing={1.4}
+          intensity={4.0}
+          luminanceThreshold={0.15}
+          luminanceSmoothing={1.2}
+          mipmapBlur
         />
         <AnalogDecayPass />
-        <Vignette offset={0.11} darkness={0.6} />
+        <Vignette offset={0.1} darkness={0.7} />
       </EffectComposer>
     </Canvas>
   );

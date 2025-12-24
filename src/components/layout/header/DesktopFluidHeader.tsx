@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense } from 'react';
-import { usePathname } from 'next/navigation';
+
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { NAV_LINKS } from '@/config/navigation';
@@ -16,8 +16,6 @@ const FluidGlass = dynamic(() => import('./webgl/FluidGlass'), {
  * Desktop Fluid Glass Header
  */
 export default function DesktopFluidHeader() {
-  const pathname = usePathname();
-
   return (
     <>
       {/* 
@@ -26,14 +24,14 @@ export default function DesktopFluidHeader() {
         Portals them into a buffer for real refraction/distortion
       */}
       <div
-        className="fixed inset-x-0 top-0 z-[100] h-24 w-full"
+        className="fixed inset-x-0 top-0 z-[100] w-full h-24 pointer-events-none"
         role="img"
         aria-label="Header de vidro fluido com navegação 3D"
       >
-        <Suspense fallback={<div className="h-24 w-full" />}>
+        <Suspense fallback={null}>
           <FluidGlass
             scale={0.25}
-            ior={1.2}
+            ior={1.25}
             thickness={6}
             chromaticAberration={0.12}
             anisotropy={0.3}

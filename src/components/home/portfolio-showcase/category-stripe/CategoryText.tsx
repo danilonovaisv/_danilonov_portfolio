@@ -16,15 +16,15 @@ const CategoryText: FC<CategoryTextProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col gap-1 min-w-0
+      className={`flex flex-col gap-1 min-w-0 items-center text-center
         ${
           isExpanded
-            ? 'items-center text-center md:items-start md:text-left'
+            ? 'md:items-start md:text-left'
             : index === 0
-              ? 'items-start text-left md:items-end md:text-right'
+              ? 'md:items-end md:text-right'
               : index === 1
-                ? 'items-start text-left md:items-center md:text-center'
-                : 'items-start text-left md:items-start md:text-left'
+                ? 'md:items-center md:text-center'
+                : 'md:items-start md:text-left'
         }
       `}
     >
