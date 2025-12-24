@@ -1,75 +1,55 @@
 // src/components/home/HomeHero.tsx
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { useRef } from 'react';
+import { useScroll } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { ScrollProvider } from '@/contexts/ScrollContext';
 import HeroCopy from './HeroCopy';
 import ManifestoThumb from './ManifestoThumb';
-import GhostStage from '@/components/canvas/GhostStage';
-import HeroGlow from './HeroGlow';
-import HeroPreloader from './HeroPreloader';
-import { ScrollProvider } from '@/contexts/ScrollContext';
 
-/**
- * HomeHero (Ghost Atmosphere Orchestrator)
- * Hierarquia de Camadas (Master Sync):
- * z-0: WebGL Canvas (GhostStage)
- * z-10: Gradient Overlay (opcional)
- * z-20: Conteúdo Editorial (HeroCopy + ManifestoThumb)
- * z-50: Preloader
- */
+// Dynamically import WebGL canvas to avoid SSR issues
+const GhostStage = dynamic(() => import('@/components/canvas/GhostStage'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_#0b0d3a_0%,_#050505_60%)]" />
+  ),
+});
+
 export default function HomeHero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+  // Set up scroll tracking for the Hero section
   const { scrollYProgress } = useScroll({
-    target: isMounted ? containerRef : undefined,
+    target: containerRef,
     offset: ['start start', 'end start'],
   });
 
   return (
-    <ScrollProvider value={{ scrollYProgress }}>
+    <ScrollProvider scrollYProgress={scrollYProgress}>
       <section
-        id="hero"
         ref={containerRef}
-        className="relative w-full h-[150vh] bg-[#050505]"
+        id="hero"
+        className="relative w-full h-[100vh] bg-[#050505] overflow-hidden"
       >
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
-          {/* 1. Preloader (z-50) */}
-          <HeroPreloader />
-
-          {/* 2. WebGL Atmosfera (z-0) */}
+        {/* WebGL Atmosphere (z-0) */}
+        <div className="absolute inset-0 z-0">
           <GhostStage />
-
-          {/* 3. Overlay Radial de Integração (z-10) */}
-          <div
-            className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(11,13,58,0.2)_0%,#050505_70%)] pointer-events-none"
-            aria-hidden="true"
-          />
-
-          {/* 4. Conteúdo Editorial (z-20) */}
-          <div className="absolute inset-0 z-20 px-4">
-            <div className="relative mx-auto flex h-full max-w-6xl flex-col items-center justify-center lg:items-start">
-              <HeroGlow className="absolute -left-24 top-8 hidden lg:block" />
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.8, duration: 1.5 }}
-                className="relative w-full"
-              >
-                <HeroCopy className="lg:pl-16" />
-              </motion.div>
-            </div>
-            <ManifestoThumb />
-          </div>
-
-          {/* 6. Analog Decay Overlay Global (Scanlines/Noise) */}
-          <div className="absolute inset-0 z-30 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
         </div>
+
+        {/* Radial overlay for visual integration (z-10) */}
+        <div
+          className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_30%_50%,transparent_0%,#050505_70%)] pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* Editorial Content (z-20) */}
+        <div className="relative z-20 h-full">
+          <HeroCopy />
+        </div>
+
+        {/* Manifesto Video Thumbnail (z-30) - Fixed position, bottom-right */}
+        <ManifestoThumb />
       </section>
     </ScrollProvider>
   );

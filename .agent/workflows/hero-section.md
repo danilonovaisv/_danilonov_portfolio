@@ -5,12 +5,15 @@ description: hero
 # Workflow: Hero Section Implementation (Ghost Atmosphere)
 
 ## Overview
+
 - Implements the Hero section with a dark background, static text, and a Manifesto thumbnail.
 - Uses a WebGL Ghost atmosphere rendered via `GhostStage`.
 - All interactive elements have appropriate `aria-label`s and respect `prefers-reduced-motion`.
 
 ## Steps
+
 1. **Create `HomeHero.tsx`**
+
    ```tsx
    // src/components/home/HomeHero.tsx
    import HeroCopy from "./HeroCopy";
@@ -41,7 +44,9 @@ description: hero
      );
    }
    ```
+
 2. **Ghost WebGL (`Ghost.tsx`)** – floating animation only
+
    ```tsx
    // src/components/home/webgl/Ghost.tsx
    useFrame((state) => {
@@ -54,7 +59,9 @@ description: hero
      ghostMaterial.emissiveIntensity = 5.8 + Math.sin(t * 1.6) * 0.6;
    });
    ```
+
 3. **Mouse follow (desktop only)**
+
    ```tsx
    // src/components/home/webgl/GhostCanvas.tsx
    function MouseFollower({ children }: { children: React.ReactNode }) {
@@ -81,7 +88,9 @@ description: hero
      return <group ref={ghostRef}>{children}</group>;
    }
    ```
+
 4. **Preloader (optional, respects reduced motion)**
+
    ```tsx
    // src/components/home/HeroPreloader.tsx
    export default function HeroPreloader() {
@@ -108,7 +117,9 @@ description: hero
      );
    }
    ```
+
 5. **Post‑processing (Analog Decay Pass – optional)**
+
    ```tsx
    // src/components/home/webgl/postprocessing/AnalogDecayPass.ts
    const AnalogDecayShader = shaderMaterial(
@@ -126,6 +137,7 @@ description: hero
    ```
 
 ## Non‑Negotiables
+
 - Layering hierarchy must remain unchanged.
 - No heavy scroll‑based animations; all motion is time‑based.
 - Respect `prefers-reduced-motion`.
@@ -133,6 +145,7 @@ description: hero
 - Background color `#06071f` with AA contrast for text.
 
 ## Expected Outcome
+
 - Premium‑looking hero section with ethereal ghost effect.
 - No console warnings or TypeScript errors.
 - Smooth experience on desktop and mobile.

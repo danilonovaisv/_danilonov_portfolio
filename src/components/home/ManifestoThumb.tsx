@@ -1,10 +1,9 @@
 // src/components/home/ManifestoThumb.tsx
 'use client';
 
+import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useTransform, useScroll } from 'framer-motion';
 import { BRAND } from '@/config/brand';
-import { useScrollContext } from '@/contexts/ScrollContext';
 
 function track(event: string, detail?: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
@@ -14,38 +13,12 @@ function track(event: string, detail?: Record<string, unknown>) {
 }
 
 export default function ManifestoThumb() {
-  const { scrollYProgress: contextScrollProgress } = useScrollContext();
-  const rootRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  // Use context scroll if available, otherwise set up local scroll
-  const { scrollYProgress } = useScroll({
-    target: rootRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const progress = contextScrollProgress ?? scrollYProgress;
-
-  // Animation Transforms
-  // Start: 192x120px, Bottom 40px, Right 24px
-  // End: 100%x100%, Bottom 0px, Right 0px
-  const width = useTransform(progress, [0, 0.46], ['192px', '100%']);
-  const height = useTransform(progress, [0, 0.46], ['120px', '100%']);
-  const right = useTransform(progress, [0, 0.46], ['24px', '0px']);
-  const bottom = useTransform(progress, [0, 0.46], ['40px', '0px']);
-  const borderRadius = useTransform(progress, [0, 0.46], ['12px', '0px']);
-  const scale = useTransform(progress, [0, 0.1, 0.46], [1, 0.98, 1]); // Slight scale down before expanding
-  const opacity = useTransform(progress, [0.4, 0.46], [1, 0]); // Fade out when fully expanded
-
-  // Opacity fade of the overlay/border to cleaner look when full
-  const borderOpacity = useTransform(progress, [0.3, 0.46], [0.1, 0]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    // Ensure muted autoplay for reliability
     video.muted = true;
     video
       .play()
@@ -55,38 +28,48 @@ export default function ManifestoThumb() {
       })
       .catch((e) => {
         console.warn('Autoplay blocked for thumb video', e);
-        // If autoplay fails, we'll try again on user interaction
       });
   }, []);
 
-  return (
-    <div ref={rootRef}>
-      <motion.div
-        style={{
-          width,
-          height,
-          right,
-          bottom,
-          scale,
-          opacity,
-          position: 'fixed',
-          borderRadius,
-          zIndex: 49, // Slightly below the hero video
-          transformOrigin: 'bottom right',
-        }}
-        className="overflow-hidden shadow-2xl bg-black"
-      >
-        <motion.div
-          className="absolute inset-0 border border-white"
-          style={{ opacity: borderOpacity, borderRadius }}
-        />
+  // Click handler to smooth-scroll to the Manifesto section
+  const handleClick = () => {
+    const target = document.getElementById('manifesto');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      track('manifesto_thumb_click_scroll');
+    }
+  };
 
+  return (
+    <motion.div
+      onClick={handleClick}
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: 2.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
+      className="fixed z-30 right-6 md:right-8 bottom-8 md:bottom-10 cursor-pointer group"
+      style={{ transformOrigin: 'bottom right' }}
+      aria-label="Watch manifesto video"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
+    >
+      {/* Video Container */}
+      <div className="relative w-48 h-28 md:w-56 md:h-32 rounded-xl overflow-hidden shadow-2xl bg-black ring-1 ring-white/10 group-hover:ring-white/20 transition-all duration-300">
+        {/* Loading Spinner */}
         {!isPlaying && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
-            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
+            <div className="w-6 h-6 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
           </div>
         )}
 
+        {/* Video */}
         <video
           ref={videoRef}
           src={BRAND.video.manifesto}
@@ -96,9 +79,39 @@ export default function ManifestoThumb() {
           playsInline
           autoPlay
           preload="metadata"
-          aria-label="Video thumbnail for manifesto"
         />
-      </motion.div>
-    </div>
+
+        {/* Hover Overlay with Arrow */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-end justify-end p-3">
+          <motion.div
+            initial={{ opacity: 0, x: -5 }}
+            whileHover={{ opacity: 1, x: 0 }}
+            className="text-white/80 text-xs font-medium tracking-wide flex items-center gap-1"
+          >
+            <span className="hidden group-hover:inline">Watch</span>
+            <svg
+              className="w-4 h-4 transform -rotate-45"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </motion.div>
+        </div>
+
+        {/* "Strategy" Label - matching reference image */}
+        <div className="absolute bottom-2 left-3 z-20">
+          <span className="text-white text-sm font-semibold drop-shadow-lg">
+            Strategy
+          </span>
+        </div>
+      </div>
+    </motion.div>
   );
 }

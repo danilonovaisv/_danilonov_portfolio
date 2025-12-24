@@ -4,20 +4,26 @@ import React, { createContext, useContext } from 'react';
 import { MotionValue } from 'framer-motion';
 
 interface ScrollContextType {
-  scrollYProgress?: MotionValue<number>;
+  scrollYProgress: MotionValue<number> | null;
 }
 
-const ScrollContext = createContext<ScrollContextType>({});
+const ScrollContext = createContext<ScrollContextType>({
+  scrollYProgress: null,
+});
+
+interface ScrollProviderProps {
+  children: React.ReactNode;
+  scrollYProgress: MotionValue<number>;
+}
 
 export function ScrollProvider({
   children,
-  value,
-}: {
-  children: React.ReactNode;
-  value: ScrollContextType;
-}) {
+  scrollYProgress,
+}: ScrollProviderProps) {
   return (
-    <ScrollContext.Provider value={value}>{children}</ScrollContext.Provider>
+    <ScrollContext.Provider value={{ scrollYProgress }}>
+      {children}
+    </ScrollContext.Provider>
   );
 }
 
