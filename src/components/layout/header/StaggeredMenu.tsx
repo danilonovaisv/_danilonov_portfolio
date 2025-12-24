@@ -57,6 +57,8 @@ export default function StaggeredMenu() {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [isOpen]);
 
+  const ariaExpanded = isOpen ? 'true' : 'false';
+
   return (
     <div ref={containerRef}>
       {/* Menu Toggle Button */}
@@ -66,7 +68,8 @@ export default function StaggeredMenu() {
           isOpen ? 'text-black bg-white/10' : 'text-[#e9e9ef] hover:bg-white/10'
         }`}
         aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-        aria-expanded={isOpen ? 'true' : 'false'}
+        aria-expanded={ariaExpanded}
+        type="button"
       >
         <motion.div
           initial={false}

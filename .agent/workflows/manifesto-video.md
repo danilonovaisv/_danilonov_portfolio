@@ -16,13 +16,13 @@ description: manifest
 
    ```tsx
    // src/components/home/ManifestoSection.tsx
-   "use client";
-   import { motion, useInView } from "framer-motion";
-   import ManifestoVideo from "./ManifestoVideo";
+   'use client';
+   import { motion, useInView } from 'framer-motion';
+   import ManifestoVideo from './ManifestoVideo';
 
    export default function ManifestoSection() {
      const ref = React.useRef(null);
-     const inView = useInView(ref, { once: true, margin: "-100px" });
+     const inView = useInView(ref, { once: true, margin: '-100px' });
 
      const variants = {
        hidden: { opacity: 0, scale: 0.95, y: 20 },
@@ -38,7 +38,7 @@ description: manifest
          <motion.div
            variants={variants}
            initial="hidden"
-           animate={inView ? "visible" : "hidden"}
+           animate={inView ? 'visible' : 'hidden'}
            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
          >
            <ManifestoVideo />
@@ -52,7 +52,7 @@ description: manifest
 
    ```tsx
    // src/components/home/ManifestoVideo.tsx
-   "use client";
+   'use client';
    export default function ManifestoVideo() {
      return (
        <video

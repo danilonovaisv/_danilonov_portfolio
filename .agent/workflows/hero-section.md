@@ -16,9 +16,9 @@ description: hero
 
    ```tsx
    // src/components/home/HomeHero.tsx
-   import HeroCopy from "./HeroCopy";
-   import ManifestoThumb from "./ManifestoThumb";
-   import GhostStage from "./GhostStage";
+   import HeroCopy from './HeroCopy';
+   import ManifestoThumb from './ManifestoThumb';
+   import GhostStage from './GhostStage';
 
    export default function HomeHero() {
      return (
@@ -73,16 +73,18 @@ description: hero
          mouse.current.x = (e.clientX / size.width) * 2 - 1;
          mouse.current.y = -(e.clientY / size.height) * 2 + 1;
        };
-       window.addEventListener("mousemove", handle);
-       return () => window.removeEventListener("mousemove", handle);
+       window.addEventListener('mousemove', handle);
+       return () => window.removeEventListener('mousemove', handle);
      }, [size]);
 
      useFrame(() => {
        if (!ghostRef.current) return;
        const targetX = mouse.current.x * 8;
        const targetY = mouse.current.y * 5;
-       ghostRef.current.position.x += (targetX - ghostRef.current.position.x) * 0.05;
-       ghostRef.current.position.y += (targetY - ghostRef.current.position.y) * 0.05;
+       ghostRef.current.position.x +=
+         (targetX - ghostRef.current.position.x) * 0.05;
+       ghostRef.current.position.y +=
+         (targetY - ghostRef.current.position.y) * 0.05;
      });
 
      return <group ref={ghostRef}>{children}</group>;
@@ -109,8 +111,8 @@ description: hero
            <motion.div
              className="progress-bar h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
              initial={{ width: 0 }}
-             animate={{ width: "100%" }}
-             transition={{ duration: 2, ease: "easeInOut" }}
+             animate={{ width: '100%' }}
+             transition={{ duration: 2, ease: 'easeInOut' }}
            />
          </div>
        </motion.div>

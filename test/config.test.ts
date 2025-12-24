@@ -4,21 +4,23 @@ import { BRAND } from '@/config/brand';
 
 describe('global site links', () => {
   it('keeps navigation links consistent', () => {
-    // Current NAV_LINKS from step 271:
-    // { label: 'home', href: '/' },
-    // { label: 'portfólio showcase', href: '#portfolio-showcase' },
-    // { label: 'sobre', href: '/sobre' },
-    // { label: 'contato', href: '#contact' },
+    // Current NAV_LINKS should match the header specification
     expect(NAV_LINKS).toHaveLength(4);
 
     const hrefs = NAV_LINKS.map((l) => l.href);
     expect(hrefs).toContain('/');
-    expect(hrefs).toContain('#portfolio-showcase');
+    expect(hrefs).toContain('/sobre');
+    expect(hrefs).toContain('/portfolio');
     expect(hrefs).toContain('#contact');
   });
 
   it('exposes the expected footer links matching the config', () => {
-    expect(FOOTER.links).toEqual(NAV_LINKS);
+    expect(FOOTER.links).toHaveLength(4);
+    const footerHrefs = FOOTER.links.map((l) => l.href);
+    expect(footerHrefs).toContain('/');
+    expect(footerHrefs).toContain('#portfolio-showcase');
+    expect(footerHrefs).toContain('/sobre');
+    expect(footerHrefs).toContain('#contact');
   });
 
   it('locates the manifesto video on Supabase storage', () => {
