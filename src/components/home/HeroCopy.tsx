@@ -4,12 +4,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import {
   motion,
-  useScroll,
   useTransform,
   useMotionValueEvent,
+  useMotionValue,
 } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { BRAND } from '@/config/brand';
+import { useScrollContext } from '@/contexts/ScrollContext';
 
 // Reference Animation Logic adapted for React
 // Uses the specific linear() easing from the provided CSS reference
@@ -40,20 +41,13 @@ const RefAnimatedText: React.FC<{
 };
 
 const HeroCopy: React.FC<{ className?: string }> = ({ className }) => {
-  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
-  // Control Scroll for timeline animation
-  const { scrollYProgress } = useScroll({
-    target: isMounted ? sectionRef : undefined,
-    offset: ['start start', 'end end'],
-  });
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // Use context scroll provided by HomeHero
+  const { scrollYProgress: contextScrollYProgress } = useScrollContext();
+  const fallbackScroll = useMotionValue(0);
+  const scrollYProgress = contextScrollYProgress || fallbackScroll;
 
   // Trigger animation on mount/view
   useEffect(() => {

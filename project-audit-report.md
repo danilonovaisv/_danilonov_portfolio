@@ -5,10 +5,11 @@ Gerado em: 12/23/2025, 8:46:27 PM
 ---
 
 ## 📦 Dependências não utilizadas
+
 - Nenhuma dependência inútil detectada
 
-
 ## 🧱 Dependências de desenvolvimento
+
 - @jest/globals
 - @tailwindcss/postcss
 - @tailwindcss/typography
@@ -37,14 +38,14 @@ Gerado em: 12/23/2025, 8:46:27 PM
 - ts-node
 - typescript
 
-
 ## 🌿 Branches no repositório
-- * main
--   remotes/origin/HEAD -> origin/main
--   remotes/origin/main
--   remotes/origin/codex/optimize-and-rewrite-project-documentation
--   jules-9322853840969876428-c8fe88fb
 
+- - main
+- remotes/origin/HEAD -> origin/main
+- remotes/origin/main
+- remotes/origin/codex/optimize-and-rewrite-project-documentation
+- jules-9322853840969876428-c8fe88fb
 
 ## 🪓 Branches potencialmente obsoletas
--   remotes/origin/codex/optimize-and-rewrite-project-documentation
+
+- remotes/origin/codex/optimize-and-rewrite-project-documentation

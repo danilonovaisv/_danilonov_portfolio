@@ -2,54 +2,81 @@
 description: manifest
 ---
 
-### Workflow Seção Manifesto (Reveal Suave, não Scroll Expansion)
+# Workflow: Manifesto Section (Smooth Reveal, No Scroll Expansion)
 
-**Conceito Visual (Ajustado):**
-A seção Manifesto deve aparecer com um **efeito de revelação suave** quando entra na viewport, semelhante ao comportamento observado no site de referência para as seções subsequentes à hero. O vídeo é o elemento central e deve ganhar destaque com uma animação de fade-in e scale leve. A transição entre Hero e Manifesto é uma **mudança de seção clara**, não uma expansão contínua do mesmo elemento.
+## Visual Concept
 
----
+- The Manifesto section appears with a **smooth reveal animation** when it enters the viewport.
+- The video is the focal element, animated with a subtle fade‑in and scale.
+- Transition from Hero to Manifesto is a clear section change, **not** a continuous expansion of the Hero thumbnail.
 
-**Estratégia de Implementação (`ManifestoSection.tsx`):**
+## Implementation Strategy (`ManifestoSection.tsx`)
 
-1.  **Orquestrador Central (`ManifestoSection.tsx`):**
-    - Este componente representa a seção Manifesto como um bloco independente após a Hero.
-    - Utiliza `whileInView`, `useInView`, `variants` do Framer Motion para acionar a animação de entrada quando a seção entra na viewport do usuário.
-    - O scroll é natural, sem `position: sticky` ou scrubbing complexo.
+1. **Section Wrapper**
 
-2.  **Animação de Entrada do Vídeo (`ManifestoVideo.tsx` ou dentro de `ManifestoSection.tsx`):**
-    - **Estado Inicial (Fora da Viewport):**
-      - `opacity: 0`
-      - `scale: 0.95` ou `y: 20px` (levemente abaixo ou menor)
-      - `transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }` (easing premium)
-    - **Estado Final (Na Viewport):**
-      - `opacity: 1`
-      - `scale: 1` ou `y: 0`
-    - A animação deve ser suave e enfocar o vídeo como o elemento principal da seção.
+   ```tsx
+   // src/components/home/ManifestoSection.tsx
+   "use client";
+   import { motion, useInView } from "framer-motion";
+   import ManifestoVideo from "./ManifestoVideo";
 
-3.  **Conteúdo da Seção:**
-    - O vídeo é o foco. Outros elementos (título, descrição) também podem receber uma leve animação staggered, mas o vídeo entra primeiro e com mais ênfase.
-    - A seção Manifesto ocupa `100vh` ou mais, centralizando o vídeo.
+   export default function ManifestoSection() {
+     const ref = React.useRef(null);
+     const inView = useInView(ref, { once: true, margin: "-100px" });
 
-4.  **Componente de Vídeo:**
-    - Tag `<video>` nativa otimizada ou `next-video` se disponível.
-    - Props: `autoPlay`, `loop`, `muted`, `playsInline`, `controls` (opcional).
-    - **Não** usa `layoutId` para expansão da Hero.
-    - Pode usar `object-fit: cover` e estar centralizado no contêiner da seção.
+     const variants = {
+       hidden: { opacity: 0, scale: 0.95, y: 20 },
+       visible: { opacity: 1, scale: 1, y: 0 },
+     };
 
----
+     return (
+       <section
+         id="manifesto"
+         ref={ref}
+         className="bg-[#06071f] py-20 flex justify-center items-center"
+       >
+         <motion.div
+           variants={variants}
+           initial="hidden"
+           animate={inView ? "visible" : "hidden"}
+           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+         >
+           <ManifestoVideo />
+         </motion.div>
+       </section>
+     );
+   }
+   ```
 
-**Non-Negotiables (Ajustados):**
+2. **Video Component** (`ManifestoVideo.tsx`)
 
-- **Performance:** Animações via Framer Motion (`whileInView`, `variants`) usando apenas `opacity` e `transform`. Evitar animações de `width`, `height`, `bordewrRadius` em scroll (a menos que seja uma interação específica, não uma animação de entrada).
-- **Fluidez:** A animação de entrada deve ser suave e consistente, respeitando o easing premium.
-- **Estética:** Alinhada com a estética editorial e premium do site de referência: limpa, espaçada, com foco no conteúdo principal (vídeo).
-- **Acessibilidade:** `prefers-reduced-motion: reduce` deve desativar a animação de entrada (`initial` e `animate` devem ser iguais nesse caso). O vídeo deve ter controles ou um botão de mute claro se o som for ativado.
+   ```tsx
+   // src/components/home/ManifestoVideo.tsx
+   "use client";
+   export default function ManifestoVideo() {
+     return (
+       <video
+         src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+         autoPlay
+         loop
+         muted
+         playsInline
+         className="max-w-full rounded-xl overflow-hidden"
+         aria-label="Manifesto video presentation"
+       />
+     );
+   }
+   ```
 
----
+## Non‑Negotiables
 
-**Relação com a Hero e o Thumbnail:**
+- **Performance**: Only `opacity` and `transform` are animated via Framer Motion.
+- **Accessibility**: Respect `prefers-reduced-motion`. When reduced motion is preferred, the component renders the video statically (no animation).
+- **No Layout‑Shift**: The container has a fixed height (`min-h-screen`) to avoid CLS.
+- **Interactive Elements**: All interactive elements include descriptive `aria-label`s.
 
-- O `ManifestoThumb.tsx` na Hero **não se expandirá para esta seção**.
-- O `ManifestoThumb.tsx` pode ter sua própria micro-interação (ex: `whileHover`) para indicar que é um link para a seção Manifesto.
-- O clique no `ManifestoThumb.tsx` deve **realizar um scroll suave** para a âncora `#manifesto` ou para o ID do componente `ManifestoSection.tsx`.
-- A seção Manifesto tem seu **próprio vídeo independente**. Pode ser o mesmo arquivo ou uma versão otimizada para o tamanho da seção.
+## Expected Outcome
+
+- The Manifesto section reveals itself smoothly when scrolled into view.
+- No scroll‑based expansion or shared animation with the Hero.
+- The implementation follows the project's premium aesthetic and accessibility standards.
