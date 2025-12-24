@@ -3,8 +3,10 @@
 import { Suspense } from 'react';
 
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 import { NAV_LINKS } from '@/config/navigation';
+import { BRAND } from '@/config/brand';
 
 // Dynamically import WebGL component to avoid SSR issues
 const FluidGlass = dynamic(() => import('./webgl/FluidGlass'), {
@@ -39,21 +41,35 @@ export default function DesktopFluidHeader() {
         </Suspense>
       </div>
 
-      {/* 
-        Accessibility Fallback / SEO Layer
-        Visible to screen readers but hidden visually as the WebGL layer 
-        handles the primary visual presentation.
-      */}
-      <div className="sr-only">
-        <header>
-          <nav>
+      {/* Desktop text overlay (logo + links) */}
+      <div className="hidden lg:flex fixed inset-x-0 top-0 z-[110] h-24 items-center justify-center pointer-events-auto">
+        <div className="container mx-auto flex items-center justify-between px-6 text-xs font-semibold uppercase tracking-[0.4em] text-white">
+          <Link
+            href="/"
+            aria-label={`Ir para a home de ${BRAND.name}`}
+            className="flex items-center gap-4"
+          >
+            <Image
+              src={BRAND.logos.light}
+              alt={BRAND.name}
+              width={140}
+              height={28}
+              className="object-contain"
+              priority
+            />
+          </Link>
+          <nav className="flex items-center gap-10">
             {NAV_LINKS.map((link) => (
-              <Link key={link.label} href={link.href}>
+              <Link
+                key={link.label}
+                href={link.href}
+                className="transition-colors duration-200 hover:text-[#0057FF]"
+              >
                 {link.label}
               </Link>
             ))}
           </nav>
-        </header>
+        </div>
       </div>
     </>
   );

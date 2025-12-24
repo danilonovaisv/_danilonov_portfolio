@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
@@ -13,12 +15,14 @@ export default function Hero() {
           <div className="flex flex-col md:flex-row items-center justify-center gap-8">
             {/* Ghost element - centered */}
             <div className="relative">
-              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto relative">
+              <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto">
                 <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-75 animate-pulse"></div>
-                <img 
-                  src="/ghost.png" 
-                  alt="Ghost" 
-                  className="relative w-full h-full object-contain"
+                <Image
+                  src="/ghost.png"
+                  alt="Ghost"
+                  fill
+                  sizes="(min-width: 768px) 160px, 128px"
+                  className="relative object-contain"
                 />
               </div>
             </div>
@@ -32,9 +36,13 @@ export default function Hero() {
                 [É intenção, é estratégia, é experiência.]
               </p>
               
-              <button className="group inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-full transition-colors duration-200 transform hover:scale-105">
+              <button
+                type="button"
+                className="group inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-full transition-colors duration-200 transform hover:scale-105"
+              >
                 <span>get to know me better</span>
                 <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <title>Navegar para mais detalhes</title>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>

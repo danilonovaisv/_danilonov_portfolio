@@ -41,7 +41,7 @@ export default function FluidGlass(props: FluidGlassProps) {
   if (!webglSupported) return <>{props.children}</>;
 
   return (
-    <div className="absolute inset-0 w-full h-full">
+    <div className="absolute inset-0 w-full h-full pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 25 }}
         gl={{ alpha: true, antialias: true }}
