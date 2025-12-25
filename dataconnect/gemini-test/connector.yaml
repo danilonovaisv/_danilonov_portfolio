@@ -2,8 +2,8 @@ connectorId: gemini-test
 generate:
   adminNodeSdk:
     - outputDir: ../../src/dataconnect-admin-generated
-      package: "@dataconnect/admin-generated"
+      package: '@dataconnect/admin-generated'
       packageJsonDir: ../..
     - outputDir: ../../functions/src/dataconnect-admin-generated
-      package: "@dataconnect/admin-generated"
+      package: '@dataconnect/admin-generated'
       packageJsonDir: ../../functions

@@ -9,6 +9,7 @@ export default [
       'build/**',
       '.firebase/**',
       'dataconnect-generated/**',
+      'functions/**',
       'functions/lib/**',
       'functions/src/**',
       'functions/.eslintrc.js',

@@ -2,11 +2,7 @@
 
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import {
-  MeshTransmissionMaterial,
-  Text,
-  RoundedBox,
-} from '@react-three/drei';
+import { MeshTransmissionMaterial, Text, RoundedBox } from '@react-three/drei';
 import { useRouter } from 'next/navigation';
 
 interface FluidGlassProps {
@@ -18,11 +14,16 @@ interface FluidGlassProps {
     chromaticAberration: number;
     anisotropy: number;
     navItems: { label: string; link: string }[];
-  }
+  };
 }
 
-const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) => {
-  const { navItems, ior, thickness, chromaticAberration, anisotropy } = lensProps;
+const GlassBar = ({
+  lensProps,
+}: {
+  lensProps: FluidGlassProps['lensProps'];
+}) => {
+  const { navItems, ior, thickness, chromaticAberration, anisotropy } =
+    lensProps;
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const activeIndex = 0;
@@ -47,20 +48,20 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
           backside
           samples={8}
           resolution={128}
-        transmission={0.5}
-        roughness={0.18}
-        thickness={thickness}
-        ior={ior}
-        chromaticAberration={chromaticAberration}
-        anisotropy={anisotropy}
-        distortion={0.08}
-        distortionScale={0.12}
-        temporalDistortion={0.02}
-        color="#050510"
-        attenuationColor="#0b1a3f"
-        attenuationDistance={0.28}
-      />
-    </RoundedBox>
+          transmission={0.5}
+          roughness={0.18}
+          thickness={thickness}
+          ior={ior}
+          chromaticAberration={chromaticAberration}
+          anisotropy={anisotropy}
+          distortion={0.08}
+          distortionScale={0.12}
+          temporalDistortion={0.02}
+          color="#050510"
+          attenuationColor="#0b1a3f"
+          attenuationDistance={0.28}
+        />
+      </RoundedBox>
 
       {/* Blue glow outline */}
       <RoundedBox
@@ -69,11 +70,7 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
         smoothness={8}
         position={[0, 0, -0.04]}
       >
-        <meshBasicMaterial
-          color="#7c5dff"
-          transparent
-          opacity={0.16}
-        />
+        <meshBasicMaterial color="#7c5dff" transparent opacity={0.16} />
       </RoundedBox>
 
       {/* Navigation Text */}
@@ -97,13 +94,13 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
               anchorX="center"
               anchorY="middle"
               letterSpacing={0.02}
-              onPointerOver={() => { 
-                document.body.style.cursor = 'pointer'; 
-                setHoveredIndex(index); 
+              onPointerOver={() => {
+                document.body.style.cursor = 'pointer';
+                setHoveredIndex(index);
               }}
-              onPointerOut={() => { 
-                document.body.style.cursor = 'auto'; 
-                setHoveredIndex(null); 
+              onPointerOut={() => {
+                document.body.style.cursor = 'auto';
+                setHoveredIndex(null);
               }}
               onClick={() => router.push(item.link)}
             >
@@ -118,8 +115,8 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
 
 const FluidGlass = ({ lensProps }: FluidGlassProps) => {
   return (
-    <Canvas 
-      camera={{ position: [0, 0, 5], fov: 50 }} 
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 50 }}
       gl={{ alpha: true, antialias: true }}
       style={{ pointerEvents: 'none' }}
       className="bg-transparent"
@@ -127,7 +124,7 @@ const FluidGlass = ({ lensProps }: FluidGlassProps) => {
       <ambientLight intensity={0.4} />
       <directionalLight position={[0, 2, 3]} intensity={0.5} color="#ffffff" />
       <pointLight position={[0, 0, 2]} intensity={0.3} color="#3b82f6" />
-      
+
       <GlassBar lensProps={lensProps} />
     </Canvas>
   );

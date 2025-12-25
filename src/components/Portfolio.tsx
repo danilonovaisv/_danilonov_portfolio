@@ -61,7 +61,9 @@ export default function Portfolio() {
             <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide">
               portfólio showcase
             </h2>
-            <p className="text-blue-400">Let&apos;s build something amazing together</p>
+            <p className="text-blue-400">
+              Let&apos;s build something amazing together
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -8,7 +8,7 @@ export default function ManifestoThumb() {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: 'easeOut' }}
       className="relative w-full aspect-video md:h-[400px] rounded-lg overflow-hidden shadow-2xl"
     >
       <video
@@ -20,7 +20,7 @@ export default function ManifestoThumb() {
         className="w-full h-full object-cover"
         aria-label="Manifesto thumbnail"
       />
-      
+
       {/* Overlay gradient for depth */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
     </motion.div>

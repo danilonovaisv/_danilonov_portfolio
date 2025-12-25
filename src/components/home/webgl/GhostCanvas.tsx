@@ -12,7 +12,6 @@ import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 
-
 // Ghost Scene Orchestrator
 function GhostScene() {
   const reducedMotion = usePrefersReducedMotion();
