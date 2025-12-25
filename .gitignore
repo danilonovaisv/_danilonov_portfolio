@@ -38,6 +38,21 @@ coverage/
 # Typescript
 *.tsbuildinfo
 
+# IDE / Editor
+.idea/
+.vscode/
+*.iml
+.Jules/
+
+# Linters cache (non-essential)
+.clj-kondo/
+.lsp/
+.qodo/
+
+# Agent / AI tools (keep .agent but add specifics)
+.antigravity/
+.context/
+
 # OS generated files
 .DS_Store
 .DS_Store?
@@ -46,3 +61,7 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Test artifacts
+test-results/
+playwright-report/

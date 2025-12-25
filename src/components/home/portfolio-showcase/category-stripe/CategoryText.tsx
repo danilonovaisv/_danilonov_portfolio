@@ -16,15 +16,15 @@ const CategoryText: FC<CategoryTextProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col gap-1 min-w-0
+      className={`flex flex-col gap-1 min-w-0 items-center text-center
         ${
           isExpanded
-            ? 'items-center text-center md:items-start md:text-left'
+            ? 'md:items-start md:text-left'
             : index === 0
-              ? 'items-start text-left md:items-end md:text-right'
+              ? 'md:items-end md:text-right'
               : index === 1
-                ? 'items-start text-left md:items-center md:text-center'
-                : 'items-start text-left md:items-start md:text-left'
+                ? 'md:items-center md:text-center'
+                : 'md:items-start md:text-left'
         }
       `}
     >
@@ -33,8 +33,12 @@ const CategoryText: FC<CategoryTextProps> = ({
           layout="position"
           className="font-light text-[#111111] transition-all duration-500 tracking-tight leading-tight md:leading-none text-2xl sm:text-3xl md:text-5xl lg:text-6xl group-hover:text-[#0057FF] group-hover:tracking-normal"
         >
-          <span className="block">Web Campaigns,</span>
-          <span className="block">Websites & Tech</span>
+          {label.split(', ').map((part, i, arr) => (
+            <span key={i} className="block">
+              {part}
+              {i < arr.length - 1 ? ',' : ''}
+            </span>
+          ))}
         </motion.h3>
       ) : (
         <>

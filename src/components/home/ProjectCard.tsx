@@ -15,13 +15,13 @@ interface ProjectCardProps {
 const ProjectCard: FC<ProjectCardProps> = ({ project, index }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-10%' }}
+      viewport={{ once: true, margin: '-50px' }}
       transition={{
-        duration: 0.8,
-        ease: [0.21, 0.47, 0.32, 0.98],
-        delay: index * 0.08,
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1],
+        delay: index * 0.04,
       }}
       className={`group relative flex flex-col w-full ${
         project.isHero ? 'md:col-span-2' : ''
@@ -29,12 +29,12 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, index }) => {
     >
       <Link href={`/portfolio/${project.slug}`} className="block w-full">
         {/* Generative/Image Container */}
-        <div className="relative overflow-hidden rounded-lg bg-gray-100 w-full aspect-4/3 md:aspect-video mb-4 shadow-sm group-hover:shadow-xl group-hover:shadow-blue-500/15 transition-all duration-500 transform group-hover:scale-[1.03]">
+        <div className="relative overflow-hidden rounded-lg bg-gray-100 w-full aspect-[4/3] md:aspect-video mb-4 shadow-sm group-hover:shadow-xl group-hover:shadow-blue-500/15 transition-all duration-500 transform group-hover:scale-[1.03]">
           {/* Overlay Gradient (Hover) */}
           <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
 
           <Image
-            src={project.imageUrl}
+            src={project.img}
             alt={project.title}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -50,7 +50,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, index }) => {
         </div>
 
         {/* Legend / Info (Bottom) */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 items-center text-center md:items-start md:text-left">
           <h3 className="text-xl md:text-2xl font-bold font-sans tracking-tight text-[#111111] leading-tight group-hover:text-[#0057FF] transition-colors duration-300">
             {project.title}
           </h3>

@@ -1,6 +1,6 @@
 import React from 'react';
 import localFont from 'next/font/local';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -43,42 +43,49 @@ const ttNorms = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL('https://portfoliodanilo.com'),
   title: {
-    default: `${BRAND.name} | Creative Developer`,
+    default: `${BRAND.name} | Creative Developer & Interactive Designer`,
     template: `%s | ${BRAND.name}`,
   },
   description:
-    'Portfólio de Danilo Novais - Designer e Desenvolvedor focado em Motion, 3D e Experiências Interativas.',
+    'Especialista em WebGL, R3F e animações interativas. Danilo Novais cria experiências digitais onde design e estratégia se encontram.',
   keywords: [
     'Creative Developer',
-    'WebGL',
-    'R3F',
-    'Next.js',
-    'Motion Design',
-    'Interactive Developer',
-    'Web Design',
-    '3D',
-    'React',
-    'Brazil',
+    'WebGL Developer Brazil',
+    'Three.js Expert',
+    'React Three Fiber Portfolio',
+    'Interactive Web Design',
+    'Motion Graphics Web',
+    'Frontend Engineer 3D',
+    'Next.js Specialist',
     'Danilo Novais',
   ],
   authors: [{ name: BRAND.name, url: 'https://portfoliodanilo.com' }],
   creator: BRAND.name,
   publisher: BRAND.name,
+  category: 'technology',
   openGraph: {
-    title: `${BRAND.name} | Creative Developer`,
+    title: `${BRAND.name} | Creative Developer & Interactive Designer`,
     description:
-      'Design, não é só estética. É intenção, estratégia e experiência.',
+      'Design, não é só estética. É intenção, estratégia e experiência. Explore o portfólio de um especialista em experiências digitais imersivas.',
     url: 'https://portfoliodanilo.com',
     siteName: `${BRAND.name} Portfolio`,
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: `${BRAND.name} Creative Portfolio`,
+      },
+    ],
     locale: 'pt_BR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: `${BRAND.name} | Creative Developer`,
-    description:
-      'Design, não é só estética. É intenção, estratégia e experiência.',
+    description: 'Criando o futuro da web com 3D, WebGL e interatividade.',
     creator: '@danilo_novais',
+    images: ['/opengraph-image.png'],
   },
   alternates: {
     canonical: '/',
@@ -99,6 +106,13 @@ export const metadata: Metadata = {
     shortcut: BRAND.logos.favicon,
     apple: BRAND.logos.favicon,
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#050505',
 };
 
 export default function RootLayout({
@@ -135,7 +149,12 @@ export default function RootLayout({
               name: BRAND.name,
               url: 'https://portfoliodanilo.com',
               jobTitle: 'Creative Developer',
-              sameAs: SOCIALS.map((s) => s.url),
+              sameAs: [
+                SOCIALS.linkedin,
+                SOCIALS.instagram,
+                SOCIALS.twitter,
+                SOCIALS.facebook,
+              ],
             }),
           }}
         />
