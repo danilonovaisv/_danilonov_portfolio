@@ -1,86 +1,383 @@
-# Project Overview
+# **Documento de Especificação Técnica — Home Page (Ghost Blue)**
+**Projeto:** Portfólio Institucional de Danilo Novais  
+**Páginas Principais:** Home, Sobre, Portfólio, Contato  
+**Foco deste Documento:** Home Page (Header, Hero, Manifesto, Portfolio Showcase, Featured Projects, Clients/Brands, Contact, Footer)
 
-Portfólio interativo de Danilo Novais construído em Next.js (App Router) com foco em narrar o manifesto “Design, não é só estética.” apoiado por uma atmosfera 3D etérea (“Ghost Blue”) em React Three Fiber. A home segue a ordem: Header → Hero (WebGL + copy estática) → Manifesto em vídeo → Portfolio Showcase → Featured Projects → Clients/Brands → Contato → Footer. Conteúdo e assets são centralizados em `src/config` e `HOME_CONTENT`, enquanto o Hero 3D usa canvas isolado com pós-processamento (Bloom + Analog Decay) e transições controladas por Framer Motion. 【F:src/app/page.tsx†L1-L17】【F:src/components/home/HomeHero.tsx†L1-L83】
+---
+## INFORMAÇÕES GLOBAIS
 
-# Architecture & System Design
+### 1. Contexto do Projeto
+- Site Next.js 16 (App Router) + React 19 + TypeScript + Tailwind 4, com experiência imersiva “Ghost Blue”.  
+- Ordem das seções da Home: 1) Header 2) Hero 3) Manifesto (vídeo) 4) Portfolio Showcase 5) Featured Projects 6) Clients/Brands 7) Contact 8) Footer.  
+- Stack visual: R3F + Drei + Postprocessing (Bloom + Analog Decay), Framer Motion para DOM, Lenis para scroll suave.  
+- Deploy: Firebase Hosting/App Hosting; assets principais servidos via Supabase Storage (imagens, vídeo manifesto, logos).  
+- Fontes: TT Norms Pro (local em `src/fonts`).
 
-- **App Router & Layout**: `src/app/layout.tsx` define fontes locais TT Norms, metadados OG/Twitter, SmoothScroll (Lenis) e shell global (Header + Footer). `src/app/page.tsx` monta a página com seções independentes. 【F:src/app/layout.tsx†L1-L94】【F:src/app/page.tsx†L1-L17】
-- **Camadas da Hero**: Sticky section com z-index estratificado — z0 WebGL (`GhostStage` → `GhostCanvas`), z10 overlay radial, z20 conteúdo (HeroCopy + ManifestoThumb), z30 ruído, z50 preloader. Scroll context (`ScrollProvider`) sincroniza transformações. 【F:src/components/home/HomeHero.tsx†L1-L83】
-- **WebGL Atmosphere**: Canvas com fundo #050505, ghost emissivo deformado, partículas, fireflies e shader veil; pós-processamento via Bloom, Vignette e pass personalizado AnalogDecay. Mouse follow e scroll offset ajustam posição/escala; respeita `prefers-reduced-motion`. 【F:src/components/canvas/home-hero/GhostCanvas.tsx†L1-L86】【F:src/components/canvas/home-hero/Ghost.tsx†L1-L64】
-- **Motion & Scroll**: Lenis suaviza rolagem global; Framer Motion anima reveals, thumb→full para manifesto e microinterações; hooks de accessibilidade `usePrefersReducedMotion` evitam desconforto. 【F:src/components/layout/SmoothScroll.tsx†L1-L33】【F:src/components/home/ManifestoThumb.tsx†L1-L119】
-- **Dados & Conteúdo**: Branding, navegação e vídeo manifesto em `src/config/{brand,navigation}.tsx`; categorias/projetos/logos em `src/config/content.ts`. Tipos compartilhados em `src/lib/types.ts`. 【F:src/config/brand.ts†L1-L19】【F:src/config/content.ts†L1-L60】
-- **UI Kit & Glass**: Botões animados (Framer Motion) e superfície de vidro SVG (`GlassSurface`) para glow/aberração cromática usados na Hero. 【F:src/components/ui/Button.tsx†L1-L122】【F:src/components/ui/GlassSurface.tsx†L1-L120】
+### 2. Assets Globais
+- **Logo Light:** https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg  
+- **Logo Dark:** https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon.svg  
+- **Favicon:** https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/logo.svg  
+- **Vídeo Manifesto (Hero + Manifesto):** https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4  
+- **Paleta Ghost:** fundo `#050505`, acento azul HDR `#0057FF`, texto `#d9dade`.
 
-# Module & Component Breakdown
+### 3. Conteúdo Global por Seção (dados base)
+- Hero  
+  - Tag: `[BRAND AWARENESS]`  
+  - Título: “Design, não é / só estética.”  
+  - Subtítulo: `[É intenção, é estratégia, é experiência.]`  
+  - CTA primário: `get to know me better →` (`/sobre`)  
+  - CTA secundário: scroll para `#manifesto`  
+  - WebGL: ghost abstrato emissivo com pós-processamento, sem GLB.
+- Portfolio Showcase  
+  - Título: `portfólio showcase`  
+  - Categorias (ID → Label → Thumb):  
+    - `brand-campaigns` → `Brand & Campaigns` → https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp  
+    - `videos-motions` → `Videos & Motions` → https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif  
+    - `websites-webcampaigns-tech` → `Web Campaigns, Websites & Tech` → https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp  
+  - CTA final: `VEJA MAIS →` (`/portfolio`)
+- Featured Projects (cards)  
+  - `magic-radio-branding` — Magic — devolvendo a magia ao rádio — branding & campanha — 2023 — https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp  
+  - `branding-project-01` — Uma marca ousada e consistente — branding — 2022 — https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp  
+  - `key-visual-campaign` — Key visual para campanha sazonal — campanha — 2021 — https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp  
+  - `webdesigner-motion` — Experiência web em movimento — web & motion — 2023 — https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif
+- Clients / Brands  
+  - Título: `marcas com as quais já trabalhei`  
+  - Logos (1–12): https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client{1..12}.svg
+- Contact  
+  - Título: `contato` — Sub: `Tem uma pergunta ou quer trabalhar junto?`  
+  - Form action: https://formsubmit.co/danilo@portfoliodanilo.com — CTA: `Enviar Mensagem`  
+  - Links: tel:+5511983966838 | mailto:dannovaisv@gmail.com | mailto:danilo@portfoliodanilo.com | IG/FB/LinkedIn/Twitter/Portfolio (urls na lista Social).  
+- Footer  
+  - Copyright: preferencialmente `© 2025 Danilo Novais Vilela — todos os direitos reservados.` em todas as áreas.  
+  - Links: home → #hero | portfólio showcase → #portfolio-showcase | sobre → /sobre | contato → #contact
 
-- **Layout & Shell**
-  - `components/layout/header/SiteHeader.tsx`: Header fixo com fluid glass (desktop) e menu staggered (mobile), ativo por pathname. 【F:src/components/layout/header/SiteHeader.tsx†L1-L57】【F:src/components/layout/header/DesktopFluidHeader.tsx†L1-L92】
-  - `components/layout/header/StaggeredMenu.tsx`: Menu fullscreen animado; bloqueia scroll ao abrir. 【F:src/components/layout/header/StaggeredMenu.tsx†L1-L77】
-  - `components/layout/Footer.tsx`: Rodapé com navegação e copyright (não exibido acima, mas segue FOOTER config). 
-- **Home Experience**
-  - `components/home/HeroCopy.tsx`: Copy estática + CTA primário para `/sobre`. 【F:src/components/home/HeroCopy.tsx†L1-L35】
-  - `components/home/HeroPreloader.tsx`: Splash com ghost SVG, barra de progresso e fade-out. 【F:src/components/home/HeroPreloader.tsx†L1-L61】
-  - `components/home/ManifestoThumb.tsx`: Thumb de vídeo que escala até full-screen conforme scroll; alterna mute/unmute via `useMotionValueEvent`. 【F:src/components/home/ManifestoThumb.tsx†L1-L119】
-  - `components/home/ManifestoSection.tsx`: Reprodução principal do manifesto com observers para exibir apenas após saída da hero; áudio habilita ao entrar em viewport. 【F:src/components/home/ManifestoSection.tsx†L1-L99】
-  - `components/home/PortfolioShowcase.tsx` + `CategoryStripe`: Lista categorias expansíveis; CTA “let’s build something great”. 【F:src/components/home/PortfolioShowcase.tsx†L1-L111】
-  - `components/home/FeaturedProjects.tsx` + `ProjectCard`: Grid de projetos com hover/CTA “view projects”. 【F:src/components/home/FeaturedProjects.tsx†L1-L61】【F:src/components/home/ProjectCard.tsx†L1-L71】
-  - `components/home/Clients.tsx`: Grade de logos em faixa azul. 【F:src/components/home/Clients.tsx†L1-L62】
-  - `components/home/Contact.tsx` + `contact/*`: Lado A links/CTA sociais; lado B formulário validado que posta para FormSubmit (AJAX). 【F:src/components/home/Contact.tsx†L1-L33】【F:src/components/home/contact/ContactForm.tsx†L1-L131】
-- **Canvas / WebGL**
-  - `components/canvas/GhostStage.tsx`: dynamic import SSR-off do canvas. 【F:src/components/canvas/GhostStage.tsx†L1-L13】
-  - `components/canvas/home-hero/*`: Ghost deformado (HDR emissive azul), olhos responsivos, partículas instanciadas, fireflies com luz, véu atmosférico shader-based e `AnalogDecayPass` para grain/scanlines. 【F:src/components/canvas/home-hero/Ghost.tsx†L1-L64】【F:src/components/canvas/home-hero/postprocessing/AnalogDecayPass.tsx†L1-L75】
-- **Portfolio (futuro/rota dedicada)**
-  - `components/portfolio/*`: Hero mosaic com flex grow animado, grid de mosaico e tipos auxiliares. 【F:src/components/portfolio/PortfolioHero.tsx†L1-L74】
+### 4. Princípios Globais de Animação
+- DOM (Framer Motion): reveals `whileInView`, microinterações `whileHover/whileTap`, scroll `useScroll/useTransform`.  
+- Animar apenas `transform` e `opacity`; evitar `width/height` animado.  
+- WebGL (R3F): `useFrame` para flutuação/ruído; postprocessing obrigatório.  
+- `prefers-reduced-motion: reduce`: desligar follow de mouse, parallax, morph thumb→vídeo, quedas de brilho; manter fades simples.
 
-# UI/Design Interpretation (from reference images)
+---
+## ESPECIFICAÇÃO POR SEÇÃO (TEMPLATE COMPLETO)
 
-- **Hero “Ghost Blue”**: Fundo preto com bloom azul intenso, ghost translúcido/fofo à esquerda, copy editorial centralizada e CTA arredondado; miniatura de manifesto à direita com bordas suaves. Visual mantém contraste alto e scanlines sutis, ecoando as imagens fornecidas.
-- **Navegação**: Logo light e menu superior em caixa preta com destaque azul na aba ativa; mobile usa ícone hambúrguer e overlay escuro.
-- **Manifesto**: Vídeo cinemático ocupa largura total ao rolar; thumb faz transição suave de corner → full-screen.
-- **Showcase**: Cards arredondados com gradientes e cantos orgânicos; tipografia em minúsculas, espaçamento amplo e bullets azuis como marcadores.
-- **Contato/Faixa de marcas**: Seção azul sólida com logos mono; contato em fundo claro com cards de input arredondados e CTA primário azul.
+# **SECTION NAME: Header (SiteHeader)**
+### Desktop: Fluid Glass Navigation — Mobile & Tablet: Staggered Menu Navigation
 
-# Stack & Ecosystem Research Summary
+## SECTION PURPOSE
+- Fornecer navegação global e identidade premium sem competir com a Hero.
 
-- **Next.js 16 + React 19**: App Router, RSC-friendly; usar `next/dynamic` para WebGL (`ssr: false`) e `Metadata` para SEO/OG. Fonte local via `next/font/local` já configurada. 【F:src/app/layout.tsx†L1-L41】
-- **Tailwind CSS 4**: Tokens declarativos em `globals.css` com cores Ghost e tipografia; aproveitar `@theme` e utilities para consistência. 【F:src/app/globals.css†L1-L56】
-- **Framer Motion 12**: Recomenda animar apenas `transform/opacity`, usar `useReducedMotion`/`prefers-reduced-motion` para acessibilidade (já aplicado em manifesto e particles). 【F:src/components/home/ManifestoSection.tsx†L1-L99】
-- **React Three Fiber + Drei + Postprocessing**: Canvas isolado, `EffectComposer` para Bloom/Vignette, materials emissivos HDR e `shaderMaterial` custom (AnalogDecay). Limitar DPR e `antialias` para performance; desligar interações em reduce-motion. 【F:src/components/canvas/home-hero/GhostCanvas.tsx†L1-L86】
-- **Lenis**: Suaviza scroll global; integrar `requestAnimationFrame` no provider (feito). 【F:src/components/layout/SmoothScroll.tsx†L1-L33】
-- **Supabase Storage + Custom Image Loader**: `next.config.mjs` aponta para loader que converte object URL → render URL com width/quality; requer `NEXT_PUBLIC_SUPABASE_URL` para caminhos relativos. 【F:next.config.mjs†L1-L26】【F:src/lib/supabase/image-loader.ts†L1-L73】
-- **FormSubmit**: Contato envia via endpoint AJAX; manter honeypot/captcha desativado conforme config. 【F:src/components/home/contact/ContactForm.tsx†L1-L97】
-- **Firebase Hosting/App Hosting**: Deploy default com headers de cache agressivos para assets e SW no-revalidate; backend region us-east1, emuladores configurados. 【F:firebase.json†L1-L95】
+## RESPONSABILIDADE CONCEITUAL
+- Desktop: objeto óptico fluido (refração real), sombra suave, sem fundo sólido.  
+- Mobile/Tablet: menu fullscreen staggered, foco em legibilidade e performance.
 
-# Build, Deployment & Infrastructure
+## BREAKPOINT STRATEGY
+- ≥1024px: Fluid Glass Header  
+- ≤1023px: Staggered Menu (sem WebGL)
 
-- **Pré-requisitos**: Node ≥22, PNPM 10 (packageManager), mas scripts usam `npm run`; alinhar gestor em CI.
-- **Scripts chave**: `dev`, `prebuild` (gera build-info), `build`, `start`, `lint`, `typecheck`, `prettier`, `jest`, `test` (lint + typecheck + prettier + jest + e2e shell). 【F:package.json†L9-L49】
-- **Imagens**: Next Image com loader custom; `dangerouslyAllowSVG` habilitado para logos. Definir `NEXT_PUBLIC_SUPABASE_URL` em `.env.local` para assets relativos.
-- **Deployment**: `firebase.json` usa frameworksBackend (Next SSR) + apphosting. Headers: cache 1y para estáticos, no-store para SW, revalidate 0 para HTML/build-info. Emuladores pré-configurados (`npm run dev` para apphosting). 【F:firebase.json†L1-L95】
-- **Fonts & Assets**: TT Norms locais em `src/fonts`, logos/vídeo servidos de Supabase Storage; fallback com SSR seguro.
+## DESKTOP — FLUID GLASS HEADER
+- Referência: https://reactbits.dev/components/fluid-glass  
+- Conteúdo: Logo light + links (Home, Sobre, Portfolio, Contato).  
+- Layout: flutuante, centralizado, largura limitada (max 6xl), padding compacto.  
+- WebGL: refração sutil, chromatic aberration baixa, segue cursor de forma suave.  
+- Config base:  
+  ```tsx
+  <FluidGlass
+    mode="lens"
+    lensProps={{ scale: 0.25, ior: 1.15, thickness: 5, chromaticAberration: 0.1, anisotropy: 0.01 }}
+  />
+  ```
+- Interações: hover muda opacidade; sem underline; sem animação de tamanho no scroll.
+- Performance: Canvas isolado, DPR limitado, geometria simples; fallback HTML se WebGL falhar.
+- Acessibilidade: navegação por teclado, `aria-label` nos links, foco visível.
 
-# API, Integrations & Data Flow
+## MOBILE & TABLET — STAGGERED MENU
+- Referência: https://reactbits.dev/components/staggered-menu  
+- Comportamento: menu fullscreen com entrada lateral e animação staggered; botão menu ↔ close animado.  
+- Config base:  
+  ```tsx
+  <StaggeredMenu
+    position="right"
+    items={menuItems}
+    socialItems={socialItems}
+    displaySocials
+    displayItemNumbering
+    menuButtonColor="#e9e9ef"
+    openMenuButtonColor="#000"
+    changeMenuColorOnOpen
+    colors={['#B19EEF', '#5227FF']}
+    accentColor="#5227FF"
+    isFixed
+  />
+  ```
 
-- **Conteúdo**: `HOME_CONTENT` abastece showcase, featured, clients; `BRAND` mantém URLs de logo/vídeo; navegação e contatos em `navigation.tsx`.
-- **Scroll Sync**: `ScrollProvider` injeta `scrollYProgress` em Hero; `ManifestoThumb` deriva largura/altura/borderRadius e estado de áudio a partir do progresso e interseção da seção manifesto.
-- **Acessibilidade**: Skip link em layout, aria-labels em links do header, form inputs com `aria-invalid`/`aria-describedby`; `prefers-reduced-motion` respeitado em Hero/WebGL.
-- **Networking**: Contato posta via fetch AJAX; manifesto vídeo e assets streamam de Supabase (HTTPS). Não há backend próprio além de hosting.
+## Z-INDEX STRATEGY
+- z-40 Header/Menu | z-20 Hero content | z-0 WebGL.
 
-# Automation & Optimization Opportunities
+## NON-NEGOTIABLES
+- Header não compete com Hero; sem glassmorphism em CSS; WebGL só no desktop; fallback funcional obrigatório.
 
-- **CI sugerido**: `pnpm lint && pnpm typecheck && pnpm prettier && pnpm jest` em PR; cache de pnpm e Next para builds.
-- **WebGL Perf**: Limitar partículas/fireflies em mobile, fixar `dpr={[1,1.2]}` para low-end, considerar `useMemo` para materials e desativar pointer-move em reduce-motion (já parcialmente feito).
-- **Imagem**: Migrar thumbs GIF para MP4/WEBM + poster para LCP; revisar `remotePatterns` se novos buckets forem usados.
-- **Observabilidade**: Adicionar `reportWebVitals` ou análise de FPS em modos debug; log de autoplay bloqueado já condicionado a dev.
-- **A11y**: Garantir contraste dos textos sobre fundos (ghost bloom intenso) e foco visível no menu mobile.
+---
 
-# Documentation Improvements & Standards
+# **SECTION NAME: Hero**
+### SECTION PURPOSE
+- Impacto visual inicial com atmosfera etérea; texto editorial estático; direcionar ao Manifesto.
 
-- Manter documentos estruturados por seções deste arquivo; usar paths completos (ex.: `src/components/canvas/home-hero/GhostCanvas.tsx`) para localização rápida.
-- Referenciar decisões de design ao “Ghost Blue” (fundo #050505, bloom azul HDR, texto estático) e z-index contract (WebGL z0 < conteúdo z20).
-- Registrar requisitos de assets (Supabase URLs, FormSubmit) e dependências de ambiente (NEXT_PUBLIC_SUPABASE_URL, Node 22).
-- Preferir exemplos de código curtos + motivos (perf, acessibilidade) e checklist de testes a cada mudança.
+## VISÃO GERAL
+- Implementação em `src/components/home/HomeHero.tsx` + `src/components/canvas/home-hero/*`.  
+- Referência visual: CodePen https://codepen.io/danilonovaisv/pen/azZbdQo e imagens Ghost (hero com ghost azul, CTA arredondado, thumb de manifesto à direita).
 
-# Final Optimized Project Document (all sections rewritten and improved)
+## PRÉ-CARREGAMENTO (PRELOADER)
+- Componente: `HeroPreloader` (ghost SVG, barra de progresso). Fade-out após carregamento inicial.  
+- Animações: flutuação do ghost, pulsar dos olhos, progress gradient azul.
 
-- Este arquivo consolida visão, arquitetura, componentes, design system, stack, pipeline e oportunidades de automação do portfólio Ghost. Use-o como guia de onboarding e referência de implementação; alinhe qualquer nova feature ao contrato de camadas (WebGL → Overlay → Conteúdo) e ao tom visual/estratégico descrito acima.
+## CONTEÚDO (FIXO — SEM ANIMAÇÃO DE ENTRADA)
+- Texto 100% estático (sem reveal).  
+  ```
+  [BRAND AWARENESS]
+  Design, não
+  é só estética.
+  [É intenção, é estratégia, é experiência.]
+  ```
+- CTA primário para `/sobre`. Sem scroll-binding.
+
+## BACKGROUND
+- Base `#050505` (gradiente radial opcional do centro). Sem glassmorphism.
+
+## WEBGL ATMOSFÉRICO (GHOST)
+- Conceito: camada sensorial, não estrutura o layout.  
+- Elementos: ghost emissivo HDR azul, ruído/scanlines, véu atmosférico, partículas, fireflies, olhos responsivos, bloom + analog decay.  
+- Follow de mouse apenas desktop; pulso orgânico; respeitar reduce-motion.
+
+## ARQUITETURA DE ARQUIVOS (HERO)
+```
+components/home/
+├─ HomeHero.tsx           (orquestra camadas e scroll context)
+├─ HeroPreloader.tsx      (splash)
+├─ HeroCopy.tsx           (texto estático + CTA)
+├─ ManifestoThumb.tsx     (thumb do vídeo, escala até full)
+├─ GhostStage.tsx         (dynamic import SSR-off)
+└─ webgl/ (em src/components/canvas/home-hero/)
+   ├─ GhostCanvas.tsx     (Canvas + postprocessing)
+   ├─ Ghost.tsx           (mesh emissivo deformado)
+   ├─ Eyes.tsx            (olhos reativos)
+   ├─ Particles.tsx       (instanced particles)
+   ├─ Fireflies.tsx       (pontos luminosos)
+   ├─ AtmosphereVeil.tsx  (shader de revelação)
+   └─ postprocessing/
+       └─ AnalogDecayPass.tsx (grain, scanlines)
+```
+
+## Z-INDEX (CRÍTICO)
+- z-0 WebGL | z-10 overlay radial | z-20 conteúdo (texto + thumb) | z-30 noise overlay | z-50 preloader.
+
+## IMPLEMENTAÇÃO-CHAVE (WEBGL)
+- `GhostCanvas`: fundo `#050505`, câmera `[0,0,7]`, DPR `[1,1.5]`, sem antialias, Bloom + Vignette + AnalogDecay.  
+- `GhostScene`: desloca ghost com scroll (`scrollYProgress`) e mouse, escala reduzida ao subir; usa `usePrefersReducedMotion`.  
+- `Ghost`: esfera deformada, emissive azul HDR, flutuação e wobble suave.  
+- `AtmosphereVeil`: shader que mistura opacidade conforme posição do ghost; renderOrder negativo.  
+- `AnalogDecayPass`: jitter leve, grain e scanlines parametrizados.
+
+## MANIFESTO THUMB → FULL
+- `ManifestoThumb`: anima largura/altura/borderRadius/posicionamento via `useScroll`; mute/unmute condicionado à interseção e progresso de scroll; respeita reduce-motion.  
+- `ManifestoSection`: vídeo principal só aparece após saída da Hero; observer habilita áudio quando visível.
+
+## ACESSIBILIDADE & PERFORMANCE
+- `prefers-reduced-motion` desliga follow/parallax e reduz pós-processamento.  
+- Canvas com `alpha:true`, fallback preto.  
+- Texto com contraste sobre fundo escuro; CTA com foco visível.  
+- Evitar layout shift: sticky hero, preloader temporário.
+
+## NON-NEGOTIABLES
+- Texto da hero nunca depende de shader; WebGL apoia, não substitui conteúdo; sem GLB/vidro; fallback sem canvas mantém legibilidade.
+
+---
+
+# **SECTION NAME: Manifesto (Vídeo)**
+- Objetivo: transição do thumb da Hero para reprodução full.  
+- Asset: mesmo vídeo da Hero.  
+- Layout: seção dedicada (`id="manifesto"`) com vídeo em `aspect-video`, fundo `#050505`.  
+- Interações: autoplay muted; áudio habilitado apenas quando ≥60% em viewport; respeitar reduce-motion.  
+- Estados: loading (poster opcional), erro (mensagem), sucesso (loop).  
+- Tracking sugerido: `manifesto_play`, `manifesto_audio_toggle`.  
+- Acessibilidade: `playsInline`, `aria-label` descritiva, controles podem ser exibidos em reduce-motion se necessário.
+
+---
+
+# **SECTION NAME: Portfolio Showcase**
+## PURPOSE & HEADLINE
+- Exibir categorias principais do portfólio e conduzir para `/portfolio`.
+
+## LAYOUT & BREAKPOINTS
+- Stripes verticais empilhados; 1 coluna mobile, largura fluida desktop (`max-w 1680px`, padding clamp).  
+- Alternância de alinhamento (R/C/L) para ritmo editorial; bullets azuis.  
+- CTA final “VEJA MAIS →” levando ao portfólio.
+
+## CONTENT MODEL
+- 3 categorias (IDs acima). Cada stripe: label, thumbnail/poster, subtítulo PT opcional.  
+- Thumbnail slide-in no hover (desktop); em mobile não mostrar hover media.
+
+## INTERAÇÕES & ANIMAÇÕES
+- Reveal on scroll (fade + translateY); hover com slide/opacity da thumb; expansão opcional com layout animation (Framer Motion).  
+- Easing: `cubic-bezier(0.22,1,0.36,1)`; `prefers-reduced-motion` desativa movimentos não essenciais.  
+- Microinterações: bullet azul com leve scale; ícone seta pode rotacionar quando expandido.  
+- Z-index: conteúdo sobre fundo claro (`#F4F5F7`), sem canvas.
+
+## NON-NEGOTIABLES
+- Labels curtos; CTA final presente; sem over-animar largura em mobile; apenas transform/opacity animados.
+
+## QA VISUAL (resumido)
+- Desktop/Ultrawide: headline centralizada, stripes com respiro lateral, hover sem layout shift.  
+- Tablet: legibilidade e expansão sem overflow.  
+- Mobile: sem overflow horizontal; stripes clicáveis; CTA visível.  
+- A11y: `role="button"` nos stripes, `aria-expanded` quando aplicável, foco visível.
+
+---
+
+# **SECTION NAME: Featured Projects**
+## PURPOSE
+- Destacar projetos com grid editorial e CTA para mais trabalhos.
+
+## LAYOUT
+- Grid responsivo (1–2 colunas; item hero pode span 2 colunas). Fundo `#F4F5F7`.  
+- Card: imagem com overlay no hover, título, cliente, ano, categoria; bloco “Like what you see? view projects”.
+
+## ANIMAÇÕES
+- Entrada: fade/translate (stagger 0.08).  
+- Hover: imagem scale ~1.03 + overlay gradient; ícone seta surge com fade/translate.  
+- CTA: botão arredondado azul, hover eleva e troca cor do ícone.
+
+## CONTENT LIMITS
+- Título até ~50 caracteres; cliente/ano curtos; CTA sempre visível.  
+- Fallback: placeholder se imagem falhar.
+
+## A11y & TRACKING
+- `alt` descritivo; cards focáveis; reduce-motion desativa efeitos de entrada; eventos de clique em cards/CTA para analytics.
+
+---
+
+# **SECTION NAME: Clients/Brands**
+## PURPOSE
+- Provar confiança com logos em faixa azul.
+
+## LAYOUT
+- Fundo `#0057FF`, grid 2–6 colunas conforme breakpoints; logos monocromáticas invertidas.  
+- Título centralizado; spacing generoso (`py-24` desktop).
+
+## ANIMAÇÕES & MICRO-INTERAÇÕES
+- Entrada fade/translate com stagger; hover scale ~1.04 + brightness leve (desktop).  
+- Reduce-motion: sem animação.
+
+## NON-NEGOTIABLES
+- Faixa azul contínua; 12 logos; título “marcas com as quais já trabalhei”.
+
+---
+
+# **SECTION NAME: Contact**
+## PURPOSE
+- Converter leads e oferecer múltiplos canais rápidos.
+
+## LAYOUT
+- Duas colunas em desktop: esquerda (links e sociais), direita (form). Mobile: colunar. Fundo branco, bordas suaves.  
+- Form: name/email/phone/message + honeypot; POST via FormSubmit (endpoint acima); feedback de sucesso/erro.
+
+## INTERAÇÕES & ESTADOS
+- Inputs com focus ring azul; botão “Enviar Mensagem” com hover scale leve; loading desabilita botão.  
+- Sucesso: mensagem e ícone check; erro: texto curto.  
+- Social buttons: ícones com hover de cor.
+
+## A11y
+- Labels conectadas, `aria-invalid`/`aria-describedby`; navegação por teclado; reduce-motion desativa entradas animadas.
+
+---
+
+## **SECTION NAME: Footer**
+## PURPOSE
+- Concluir navegação, repetir links e copyright.
+
+## LAYOUT
+- Barra final (pode ser estática em layout App Router), fundo azul ou preto conforme tema; padding `py-4–6`.  
+- Conteúdo: copyright 2025, links (home, portfolio showcase, sobre, contato), sociais opcionais.
+
+## ANIMAÇÕES / MICRO-INTERAÇÕES
+- Fade-in simples; links com underline animado semelhante ao header; ícones com hover scale.  
+- Reduce-motion: sem animações.
+
+## NON-NEGOTIABLES
+- Copyright unificado 2025; links corretos; acessível via teclado.
+
+---
+
+# **ANEXO TÉCNICO — WEBGL ATMOSFÉRICO (GHOST)**
+## Objetivo
+- Formalizar pipeline Ghost: sem GLB, sem MeshTransmissionMaterial; WebGL como camada sensorial com pós-processamento.
+
+## Paradigma Atual
+- Canvas independente; postprocessing obrigatório; nada de ScrollControls; fallback de conteúdo intacto se canvas falhar.
+
+## Canvas (base)
+```tsx
+<Canvas
+  dpr={[1, 1.5]}
+  gl={{ antialias: false, alpha: true }}
+  camera={{ position: [0, 0, 7], fov: 45 }}
+  className="absolute inset-0 z-0"
+>
+  <color attach="background" args={['#050505']} />
+</Canvas>
+```
+
+## Loop de Animação
+```ts
+useFrame((state) => {
+  ghost.position.lerp(target, 0.05);
+  material.emissiveIntensity = 3.5 + Math.sin(state.clock.elapsedTime * 1.2) * 0.6;
+});
+```
+
+## Postprocessing
+- Bloom (aura azul), Analog Decay (grain/scanlines/jitter), Vignette sutil.  
+- Intensidade moderada para manter legibilidade do texto.
+
+## Regras Não-Negociáveis
+- WebGL nunca controla layout ou texto.  
+- Texto permanece legível sem canvas.  
+- Reduce-motion desativa follow/parallax e reduz efeitos.
+
+## Regra de Ouro
+> WebGL apoia a narrativa. Nunca a substitui.
+
+---
+
+# Stack Research Summary (autoritativo)
+- **Next.js 16 / React 19**: usar App Router, `next/dynamic` para R3F com `ssr:false`, `Metadata` para SEO, fonte local via `next/font`.  
+- **Tailwind CSS 4**: tokens em `@theme` (cores Ghost, tipografia TT Norms), utilities em `globals.css`; evitar classes não resolvidas.  
+- **Framer Motion 12**: animar apenas transform/opacity; `useReducedMotion` para acessibilidade; `useScroll` para thumb manifesto; `layoutId` opcional para morphs.  
+- **React Three Fiber + Drei + @react-three/postprocessing**: limitar DPR, antialias off, post stack (Bloom/Vignette/Noise); shaders custom via `shaderMaterial`; evitar ScrollControls em Hero; prefer instancing para partículas.  
+- **Lenis**: integrar com RAF global; destruir instância no unmount.  
+- **Supabase Storage + Custom Image Loader**: converter `/object/public/` → `/render/image/public/` com width/quality; exigir `NEXT_PUBLIC_SUPABASE_URL`; permitir SVG (`dangerouslyAllowSVG`).  
+- **Firebase Hosting/App Hosting**: headers de cache fortes para estáticos (`_next/static/**`), no-store para SW; emuladores configurados; região us-east1.  
+- **FormSubmit**: POST AJAX com honeypot/captcha off; tratar erros e sucesso no cliente.
+
+---
+
+# Documentation Quality & Optimization Report
+- **Estrutura**: preservados todos os blocos originais (Informações Globais, Header, Hero, Manifesto, Portfolio Showcase, Featured Projects, Clients/Brands, Contact, Footer, Anexo WebGL).  
+- **Ajustes de precisão**: paths e componentes atualizados para App Router (`src/components/home`, `src/components/canvas/home-hero`); assets e CTAs alinhados aos configs atuais; z-index e cores conforme implementação.  
+- **A11y & Perf**: reforço de `prefers-reduced-motion`, limites de DPR/antialias, animações apenas em transform/opacity, foco visível.  
+- **Automação/Deploy**: chamada clara de Supabase loader, Firebase headers, e necessidade de `NEXT_PUBLIC_SUPABASE_URL`.  
+- **UI Fidelity**: notas derivadas das referências visuais (ghost azul, CTA pill, stripes alternados, faixa azul de logos).  
+- **Redução de ruído**: removidas duplicidades intra-seção, mantendo todas as sessões intactas.
+
+---
+
+# Google Antigravity Agent Configuration Prompt
+- **Role**: Documentation & Experience Guardian.  
+- **Specialists**:  
+  - *Docs Optimizer*: mantém sessões originais, atualiza paths/fluxos, garante consistência terminológica.  
+  - *Design QA*: valida fidelidade “Ghost Blue”, z-index (WebGL < conteúdo), legibilidade e contraste.  
+  - *Performance*: impõe DPR/antialias limites, evita animações de layout, sugere instancing/cache.  
+  - *Accessibility*: aplica `prefers-reduced-motion`, foco visível, `aria-*` em navegação/cards/form.  
+  - *Architecture*: garante separação App Router + R3F SSR-off, Supabase loader correto, Firebase headers e rotas intactas.  
+- **Guardrails**: não remover sessões; não adicionar dependências; não quebrar rotas/deploy; manter SEO/metadados e assets configurados.  
+- **Outputs**: documentação por sessão, checklists de QA, notas de perf/A11y; referencia paths completos.  
+- **Trigger**: a cada atualização de experiência Ghost ou conteúdo de portfólio.
