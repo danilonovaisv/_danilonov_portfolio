@@ -1,39 +1,89 @@
 {
   "name": "functions",
+  "version": "1.0.0",
+  "description": "Firebase Functions with Genkit AI integration",
   "scripts": {
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "build:clean": "rm -rf lib && npm run build",
     "serve": "npm run build && firebase emulators:start --only functions",
+    "serve:all": "npm run build && firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "dev": "concurrently \"npm run build:watch\" \"firebase emulators:start --only functions\"",
+    "dev:all": "concurrently \"npm run build:watch\" \"firebase emulators:start\"",
+    "deploy": "npm run build && firebase deploy --only functions",
+    "deploy:all": "npm run build && firebase deploy",
     "logs": "firebase functions:log",
-    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts"
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "genkit:dev": "concurrently \"npm run build:watch\" \"npm run genkit:start\"",
+    "test": "npm run test:unit",
+    "test:unit": "firebase functions:test",
+    "test:watch": "firebase functions:test --watch",
+    "test:coverage": "firebase functions:test --coverage",
+    "clean": "rm -rf node_modules lib dist .genkit",
+    "clean:install": "npm run clean && npm install",
+    "prepare": "husky",
+    "pre-commit": "lint-staged"
   },
   "engines": {
-    "node": "24"
+    "node": "20"
   },
   "main": "lib/index.js",
   "dependencies": {
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
     "@genkit-ai/firebase": "^1.27.0",
     "@genkit-ai/google-genai": "^1.27.0",
-    "express": "^5.2.1",
+    "express": "^4.21.2",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^7.0.0",
     "genkit": "^1.27.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.17.9",
     "@typescript-eslint/eslint-plugin": "^8.50.1",
     "@typescript-eslint/parser": "^8.50.1",
+    "concurrently": "^9.1.0",
     "eslint": "^9.39.2",
     "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^5.2.1",
     "firebase-functions-test": "^3.4.1",
     "genkit-cli": "^1.27.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
-  "private": true
+  "private": true,
+  "keywords": [
+    "firebase",
+    "functions",
+    "genkit",
+    "ai",
+    "express"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx,json,css,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
 }

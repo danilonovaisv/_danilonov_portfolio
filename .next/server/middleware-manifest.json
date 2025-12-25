@@ -11,10 +11,10 @@
         "server/server-reference-manifest.js",
         "server/app/opengraph-image/route_client-reference-manifest.js",
         "server/edge/chunks/_next-internal_server_app_opengraph-image_route_actions_238d033d.js",
-        "server/edge/chunks/[root-of-the-server]__264fde79._.js",
-        "server/edge/chunks/node_modules_3b8f2bf2._.js",
-        "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_16be1ace._.js",
-        "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_3893dcf1.js"
+        "server/edge/chunks/[root-of-the-server]__4da01462._.js",
+        "server/edge/chunks/node_modules__pnpm_5b141376._.js",
+        "server/edge/chunks/55a3c_next_dist_compiled_@vercel_og_4dca51af._.js",
+        "server/edge/chunks/50557_next_dist_esm_build_templates_edge-wrapper_180018f1.js"
       ],
       "name": "app/opengraph-image/route",
       "page": "/opengraph-image/route",
@@ -27,11 +27,11 @@
       "wasm": [
         {
           "name": "wasm_fdb56e4cc5936d29",
-          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_resvg_23ace1ce.wasm"
+          "filePath": "server/edge/chunks/55a3c_next_dist_compiled_@vercel_og_resvg_23ace1ce.wasm"
         },
         {
           "name": "wasm_1ccdc983b1fd9f87",
-          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_yoga_23ace1ce.wasm"
+          "filePath": "server/edge/chunks/55a3c_next_dist_compiled_@vercel_og_yoga_23ace1ce.wasm"
         }
       ],
       "assets": [
@@ -41,7 +41,7 @@
         }
       ],
       "env": {
-        "__NEXT_BUILD_ID": "8sNh4y8Pq2h_J20l0yJcd",
+        "__NEXT_BUILD_ID": "oVwPIL9qoeNiOSq3gxBod",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "bhbXT+FgVnYZ+J/HK7oqWrqaZiTYLVYK9solNkw1A9Y=",
         "__NEXT_PREVIEW_MODE_ID": "c21f0bfdec7d587c216516914c126ed6",
         "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "a24f127a95ac5b93b127b80084eeb0696a3a74497e2a2d699d6e057adfb5dda3",
