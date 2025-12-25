@@ -25,11 +25,12 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
   const { navItems, ior, thickness, chromaticAberration, anisotropy } = lensProps;
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const activeIndex = 0;
 
   // Bar dimensions
-  const barWidth = 6;
+  const barWidth = 7.5;
   const barHeight = 0.7;
-  const barDepth = 0.15;
+  const barDepth = 0.18;
 
   // Calculate text positions
   const textSpacing = barWidth / (navItems.length + 1);
@@ -46,20 +47,20 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
           backside
           samples={8}
           resolution={128}
-          transmission={0.5}
-          roughness={0.25}
-          thickness={thickness}
-          ior={ior}
-          chromaticAberration={chromaticAberration}
-          anisotropy={anisotropy}
-          distortion={0.05}
-          distortionScale={0.1}
-          temporalDistortion={0}
-          color="#0a0a18"
-          attenuationColor="#1a1a2e"
-          attenuationDistance={0.3}
-        />
-      </RoundedBox>
+        transmission={0.5}
+        roughness={0.18}
+        thickness={thickness}
+        ior={ior}
+        chromaticAberration={chromaticAberration}
+        anisotropy={anisotropy}
+        distortion={0.08}
+        distortionScale={0.12}
+        temporalDistortion={0.02}
+        color="#050510"
+        attenuationColor="#0b1a3f"
+        attenuationDistance={0.28}
+      />
+    </RoundedBox>
 
       {/* Blue glow outline */}
       <RoundedBox
@@ -69,9 +70,9 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
         position={[0, 0, -0.04]}
       >
         <meshBasicMaterial
-          color="#3b82f6"
+          color="#7c5dff"
           transparent
-          opacity={0.12}
+          opacity={0.16}
         />
       </RoundedBox>
 
@@ -79,12 +80,19 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
       <group position={[0, 0, 0.12]}>
         {navItems.map((item, index) => {
           const xPos = -barWidth / 2 + textSpacing * (index + 1);
+          const isActive = index === activeIndex;
           return (
             <Text
               key={item.link}
               position={[xPos, 0, 0]}
               fontSize={0.14}
-              color={hoveredIndex === index ? "#ffffff" : "#b0b0b0"}
+              color={
+                isActive
+                  ? '#1a68ff'
+                  : hoveredIndex === index
+                    ? '#ffffff'
+                    : '#d8d8d8'
+              }
               font="/fonts/RobotoBlack.ttf"
               anchorX="center"
               anchorY="middle"
@@ -113,7 +121,8 @@ const FluidGlass = ({ lensProps }: FluidGlassProps) => {
     <Canvas 
       camera={{ position: [0, 0, 5], fov: 50 }} 
       gl={{ alpha: true, antialias: true }}
-      style={{ pointerEvents: 'auto' }}
+      style={{ pointerEvents: 'none' }}
+      className="bg-transparent"
     >
       <ambientLight intensity={0.4} />
       <directionalLight position={[0, 2, 3]} intensity={0.5} color="#ffffff" />

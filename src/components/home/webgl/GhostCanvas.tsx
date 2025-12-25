@@ -10,6 +10,7 @@ import Ghost from './Ghost';
 import AtmosphereVeil from './AtmosphereVeil';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
+import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 
 
 // Ghost Scene Orchestrator
@@ -103,7 +104,7 @@ export default function GhostCanvas() {
       camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={[1, 1.5]}
       gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}
-      className="absolute inset-0"
+      className="absolute inset-0 pointer-events-none"
       style={{ background: 'transparent' }}
     >
       <ambientLight intensity={0.02} color="#020214" />
@@ -124,7 +125,7 @@ export default function GhostCanvas() {
           luminanceSmoothing={1.2}
           mipmapBlur
         />
-        {/* <AnalogDecayPass /> */}
+        <AnalogDecayPass />
         <Vignette offset={0.1} darkness={0.7} />
       </EffectComposer>
     </Canvas>

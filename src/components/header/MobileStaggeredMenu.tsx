@@ -3,16 +3,18 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
+import LogoLight from '@/assets/logos/LogoLight.svg';
 
 const MobileStaggeredMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
   const menuItems = [
-    { label: 'Home', link: '/' },
-    { label: 'Sobre', link: '/sobre' },
-    { label: 'Portfolio', link: '/portfolio' },
-    { label: 'Contato', link: '#contact' }
+    { label: 'home', link: '#hero' },
+    { label: 'sobre', link: '/sobre' },
+    { label: 'portfolio showcase', link: '/portfolio' },
+    { label: 'contato', link: '#contact' }
   ];
 
   const socialItems = [
@@ -25,9 +27,18 @@ const MobileStaggeredMenu = () => {
 
   return (
     <>
+      <div className="fixed top-4 left-4 z-50 flex items-center gap-3 rounded-full bg-black/50 px-4 py-2 backdrop-blur-md">
+        <Image
+          src={LogoLight}
+          alt="Danilo Novais"
+          className="h-7 w-auto"
+          priority
+        />
+      </div>
+
       {/* Menu Button */}
       <motion.button
-        className="fixed top-6 right-6 z-50 w-12 h-12 flex flex-col items-center justify-center rounded-full bg-white/10 backdrop-blur-md"
+        className="fixed top-6 right-6 z-50 flex h-12 w-12 flex-col items-center justify-center rounded-full border border-white/20 bg-white/15 backdrop-blur-md"
         onClick={toggleMenu}
         animate={{ 
           backgroundColor: isOpen ? "#000" : "#e9e9ef",
@@ -37,7 +48,7 @@ const MobileStaggeredMenu = () => {
         aria-expanded={isOpen}
       >
         <motion.span
-          className="block w-6 h-0.5 bg-black mb-1.5"
+          className="mb-1.5 block h-0.5 w-6 bg-black"
           animate={{ 
             rotate: isOpen ? 45 : 0,
             y: isOpen ? 6 : 0,
@@ -45,7 +56,7 @@ const MobileStaggeredMenu = () => {
           }}
         />
         <motion.span
-          className="block w-6 h-0.5 bg-black"
+          className="block h-0.5 w-6 bg-black"
           animate={{ 
             rotate: isOpen ? -45 : 0,
             y: isOpen ? -6 : 0,
