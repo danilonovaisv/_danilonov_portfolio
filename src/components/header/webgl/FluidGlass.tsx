@@ -26,12 +26,12 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  // Medium pill-shaped bar - adjusted to fill container properly
-  const barWidth = 4.8;
-  const barHeight = 0.5;
-  const barDepth = 0.12;
+  // Bar dimensions to fill the canvas
+  const barWidth = 8;
+  const barHeight = 0.8;
+  const barDepth = 0.15;
 
-  // Calculate text positions - spread evenly
+  // Calculate text positions
   const textSpacing = barWidth / (navItems.length + 1);
 
   return (
@@ -39,7 +39,7 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
       {/* Dark Glass Bar */}
       <RoundedBox
         args={[barWidth, barHeight, barDepth]}
-        radius={0.25}
+        radius={0.4}
         smoothness={8}
       >
         <MeshTransmissionMaterial
@@ -61,12 +61,12 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
         />
       </RoundedBox>
 
-      {/* Blue glow outline effect */}
+      {/* Blue glow outline */}
       <RoundedBox
-        args={[barWidth + 0.06, barHeight + 0.06, barDepth - 0.04]}
-        radius={0.28}
+        args={[barWidth + 0.08, barHeight + 0.08, barDepth - 0.06]}
+        radius={0.44}
         smoothness={8}
-        position={[0, 0, -0.03]}
+        position={[0, 0, -0.04]}
       >
         <meshBasicMaterial
           color="#3b82f6"
@@ -76,14 +76,14 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
       </RoundedBox>
 
       {/* Navigation Text */}
-      <group position={[0, 0, 0.08]}>
+      <group position={[0, 0, 0.12]}>
         {navItems.map((item, index) => {
           const xPos = -barWidth / 2 + textSpacing * (index + 1);
           return (
             <Text
               key={item.link}
               position={[xPos, 0, 0]}
-              fontSize={0.14}
+              fontSize={0.22}
               color={hoveredIndex === index ? "#ffffff" : "#b0b0b0"}
               font="/fonts/RobotoBlack.ttf"
               anchorX="center"
@@ -111,7 +111,7 @@ const GlassBar = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }) =>
 const FluidGlass = ({ lensProps }: FluidGlassProps) => {
   return (
     <Canvas 
-      camera={{ position: [0, 0, 3], fov: 50 }} 
+      camera={{ position: [0, 0, 5], fov: 50 }} 
       gl={{ alpha: true, antialias: true }}
       style={{ pointerEvents: 'auto' }}
     >

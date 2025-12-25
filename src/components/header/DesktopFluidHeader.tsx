@@ -12,8 +12,8 @@ const DesktopFluidHeader = () => {
   ];
 
   return (
-    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 w-auto">
-      <div className="relative" style={{ height: '70px', width: '550px' }}>
+    <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="relative" style={{ height: '200px', width: '1000px' }}>
         <FluidGlass 
           mode="bar"
           lensProps={{

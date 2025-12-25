@@ -57,7 +57,7 @@ export default function Ghost() {
         <meshStandardMaterial
           color="#001a4d"
           emissive="#3b82f6"
-          emissiveIntensity={8}
+          emissiveIntensity={4}
           transparent
           opacity={0.8}
           roughness={0}
@@ -73,7 +73,7 @@ export default function Ghost() {
         <meshBasicMaterial
           color="#3b82f6"
           transparent
-          opacity={0.15}
+          opacity={0.25}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />

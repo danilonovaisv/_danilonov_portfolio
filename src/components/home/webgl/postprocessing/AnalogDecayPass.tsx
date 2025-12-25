@@ -7,9 +7,9 @@ const AnalogDecayShader = shaderMaterial(
   {
     tDiffuse: new THREE.Texture(),
     uTime: 10,
-    uIntensity: 1.9,
-    uGrain: 2.4,
-    uScanlines: 3.0,
+    uIntensity: 5.9,
+    uGrain: 5.4,
+    uScanlines: 9.0,
     uJitter: 1.5,
   },
   /* glsl */ `
