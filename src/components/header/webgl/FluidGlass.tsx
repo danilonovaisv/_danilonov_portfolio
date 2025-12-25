@@ -1,7 +1,8 @@
 'use client';
 
 import * as THREE from 'three';
-import { Canvas, useThree } from '@react-three/fiber';
+import { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
 import {
   MeshTransmissionMaterial,
   Text,
@@ -32,7 +33,7 @@ const GlassContent = ({ lensProps }: { lensProps: FluidGlassProps['lensProps'] }
   // Calculate width based on items roughly
   // 4 items.
   // We want to fill the viewport mostly.
-  const { viewport } = useThree();
+
   
   // Create a bar shape
   // Viewport width/height matches the 600px/80px ratio effectively.
