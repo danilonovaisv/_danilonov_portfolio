@@ -23,6 +23,13 @@ function GhostScene() {
   const { size, camera } = useThree();
   const [isMobile, setIsMobile] = useState(false);
 
+  // Set initial anchor so the ghost starts leading the text on the left
+  useEffect(() => {
+    if (ghostGroupRef.current) {
+      ghostGroupRef.current.position.set(-8, 3.5, 0);
+    }
+  }, []);
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
@@ -59,15 +66,18 @@ function GhostScene() {
       targetY = Math.cos(t * 0.15) * 4;
     } else {
       // Mouse tracking for desktop
-      targetX = mouseRef.current.x * 12;
-      targetY = mouseRef.current.y * 8;
+      targetX = mouseRef.current.x * 8;
+      targetY = mouseRef.current.y * 6;
     }
+
+    const anchorX = -8;
+    const anchorY = 3.5;
 
     // Smooth dampening
     ghostGroupRef.current.position.x +=
-      (targetX - ghostGroupRef.current.position.x) * 0.05;
+      (anchorX + targetX - ghostGroupRef.current.position.x) * 0.06;
     ghostGroupRef.current.position.y +=
-      (targetY - ghostGroupRef.current.position.y) * 0.05;
+      (anchorY + targetY - ghostGroupRef.current.position.y) * 0.06;
 
     // Scale adjustment for mobile
     const baseScale = isMobile ? 0.8 : 1.3;
@@ -124,7 +134,7 @@ export default function GhostCanvas() {
       camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={[1, 2]}
       gl={{
-        antialias: true,
+        antialias: false,
         alpha: true,
         premultipliedAlpha: false,
         powerPreference: 'high-performance',
@@ -145,13 +155,13 @@ export default function GhostCanvas() {
 
       <EffectComposer>
         <Bloom
-          intensity={2.8}
-          luminanceThreshold={0.1}
-          luminanceSmoothing={0.9}
+          intensity={3.2}
+          luminanceThreshold={0.08}
+          luminanceSmoothing={0.85}
           mipmapBlur
         />
         <AnalogDecayPass />
-        <Vignette offset={0.1} darkness={0.7} />
+        <Vignette offset={0.12} darkness={0.78} />
       </EffectComposer>
     </Canvas>
   );

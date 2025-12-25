@@ -17,6 +17,7 @@ export default [
         },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-expressions': 'off',
       'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     },
   },

@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { MeshTransmissionMaterial, Text, RoundedBox } from '@react-three/drei';
-import { useRouter } from 'next/navigation';
+import { useMemo, useRef } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { MeshTransmissionMaterial, RoundedBox } from '@react-three/drei';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry';
+import * as THREE from 'three';
 
 interface FluidGlassProps {
   mode: 'lens' | 'bar';
@@ -17,98 +18,83 @@ interface FluidGlassProps {
   };
 }
 
-const GlassBar = ({
+const GlassLens = ({
   lensProps,
 }: {
   lensProps: FluidGlassProps['lensProps'];
 }) => {
-  const { navItems, ior, thickness, chromaticAberration, anisotropy } =
-    lensProps;
-  const router = useRouter();
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const activeIndex = 0;
+  const groupRef = useRef<THREE.Group>(null);
+  const { ior, thickness, chromaticAberration, anisotropy } = lensProps;
 
-  // Bar dimensions
-  const barWidth = 7.5;
-  const barHeight = 0.7;
-  const barDepth = 0.18;
+  const glowGeom = useMemo(() => new RoundedBoxGeometry(7.8, 1.7, 0.24, 12, 0.5), []);
 
-  // Calculate text positions
-  const textSpacing = barWidth / (navItems.length + 1);
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    const { mouse } = state;
+    const targetX = mouse.x * 0.4;
+    const targetY = mouse.y * 0.3;
+    groupRef.current.position.x = THREE.MathUtils.lerp(
+      groupRef.current.position.x,
+      targetX,
+      0.08
+    );
+    groupRef.current.position.y = THREE.MathUtils.lerp(
+      groupRef.current.position.y,
+      targetY,
+      0.08
+    );
+    groupRef.current.rotation.y = THREE.MathUtils.lerp(
+      groupRef.current.rotation.y,
+      mouse.x * 0.08,
+      0.1
+    );
+    groupRef.current.rotation.x = THREE.MathUtils.lerp(
+      groupRef.current.rotation.x,
+      -mouse.y * 0.05,
+      0.1
+    );
+  });
 
   return (
-    <group>
-      {/* Dark Glass Bar */}
-      <RoundedBox
-        args={[barWidth, barHeight, barDepth]}
-        radius={0.35}
-        smoothness={8}
-      >
+    <group ref={groupRef} scale={0.92}>
+      <RoundedBox args={[7.6, 1.5, 0.22]} radius={0.5} smoothness={12}>
         <MeshTransmissionMaterial
           backside
-          samples={8}
-          resolution={128}
-          transmission={0.5}
-          roughness={0.18}
+          samples={10}
+          resolution={256}
+          transmission={1}
+          roughness={0.12}
           thickness={thickness}
           ior={ior}
           chromaticAberration={chromaticAberration}
           anisotropy={anisotropy}
-          distortion={0.08}
-          distortionScale={0.12}
-          temporalDistortion={0.02}
-          color="#050510"
+          distortion={0.12}
+          distortionScale={0.16}
+          temporalDistortion={0.08}
+          color="#05060f"
           attenuationColor="#0b1a3f"
-          attenuationDistance={0.28}
+          attenuationDistance={0.4}
         />
       </RoundedBox>
 
-      {/* Blue glow outline */}
-      <RoundedBox
-        args={[barWidth + 0.08, barHeight + 0.08, barDepth - 0.06]}
-        radius={0.38}
-        smoothness={8}
-        position={[0, 0, -0.04]}
-      >
-        <meshBasicMaterial color="#7c5dff" transparent opacity={0.16} />
-      </RoundedBox>
-
-      {/* Navigation Text */}
-      <group position={[0, 0, 0.12]}>
-        {navItems.map((item, index) => {
-          const xPos = -barWidth / 2 + textSpacing * (index + 1);
-          const isActive = index === activeIndex;
-          return (
-            <Text
-              key={item.link}
-              position={[xPos, 0, 0]}
-              fontSize={0.14}
-              color={
-                isActive
-                  ? '#1a68ff'
-                  : hoveredIndex === index
-                    ? '#ffffff'
-                    : '#d8d8d8'
-              }
-              font="/fonts/RobotoBlack.ttf"
-              anchorX="center"
-              anchorY="middle"
-              letterSpacing={0.02}
-              onPointerOver={() => {
-                document.body.style.cursor = 'pointer';
-                setHoveredIndex(index);
-              }}
-              onPointerOut={() => {
-                document.body.style.cursor = 'auto';
-                setHoveredIndex(null);
-              }}
-              onClick={() => router.push(item.link)}
-            >
-              {item.label}
-            </Text>
-          );
-        })}
-      </group>
+      <mesh geometry={glowGeom} position={[0, 0, -0.08]}>
+        <meshBasicMaterial
+          color="#6f7bff"
+          transparent
+          opacity={0.2}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh geometry={glowGeom} position={[0, 0, -0.12]} scale={1.05}>
+        <meshBasicMaterial
+          color="#5327ff"
+          transparent
+          opacity={0.12}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
     </group>
   );
 };
@@ -116,16 +102,22 @@ const GlassBar = ({
 const FluidGlass = ({ lensProps }: FluidGlassProps) => {
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 50 }}
-      gl={{ alpha: true, antialias: true }}
+      camera={{ position: [0, 0, 7], fov: 48 }}
+      dpr={[1, 1.5]}
+      gl={{
+        alpha: true,
+        antialias: false,
+        powerPreference: 'high-performance',
+      }}
       style={{ pointerEvents: 'none' }}
-      className="bg-transparent"
+      className="pointer-events-none select-none"
     >
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[0, 2, 3]} intensity={0.5} color="#ffffff" />
-      <pointLight position={[0, 0, 2]} intensity={0.3} color="#3b82f6" />
+      <color attach="background" args={['transparent']} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[0, 2.5, 3]} intensity={0.6} color="#ffffff" />
+      <pointLight position={[0, 0, 2]} intensity={0.5} color="#4b7cff" />
 
-      <GlassBar lensProps={lensProps} />
+      <GlassLens lensProps={lensProps} />
     </Canvas>
   );
 };

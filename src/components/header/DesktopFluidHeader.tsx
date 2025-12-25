@@ -15,26 +15,32 @@ const DesktopFluidHeader = () => {
   const activeIndex = 0;
 
   return (
-    <header className="fixed left-1/2 top-6 z-40 w-full max-w-none -translate-x-1/2 px-4">
-      <div className="relative h-[86px] w-full max-w-[1180px] overflow-visible sm:h-[92px]">
-        <div className="absolute inset-0 -z-10 rounded-[32px] bg-[radial-gradient(circle_at_20%_10%,rgba(86,133,255,0.25),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(120,66,255,0.2),transparent_40%)] opacity-60 blur-xl" />
-
-        {/* WebGL lens */}
-        <FluidGlass
-          mode="lens"
-          lensProps={{
-            scale: 0.25,
-            ior: 1.15,
-            thickness: 5,
-            chromaticAberration: 0.1,
-            anisotropy: 0.01,
-            navItems,
-          }}
-        />
+    <header
+      role="banner"
+      className="fixed left-1/2 top-4 z-[120] w-full -translate-x-1/2 px-4 md:top-6"
+    >
+      <div className="relative mx-auto h-[82px] w-full max-w-[1200px] overflow-visible sm:h-[90px]">
+        {/* Canvas + glow as background layer */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 -z-10 rounded-[30px] bg-[radial-gradient(circle_at_15%_10%,rgba(86,133,255,0.28),transparent_35%),radial-gradient(circle_at_85%_25%,rgba(120,66,255,0.22),transparent_42%)] opacity-70 blur-xl" />
+          <div className="absolute inset-0">
+            <FluidGlass
+              mode="lens"
+              lensProps={{
+                scale: 0.25,
+                ior: 1.15,
+                thickness: 5,
+                chromaticAberration: 0.1,
+                anisotropy: 0.01,
+                navItems,
+              }}
+            />
+          </div>
+        </div>
 
         {/* DOM overlay for clarity and accessibility */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-6 text-white">
-          <div className="pointer-events-auto flex items-center gap-3">
+        <div className="relative z-10 flex h-full items-center justify-between px-6 text-white">
+          <div className="flex items-center gap-3">
             <Image
               src={LogoLight}
               alt="Danilo Novais"
@@ -43,7 +49,7 @@ const DesktopFluidHeader = () => {
             />
           </div>
 
-          <nav className="pointer-events-auto hidden items-center gap-8 text-lg font-medium tracking-tight md:flex">
+          <nav className="hidden items-center gap-8 text-lg font-medium tracking-tight md:flex">
             {navItems.map((item, index) => (
               <Link
                 key={item.label}

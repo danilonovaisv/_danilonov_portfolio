@@ -34,12 +34,12 @@ export default function Ghost({ speedRef }: GhostProps) {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const speed = speedRef?.current ?? 0;
-    const speedNormalized = THREE.MathUtils.clamp(speed * 0.06, 0, 6);
+    const speedNormalized = THREE.MathUtils.clamp(speed * 0.08, 0, 7);
 
     // Pulsing core
-    const pulse = Math.sin(t * 1.5) * 0.15;
+    const pulse = Math.sin(t * 1.8) * 0.2;
     const material = meshRef.current.material as THREE.MeshStandardMaterial;
-    material.emissiveIntensity = 5.5 + pulse * 8 + speedNormalized;
+    material.emissiveIntensity = 6.5 + pulse * 9 + speedNormalized;
 
     // Floating animation
     const float = Math.sin(t * 1.2) * 0.2;
@@ -47,7 +47,7 @@ export default function Ghost({ speedRef }: GhostProps) {
     glowRef.current.position.y = float;
 
     // Scale breathing
-    const s = 1 + Math.sin(t * 0.8) * 0.05 + speedNormalized * 0.01;
+    const s = 1.1 + Math.sin(t * 0.8) * 0.06 + speedNormalized * 0.012;
     meshRef.current.scale.setScalar(s);
     glowRef.current.scale.setScalar(s * (1.45 + speedNormalized * 0.02));
 
@@ -61,9 +61,9 @@ export default function Ghost({ speedRef }: GhostProps) {
       {/* INTERNAL CORE - Semi-solid but glowing */}
       <mesh ref={meshRef} geometry={geometry}>
         <meshStandardMaterial
-          color="#06123b"
-          emissive="#0b4dff"
-          emissiveIntensity={5.5}
+          color="#060a1f"
+          emissive="#0e5dff"
+          emissiveIntensity={6.5}
           transparent
           opacity={0.82}
           roughness={0}
