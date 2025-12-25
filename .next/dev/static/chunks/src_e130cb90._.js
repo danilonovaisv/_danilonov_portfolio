@@ -906,8 +906,10 @@ var _s = __turbopack_context__.k.signature();
 const SiteHeader = ()=>{
     _s();
     const [isMobile, setIsMobile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [isMounted, setIsMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SiteHeader.useEffect": ()=>{
+            setIsMounted(true);
             const checkIsMobile = {
                 "SiteHeader.useEffect.checkIsMobile": ()=>{
                     setIsMobile(window.innerWidth < 1024);
@@ -922,19 +924,23 @@ const SiteHeader = ()=>{
             })["SiteHeader.useEffect"];
         }
     }["SiteHeader.useEffect"], []);
+    // Don't render anything during SSR to avoid hydration issues
+    if (!isMounted) {
+        return null;
+    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: isMobile ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$header$2f$MobileStaggeredMenu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
             fileName: "[project]/src/components/header/SiteHeader.tsx",
-            lineNumber: 23,
+            lineNumber: 30,
             columnNumber: 24
         }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$header$2f$DesktopFluidHeader$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
             fileName: "[project]/src/components/header/SiteHeader.tsx",
-            lineNumber: 23,
+            lineNumber: 30,
             columnNumber: 50
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false);
 };
-_s(SiteHeader, "0VTTNJATKABQPGLm9RVT0tKGUgU=");
+_s(SiteHeader, "nbjW17Aqj8bZ9igmW30INNqPwUM=");
 _c = SiteHeader;
 const __TURBOPACK__default__export__ = SiteHeader;
 var _c;
@@ -951,7 +957,7 @@ __turbopack_context__.s([
     ()=>Header
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-// Refactored Header Layout to use new Component Architecture
+// Canonical Header Component
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$header$2f$SiteHeader$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/header/SiteHeader.tsx [app-client] (ecmascript)");
 'use client';
 ;

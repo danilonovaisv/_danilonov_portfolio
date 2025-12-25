@@ -42,7 +42,7 @@ export default function Particles({ count = 250, speedRef }: ParticlesProps) {
     return temp;
   }, [count]);
 
-  useFrame((state, delta) => {
+  useFrame((state, _delta) => {
     const t = state.clock.elapsedTime;
     const speedFactor = speedRef?.current
       ? THREE.MathUtils.clamp(0.6 + speedRef.current * 0.06, 0.6, 4.5)

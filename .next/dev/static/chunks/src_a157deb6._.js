@@ -66,24 +66,50 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/framer-motion/dist/es/render/components/motion/proxy.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$usePrefersReducedMotion$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/usePrefersReducedMotion.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$config$2f$brand$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/config/brand.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
 'use client';
 ;
 ;
 ;
 function ManifestoThumb() {
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
-        initial: {
+    _s();
+    const reducedMotion = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$usePrefersReducedMotion$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePrefersReducedMotion"])();
+    // Premium editorial entrance animation
+    const containerVariants = {
+        hidden: {
             opacity: 0,
-            scale: 0.95
+            y: 20,
+            scale: 0.98
         },
-        whileInView: {
+        visible: {
             opacity: 1,
-            scale: 1
-        },
-        transition: {
-            duration: 0.8,
-            ease: 'easeOut'
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: 0.6,
+                ease: [
+                    0.23,
+                    1,
+                    0.32,
+                    1
+                ],
+                delay: 0.2
+            }
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
+        variants: containerVariants,
+        initial: "hidden",
+        whileInView: "visible",
+        transition: reducedMotion ? {
+            duration: 0
+        } : undefined,
+        viewport: {
+            once: true,
+            margin: "-100px"
         },
         className: "relative w-full aspect-video md:h-[400px] rounded-lg overflow-hidden shadow-2xl",
         children: [
@@ -97,23 +123,28 @@ function ManifestoThumb() {
                 "aria-label": "Manifesto thumbnail"
             }, void 0, false, {
                 fileName: "[project]/src/components/home/ManifestoThumb.tsx",
-                lineNumber: 14,
+                lineNumber: 38,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"
             }, void 0, false, {
                 fileName: "[project]/src/components/home/ManifestoThumb.tsx",
-                lineNumber: 25,
+                lineNumber: 49,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/home/ManifestoThumb.tsx",
-        lineNumber: 8,
+        lineNumber: 30,
         columnNumber: 5
     }, this);
 }
+_s(ManifestoThumb, "MQhwWx22ofJm/oN8X4ZgCkxD48I=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$usePrefersReducedMotion$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePrefersReducedMotion"]
+    ];
+});
 _c = ManifestoThumb;
 var _c;
 __turbopack_context__.k.register(_c, "ManifestoThumb");
@@ -525,7 +556,7 @@ function HomeHero() {
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative z-20 flex w-full max-w-[1100px] flex-col items-center px-6 pt-24 pb-16 text-center md:px-10 md:pt-28",
+                        className: "relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-24 pb-16 text-center md:px-10 md:pt-28 xl:px-12",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f$HeroCopy$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                             fileName: "[project]/src/components/home/HomeHero.tsx",
                             lineNumber: 51,
@@ -609,7 +640,9 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "HOME_CONTENT",
-    ()=>HOME_CONTENT
+    ()=>HOME_CONTENT,
+    "PORTFOLIO_MOSAIC_DATA",
+    ()=>PORTFOLIO_MOSAIC_DATA
 ]);
 const HOME_CONTENT = {
     hero: {
@@ -682,6 +715,66 @@ const HOME_CONTENT = {
             src: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`
         }))
 };
+const PORTFOLIO_MOSAIC_DATA = [
+    {
+        id: 'row-1',
+        columns: 2,
+        items: [
+            {
+                id: 'magic-brand',
+                imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+                gradient: 'linear-gradient(to bottom right, #0057FF, #001f5c)',
+                title: 'Magic Radio',
+                subtitle: 'Branding & Identity',
+                aspectRatio: 1.3
+            },
+            {
+                id: 'nestle-promo',
+                imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+                gradient: 'linear-gradient(to bottom right, #FF3366, #5c001f)',
+                title: 'Nestlé Promo',
+                subtitle: 'Key Visual & Campaign',
+                aspectRatio: 1.3
+            }
+        ]
+    },
+    {
+        id: 'row-2',
+        columns: 1,
+        items: [
+            {
+                id: 'tech-web',
+                imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+                gradient: 'linear-gradient(to right, #1a1a1a, #333333)',
+                title: 'Web Experience Motion',
+                subtitle: 'Interactive Design & Development',
+                aspectRatio: 2.4
+            }
+        ]
+    },
+    {
+        id: 'row-3',
+        columns: 2,
+        items: [
+            {
+                id: 'branding-confidential',
+                imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+                gradient: 'linear-gradient(to top right, #333, #000)',
+                title: 'Confidential Client',
+                subtitle: 'Corporate Branding',
+                aspectRatio: 1
+            },
+            {
+                id: 'campaign-visuals',
+                imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+                gradient: 'linear-gradient(to bottom left, #0057FF, #000)',
+                title: 'Campaign Visuals',
+                subtitle: 'Art Direction',
+                aspectRatio: 1
+            }
+        ]
+    }
+];
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

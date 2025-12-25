@@ -581,7 +581,7 @@ function Particles({ count = 250, speedRef }) {
         count
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$1eccaf1c$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"])({
-        "Particles.useFrame": (state, delta)=>{
+        "Particles.useFrame": (state, _delta)=>{
             const t = state.clock.elapsedTime;
             const speedFactor = speedRef?.current ? __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].clamp(0.6 + speedRef.current * 0.06, 0.6, 4.5) : 0.8;
             particles.forEach({
@@ -913,7 +913,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f$webgl$2f$Fireflies$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/home/webgl/Fireflies.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f$webgl$2f$postprocessing$2f$AnalogDecayPass$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/home/webgl/postprocessing/AnalogDecayPass.tsx [app-client] (ecmascript)");
 ;
-var _s = __turbopack_context__.k.signature();
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
 // src/components/home/webgl/GhostCanvas.tsx
 'use client';
 ;
@@ -1071,6 +1071,29 @@ _s(GhostScene, "1f0IF6/LjMURoJa7uDhdILl2iRo=", false, function() {
 });
 _c = GhostScene;
 function GhostCanvas() {
+    _s1();
+    const [isMobile, setIsMobile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const reducedMotion = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$usePrefersReducedMotion$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePrefersReducedMotion"])();
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "GhostCanvas.useEffect": ()=>{
+            const checkMobile = {
+                "GhostCanvas.useEffect.checkMobile": ()=>setIsMobile(window.innerWidth < 1024)
+            }["GhostCanvas.useEffect.checkMobile"];
+            checkMobile();
+            window.addEventListener('resize', checkMobile);
+            return ({
+                "GhostCanvas.useEffect": ()=>window.removeEventListener('resize', checkMobile)
+            })["GhostCanvas.useEffect"];
+        }
+    }["GhostCanvas.useEffect"], []);
+    // Determine DPR based on device and reduced motion preferences
+    const dpr = reducedMotion ? 1 : isMobile ? [
+        1,
+        1.25
+    ] : [
+        1,
+        2
+    ];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$react$2d$three$2d$fiber$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Canvas"], {
         camera: {
             position: [
@@ -1080,10 +1103,7 @@ function GhostCanvas() {
             ],
             fov: 75
         },
-        dpr: [
-            1,
-            2
-        ],
+        dpr: dpr,
         gl: {
             antialias: false,
             alpha: true,
@@ -1100,7 +1120,7 @@ function GhostCanvas() {
                 color: "#020214"
             }, void 0, false, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 145,
+                lineNumber: 158,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -1113,7 +1133,7 @@ function GhostCanvas() {
                 color: "#4a90e2"
             }, void 0, false, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 146,
+                lineNumber: 159,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -1126,19 +1146,19 @@ function GhostCanvas() {
                 color: "#0057ff"
             }, void 0, false, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 151,
+                lineNumber: 164,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(GhostScene, {}, void 0, false, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 153,
+                lineNumber: 166,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f$webgl$2f$Fireflies$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 count: 48
             }, void 0, false, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 154,
+                lineNumber: 167,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$postprocessing$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EffectComposer"], {
@@ -1150,12 +1170,12 @@ function GhostCanvas() {
                         mipmapBlur: true
                     }, void 0, false, {
                         fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                        lineNumber: 157,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$home$2f$webgl$2f$postprocessing$2f$AnalogDecayPass$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                        lineNumber: 163,
+                        lineNumber: 176,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$postprocessing$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vignette"], {
@@ -1163,22 +1183,27 @@ function GhostCanvas() {
                         darkness: 0.78
                     }, void 0, false, {
                         fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                        lineNumber: 164,
+                        lineNumber: 177,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-                lineNumber: 156,
+                lineNumber: 169,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/home/webgl/GhostCanvas.tsx",
-        lineNumber: 133,
+        lineNumber: 146,
         columnNumber: 5
     }, this);
 }
+_s1(GhostCanvas, "Y9rRQNJhzzkdGiM6lxHklyLUBkI=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$usePrefersReducedMotion$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePrefersReducedMotion"]
+    ];
+});
 _c1 = GhostCanvas;
 var _c, _c1;
 __turbopack_context__.k.register(_c, "GhostScene");
