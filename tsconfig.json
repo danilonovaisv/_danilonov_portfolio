@@ -8,7 +8,6 @@
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["node", "jest"],
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "moduleDetection": "force",
