@@ -32,7 +32,7 @@
     "pre-commit": "lint-staged"
   },
   "engines": {
-    "node": "20"
+    "node": "24"
   },
   "main": "lib/index.js",
   "dependencies": {
