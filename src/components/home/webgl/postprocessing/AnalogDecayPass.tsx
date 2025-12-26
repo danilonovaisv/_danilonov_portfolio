@@ -71,14 +71,7 @@ import { ShaderPass } from 'three-stdlib';
 
 extend({ AnalogDecayShader, ShaderPass });
 
-// Define types for JSX
-/* eslint-disable no-unused-vars */
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    analogDecayShader: any
-  }
-}
-/* eslint-enable no-unused-vars */
+// Types are defined in src/types/global.d.ts
 
 export default function AnalogDecayPass() {
   const material = React.useMemo(() => new AnalogDecayShader(), []);

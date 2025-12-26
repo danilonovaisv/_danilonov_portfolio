@@ -4,7 +4,6 @@ import PortfolioShowcase from '@/components/home/PortfolioShowcase';
 import FeaturedProjects from '@/components/home/FeaturedProjects';
 import Clients from '@/components/home/Clients';
 import Contact from '@/components/home/Contact';
-import ManifestoSection from '@/components/home/ManifestoSection';
 
 export const metadata: Metadata = {
   title: 'Danilo Novais | Creative Developer & Interactive Designer',
@@ -17,7 +16,6 @@ export default function Home() {
     <div className="relative min-h-screen bg-[#050505]">
       {/* 1. Hero with Video Expansion */}
       <HomeHero />
-      <ManifestoSection />
 
       {/* 2. Portfolio Content */}
       <PortfolioShowcase />

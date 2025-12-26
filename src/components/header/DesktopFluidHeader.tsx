@@ -63,14 +63,16 @@ export default function DesktopFluidHeader() {
         setWebglOk(supportsWebGL());
     }, []);
 
-    // Requisito do prompt (valores idênticos ao reactbits)
-    const lensProps = useMemo(
+    // Requisito do prompt (valores para bar mode)
+    const barProps = useMemo(
         () => ({
-            scale: 0.25,
+            transmission: 1,
+            roughness: 0,
+            thickness: 10,
             ior: 1.15,
-            thickness: 5,
-            chromaticAberration: 0.1,
-            anisotropy: 0.2,
+            color: '#ffffff',
+            attenuationColor: '#ffffff',
+            attenuationDistance: 0.25,
         }),
         []
     );
@@ -100,8 +102,7 @@ export default function DesktopFluidHeader() {
                     <div className="pointer-events-none absolute inset-0 z-0">
                         <WebGLErrorBoundary onError={() => setWebglOk(false)}>
                             <FluidGlass
-                                mode="lens"
-                                lensProps={lensProps}
+                                barProps={barProps}
                                 // Captura eventos do wrapper (não do canvas), assim o cursor funciona mesmo com o nav por cima
                                 eventSource={eventSource}
                                 followPointer={!reducedMotion}
