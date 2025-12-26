@@ -11,9 +11,9 @@ export default function HeroCopy() {
     ? undefined
     : ({
         WebkitMaskImage:
-          'radial-gradient(180px circle at var(--gx, 18%) var(--gy, 55%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%)',
+          'radial-gradient(140px circle at var(--gx, 25%) var(--gy, 48%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 65%)',
         maskImage:
-          'radial-gradient(180px circle at var(--gx, 18%) var(--gy, 55%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%)',
+          'radial-gradient(140px circle at var(--gx, 25%) var(--gy, 48%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 65%)',
       } as React.CSSProperties);
 
   return (
@@ -36,26 +36,30 @@ export default function HeroCopy() {
       </div>
 
       {/* ===== TITLE ===== */}
-      <div className="relative mx-auto max-w-[22ch]">
+      <div className="relative mx-auto max-w-[45ch]">
         {/* Base */}
-        <h1 className="select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white/20 text-[clamp(2.25rem,6vw,4.6rem)]">
-          Design, não é<br />
-          só estética.
+        <h1 className="select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white/20 text-[clamp(2.5rem,6vw,4.6rem)]">
+          <strong>
+            Design, não é<br />
+            só estética.
+          </strong>
         </h1>
 
         {/* Highlight */}
         <h1
           aria-hidden
-          className="pointer-events-none absolute inset-0 select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white text-[clamp(2.25rem,6vw,4.6rem)] drop-shadow-[0_0_20px_rgba(120,180,255,0.55)]"
+          className="pointer-events-none absolute inset-0 select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white text-[clamp(2.5rem,6vw,4.6rem)] drop-shadow-[0_0_20px_rgba(120,180,255,0.55)]"
           style={maskStyle}
         >
-          Design, não é<br />
-          só estética.
+          <strong>
+            Design, não é<br />
+            só estética.
+          </strong>
         </h1>
       </div>
 
       {/* ===== SUBTITLE ===== */}
-      <div className="relative mx-auto mt-5 max-w-[58ch]">
+      <div className="relative mx-auto mt-6 max-w-[58ch]">
         {/* Base */}
         <p className="select-none text-pretty text-sm leading-relaxed text-white/25 md:text-base">
           [É intenção, é estratégia, é experiência.]

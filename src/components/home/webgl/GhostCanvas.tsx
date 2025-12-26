@@ -23,10 +23,10 @@ function GhostScene() {
   const { size, camera } = useThree();
   const [isMobile, setIsMobile] = useState(false);
 
-  // Set initial anchor so the ghost starts at TOP CENTER (above text)
+  // Set initial position at (-7, 0) to place ghost on the LEFT
   useEffect(() => {
     if (ghostGroupRef.current) {
-      ghostGroupRef.current.position.set(0, 5, 0);
+      ghostGroupRef.current.position.set(-7, 0, 0);
     }
   }, []);
 
@@ -62,17 +62,17 @@ function GhostScene() {
 
     if (isMobile) {
       // Automatic organic movement for mobile (Sine/Cosine loop - slower for ethereal feel)
-      targetX = Math.sin(t * 0.25) * 4; // Reduced horizontal range
-      targetY = Math.cos(t * 0.18) * 3; // Reduced vertical range
+      targetX = Math.sin(t * 0.25) * 4;
+      targetY = Math.cos(t * 0.18) * 3;
     } else {
-      // Mouse tracking for desktop
-      targetX = mouseRef.current.x * 6; // Reduced from 8
-      targetY = mouseRef.current.y * 4; // Reduced from 6
+      // Mouse tracking for desktop - reduced range for more subtle effect
+      targetX = mouseRef.current.x * 5; // Reduced for focus
+      targetY = mouseRef.current.y * 3.5; // Reduced for focus
     }
 
-    // Ghost positioned at TOP CENTER (above text)
-    const anchorX = 0;
-    const anchorY = 5;
+    // Ghost anchor at LEFT (fixed position)
+    const anchorX = -7;
+    const anchorY = 0;
 
     // Smooth dampening
     ghostGroupRef.current.position.x +=

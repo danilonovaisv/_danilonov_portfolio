@@ -1,76 +1,238 @@
-# Portfólio Danilo Novais — Next.js
 
-Home page interativa do portfólio institucional alinhada ao briefing em `docs/PORT DAN REVISADO - NEXT.md` e ao layout `docs/HOME-PORTFOLIO-LAYOUYT.jpg`. O foco é replicar a experiência com hero 3D, manifesto em vídeo, navegação suave e vitrine de projetos.
+# Portfólio — Danilo Novais
 
-## Visão geral
+**Next.js · WebGL · Motion · Design Systems**
 
-- Cabeçalho fixo com logo claro e navegação para `home`, `sobre`, `portfolio showcase` e `contato`.
-- Hero sticky com orb de vidro líquido (R3F), título “Design, não é só estética.”, subtítulo “[É intenção, é estratégia, é experiência.]”, CTA para `/sobre` e vídeo manifesto que escala para full ao rolar.
-- Portfolio showcase com três categorias (Brand & Campaigns, Videos & Motions, Web Campaigns/Websites & Tech) que expandem em linha, seguindo o alinhamento do mock.
-- Featured projects em cards grandes com tags, CTA para `/portfolio/{slug}` e destaque “Key visual” no grid.
-- Faixa de marcas em fundo azul e seção de contato com links rápidos, redes sociais e formulário enviado para `https://formsubmit.co/danilo@portfoliodanilo.com`.
-- Footer espelhando a navegação e copyright `© 2025 Danilo Novais Vilela — todos os direitos reservados`.
+Este repositório contém o código-fonte do **portfólio institucional de Danilo Novais**, desenvolvido com **Next.js (App Router)** e uma abordagem **experimental-premium**, combinando **WebGL atmosférico**, **motion editorial** e **arquitetura escalável**.
 
-## Stack e libs
+O projeto foi concebido para ir além de um portfólio tradicional, tratando **luz, movimento e tipografia como sistema**, não como efeitos isolados.
 
-- **Framework:** Next.js 16 (App Router) + React 19 + TypeScript.
-- **Estilos:** Tailwind CSS 4 (`app/globals.css`) com tokens de cor e tipografia Inter.
-- **Animações:** Framer Motion (reveals, sticky/scroll interactions, microinterações) com fallback a `prefers-reduced-motion`.
-- **3D:** React Three Fiber + Drei (Canvas fixo, `MeshTransmissionMaterial = Props`, `Environment` preset city) para o orb de vidro.
-- **Ícones/UX:** Lucide, anchors suaves e foco visível em navegação.
-- **Formulário:** envio via FormSubmit; links sociais e de contato em `lib/constants.tsx`.
+🌐 **Site:** [https://portfoliodanilo.com](https://portfoliodanilo.com)
 
-## Organização rápida
+---
 
-- `app/` — rotas (`page.tsx` para home, `/sobre`, `/portfolio` placeholder), layout global com `Header` e `Footer`.
-- `components/sections/Hero.tsx` — hero sticky, lógica de scroll, vídeo manifesto e CTA.
-- `components/home/` — `PortfolioShowcase`, `FeaturedProjects`, `Clients`, `Contact` e manifesto auxiliar.
-- `components/layout/` — `Header` (condensa no scroll, menu mobile acessível) e `Footer`.
-- `components/three/` — `OrbCanvas` (Canvas + luzes), `TorusDan` (orb com material transmissivo) e hooks.
-- `lib/constants.tsx` — textos, thumbs, logos, links e assets (Supabase) centralizados.
-- `public/media//media/Torus_dan.glb` — modelo 3D usado no hero (gerado via `gltfjsx`).
+## ✦ Visão Geral
 
-## Conteúdo e assets
+A Home Page é composta por uma narrativa visual contínua, com as seguintes seções (ordem não-negociável):
 
-- Hero usa `ASSETS.videoManifesto` para thumb e vídeo em loop/mudo; clique/scroll revela a versão full.
-- Categorias e projetos usam os thumbnails do bucket Supabase indicados na especificação; substitua URLs em `lib/constants.tsx` se necessário.
-- Formulário de contato envia para `danilo@portfoliodanilo.com`; telefone e emails estão na mesma constante.
-- Paleta principal: fundo `#F4F5F7`, acento azul `#0057FF`, textos escuros; siga os mesmos tokens para novas seções.
+1. **Header** — navegação global (Fluid Glass no desktop / Staggered Menu no mobile)
+2. **Hero** — Ghost WebGL + texto editorial estático
+3. **Manifesto (vídeo)** — revelação cinematográfica
+4. **Portfolio Showcase** — categorias principais de atuação
+5. **Featured Projects** — projetos em destaque
+6. **Clients / Brands** — marcas atendidas
+7. **Contact** — informações e formulário
+8. **Footer** — navegação secundária e copyright
 
-## Rodar localmente
+O foco é **clareza editorial + impacto sensorial controlado**.
 
-1. Instale dependências:
+---
+
+## ✦ Stack Principal
+
+### Framework & Linguagem
+
+* **Next.js** (App Router)
+* **React**
+* **TypeScript**
+
+### Estilo & UI
+
+* **Tailwind CSS**
+* Tipografia: **TT Norms Pro**
+* Tokens centralizados em `config/`
+
+### Motion & Interação
+
+* **Framer Motion**
+
+  * `whileInView` para reveals
+  * microinterações (`hover`, `tap`)
+* Respeito total a `prefers-reduced-motion`
+
+### WebGL / 3D
+
+* **React Three Fiber**
+* **@react-three/drei**
+* **Postprocessing customizado**
+
+  * Bloom
+  * Analog Decay (grain, scanlines, jitter)
+
+> ⚠️ O WebGL é **atmosférico**, nunca estrutural.
+> Ele **não controla layout** e **não compete com o conteúdo**.
+
+---
+
+## ✦ Arquitetura de Pastas (Resumo)
+
+```txt
+app/
+ ├─ layout.tsx        # Layout global
+ ├─ page.tsx          # Home
+ ├─ portfolio/page.tsx
+ ├─ sitemap.ts
+ └─ robots.ts
+
+components/
+ ├─ header/
+ │   ├─ SiteHeader.tsx
+ │   ├─ DesktopFluidHeader.tsx
+ │   ├─ MobileStaggeredMenu.tsx
+ │   └─ webgl/FluidGlass.tsx
+ │
+ ├─ home/
+ │   ├─ HomeHero.tsx
+ │   ├─ HeroCopy.tsx
+ │   ├─ ManifestoThumb.tsx
+ │   ├─ GhostStage.tsx
+ │   ├─ PortfolioShowcase.tsx
+ │   ├─ FeaturedProjects.tsx
+ │   ├─ Clients.tsx
+ │   └─ Contact.tsx
+ │
+ │   └─ webgl/
+ │       ├─ GhostCanvas.tsx
+ │       ├─ Ghost.tsx
+ │       ├─ Eyes.tsx
+ │       ├─ Particles.tsx
+ │       ├─ Fireflies.tsx
+ │       └─ postprocessing/AnalogDecayPass.tsx
+ │
+ ├─ layout/
+ │   ├─ Header.tsx
+ │   ├─ Footer.tsx
+ │   └─ SmoothScroll.tsx
+ │
+ └─ ui/
+     ├─ Button.tsx
+     └─ GlassSurface.tsx
+```
+
+---
+
+## ✦ Conceitos-Chave do Projeto
+
+### Hero Ghost (WebGL)
+
+* Entidade etérea abstrata
+* Glow azul emissivo (`#0057FF`)
+* Follow sutil do cursor (desktop apenas)
+* Pulsação orgânica (não mecânica)
+* Olhos reativos à velocidade do mouse
+* Pós-processamento analógico para textura visual
+
+### Texto da Hero
+
+* **100% estático**
+* Nenhuma animação de entrada
+* Nenhum glassmorphism em CSS
+* Hierarquia editorial clara
+
+### Manifesto (Vídeo)
+
+* Mesmo vídeo usado na Hero e na seção Manifesto
+* **Animação cinematográfica de entrada**
+
+  * escala + deslocamento + raio
+* Mobile:
+
+  * vídeo aparece apenas abaixo da Hero
+  * sem animação agressiva
+
+### Header
+
+* **Desktop (≥1024px)**
+
+  * Objeto óptico fluido em WebGL (Fluid Glass)
+  * Refração real (`MeshTransmissionMaterial`)
+  * Sincronizado com a energia luminosa do Ghost
+
+* **Mobile / Tablet**
+
+  * Menu fullscreen staggered
+  * Sem WebGL pesado
+  * Foco em performance e acessibilidade
+
+---
+
+## ✦ Acessibilidade & Performance
+
+* `prefers-reduced-motion` respeitado globalmente
+* Navegação completa por teclado
+* Foco visível em todos os elementos interativos
+* Canvas WebGL isolado (`ssr: false`)
+* DPR limitado em dispositivos móveis
+* Apenas `transform` e `opacity` são animados no DOM
+
+---
+
+## ✦ Rodar Localmente
+
+### Instalar dependências
 
 ```bash
 npm install
 ```
 
-2. Desenvolvimento (http://localhost:3000):
+### Ambiente de desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-3. Build de produção:
+Acesse: [http://localhost:3000](http://localhost:3000)
+
+### Build de produção
 
 ```bash
 npm run build
 ```
 
-4. Start da build:
+### Preview da build
 
 ```bash
 npm start
 ```
 
-5. Type-check rápido:
+---
 
-```bash
-npm run lint
-```
+## ✦ Conteúdo & Assets
 
-## Próximos passos sugeridos
+* Vídeos e imagens hospedados no **Supabase Storage**
+* URLs centralizadas em arquivos de configuração
+* Logos em SVG monocromáticos
+* Formulário de contato via **FormSubmit**
 
-- Completar conteúdo das rotas `/sobre` e `/portfolio` com o mesmo tom visual da home.
-- Afinar parâmetros do orb (`components/three/TorusDan.tsx`) para mobile low-end se notar queda de FPS.
-- Validar se todos os assets remotos continuam acessíveis; manter o fallback textual das logos e do 3D em caso de erro.
+---
+
+## ✦ Princípios Não-Negociáveis
+
+* ❌ Sem glassmorphism fake em CSS
+
+* ❌ Sem animações decorativas gratuitas
+
+* ❌ Sem WebGL no mobile
+
+* ❌ Sem texto animado na Hero
+
+* ✅ Conteúdo > efeito
+
+* ✅ Movimento como linguagem
+
+* ✅ WebGL como atmosfera
+
+* ✅ Código legível e escalável
+
+---
+
+## ✦ Autor
+
+**Danilo Novais**
+Design · Motion · Creative Development
+
+🌐 [https://portfoliodanilo.com](https://portfoliodanilo.com)
+📷 [https://instagram.com/danilo_novais](https://instagram.com/danilo_novais)
+💼 [https://linkedin.com/in/danilonovais](https://linkedin.com/in/danilonovais)
+
+---
