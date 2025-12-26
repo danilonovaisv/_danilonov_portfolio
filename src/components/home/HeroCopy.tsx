@@ -11,22 +11,34 @@ export default function HeroCopy() {
     ? undefined
     : ({
         WebkitMaskImage:
-          'radial-gradient(160px circle at var(--gx, 20%) var(--gy, 52%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 32%, rgba(0,0,0,0) 68%)',
+          'radial-gradient(180px circle at var(--gx, 18%) var(--gy, 55%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%)',
         maskImage:
-          'radial-gradient(160px circle at var(--gx, 20%) var(--gy, 52%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 32%, rgba(0,0,0,0) 68%)',
+          'radial-gradient(180px circle at var(--gx, 18%) var(--gy, 55%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 70%)',
       } as React.CSSProperties);
 
   return (
     <div className="relative z-20 w-full max-w-4xl px-4 sm:px-6 text-center">
-      {/* Tag */}
-      <div className="mb-4 text-xs font-medium tracking-[0.28em] text-white/55">
-        [BRAND AWARENESS]
+      {/* ===== TAG [BRAND AWARENESS] ===== */}
+      <div className="relative mb-4">
+        {/* Base */}
+        <div className="select-none text-xs font-medium tracking-[0.28em] text-white/25">
+          [BRAND AWARENESS]
+        </div>
+
+        {/* Highlight */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 select-none text-xs font-medium tracking-[0.28em] text-white/70 drop-shadow-[0_0_12px_rgba(120,180,255,0.4)]"
+          style={maskStyle}
+        >
+          [BRAND AWARENESS]
+        </div>
       </div>
 
       {/* ===== TITLE ===== */}
       <div className="relative mx-auto max-w-[22ch]">
         {/* Base */}
-        <h1 className="select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white/15 text-[clamp(2.25rem,6vw,4.6rem)]">
+        <h1 className="select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white/20 text-[clamp(2.25rem,6vw,4.6rem)]">
           Design, não é<br />
           só estética.
         </h1>
@@ -34,7 +46,7 @@ export default function HeroCopy() {
         {/* Highlight */}
         <h1
           aria-hidden
-          className="pointer-events-none absolute inset-0 select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white text-[clamp(2.25rem,6vw,4.6rem)] drop-shadow-[0_0_18px_rgba(120,180,255,0.5)]"
+          className="pointer-events-none absolute inset-0 select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white text-[clamp(2.25rem,6vw,4.6rem)] drop-shadow-[0_0_20px_rgba(120,180,255,0.55)]"
           style={maskStyle}
         >
           Design, não é<br />
@@ -45,14 +57,14 @@ export default function HeroCopy() {
       {/* ===== SUBTITLE ===== */}
       <div className="relative mx-auto mt-5 max-w-[58ch]">
         {/* Base */}
-        <p className="select-none text-pretty text-sm leading-relaxed text-white/22 md:text-base">
+        <p className="select-none text-pretty text-sm leading-relaxed text-white/25 md:text-base">
           [É intenção, é estratégia, é experiência.]
         </p>
 
         {/* Highlight */}
         <p
           aria-hidden
-          className="pointer-events-none absolute inset-0 select-none text-pretty text-sm leading-relaxed text-white/65 md:text-base drop-shadow-[0_0_12px_rgba(120,180,255,0.32)]"
+          className="pointer-events-none absolute inset-0 select-none text-pretty text-sm leading-relaxed text-white/65 md:text-base drop-shadow-[0_0_14px_rgba(120,180,255,0.35)]"
           style={maskStyle}
         >
           [É intenção, é estratégia, é experiência.]
@@ -68,7 +80,7 @@ export default function HeroCopy() {
             px-6 py-3 text-sm font-medium text-white
             shadow-[0_14px_40px_rgba(0,87,255,0.28)]
             transition-transform duration-300
-            hover:-translate-y-[1px]
+            hover:-translate-y-px
             focus-visible:outline-none focus-visible:ring-2
             focus-visible:ring-white focus-visible:ring-offset-2
             focus-visible:ring-offset-black

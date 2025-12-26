@@ -117,6 +117,18 @@ function GhostScene() {
     // Update CSS variables for DOM text masking
     document.documentElement.style.setProperty('--gx', `${screenX}%`);
     document.documentElement.style.setProperty('--gy', `${screenY}%`);
+
+    // Emit Ghost Energy for Header synchronization
+    // Energy based on proximity to center (0,0) -> normalized 0 to 1
+    const energy = 1 - Math.min(1, Math.sqrt(
+      mouseRef.current.x ** 2 + mouseRef.current.y ** 2
+    ));
+    // Clamp to avoid zero (minimum baseline glow)
+    const clampedEnergy = Math.max(0.15, energy);
+    document.documentElement.style.setProperty(
+      '--ghost-energy',
+      clampedEnergy.toFixed(3)
+    );
   });
 
   return (

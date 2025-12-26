@@ -7,46 +7,55 @@ import { BRAND } from '@/config/brand';
 export default function ManifestoThumb() {
   const reducedMotion = usePrefersReducedMotion();
 
-  // Premium editorial entrance animation
-  const containerVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-      scale: 0.98,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.23, 1, 0.32, 1] as [number, number, number, number], // Custom easing for editorial feel
-        delay: 0.2,
-      },
-    },
-  };
-
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      transition={reducedMotion ? { duration: 0 } : undefined}
-      viewport={{ once: true, margin: '-100px' }}
-      className="relative w-full aspect-video md:h-[400px] rounded-lg overflow-hidden shadow-2xl"
-    >
-      <video
-        src={BRAND.video.manifesto}
-        muted
-        loop
-        playsInline
-        autoPlay
-        className="w-full h-full object-cover"
-        aria-label="Manifesto thumbnail"
-      />
+      <motion.div
+          initial={
+            reducedMotion
+                ? undefined
+                : {
+                  opacity: 1,
+                  scale: 0.25,
+                  x: '35%',
+                  y: '30%',
+                  borderRadius: 16,
+                }
+          }
+          whileInView={
+            reducedMotion
+                ? undefined
+                : {
+                  opacity: 1,
+                  scale: 1,
+                  x: '0%',
+                  y: '0%',
+                  borderRadius: 0,
+                }
+          }
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{
+            duration: 0.85,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="
+        relative w-full aspect-video
+        overflow-hidden
+        shadow-[0_30px_90px_rgba(0,0,0,0.45)]
+        bg-black
+      "
+      >
+        <video
+            src={BRAND.video.manifesto}
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="metadata"
+            className="h-full w-full object-cover"
+            aria-label="Manifesto thumbnail"
+        />
 
-      {/* Overlay gradient for depth */}
-      <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent pointer-events-none" />
-    </motion.div>
+        {/* Overlay de profundidade */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+      </motion.div>
   );
 }
