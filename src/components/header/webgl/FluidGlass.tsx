@@ -1,132 +1,319 @@
-'use client';
-
-import { useMemo, useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshTransmissionMaterial, RoundedBox } from '@react-three/drei';
-import { RoundedBoxGeometry } from 'three-stdlib';
 import * as THREE from 'three';
+import { useRef, useState, useEffect, memo, ReactNode } from 'react';
+import { Canvas, createPortal, useFrame, useThree, ThreeElements } from '@react-three/fiber';
+import {
+  useFBO,
+  useGLTF,
+  useScroll,
+  Image,
+  Scroll,
+  Preload,
+  ScrollControls,
+  MeshTransmissionMaterial,
+  Text
+} from '@react-three/drei';
+import { easing } from 'maath';
 
-interface FluidGlassProps {
-  mode: 'lens' | 'bar';
-  lensProps: {
-    scale: number;
-    ior: number;
-    thickness: number;
-    chromaticAberration: number;
-    anisotropy: number;
-    navItems: { label: string; link: string }[];
-  };
+type Mode = 'lens' | 'bar' | 'cube';
+
+interface NavItem {
+  label: string;
+  link: string;
 }
 
-const GlassLens = ({
-  lensProps,
-}: {
-  lensProps: FluidGlassProps['lensProps'];
-}) => {
-  const groupRef = useRef<THREE.Group>(null);
-  const { ior, thickness, chromaticAberration, anisotropy } = lensProps;
+type ModeProps = Record<string, unknown>;
 
-  const glowGeom = useMemo(
-    () => new RoundedBoxGeometry(7.8, 1.7, 0.24, 12, 0.5),
-    []
+interface FluidGlassProps {
+  mode?: Mode;
+  lensProps?: ModeProps;
+  barProps?: ModeProps;
+  cubeProps?: ModeProps;
+}
+
+export default function FluidGlass({ mode = 'lens', lensProps = {}, barProps = {}, cubeProps = {} }: FluidGlassProps) {
+  const Wrapper = mode === 'bar' ? Bar : mode === 'cube' ? Cube : Lens;
+  const rawOverrides = mode === 'bar' ? barProps : mode === 'cube' ? cubeProps : lensProps;
+
+  const {
+    navItems = [
+      { label: 'Home', link: '' },
+      { label: 'About', link: '' },
+      { label: 'Contact', link: '' }
+    ],
+    ...modeProps
+  } = rawOverrides;
+
+  return (
+    <Canvas camera={{ position: [0, 0, 20], fov: 15 }} gl={{ alpha: true }}>
+      <ScrollControls damping={0.2} pages={3} distance={0.4}>
+        {mode === 'bar' && <NavItems items={navItems as NavItem[]} />}
+        <Wrapper modeProps={modeProps}>
+          <Scroll>
+            <Typography />
+            <Images />
+          </Scroll>
+          <Scroll html />
+          <Preload />
+        </Wrapper>
+      </ScrollControls>
+    </Canvas>
   );
+}
 
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    const { mouse } = state;
-    const targetX = mouse.x * 0.4;
-    const targetY = mouse.y * 0.3;
-    groupRef.current.position.x = THREE.MathUtils.lerp(
-      groupRef.current.position.x,
-      targetX,
-      0.08
-    );
-    groupRef.current.position.y = THREE.MathUtils.lerp(
-      groupRef.current.position.y,
-      targetY,
-      0.08
-    );
-    groupRef.current.rotation.y = THREE.MathUtils.lerp(
-      groupRef.current.rotation.y,
-      mouse.x * 0.08,
-      0.1
-    );
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(
-      groupRef.current.rotation.x,
-      -mouse.y * 0.05,
-      0.1
-    );
+type MeshProps = ThreeElements['mesh'];
+
+interface ModeWrapperProps extends MeshProps {
+  children?: ReactNode;
+  glb: string;
+  geometryKey: string;
+  lockToBottom?: boolean;
+  followPointer?: boolean;
+  modeProps?: ModeProps;
+}
+
+interface ZoomMaterial extends THREE.Material {
+  zoom: number;
+}
+
+interface ZoomMesh extends THREE.Mesh<THREE.BufferGeometry, ZoomMaterial> {}
+
+type ZoomGroup = THREE.Group & { children: ZoomMesh[] };
+
+const ModeWrapper = memo(function ModeWrapper({
+  children,
+  glb,
+  geometryKey,
+  lockToBottom = false,
+  followPointer = true,
+  modeProps = {},
+  ...props
+}: ModeWrapperProps) {
+  const ref = useRef<THREE.Mesh>(null!);
+  const { nodes } = useGLTF(glb);
+  const buffer = useFBO();
+  const { viewport: vp } = useThree();
+  const [scene] = useState<THREE.Scene>(() => new THREE.Scene());
+  const geoWidthRef = useRef<number>(1);
+
+  useEffect(() => {
+    const geo = (nodes[geometryKey] as THREE.Mesh)?.geometry;
+    geo.computeBoundingBox();
+    geoWidthRef.current = geo.boundingBox!.max.x - geo.boundingBox!.min.x || 1;
+  }, [nodes, geometryKey]);
+
+  useFrame((state, delta) => {
+    const { gl, viewport, pointer, camera } = state;
+    const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
+
+    const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
+    const destY = lockToBottom ? -v.height / 2 + 0.2 : followPointer ? (pointer.y * v.height) / 2 : 0;
+    easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
+
+    if ((modeProps as { scale?: number }).scale == null) {
+      const maxWorld = v.width * 0.9;
+      const desired = maxWorld / geoWidthRef.current;
+      ref.current.scale.setScalar(Math.min(0.15, desired));
+    }
+
+    gl.setRenderTarget(buffer);
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);
+    gl.setClearColor(0x5227ff, 1);
+  });
+
+  const { scale, ior, thickness, anisotropy, chromaticAberration, ...extraMat } = modeProps as {
+    scale?: number;
+    ior?: number;
+    thickness?: number;
+    anisotropy?: number;
+    chromaticAberration?: number;
+    [key: string]: unknown;
+  };
+
+  return (
+    <>
+      {createPortal(children, scene)}
+      <mesh scale={[vp.width, vp.height, 1]}>
+        <planeGeometry />
+        <meshBasicMaterial map={buffer.texture} transparent />
+      </mesh>
+      <mesh
+        ref={ref}
+        scale={scale ?? 0.15}
+        rotation-x={Math.PI / 2}
+        geometry={(nodes[geometryKey] as THREE.Mesh)?.geometry}
+        {...props}
+      >
+        <MeshTransmissionMaterial
+          buffer={buffer.texture}
+          ior={ior ?? 1.15}
+          thickness={thickness ?? 5}
+          anisotropy={anisotropy ?? 0.01}
+          chromaticAberration={chromaticAberration ?? 0.1}
+          {...(typeof extraMat === 'object' && extraMat !== null ? extraMat : {})}
+        />
+      </mesh>
+    </>
+  );
+});
+
+function Lens({ modeProps, ...p }: { modeProps?: ModeProps } & MeshProps) {
+  return <ModeWrapper glb="/assets/3d/lens.glb" geometryKey="Cylinder" followPointer modeProps={modeProps} {...p} />;
+}
+
+function Cube({ modeProps, ...p }: { modeProps?: ModeProps } & MeshProps) {
+  return <ModeWrapper glb="/assets/3d/cube.glb" geometryKey="Cube" followPointer modeProps={modeProps} {...p} />;
+}
+
+function Bar({ modeProps = {}, ...p }: { modeProps?: ModeProps } & MeshProps) {
+  const defaultMat = {
+    transmission: 1,
+    roughness: 0,
+    thickness: 10,
+    ior: 1.15,
+    color: '#ffffff',
+    attenuationColor: '#ffffff',
+    attenuationDistance: 0.25
+  };
+
+  return (
+    <ModeWrapper
+      glb="/assets/3d/bar.glb"
+      geometryKey="Cube"
+      lockToBottom
+      followPointer={false}
+      modeProps={{ ...defaultMat, ...modeProps }}
+      {...p}
+    />
+  );
+}
+
+function NavItems({ items }: { items: NavItem[] }) {
+  const group = useRef<THREE.Group>(null!);
+  const { viewport, camera } = useThree();
+
+  const DEVICE = {
+    mobile: { max: 639, spacing: 0.2, fontSize: 0.035 },
+    tablet: { max: 1023, spacing: 0.24, fontSize: 0.045 },
+    desktop: { max: Infinity, spacing: 0.3, fontSize: 0.045 }
+  };
+  const getDevice = () => {
+    const w = window.innerWidth;
+    return w <= DEVICE.mobile.max ? 'mobile' : w <= DEVICE.tablet.max ? 'tablet' : 'desktop';
+  };
+
+  const [device, setDevice] = useState<keyof typeof DEVICE>(getDevice());
+
+  useEffect(() => {
+    const onResize = () => setDevice(getDevice());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const { spacing, fontSize } = DEVICE[device];
+
+  useFrame(() => {
+    if (!group.current) return;
+    const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
+    group.current.position.set(0, -v.height / 2 + 0.2, 15.1);
+
+    group.current.children.forEach((child, i) => {
+      child.position.x = (i - (items.length - 1) / 2) * spacing;
+    });
+  });
+
+  const handleNavigate = (link: string) => {
+    if (!link) return;
+    link.startsWith('#') ? (window.location.hash = link) : (window.location.href = link);
+  };
+
+  return (
+    <group ref={group} renderOrder={10}>
+      {items.map(({ label, link }) => (
+        <Text
+          key={label}
+          fontSize={fontSize}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          outlineWidth={0}
+          outlineBlur="20%"
+          outlineColor="#000"
+          outlineOpacity={0.5}
+          renderOrder={10}
+          onClick={e => {
+            e.stopPropagation();
+            handleNavigate(link);
+          }}
+          onPointerOver={() => (document.body.style.cursor = 'pointer')}
+          onPointerOut={() => (document.body.style.cursor = 'auto')}
+        >
+          {label}
+        </Text>
+      ))}
+    </group>
+  );
+}
+
+function Images() {
+  const group = useRef<ZoomGroup>(null!);
+  const data = useScroll();
+  const { height } = useThree(s => s.viewport);
+
+  useFrame(() => {
+    group.current.children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3;
+    group.current.children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3;
+    group.current.children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+    group.current.children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+    group.current.children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
   });
 
   return (
-    <group ref={groupRef} scale={0.92}>
-      <RoundedBox args={[7.6, 1.5, 0.22]} radius={0.5} smoothness={12}>
-        <MeshTransmissionMaterial
-          backside
-          samples={10}
-          resolution={256}
-          transmission={1}
-          roughness={0.12}
-          thickness={thickness}
-          ior={ior}
-          chromaticAberration={chromaticAberration}
-          anisotropy={anisotropy}
-          distortion={0.12}
-          distortionScale={0.16}
-          temporalDistortion={0.08}
-          color="#05060f"
-          attenuationColor="#0b1a3f"
-          attenuationDistance={0.4}
-        />
-      </RoundedBox>
-
-      <mesh geometry={glowGeom} position={[0, 0, -0.08]}>
-        <meshBasicMaterial
-          color="#6f7bff"
-          transparent
-          opacity={0.2}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-      <mesh geometry={glowGeom} position={[0, 0, -0.12]} scale={1.05}>
-        <meshBasicMaterial
-          color="#5327ff"
-          transparent
-          opacity={0.12}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
+    <group ref={group}>
+      <Image position={[-2, 0, 0]} scale={[3, height / 1.1]} url="/assets/demo/cs1.webp" />
+      <Image position={[2, 0, 3]} scale={3} url="/assets/demo/cs2.webp" />
+      <Image position={[-2.05, -height, 6]} scale={[1, 3]} url="/assets/demo/cs3.webp" />
+      <Image position={[-0.6, -height, 9]} scale={[1, 2]} url="/assets/demo/cs1.webp" />
+      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/assets/demo/cs2.webp" />
     </group>
   );
-};
+}
 
-const FluidGlass = ({ lensProps }: FluidGlassProps) => {
+function Typography() {
+  const DEVICE = {
+    mobile: { fontSize: 0.2 },
+    tablet: { fontSize: 0.4 },
+    desktop: { fontSize: 0.6 }
+  };
+  const getDevice = () => {
+    const w = window.innerWidth;
+    return w <= 639 ? 'mobile' : w <= 1023 ? 'tablet' : 'desktop';
+  };
+
+  const [device, setDevice] = useState<keyof typeof DEVICE>(getDevice());
+
+  useEffect(() => {
+    const onResize = () => setDevice(getDevice());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  const { fontSize } = DEVICE[device];
+
   return (
-    <Canvas
-      camera={{ position: [0, 0, 7], fov: 48 }}
-      dpr={[1, 1.5]}
-      gl={{
-        alpha: true,
-        antialias: false,
-        powerPreference: 'high-performance',
-      }}
-      style={{ pointerEvents: 'none' }}
-      className="pointer-events-none select-none"
+    <Text
+      position={[0, 0, 12]}
+      fontSize={fontSize}
+      letterSpacing={-0.05}
+      outlineWidth={0}
+      outlineBlur="20%"
+      outlineColor="#000"
+      outlineOpacity={0.5}
+      color="white"
+      anchorX="center"
+      anchorY="middle"
     >
-      <color attach="background" args={['transparent']} />
-      <ambientLight intensity={0.35} />
-      <directionalLight
-        position={[0, 2.5, 3]}
-        intensity={0.6}
-        color="#ffffff"
-      />
-      <pointLight position={[0, 0, 2]} intensity={0.5} color="#4b7cff" />
-
-      <GlassLens lensProps={lensProps} />
-    </Canvas>
+      React Bits
+    </Text>
   );
-};
-
-export default FluidGlass;
+}

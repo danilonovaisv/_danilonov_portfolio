@@ -23,10 +23,10 @@ function GhostScene() {
   const { size, camera } = useThree();
   const [isMobile, setIsMobile] = useState(false);
 
-  // Set initial anchor so the ghost starts leading the text on the left
+  // Set initial anchor so the ghost starts at TOP CENTER (above text)
   useEffect(() => {
     if (ghostGroupRef.current) {
-      ghostGroupRef.current.position.set(-8, 3.5, 0);
+      ghostGroupRef.current.position.set(0, 5, 0);
     }
   }, []);
 
@@ -62,16 +62,17 @@ function GhostScene() {
 
     if (isMobile) {
       // Automatic organic movement for mobile (Sine/Cosine loop - slower for ethereal feel)
-      targetX = Math.sin(t * 0.2) * 6; // Reduced speed and distance
-      targetY = Math.cos(t * 0.15) * 4;
+      targetX = Math.sin(t * 0.25) * 4; // Reduced horizontal range
+      targetY = Math.cos(t * 0.18) * 3; // Reduced vertical range
     } else {
       // Mouse tracking for desktop
-      targetX = mouseRef.current.x * 8;
-      targetY = mouseRef.current.y * 6;
+      targetX = mouseRef.current.x * 6; // Reduced from 8
+      targetY = mouseRef.current.y * 4; // Reduced from 6
     }
 
-    const anchorX = -8;
-    const anchorY = 3.5;
+    // Ghost positioned at TOP CENTER (above text)
+    const anchorX = 0;
+    const anchorY = 5;
 
     // Smooth dampening
     ghostGroupRef.current.position.x +=
@@ -80,8 +81,9 @@ function GhostScene() {
       (anchorY + targetY - ghostGroupRef.current.position.y) * 0.06;
 
     // Scale adjustment for mobile
-    const baseScale = isMobile ? 0.8 : 1.3;
+    const baseScale = isMobile ? 0.9 : 1.4;
     ghostGroupRef.current.scale.setScalar(baseScale);
+
 
     // Sync Ref for Veil
     ghostPosRef.current.copy(ghostGroupRef.current.position);

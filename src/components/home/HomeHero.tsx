@@ -35,10 +35,15 @@ export default function HomeHero() {
         id="hero"
         className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#06071f]"
       >
+        {/* Canvas atrás de tudo */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           <GhostStage enabled={!reducedMotion} />
+        </div>
+
+        {/* Overlays entre canvas e texto */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
           <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,87,255,0.24),transparent_42%),radial-gradient(circle_at_70%_35%,rgba(82,39,255,0.18),transparent_48%)] mix-blend-screen"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(0,87,255,0.18)_0%,transparent_60%)]"
             aria-hidden
           />
           <div
@@ -47,6 +52,7 @@ export default function HomeHero() {
           />
         </div>
 
+        {/* Texto SEMPRE acima */}
         <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-24 pb-16 text-center md:px-10 md:pt-28 xl:px-12">
           <HeroCopy />
         </div>
