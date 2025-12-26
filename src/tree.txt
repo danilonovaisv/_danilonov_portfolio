@@ -1,0 +1,140 @@
+.
+├── .DS_Store
+├── app
+│   ├── .DS_Store
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── portfolio
+│   │   └── page.tsx
+│   ├── robots.ts
+│   └── sitemap.ts
+├── assets
+│   └── logos
+│       ├── Favicon.svg
+│       ├── FaviconLight.svg
+│       ├── LogoDark.svg
+│       └── LogoLight.svg
+├── components
+│   ├── Header.tsx
+│   ├── Hero.tsx
+│   ├── Portfolio.tsx
+│   ├── Section.tsx
+│   ├── header
+│   │   ├── DesktopFluidHeader.tsx
+│   │   ├── MobileStaggeredMenu.tsx
+│   │   ├── SiteHeader.tsx
+│   │   └── webgl
+│   │       └── FluidGlass.tsx
+│   ├── home
+│   │   ├── CategoryStripe.tsx
+│   │   ├── Clients.tsx
+│   │   ├── Contact.tsx
+│   │   ├── FeaturedProjects.tsx
+│   │   ├── GhostStage.tsx
+│   │   ├── HeroCopy.tsx
+│   │   ├── HeroPreloader.tsx
+│   │   ├── HomeHero.tsx
+│   │   ├── ManifestoThumb.tsx
+│   │   ├── PortfolioShowcase.tsx
+│   │   ├── ProjectCard.tsx
+│   │   ├── contact
+│   │   │   ├── ContactDetails.tsx
+│   │   │   ├── ContactForm.tsx
+│   │   │   └── FormFields.tsx
+│   │   ├── portfolio-showcase
+│   │   │   └── category-stripe
+│   │   │       ├── CategoryArrow.tsx
+│   │   │       ├── CategoryExpanded.tsx
+│   │   │       ├── CategoryText.tsx
+│   │   │       └── CategoryThumbnail.tsx
+│   │   └── webgl
+│   │       ├── AtmosphereVeil.tsx
+│   │       ├── Eyes.tsx
+│   │       ├── Fireflies.tsx
+│   │       ├── Ghost.tsx
+│   │       ├── GhostCanvas.tsx
+│   │       ├── Particles.tsx
+│   │       └── postprocessing
+│   │           └── AnalogDecayPass.tsx
+│   ├── layout
+│   │   ├── Footer.tsx
+│   │   ├── Header.tsx
+│   │   └── SmoothScroll.tsx
+│   ├── portfolio
+│   │   ├── MosaicCard.tsx
+│   │   ├── PortfolioHero.tsx
+│   │   ├── PortfolioHeroGallery.module.css
+│   │   ├── PortfolioMosaicGrid.tsx
+│   │   └── types.ts
+│   └── ui
+│       ├── Button.tsx
+│       └── GlassSurface.tsx
+├── config
+│   ├── brand.ts
+│   ├── content.ts
+│   ├── motion.ts
+│   └── navigation.tsx
+├── content
+│   └── projects.ts
+├── contexts
+│   └── ScrollContext.tsx
+├── dataconnect-admin-generated
+│   ├── esm
+│   │   ├── index.esm.js
+│   │   └── package.json
+│   ├── index.cjs.js
+│   ├── index.d.ts
+│   └── package.json
+├── dataconnect-generated
+│   ├── .guides
+│   │   ├── config.json
+│   │   ├── setup.md
+│   │   └── usage.md
+│   ├── README.md
+│   ├── esm
+│   │   ├── index.esm.js
+│   │   └── package.json
+│   ├── index.cjs.js
+│   ├── index.d.ts
+│   ├── package.json
+│   └── react
+│       ├── README.md
+│       ├── esm
+│       │   ├── index.esm.js
+│       │   └── package.json
+│       ├── index.cjs.js
+│       ├── index.d.ts
+│       └── package.json
+├── fonts
+│   ├── TT Norms Pro Bold.woff2
+│   ├── TT Norms Pro Light.woff2
+│   ├── TT Norms Pro Medium.woff2
+│   ├── TT Norms Pro Regular.woff2
+│   └── TT Norms Pro Thin.woff2
+├── hooks
+│   ├── useDarkMode.ts
+│   ├── useMediaQuery.ts
+│   └── usePrefersReducedMotion.ts
+├── lib
+│   ├── firebase
+│   │   └── config.ts
+│   ├── supabase
+│   │   ├── client.ts
+│   │   ├── image-loader.ts
+│   │   └── middleware.ts
+│   ├── types.ts
+│   ├── utils
+│   │   └── index.ts
+│   └── utils.ts
+├── proxy.ts
+├── setupPolyfills.ts
+├── styles
+│   └── globals.css
+├── tree.txt
+├── types
+│   └── global.d.ts
+└── validations
+    └── post.schema.ts
+
+36 directories, 102 files

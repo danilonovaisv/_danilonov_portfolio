@@ -1,5 +1,7 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import { HOME_CONTENT } from '@/config/content';
+
+export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://portfoliodanilo.com';
