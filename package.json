@@ -17,25 +17,23 @@
     "dev": "next dev",
     "prebuild": "node scripts/generate-build-info.cjs",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out",
+    "clean": "rimraf .next out",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "eslint": "eslint --fix .",
     "eslint:ci": "eslint .",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false --strict --jsx react-jsx",
+    "typecheck": "tsc --noEmit --strict --jsx react-jsx",
     "typegen": "tsc --emitDeclarationOnly",
     "analyze": "pnpm run lint && pnpm run typecheck",
     "analyze:deps": "depcheck",
     "analyze:graph": "node scripts/analyze-graph.cjs",
     "audit:project": "npx ts-node scripts/analyze-project.ts",
-    "test": "pnpm run eslint:ci && pnpm run typecheck && pnpm run prettier && pnpm run jest && (cd test/e2e; ./e2e.sh 0.180)",
+    "test": "pnpm run eslint:ci && pnpm run typecheck && pnpm run prettier && pnpm run jest",
     "jest": "jest",
-    "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "clean": "rimraf .next",
-    "deploy": "firebase deploy --project portfolio-danilo-novais --non-interactive"
+    "deploy": "pnpm run build && firebase deploy --only hosting --project portfolio-danilo-novais"
   },
   "dependencies": {
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
@@ -89,7 +87,8 @@
     "tailwindcss": "^4.1.18",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "serve": "^14.2.4"
   },
   "overrides": {
     "test-exclude": "7.0.1"

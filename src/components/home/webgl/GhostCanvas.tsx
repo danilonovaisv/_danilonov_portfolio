@@ -93,7 +93,8 @@ function GhostScene() {
 
     const distanceMoved = ghostGroupRef.current.position
       .clone()
-      .sub(lastGhostPosRef.current).length();
+      .sub(lastGhostPosRef.current)
+      .length();
     const velocity = delta > 0 ? distanceMoved / delta : 0;
     const clampedVelocity = Math.min(velocity, 40);
     ghostSpeedRef.current = THREE.MathUtils.lerp(
@@ -140,7 +141,11 @@ export default function GhostCanvas() {
   }, []);
 
   // Determine DPR based on device and reduced motion preferences
-  const dpr = reducedMotion ? 1 : (isMobile ? [1, 1.25] as [number, number] : [1, 2] as [number, number]);
+  const dpr = reducedMotion
+    ? 1
+    : isMobile
+      ? ([1, 1.25] as [number, number])
+      : ([1, 2] as [number, number]);
 
   return (
     <Canvas

@@ -17,7 +17,7 @@ const DesktopFluidHeader = () => {
   return (
     <header
       role="banner"
-      className="fixed left-1/2 top-4 z-[120] w-full -translate-x-1/2 px-4 md:top-6"
+      className="fixed left-1/2 top-4 z-120 w-full -translate-x-1/2 px-4 md:top-6"
     >
       <div className="relative mx-auto h-[82px] w-full max-w-[1200px] overflow-visible sm:h-[90px]">
         {/* Canvas + glow as background layer */}

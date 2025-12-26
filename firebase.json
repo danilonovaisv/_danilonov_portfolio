@@ -1,10 +1,19 @@
 {
   "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "public": "out",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|woff2|png|jpg|jpeg|svg|webp)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=31536000,immutable"
+          }
+        ]
+      }
     ],
     "rewrites": [
       {
@@ -12,106 +21,5 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  },
-  "extensions": {},
-  "database": {
-    "rules": "database.rules.json"
-  },
-  "apphosting": [
-    {
-      "backendId": "portfoliodannovais",
-      "rootDir": ".",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ],
-      "alwaysDeployFromSource": true
-    },
-    {
-      "backendId": "portfoliodannovais",
-      "rootDir": "/",
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "functions"
-      ],
-      "alwaysDeployFromSource": true
-    }
-  ],
-  "firestore": {
-    "database": "portfolio-danilo-novais",
-    "location": "southamerica-east1",
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  },
-  "functions": [
-    {
-      "codebase": "default",
-      "disallowLegacyRuntimeConfig": true,
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "source": "functions"
-    }
-  ],
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "emulators": {
-    "apphosting": {
-      "port": 5002,
-      "rootDirectory": "./",
-      "startCommand": "pnpm run dev"
-    },
-    "auth": {
-      "port": 9099
-    },
-    "functions": {
-      "port": 5001
-    },
-    "firestore": {
-      "port": 8080
-    },
-    "database": {
-      "port": 9000
-    },
-    "hosting": {
-      "port": 5005
-    },
-    "storage": {
-      "port": 9199
-    },
-    "dataconnect": {
-      "port": 9399,
-      "dataDir": "dataconnect/.dataconnect/pgliteData"
-    },
-    "tasks": {
-      "port": 9499
-    },
-    "ui": {
-      "enabled": true
-    },
-    "singleProjectMode": true,
-    "pubsub": {
-      "port": 8085
-    },
-    "eventarc": {
-      "port": 9299
-    }
-  },
-  "dataconnect": {
-    "source": "dataconnect"
   }
 }

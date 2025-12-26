@@ -9,21 +9,21 @@ export default function ManifestoThumb() {
 
   // Premium editorial entrance animation
   const containerVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 20, 
-      scale: 0.98 
+    hidden: {
+      opacity: 0,
+      y: 20,
+      scale: 0.98,
     },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
       transition: {
         duration: 0.6,
         ease: [0.23, 1, 0.32, 1] as [number, number, number, number], // Custom easing for editorial feel
-        delay: 0.2
-      }
-    }
+        delay: 0.2,
+      },
+    },
   };
 
   return (
@@ -32,7 +32,7 @@ export default function ManifestoThumb() {
       initial="hidden"
       whileInView="visible"
       transition={reducedMotion ? { duration: 0 } : undefined}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: '-100px' }}
       className="relative w-full aspect-video md:h-[400px] rounded-lg overflow-hidden shadow-2xl"
     >
       <video

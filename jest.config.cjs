@@ -14,6 +14,7 @@ const baseConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: ['node_modules/(?!(framer-motion)/)'],
+  modulePathIgnorePatterns: ['<rootDir>/functions/'],
   testMatch: ['**/test/**/*.test.{ts,tsx,js}'],
 };
 

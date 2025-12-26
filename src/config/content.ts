@@ -68,64 +68,69 @@ export const HOME_CONTENT = {
   })),
 };
 
-export const PORTFOLIO_MOSAIC_DATA: import('@/components/portfolio/types').MosaicRow[] = [
-  {
-    id: 'row-1',
-    columns: 2,
-    items: [
-      {
-        id: 'magic-brand',
-        imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-        gradient: 'linear-gradient(to bottom right, #0057FF, #001f5c)',
-        title: 'Magic Radio',
-        subtitle: 'Branding & Identity',
-        aspectRatio: 1.3,
-      },
-      {
-        id: 'nestle-promo',
-        imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-        gradient: 'linear-gradient(to bottom right, #FF3366, #5c001f)',
-        title: 'Nestlé Promo',
-        subtitle: 'Key Visual & Campaign',
-        aspectRatio: 1.3,
-      },
-    ],
-  },
-  {
-    id: 'row-2',
-    columns: 1,
-    items: [
-      {
-        id: 'tech-web',
-        imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-        gradient: 'linear-gradient(to right, #1a1a1a, #333333)',
-        title: 'Web Experience Motion',
-        subtitle: 'Interactive Design & Development',
-        aspectRatio: 2.4, // ultra wide
-      },
-    ],
-  },
-  {
-    id: 'row-3',
-    columns: 2,
-    items: [
-      {
-        id: 'branding-confidential',
-        imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-        gradient: 'linear-gradient(to top right, #333, #000)',
-        title: 'Confidential Client',
-        subtitle: 'Corporate Branding',
-        aspectRatio: 1,
-      },
-      {
-        id: 'campaign-visuals',
-        imageSrc: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-        gradient: 'linear-gradient(to bottom left, #0057FF, #000)',
-        title: 'Campaign Visuals',
-        subtitle: 'Art Direction',
-        aspectRatio: 1,
-      },
-    ],
-  },
-];
-
+export const PORTFOLIO_MOSAIC_DATA: import('@/components/portfolio/types').MosaicRow[] =
+  [
+    {
+      id: 'row-1',
+      columns: 2,
+      items: [
+        {
+          id: 'magic-brand',
+          imageSrc:
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+          gradient: 'linear-gradient(to bottom right, #0057FF, #001f5c)',
+          title: 'Magic Radio',
+          subtitle: 'Branding & Identity',
+          aspectRatio: 1.3,
+        },
+        {
+          id: 'nestle-promo',
+          imageSrc:
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+          gradient: 'linear-gradient(to bottom right, #FF3366, #5c001f)',
+          title: 'Nestlé Promo',
+          subtitle: 'Key Visual & Campaign',
+          aspectRatio: 1.3,
+        },
+      ],
+    },
+    {
+      id: 'row-2',
+      columns: 1,
+      items: [
+        {
+          id: 'tech-web',
+          imageSrc:
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+          gradient: 'linear-gradient(to right, #1a1a1a, #333333)',
+          title: 'Web Experience Motion',
+          subtitle: 'Interactive Design & Development',
+          aspectRatio: 2.4, // ultra wide
+        },
+      ],
+    },
+    {
+      id: 'row-3',
+      columns: 2,
+      items: [
+        {
+          id: 'branding-confidential',
+          imageSrc:
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+          gradient: 'linear-gradient(to top right, #333, #000)',
+          title: 'Confidential Client',
+          subtitle: 'Corporate Branding',
+          aspectRatio: 1,
+        },
+        {
+          id: 'campaign-visuals',
+          imageSrc:
+            'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+          gradient: 'linear-gradient(to bottom left, #0057FF, #000)',
+          title: 'Campaign Visuals',
+          subtitle: 'Art Direction',
+          aspectRatio: 1,
+        },
+      ],
+    },
+  ];

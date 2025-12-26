@@ -26,7 +26,10 @@ const GlassLens = ({
   const groupRef = useRef<THREE.Group>(null);
   const { ior, thickness, chromaticAberration, anisotropy } = lensProps;
 
-  const glowGeom = useMemo(() => new RoundedBoxGeometry(7.8, 1.7, 0.24, 12, 0.5), []);
+  const glowGeom = useMemo(
+    () => new RoundedBoxGeometry(7.8, 1.7, 0.24, 12, 0.5),
+    []
+  );
 
   useFrame((state) => {
     if (!groupRef.current) return;
@@ -114,7 +117,11 @@ const FluidGlass = ({ lensProps }: FluidGlassProps) => {
     >
       <color attach="background" args={['transparent']} />
       <ambientLight intensity={0.35} />
-      <directionalLight position={[0, 2.5, 3]} intensity={0.6} color="#ffffff" />
+      <directionalLight
+        position={[0, 2.5, 3]}
+        intensity={0.6}
+        color="#ffffff"
+      />
       <pointLight position={[0, 0, 2]} intensity={0.5} color="#4b7cff" />
 
       <GlassLens lensProps={lensProps} />

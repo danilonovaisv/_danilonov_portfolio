@@ -1,18 +1,19 @@
 # 🧩 Auditoria do Projeto Danilo Novais Portfolio
 
-Gerado em: 12/25/2025, 11:58:14 AM
+Gerado em: 12/26/2025, 1:12:24 AM
 
 ---
 
 ## 📦 Dependências não utilizadas
+
 - @dataconnect/admin-generated
 - @dataconnect/generated
 - firebase-admin
 - maath
 - postprocessing
 
-
 ## 🧱 Dependências de desenvolvimento não utilizadas
+
 - @tailwindcss/postcss
 - @tailwindcss/typography
 - @types/jest
@@ -22,12 +23,10 @@ Gerado em: 12/25/2025, 11:58:14 AM
 - rimraf
 - tailwindcss
 
-
 ## 🌿 Branches no repositório
-- * main
+
+- - main
 - remotes/origin/HEAD -> origin/main
 - remotes/origin/main
 
-
 ## 🪓 Branches potencialmente obsoletas
-

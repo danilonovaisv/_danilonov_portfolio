@@ -5,25 +5,21 @@ module.exports = {
     node: true,
   },
   extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "prettier"
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'prettier',
   ],
-  parser: "@typescript-eslint/parser",
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ["tsconfig.json"],
-    sourceType: "module",
+    project: ['tsconfig.json'],
+    sourceType: 'module',
   },
-  plugins: [
-    "@typescript-eslint",
-    "import",
-    "prettier"
-  ],
+  plugins: ['@typescript-eslint', 'import', 'prettier'],
   rules: {
-    "prettier/prettier": "error",
-    "import/no-unresolved": 0,
-    "@typescript-eslint/no-explicit-any": "warn"
-  }
+    'prettier/prettier': 'error',
+    'import/no-unresolved': 0,
+    '@typescript-eslint/no-explicit-any': 'warn',
+  },
 };

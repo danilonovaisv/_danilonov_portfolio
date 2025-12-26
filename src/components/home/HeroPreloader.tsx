@@ -41,7 +41,11 @@ export default function HeroPreloader({ isVisible }: HeroPreloaderProps) {
                 r="22"
                 fill="#0d0f29"
                 animate={{ opacity: [0.35, 0.8, 0.35] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 1.6,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               />
               <motion.circle
                 cx="297"
@@ -49,7 +53,12 @@ export default function HeroPreloader({ isVisible }: HeroPreloaderProps) {
                 r="22"
                 fill="#0d0f29"
                 animate={{ opacity: [0.35, 0.8, 0.35] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                transition={{
+                  duration: 1.6,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 0.2,
+                }}
               />
             </svg>
           </motion.div>
@@ -67,7 +76,11 @@ export default function HeroPreloader({ isVisible }: HeroPreloaderProps) {
               className="h-full bg-gradient-to-r from-[#0057FF] via-[#2c7bff] to-[#5227FF]"
               initial={{ width: '0%' }}
               animate={{ width: '100%' }}
-              transition={{ duration: 2.2, ease: 'easeInOut', repeat: Infinity }}
+              transition={{
+                duration: 2.2,
+                ease: 'easeInOut',
+                repeat: Infinity,
+              }}
             />
           </div>
         </motion.div>

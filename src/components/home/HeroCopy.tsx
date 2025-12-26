@@ -8,8 +8,7 @@ export default function HeroCopy() {
       </div>
       <h1 className="text-[#d9dade] font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
         Design, não
-        <br />
-        é só estética.
+        <br />é só estética.
       </h1>
       <div className="text-[#d9dade] text-base md:text-lg mb-8">
         [É intenção, é estratégia, é experiência.]
