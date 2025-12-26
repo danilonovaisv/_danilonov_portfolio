@@ -134,3 +134,22 @@ export const PORTFOLIO_MOSAIC_DATA: import('@/components/portfolio/types').Mosai
       ],
     },
   ];
+
+export const ABOUT_CONTENT = {
+  hero: {
+    title: 'More than pixels, logic_.',
+    subtitle: 'Danilo Novais — Creative Developer',
+    description:
+      'Combinando excelência técnica com visão artística para criar experiências digitais que se parecem vivas.',
+  },
+  bio: [
+    'Sou um Creative Developer brasileiro, obcecado pela intersecção entre Design e Tecnologia.',
+    'Com background em ambas as áreas, eu crio a ponte entre o design estático e a realidade interativa, usando código como minha ferramenta primária de expressão.',
+    'Acredito que a web não deve ser apenas funcional, mas memorável. Cada scroll, click e transição é uma oportunidade de contar uma história.',
+  ],
+  stats: [
+    { label: 'Anos Exp.', value: '5+' },
+    { label: 'Projetos', value: '40+' },
+    { label: 'Prêmios', value: '12' },
+  ],
+};

@@ -151,6 +151,7 @@ export default function GhostCanvas() {
 
   return (
     <Canvas
+      frameloop={reducedMotion ? 'never' : 'always'}
       camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={dpr}
       gl={{

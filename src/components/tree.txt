@@ -1,0 +1,58 @@
+.
+├── Header.tsx
+├── Hero.tsx
+├── Portfolio.tsx
+├── Section.tsx
+├── header
+│   ├── DesktopFluidHeader.tsx
+│   ├── MobileStaggeredMenu.tsx
+│   ├── SiteHeader.tsx
+│   └── webgl
+│       └── FluidGlass.tsx
+├── home
+│   ├── CategoryStripe.tsx
+│   ├── Clients.tsx
+│   ├── Contact.tsx
+│   ├── FeaturedProjects.tsx
+│   ├── GhostStage.tsx
+│   ├── HeroCopy.tsx
+│   ├── HeroPreloader.tsx
+│   ├── HomeHero.tsx
+│   ├── ManifestoThumb.tsx
+│   ├── PortfolioShowcase.tsx
+│   ├── ProjectCard.tsx
+│   ├── contact
+│   │   ├── ContactDetails.tsx
+│   │   ├── ContactForm.tsx
+│   │   └── FormFields.tsx
+│   ├── portfolio-showcase
+│   │   └── category-stripe
+│   │       ├── CategoryArrow.tsx
+│   │       ├── CategoryExpanded.tsx
+│   │       ├── CategoryText.tsx
+│   │       └── CategoryThumbnail.tsx
+│   └── webgl
+│       ├── AtmosphereVeil.tsx
+│       ├── Eyes.tsx
+│       ├── Fireflies.tsx
+│       ├── Ghost.tsx
+│       ├── GhostCanvas.tsx
+│       ├── Particles.tsx
+│       └── postprocessing
+│           └── AnalogDecayPass.tsx
+├── layout
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   └── SmoothScroll.tsx
+├── portfolio
+│   ├── MosaicCard.tsx
+│   ├── PortfolioHero.tsx
+│   ├── PortfolioHeroGallery.module.css
+│   ├── PortfolioMosaicGrid.tsx
+│   └── types.ts
+├── tree.txt
+└── ui
+    ├── Button.tsx
+    └── GlassSurface.tsx
+
+12 directories, 44 files

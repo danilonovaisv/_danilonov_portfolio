@@ -47,7 +47,9 @@ const Clients: React.FC = () => {
                 fill
                 className="object-contain brightness-0 invert"
                 sizes="(max-width: 768px) 33vw, 16vw"
+                aria-label={`Logo da ${name}`}
               />
+              <span className="sr-only">{name}</span>
             </motion.div>
           ))}
         </div>

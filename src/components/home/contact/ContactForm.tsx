@@ -127,7 +127,18 @@ const ContactForm: React.FC = () => {
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          action="https://formsubmit.co/danilo@portfoliodanilo.com"
+          method="POST"
+          className="space-y-6"
+        >
+          <noscript>
+            <p className="p-4 mb-4 text-sm text-amber-800 bg-amber-50 rounded-lg">
+              JavaScript está desativado. O formulário será enviado via
+              redirecionamento padrão.
+            </p>
+          </noscript>
           <input
             type="text"
             name="_honey"
