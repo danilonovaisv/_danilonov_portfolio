@@ -64,14 +64,14 @@ const FeaturedProjects: React.FC = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="md:col-span-5 h-[280px] md:h-[340px] group relative flex flex-col justify-end p-8 md:p-10 rounded-3xl bg-[#E8E9EB] hover:bg-[#DCDEE2] transition-colors duration-500"
+            className="md:col-span-5 h-[280px] md:h-[340px] group relative flex flex-col justify-center items-center p-8 md:p-10 rounded-3xl bg-[#F4F5F7] hover:bg-[#ECEDF0] transition-colors duration-500"
           >
             {/* Background Pattern (opcional) */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden rounded-3xl">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,#0057FF_0%,transparent_50%)]" />
             </div>
 
-            <div className="relative z-10 flex flex-col gap-6">
+            <div className="relative z-10 flex flex-col gap-6 items-center text-center">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-sans tracking-tight text-[#111111] leading-[0.95]">
                 Like what
                 <br />

@@ -6,6 +6,9 @@ tsconfig.tsbuildinfo
 .next/
 out/
 
+# Firebase
+.firebase/
+
 # System files
 .DS_Store
 

@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { BRAND } from '@/config/brand';
 
-const desktopEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
 export default function ManifestoThumb() {
   const reducedMotion = usePrefersReducedMotion();
+  const [isVisible, setIsVisible] = useState(false);
+  const thumbRef = useRef<HTMLDivElement>(null);
 
   // Detecta o tamanho da viewport
   const [viewportWidth, setViewportWidth] = useState(() =>
@@ -23,25 +23,56 @@ export default function ManifestoThumb() {
   }, []);
 
   const isMobile = viewportWidth !== undefined ? viewportWidth < 1024 : false;
+
+  // IntersectionObserver para trigger da animação de entrada
+  useEffect(() => {
+    if (reducedMotion || !thumbRef.current) {
+      setIsVisible(true); // Exibir imediatamente se reducedMotion está ativo
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Animar apenas uma vez
+        }
+      },
+      {
+        threshold: 0.1, // Trigger quando 10% do elemento estiver visível
+      }
+    );
+
+    observer.observe(thumbRef.current);
+
+    return () => observer.disconnect();
+  }, [reducedMotion]);
+
   const enableDesktopMotion = !reducedMotion && !isMobile;
   const enableMobileFade = !reducedMotion && isMobile;
 
-  // Define as animações específicas
+  // Define as animações específicas conforme referência loandbehold.studio
+  // ease-in-out = cubic-bezier(0.42, 0, 0.58, 1)
+  const easeInOut: [number, number, number, number] = [0.42, 0, 0.58, 1];
+
   const motionProps = enableDesktopMotion
     ? {
-        initial: { opacity: 0, scale: 0.9, y: 20 },
-        animate: { opacity: 1, scale: 1, y: 0 },
+        initial: { opacity: 0, scale: 0.9 },
+        animate: isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 },
         transition: {
-          duration: 0.85,
-          ease: desktopEase,
+          duration: 0.5,
+          ease: easeInOut,
         },
-        whileHover: { scale: 1.05 },
+        whileHover: { 
+          scale: 1.05,
+          transition: { duration: 0.5, ease: easeInOut }
+        },
       }
     : enableMobileFade
       ? {
           initial: { opacity: 0 },
-          animate: { opacity: 1 },
-          transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+          animate: isVisible ? { opacity: 1 } : { opacity: 0 },
+          transition: { duration: 0.5, ease: easeInOut },
         }
       : { initial: false };
 
@@ -56,6 +87,7 @@ export default function ManifestoThumb() {
     return (
       <motion.div
         key={motionKey}
+        ref={thumbRef}
         {...motionProps}
         className="relative w-full h-[70vh] bg-black overflow-hidden"
       >
@@ -77,10 +109,11 @@ export default function ManifestoThumb() {
   return (
     <motion.div
       key={motionKey}
+      ref={thumbRef}
       {...motionProps}
       className="
         group fixed bottom-8 right-8 z-20
-        aspect-9/14 w-[260px]
+        aspect-video w-[360px]
         overflow-hidden
         rounded-xl
         shadow-[0_30px_90px_rgba(0,0,0,0.45)]
@@ -97,7 +130,7 @@ export default function ManifestoThumb() {
         preload="metadata"
         className="
           h-full w-full object-cover
-          transition-transform duration-700 ease-out-expo
+          transition-transform duration-500 ease-in-out
           group-hover:scale-105
         "
         aria-label="Manifesto thumbnail"

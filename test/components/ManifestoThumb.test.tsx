@@ -113,11 +113,12 @@ describe('ManifestoThumb Component', () => {
       expect(thumbContainer).not.toHaveClass('h-[70vh]');
     });
 
-    it('deve ter dimensões corretas para o vídeo (260px width)', () => {
+    it('deve ter dimensões corretas para o vídeo (360px width, 16:9 aspect)', () => {
       const { container } = render(<ManifestoThumb />);
 
       const thumbContainer = container.firstChild as HTMLElement;
-      expect(thumbContainer).toHaveClass('w-[260px]');
+      expect(thumbContainer).toHaveClass('w-[360px]');
+      expect(thumbContainer).toHaveClass('aspect-video'); // 16:9
     });
 
     it('deve aplicar hover scale no grupo', () => {
