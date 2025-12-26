@@ -10,12 +10,12 @@ type NavItem = { label: string; href: string };
 function MenuIcon({ open }: { open: boolean }) {
     return (
         <div className="relative h-5 w-6">
-      <span
-          className={[
-              'absolute left-0 top-0 h-[2px] w-6 bg-white/90 transition-transform duration-300',
-              open ? 'translate-y-[9px] rotate-45' : '',
-          ].join(' ')}
-      />
+            <span
+                className={[
+                    'absolute left-0 top-0 h-[2px] w-6 bg-white/90 transition-transform duration-300',
+                    open ? 'translate-y-[9px] rotate-45' : '',
+                ].join(' ')}
+            />
             <span
                 className={[
                     'absolute left-0 top-[9px] h-[2px] w-6 bg-white/90 transition-opacity duration-300',
@@ -54,7 +54,7 @@ export default function MobileStaggeredMenu() {
 
     return (
         <>
-            <header className="fixed left-1/2 top-4 z-[80] w-[min(720px,calc(100vw-1.5rem))] -translate-x-1/2 md:hidden">
+            <header className="fixed left-1/2 top-4 z-80 w-[min(720px,calc(100vw-1.5rem))] -translate-x-1/2 md:hidden">
                 <div ref={wrapRef} className="relative h-14 overflow-hidden rounded-[24px]">
                     {/* WEBGL GLASS - Agora apenas 'bar' */}
                     <FluidGlass
@@ -82,7 +82,7 @@ export default function MobileStaggeredMenu() {
                     />
 
                     <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/10" />
-                    <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
+                    <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-linear-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
 
                     <div className="relative z-10 flex h-full items-center justify-between px-5">
                         <Link href="/" className="text-[18px] font-semibold tracking-tight text-white/90">
@@ -105,7 +105,7 @@ export default function MobileStaggeredMenu() {
             <AnimatePresence>
                 {open ? (
                     <motion.div
-                        className="fixed inset-0 z-[75] md:hidden"
+                        className="fixed inset-0 z-75 md:hidden"
                         initial={reduceMotion ? false : { opacity: 0 }}
                         animate={reduceMotion ? undefined : { opacity: 1 }}
                         exit={reduceMotion ? undefined : { opacity: 0 }}

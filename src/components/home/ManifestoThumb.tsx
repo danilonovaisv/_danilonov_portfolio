@@ -6,7 +6,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { BRAND } from '@/config/brand';
 
 interface ManifestoThumbProps {
-    heroRef?: RefObject<HTMLElement> | undefined;
+    heroRef?: RefObject<HTMLElement | null> | undefined;
 }
 
 export default function ManifestoThumb({ heroRef }: ManifestoThumbProps) {

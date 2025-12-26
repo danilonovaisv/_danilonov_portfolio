@@ -4,17 +4,13 @@ import React, { memo, ReactNode, Suspense, useMemo, useRef, useState } from 'rea
 import {
     Canvas,
     createPortal,
-    extend,
     ThreeElements,
     useFrame,
     useThree,
 } from '@react-three/fiber';
 import { MeshTransmissionMaterial, RoundedBox, useFBO } from '@react-three/drei';
 import { easing } from 'maath';
-import { RoundedBox as DreiRoundedBox } from '@react-three/drei'; // Importar o componente original
 
-// Extender o THREE para o R3F reconhecer RoundedBox
-extend({ RoundedBox: DreiRoundedBox });
 
 type Mode = 'bar'; // Apenas 'bar' é suportado agora
 type ModeProps = Record<string, unknown>;
@@ -42,12 +38,12 @@ export interface FluidGlassProps {
 }
 
 export default function FluidGlass({
-                                       mode = 'bar',
-                                       barProps = {},
-                                       eventSource = null,
-                                       followPointer = true,
-                                       className,
-                                   }: FluidGlassProps) {
+    mode = 'bar',
+    barProps = {},
+    eventSource = null,
+    followPointer = true,
+    className,
+}: FluidGlassProps) {
     // Garantir que mode seja apenas 'bar'
     if (mode !== 'bar') {
         console.warn(`Modo '${mode}' não suportado. Usando 'bar'.`);
@@ -116,11 +112,11 @@ interface PortalWrapperProps {
 }
 
 const PortalWrapper = memo(function PortalWrapper({
-                                                      children, // Os elementos HTML (links, logotipo)
-                                                      followPointer = true,
-                                                      modeProps = {},
-                                                      renderGlass,
-                                                  }: PortalWrapperProps) {
+    children, // Os elementos HTML (links, logotipo)
+    followPointer = true,
+    modeProps = {},
+    renderGlass,
+}: PortalWrapperProps) {
     const ref = useRef<THREE.Mesh>(null!);
     const buffer = useFBO({ stencilBuffer: false, depthBuffer: true });
     const { viewport } = useThree();
@@ -221,10 +217,10 @@ function PortalBackground() {
 }
 
 function Bar({
-                 modeProps = {},
-                 followPointer = true,
-                 ...p
-             }: { modeProps?: ModeProps; followPointer?: boolean } & MeshProps) { // Usando MeshProps corretamente
+    modeProps = {},
+    followPointer = true,
+    ...p
+}: { modeProps?: ModeProps; followPointer?: boolean } & MeshProps) { // Usando MeshProps corretamente
     const tuning = modeProps as TransmissionTuning;
 
     return (

@@ -57,7 +57,7 @@ export default function DesktopFluidHeader() {
 
     return (
         <motion.header
-            className="fixed left-1/2 top-5 z-[70] w-[min(1120px,calc(100vw-2rem))] -translate-x-1/2"
+            className="fixed left-1/2 top-5 z-70 w-[min(1120px,calc(100vw-2rem))] -translate-x-1/2"
             initial={reduceMotion ? false : { opacity: 0, y: -14 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
@@ -93,8 +93,8 @@ export default function DesktopFluidHeader() {
                 {/* “casing”/glow (igual referência) */}
                 <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/10" />
                 <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-sky-400/15 shadow-[0_16px_80px_rgba(56,189,248,0.18)]" />
-                <div className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
-                <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/40 to-transparent opacity-60" />
+                <div className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-linear-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
+                <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-linear-to-r from-transparent via-fuchsia-400/40 to-transparent opacity-60" />
 
                 {/* CONTENT */}
                 <div className="relative z-10 flex h-full items-center justify-between px-6">
