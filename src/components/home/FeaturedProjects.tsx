@@ -82,7 +82,7 @@ const FeaturedProjects: React.FC = () => {
             className="group relative flex flex-col justify-center items-start text-left p-10 md:p-12 rounded-3xl bg-gray-100 hover:bg-gray-50 border border-transparent hover:border-blue-100 transition-colors duration-500 md:col-span-1 h-full min-h-[300px]"
           >
             {/* Background Glow Sutil */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+            <div className="absolute inset-0 bg-linear-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
             
             <div className="relative z-10 flex flex-col items-start gap-6 w-full h-full justify-between">
               <div /> {/* Spacer top */}

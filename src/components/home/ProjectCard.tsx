@@ -37,7 +37,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, index, className = '' }) =
             </span>
           </div>
 
-          <div className="relative w-full aspect-[4/3] md:aspect-auto h-full"> 
+          <div className="relative w-full aspect-4/3 md:aspect-auto h-full"> 
             {/* Aspect ratio será controlado pelo container pai ou classes utilitárias na imagem se necessário, 
                 mas para garantir flexibilidade vamos deixar o aspect-ratio ser definido pelas classes passadas ou o padrão */}
              <div className="w-full h-full relative">

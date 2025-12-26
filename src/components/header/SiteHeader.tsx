@@ -5,7 +5,10 @@ import MobileStaggeredMenu from '@/components/header/MobileStaggeredMenu';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const SiteHeader = () => {
+  // Desktop ≥ 1024px => Fluid Glass
+  // Tablet/Mobile ≤ 1023px => Staggered Menu
   const isDesktop = useMediaQuery('(min-width: 1024px)');
+
   return isDesktop ? <DesktopFluidHeader /> : <MobileStaggeredMenu />;
 };
 

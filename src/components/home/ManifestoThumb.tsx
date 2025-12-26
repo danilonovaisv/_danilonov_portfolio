@@ -55,15 +55,24 @@ export default function ManifestoThumb() {
   const motionKey =
     isMobile === null ? 'manifesto-thumb-pending' : isMobile ? 'manifesto-thumb-mobile' : 'manifesto-thumb-desktop';
 
+  const handleScrollToManifesto = () => {
+    const manifestoSection = document.getElementById('manifesto');
+    if (manifestoSection) {
+      manifestoSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <motion.div
       key={motionKey}
       {...motionProps}
+      onClick={handleScrollToManifesto}
       className="
         relative w-full aspect-video
         overflow-hidden
         shadow-[0_30px_90px_rgba(0,0,0,0.45)]
         bg-black
+        cursor-pointer
       "
     >
       <video
@@ -78,7 +87,7 @@ export default function ManifestoThumb() {
       />
 
       {/* Overlay de profundidade */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/55 via-black/10 to-transparent" />
     </motion.div>
   );
 }
