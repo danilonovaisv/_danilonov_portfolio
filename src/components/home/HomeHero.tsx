@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import ManifestoThumb from './ManifestoThumb';
@@ -9,6 +9,7 @@ import GhostStage from './GhostStage';
 import HeroPreloader from './HeroPreloader';
 
 export default function HomeHero() {
+  const heroRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
   const [showPreloader, setShowPreloader] = useState(!reducedMotion);
@@ -33,42 +34,46 @@ export default function HomeHero() {
     <>
       <section
         id="hero"
-        className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#06071f]"
+        ref={heroRef}
+        className={`relative w-full bg-[#06071f] ${isMobile ? 'min-h-screen flex items-center justify-center' : 'h-[250vh]'}`}
       >
-        {/* Canvas atrás de tudo */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <GhostStage enabled={!reducedMotion} />
-        </div>
+        {/* Sticky Utility for Scrollytelling on Desktop */}
+        <div className={isMobile ? 'contents' : 'sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center'}>
+          {/* Canvas atrás de tudo */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <GhostStage enabled={!reducedMotion} />
+          </div>
 
-        {/* Overlays entre canvas e texto */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
-          <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_25%_50%,rgba(0,87,255,0.08)_0%,transparent_55%)]"
-            aria-hidden
-          />
-          <div
-            className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/35"
-            aria-hidden
-          />
-        </div>
+          {/* Overlays entre canvas e texto */}
+          <div className="absolute inset-0 z-10 pointer-events-none">
+            <div
+              className="absolute inset-0 bg-[radial-gradient(circle_at_25%_50%,rgba(0,87,255,0.08)_0%,transparent_55%)]"
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/35"
+              aria-hidden
+            />
+          </div>
 
-        {/* Texto SEMPRE acima */}
-        <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-12 pb-16 text-center md:px-10 md:pt-16 xl:px-12">
-          <HeroCopy />
+          {/* Texto SEMPRE acima */}
+          <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-12 pb-16 text-center md:px-10 md:pt-16 xl:px-12">
+            <HeroCopy />
+          </div>
         </div>
 
         {!isMobile && (
-          <div className="absolute bottom-10 right-6 z-30 w-[220px] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)] md:right-12 md:w-[260px]">
+          <div className="absolute bottom-10 right-6 z-30 w-[220px] md:right-12 md:w-[260px]">
             <div className="pointer-events-none absolute -top-8 right-0 flex items-center gap-2 text-sm text-white/80">
               <ArrowUpRight className="h-5 w-5" />
             </div>
-            <ManifestoThumb />
+            <ManifestoThumb heroRef={heroRef} />
           </div>
         )}
       </section>
 
       {isMobile && (
-        <section className="relative flex w-full flex-col items-center justify-center bg-black p-6">
+        <section className="relative flex w-full flex-col items-center justify-center bg-[#050505] p-0">
           <ManifestoThumb />
         </section>
       )}
