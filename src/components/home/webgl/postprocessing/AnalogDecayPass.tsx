@@ -73,12 +73,9 @@ extend({ AnalogDecayShader, ShaderPass });
 
 // Define types for JSX
 /* eslint-disable no-unused-vars */
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      analogDecayShader: any;
-      shaderPass: any;
-    }
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    analogDecayShader: any
   }
 }
 /* eslint-enable no-unused-vars */

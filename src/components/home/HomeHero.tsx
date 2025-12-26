@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import ManifestoThumb from './ManifestoThumb';
-import HeroCopy from './HeroCopy';
+import HeroCopy from '@/components/home/HeroCopy';
 import GhostStage from './GhostStage';
 import HeroPreloader from './HeroPreloader';
 
@@ -43,17 +43,17 @@ export default function HomeHero() {
         {/* Overlays entre canvas e texto */}
         <div className="absolute inset-0 z-10 pointer-events-none">
           <div
-            className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(0,87,255,0.18)_0%,transparent_60%)]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_25%_50%,rgba(0,87,255,0.08)_0%,transparent_55%)]"
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/15 to-black/40"
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/35"
             aria-hidden
           />
         </div>
 
         {/* Texto SEMPRE acima */}
-        <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-24 pb-16 text-center md:px-10 md:pt-28 xl:px-12">
+        <div className="relative z-20 flex w-full max-w-6xl flex-col items-center px-6 pt-12 pb-16 text-center md:px-10 md:pt-16 xl:px-12">
           <HeroCopy />
         </div>
 
