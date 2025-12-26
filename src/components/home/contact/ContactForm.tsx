@@ -129,7 +129,7 @@ const ContactForm: React.FC = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          action="https://formsubmit.co/danilo@portfoliodanilo.com"
+          action={CONTACT_FORM.action}
           method="POST"
           className="space-y-6"
         >

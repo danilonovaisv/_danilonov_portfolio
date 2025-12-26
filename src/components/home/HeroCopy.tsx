@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { HOME_CONTENT } from '@/config/content';
 
 export default function HeroCopy() {
   const reducedMotion = usePrefersReducedMotion();
@@ -22,7 +23,7 @@ export default function HeroCopy() {
       <div className="relative mb-4">
         {/* Base */}
         <div className="select-none text-xs font-medium tracking-[0.28em] text-white/25">
-          [BRAND AWARENESS]
+          {HOME_CONTENT.hero.tag}
         </div>
 
         {/* Highlight */}
@@ -31,7 +32,7 @@ export default function HeroCopy() {
           className="pointer-events-none absolute inset-0 select-none text-xs font-medium tracking-[0.28em] text-white/70 drop-shadow-[0_0_12px_rgba(120,180,255,0.4)]"
           style={maskStyle}
         >
-          [BRAND AWARENESS]
+          {HOME_CONTENT.hero.tag}
         </div>
       </div>
 
@@ -40,8 +41,8 @@ export default function HeroCopy() {
         {/* Base */}
         <h1 className="select-none text-balance font-semibold leading-[0.92] tracking-[-0.03em] text-white/20 text-[clamp(2.5rem,6vw,4.6rem)]">
           <strong>
-            Design, não é<br />
-            só estética.
+            {HOME_CONTENT.hero.title[0]}<br />
+            {HOME_CONTENT.hero.title[1]}
           </strong>
         </h1>
 
@@ -52,8 +53,8 @@ export default function HeroCopy() {
           style={maskStyle}
         >
           <strong>
-            Design, não é<br />
-            só estética.
+            {HOME_CONTENT.hero.title[0]}<br />
+            {HOME_CONTENT.hero.title[1]}
           </strong>
         </h1>
       </div>
@@ -62,7 +63,7 @@ export default function HeroCopy() {
       <div className="relative mx-auto mt-6 max-w-[58ch]">
         {/* Base */}
         <p className="select-none text-pretty text-sm leading-relaxed text-white/25 md:text-base">
-          [É intenção, é estratégia, é experiência.]
+          {HOME_CONTENT.hero.subtitle}
         </p>
 
         {/* Highlight */}
@@ -71,7 +72,7 @@ export default function HeroCopy() {
           className="pointer-events-none absolute inset-0 select-none text-pretty text-sm leading-relaxed text-white/65 md:text-base drop-shadow-[0_0_14px_rgba(120,180,255,0.35)]"
           style={maskStyle}
         >
-          [É intenção, é estratégia, é experiência.]
+          {HOME_CONTENT.hero.subtitle}
         </p>
       </div>
 
@@ -90,7 +91,7 @@ export default function HeroCopy() {
             focus-visible:ring-offset-black
           "
         >
-          get to know me better
+          {HOME_CONTENT.hero.cta}
           <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10">
             <ArrowUpRight className="h-5 w-5" />
           </span>
