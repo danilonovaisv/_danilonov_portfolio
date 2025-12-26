@@ -24,32 +24,34 @@ export default function ManifestoThumb() {
     ? {
         initial: {
           scale: 0.25,
-          x: '35%',
-          y: '30%',
-          borderRadius: 16,
+          x: '20%', // Reduzido para evitar corte excessivo
+          y: '20%',
+          opacity: 0, // Garante que não apareça "travado" antes de animar
+          borderRadius: 24,
         },
-        whileInView: {
+        animate: { // Mudado de whileInView para animate
           scale: 1,
           x: '0%',
           y: '0%',
+          opacity: 1,
           borderRadius: 0,
         },
-        viewport: { once: true, amount: 0.4 },
         transition: {
-          duration: 0.85,
-          ease: [0.22, 1, 0.36, 1],
+          duration: 1.2, // Mais lento e etéreo conforme Lo & Behold
+          ease: [0.16, 1, 0.3, 1], // Ajuste fino da curva
+          delay: 0.2, // Pequeno delay para permitir renderização inicial
         },
       }
     : enableMobileFade
       ? {
-          initial: { opacity: 0.75 },
+          initial: { opacity: 0 },
           whileInView: { opacity: 1 },
-          viewport: { once: true, amount: 0.25 },
-          transition: { duration: 0.35, ease: 'easeOut' },
+          viewport: { once: true, margin: "-10%" }, // Margem para garantir trigger no mobile
+          transition: { duration: 0.6, ease: 'easeOut' },
         }
       : {
-          initial: false,
-          viewport: { once: true },
+          initial: false, // Reduced motion
+          animate: { opacity: 1 },
         };
 
   const motionKey =

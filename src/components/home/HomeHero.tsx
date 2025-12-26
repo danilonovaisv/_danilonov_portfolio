@@ -25,7 +25,7 @@ export default function HomeHero() {
       setShowPreloader(false);
       return;
     }
-    const timer = window.setTimeout(() => setShowPreloader(false), 1800);
+    const timer = window.setTimeout(() => setShowPreloader(false), 1500);
     return () => window.clearTimeout(timer);
   }, [reducedMotion]);
 
@@ -47,7 +47,7 @@ export default function HomeHero() {
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/35"
+            className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-black/35"
             aria-hidden
           />
         </div>
