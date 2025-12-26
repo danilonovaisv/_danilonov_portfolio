@@ -1,320 +1,265 @@
-/* eslint-disable react/no-unknown-property */
+// src/components/header/webgl/FluidGlass.tsx
 import * as THREE from 'three';
-import { useRef, useState, useEffect, memo, ReactNode } from 'react';
-import { Canvas, createPortal, useFrame, useThree, ThreeElements } from '@react-three/fiber';
+import React, { memo, ReactNode, Suspense, useMemo, useRef, useState } from 'react';
 import {
-  useFBO,
-  useGLTF,
-  useScroll,
-  Image,
-  Scroll,
-  Preload,
-  ScrollControls,
-  MeshTransmissionMaterial,
-  Text
-} from '@react-three/drei';
+    Canvas,
+    createPortal,
+    ThreeElements,
+    useFrame,
+    useThree,
+} from '@react-three/fiber';
+import { MeshTransmissionMaterial, RoundedBox, useFBO } from '@react-three/drei';
 import { easing } from 'maath';
 
-type Mode = 'lens' | 'bar' | 'cube';
-
-interface NavItem {
-  label: string;
-  link: string;
-}
-
+type Mode = 'bar'; // Apenas 'bar' é suportado agora
 type ModeProps = Record<string, unknown>;
 
-interface FluidGlassProps {
-  mode?: Mode;
-  lensProps?: ModeProps;
-  barProps?: ModeProps;
-  cubeProps?: ModeProps;
+export interface FluidGlassProps {
+    mode?: Mode; // Apenas 'bar'
+    barProps?: ModeProps;
+
+    /**
+     * Quando informado, o Canvas do R3F escuta os eventos do elemento pai (ex: wrapper do header),
+     * permitindo que o glass responda ao cursor mesmo com o HTML por cima.
+     */
+    eventSource?: HTMLElement | null;
+
+    /**
+     * Controla se o glass deve “seguir” o cursor. Útil para prefers-reduced-motion.
+     */
+    followPointer?: boolean;
+
+    /**
+     * className aplicado diretamente no <canvas>.
+     * Dica: use `pointer-events-none` quando estiver usando `eventSource`.
+     */
+    className?: string;
 }
 
-export default function FluidGlass({ mode = 'lens', lensProps = {}, barProps = {}, cubeProps = {} }: FluidGlassProps) {
-  const Wrapper = mode === 'bar' ? Bar : mode === 'cube' ? Cube : Lens;
-  const rawOverrides = mode === 'bar' ? barProps : mode === 'cube' ? cubeProps : lensProps;
+export default function FluidGlass({
+    mode = 'bar',
+    barProps = {},
+    eventSource = null,
+    followPointer = true,
+    className,
+}: FluidGlassProps) {
+    // Garantir que mode seja apenas 'bar'
+    if (mode !== 'bar') {
+        console.warn(`Modo '${mode}' não suportado. Usando 'bar'.`);
+    }
 
-  const {
-    navItems = [
-      { label: 'Home', link: '' },
-      { label: 'About', link: '' },
-      { label: 'Contact', link: '' }
-    ],
-    ...modeProps
-  } = rawOverrides;
-
-  return (
-    <Canvas camera={{ position: [0, 0, 20], fov: 15 }} gl={{ alpha: true }}>
-      <ScrollControls damping={0.2} pages={3} distance={0.4}>
-        {mode === 'bar' && <NavItems items={navItems as NavItem[]} />}
-        <Wrapper modeProps={modeProps}>
-          <Scroll>
-            <Typography />
-            <Images />
-          </Scroll>
-          <Scroll html />
-          <Preload />
-        </Wrapper>
-      </ScrollControls>
-    </Canvas>
-  );
+    return (
+        <Canvas
+            className={className}
+            camera={{ position: [0, 0, 20], fov: 15 }}
+            gl={{
+                alpha: true,
+                antialias: true,
+                powerPreference: 'high-performance',
+            }}
+            dpr={[1, 1.6]}
+            {...(eventSource ? { eventSource } : {})}
+            onCreated={({ gl }) => {
+                gl.setClearColor(0x000000, 0);
+            }}
+        >
+            <Suspense fallback={null}>
+                <Bar modeProps={barProps} followPointer={followPointer} />
+            </Suspense>
+        </Canvas>
+    );
 }
 
 type MeshProps = ThreeElements['mesh'];
 
-interface ModeWrapperProps extends MeshProps {
-  children?: ReactNode;
-  glb: string;
-  geometryKey: string;
-  lockToBottom?: boolean;
-  followPointer?: boolean;
-  modeProps?: ModeProps;
-}
-
-interface ZoomMaterial extends THREE.Material {
-  zoom: number;
-}
-
-interface ZoomMesh extends THREE.Mesh<THREE.BufferGeometry, ZoomMaterial> {}
-
-type ZoomGroup = THREE.Group & { children: ZoomMesh[] };
-
-const ModeWrapper = memo(function ModeWrapper({
-  children,
-  glb,
-  geometryKey,
-  lockToBottom = false,
-  followPointer = true,
-  modeProps = {},
-  ...props
-}: ModeWrapperProps) {
-  const ref = useRef<THREE.Mesh>(null!);
-  const { nodes } = useGLTF(glb);
-  const buffer = useFBO();
-  const { viewport: vp } = useThree();
-  const [scene] = useState<THREE.Scene>(() => new THREE.Scene());
-  const geoWidthRef = useRef<number>(1);
-
-  useEffect(() => {
-    const geo = (nodes[geometryKey] as THREE.Mesh)?.geometry;
-    geo.computeBoundingBox();
-    geoWidthRef.current = geo.boundingBox!.max.x - geo.boundingBox!.min.x || 1;
-  }, [nodes, geometryKey]);
-
-  useFrame((state, delta) => {
-    const { gl, viewport, pointer, camera } = state;
-    const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
-
-    const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
-    const destY = lockToBottom ? -v.height / 2 + 0.2 : followPointer ? (pointer.y * v.height) / 2 : 0;
-    easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
-
-    if ((modeProps as { scale?: number }).scale == null) {
-      const maxWorld = v.width * 0.9;
-      const desired = maxWorld / geoWidthRef.current;
-      ref.current.scale.setScalar(Math.min(0.15, desired));
-    }
-
-    gl.setRenderTarget(buffer);
-    gl.render(scene, camera);
-    gl.setRenderTarget(null);
-    gl.setClearColor(0x5227ff, 1);
-  });
-
-  const { scale, ior, thickness, anisotropy, chromaticAberration, ...extraMat } = modeProps as {
-    scale?: number;
+type TransmissionTuning = {
     ior?: number;
     thickness?: number;
-    anisotropy?: number;
     chromaticAberration?: number;
-    [key: string]: unknown;
-  };
+    anisotropy?: number;
 
-  return (
-    <>
-      {createPortal(children, scene)}
-      <mesh scale={[vp.width, vp.height, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial map={buffer.texture} transparent />
-      </mesh>
-      <mesh
-        ref={ref}
-        scale={scale ?? 0.15}
-        rotation-x={Math.PI / 2}
-        geometry={(nodes[geometryKey] as THREE.Mesh)?.geometry}
-        {...props}
-      >
-        <MeshTransmissionMaterial
-          buffer={buffer.texture}
-          ior={ior ?? 1.15}
-          thickness={thickness ?? 5}
-          anisotropy={anisotropy ?? 0.01}
-          chromaticAberration={chromaticAberration ?? 0.1}
-          {...(typeof extraMat === 'object' && extraMat !== null ? extraMat : {})}
-        />
-      </mesh>
-    </>
-  );
+    // drei MeshTransmissionMaterial extras
+    samples?: number;
+    resolution?: number;
+
+    distortion?: number;
+    distortionScale?: number;
+    temporalDistortion?: number;
+
+    attenuationColor?: string;
+    attenuationDistance?: number;
+
+    // Movimentação
+    ampX?: number;
+    ampY?: number;
+    rotX?: number;
+    rotY?: number;
+
+    // BAR sizing
+    barWidth?: number; // 0..1 do viewport width
+    barHeight?: number; // 0..1 do viewport height
+};
+
+interface PortalWrapperProps {
+    children?: ReactNode;
+    followPointer?: boolean;
+    modeProps?: ModeProps;
+    renderGlass: (_ctx: {
+        ref: React.RefObject<THREE.Mesh>;
+        buffer: THREE.WebGLRenderTarget;
+    }) => ReactNode;
+}
+
+const PortalWrapper = memo(function PortalWrapper({
+    children,
+    followPointer = true,
+    modeProps = {},
+    renderGlass,
+}: PortalWrapperProps) {
+    const ref = useRef<THREE.Mesh>(null!);
+    const buffer = useFBO({ stencilBuffer: false, depthBuffer: true });
+    const { viewport } = useThree();
+    const [portalScene] = useState<THREE.Scene>(() => new THREE.Scene());
+
+    const tuning = modeProps as TransmissionTuning;
+
+    useFrame((state, delta) => {
+        const { gl, pointer, camera } = state;
+        const v = state.viewport.getCurrentViewport(camera, [0, 0, 15]);
+
+        const ampX = followPointer ? (tuning.ampX ?? 0.12) : 0;
+        const ampY = followPointer ? (tuning.ampY ?? 0.08) : 0;
+
+        const destX = (pointer.x * v.width * ampX) / 2;
+        const destY = (pointer.y * v.height * ampY) / 2;
+
+        easing.damp3(ref.current.position, [destX, destY, 15], 0.22, delta);
+
+        // Micro-tilt (deixa mais “premium” e próximo do Reactbits)
+        const rotX = followPointer ? (tuning.rotX ?? 0.06) : 0;
+        const rotY = followPointer ? (tuning.rotY ?? 0.08) : 0;
+        const targetRx = (-pointer.y * rotX * Math.PI) / 2;
+        const targetRy = (pointer.x * rotY * Math.PI) / 2;
+        easing.dampE(ref.current.rotation, [targetRx, targetRy, 0], 0.18, delta);
+
+        // Aplicar scale do bar
+        const bw = Math.max(0.1, Math.min(1, tuning.barWidth ?? 0.98));
+        const bh = Math.max(0.1, Math.min(1, tuning.barHeight ?? 0.88));
+        ref.current.scale.set(v.width * bw, v.height * bh, 0.9);
+
+        gl.setRenderTarget(buffer);
+        gl.setClearColor(0x000000, 0);
+        gl.clear(true, true, true);
+        gl.render(portalScene, camera);
+        gl.setRenderTarget(null);
+        gl.setClearColor(0x000000, 0);
+    });
+
+    return (
+        <>
+            {createPortal(children, portalScene)}
+            {/* Background do buffer (necessário para refração real) */}
+            <mesh scale={[viewport.width, viewport.height, 1]} position={[0, 0, 0]}>
+                <planeGeometry args={[1, 1]} />
+                <meshBasicMaterial map={buffer.texture} transparent />
+            </mesh>
+            {renderGlass({ ref, buffer })}
+        </>
+    );
 });
 
-function Lens({ modeProps, ...p }: { modeProps?: ModeProps } & MeshProps) {
-  return <ModeWrapper glb="/assets/3d/lens.glb" geometryKey="Cylinder" followPointer modeProps={modeProps} {...p} />;
+function PortalBackground() {
+    const stripes = useMemo(
+        () => [
+            { x: -0.45, y: 0.15, r: Math.PI / 10, s: [1.3, 0.12, 1] as [number, number, number], c: '#7dd3fc', o: 0.32 },
+            { x: 0.35, y: -0.05, r: -Math.PI / 12, s: [1.1, 0.1, 1] as [number, number, number], c: '#a78bfa', o: 0.26 },
+            { x: 0.0, y: -0.22, r: Math.PI / 20, s: [1.7, 0.08, 1] as [number, number, number], c: '#38bdf8', o: 0.22 },
+        ],
+        []
+    );
+
+    return (
+        <group>
+            <ambientLight intensity={0.85} />
+            <directionalLight position={[3, 5, 5]} intensity={0.7} />
+            <pointLight position={[-4, 2, 6]} intensity={0.9} color={'#7dd3fc'} />
+            <pointLight position={[4, -2, 6]} intensity={0.7} color={'#a78bfa'} />
+
+            {/* Base escura */}
+            <mesh position={[0, 0, -2]} scale={[50, 50, 1]}>
+                <planeGeometry args={[1, 1]} />
+                <meshBasicMaterial color="#05070f" />
+            </mesh>
+
+            {/* “Streaks” coloridos para dar leitura no vidro */}
+            {stripes.map((st, i) => (
+                <mesh
+                    key={i}
+                    position={[st.x, st.y, -1.5]}
+                    rotation={[0, 0, st.r]}
+                    scale={st.s}
+                >
+                    <planeGeometry args={[1, 1]} />
+                    <meshBasicMaterial
+                        color={st.c}
+                        transparent
+                        opacity={st.o}
+                        blending={THREE.AdditiveBlending}
+                    />
+                </mesh>
+            ))}
+        </group>
+    );
 }
 
-function Cube({ modeProps, ...p }: { modeProps?: ModeProps } & MeshProps) {
-  return <ModeWrapper glb="/assets/3d/cube.glb" geometryKey="Cube" followPointer modeProps={modeProps} {...p} />;
-}
+function Bar({
+    modeProps = {},
+    followPointer = true,
+    ...p
+}: { modeProps?: ModeProps; followPointer?: boolean } & MeshProps) { // Usando MeshProps corretamente
+    const tuning = modeProps as TransmissionTuning;
+    // Omit args from p to avoid conflict with RoundedBox args
+    // eslint-disable-next-line
+    const { args: _args, ...meshProps } = p;
 
-function Bar({ modeProps = {}, ...p }: { modeProps?: ModeProps } & MeshProps) {
-  const defaultMat = {
-    transmission: 1,
-    roughness: 0,
-    thickness: 10,
-    ior: 1.15,
-    color: '#ffffff',
-    attenuationColor: '#ffffff',
-    attenuationDistance: 0.25
-  };
-
-  return (
-    <ModeWrapper
-      glb="/assets/3d/bar.glb"
-      geometryKey="Cube"
-      lockToBottom
-      followPointer={false}
-      modeProps={{ ...defaultMat, ...modeProps }}
-      {...p}
-    />
-  );
-}
-
-function NavItems({ items }: { items: NavItem[] }) {
-  const group = useRef<THREE.Group>(null!);
-  const { viewport, camera } = useThree();
-
-  const DEVICE = {
-    mobile: { max: 639, spacing: 0.2, fontSize: 0.035 },
-    tablet: { max: 1023, spacing: 0.24, fontSize: 0.045 },
-    desktop: { max: Infinity, spacing: 0.3, fontSize: 0.045 }
-  };
-  const getDevice = () => {
-    const w = window.innerWidth;
-    return w <= DEVICE.mobile.max ? 'mobile' : w <= DEVICE.tablet.max ? 'tablet' : 'desktop';
-  };
-
-  const [device, setDevice] = useState<keyof typeof DEVICE>(getDevice());
-
-  useEffect(() => {
-    const onResize = () => setDevice(getDevice());
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const { spacing, fontSize } = DEVICE[device];
-
-  useFrame(() => {
-    if (!group.current) return;
-    const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
-    group.current.position.set(0, -v.height / 2 + 0.2, 15.1);
-
-    group.current.children.forEach((child, i) => {
-      child.position.x = (i - (items.length - 1) / 2) * spacing;
-    });
-  });
-
-  const handleNavigate = (link: string) => {
-    if (!link) return;
-    link.startsWith('#') ? (window.location.hash = link) : (window.location.href = link);
-  };
-
-  return (
-    <group ref={group} renderOrder={10}>
-      {items.map(({ label, link }) => (
-        <Text
-          key={label}
-          fontSize={fontSize}
-          color="white"
-          anchorX="center"
-          anchorY="middle"
-          outlineWidth={0}
-          outlineBlur="20%"
-          outlineColor="#000"
-          outlineOpacity={0.5}
-          renderOrder={10}
-          onClick={e => {
-            e.stopPropagation();
-            handleNavigate(link);
-          }}
-          onPointerOver={() => (document.body.style.cursor = 'pointer')}
-          onPointerOut={() => (document.body.style.cursor = 'auto')}
+    return (
+        <PortalWrapper
+            followPointer={followPointer}
+            modeProps={modeProps}
+            renderGlass={({ ref, buffer }) => (
+                <RoundedBox // Usando RoundedBox como JSX element
+                    ref={ref as any} // Passando ref diretamente, o R3F lida com o tipo corretamente
+                    args={[1, 1, 0.18]} // Tipos corretos para args
+                    radius={0.32}
+                    smoothness={10}
+                    position={[0, 0, 15]}
+                    frustumCulled={false}
+                    {...meshProps}
+                >
+                    <MeshTransmissionMaterial
+                        buffer={buffer.texture}
+                        transmission={1}
+                        roughness={0}
+                        metalness={0}
+                        reflectivity={0.25}
+                        clearcoat={1}
+                        clearcoatRoughness={0}
+                        ior={tuning.ior ?? 1.14}
+                        thickness={tuning.thickness ?? 9}
+                        chromaticAberration={tuning.chromaticAberration ?? 0.08}
+                        anisotropy={tuning.anisotropy ?? 0.06}
+                        distortion={tuning.distortion ?? 0.28}
+                        distortionScale={tuning.distortionScale ?? 0.28}
+                        temporalDistortion={tuning.temporalDistortion ?? 0.12}
+                        attenuationColor={tuning.attenuationColor ?? '#ffffff'}
+                        attenuationDistance={tuning.attenuationDistance ?? 0.35}
+                        samples={tuning.samples ?? 8}
+                        resolution={tuning.resolution ?? 512}
+                    />
+                </RoundedBox>
+            )}
         >
-          {label}
-        </Text>
-      ))}
-    </group>
-  );
-}
-
-function Images() {
-  const group = useRef<ZoomGroup>(null!);
-  const data = useScroll();
-  const { height } = useThree(s => s.viewport);
-
-  useFrame(() => {
-    group.current.children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    group.current.children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    group.current.children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    group.current.children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    group.current.children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-  });
-
-  return (
-    <group ref={group}>
-      <Image position={[-2, 0, 0]} scale={[3, height / 1.1]} url="/assets/demo/cs1.webp" />
-      <Image position={[2, 0, 3]} scale={3} url="/assets/demo/cs2.webp" />
-      <Image position={[-2.05, -height, 6]} scale={[1, 3]} url="/assets/demo/cs3.webp" />
-      <Image position={[-0.6, -height, 9]} scale={[1, 2]} url="/assets/demo/cs1.webp" />
-      <Image position={[0.75, -height, 10.5]} scale={1.5} url="/assets/demo/cs2.webp" />
-    </group>
-  );
-}
-
-function Typography() {
-  const DEVICE = {
-    mobile: { fontSize: 0.2 },
-    tablet: { fontSize: 0.4 },
-    desktop: { fontSize: 0.6 }
-  };
-  const getDevice = () => {
-    const w = window.innerWidth;
-    return w <= 639 ? 'mobile' : w <= 1023 ? 'tablet' : 'desktop';
-  };
-
-  const [device, setDevice] = useState<keyof typeof DEVICE>(getDevice());
-
-  useEffect(() => {
-    const onResize = () => setDevice(getDevice());
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const { fontSize } = DEVICE[device];
-
-  return (
-    <Text
-      position={[0, 0, 12]}
-      fontSize={fontSize}
-      letterSpacing={-0.05}
-      outlineWidth={0}
-      outlineBlur="20%"
-      outlineColor="#000"
-      outlineOpacity={0.5}
-      color="white"
-      anchorX="center"
-      anchorY="middle"
-    >
-      React Bits
-    </Text>
-  );
+            <PortalBackground />
+        </PortalWrapper>
+    );
 }

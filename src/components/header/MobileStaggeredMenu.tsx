@@ -1,3 +1,4 @@
+// src/components/header/MobileStaggeredMenu.tsx
 'use client';
 
 import Link from 'next/link';
@@ -81,9 +82,11 @@ export default function MobileStaggeredMenu() {
                         }}
                     />
 
+                    {/* “casing”/glow */}
                     <div className="pointer-events-none absolute inset-0 rounded-[24px] border border-white/10" />
                     <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-linear-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
 
+                    {/* CONTENT */}
                     <div className="relative z-10 flex h-full items-center justify-between px-5">
                         <Link href="/" className="text-[18px] font-semibold tracking-tight text-white/90">
                             Danilo

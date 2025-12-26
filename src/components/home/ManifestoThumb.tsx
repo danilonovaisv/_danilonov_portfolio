@@ -1,175 +1,87 @@
+// src/components/home/ManifestoThumb.tsx
 'use client';
 
-import { RefObject, useEffect, useRef, useState } from 'react';
-import { motion, useInView, useScroll, useSpring, useTransform, Transition } from 'framer-motion';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { BRAND } from '@/config/brand';
+import * as React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ASSETS } from '@/lib/constants';
 
-interface ManifestoThumbProps {
-    heroRef?: RefObject<HTMLElement | null> | undefined;
+// Função auxiliar de tracking (segura para SSR)
+function track(event: string, detail?: Record<string, unknown>) {
+    if (typeof window === 'undefined') return;
+    // Descomenta a linha abaixo se tiveres o listener configurado
+    // window.dispatchEvent(new CustomEvent('portfolio:track', { detail: { event, ...detail } }));
+    console.log(`Tracking: ${event}`, detail);
 }
 
-export default function ManifestoThumb({ heroRef }: ManifestoThumbProps) {
-    const reducedMotion = usePrefersReducedMotion();
-    const thumbRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const [videoReady, setVideoReady] = useState(false);
-    const _thumbInView = useInView(thumbRef, { amount: 0.2, once: true }); // Prefixo com _ para indicar que está sendo usado indiretamente
+export default function ManifestoThumb() {
+    const reduceMotion = useReducedMotion();
+    const videoRef = React.useRef<HTMLVideoElement | null>(null);
+    const rootRef = React.useRef<HTMLElement | null>(null);
+    const hasPlayedRef = React.useRef(false);
 
-    // Detecta o tamanho da viewport
-    const [dimensions, setDimensions] = useState(() => ({
-        width: typeof window !== 'undefined' ? window.innerWidth : 1280,
-        height: typeof window !== 'undefined' ? window.innerHeight : 800,
-    }));
+    React.useEffect(() => {
+        const el = rootRef.current;
+        const video = videoRef.current;
+        if (!el || !video) return;
 
-    useEffect(() => {
-        const handleResize = () =>
-            setDimensions({ width: window.innerWidth, height: window.innerHeight });
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
+        const io = new IntersectionObserver(
+            async (entries) => {
+                const entry = entries[0];
+                if (!entry) return;
+
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.55) {
+                    try {
+                        if (!hasPlayedRef.current) {
+                            await video.play();
+                            hasPlayedRef.current = true;
+                            track('manifesto_video_auto_play');
+                        }
+                        // Tenta ativar o som (pode falhar dependendo do browser)
+                        video.muted = false;
+                    } catch {
+                        video.muted = true;
+                    }
+                } else {
+                    video.muted = true;
+                }
+            },
+            { threshold: [0, 0.55, 0.75] }
+        );
+
+        io.observe(el);
+        return () => io.disconnect();
     }, []);
 
-    const isMobile = dimensions.width < 1024;
-
-    // ==========================================
-    // 🎬 SCROLL-DRIVEN ANIMATION (Desktop only)
-    // ==========================================
-    const { scrollYProgress } = useScroll({
-        target: heroRef ?? undefined,
-        offset: ['start start', 'end start'],
-    });
-
-    // Mapear valores para a transformação do vídeo (sincronizado com o vídeo de referência)
-    const scale = useSpring(
-        useTransform(scrollYProgress, [0, 0.5, 0.8, 1], [1, 1.8, 3, 5]),
-        { stiffness: 100, damping: 20 }
-    );
-
-    const x = useSpring(
-        useTransform(scrollYProgress, [0, 0.5, 0.8, 1], [0, -120, -300, -500]),
-        { stiffness: 100, damping: 20 }
-    );
-
-    const y = useSpring(
-        useTransform(scrollYProgress, [0, 0.5, 0.8, 1], [0, -60, -200, -400]),
-        { stiffness: 100, damping: 20 }
-    );
-
-    const opacity = useSpring(
-        useTransform(scrollYProgress, [0, 0.7, 1], [1, 1, 0]),
-        { stiffness: 100, damping: 20 }
-    );
-
-    const borderRadius = useSpring(
-        useTransform(scrollYProgress, [0, 0.5, 1], [12, 8, 0]),
-        { stiffness: 100, damping: 20 }
-    );
-
-    // ==========================================
-    // 🎨 ANIMATION PROPS
-    // ==========================================
-    const enableDesktopMotion = !reducedMotion && !isMobile;
-    const _showVideo = (_thumbInView || reducedMotion) && (videoReady || reducedMotion); // Prefixo com _ para indicar uso indireto
-
-    // Animação de entrada (fade-in com leve translateY)
-    const entryAnimation = reducedMotion
-        ? {}
-        : {
-            initial: { opacity: 0, y: 20 },
-            animate: { opacity: 1, y: 0 },
-            transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } as Transition
-        };
-
-    const videoSrc = BRAND.video.manifesto;
-
-    const handleThumbClick = () => {
-        if (!isMobile && heroRef?.current) {
-            const manifestoSection = document.getElementById('manifesto');
-            if (manifestoSection) {
-                manifestoSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    };
-
-    // ==========================================
-    // 📱 MOBILE LAYOUT
-    // ==========================================
-    if (isMobile) {
-        return (
-            <motion.div
-                key="manifesto-thumb-mobile"
-                ref={thumbRef}
-                {...(reducedMotion ? {} : {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { duration: 0.5 } as Transition
-                })}
-                className="relative w-full h-[70vh] bg-black overflow-hidden"
-            >
-                <video
-                    ref={videoRef}
-                    src={videoSrc}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                    preload="metadata"
-                    onLoadedData={() => setVideoReady(true)}
-                    onCanPlay={() => setVideoReady(true)}
-                    className="w-full h-full object-cover"
-                    aria-label="Manifesto video full"
-                />
-            </motion.div>
-        );
-    }
-
-    // ==========================================
-    // 🖥️ DESKTOP LAYOUT com SCROLL ANIMATION
-    // ==========================================
     return (
-        <motion.div
-            key="manifesto-thumb-desktop"
-            style={{
-                position: 'fixed',
-                top: 'auto',
-                bottom: '40px',
-                left: 'auto',
-                right: '40px',
-                width: '320px',
-                height: '180px',
-                borderRadius: enableDesktopMotion ? borderRadius : 12,
-                scale: enableDesktopMotion ? scale : 1,
-                x: enableDesktopMotion ? x : 0,
-                y: enableDesktopMotion ? y : 0,
-                opacity: enableDesktopMotion ? opacity : 1,
-                zIndex: 50,
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
-            }}
-            {...entryAnimation}
-            className="overflow-hidden bg-black origin-bottom-right"
+        <section
+            id="manifesto"
+            ref={rootRef}
+            aria-label="Manifesto"
+            className="w-full bg-[#0E0F12] py-16 px-4 md:px-8 flex justify-center"
         >
-            <div
-                ref={thumbRef}
-                className="w-full h-full relative cursor-pointer"
-                onClick={handleThumbClick}
-            >
-                <video
-                    ref={videoRef}
-                    src={videoSrc}
-                    muted
-                    loop
-                    playsInline
-                    autoPlay
-                    preload="metadata"
-                    onLoadedData={() => setVideoReady(true)}
-                    onCanPlay={() => setVideoReady(true)}
-                    className="w-full h-full object-cover"
-                    aria-label="Manifesto thumbnail"
-                />
-                {/* Overlay sutil para melhorar contraste */}
-                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+            <div className="w-full max-w-[1240px]">
+                <motion.div
+                    initial={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+                    whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.35 }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden rounded-2xl shadow-[0_26px_90px_rgba(0,0,0,0.35)] bg-white/5"
+                >
+                    <div className="aspect-video w-full">
+                        <video
+                            ref={videoRef}
+                            className="h-full w-full object-cover"
+                            src={ASSETS.videoManifesto}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            controls={true} // Útil para mobile
+                            preload="metadata"
+                        />
+                    </div>
+                </motion.div>
             </div>
-        </motion.div>
+        </section>
     );
 }
