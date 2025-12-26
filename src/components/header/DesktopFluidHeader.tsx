@@ -1,181 +1,140 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Logo from '@/assets/logos/LogoLight.svg';
-import { useGhostEnergy } from '@/hooks/useGhostEnergy';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { motion, useReducedMotion } from 'framer-motion';
+import FluidGlass from './webgl/FluidGlass';
 
-const FluidGlass = dynamic(() => import('./webgl/FluidGlass'), { ssr: false });
+type NavItem = { label: string; href: string };
 
-// WebGL temporariamente desabilitado - função não usada
-// function supportsWebGL(): boolean {
-//   try {
-//     const canvas = document.createElement('canvas');
-//     const gl =
-//       canvas.getContext('webgl', { failIfMajorPerformanceCaveat: true }) ||
-//       canvas.getContext('experimental-webgl');
-//     return !!gl;
-//   } catch {
-//     return false;
-//   }
-// }
+function isActive(pathname: string, href: string) {
+    if (href === '/') return pathname === '/';
+    return pathname.startsWith(href);
+}
 
-class WebGLErrorBoundary extends React.Component<
-  { children: React.ReactNode; onError?: () => void },
-  { hasError: boolean }
-> {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch() {
-    this.props.onError?.();
-  }
-
-  render() {
-    if (this.state.hasError) return null;
-    return this.props.children;
-  }
+function BrandMark(props: React.SVGProps<SVGSVGElement>) {
+    // Substitua este SVG pelo SVG real do seu logotipo "Danilo"
+    return (
+        <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" {...props}>
+            {/* Este é um exemplo genérico. Substitua pela sua arte. */}
+            <path
+                d="M9 11.2c0-1.2 1-2.2 2.2-2.2h12.2c6.4 0 11.6 5.2 11.6 11.6S29.8 32.2 23.4 32.2H11.2C10 32.2 9 31.2 9 30V11.2Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                opacity="0.9"
+            />
+            <path
+                d="M14 14l12 12M26 14 14 26"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                opacity="0.55"
+            />
+        </svg>
+    );
 }
 
 export default function DesktopFluidHeader() {
-  const energy = useGhostEnergy();
-  const reducedMotion = usePrefersReducedMotion();
+    const pathname = usePathname();
+    const reduceMotion = useReducedMotion();
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+    const wrapRef = useRef<HTMLDivElement | null>(null);
+    const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
 
-  // Importante:
-  // - eventSource precisa ser um HTMLElement (não ref)
-  // - wrapperRef.current pode ficar `null` se não houver re-render após o mount
-  //   (setState com o mesmo valor pode ser ignorado pelo React).
-  // Então guardamos em state para garantir re-render.
-  const [eventSource, setEventSource] = useState<HTMLElement | null>(null);
+    useEffect(() => {
+        if (wrapRef.current) setEventSource(wrapRef.current);
+    }, []);
 
-  // Fallback automático (sem WebGL)
-  // const [webglOk, setWebglOk] = useState<boolean | null>(null);
+    const nav = useMemo<NavItem[]>(
+        () => [
+            { label: 'home', href: '/' },
+            { label: 'sobre', href: '/sobre' },
+            { label: 'portfolio showcase', href: '/portfolio' },
+            { label: 'contato', href: '/#contato' },
+        ],
+        []
+    );
 
-  useEffect(() => {
-    setEventSource(wrapperRef.current);
-    // setWebglOk(supportsWebGL());
-  }, []);
-
-  // Requisito do prompt (valores para bar mode)
-  const barProps = useMemo(
-    () => ({
-      transmission: 1,
-      roughness: 0,
-      thickness: 10,
-      ior: 1.15,
-      color: '#ffffff',
-      attenuationColor: '#ffffff',
-      attenuationDistance: 0.25,
-    }),
-    []
-  );
-
-  const menuItems = useMemo(
-    () => [
-      { label: 'home', href: '/', ariaLabel: 'Ir para home' },
-      { label: 'sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
-      {
-        label: 'portfolio showcase',
-        href: '/portfolio',
-        ariaLabel: 'Ir para portfolio',
-      },
-      { label: 'contato', href: '#contact', ariaLabel: 'Ir para contato' },
-    ],
-    []
-  );
-
-  // Enquanto não sabemos se WebGL existe, preferimos renderizar o HTML já com estilo “fallback”.
-  // WebGL desativado temporariamente para evitar erros de runtime com createRoot duplicado e assets ausentes.
-  const canShowWebGL = false;
-
-  return (
-    <div
-      ref={wrapperRef}
-      className="fixed top-6 left-1/2 z-40 w-[calc(100vw-2rem)] max-w-[1100px] -translate-x-1/2"
-    >
-      <div className="relative isolate h-[64px] overflow-hidden rounded-full drop-shadow-[0_14px_40px_rgba(0,0,0,0.45)]">
-        {/* WebGL Glass Layer (atrás do HTML) */}
-        {canShowWebGL && (
-          <div className="pointer-events-none absolute inset-0 z-0">
-            <WebGLErrorBoundary>
-              <FluidGlass
-                barProps={barProps}
-                // Captura eventos do wrapper (não do canvas), assim o cursor funciona mesmo com o nav por cima
-                eventSource={eventSource}
-                followPointer={!reducedMotion}
-                // Importante: como usamos eventSource, o canvas pode ficar com pointer-events-none
-                className="h-full w-full pointer-events-none"
-              />
-            </WebGLErrorBoundary>
-          </div>
-        )}
-
-        {/* HTML (fallback e camada de interação) */}
-        <nav
-          className={[
-            'pointer-events-auto relative z-10 flex h-full items-center justify-between px-6',
-            'rounded-full border',
-            // Quando WebGL está OK, evitamos backdrop-blur para não parecer glassmorphism fake.
-            // O “glass” real vem do MeshTransmissionMaterial.
-            canShowWebGL
-              ? 'border-white/10 bg-transparent'
-              : 'border-white/15 bg-black/35 backdrop-blur-md',
-          ].join(' ')}
-          role="navigation"
-          aria-label="Primary"
+    return (
+        <motion.header
+            className="fixed left-1/2 top-5 z-[70] w-[min(1120px,calc(100vw-2rem))] -translate-x-1/2"
+            initial={reduceMotion ? false : { opacity: 0, y: -14 }}
+            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Link
-            href="/"
-            aria-label="Voltar para a home"
-            className="flex items-center gap-3 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30"
-          >
-            <Image
-              src={Logo}
-              alt="Danilo Novais"
-              className="h-5 w-auto"
-              priority
-              unoptimized
-            />
-            <span className="sr-only">Danilo Novais</span>
-          </Link>
+            <div ref={wrapRef} className="relative h-16 overflow-hidden rounded-[28px]">
+                {/* WEBGL GLASS - Agora apenas 'bar' */}
+                <FluidGlass
+                    mode="bar"
+                    eventSource={eventSource}
+                    followPointer={!reduceMotion}
+                    className="pointer-events-none absolute inset-0 h-full w-full"
+                    barProps={{
+                        ior: 1.14,
+                        thickness: 9,
+                        chromaticAberration: 0.08,
+                        anisotropy: 0.06,
+                        distortion: 0.28,
+                        distortionScale: 0.28,
+                        temporalDistortion: 0.12,
+                        attenuationColor: '#ffffff',
+                        attenuationDistance: 0.35,
+                        samples: 8,
+                        resolution: 512,
+                        ampX: 0.12,
+                        ampY: 0.08,
+                        rotX: 0.06,
+                        rotY: 0.08,
+                        barWidth: 0.99,
+                        barHeight: 0.9,
+                    }}
+                />
 
-          <div className="flex items-center gap-7 text-sm text-white/90">
-            {menuItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                aria-label={item.ariaLabel}
-                className={[
-                  'relative whitespace-nowrap rounded-full px-1 outline-none transition-opacity',
-                  'hover:opacity-70 focus-visible:opacity-100',
-                  'focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30',
-                ].join(' ')}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
+                {/* “casing”/glow (igual referência) */}
+                <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-white/10" />
+                <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-sky-400/15 shadow-[0_16px_80px_rgba(56,189,248,0.18)]" />
+                <div className="pointer-events-none absolute inset-x-6 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-400/80 to-transparent opacity-70" />
+                <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/40 to-transparent opacity-60" />
 
-        {/* “Glow / stroke” sutil (aproxima do look da referência e do frame enviado) */}
-        <div className="pointer-events-none absolute inset-0 z-1 rounded-full ring-1 ring-white/5" />
-      </div>
+                {/* CONTENT */}
+                <div className="relative z-10 flex h-full items-center justify-between px-6">
+                    <Link
+                        href="/"
+                        className="group inline-flex items-center gap-2 text-white/90"
+                        aria-label="Ir para home"
+                    >
+                        <BrandMark className="h-8 w-8 text-white/90 transition-opacity group-hover:opacity-100" />
+                        <span className="text-[22px] font-semibold tracking-tight">Danilo</span>
+                    </Link>
 
-      {/* Compat: usa ghostEnergy como brilho MUITO sutil sem mexer no material (mantém aderência ao reactbits) */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 rounded-full opacity-0"
-        style={{
-          opacity: reducedMotion ? 0 : Math.min(0.12, energy * 0.12),
-        }}
-      />
-    </div>
-  );
+                    <nav aria-label="Navegação principal" className="flex items-center gap-2">
+                        {nav.map((item) => {
+                            const active = item.href.startsWith('/#')
+                                ? pathname === '/'
+                                : isActive(pathname, item.href);
+
+                            return (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    aria-current={active ? 'page' : undefined}
+                                    className={[
+                                        'relative rounded-full px-3 py-2 text-[15px] font-medium tracking-tight transition-colors',
+                                        active ? 'text-sky-300' : 'text-white/80 hover:text-white',
+                                    ].join(' ')}
+                                >
+                                    <span className="relative z-10">{item.label}</span>
+
+                                    {/* underline ativo */}
+                                    {active ? (
+                                        <span className="pointer-events-none absolute inset-x-2 bottom-1 h-px bg-sky-400/90" />
+                                    ) : null}
+                                </Link>
+                            );
+                        })}
+                    </nav>
+                </div>
+            </div>
+        </motion.header>
+    );
 }

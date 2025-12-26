@@ -1,15 +1,17 @@
-'use client';
+import React from 'react';
+import DesktopFluidHeader from './DesktopFluidHeader';
+import MobileStaggeredMenu from './MobileStaggeredMenu';
 
-import DesktopFluidHeader from '@/components/header/DesktopFluidHeader';
-import MobileStaggeredMenu from '@/components/header/MobileStaggeredMenu';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+export default function SiteHeader() {
+  return (
+      <>
+        <div className="hidden md:block">
+          <DesktopFluidHeader />
+        </div>
 
-const SiteHeader = () => {
-  // Desktop ≥ 1024px => Fluid Glass
-  // Tablet/Mobile ≤ 1023px => Staggered Menu
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
-
-  return isDesktop ? <DesktopFluidHeader /> : <MobileStaggeredMenu />;
-};
-
-export default SiteHeader;
+        <div className="md:hidden">
+          <MobileStaggeredMenu />
+        </div>
+      </>
+  );
+}

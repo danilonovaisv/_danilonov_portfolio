@@ -14,12 +14,17 @@ export function ScrollImages() {
     if (!group.current) return;
     // Cast strict material access
     const children = group.current.children as any[];
-    
-    if (children[0]?.material) children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    if (children[1]?.material) children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3;
-    if (children[2]?.material) children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    if (children[3]?.material) children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
-    if (children[4]?.material) children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+
+    if (children[0]?.material)
+      children[0].material.zoom = 1 + data.range(0, 1 / 3) / 3;
+    if (children[1]?.material)
+      children[1].material.zoom = 1 + data.range(0, 1 / 3) / 3;
+    if (children[2]?.material)
+      children[2].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+    if (children[3]?.material)
+      children[3].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+    if (children[4]?.material)
+      children[4].material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
   });
 
   return (

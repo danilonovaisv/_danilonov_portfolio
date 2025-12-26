@@ -1,7 +1,12 @@
 'use client';
 
 import { memo, useRef, useState, useEffect, ReactNode } from 'react';
-import { useFrame, useThree, createPortal, ThreeElements } from '@react-three/fiber';
+import {
+  useFrame,
+  useThree,
+  createPortal,
+  ThreeElements,
+} from '@react-three/fiber';
 import { useGLTF, useFBO, MeshTransmissionMaterial } from '@react-three/drei';
 import { easing } from 'maath';
 import * as THREE from 'three';
@@ -25,7 +30,8 @@ export const BarWrapper = memo(function BarWrapper({
     const geo = (nodes.Cube as THREE.Mesh)?.geometry;
     if (geo) {
       geo.computeBoundingBox();
-      geoWidthRef.current = geo.boundingBox!.max.x - geo.boundingBox!.min.x || 1;
+      geoWidthRef.current =
+        geo.boundingBox!.max.x - geo.boundingBox!.min.x || 1;
     }
   }, [nodes]);
 
