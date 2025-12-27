@@ -537,7 +537,7 @@ Hero — Video Morphing (Scroll Cinematográfico)
 ### SECTION PURPOSE (what this section must achieve):
 
 * Criar uma transição **cinematográfica e contínua** entre a Hero e o Manifesto.
-* Transformar uma **thumb central** em um **vídeo fullpage**, guiado exclusivamente pelo scroll.
+* Transformar uma **thumb** que no seu estado incial esta no canto inferior direito da HERO, em um **vídeo fullpage**, guiado exclusivamente pelo scroll.
 * Estabelecer uma narrativa visual clara: *objeto → ambiente*.
 
 ### PRIMARY MESSAGE / HEADLINE:

@@ -6,9 +6,9 @@ export const MOTION_TOKENS = {
     instant: 0.2,
   },
   easing: {
-    base: [0.22, 1, 0.36, 1], // Smooth Sine/Sine-like Easing
-    ghost: [0.25, 1, 0.5, 1], // Even softer for atmospheric effects
-    heavy: [0.43, 0.13, 0.23, 0.96], // For large movements
+    base: [0.22, 1, 0.36, 1] as [number, number, number, number], // Smooth Sine/Sine-like Easing
+    ghost: [0.25, 1, 0.5, 1] as [number, number, number, number], // Even softer for atmospheric effects
+    heavy: [0.43, 0.13, 0.23, 0.96] as [number, number, number, number], // For large movements
   },
   stagger: {
     tight: 0.05,
