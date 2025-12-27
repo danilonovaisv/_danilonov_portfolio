@@ -1,100 +1,18 @@
-// src/components/home/HomeHero.tsx
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import { ASSETS } from '@/lib/constants';
 import HeroCopy from './HeroCopy';
 import GhostStage from './GhostStage';
 import HeroPreloader from './HeroPreloader';
-import ManifestoThumb from './ManifestoThumb'; // Reutilizado no Mobile
 
-// --- SUB-COMPONENTE DESKTOP ---
-function DesktopHero() {
-  const containerRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
-  // Animação da Thumb (Dissolver)
-  const thumbY = useTransform(smoothProgress, [0, 0.5], ['0%', '-20%']);
-  const thumbScale = useTransform(smoothProgress, [0, 0.5], [1, 0.95]);
-  const thumbOpacity = useTransform(smoothProgress, [0, 0.4], [1, 0]);
-  const thumbBlur = useTransform(smoothProgress, [0, 0.4], ['0px', '12px']);
-  const ghostOpacity = useTransform(smoothProgress, [0, 0.8], [1, 0]);
-
-  return (
-    <section
-      ref={containerRef}
-      className="relative h-screen w-full overflow-hidden bg-ghost-void"
-    >
-      <motion.div
-        style={{ opacity: ghostOpacity }}
-        className="absolute inset-0 z-0 pointer-events-none"
-      >
-        <GhostStage enabled={true} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-ghost-void)_90%)]" />
-      </motion.div>
-
-      <div className="relative z-10 flex h-full w-full items-center justify-center pointer-events-none">
-        <HeroCopy />
-      </div>
-
-      <motion.div
-        style={{
-          y: thumbY,
-          scale: thumbScale,
-          opacity: thumbOpacity,
-          filter: thumbBlur,
-        }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-        className="group absolute bottom-8 right-8 z-20 aspect-video w-[280px] cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-black/20 shadow-2xl backdrop-blur-md"
-        onClick={() => {
-          const manifestoSection = document.getElementById('manifesto');
-          if (manifestoSection) {
-            manifestoSection.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
-      >
-        <div className="relative h-full w-full">
-          <video
-            ref={videoRef}
-            src={ASSETS.videoManifesto}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full scale-105 object-cover opacity-80 transition-transform duration-500 group-hover:scale-100 group-hover:opacity-100"
-          />
-          <div className="absolute bottom-3 left-3 z-10 flex items-center gap-2">
-            <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary shadow-[0_0_8px_var(--color-primary)]" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-white/90 drop-shadow-md">
-              Showreel
-            </span>
-          </div>
-          <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-transparent" />
-        </div>
-      </motion.div>
-    </section>
-  );
-}
-
-// --- COMPONENTE PRINCIPAL ---
 export default function HomeHero() {
-  const [isMounted, setIsMounted] = useState(false);
+  const containerRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
+  // Detecção de Mobile e Montagem
   useEffect(() => {
     setIsMounted(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -103,29 +21,108 @@ export default function HomeHero() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  if (!isMounted) return <div className="h-screen w-full bg-ghost-void" />;
+  // SCROLL TRIGGER
+  // O container tem altura suficiente (~220vh) para permitir o scroll timeline completo
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Suavização do scroll (Lenis feel) para evitar movimentos bruscos
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 200,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // --- TIMELINE DE ANIMAÇÃO (DESKTOP) ---
+  // Baseado na spec: 0% -> 5% (Trava) -> 25% (Zoom) -> 55% (Full) -> 75% (Lock)
+
+  // Scale: 0.58 (Thumb) -> 1 (Fullscreen)
+  const desktopScale = useTransform(smoothProgress,
+      [0, 0.05, 0.25, 0.55],
+      [0.58, 0.58, 0.75, 1]
+  );
+
+  // Border Radius: 24px (Thumb) -> 0px (Full)
+  const desktopRadius = useTransform(smoothProgress,
+      [0, 0.05, 0.25, 0.55, 0.75],
+      [24, 24, 20, 6, 0]
+  );
+
+  // --- TIMELINE DE ANIMAÇÃO (MOBILE) ---
+  // Simplificada para performance: 0.85 -> 1
+  const mobileScale = useTransform(smoothProgress, [0, 0.6], [0.85, 1]);
+  const mobileRadius = useTransform(smoothProgress, [0, 0.6], [12, 0]);
+
+  // Aplicação condicional das transformações
+  const scale = isMobile ? mobileScale : desktopScale;
+  const borderRadius = isMobile ? mobileRadius : desktopRadius;
+
+  // Efeitos de Texto e Ghost (Fading out para dar destaque ao vídeo)
+  const contentOpacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
+  const contentBlur = useTransform(smoothProgress, [0, 0.15], ['0px', '10px']);
+
+  if (!isMounted) return <div className="h-screen w-full bg-[#06071f]" />;
 
   return (
-    <>
-      <HeroPreloader isVisible={true} />
+      <>
+        <HeroPreloader isVisible={true} />
 
-      {isMobile ? (
-        <>
-          <section className="relative flex min-h-[70vh] w-full items-center justify-center overflow-hidden bg-ghost-void pt-20">
-            <div className="absolute inset-0 opacity-40">
-              <GhostStage enabled={false} />
-            </div>
-            <div className="relative z-10 w-full px-4">
-              <HeroCopy />
-            </div>
-          </section>
+        <section
+            ref={containerRef}
+            // Altura definida para ~220vh para acomodar o timeline da animação
+            className="relative h-[220vh] w-full bg-[#06071f]"
+        >
+          {/* WRAPPER STICKY: Mantém o conteúdo fixo enquanto o usuário faz scroll */}
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
 
-          {/* Componente Manifesto separado para Mobile */}
-          <ManifestoThumb />
-        </>
-      ) : (
-        <DesktopHero />
-      )}
-    </>
+            {/* 1. LAYER: BACKGROUND GHOST & TEXTO (Z-INDEX 10) */}
+            {/* Ficam atrás/junto do vídeo inicialmente, mas somem ao scrollar */}
+            <motion.div
+                style={{ opacity: contentOpacity, filter: useMotionTemplate`blur(${contentBlur})` }}
+                className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center"
+            >
+              {/* Ghost Background */}
+              <div className="absolute inset-0 z-0 opacity-60">
+                <GhostStage enabled={!isMobile} />
+              </div>
+
+              {/* Hero Copy (Texto) */}
+              <div className="relative z-20 w-full px-6">
+                <HeroCopy />
+              </div>
+            </motion.div>
+
+            {/* 2. LAYER: VÍDEO HERO ANIMADO (Z-INDEX 0 -> Background funcional) */}
+            <motion.div
+                style={{
+                  scale,
+                  borderRadius,
+                }}
+                className="relative z-0 w-full h-full overflow-hidden shadow-2xl origin-center will-change-transform"
+            >
+              {/* Overlay sutil para garantir contraste inicial (desaparece quando full) */}
+              <motion.div
+                  style={{ opacity: contentOpacity }}
+                  className="absolute inset-0 bg-[#06071f]/40 z-10 pointer-events-none"
+              />
+
+              <video
+                  src={ASSETS.videoManifesto}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                  // Propriedades de otimização
+                  disablePictureInPicture
+                  controls={false}
+              />
+            </motion.div>
+
+          </div>
+        </section>
+      </>
   );
 }

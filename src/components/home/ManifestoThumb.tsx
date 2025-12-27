@@ -1,86 +1,110 @@
 // src/components/home/ManifestoThumb.tsx
 'use client';
 
-import * as React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useTransform, MotionValue, useMotionValue } from 'motion/react';
 import { ASSETS } from '@/lib/constants';
 
-// Função auxiliar de tracking (segura para SSR)
-// Prefixamos com "_" para indicar ao linter que sabemos que não estão a ser usados agora
-function track(_event: string, _detail?: Record<string, unknown>) {
-  if (typeof window === 'undefined') return;
-  // Quando implementares o analytics real, podes remover os "_" e descomentar:
-  // window.dispatchEvent(new CustomEvent('portfolio:track', { detail: { event: _event, ..._detail } }));
+interface ManifestoThumbProps {
+  scrollProgress?: MotionValue<number>;
+  isMobile?: boolean; // Generic flag if we want conditional logic inside
 }
 
-export default function ManifestoThumb() {
-  const reduceMotion = useReducedMotion();
-  const videoRef = React.useRef<HTMLVideoElement | null>(null);
-  const rootRef = React.useRef<HTMLElement | null>(null);
-  const hasPlayedRef = React.useRef(false);
+export default function ManifestoThumb({ scrollProgress }: ManifestoThumbProps) {
+  // --- ANIMATION CONFIGURATION ---
+  // Based on Technical Report:
+  // Phase 0 (0-5%): Static (scale 0.58)
+  // Phase 1 (5-25%): Zoom Start (scale -> 0.75)
+  // Phase 2 (25-55%): Structural Transition (scale -> 1, width -> 100vw)
+  // Phase 3 (55-75%): Fullpage Takeover (borderRadius -> 0)
 
-  React.useEffect(() => {
-    const el = rootRef.current;
-    const video = videoRef.current;
-    if (!el || !video) return;
+  // Note: We use a fallback MotionValue (0) if none provided (e.g., standard render or mobile without scroll)
+  // To simulate "Video Thumb" behavior on mobile without external scroll, we might default to a static 1 or 0 state.
+  // Current HomeHero logic for mobile renders this as a static component at the bottom.
 
-    const io = new IntersectionObserver(
-      async (entries) => {
-        const entry = entries[0];
-        if (!entry) return;
+  // Default values for cases without scroll control (Mobile Static)
+  // If scrollProgress is missing, we render a static "card" look (Progress = 0)
 
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-          try {
-            if (!hasPlayedRef.current) {
-              await video.play();
-              hasPlayedRef.current = true;
-              track('manifesto_video_auto_play');
-            }
-            // video.muted = false; // Opcional: ativar som ao focar
-          } catch {
-            // Ignorando erro de autoplay
-            if (video) video.muted = true;
-          }
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.5 }
-    );
+  // TRANSFORMATIONS
+  // Input Range: [0, 0.05, 0.25, 0.55, 0.75, 1]
 
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  // Scale Map
+  // 0-5%: 0.58
+  // 25%: 0.75
+  // 55%: 1 (Full width effectively)
+  // 100%: 1
+
+  // Border Radius Map
+  // 0-25%: 24px
+  // 55%: 6px
+  // 75%: 0px
+
+  // Y Offset Map (Optional "slight negative")
+  // 55-75%: 0 -> -2vh?
+
+  const defaultProgress = useMotionValue(0);
+  const progress = scrollProgress || defaultProgress;
+
+  const scale = useTransform(
+    progress,
+    [0, 0.05, 0.25, 0.55, 1],
+    [0.58, 0.58, 0.75, 1, 1]
+  );
+
+  const borderRadius = useTransform(
+    progress,
+    [0, 0.25, 0.55, 0.75],
+    [24, 24, 6, 0]
+  );
+
+  const y = useTransform(
+    progress,
+    [0.55, 0.75],
+    ['0%', '-2%']
+  );
+
+  // If isMobile (and no scrollControl passed), we might want a different static style or just standard block.
+  // The current Mobile implementation in HomeHero uses this component.
+  // If scrollProgress IS provided, we assume it's driving the animation.
+
+  // Fallback style for when scrollProgress is NOT provided (e.g. current Mobile static thumb)
+  // We want it to look like a normal card.
+  const isControlled = !!scrollProgress;
 
   return (
-    <section
-      id="manifesto"
-      ref={rootRef}
-      aria-label="Manifesto"
-      className="flex w-full justify-center bg-[#0E0F12] px-4 py-12 md:px-8"
-    >
-      <div className="w-full max-w-[1240px]">
-        <motion.div
-          initial={reduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 shadow-2xl"
-        >
-          <video
-            ref={videoRef}
-            className="h-full w-full object-cover"
-            src={ASSETS.videoManifesto}
-            autoPlay={false} // Controlado via Observer
-            loop
-            muted
-            playsInline
-            controls // Controles nativos úteis para mobile/tablet
-            preload="metadata"
-            aria-label="Manifesto video presentation"
-          />
-        </motion.div>
-      </div>
-    </section>
+    <div className="relative h-full w-full flex items-center justify-center">
+      <motion.div
+        style={
+          isControlled
+            ? {
+              scale,
+              borderRadius,
+              y,
+            }
+            : undefined // Standard static rendering if not controlled
+        }
+        className={`
+          relative overflow-hidden shadow-2xl bg-black
+          ${!isControlled ? 'w-full aspect-video rounded-xl border border-white/10' : 'w-screen h-screen'}
+        `}
+      // Note: For controlled desktop, we want base w-screen h-screen to allow scaling DOWN to 0.58.
+      // If we scaled UP from a small card, resolution might be an issue if not 100vw from start.
+      // Spec says: "Video fullpage ... 100% viewport".
+      // Best approach: "Start as full screen element, Scale DOWN to look like thumb".
+      // Scale 0.58 of 100vw ~ 58vw. Matches "56-62vw".  :)
+      >
+        <video
+          src={ASSETS.videoManifesto}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="h-full w-full object-cover"
+          poster={ASSETS.videoManifesto} // Optional poster if asset exists or just video
+        />
+
+        {/* Optional Overlay/Noise/Vignette that fades out? */}
+        <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+      </motion.div>
+    </div>
   );
 }

@@ -401,690 +401,617 @@ z-0  → WebGL Hero Canvas
 
 
 
+# HEADER (SiteHeader)
 
-# **SECTION NAME: Hero**
+## SECTION NAME:
 
-### SECTION PURPOSE
-- Criar impacto visual inicial com atmosfera etérea
-- Comunicar posicionamento estratégico através de texto editorial forte
-- Introduzir linguagem digital experimental com WebGL como camada sensorial
-- Direcionar o usuário ao Manifesto com mínima distração
+Header (SiteHeader)
 
----
-## VISÃO GERAL
+## SECTION PURPOSE (what this section must achieve):
 
-Este documento descreve a implementação da Hero e Manifesto utilizando Next.js App Router + React + TypeScript + Tailwind CSS + React Three Fiber + Framer Motion, adaptando o conceito do CodePen de referência (https://codepen.io/danilonovaisv/pen/azZbdQo) mantendo a identidade premium e preparando uma base escalável para evolução.
+* Fornecer navegação global e identidade visual do site.
+* Permanecer visível em todas as páginas.
+* Reforçar a identidade **premium + experimental** do projeto.
+* Atuar como **camada atmosférica complementar** à Hero Ghost (não competir).
 
----
+## PRIMARY MESSAGE / HEADLINE:
 
-## PRÉ-CARREGAMENTO (PRELOADER)
-### Conceito
-- Preloader minimalista com SVG animado do "ghost"
-- Progresso visual discreto durante carregamento de assets
-- Transição suave para o conteúdo principal
+* Identidade + navegação (objeto óptico “premium”).
 
-### Componentes
-```tsx
-// src/components/home/HeroPreloader.tsx
-import { motion } from 'framer-motion';
+## SECONDARY MESSAGE / SUPPORT TEXT:
 
-export default function HeroPreloader() {
-  return (
-    <motion.div 
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
-      transition={{ delay: 1.5, duration: 1 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]"
-    >
-      <div className="ghost-loader mb-8">
-        <svg className="ghost-svg" height="80" viewBox="0 0 512 512" width="80" xmlns="http://www.w3.org/2000/svg">
-          <path className="ghost-body" d="m508.374 432.802s-46.6-39.038-79.495-275.781c-8.833-87.68-82.856-156.139-172.879-156.139-90.015 0-164.046 68.458-172.879 156.138-32.895 236.743-79.495 275.782-79.495 275.782-15.107 25.181 20.733 28.178 38.699 27.94 35.254-.478 35.254 40.294 70.516 40.294 35.254 0 35.254-35.261 70.508-35.261s37.396 45.343 72.65 45.343 37.389-45.343 72.651-45.343c35.254 0 35.254 35.261 70.508 35.261s35.27-40.772 70.524-40.294c17.959.238 53.798-2.76 38.692-27.94z" fill="white" />
-          <circle className="ghost-eye left-eye" cx="208" cy="225" r="22" fill="black" />
-          <circle className="ghost-eye right-eye" cx="297" cy="225" r="22" fill="black" />
-        </svg>
-      </div>
-      <div className="loading-text font-mono text-xs uppercase tracking-widest text-[#e0e0e0] mb-4">
-        Summoning spirits
-      </div>
-      <div className="loading-progress w-24 h-0.5 bg-[#06071f] rounded-full overflow-hidden">
-        <motion.div 
-          className="progress-bar h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
-          initial={{ width: 0 }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 2, ease: "easeInOut" }}
-        />
-      </div>
-    </motion.div>
-  );
-}
-```
+* Header como “objeto” translúcido: presença discreta, leitura clara.
 
-### Animações
-- `ghostFloat`: Animação de flutuação suave (3s)
-- `eyePulse`: Animação pulsante dos olhos (2s)
-- `textPulse`: Efeito de respiração no texto de carregamento
-- Progresso visual com gradient azul
+## KEY CONTENT ELEMENTS (bullets, stats, quotes, etc.):
+
+* Logo (Light)
+* Links de navegação (Desktop):
+
+  * Home → `/` ou `#hero`
+  * Sobre → `/sobre`
+  * Portfolio → `/portfolio`
+  * Contato → `#contato`
+* Mobile/Tablet: botão Menu → abre menu fullscreen
+
+## CALL TO ACTION (if any):
+
+* Navegação primária via links (sem CTA extra no header).
+
+## LINKS GLOBAIS:
+
+* Home: `/` (ou `/#hero`)
+* Sobre: `/sobre`
+* Portfolio showcase: `/portfolio`
+* Contato: `/#contato`
 
 ---
 
-## CONTEÚDO (FIXO — SEM ANIMAÇÃO)
-### Cor do texto: `#d9dade`
-```
-[BRAND AWARENESS]
-Design, não é 
-só estética.
-[É intenção, é estratégia, é experiência.]
-```
+## LAYOUT TYPE (hero, grid, list, carousel, form, etc.):
 
-### Regras absolutas
-✅ **Texto 100% estático** - Nenhuma animação de entrada  
-✅ **Sem glassmorphism** - Nenhum efeito de vidro/blur CSS  
-✅ **Sem reveal progressivo** - Todo o texto aparece imediatamente  
-✅ **Sem scroll binding** - Texto nunca depende de posição de scroll  
+* Header flutuante fixo (Desktop e Mobile)
 
-### Componente
-```tsx
-// src/components/home/HeroCopy.tsx
-import Link from 'next/link';
+## ALIGNMENT (left/center/right, vertical alignment):
 
-export default function HeroCopy() {
-  return (
-    <div className="z-20 flex flex-col items-center text-center px-4 sm:px-6 max-w-3xl mx-auto">
-      <div className="text-[#d9dade] text-sm uppercase tracking-wide mb-4">
-        [BRAND AWARENESS]
-      </div>
-      <h1 className="text-[#d9dade] font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-        Design, não<br />
-        é só estética.
-      </h1>
-      <div className="text-[#d9dade] text-base md:text-lg mb-8">
-        [É intenção, é estratégia, é experiência.]
-      </div>
-      <Link
-        href="/sobre"
-        className="text-[#d9dade] hover:text-white transition-colors duration-300 font-normal text-sm md:text-base tracking-wide"
-        aria-label="Conheça mais sobre Danilo Novais"
-      >
-        get to know me better →
-      </Link>
-    </div>
-  );
-}
-```
+* Desktop: container centralizado horizontalmente, conteúdo distribuído `space-between`.
+* Mobile: logo à esquerda, menu à direita.
+
+## SPACING (top/bottom padding, breathing room):
+
+* Desktop: altura compacta (~64px), padding horizontal ~24px.
+* Mobile: altura compacta (~56px), padding horizontal ~20px.
+* Margem do topo: 16–20px.
 
 ---
 
-## BACKGROUND
-### Cor base: `#06071f`
-### Gradiente opcional:
-```css
-radial-gradient(circle at center, #0b0d3a 0%, #06071f 60%)
-```
+## BACKGROUND (color, gradient, image, video):
+
+* Desktop: **WebGL Fluid Glass** (refração real) renderizando o conteúdo por trás.
+* Mobile/Tablet: fundo discreto + blur leve, sem WebGL pesado.
+
+## SECTION COLORS (overrides or specific tokens):
+
+* Texto: `white/80 → white` (hover)
+* Ativo: `sky-300` (ou token equivalente)
+* Linhas/Glows: `sky-400/…`, `fuchsia-400/…` (sutil)
+
+## TYPOGRAPHY (any overrides for headings/body in this section):
+
+* Navegação: 15–16px, `font-medium`, tracking-tight.
+* Logo: 18–22px, `font-semibold`.
+
+## IMAGERY (what to show: photos, illustrations, icons, logos):
+
+* Logo “anilo” com marca + wordmark.
+
+## MEDIA (video, animation, Lottie, 3D, etc.):
+
+* Desktop: WebGL (React Three Fiber) + MeshTransmissionMaterial.
 
 ---
 
-## WEBGL ATMOSFÉRICO (GHOST)
-### Conceito
-O WebGL funciona como uma **camada sensorial** no fundo, não como objeto principal:
-- **Elemento etéreo** ("ghost") abstrato com alta emissividade
-- **Glow intenso** com Bloom HDR na cor `#0057FF`
-- **Ruído analógico** com scanlines sutis e vinheta
-- **Follow sutil** do mouse apenas no desktop
-- **Pulso temporal** orgânico (sem movimento mecânico)
+## COMPONENTS USED (buttons, cards, tabs, accordions, sliders, etc.):
 
-### Referência Visual: https://codepen.io/danilonovaisv/pen/azZbdQo  
-### Elementos Principais:
-1. **Ghost Principal**: Mesh esférico com base deformada organicamente
-2. **Atmosfera de Revelação**: Shader que revela o fundo conforme o ghost se move
-3. **Sistema de Partículas**: Partículas que emergem do ghost durante movimento
-4. **Olhos Interativos**: Brilho que responde à velocidade de movimento
-5. **Fireflies**: Elementos luminosos flutuantes no fundo
-6. **Pós-processamento**: Bloom + Analog Decay (grain, scanlines, jitter)
+* `SiteHeader.tsx`
+* `DesktopFluidHeader.tsx`
+* `MobileStaggeredMenu.tsx`
+* `webgl/FluidGlass.tsx`
 
----
+## STATE VARIANTS (hover, active, focus, disabled, selected):
 
-## ARQUITETURA DE ARQUIVOS (HERO)
-```
-components/home/
-├─ HomeHero.tsx            ← Orchestrator (z-index layers)
-├─ HeroPreloader.tsx       ← Componente de carregamento
-├─ HeroCopy.tsx            ← Texto estático (sem animação)
-├─ ManifestoThumb.tsx      ← Thumb do vídeo manifesto (expande ao scroll)
-├─ GhostStage.tsx          ← Client boundary wrapper
-└─ webgl/
-   ├─ GhostCanvas.tsx      ← Cena principal R3F + postprocessing
-   ├─ Ghost.tsx            ← Mesh etéreo com follow mouse
-   ├─ Eyes.tsx             ← Sistema de olhos reativos
-   ├─ Particles.tsx        ← Sistema de partículas
-   ├─ Fireflies.tsx        ← Elementos luminosos de fundo
-   ├─ AtmosphereVeil.tsx   ← Shader de revelação do fundo
-   └─ postprocessing/
-       ├─ AnalogDecayPass.ts  ← Efeitos analógicos (grain, scanlines)
-       └─ BloomPass.ts        ← Bloom HDR customizado
-```
+* Links:
+
+  * hover: aumento leve de opacidade
+  * active: cor destacada + underline ativo
+  * focus-visible: ring acessível
+* Menu (mobile):
+
+  * open/close com ícone animado
+
+## INTERACTIONS (click, hover, tap, drag, scroll-trigger, etc.):
+
+* Desktop:
+
+  * hover nos links: opacidade
+  * pointer move: vidro acompanha suavemente o cursor (WebGL)
+  * click: navegação
+* Mobile/Tablet:
+
+  * tap: abrir/fechar menu
+  * tap item: navegar e fechar menu
+
+## SCROLL BEHAVIOUR (sticky, parallax, reveal on scroll):
+
+* **Sticky/fixed** no topo.
+* **Sem animação por scroll** (não reage ao scroll; não muda tamanho).
+
+## ANIMATIONS (what moves, when, duration, easing):
 
 ---
 
-## Z-INDEX (CRÍTICO)
-| Z-Index | Elemento                  | Descrição                                  |
-|---------|---------------------------|--------------------------------------------|
-| **z-0** | **WebGL Canvas**          | Cena 3D completa (Ghost + Atmosfera + Partículas) |
-| **z-10**| **Overlay Gradiente**     | Camada de vinheta opcional para integração visual |
-| **z-20**| **Conteúdo**              | Texto H1 + Thumb do vídeo (interativo)     |
-| **z-50**| **Preloader**             | Tela de carregamento (aparece apenas no início) |
+## HERO — VIDEO MORPHING (SCROLL CINEMATOGRÁFICO)
+
+### SECTION NAME:
+
+Hero — Video Morphing (Scroll Cinematográfico)
+
+### SECTION PURPOSE (what this section must achieve):
+
+* Criar uma transição **cinematográfica e contínua** entre a Hero e o Manifesto.
+* Transformar uma **thumb central** em um **vídeo fullpage**, guiado exclusivamente pelo scroll.
+* Estabelecer uma narrativa visual clara: *objeto → ambiente*.
+
+### PRIMARY MESSAGE / HEADLINE:
+
+* O vídeo não comunica mensagem textual — ele **amplifica o manifesto visual**.
+
+### KEY CONTENT ELEMENTS:
+
+* Vídeo MP4 único (mesmo asset em todas as fases)
+* Wrapper sticky
+* Scroll-driven morphing
 
 ---
 
-## DETALHAMENTO TÉCNICO DOS COMPONENTES WEBGL
+### LAYOUT TYPE:
 
-### 1. `GhostCanvas.tsx` (Setup Principal)
-```tsx
-// src/components/home/webgl/GhostCanvas.tsx
-'use client';
+* Sticky full-viewport morphing container
 
-import { useRef, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import Ghost from './Ghost';
-import AtmosphereVeil from './AtmosphereVeil';
-import Particles from './Particles';
-import Fireflies from './Fireflies';
-import AnalogDecayPass from './postprocessing/AnalogDecayPass';
+### ALIGNMENT:
 
-function MouseFollower({ children }: { children: React.ReactNode }) {
-  const reducedMotion = usePrefersReducedMotion();
-  const ghostRef = useRef<THREE.Group>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const { size } = useThree();
+* Centro absoluto (horizontal + vertical) no estado inicial
 
-  useEffect(() => {
-    if (reducedMotion) return;
-    const handleMove = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / size.width) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / size.height) * 2 + 1;
-    };
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
-  }, [reducedMotion, size]);
+### SCROLL BEHAVIOUR:
 
-  useFrame(() => {
-    if (reducedMotion || !ghostRef.current) return;
-    ghostRef.current.position.x += (mouseRef.current.x * 8 - ghostRef.current.position.x) * 0.05;
-    ghostRef.current.position.y += (mouseRef.current.y * 5 - ghostRef.current.position.y) * 0.05;
-  });
-
-  return <group ref={ghostRef}>{children}</group>;
-}
-
-export default function GhostCanvas() {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 7], fov: 45 }}
-      dpr={[1, 2]}
-      gl={{ antialias: false, alpha: true }}
-      className="absolute inset-0 z-0"
-    >
-      <color attach="background" args={['#06071f']} />
-      
-      <ambientLight intensity={0.08} color="#0a0a2e" />
-      
-      <AtmosphereVeil />
-      
-      <MouseFollower>
-        <Ghost />
-        <Particles />
-      </MouseFollower>
-      
-      <Fireflies />
-      
-      <EffectComposer>
-        <Bloom
-          intensity={2.8}
-          luminanceThreshold={0.1}
-          luminanceSmoothing={0.9}
-          radius={0.6}
-        />
-        <AnalogDecayPass />
-        <Vignette eskil={false} offset={0.1} darkness={0.4} />
-      </EffectComposer>
-    </Canvas>
-  );
-}
-```
-
-### 2. `Ghost.tsx` (Mesh Principal)
-```tsx
-// src/components/home/webgl/Ghost.tsx
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
-import Eyes from './Eyes';
-
-export default function Ghost() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const ghostColor = new THREE.Color('#0057FF');
-  
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.elapsedTime;
-    
-    // Pulsing emissive
-    meshRef.current.material.emissiveIntensity = 3.5 + Math.sin(t * 1.2) * 0.6;
-    
-    // Floating animation
-    meshRef.current.position.y = Math.sin(t * 0.8) * 0.15;
-    
-    // Gentle wobble
-    meshRef.current.rotation.y = Math.sin(t * 0.3) * 0.1;
-  });
-
-  return (
-    <group>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[2, 64, 64]} />
-        <meshStandardMaterial
-          color="#06071f"
-          emissive={ghostColor}
-          emissiveIntensity={3.5}
-          transparent
-          opacity={0.92}
-          roughness={0}
-          metalness={0}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      <Eyes />
-    </group>
-  );
-}
-```
-
-### 3. `Eyes.tsx` (Sistema de Olhos Reativos)
-```tsx
-// src/components/home/webgl/Eyes.tsx
-import { useRef, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-export default function Eyes() {
-  const reducedMotion = usePrefersReducedMotion();
-  const { camera } = useThree();
-  const leftEyeRef = useRef<THREE.Mesh>(null);
-  const rightEyeRef = useRef<THREE.Mesh>(null);
-  const mouseSpeedRef = useRef({ x: 0, y: 0 });
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const currentMovement = useRef(0);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (reducedMotion) return;
-      
-      const mousePos = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1
-      };
-      
-      mouseSpeedRef.current.x = Math.abs(mousePos.x - lastMousePos.current.x);
-      mouseSpeedRef.current.y = Math.abs(mousePos.y - lastMousePos.current.y);
-      lastMousePos.current = mousePos;
-      
-      currentMovement.current = 
-        currentMovement.current * 0.95 + 
-        (mouseSpeedRef.current.x + mouseSpeedRef.current.y) * 0.5;
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [reducedMotion]);
-
-  useFrame(() => {
-    if (reducedMotion || !leftEyeRef.current || !rightEyeRef.current) return;
-    
-    // Eye glow based on movement speed
-    const glowIntensity = Math.min(currentMovement.current * 5, 1);
-    leftEyeRef.current.material.opacity = glowIntensity;
-    rightEyeRef.current.material.opacity = glowIntensity;
-    
-    // Make eyes look at camera
-    leftEyeRef.current.lookAt(camera.position);
-    rightEyeRef.current.lookAt(camera.position);
-  });
-
-  return (
-    <group>
-      {/* Eye sockets */}
-      <mesh position={[-0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
-        <sphereGeometry args={[0.45, 16, 16]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
-      <mesh position={[0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
-        <sphereGeometry args={[0.45, 16, 16]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
-      
-      {/* Glowing eyes */}
-      <mesh ref={leftEyeRef} position={[-0.7, 0.6, 2.0]}>
-        <sphereGeometry args={[0.3, 12, 12]} />
-        <meshBasicMaterial 
-          color="#0057FF" 
-          transparent 
-          opacity={0}
-          emissive="#5227FF"
-          emissiveIntensity={4.5}
-        />
-      </mesh>
-      <mesh ref={rightEyeRef} position={[0.7, 0.6, 2.0]}>
-        <sphereGeometry args={[0.3, 12, 12]} />
-        <meshBasicMaterial 
-          color="#0057FF" 
-          transparent 
-          opacity={0}
-          emissive="#5227FF"
-          emissiveIntensity={4.5}
-        />
-      </mesh>
-      
-      {/* Outer glow */}
-      <mesh position={[-0.7, 0.6, 1.95]}>
-        <sphereGeometry args={[0.525, 12, 12]} />
-        <meshBasicMaterial 
-          color="#5227FF" 
-          transparent 
-          opacity={0}
-          side={THREE.BackSide}
-        />
-      </mesh>
-      <mesh position={[0.7, 0.6, 1.95]}>
-        <sphereGeometry args={[0.525, 12, 12]} />
-        <meshBasicMaterial 
-          color="#5227FF" 
-          transparent 
-          opacity={0}
-          side={THREE.BackSide}
-        />
-      </mesh>
-    </group>
-  );
-}
-```
-
-### 4. `AnalogDecayPass.ts` (Pós-processamento)
-```tsx
-// src/components/home/webgl/postprocessing/AnalogDecayPass.ts
-import { shaderMaterial } from '@react-three/drei';
-import { extend } from '@react-three/fiber';
-import * as THREE from 'three';
-
-const AnalogDecayShader = shaderMaterial(
-  {
-    tDiffuse: new THREE.Texture(),
-    uTime: 0,
-    uIntensity: 0.7,
-    uGrain: 0.4,
-    uScanlines: 1.0,
-    uJitter: 0.5,
-  },
-  /* glsl */ `
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-  /* glsl */ `
-    uniform sampler2D tDiffuse;
-    uniform float uTime;
-    uniform float uIntensity;
-    uniform float uGrain;
-    uniform float uScanlines;
-    uniform float uJitter;
-    varying vec2 vUv;
-
-    float rand(vec2 co) {
-      return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
-    }
-
-    void main() {
-      vec2 uv = vUv;
-      
-      // Jitter sutil
-      if (uJitter > 0.01) {
-        uv += (rand(vec2(uTime)) - 0.5) * uJitter * 0.002;
-      }
-
-      vec4 color = texture2D(tDiffuse, uv);
-
-      // Grain
-      if (uGrain > 0.01) {
-        float grain = rand(uv + uTime) * 2.0 - 1.0;
-        color.rgb += grain * uGrain * 0.08 * uIntensity;
-      }
-
-      // Scanlines
-      if (uScanlines > 0.01) {
-        float scan = sin(uv.y * 1200.0 + uTime * 2.0) * 0.5 + 0.5;
-        color.rgb *= mix(1.0, 0.97, scan * uScanlines * uIntensity);
-      }
-
-      gl_FragColor = color;
-    }
-  `
-);
-
-extend({ AnalogDecayShader });
-
-export default function AnalogDecayPass() {
-  return (
-    <shaderPass
-      args={[AnalogDecayShader]}
-      tDiffuse={null}
-      uTime={0}
-      uIntensity={0.7}
-      uGrain={0.4}
-      uScanlines={1.0}
-      uJitter={0.5}
-    />
-  );
-}
-```
+* `position: sticky; top: 0`
+* Scroll total da Hero: ~180–220vh
+* Animação ativa nos primeiros 65–75%
 
 ---
 
-## MANIFESTO — VÍDEO (Animação Ajustada: Reveal Suave)
+### ANIMATION TIMELINE (DESKTOP)
 
-### Conceito de Animação
-A seção Manifesto deve aparecer com um **efeito de revelação suave** quando entra na viewport, semelhante ao comportamento observado no site de referência para as seções subsequentes à hero. O vídeo é o elemento central e deve ganhar destaque com uma animação de fade-in e scale leve. A transição entre Hero e Manifesto é uma **mudança de seção clara**, não uma expansão contínua do mesmo elemento.
+#### Fase 0 — Estado inicial (0% → 5%)
 
-### Regras Atualizadas
-- **Mesmo arquivo** da Hero: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4`
-- **Autoplay** + **Loop**
-- **Muted por padrão** - Áudio apenas quando em foco (IntersectionObserver)
-- **Sem overlays** - Nenhum elemento visual sobreposto ao vídeo
-- **Sem fullscreen forçado** - Respeita a proporção original
-- **Animação de entrada**: Fade-in e scale leve usando Framer Motion (`whileInView`, `variants`).
-- **Nenhuma expansão via scroll** do vídeo thumbnail da Hero.
+* scale: `0.58`
+* border-radius: `24px`
+* vídeo autoplay, **muted**
 
-### Componente da Seção Manifesto
-```tsx
-// src/components/home/ManifestoSection.tsx
-'use client';
+#### Fase 1 — Início do zoom (5% → 25%)
 
-import { motion, useInView, Variants } from 'framer-motion';
-import { useRef } from 'react';
+* scale: `0.58 → 0.75`
+* border-radius: `24px → 20px`
 
-const manifestoVideoVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
-    y: 0,
-    transition: { 
-      duration: 0.6, 
-      ease: [0.22, 1, 0.36, 1] // Easing premium
-    }
-  }
-};
+#### Fase 2 — Transição estrutural (25% → 55%)
 
-export default function ManifestoSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" }); // Aciona quando 100px entram na view
+* scale: `0.75 → 1`
+* width: `60vw → 100vw`
+* height: `auto → 100vh`
+* border-radius: `20px → 6px`
 
-  return (
-    <section 
-      id="manifesto"
-      ref={sectionRef}
-      className="w-full py-20 bg-[#06071f] flex items-center justify-center" // Espaçamento e cor de fundo
-    >
-      <div className="max-w-4xl w-full px-4"> {/* Container centralizado */}
-        <motion.div
-          variants={manifestoVideoVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"} // Animação acionada pelo Intersection Observer
-          className="w-full aspect-video rounded-xl overflow-hidden" // Mantém proporção e cantos arredondados
-        >
-          <video
-            src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
-            muted
-            loop
-            playsInline
-            autoPlay // Opcional, dependendo do comportamento desejado ao entrar na view
-            className="w-full h-full object-cover"
-          />
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-```
+#### Fase 3 — Fullpage takeover (55% → 75%)
+
+* border-radius: `6px → 0`
+* translateY: `0 → -2vh`
+* **Áudio é ativado automaticamente**
+
+#### Fase 4 — Lock visual (75% → 100%)
+
+* vídeo permanece fixo
+* scroll move o conteúdo subsequente
 
 ---
 
-## INTERAÇÃO HERO → MANIFESTO (Atualizado)
+### AUDIO BEHAVIOUR:
 
-### Comportamento
-- **Clique na thumb**: Scroll suave até `#manifesto`
-- **Nenhuma transição visual agressiva** entre estados
-- **Thumb mantém animação própria** (hover/scale) mas **não expande visualmente**.
-- **Scroll suave** com easing natural.
-- **A seção Manifesto tem sua própria animação de entrada** quando entra na viewport.
+* Desktop:
 
-### Implementação (Exemplo em Home Page)
-```tsx
-// src/app/page.tsx (ou src/app/home/page.tsx)
-import HomeHero from '@/components/home/HomeHero';
-import ManifestoSection from '@/components/home/ManifestoSection';
+  * Thumb: **muted**
+  * Fullpage: **áudio ativo automaticamente**
+  * Ao sair para próxima seção: volta para **muted**
+* Mobile:
 
-export default function HomePage() {
-  return (
-    <>
-      <HomeHero />
-      <ManifestoSection />
-      {/* Outras seções... */}
-    </>
-  );
-}
-```
+  * Vídeo inicia muted
+  * Áudio é ativado quando o vídeo estiver **100% visível na viewport**
 
 ---
 
-## ACESSIBILIDADE E PERFORMANCE
-### Acessibilidade
-✅ **Contraste AA garantido** (#d9dade sobre #06071f = ~7.2:1)  
-✅ **`prefers-reduced-motion`**:
-   - Desativa follow do mouse
-   - Desativa bloom intenso
-   - **Desativa animação de entrada do vídeo manifesto**
-   - Mantém layout estático
-✅ **`aria-label`** em todos os elementos interativos
-✅ **Vídeo sempre inicia mudo**
+### INTERACTIONS:
 
-### Performance
-✅ **Canvas isolado** (client-only com dynamic import)
-✅ **DPR máximo: 2** para dispositivos móveis
-✅ **Fallback CSS** se WebGL falhar
-✅ **Carregamento progressivo** com preloader
-✅ **Limite de partículas** (máximo 250, renderização parcial)
-✅ **Instancing** para fireflies
-✅ **Animações de entrada via `useInView`** para otimizar performance de scroll
-
-### Implementação de fallback:
-```tsx
-// src/components/home/GhostStage.tsx
-'use client';
-
-import dynamic from 'next/dynamic';
-
-const GhostCanvas = dynamic(
-  () => import('./webgl/GhostCanvas'),
-  { 
-    ssr: false,
-    loading: () => (
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_#0b0d3a_0%,_#06071f_60%)]" />
-    )
-  }
-);
-
-export default function GhostStage() {
-  return <GhostCanvas />;
-}
-```
+* ❌ Sem interação de mouse
+* ❌ Sem hover
+* ❌ Vídeo não clicável
+* `pointer-events: none`
 
 ---
 
-## NÃO NEGOCIÁVEL
-❌ **Sem glassmorphism** - Nenhum efeito de vidro/blur CSS  
-❌ **Sem texto animado** - Texto 100% estático desde o primeiro frame  
-❌ **Sem 3D tradicional** - Nenhum modelo GLB ou objeto sólido  
-❌ **Sem overlays sobre vídeo** - Vídeo puro sem elementos visuais sobrepostos  
-❌ **Sem expansão via scroll do vídeo** - O vídeo da Hero não se transforma/expande para a seção Manifesto  
-✅ **WebGL como atmosfera** - Elemento de fundo que não compete com o conteúdo  
-✅ **Texto como âncora editorial** - Hierarquia clara: conteúdo > atmosfera  
-✅ **Animação de entrada do vídeo manifesto** - Usar `whileInView` e `useInView` do Framer Motion
+### PERFORMANCE:
+
+* Apenas transformações GPU-friendly
+* `will-change: transform, border-radius`
+* Sem filtros pesados
 
 ---
 
-## RESULTADO ESPERADO
-- **Hero silenciosa e editorial** com texto imediatamente legível
-- **Animação como pano de fundo vivo** que responde organicamente ao usuário
-- **Narrativa clara** sem distrações visuais desnecessárias
-- **Seção Manifesto com entrada suave e premium**, alinhada com a estética do site de referência
-- **Base escalável** para futuras interações mantendo a identidade "Ghost Blue"
+### ACCESSIBILITY:
+
+* `prefers-reduced-motion: reduce`
+
+  * Animação desativada
+  * Vídeo inicia diretamente em fullpage
 
 ---
 
-## NOTAS DE IMPLEMENTAÇÃO
-1. **TT Norms Pro** deve ser configurada no `tailwind.config.ts` e carregada globalmente via `next/font`
-2. **Hook de reduced motion**:
-```tsx
-// src/hooks/usePrefersReducedMotion.ts
-import { useState, useEffect } from 'react';
+* Desktop — **entrada única (on mount)**:
 
-export function usePrefersReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  * `opacity: 0 → 1`
+  * `y: -14 → 0`
+  * duration ~0.55s
+  * ease: `[0.16, 1, 0.3, 1]`
+* Desktop — **cursor follow (contínuo, sutil)**:
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-    
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  * movimento óptico do glass (damp) + micro-tilt
+  * respeita `prefers-reduced-motion`
+* Mobile — menu:
 
-  return prefersReducedMotion;
-}
-```
-3. **Otimização de performance**:
-   - Limitar número de draw calls
-   - Usar `drei/instances` para fireflies
-   - Desativar antialiasing no canvas (`antialias: false`)
-   - Manter geometrias simples
-   - Usar `useInView` para acionar animações de scroll de forma performática
+  * overlay fade-in
+  * painel slide/opacity
+  * itens em stagger editorial (~0.04s de delay incremental)
+
+## MICRO-INTERACTIONS (small feedback, e.g. button press, icon change):
+
+* Hover nos links: apenas opacidade
+* Link ativo: underline
+* Botão menu: ícone “hamburger → X”
+
+---
+
+## TEXT LIMITS (max characters for headline, body, CTA):
+
+* Labels dos links: até ~20–24 caracteres (sem quebrar linha no desktop).
+
+## CONTENT PRIORITY (what must be seen first):
+
+1. Logo
+2. Links / Menu
+3. Efeito glass como ambiente (secundário)
+
+## ALTERNATIVE CONTENT (fallback if image/video not available):
+
+* Se WebGL falhar: header HTML normal com fundo discreto e borda.
+
+---
+
+## LINKS / DESTINATIONS (where CTAs point):
+
+* Home → `/` ou `#hero`
+* Sobre → `/sobre`
+* Portfolio → `/portfolio`
+* Contato → `#contato`
+
+## DATA HOOKS / TRACKING (events to track in analytics):
+
+* `header_nav_click` (label, href)
+* `mobile_menu_open` / `mobile_menu_close`
+
+## DEPENDENCIES (APIs, forms, integrations for this section):
+
+* `framer-motion`
+* `@react-three/fiber`
+* `@react-three/drei`
+* `three`
+
+---
+
+## ACCESSIBILITY NOTES (alt text, motion reduction, ARIA if needed):
+
+* `aria-label` no logo e botão do menu
+* `aria-expanded` e `aria-label` no toggle do menu
+* `focus-visible` ring nos links
+* `prefers-reduced-motion`:
+
+  * desativar followPointer do glass
+  * reduzir/evitar animações do menu
+
+## SPECIAL STATES (empty state, error state, loading state):
+
+* WebGL loading: fallback transparente (sem layout shift)
+* WebGL erro: fallback HTML estático
+
+---
+
+## NOTES / INSPIRATION (links, references, moodboards):
+
+* Fluid Glass: [https://reactbits.dev/components/fluid-glass](https://reactbits.dev/components/fluid-glass)
+* Staggered Menu: [https://reactbits.dev/components/staggered-menu](https://reactbits.dev/components/staggered-menu)
+
+## REFERENCES:
+
+* Referência visual: Header com “pill glass” e glow sutil (vídeo/header anexado)
+
+## "NON-NEGOTIABLES" (things that cannot change in this section):
+
+* ❌ Sem animação por scroll
+* ❌ Sem morph de tamanho
+* ❌ Sem glassmorphism fake em CSS
+* ✅ WebGL apenas no Desktop
+* ✅ Mobile/Tablet com menu fullscreen staggered
+* ✅ Fallback funcional obrigatório
+
+---
+
+
+
+
+
+
+
+# HERO
+
+## SECTION NAME:
+
+Hero
+
+## SECTION PURPOSE (what this section must achieve):
+
+* Criar impacto visual inicial com atmosfera etérea.
+* Comunicar posicionamento estratégico com texto editorial forte.
+* Introduzir linguagem digital experimental com WebGL como camada sensorial.
+* Direcionar o usuário ao Manifesto com mínima distração.
+
+## PRIMARY MESSAGE / HEADLINE:
+
+* “Design, não é só estética.”
+
+## SECONDARY MESSAGE / SUPPORT TEXT:
+
+* “[BRAND AWARENESS]”
+* “[É intenção, é estratégia, é experiência.]”
+
+## KEY CONTENT ELEMENTS (bullets, stats, quotes, etc.):
+
+* Texto editorial (100% estático)
+* Botão/link: “get to know me better” (ou equivalente)
+* WebGL Ghost no background (atmosférico)
+* Thumb de vídeo (Manifesto) no desktop (elemento secundário)
+
+## CALL TO ACTION (if any):
+
+* CTA principal: link para “sobre” (ex: `/sobre`) **ou** interação equivalente definida no design.
+* CTA secundário (via thumb): scroll para `#manifesto`
+
+## LINKS GLOBAIS:
+
+* CTA “get to know me better” → `/sobre`
+* Thumb Manifesto → `#manifesto`
+
+---
+
+## LAYOUT TYPE (hero, grid, list, carousel, form, etc.):
+
+* Hero editorial centralizado + background WebGL
+
+## ALIGNMENT (left/center/right, vertical alignment):
+
+* Conteúdo centralizado (text-center), verticalmente centrado.
+* Thumb no desktop ancorada ao canto inferior direito (overlay dentro da hero).
+
+## SPACING (top/bottom padding, breathing room):
+
+* Hero: min-height ~90vh (ou dvh), padding vertical amplo.
+* Conteúdo com respiro (max-width ~3xl).
+
+---
+
+## BACKGROUND (color, gradient, image, video):
+
+* Base: `#06071f`
+* Opcional: `radial-gradient(circle at center, #0b0d3a 0%, #06071f 60%)`
+* WebGL Ghost (camada z-0)
+* Vinheta / integração sutil (camada z-10, se necessário)
+
+## SECTION COLORS (overrides or specific tokens):
+
+* Texto: `#d9dade`
+* Glow WebGL: `#0057FF` (bloom)
+
+## TYPOGRAPHY (any overrides for headings/body in this section):
+
+* Headline: 48–72px (responsivo), `font-bold`, leading-tight
+* Suporte: 14–18px
+* Tracking editorial sutil
+
+## IMAGERY (what to show: photos, illustrations, icons, logos):
+
+* Sem fotos na hero.
+* Ghost como elemento abstrato emissivo.
+
+## MEDIA (video, animation, Lottie, 3D, etc.):
+
+* WebGL Ghost (R3F) com pós-processamento
+* Thumb de vídeo (desktop)
+* Vídeo full-width abaixo da Hero no mobile
+
+---
+
+## COMPONENTS USED (buttons, cards, tabs, accordions, sliders, etc.):
+
+* `HomeHero.tsx` (orchestrator)
+* `HeroCopy.tsx` (texto estático)
+* `GhostStage.tsx` / `GhostCanvas.tsx` (WebGL)
+* `ManifestoThumb.tsx` (thumb vídeo desktop)
+* `ManifestoSection.tsx` (seção manifesto)
+
+## STATE VARIANTS (hover, active, focus, disabled, selected):
+
+* CTA link/botão:
+
+  * hover: mudança leve de cor/opacidade
+  * focus-visible: ring
+* Thumb:
+
+  * hover: micro scale/brightness (opcional, sutil)
+  * focus-visible: ring
+
+## INTERACTIONS (click, hover, tap, drag, scroll-trigger, etc.):
+
+* Texto: **sem animação**
+* CTA: click navega para `/sobre`
+* Thumb (desktop): click faz scroll suave para `#manifesto`
+* WebGL: follow do mouse apenas no desktop (sutil)
+
+## SCROLL BEHAVIOUR (sticky, parallax, reveal on scroll):
+
+* Texto: **não reage ao scroll**
+* WebGL: **não reage ao scroll**
+* Thumb (desktop): **reage ao scroll enquanto a hero sai da viewport** (transform-only)
+
+---
+
+## ANIMATIONS (what moves, when, duration, easing):
+
+### A) Texto (HeroCopy) — NÃO NEGOCIÁVEL
+
+* ✅ 100% estático desde o primeiro frame.
+* ❌ Sem fade-in / reveal / scroll binding.
+
+### B) WebGL Ghost (background)
+
+* Movimento contínuo baseado em tempo:
+
+  * flutuação orgânica
+  * pulso emissivo
+  * partículas / fireflies lentos
+* Mouse follow (desktop): damp sutil
+* `prefers-reduced-motion`: desativar follow e reduzir intensidade de efeitos
+
+### C) Thumb do Manifesto (desktop) — ENTRADA
+
+* Trigger: `whileInView` / `useInView` (once)
+* Motion: fade-in + translateY leve + scale sutil
+* duration: ~0.5–0.6s
+* ease premium: `[0.43, 0.13, 0.23, 0.96]` (ou `[0.16, 1, 0.3, 1]`)
+
+### D) Thumb do Manifesto (desktop) — SCROLL-DRIVEN (OBRIGATÓRIO)
+
+* Trigger: `useScroll({ target: heroRef, offset: ['start start', 'end start'] })`
+* Mapeamentos (0 → 1):
+
+  * `translateY`: 0 → -120px (tunable)
+  * `scale`: 1 → 0.82 (tunable)
+  * `opacity`: 1 → 0.7 → 0 (com mid-point tunable)
+  * `blur`: 0px → 6px
+  * (opcional) `rotate`: 0 → -3deg
+* Suavização: `useSpring` em y/scale/opacity/rotate
+* Restrições:
+
+  * ❌ sem width/height
+  * ❌ sem fullscreen
+  * ❌ sem position swap para fixed
+  * ✅ apenas transform + opacity + filter
+
+### E) Manifesto Section (vídeo abaixo) — REVEAL AO ENTRAR
+
+* Trigger: `whileInView` / `useInView`
+* Motion: fade-in + scale leve
+* Não é continuidade da thumb (mudança de seção clara)
+
+---
+
+## MICRO-INTERACTIONS (small feedback, e.g. button press, icon change):
+
+* CTA: feedback de hover/tap discreto
+* Thumb: hover sutil (scale até ~1.03–1.04) + leve brightness (opcional)
+
+---
+
+## TEXT LIMITS (max characters for headline, body, CTA):
+
+* [BRAND AWARENESS]: até 24–32 chars
+* Headline: até 40–60 chars (quebra em 2 linhas)
+* Suporte: até 60–90 chars
+* CTA: até 22–28 chars
+
+## CONTENT PRIORITY (what must be seen first):
+
+1. Headline
+2. Suporte
+3. CTA principal
+4. WebGL como atmosfera
+5. Thumb como elemento secundário
+
+## ALTERNATIVE CONTENT (fallback if image/video not available):
+
+* Se WebGL falhar: fundo radial/gradiente estático.
+* Se vídeo não carregar: placeholder sólido sem overlay.
+
+---
+
+## LINKS / DESTINATIONS (where CTAs point):
+
+* CTA principal: `/sobre`
+* Thumb: `#manifesto`
+
+## DATA HOOKS / TRACKING (events to track in analytics):
+
+* `hero_cta_click` (label)
+* `manifesto_thumb_click`
+* `manifesto_video_in_view` (IntersectionObserver)
+* `manifesto_audio_unmuted` / `manifesto_audio_muted`
+
+## DEPENDENCIES (APIs, forms, integrations for this section):
+
+* `framer-motion`
+* `@react-three/fiber`
+* `@react-three/drei`
+* `@react-three/postprocessing` (ou passes custom)
+* Vídeo: Supabase Storage
+
+---
+
+## ACCESSIBILITY NOTES (alt text, motion reduction, ARIA if needed):
+
+* `prefers-reduced-motion`:
+
+  * reduzir/desativar animações não essenciais
+  * manter texto estático (já é)
+* Vídeo:
+
+  * `playsInline`, `muted` default
+  * áudio só quando em foco (IntersectionObserver)
+* Links/CTA:
+
+  * `aria-label`
+  * `focus-visible` ring
+
+## SPECIAL STATES (empty state, error state, loading state):
+
+* Preloader (se aplicável): z-50, transição suave
+* WebGL loading: fallback background
+* Vídeo loading: `preload='metadata'` e placeholder simples
+
+---
+
+## NOTES / INSPIRATION (links, references, moodboards):
+
+* Referência hero ghost (CodePen): [https://codepen.io/danilonovaisv/pen/azZbdQo](https://codepen.io/danilonovaisv/pen/azZbdQo)
+* Referência de comportamento (vídeos anexados): Header + Hero + scroll thumb
+
+## REFERENCES:
+
+* Header fluid glass: [https://reactbits.dev/components/fluid-glass](https://reactbits.dev/components/fluid-glass)
+* Mobile staggered menu: [https://reactbits.dev/components/staggered-menu](https://reactbits.dev/components/staggered-menu)
+
+## "NON-NEGOTIABLES" (things that cannot change in this section):
+
+* ✅ Texto da hero 100% estático (sem animação)
+* ✅ WebGL é atmosfera, não protagonista
+* ✅ Thumb reage ao scroll **sem expandir** (transform-only)
+* ✅ Seção Manifesto tem reveal próprio (não é continuação da thumb)
+* ✅ Mobile: sem thumb na hero; vídeo full-width abaixo
+* ✅ Sem overlays sobre vídeos
+* ✅ Sem fullscreen forçado; respeitar proporção original
+
+
 
 
 
