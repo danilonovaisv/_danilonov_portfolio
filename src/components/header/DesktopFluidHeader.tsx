@@ -1,9 +1,9 @@
 // src/components/header/DesktopFluidHeader.tsx
 'use client';
 
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import FluidGlass from './webgl/FluidGlass';
 

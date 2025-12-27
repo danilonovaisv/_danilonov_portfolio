@@ -11,9 +11,7 @@ const GhostCanvas = dynamic(
   () => import('@/components/home/webgl/GhostCanvas'),
   {
     ssr: false,
-    loading: () => (
-      <div className="absolute inset-0 bg-[#050505]" aria-hidden />
-    ),
+    loading: () => <div className="absolute inset-0 bg-ghost-bg" aria-hidden />,
   }
 );
 
@@ -23,7 +21,7 @@ export default function GhostStage({ enabled = true }: GhostStageProps) {
   if (!enabled) {
     return (
       <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,#0b0d3a_0%,#06071f_65%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-ghost-abyss)_0%,var(--color-ghost-void)_65%)]"
         aria-hidden
       />
     );
