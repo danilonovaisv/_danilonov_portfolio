@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import MosaicCard from './MosaicCard';
 import type { MosaicRow } from './types';
 
@@ -32,7 +32,7 @@ export default function PortfolioMosaicGrid({
       className="relative bg-[#f7f7f7] text-[#0f172a] py-24 md:py-32"
     >
       {/* Overlay de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-white/60 to-white pointer-events-none" />
 
       <div className="container mx-auto px-6 md:px-12 relative z-10 xl:px-12">
         {/* Grid Editorial */}
@@ -47,8 +47,8 @@ export default function PortfolioMosaicGrid({
                   row.columns === 3
                     ? 'lg:col-span-4'
                     : row.columns === 2
-                    ? 'lg:col-span-6'
-                    : 'lg:col-span-12';
+                      ? 'lg:col-span-6'
+                      : 'lg:col-span-12';
 
                 return (
                   <motion.div

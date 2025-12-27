@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { NAV_LINKS, SOCIAL_LIST, FOOTER } from '@/config/navigation';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 const Footer: React.FC = () => {
   return (

@@ -1,128 +1,114 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
-import { ASSETS } from '@/lib/constants';
-import HeroCopy from './HeroCopy';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
 import GhostStage from './GhostStage';
+import HeroCopy from './HeroCopy';
 import HeroPreloader from './HeroPreloader';
+import ManifestoThumb from './ManifestoThumb';
+import PlayButton from './PlayButton';
 
-export default function HomeHero() {
-  const containerRef = useRef<HTMLElement>(null);
+// --- SUB-COMPONENTE COM LÓGICA DE SCROLL SEGURA ---
+// Este componente só é montado quando o browser está pronto, evitando o erro de "ref not hydrated"
+function HomeHeroContent() {
+  const heroRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
-  // Detecção de Mobile e Montagem
+  // Scroll progress relativo APENAS à Hero
+  // Agora é seguro porque heroRef estará sempre ligado ao <section> retornado
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'], // 0 → 1 ao longo da Hero
+  });
+
+  // PlayButton timetable
+  const playButtonOpacity = useTransform(
+      scrollYProgress,
+      [0, 0.1, 0.3, 0.6],
+      [0, 1, 1, 0]
+  );
+
+  // HeroCopy limpa rapidamente (0 -> 10%)
+  const copyOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
+
   useEffect(() => {
-    setIsMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    // Deteção de mobile dentro do componente montado
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // SCROLL TRIGGER
-  // O container tem altura suficiente (~220vh) para permitir o scroll timeline completo
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  });
+  return (
+      <section
+          ref={heroRef}
+          // Altura ajustada: Mobile precisa de menos scroll space (~140vh) vs Desktop (~220vh)
+          className={`relative w-full bg-[#06071f] ${isMobile ? 'h-[140vh]' : 'h-[220vh]'}`}
+      >
+        {/* Layer 0 — WebGL Atmosphere */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <GhostStage enabled />
+        </div>
 
-  // Suavização do scroll (Lenis feel) para evitar movimentos bruscos
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 200,
-    damping: 30,
-    restDelta: 0.001,
-  });
+        {/* Layer 2 — Texto Editorial (Z-20 para ficar ACIMA do vídeo inicialmente) */}
+        <motion.div
+            style={{ opacity: copyOpacity }}
+            className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+        >
+          <HeroCopy />
+        </motion.div>
 
-  // --- TIMELINE DE ANIMAÇÃO (DESKTOP) ---
-  // Baseado na spec: 0% -> 5% (Trava) -> 25% (Zoom) -> 55% (Full) -> 75% (Lock)
+        {/* Layer 1 — Vídeo HERO (Sticky + Scroll Driven) - Z-10 */}
+        <div className="absolute inset-0 z-10">
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+            <ManifestoThumb
+                scrollProgress={scrollYProgress}
+                isMobile={isMobile}
+            />
+          </div>
+        </div>
 
-  // Scale: 0.58 (Thumb) -> 1 (Fullscreen)
-  const desktopScale = useTransform(smoothProgress,
-      [0, 0.05, 0.25, 0.55],
-      [0.58, 0.58, 0.75, 1]
+        {/* Layer 3 — Play Button */}
+        <motion.div
+            style={{ opacity: playButtonOpacity }}
+            className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
+        >
+          <div className="pointer-events-auto cursor-pointer">
+            <PlayButton />
+          </div>
+        </motion.div>
+      </section>
   );
+}
 
-  // Border Radius: 24px (Thumb) -> 0px (Full)
-  const desktopRadius = useTransform(smoothProgress,
-      [0, 0.05, 0.25, 0.55, 0.75],
-      [24, 24, 20, 6, 0]
-  );
+// --- COMPONENTE PRINCIPAL (WRAPPER) ---
+export default function HomeHero() {
+  const [isMounted, setIsMounted] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(true);
 
-  // --- TIMELINE DE ANIMAÇÃO (MOBILE) ---
-  // Simplificada para performance: 0.85 -> 1
-  const mobileScale = useTransform(smoothProgress, [0, 0.6], [0.85, 1]);
-  const mobileRadius = useTransform(smoothProgress, [0, 0.6], [12, 0]);
+  useEffect(() => {
+    setIsMounted(true);
+    const timeout = setTimeout(() => setShowPreloader(false), 1200);
+    return () => clearTimeout(timeout);
+  }, []);
 
-  // Aplicação condicional das transformações
-  const scale = isMobile ? mobileScale : desktopScale;
-  const borderRadius = isMobile ? mobileRadius : desktopRadius;
-
-  // Efeitos de Texto e Ghost (Fading out para dar destaque ao vídeo)
-  const contentOpacity = useTransform(smoothProgress, [0, 0.15], [1, 0]);
-  const contentBlur = useTransform(smoothProgress, [0, 0.15], ['0px', '10px']);
-
-  if (!isMounted) return <div className="h-screen w-full bg-[#06071f]" />;
+  // Se não estiver montado, mostramos apenas o placeholder/preloader
+  // O hook useScroll NÃO corre aqui, prevenindo o erro.
+  if (!isMounted) {
+    return (
+        <>
+          <HeroPreloader isVisible={true} />
+          <div className="h-screen w-full bg-[#06071f]" />
+        </>
+    );
+  }
 
   return (
       <>
-        <HeroPreloader isVisible={true} />
-
-        <section
-            ref={containerRef}
-            // Altura definida para ~220vh para acomodar o timeline da animação
-            className="relative h-[220vh] w-full bg-[#06071f]"
-        >
-          {/* WRAPPER STICKY: Mantém o conteúdo fixo enquanto o usuário faz scroll */}
-          <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-
-            {/* 1. LAYER: BACKGROUND GHOST & TEXTO (Z-INDEX 10) */}
-            {/* Ficam atrás/junto do vídeo inicialmente, mas somem ao scrollar */}
-            <motion.div
-                style={{ opacity: contentOpacity, filter: useMotionTemplate`blur(${contentBlur})` }}
-                className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center"
-            >
-              {/* Ghost Background */}
-              <div className="absolute inset-0 z-0 opacity-60">
-                <GhostStage enabled={!isMobile} />
-              </div>
-
-              {/* Hero Copy (Texto) */}
-              <div className="relative z-20 w-full px-6">
-                <HeroCopy />
-              </div>
-            </motion.div>
-
-            {/* 2. LAYER: VÍDEO HERO ANIMADO (Z-INDEX 0 -> Background funcional) */}
-            <motion.div
-                style={{
-                  scale,
-                  borderRadius,
-                }}
-                className="relative z-0 w-full h-full overflow-hidden shadow-2xl origin-center will-change-transform"
-            >
-              {/* Overlay sutil para garantir contraste inicial (desaparece quando full) */}
-              <motion.div
-                  style={{ opacity: contentOpacity }}
-                  className="absolute inset-0 bg-[#06071f]/40 z-10 pointer-events-none"
-              />
-
-              <video
-                  src={ASSETS.videoManifesto}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-full object-cover"
-                  // Propriedades de otimização
-                  disablePictureInPicture
-                  controls={false}
-              />
-            </motion.div>
-
-          </div>
-        </section>
+        <HeroPreloader isVisible={showPreloader} />
+        {/* Renderizamos o conteúdo real apenas agora */}
+        <HomeHeroContent />
       </>
   );
 }

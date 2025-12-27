@@ -28,8 +28,6 @@ export const ASSETS = {
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',
   logoDark:
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/faivcon.svg',
-  // Adicionado conforme spec (seção Hero)
-  model3D: '/media/abstract_element.glb',
 };
 
 // --- 2. CONTEÚDO DA HOME (TEXTOS) ---

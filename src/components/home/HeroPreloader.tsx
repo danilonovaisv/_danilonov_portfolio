@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type HeroPreloaderProps = {
   isVisible: boolean;
@@ -15,7 +15,7 @@ export default function HeroPreloader({ isVisible }: HeroPreloaderProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#0f112b] text-[#e0e0e0]"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-linear-to-br from-[#0a0a0a] to-[#0f112b] text-[#e0e0e0]"
         >
           <motion.div
             className="mb-6"
@@ -73,7 +73,7 @@ export default function HeroPreloader({ isVisible }: HeroPreloaderProps) {
 
           <div className="mt-6 h-0.5 w-24 overflow-hidden rounded-full bg-[#12132e]">
             <motion.div
-              className="h-full bg-gradient-to-r from-[#0057FF] via-[#2c7bff] to-[#5227FF]"
+              className="h-full bg-linear-to-r from-[#0057FF] via-[#2c7bff] to-[#5227FF]"
               initial={{ width: '0%' }}
               animate={{ width: '100%' }}
               transition={{

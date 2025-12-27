@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import type { MosaicItem } from './types';
 
 type MosaicCardProps = {
@@ -47,7 +47,7 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
       className="relative overflow-hidden rounded-none border border-white/30 bg-[#0f172a]/5"
     >
       {/* Wrapper with fixed aspect ratio to prevent CLS */}
-      <div 
+      <div
         className="relative w-full"
         style={{ paddingBottom: `${paddingBottomPercentage}%` }}
       >
@@ -70,7 +70,7 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/30 mix-blend-multiply" />
 
         <motion.div
           variants={overlayVariants}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import styles from './PortfolioHeroGallery.module.css';
 
@@ -74,10 +74,10 @@ export default function PortfolioHero() {
                   flex: reduceMotion
                     ? 1
                     : activeIndex === null
-                    ? 1
-                    : activeIndex === index
-                    ? 7
-                    : 1,
+                      ? 1
+                      : activeIndex === index
+                        ? 7
+                        : 1,
                 }}
                 transition={{
                   duration: reduceMotion ? 0 : 0.8,
