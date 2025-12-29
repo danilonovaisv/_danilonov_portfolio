@@ -1,5 +1,4 @@
 export const BRAND = {
-  name: "Danilo Novais",
   domain: "portfoliodanilo.com",
   
   // Design Tokens

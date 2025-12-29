@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { BRAND } from '@/config/brand';
-import { headerTokens } from '@/design-system/headerTokens';
+import { headerTokens } from '@/components/header/headerTokens.ts';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import FluidGlass from './webgl/FluidGlass';
 import type { DesktopFluidHeaderProps, NavItem } from './types';

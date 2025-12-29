@@ -5,7 +5,7 @@ import Link from 'next/link';
 import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { headerTokens } from '@/design-system/headerTokens';
+import { headerTokens } from '@/components/header/headerTokens.ts';
 import type {
   HeaderFallbackProps,
   SiteHeaderProps,

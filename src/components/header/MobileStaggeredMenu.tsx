@@ -7,7 +7,7 @@ import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { BRAND } from '@/config/brand';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { headerTokens } from '@/design-system/headerTokens';
+import { headerTokens } from '@/components/header/headerTokens.ts';
 import type { MobileStaggeredMenuProps } from './types';
 
 const overlayVariants: Variants = {

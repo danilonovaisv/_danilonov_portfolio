@@ -69,8 +69,8 @@ export const FOOTER = {
   copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',
   links: [
     { label: 'home', href: '#hero' },
-    { label: 'portfólio showcase', href: '#portfolio-showcase' },
     { label: 'sobre', href: '/sobre' },
+    { label: 'portfólio', href: '/portfolio' },
     { label: 'contato', href: '#contact' },
   ],
 };

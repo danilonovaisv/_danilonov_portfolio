@@ -15,9 +15,9 @@ import {
 } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three-stdlib';
 import { easing } from 'maath';
-import { headerTokens } from '@/design-system/headerTokens';
+import { headerTokens } from '@/components/header/headerTokens.ts';
 
-export type FluidGlassMode = 'bar' | 'lens' | 'cube';
+export type FluidGlassMode = 'bar';
 
 export interface FluidGlassProps {
   mode: FluidGlassMode;
