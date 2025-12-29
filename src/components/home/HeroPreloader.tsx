@@ -28,7 +28,7 @@ export default function HeroPreloader() {
       {/* Progress Bar */}
       <div className="w-24 h-0.5 bg-ghost-abyss rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-linear-to-r from-[#0057FF] to-[#5227FF]"
+          className="h-full bg-linear-to-r from-focus-ring to-[#5227FF]"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.5, ease: "easeInOut" }}

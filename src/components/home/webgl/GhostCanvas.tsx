@@ -1,7 +1,7 @@
 // src/components/home/webgl/GhostCanvas.tsx
 'use client';
 
-import { useRef, useEffect, useState, type ReactElement } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -140,41 +140,12 @@ function GhostScene() {
         <Ghost speedRef={ghostSpeedRef} />
         {/* Reduce particles for mobile/reduced motion */}
         <Particles
-          count={reducedMotion ? 40 : isMobile ? 60 : 160}
+          count={reducedMotion ? 40 : isMobile ? 60 : 250}
           speedRef={ghostSpeedRef}
         />
       </group>
     </>
   );
-}
-
-function Effects(): ReactElement {
-  const reducedMotion = usePrefersReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const effects: ReactElement[] = [
-    <Bloom
-      key="bloom"
-      intensity={reducedMotion ? 1.0 : isMobile ? 2.0 : 3.2}
-      luminanceThreshold={0.08}
-      luminanceSmoothing={0.85}
-      mipmapBlur={!isMobile} // Disable mipmap blur on mobile for perf if needed, or keep for aesthetics
-    />,
-    <Vignette key="vignette" offset={0.12} darkness={0.78} />,
-  ];
-
-  if (!reducedMotion) {
-    effects.splice(1, 0, <AnalogDecayPass key="analog-decay" />);
-  }
-
-  return <EffectComposer enableNormalPass={false}>{effects}</EffectComposer>;
 }
 
 interface GhostCanvasProps {
@@ -214,18 +185,34 @@ export default function GhostCanvas({ eventSource }: GhostCanvasProps) {
       className="absolute inset-0 pointer-events-none"
       style={{ background: 'transparent' }}
     >
-      <ambientLight intensity={0.02} color="#020214" />
+      <ambientLight intensity={0.08} color="#0a0a2e" /> {/* Reference: 0.08, 0x0a0a2e */}
       <directionalLight
         position={[-8, 6, -4]}
-        intensity={1.5}
+        intensity={1.8}
         color="#4a90e2"
       />
-      <directionalLight position={[8, -4, -6]} intensity={2} color="#0057ff" />
+      <directionalLight
+        position={[8, -4, -6]}
+        intensity={1.26}
+        color="#50e3c2"
+      /> {/* Reference: 0.7 * 1.8 = 1.26, color 0x50e3c2 */}
 
       <GhostScene />
-      <Fireflies count={reducedMotion ? 20 : 48} />
+      <Fireflies count={reducedMotion ? 20 : 20} /> {/* Reference: 20 fireflies */}
 
-      <Effects />
+      {/* Bloom - matching Reference Strength 0.3, Threshold 0, Radius 1.25 */}
+      {/* R3F Bloom intensity behaves differently, sticking to ~1.0 for vanilla equivalence roughly, or keeping high if needed */}
+      <EffectComposer enableNormalPass={false}>
+        <Bloom
+          key="bloom"
+          intensity={0.5} // Closest to vanilla 0.3 visually in R3F
+          luminanceThreshold={0}
+          luminanceSmoothing={0.9}
+          mipmapBlur={false}
+        />
+        {reducedMotion ? <></> : <AnalogDecayPass key="analog-decay" />}
+        <Vignette key="vignette" offset={0.12} darkness={0.78} />
+      </EffectComposer>
     </Canvas>
   );
 }
