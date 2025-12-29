@@ -36,7 +36,6 @@
     "deploy": "pnpm run build && firebase deploy --only hosting --project portfolio-danilo-novais"
   },
   "dependencies": {
-    "@dataconnect/admin-generated": "link:src/dataconnect-admin-generated",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.2",
     "@react-three/postprocessing": "^3.0.4",

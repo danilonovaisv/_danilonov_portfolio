@@ -46,11 +46,12 @@ const Footer: React.FC = () => {
     >
       <div
         className="
-          container mx-auto 
+          w-full max-w-[1680px] mx-auto
+          px-[clamp(24px,5vw,96px)]
           flex flex-col lg:flex-row 
           justify-between items-center 
           gap-6 lg:gap-4 
-          py-10 lg:py-4 px-6
+          py-10 lg:py-4
         "
       >
         {/* Copyright - Mobile: Top, Desktop: Left */}

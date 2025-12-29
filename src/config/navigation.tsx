@@ -68,41 +68,41 @@ export const CONTACT_FORM = {
 export const FOOTER = {
   copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',
   links: [
-    { label: 'home', href: '#hero' },
+    { label: 'home', href: '/' },
     { label: 'sobre', href: '/sobre' },
-    { label: 'portfólio', href: '/portfolio' },
+    { label: 'portfolio showcase', href: '/portfolio' },
     { label: 'contato', href: '#contact' },
   ],
 };
 
 // Header navigation links
 export const NAV_LINKS = [
-  { label: 'home', href: '#hero' },
-  { label: 'portfólio showcase', href: '#portfolio-showcase' },
+  { label: 'home', href: '/' },
+  { label: 'portfolio showcase', href: '/portfolio' },
   { label: 'sobre', href: '/sobre' },
   { label: 'contato', href: '#contact' },
 ];
 
 export const HEADER_LINKS_DESKTOP = [
-  { label: 'Home', href: '/', ariaLabel: 'Ir para a home' },
-  { label: 'Sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
-  { label: 'Portfólio', href: '/portfolio', ariaLabel: 'Ir para portfólio' },
-  { label: 'Contato', href: '#contact', ariaLabel: 'Ir para contato' },
+  { label: 'home', href: '/', ariaLabel: 'Ir para a home' },
+  { label: 'sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
+  { label: 'portfolio showcase', href: '/portfolio', ariaLabel: 'Ir para portfólio' },
+  { label: 'contato', href: '#contact', ariaLabel: 'Ir para contato' },
 ];
 
 export const HEADER_LINKS_MOBILE = [
-  { label: 'Home', href: '/', ariaLabel: 'Ir para a home' },
-  { label: 'Sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
-  { label: 'Portfólio', href: '/portfolio', ariaLabel: 'Ir para portfólio' },
-  { label: 'Contato', href: '#contact', ariaLabel: 'Ir para contato' },
+  { label: 'home', href: '/', ariaLabel: 'Ir para a home' },
+  { label: 'sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
+  { label: 'portfolio showcase', href: '/portfolio', ariaLabel: 'Ir para portfólio' },
+  { label: 'contato', href: '#contact', ariaLabel: 'Ir para contato' },
 ];
 
 export const NAVIGATION = {
   header: [
-    { label: "Home", href: "#hero" },
-    { label: "Sobre", href: "/sobre" },
-    { label: "Portfólio", href: "/portfolio" },
-    { label: "Contato", href: "#contact" },
+    { label: "home", href: "/" },
+    { label: "sobre", href: "/sobre" },
+    { label: "portfolio showcase", href: "/portfolio" },
+    { label: "contato", href: "#contact" },
   ],
   footer: FOOTER
 };

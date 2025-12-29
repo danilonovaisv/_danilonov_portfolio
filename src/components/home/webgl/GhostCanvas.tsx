@@ -210,7 +210,7 @@ export default function GhostCanvas({ eventSource }: GhostCanvasProps) {
           luminanceSmoothing={0.9}
           mipmapBlur={false}
         />
-        {reducedMotion ? <></> : <AnalogDecayPass key="analog-decay" />}
+        {reducedMotion || isMobile ? <></> : <AnalogDecayPass key="analog-decay" />}
         <Vignette key="vignette" offset={0.12} darkness={0.78} />
       </EffectComposer>
     </Canvas>

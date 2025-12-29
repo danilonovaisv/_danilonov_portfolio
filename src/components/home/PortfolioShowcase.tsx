@@ -103,7 +103,7 @@ const PortfolioShowcase: FC = () => {
       ref={sectionRef}
       className="relative w-full bg-section-bg py-24 md:py-40 overflow-hidden min-h-screen flex flex-col justify-center items-center"
     >
-      <div className="mx-auto w-full px-[clamp(1.5rem,5vw,6rem)] max-w-[1680px] relative z-10">
+      <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] relative z-10">
         <motion.div
           className="flex flex-col w-full mb-12 md:mb-16 items-center text-center"
           initial="hidden"

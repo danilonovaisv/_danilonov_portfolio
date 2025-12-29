@@ -147,7 +147,7 @@ export default function HomeHero() {
         {/* TEXTO EDITORIAL (z-10) */}
         <motion.div
           style={{ opacity: opacityText }}
-          className="absolute inset-0 z-10 flex items-center justify-center px-4 text-center pointer-events-auto"
+          className="absolute inset-0 z-10 flex items-center justify-center px-[clamp(24px,5vw,96px)] text-center pointer-events-auto"
         >
           <HeroCopy />
         </motion.div>

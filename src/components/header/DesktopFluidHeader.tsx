@@ -144,7 +144,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
 
       <div
         ref={containerRef}
-        className="relative z-50 mx-auto flex h-full w-full max-w-[1200px] items-center justify-between px-10"
+        className="relative z-50 mx-auto flex h-full w-full max-w-[1680px] items-center justify-between px-[clamp(24px,5vw,96px)]"
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
@@ -170,8 +170,8 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
         >
           {magnetizedNavItems.map((link, idx) => {
             const isActive =
-              (pathname === '/' && link.href === '#hero') ||
-              (pathname !== '/' && link.href === pathname);
+              (link.href === '/' && pathname === '/') ||
+              (link.href !== '/' && !link.href.startsWith('#') && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
