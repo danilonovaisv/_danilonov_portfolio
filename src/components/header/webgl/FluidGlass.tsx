@@ -217,7 +217,7 @@ function GlassBar({
   const materialRef = useRef<FluidMaterialType | null>(null);
   const { size, viewport } = useThree();
   const fbo = useFBO({ samples: 4 });
-  const { nodes } = useGLTF(BAR_GLB_PATH) as {
+  const { nodes } = useGLTF(BAR_GLB_PATH) as unknown as {
     nodes: Record<string, THREE.Mesh>;
   };
   const geometry = useMemo(
@@ -237,10 +237,10 @@ function GlassBar({
     return Array.isArray(materialProps.scale)
       ? (materialProps.scale as [number, number, number])
       : ([materialProps.scale, materialProps.scale, materialProps.scale] as [
-          number,
-          number,
-          number
-        ]);
+        number,
+        number,
+        number
+      ]);
   }, [materialProps.scale]);
   const material = useMemo(() => {
     const mat = new FluidMaterial();

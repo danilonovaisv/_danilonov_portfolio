@@ -1,15 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function HeroPreloader() {
+  const [isComplete, setIsComplete] = useState(false);
+
   return (
     <motion.div
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
       transition={{ delay: 1.5, duration: 1 }}
-      onAnimationComplete={() => { document.body.style.overflow = 'auto'; }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#06071f]"
+      onAnimationComplete={() => setIsComplete(true)}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#06071f] ${isComplete ? 'pointer-events-none' : ''
+        }`}
+      aria-hidden={isComplete}
     >
       {/* Ghost SVG Icon */}
       <svg className="ghost-svg mb-4 animate-bounce" height="80" viewBox="0 0 512 512" width="80">
@@ -23,7 +28,7 @@ export default function HeroPreloader() {
       {/* Progress Bar */}
       <div className="w-24 h-0.5 bg-[#0b0d3a] rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]" // primary to accent
+          className="h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
           initial={{ width: 0 }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
