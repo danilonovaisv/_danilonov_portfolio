@@ -8,6 +8,7 @@
       "watchPatterns": [
         ".agent/**/*.md",
         "docs/**/*.md",
+        "PROTOTIPO INTERATIVO - PORT DAN GHOST.md",
         "src/**/*.{ts,tsx,css}",
         "tailwind.config.ts"
       ]

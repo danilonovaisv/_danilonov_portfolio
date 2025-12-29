@@ -10,16 +10,38 @@ Portfólio interativo de alta fidelidade para Danilo Novais (Creative Developer)
 
 ## Estrutura da Home Page
 
-1. **Hero:** Conceito "Ghost/Ethereal" (WebGL atmosférico, sem vidro líquido físico).
-2. **Manifesto:** Vídeo manifesto com tipografia cinética.
-3. **Portfolio Showcase:** Grid interativo de projetos.
-4. **Featured Projects:** Destaques com tratamento visual.
-5. **Clients/Brands:** Marquee de logotipos.
-6. **Contato:** Formulário e links sociais.
-7. **Footer:** Navegação e copyright.
+1. Contexto do Projeto
+• Projeto: Portfólio Institucional de Danilo Novais
+• Páginas principais:
+   • Home
+   • Sobre
+   • Portfólio
+   • Contato
+
+Ordem das seções da Home
+1. Header
+2. Hero + thumb video manifesto
+3. Portfolio Showcase
+4. Featured Projects
+5. Clients / Brands
+6. Contact
+7. Footer
+
 
 ## Design System (Ghost Theme)
 
-- **Cores:** Fundo Void (#050505), Texto Off-White (#F0F0F0), Dimmed (#888888).
-- **Tipografia:** Geist Sans (ou similar moderna sem serifa).
-- **Estética:** Minimalista, sombria, granulação analógica, scanlines, ethereal glow.
+-Colors
+• primary: #0057FF — Cor de destaque e interação
+• bg: #f0f0f0 — Fundo padrão neutro
+• text: #000000 — Texto padrão
+• textInverse: #FFFFFF — Texto sobre fundo escuro
+• neutralLight: #F5F5F5 — Fundo secundário e elementos suaves
+
+⸻
+
+Typography
+• Fonte principal: TT Norms Pro (self-host, se licenciado)
+• Fallbacks: ui-sans-serif, system-ui
+• Tamanhos e pesos:
+   • Logo: 18–22px, font-semibold
+   • Navegação: 15–16px, font-medium, tracking-tight

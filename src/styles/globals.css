@@ -1,3 +1,10 @@
-@tailwind base;
-@tailwind components;
+@import "tailwindcss/preflight";
 @tailwind utilities;
+
+.header-custom-height {
+  --header-height: 100px; /* Default value */
+}
+
+.header-custom-height[style*="--header-height"] {
+  height: var(--header-height);
+}

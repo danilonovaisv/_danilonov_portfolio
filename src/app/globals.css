@@ -92,6 +92,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --header-height: 64px;
+  --header-padding-x: 24px;
+  --header-color-primary: #0057ff;
+  --header-color-gradient-start: #0057ff;
+  --header-color-gradient-end: #7a27ff;
+  --header-color-text: #000000;
+  --header-color-text-inverse: #ffffff;
+  --header-motion-hover-opacity: 0.85;
+  --header-motion-glass-damping: 0.15;
+  --header-motion-stagger-delay: 0.1s;
 }
 
 body {
@@ -131,8 +141,31 @@ body {
 .fluid-header-shell {
   cursor: var(--fluid-header-cursor, pointer);
   transition: transform 320ms ease;
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   transform: translate3d(0, var(--fluid-header-parallax, 0px), 0);
+}
+
+.header-height {
+  height: var(--header-height);
+}
+
+.header-padding {
+  padding-left: var(--header-padding-x);
+  padding-right: var(--header-padding-x);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --header-motion-hover-opacity: 1;
+    --header-motion-glass-damping: 0;
+    --header-motion-stagger-delay: 0s;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* =========================================

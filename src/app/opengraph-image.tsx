@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ImageResponse } from 'next/og';
 
 // export const runtime = 'edge'; // Removed to avoid conflict with force-static

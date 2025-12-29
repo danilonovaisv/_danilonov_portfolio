@@ -2,6 +2,14 @@
   "knowledgeBase": {
     "sources": [
       {
+        "name": "Project_Specs_Local",
+        "type": "local_file",
+        "config": {
+          "path": "docs/PROTOTIPO INTERATIVO - PORT DAN GHOST.md"
+        },
+        "description": "Especificação técnica mestre do projeto atual (Ghost Concept)."
+      },
+      {
         "name": "DatabaseAgentNext_Repos",
         "type": "github_repository",
         "config": {

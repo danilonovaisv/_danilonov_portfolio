@@ -5,11 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { HEADER_LINKS_MOBILE } from '@/config/navigation';
 import { BRAND } from '@/config/brand';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import LogoDark from '@/assets/logos/LogoDark.svg';
 import { headerTokens } from '@/design-system/headerTokens';
+import type { MobileStaggeredMenuProps } from './types';
 
 const overlayVariants: Variants = {
   hidden: { x: '100%', opacity: 0 },
@@ -22,8 +21,8 @@ const listVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.12,
+      staggerChildren: headerTokens.motion.staggerDelay,
+      delayChildren: headerTokens.motion.staggerDelay * 1.2,
     },
   },
 };
@@ -37,7 +36,16 @@ const itemVariants: Variants = {
   },
 };
 
-const MobileStaggeredMenu: React.FC = () => {
+const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
+  navItems,
+  logoUrl,
+  gradient,
+  accentColor,
+  isFixed = true,
+  onOpen,
+  onClose,
+  className,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -72,6 +80,28 @@ const MobileStaggeredMenu: React.FC = () => {
     return itemVariants;
   }, [prefersReducedMotion]);
 
+  const resolvedGradient = useMemo(
+    () => gradient ?? headerTokens.color.gradient,
+    [gradient]
+  );
+
+  const toggleMenu = () => {
+    setIsOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        onOpen?.();
+      } else {
+        onClose?.();
+      }
+      return next;
+    });
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+    onClose?.();
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -91,10 +121,11 @@ const MobileStaggeredMenu: React.FC = () => {
             aria-modal="true"
           >
             <div className="relative h-full w-full">
+              {/* eslint-disable-next-line */}
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(135deg, ${headerTokens.color.gradient[0]}, ${headerTokens.color.gradient[1]})`,
+                  background: `linear-gradient(135deg, ${resolvedGradient[0]}, ${resolvedGradient[1]})`,
                 }}
               />
               <motion.div
@@ -130,7 +161,7 @@ const MobileStaggeredMenu: React.FC = () => {
                   initial="hidden"
                   animate="visible"
                 >
-                  {HEADER_LINKS_MOBILE.map((link, index) => (
+                  {navItems.map((link, index) => (
                     <motion.div
                       key={link.href}
                       variants={resolvedItemVariants}
@@ -141,9 +172,11 @@ const MobileStaggeredMenu: React.FC = () => {
                       </span>
                       <Link
                         href={link.href}
-                        onClick={() => setIsOpen(false)}
+                        onClick={closeMenu}
                         className="text-3xl font-medium tracking-tight text-white transition-opacity hover:opacity-[0.85]"
                         aria-label={link.ariaLabel}
+                        target={link.external ? '_blank' : undefined}
+                        rel={link.external ? 'noreferrer' : undefined}
                       >
                         {link.label}
                       </Link>
@@ -160,7 +193,9 @@ const MobileStaggeredMenu: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <header className="fixed inset-x-0 top-0 z-40 lg:hidden">
+      <header
+        className={`${isFixed ? 'fixed' : 'relative'} inset-x-0 top-0 z-40 lg:hidden ${className ?? ''}`}
+      >
         <div className="flex items-center justify-between px-6 py-4">
           <Link
             href="/"
@@ -168,25 +203,34 @@ const MobileStaggeredMenu: React.FC = () => {
             aria-label="Ir para a home"
           >
             <Image
-              src={LogoDark}
+              src={logoUrl}
               alt={`Logo ${BRAND.name}`}
               width={32}
               height={32}
               className="h-8 w-8"
               priority
+              unoptimized
             />
           </Link>
 
+          {/* eslint-disable-next-line */}
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={toggleMenu}
             aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isOpen}
-            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${
+            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${isOpen
+              ? 'border-white/50 bg-white/85 text-black'
+              : 'border-white/30 bg-white/10 text-[#e9e9ef]'
+              }`}
+            style={
               isOpen
-                ? 'border-white/50 bg-white/85 text-black'
-                : 'border-white/30 bg-white/10 text-[#e9e9ef]'
-            }`}
+                ? undefined
+                : {
+                  color: accentColor,
+                  borderColor: `${accentColor}40`,
+                }
+            }
           >
             <AnimatePresence mode="wait" initial={false}>
               {isOpen ? (

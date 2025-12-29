@@ -1,41 +1,36 @@
 # yaml-language-server: $schema=http://json-schema.org/draft-07/schema
 commands:
+  - name: 'build-header'
+    description: 'Implementa SiteHeader com lógica responsiva: Fluid Glass (Desktop) e Staggered Menu (Mobile)'
+    agent: '@VisualCore'
+    source: '.agent/workflows/header-workflow.md'
+
   - name: 'build-hero'
-    description: 'Implementa a Hero Section com conceito Blue Ghost e camadas corrigidas'
+    description: 'Implementa Hero Section: Ghost Atmosphere WebGL, Texto Editorial Fixo e Thumb de Vídeo Manifesto'
     agent: '@VisualCore'
     source: '.agent/workflows/hero-section.md'
 
-  - name: 'build-manifesto'
-    description: 'Implementa a expansão de vídeo (Thumb to Fullscreen) via scroll'
-    agent: '@VisualCore'
-    source: '.agent/workflows/manifesto-video.md'
-
-  - name: 'build-portfolio'
-    description: 'Cria o grid mosaico e stripes editoriais conectados ao Supabase'
+  - name: 'build-showcase'
+    description: 'Cria a seção Portfolio Showcase com Accordion Rows interativos e Floating Labels'
     agent: '@TechLead'
     source: '.agent/workflows/portfolio-showcase.md'
 
-  - name: 'build-footer'
-    description: 'Implementa Marquee de Clientes, Contacto e Rodapé'
+  - name: 'build-featured'
+    description: 'Implementa seção Featured Projects usando layout Bento Grid responsivo'
     agent: '@TechLead'
-    source: '.agent/workflows/brands-footer.md'
+    source: '.agent/workflows/featured-projects.md'
 
-  - name: 'audit'
-    description: 'Auditoria de performance (Web Vitals) e acessibilidade'
-    agent: '@Auditor'
-    source: '.agent/workflows/performance-audit.md'
-
-  - name: 'refactor-all'
-    description: 'Limpeza de imports, tipagem e padronização de código'
+  - name: 'build-footer-contact'
+    description: 'Implementa seção de Contato, Formulário, Marquee de Clientes e Rodapé Fixo'
     agent: '@TechLead'
-    source: '.agent/workflows/code-quality-refactor.md'
+    source: '.agent/workflows/contact-footer.md'
 
-  - name: 'seo-setup'
-    description: 'Configuração de Metadados, Sitemap e Open Graph'
-    agent: '@Auditor'
-    source: '.agent/workflows/seo-optimization.md'
-
-  - name: 'setup-assets'
-    description: 'Configura e centraliza todos os assets globais (Logos, Links, Textos)'
+  - name: 'setup-global'
+    description: 'Configuração de Design Tokens, Assets Globais (Logos/Fontes) e SEO'
     agent: '@TechLead'
     source: '.agent/workflows/global-assets-setup.md'
+
+  - name: 'audit-qa'
+    description: 'Auditoria completa de Acessibilidade (Focus, Aria-labels) e Performance (Lighthouse)'
+    agent: '@Auditor'
+    source: '.agent/workflows/performance-audit.md'

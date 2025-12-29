@@ -6,7 +6,7 @@ export default function HeroPreloader() {
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
       transition={{ delay: 1.5, duration: 1 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-linear-to-br from-[#0a0a0a] to-[#1a1a1a]"
     >
       <svg
         className="ghost-svg mb-4"
@@ -22,9 +22,9 @@ export default function HeroPreloader() {
       <p className="font-mono text-xs uppercase tracking-widest text-[#e0e0e0] mb-2">
         Summoning spirits
       </p>
-      <div className="w-24 h-0.5 bg-[#06071f] rounded-full overflow-hidden">
+      <div className="w-24 h-0.5 bg-ghost-void rounded-full overflow-hidden">
         <motion.div
-          className="h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
+          className="h-full bg-linear-to-r from-[#0057FF] to-[#5227FF]"
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
           transition={{ duration: 2 }}

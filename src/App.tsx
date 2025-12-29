@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import FluidGlassHeader from './components/header/webgl/FluidGlass';
+import FluidGlass from './components/header/webgl/FluidGlass';
 
 const navItems = [
   { label: 'Home', href: '#hero', ariaLabel: 'Ir para a Home' },
@@ -39,19 +39,17 @@ export default function App() {
         onPointerMove={handlePointer}
         onPointerLeave={() => setPointer({ x: 0.5, y: 0.5 })}
       >
-        <FluidGlassHeader
+        <FluidGlass
           mode="bar"
           pointer={pointer}
           className="absolute inset-0"
           barProps={{
-            navItems,
-            materialProps: {
-              scale: [1.85, 0.26, 0.22],
-              ior: 1.15,
-              thickness: 2,
-              chromaticAberration: 0.05,
-              anisotropy: 0.01,
-            },
+            scale: [1.2, 0.25, 0.2],
+            ior: 1.15,
+            thickness: 4,
+            chromaticAberration: 0.08,
+            anisotropy: 0.02,
+            smoothness: 0.9,
           }}
         />
 

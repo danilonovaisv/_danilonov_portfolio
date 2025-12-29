@@ -1,5 +1,8 @@
 {
   "DockerRun.DisableAutoGenerateConfig": true,
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
   "robotcode.disableExtension": true,
   "files.readonlyInclude": {
     "{**/.c4z/.extsrcs/*.PROTSYM.cbl,**/.c4z/.extsrcs/*.PROTSYM.listing}": true

@@ -1,13 +1,8 @@
-/* eslint-disable react/no-unknown-property */
 'use client';
 
 import * as THREE from 'three';
 import React, { Suspense, useMemo, useRef } from 'react';
-import {
-  Canvas,
-  useFrame,
-  useThree,
-} from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   ContactShadows,
   Environment,
@@ -20,51 +15,47 @@ import {
 } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three-stdlib';
 import { easing } from 'maath';
+import { headerTokens } from '@/design-system/headerTokens';
 
-type NavItem = {
-  label: string;
-  href: string;
-  ariaLabel?: string;
-  description?: string;
-};
+export type FluidGlassMode = 'bar' | 'lens' | 'cube';
 
-export type FluidGlassHeaderProps = {
-  mode?: 'bar';
+export interface FluidGlassProps {
+  mode: FluidGlassMode;
   barProps?: {
-    navItems: NavItem[];
-    materialProps?: FluidGlassMaterialProps;
+    scale?: [number, number, number];
+    ior?: number;
+    thickness?: number;
+    chromaticAberration?: number;
+    anisotropy?: number;
+    smoothness?: number;
   };
   pointer?: { x: number; y: number };
   parallax?: number;
   reducedMotion?: boolean;
   className?: string;
-};
+}
 
-export type FluidGlassMaterialProps = {
+type FluidGlassMaterialProps = {
   scale?: [number, number, number] | number;
-  ior?: number;
-  thickness?: number;
-  chromaticAberration?: number;
-  anisotropy?: number;
-  transmission?: number;
-  roughness?: number;
-  color?: string;
-  attenuationColor?: string;
-  attenuationDistance?: number;
+  ior: number;
+  thickness: number;
+  chromaticAberration: number;
+  anisotropy: number;
+  smoothness: number;
 };
 
 const FluidMaterial = shaderMaterial(
   {
     uTime: 0,
-    uScene: null,
+    uScene: new THREE.Texture(),
     uResolution: new THREE.Vector2(1, 1),
     uIOR: 1.15,
-    uChromaticAberration: 0.05,
-    uThickness: 2,
-    uAnisotropy: 0.01,
+    uChromaticAberration: 0.08,
+    uThickness: 4,
+    uAnisotropy: 0.02,
     uMouse: new THREE.Vector2(0.5, 0.5),
     uParallax: 0,
-    uOpacity: 1,
+    uOpacity: 0.95,
   },
   /* glsl */ `
     varying vec2 vUv;
@@ -222,7 +213,7 @@ function GlassBar({
   const glowRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<FluidMaterialType | null>(null);
   const { size, viewport } = useThree();
-  const fbo = useFBO({ samples: 4, depth: false });
+  const fbo = useFBO({ samples: 4 });
   const geometry = useMemo(
     () => new RoundedBoxGeometry(6.5, 1.6, 0.65, 12, 0.38),
     []
@@ -231,7 +222,7 @@ function GlassBar({
     const mat = new FluidMaterial();
     mat.transparent = true;
     mat.toneMapped = false;
-    mat.uOpacity = 0.95;
+    mat.uOpacity = 0.9;
     return mat;
   }, []);
   materialRef.current = material;
@@ -320,21 +311,21 @@ function GlassBar({
     easing.damp3(
       meshRef.current.position,
       [tx * 0.5, -0.05 + parallax * -0.8 + ty * 0.05, 3.3],
-      0.16,
+      headerTokens.motion.glassDamping,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'y',
       reducedMotion ? 0 : tx * 0.5,
-      0.18,
+      headerTokens.motion.glassDamping + 0.02,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'x',
       reducedMotion ? 0 : -ty * 0.25,
-      0.2,
+      headerTokens.motion.glassDamping + 0.04,
       delta
     );
 
@@ -348,21 +339,22 @@ function GlassBar({
       );
     }
 
+    const smoothness = THREE.MathUtils.clamp(materialProps.smoothness, 0, 1);
     materialRef.current.uTime = state.clock.elapsedTime;
     materialRef.current.uScene = fbo.texture;
     materialRef.current.uResolution.set(size.width, size.height);
     materialRef.current.uMouse.set(pointer.x, 1 - pointer.y);
     materialRef.current.uParallax = parallax;
-    materialRef.current.uIOR = materialProps.ior ?? 1.15;
-    materialRef.current.uChromaticAberration =
-      materialProps.chromaticAberration ?? 0.05;
-    materialRef.current.uThickness = materialProps.thickness ?? 2;
-    materialRef.current.uAnisotropy = materialProps.anisotropy ?? 0.01;
+    materialRef.current.uIOR = materialProps.ior;
+    materialRef.current.uChromaticAberration = materialProps.chromaticAberration;
+    materialRef.current.uThickness = materialProps.thickness;
+    materialRef.current.uAnisotropy = materialProps.anisotropy;
+    materialRef.current.uOpacity = 0.82 + smoothness * 0.14;
   });
 
   const resolvedScale = useMemo(() => {
     if (!materialProps.scale) {
-      return [1.15, 0.24, 0.24] as [number, number, number];
+      return [1.2, 0.25, 0.2] as [number, number, number];
     }
     return Array.isArray(materialProps.scale)
       ? (materialProps.scale as [number, number, number])
@@ -395,7 +387,7 @@ function GlassBar({
           }
         >
           <meshBasicMaterial
-            color={materialProps.attenuationColor ?? '#6ab2ff'}
+            color="#6ab2ff"
             blending={THREE.AdditiveBlending}
             transparent
             opacity={0.15}
@@ -465,24 +457,23 @@ function Scene({
   );
 }
 
-export function FluidGlassHeader({
+export function FluidGlass({
   mode = 'bar',
   barProps,
   pointer = { x: 0.5, y: 0.5 },
   parallax = 0,
   reducedMotion = false,
   className,
-}: FluidGlassHeaderProps) {
+}: FluidGlassProps) {
   if (mode !== 'bar') return null;
 
   const materialProps: FluidGlassMaterialProps = {
     ior: 1.15,
-    thickness: 2,
-    chromaticAberration: 0.05,
-    anisotropy: 0.01,
-    attenuationColor: '#7fb3ff',
-    attenuationDistance: 0.45,
-    ...barProps?.materialProps,
+    thickness: 4,
+    chromaticAberration: 0.08,
+    anisotropy: 0.02,
+    smoothness: 0.9,
+    ...barProps,
   };
 
   return (
@@ -511,4 +502,4 @@ export function FluidGlassHeader({
   );
 }
 
-export default FluidGlassHeader;
+export default FluidGlass;
