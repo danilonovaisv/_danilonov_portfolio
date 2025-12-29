@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { HEADER_LINKS_DESKTOP } from '@/config/navigation';
+import { BRAND } from '@/config/brand';
 import { cn } from '@/lib/utils';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import FluidGlass from './webgl/FluidGlass';
@@ -81,14 +82,14 @@ const DesktopFluidHeader: React.FC = () => {
           >
             <Image
               src={LogoLight}
-              alt="Logo Danilo Novais"
+              alt={`Logo ${BRAND.name}`}
               width={32}
               height={32}
               className="h-8 w-8"
               priority
             />
             <span className="text-[18px] font-semibold tracking-tight">
-              Danilo Novais
+              {BRAND.name}
             </span>
           </Link>
         </div>

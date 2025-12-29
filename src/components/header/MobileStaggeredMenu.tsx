@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { HEADER_LINKS_MOBILE } from '@/config/navigation';
+import { BRAND } from '@/config/brand';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import LogoLight from '@/assets/logos/LogoLight.svg';
 
@@ -72,57 +73,6 @@ const MobileStaggeredMenu: React.FC = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 lg:hidden">
-        <div className="flex items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src={LogoLight}
-              alt="Logo Danilo Novais"
-              width={32}
-              height={32}
-              className="h-8 w-8"
-              priority
-            />
-            <span className="text-[18px] font-semibold tracking-tight text-white">
-              Danilo
-            </span>
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={isOpen}
-            className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 text-[#e9e9ef]"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {isOpen ? (
-                <motion.span
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-black"
-                >
-                  <X className="h-5 w-5" />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="h-5 w-5" />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
-        </div>
-      </header>
-
       <AnimatePresence>
         {isOpen && (
           <motion.aside
@@ -184,13 +134,68 @@ const MobileStaggeredMenu: React.FC = () => {
                 </motion.nav>
 
                 <div className="text-xs uppercase tracking-[0.3em] text-white/60">
-                  Danilo Novais
+                  {BRAND.name}
                 </div>
               </div>
             </div>
           </motion.aside>
         )}
       </AnimatePresence>
+
+      <header className="fixed inset-x-0 top-0 z-40 lg:hidden">
+        <div className="flex items-center justify-between px-6 py-4">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src={LogoLight}
+              alt={`Logo ${BRAND.name}`}
+              width={32}
+              height={32}
+              className="h-8 w-8"
+              priority
+            />
+            <span className="text-[18px] font-semibold tracking-tight text-white">
+              {BRAND.name.split(' ')[0]}
+            </span>
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={isOpen}
+            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${
+              isOpen
+                ? 'border-white/50 bg-white/85 text-black'
+                : 'border-white/30 bg-white/10 text-[#e9e9ef]'
+            }`}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isOpen ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-black"
+                >
+                  <X className="h-5 w-5" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu className="h-5 w-5" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+      </header>
     </>
   );
 };
