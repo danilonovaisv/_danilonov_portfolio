@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion, useScroll } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroPreloader from './HeroPreloader';
 import HeroCopy from './HeroCopy';
-import ManifestoThumb from './ManifestoThumb';
 import GhostStage from './GhostStage';
 import ManifestoSection from './ManifestoSection';
+import HeroVideoThumb, { ManifestoThumb } from './HeroVideoThumb';
 
 export default function HomeHero() {
   const reducedMotion = useReducedMotion();
@@ -18,6 +18,10 @@ export default function HomeHero() {
   const videoTextRef = useRef<HTMLDivElement | null>(null);
   const toggleSoundRef = useRef<HTMLButtonElement | null>(null);
   const [muted, setMuted] = useState(true);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end end'],
+  });
 
   // Entrada da thumb (fade + slide) com stagger para texto/botão de som
   useEffect(() => {
@@ -206,6 +210,9 @@ export default function HomeHero() {
           </button>
         </div>
       </section>
+
+      {/* Thumb flutuante sincronizada com o scroll da Hero */}
+      <HeroVideoThumb scrollProgress={scrollYProgress} />
 
       {/* Mobile manifesto como seção independente */}
       <ManifestoSection />
