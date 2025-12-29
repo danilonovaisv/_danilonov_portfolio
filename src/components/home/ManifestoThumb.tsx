@@ -76,7 +76,7 @@ export default function ManifestoThumb({
       scale: 1,
       transition: {
         duration: prefersReducedMotion ? 0 : 0.7,
-        ease: [0.22, 1, 0.36, 1] // Smooth expo out
+        ease: [0.22, 1, 0.36, 1] as const // Smooth expo out - typed as Bézier tuple
       }
     }
   };

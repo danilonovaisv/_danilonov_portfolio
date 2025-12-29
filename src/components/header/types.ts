@@ -43,6 +43,7 @@ export interface MobileStaggeredMenuProps {
   isFixed?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
+  staggerDelay?: number;
   className?: string;
 }
 

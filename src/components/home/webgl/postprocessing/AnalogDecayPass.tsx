@@ -73,7 +73,7 @@ extend({ AnalogDecayShader, ShaderPass });
 
 // Types are defined in src/types/global.d.ts
 
-export default function AnalogDecayPass() {
+export default function AnalogDecayPass({ enabled = true }: { enabled?: boolean }) {
   const material = React.useMemo(() => new AnalogDecayShader(), []);
 
   useFrame((state) => {
@@ -82,5 +82,5 @@ export default function AnalogDecayPass() {
     }
   });
 
-  return <shaderPass args={[material]} />;
+  return <shaderPass args={[material]} enabled={enabled} />;
 }

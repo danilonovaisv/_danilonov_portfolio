@@ -714,7 +714,23 @@ REFRENCIAS ANIMAÇÃO:
 ---
 
 ### 🛠️ Prompt #07 — Manifesto Mobile: seção fullscreen após Hero
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER
+2. /docs/REFERENCIA_HERO-GHOST
 **Objetivo**
 - Garantir que em mobile o manifesto seja uma seção independente, fullscreen, logo abaixo da Hero.
 
@@ -739,7 +755,23 @@ REFRENCIAS ANIMAÇÃO:
 ---
 
 ### 🛠️ Prompt #08 — GhostCanvas: follow mouse somente desktop + reduced motion
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER
+2. /docs/REFERENCIA_HERO-GHOST
 **Objetivo**
 - Garantir follow mouse apenas em desktop e reduzir intensidades em mobile e reduced motion.
 
@@ -763,7 +795,23 @@ REFRENCIAS ANIMAÇÃO:
 ---
 
 ### 🛠️ Prompt #09 — GhostCanvas: DPR/antialias/performance clamp
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER
+2. /docs/REFERENCIA_HERO-GHOST
 **Objetivo**
 - Controlar DPR e custo do canvas para evitar queda de performance em mobile.
 
@@ -786,7 +834,23 @@ REFRENCIAS ANIMAÇÃO:
 ---
 
 ### 🛠️ Prompt #10 — GhostStage: Fallback sem WebGL
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER
+2. /docs/REFERENCIA_HERO-GHOST
 **Objetivo**
 - Se WebGL falhar, hero deve continuar funcional com layout idêntico (gradiente + texto + manifesto).
 
@@ -809,7 +873,23 @@ REFRENCIAS ANIMAÇÃO:
 ---
 
 ### 🛠️ Prompt #11 — PortfolioShowcase: alinhamento alternado das stripes (desktop)
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER
+2. /docs/REFERENCIA_HERO-GHOST
 **Objetivo**
 - Garantir alternância end/center/start das stripes em desktop conforme referência.
 

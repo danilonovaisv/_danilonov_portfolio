@@ -14,12 +14,10 @@ import type { MobileStaggeredMenuProps } from './types';
  * Total open duration: ~320ms (PRELAYER + PANEL overlap)
  * Total close duration: ~280ms
  */
-const PRELAYER_STAGGER = 0.07;
-const PRELAYER_DURATION = 0.5;
-const PANEL_DURATION = 0.65;
-const ITEM_DURATION = 1;
-const ITEM_STAGGER = 0.1;
-const NUMBER_DURATION = 0.6;
+const OVERLAY_DURATION = 0.22;
+const PANEL_DURATION = 0.28;
+const ITEM_DURATION = 0.22;
+const NUMBER_DURATION = 0.2;
 
 /** Unique ID for ARIA controls relationship */
 const MENU_ID = 'mobile-nav-menu';
@@ -33,6 +31,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   isFixed = true,
   onOpen,
   onClose,
+  staggerDelay = 0.1,
   className,
 }) => {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -42,14 +41,12 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   const menuRef = useRef<HTMLDivElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
-  const preLayerRefs = useRef<HTMLDivElement[]>([]);
   const itemRefs = useRef<HTMLAnchorElement[]>([]);
   const numberRefs = useRef<HTMLSpanElement[]>([]);
   const openTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const closeTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  preLayerRefs.current = [];
   itemRefs.current = [];
   numberRefs.current = [];
 
@@ -137,11 +134,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
     () => gradient ?? ['#0d0d10', '#1a1a20'],
     [gradient]
   );
-  const prelayerColors = useMemo(
-    () => [resolvedGradient[0], resolvedGradient[1], '#0b0b12'],
-    [resolvedGradient]
-  );
-
   const toggleMenu = () => {
     setOpen(!resolvedIsOpen);
   };
@@ -153,7 +145,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   useLayoutEffect(() => {
     if (!isRendered) return;
     const ctx = gsap.context(() => {
-      const preLayers = preLayerRefs.current.filter(Boolean);
       const items = itemRefs.current.filter(Boolean);
       const numbers = numberRefs.current.filter(Boolean);
       const panel = panelRef.current;
@@ -161,13 +152,13 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
       const offscreen = 100;
 
       if (panel) {
-        gsap.set([panel, ...preLayers], { xPercent: offscreen });
+        gsap.set(panel, { xPercent: offscreen });
       }
       if (overlay) {
         gsap.set(overlay, { opacity: 0 });
       }
       if (items.length) {
-        gsap.set(items, { yPercent: 140, rotate: 10, opacity: 0 });
+        gsap.set(items, { y: 16, opacity: 0 });
       }
       if (numbers.length) {
         gsap.set(numbers, { opacity: 0 });
@@ -178,7 +169,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
 
   useLayoutEffect(() => {
     if (!isRendered) return;
-    const preLayers = preLayerRefs.current.filter(Boolean);
     const items = itemRefs.current.filter(Boolean);
     const numbers = numberRefs.current.filter(Boolean);
     const panel = panelRef.current;
@@ -193,12 +183,12 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
     if (prefersReducedMotion) {
       if (resolvedIsOpen) {
         gsap.set(overlay, { opacity: 1 });
-        gsap.set([panel, ...preLayers], { xPercent: 0 });
-        gsap.set(items, { yPercent: 0, rotate: 0, opacity: 1 });
+        gsap.set(panel, { xPercent: 0 });
+        gsap.set(items, { y: 0, opacity: 1 });
         gsap.set(numbers, { opacity: 1 });
       } else {
         gsap.set(overlay, { opacity: 0 });
-        gsap.set([panel, ...preLayers], { xPercent: offscreen });
+        gsap.set(panel, { xPercent: offscreen });
         setIsRendered(false);
       }
       return;
@@ -206,38 +196,24 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
 
     if (resolvedIsOpen) {
       const tl = gsap.timeline();
-      tl.to(overlay, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 0);
-      preLayers.forEach((layer, index) => {
-        tl.to(
-          layer,
-          { xPercent: 0, duration: PRELAYER_DURATION, ease: 'power4.out' },
-          index * PRELAYER_STAGGER
-        );
-      });
-
-      const lastTime = preLayers.length
-        ? (preLayers.length - 1) * PRELAYER_STAGGER
-        : 0;
-      const panelInsertTime = lastTime + (preLayers.length ? 0.08 : 0);
+      tl.to(overlay, { opacity: 1, duration: OVERLAY_DURATION, ease: 'power2.out' }, 0);
       tl.to(
         panel,
-        { xPercent: 0, duration: PANEL_DURATION, ease: 'power4.out' },
-        panelInsertTime
+        { xPercent: 0, duration: PANEL_DURATION, ease: 'power2.out' },
+        0
       );
 
       if (items.length) {
-        const itemsStart = panelInsertTime + PANEL_DURATION * 0.15;
         tl.to(
           items,
           {
-            yPercent: 0,
-            rotate: 0,
+            y: 0,
             opacity: 1,
             duration: ITEM_DURATION,
-            ease: 'power4.out',
-            stagger: { each: ITEM_STAGGER, from: 'start' },
+            ease: 'power2.out',
+            stagger: { each: staggerDelay, from: 'start' },
           },
-          itemsStart
+          PANEL_DURATION * 0.4
         );
         if (numbers.length) {
           tl.to(
@@ -246,9 +222,9 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
               opacity: 1,
               duration: NUMBER_DURATION,
               ease: 'power2.out',
-              stagger: { each: 0.08, from: 'start' },
+              stagger: { each: staggerDelay, from: 'start' },
             },
-            itemsStart + 0.1
+            PANEL_DURATION * 0.45
           );
         }
       }
@@ -257,39 +233,31 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
       const tl = gsap.timeline({
         onComplete: () => setIsRendered(false),
       });
-      tl.to(overlay, { opacity: 0, duration: 0.2, ease: 'power2.in' }, 0);
+      tl.to(overlay, { opacity: 0, duration: OVERLAY_DURATION, ease: 'power2.in' }, 0);
       if (items.length) {
         tl.to(
           [...items].reverse(),
           {
-            yPercent: 140,
-            rotate: -6,
+            y: 16,
             opacity: 0,
-            duration: 0.3,
+            duration: ITEM_DURATION,
             ease: 'power2.in',
-            stagger: 0.04,
+            stagger: { each: staggerDelay, from: 'start' },
           },
           0
         );
       }
       if (numbers.length) {
-        tl.to(numbers, { opacity: 0, duration: 0.2 }, 0);
+        tl.to(numbers, { opacity: 0, duration: NUMBER_DURATION }, 0);
       }
       tl.to(
         panel,
-        { xPercent: offscreen, duration: 0.4, ease: 'power3.in' },
+        { xPercent: offscreen, duration: PANEL_DURATION, ease: 'power2.in' },
         0
       );
-      [...preLayers].reverse().forEach((layer, index) => {
-        tl.to(
-          layer,
-          { xPercent: offscreen, duration: 0.3, ease: 'power3.in' },
-          index * 0.04
-        );
-      });
       closeTimelineRef.current = tl;
     }
-  }, [isRendered, prefersReducedMotion, resolvedIsOpen]);
+  }, [isRendered, prefersReducedMotion, resolvedIsOpen, staggerDelay]);
 
   return (
     <>
@@ -307,13 +275,16 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
           {/* Overlay escuro - clicável para fechar */}
           <div
             ref={overlayRef}
-            className="absolute inset-0 bg-black/20"
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(135deg, ${resolvedGradient[0]}cc, ${resolvedGradient[1]}cc)`,
+            }}
             aria-hidden="true"
           />
 
           {/* Container do painel - apenas este bloqueia propagação */}
           <div
-            className="absolute right-0 top-0 h-full w-full max-w-[420px]"
+            className="absolute right-0 top-0 h-full w-full"
             onClick={(event) => event.stopPropagation()}
             style={
               {
@@ -321,23 +292,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
               } as React.CSSProperties
             }
           >
-            {/* Pre-layers animadas */}
-            <div className="absolute inset-0">
-              {prelayerColors.map((color, index) => (
-                <div
-                  key={color}
-                  ref={(node) => {
-                    if (node) preLayerRefs.current[index] = node;
-                  }}
-                  className="absolute inset-0"
-                  style={{
-                    background: color,
-                    opacity: 0.35 - index * 0.08,
-                  }}
-                />
-              ))}
-            </div>
-
             {/* Painel do gradiente principal */}
             <div
               ref={panelRef}
@@ -382,9 +336,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
                 ))}
               </nav>
 
-              <div className="text-xs uppercase tracking-[0.3em] text-white/60">
-                {BRAND.name}
-              </div>
             </div>
           </div>
         </div>
@@ -402,9 +353,9 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             <Image
               src={logoUrl}
               alt={`Logo ${BRAND.name}`}
-              width={32}
-              height={32}
-              className="h-8 w-8"
+              width={40}
+              height={40}
+              className="h-10 w-10"
               priority
               unoptimized
             />

@@ -23,6 +23,7 @@ function GhostScene() {
 
   const { camera, pointer } = useThree(); // Use pointer from R3F
   const [isMobile, setIsMobile] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
 
   // Set initial position at (-7, 0) to place ghost on the LEFT
   useEffect(() => {
@@ -45,12 +46,17 @@ function GhostScene() {
     let targetX = 0;
     let targetY = 0;
 
-    if (isMobile) {
-      // Automatic organic movement for mobile
-      targetX = Math.sin(t * 0.25) * 4;
-      targetY = Math.cos(t * 0.18) * 3;
+    if (reducedMotion) {
+      // Reduced Motion: Fixed position, barely moving
+      targetX = 0;
+      targetY = Math.sin(t * 0.5) * 0.2; // Very subtle vertically
+    } else if (isMobile) {
+      // Mobile: Gentle organic movement, no mouse tracking
+      // Slower and smaller amplitude than before
+      targetX = Math.sin(t * 0.2) * 2.0;
+      targetY = Math.cos(t * 0.15) * 1.5;
     } else {
-      // Mouse tracking for desktop using R3F state pointer
+      // Desktop: Mouse tracking active
       targetX = pointer.x * 5;
       targetY = pointer.y * 3.5;
     }
@@ -60,14 +66,21 @@ function GhostScene() {
     const anchorY = 0;
 
     // Smooth dampening
-    ghostGroupRef.current.position.x +=
-      (anchorX + targetX - ghostGroupRef.current.position.x) * 0.05;
-    ghostGroupRef.current.position.y +=
-      (anchorY + targetY - ghostGroupRef.current.position.y) * 0.05;
+    // Slower damping for reduced motion to avoid jerkiness if logic changes
+    const damping = reducedMotion ? 0.02 : 0.05;
 
-    // Scale adjustment for mobile
-    const baseScale = isMobile ? 0.9 : 1.4;
-    ghostGroupRef.current.scale.setScalar(baseScale);
+    ghostGroupRef.current.position.x +=
+      (anchorX + targetX - ghostGroupRef.current.position.x) * damping;
+    ghostGroupRef.current.position.y +=
+      (anchorY + targetY - ghostGroupRef.current.position.y) * damping;
+
+    // Scale adjustment logic
+    let targetScale = 1.4; // Desktop default
+    if (reducedMotion) targetScale = 1.25;
+    else if (isMobile) targetScale = 0.9;
+
+    // Smooth scale transition
+    ghostGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
 
     // Sync Ref for Veil
     ghostPosRef.current.copy(ghostGroupRef.current.position);
@@ -104,8 +117,14 @@ function GhostScene() {
     document.documentElement.style.setProperty('--gy', `${screenY}%`);
 
     // Emit Ghost Energy for Header synchronization
-    // Energy based on proximity to center (0,0) -> normalized 0 to 1
-    const energy = 1 - Math.min(1, Math.sqrt(pointer.x ** 2 + pointer.y ** 2));
+    let energy = 0;
+    if (reducedMotion) {
+      energy = 0.5; // Constant low energy
+    } else {
+      // Energy based on proximity to center (0,0) -> normalized 0 to 1
+      energy = 1 - Math.min(1, Math.sqrt(pointer.x ** 2 + pointer.y ** 2));
+    }
+
     // Clamp to avoid zero (minimum baseline glow)
     const clampedEnergy = Math.max(0.15, energy);
     document.documentElement.style.setProperty(
@@ -119,9 +138,41 @@ function GhostScene() {
       <AtmosphereVeil ghostPosRef={ghostPosRef} />
       <group ref={ghostGroupRef}>
         <Ghost speedRef={ghostSpeedRef} />
-        <Particles count={isMobile ? 80 : 160} speedRef={ghostSpeedRef} />
+        {/* Reduce particles for mobile/reduced motion */}
+        <Particles
+          count={reducedMotion ? 40 : isMobile ? 60 : 160}
+          speedRef={ghostSpeedRef}
+        />
       </group>
     </>
+  );
+}
+
+function Effects() {
+  const reducedMotion = usePrefersReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return (
+    <EffectComposer disableNormalPass>
+      <Bloom
+        intensity={reducedMotion ? 1.0 : isMobile ? 2.0 : 3.2}
+        luminanceThreshold={0.08}
+        luminanceSmoothing={0.85}
+        mipmapBlur={!isMobile} // Disable mipmap blur on mobile for perf if needed, or keep for aesthetics
+      />
+
+      {/* Disable noise on reduced motion to reduce visual busyness */}
+      {!reducedMotion ? <AnalogDecayPass /> : null}
+
+      <Vignette offset={0.12} darkness={0.78} />
+    </EffectComposer>
   );
 }
 
@@ -144,12 +195,12 @@ export default function GhostCanvas({ eventSource }: GhostCanvasProps) {
   const dpr = reducedMotion
     ? 1
     : isMobile
-      ? ([1, 1.25] as [number, number])
+      ? ([1, 1.5] as [number, number]) // Cap mobile DPR slightly higher if perf allows, or keep 1.25
       : ([1, 2] as [number, number]);
 
   return (
     <Canvas
-      frameloop={reducedMotion ? 'never' : 'always'}
+      frameloop={reducedMotion ? 'demand' : 'always'} // Use 'demand' for reduced motion to save resources
       camera={{ position: [0, 0, 20], fov: 75 }}
       dpr={dpr}
       gl={{
@@ -171,18 +222,9 @@ export default function GhostCanvas({ eventSource }: GhostCanvasProps) {
       <directionalLight position={[8, -4, -6]} intensity={2} color="#0057ff" />
 
       <GhostScene />
-      <Fireflies count={48} />
+      <Fireflies count={reducedMotion ? 20 : 48} />
 
-      <EffectComposer>
-        <Bloom
-          intensity={3.2}
-          luminanceThreshold={0.08}
-          luminanceSmoothing={0.85}
-          mipmapBlur
-        />
-        <AnalogDecayPass />
-        <Vignette offset={0.12} darkness={0.78} />
-      </EffectComposer>
+      <Effects />
     </Canvas>
   );
 }

@@ -30,7 +30,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   navItems,
   logoUrl,
   glass,
-  height = headerTokens.layout.height,
+  height: _height = headerTokens.layout.height,
   onNavigate,
   supportsWebGL: supportsWebGLOverride,
   className,
@@ -47,7 +47,8 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   const navItemRefs = useRef<Array<HTMLAnchorElement | undefined>>([]);
 
   const magnetizedNavItems = useMemo<NavItem[]>(() => navItems, [navItems]);
-  const headerClassName = `fixed left-0 top-6 z-40 w-full ${className ?? ''} h-16 overflow-hidden`;
+  // Height is set via Tailwind class (h-16 = 64px matches headerTokens.layout.height)
+  const headerClassName = `fixed left-0 top-6 z-40 w-full h-16 overflow-hidden ${className ?? ''}`.trim();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -110,7 +111,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   };
 
   return (
-    <header className={headerClassName} style={{ height }}>
+    <header className={headerClassName}>
       <div
         ref={containerRef}
         className="fluid-header-shell header-padding relative mx-auto flex h-full w-full max-w-5xl items-center justify-between px-6 py-3"
@@ -150,15 +151,12 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
             <Image
               src={logoUrl ?? BRAND.logos.faviconLight}
               alt={`Logo ${BRAND.name}`}
-              width={32}
-              height={32}
-              className="h-8 w-8 drop-shadow-lg transition-transform duration-500 group-hover:scale-105"
+              width={40}
+              height={40}
+              className="h-10 w-10 drop-shadow-lg transition-transform duration-500 group-hover:scale-105"
               priority
               unoptimized
             />
-            <span className="text-[15px] font-semibold tracking-tight text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.55)] transition-all duration-500 group-hover:text-white/90">
-              {BRAND.name}
-            </span>
           </Link>
 
           <nav
