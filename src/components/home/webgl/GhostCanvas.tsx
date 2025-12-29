@@ -148,7 +148,7 @@ function GhostScene() {
   );
 }
 
-function Effects() {
+function Effects(): ReactElement {
   const reducedMotion = usePrefersReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -210,7 +210,7 @@ export default function GhostCanvas({ eventSource }: GhostCanvasProps) {
         premultipliedAlpha: false,
         powerPreference: 'high-performance',
       }}
-      eventSource={eventSource}
+      eventSource={eventSource?.current ?? undefined}
       className="absolute inset-0 pointer-events-none"
       style={{ background: 'transparent' }}
     >
