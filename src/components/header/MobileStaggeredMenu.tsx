@@ -81,7 +81,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   }, [prefersReducedMotion]);
 
   const resolvedGradient = useMemo(
-    () => gradient ?? headerTokens.color.gradient,
+    () => gradient ?? ['#0d0d10', '#1a1a20'],
     [gradient]
   );
 
@@ -121,7 +121,6 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             aria-modal="true"
           >
             <div className="relative h-full w-full">
-              {/* eslint-disable-next-line */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -213,12 +212,11 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             />
           </Link>
 
-          {/* eslint-disable-next-line */}
           <button
             type="button"
             onClick={toggleMenu}
             aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={isOpen}
+            aria-expanded={isOpen ? 'true' : 'false'}
             className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${isOpen
               ? 'border-white/50 bg-white/85 text-black'
               : 'border-white/30 bg-white/10 text-[#e9e9ef]'

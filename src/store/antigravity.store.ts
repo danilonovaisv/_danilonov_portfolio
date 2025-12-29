@@ -10,30 +10,30 @@ export interface ExperienceFlags {
 }
 
 // Define Narrative States
-export type NarrativeState = 
-  | 'IDLE' 
-  | 'HERO_EDITORIAL' 
-  | 'MANIFESTO_TRANSITION' 
-  | 'MANIFESTO_FULLSCREEN' 
+export type NarrativeState =
+  | 'IDLE'
+  | 'HERO_EDITORIAL'
+  | 'MANIFESTO_TRANSITION'
+  | 'MANIFESTO_FULLSCREEN'
   | 'EXPLORATION';
 
 interface AntigravityState {
   // Experience Configuration
   flags: ExperienceFlags;
-  setFlag: (key: keyof ExperienceFlags, value: boolean) => void;
-  setFlags: (flags: Partial<ExperienceFlags>) => void;
+  setFlag: (_key: keyof ExperienceFlags, _value: boolean) => void;
+  setFlags: (_flags: Partial<ExperienceFlags>) => void;
 
   // Real-time Context
   viewport: { width: number; height: number };
-  setViewport: (width: number, height: number) => void;
+  setViewport: (_width: number, _height: number) => void;
 
   // Narrative Control
   narrativeState: NarrativeState;
-  setNarrativeState: (state: NarrativeState) => void;
-  
+  setNarrativeState: (_state: NarrativeState) => void;
+
   // Scroll Metrics
   scrollProgress: number;
-  setScrollProgress: (progress: number) => void;
+  setScrollProgress: (_progress: number) => void;
 }
 
 export const useAntigravityStore = create<AntigravityState>((set) => ({
@@ -45,17 +45,19 @@ export const useAntigravityStore = create<AntigravityState>((set) => ({
     reducedMotion: false,
     debugMode: process.env.NODE_ENV === 'development',
   },
-  
+
   viewport: { width: 0, height: 0 },
   narrativeState: 'IDLE',
   scrollProgress: 0,
 
-  setFlag: (key, value) => set((state) => ({ flags: { ...state.flags, [key]: value } })),
-  setFlags: (newFlags) => set((state) => ({ flags: { ...state.flags, ...newFlags } })),
-  
+  setFlag: (key, value) =>
+    set((state) => ({ flags: { ...state.flags, [key]: value } })),
+  setFlags: (newFlags) =>
+    set((state) => ({ flags: { ...state.flags, ...newFlags } })),
+
   setViewport: (width, height) => set({ viewport: { width, height } }),
-  
+
   setNarrativeState: (state) => set({ narrativeState: state }),
-  
+
   setScrollProgress: (progress) => set({ scrollProgress: progress }),
 }));

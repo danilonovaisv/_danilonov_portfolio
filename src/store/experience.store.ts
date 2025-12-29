@@ -3,7 +3,7 @@ import { ExperienceFlags } from '@/antigravity';
 
 interface ExperienceState {
   flags: ExperienceFlags;
-  setFlags: (flags: ExperienceFlags) => void;
+  setFlags: (_flags: ExperienceFlags) => void;
 }
 
 export const useExperienceStore = create<ExperienceState>((set) => ({
@@ -11,7 +11,8 @@ export const useExperienceStore = create<ExperienceState>((set) => ({
     mountWebGL: false,
     enableManifestoScroll: false,
     enableHoverInteractions: false,
-    reducedMotion: false
+    reducedMotion: false,
+    debugMode: false,
   },
-  setFlags: (flags) => set({ flags })
+  setFlags: (flags) => set({ flags }),
 }));

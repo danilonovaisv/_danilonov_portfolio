@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 
 import { useExperienceStore } from '@/store/experience.store';
 
@@ -17,11 +17,11 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     if (flags.reducedMotion) return;
 
     const lenis = new Lenis({
-      smooth: true,
       lerp: 0.08,
       wheelMultiplier: 1,
       touchMultiplier: 1.2,
-      smoothTouch: false
+      // smoothTouch is deprecated or not available in standard types depending on version, 
+      // but 'smooth' definitely doesn't exist. Keeping others for now.
     });
 
     function raf(time: number) {

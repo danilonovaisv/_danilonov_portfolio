@@ -34,7 +34,7 @@ beforeAll(() => {
 
 describe('ManifestoThumb Component', () => {
   it('deve renderizar a seção do manifesto corretamente', () => {
-    render(<ManifestoThumb />);
+    render(<ManifestoThumb narrativeState="IDLE" />);
 
     // Verifica se a section principal existe
     const section = screen.getByRole('region', { name: /manifesto/i });
@@ -45,7 +45,7 @@ describe('ManifestoThumb Component', () => {
   });
 
   it('deve renderizar o vídeo com os atributos corretos de acessibilidade', () => {
-    render(<ManifestoThumb />);
+    render(<ManifestoThumb narrativeState="IDLE" />);
 
     // Procura o vídeo pelo aria-label definido no componente
     const video = screen.getByLabelText('Manifesto video presentation');
@@ -59,7 +59,7 @@ describe('ManifestoThumb Component', () => {
   });
 
   it('não deve exibir controles ou responder ao mouse', () => {
-    render(<ManifestoThumb />);
+    render(<ManifestoThumb narrativeState="IDLE" />);
     const video = screen.getByLabelText('Manifesto video presentation');
     expect(video).not.toHaveAttribute('controls');
   });

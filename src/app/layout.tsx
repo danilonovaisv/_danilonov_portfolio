@@ -2,8 +2,6 @@
 
 import React from 'react';
 import localFont from 'next/font/local';
-import type { Metadata, Viewport } from 'next';
-
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -35,7 +33,7 @@ export default function RootLayout({
 
   return (
     <html lang="pt-BR" className={ttNorms.variable}>
-      <body className="antialiased bg-[#06071f] text-white">
+      <body className="antialiased bg-ghost-void text-white">
         <SmoothScroll>
           <Header />
           {children}

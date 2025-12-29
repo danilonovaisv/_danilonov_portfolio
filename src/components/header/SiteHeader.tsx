@@ -7,7 +7,6 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { headerTokens } from '@/design-system/headerTokens';
 import type {
   HeaderFallbackProps,
-  NavItem,
   SiteHeaderProps,
 } from './types';
 import { BRAND } from '@/config/brand';
@@ -143,10 +142,10 @@ export default function SiteHeader({
       navItems={items}
       logoUrl={BRAND.logos.dark} // Mobile menu usually light theme background?
       gradient={[
-        headerTokens.color.gradient[0],
-        headerTokens.color.gradient[1],
+        '#0d0d10',
+        '#1a1a20',
       ]}
-      accentColor={headerTokens.color.primary}
+      accentColor={BRAND.colors.primary}
       isFixed
       onOpen={() => undefined}
       onClose={() => undefined}

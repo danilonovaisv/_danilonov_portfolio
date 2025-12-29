@@ -1,22 +1,22 @@
 import { HOME_CONTENT } from '@/config/content';
-import { FOOTER, NAV_LINKS } from '@/config/navigation';
+import { NAVIGATION } from '@/config/navigation';
 import { BRAND } from '@/config/brand';
 
 describe('global site links', () => {
   it('keeps navigation links consistent', () => {
     // Current NAV_LINKS should match the header specification
-    expect(NAV_LINKS).toHaveLength(4);
+    expect(NAVIGATION.header).toHaveLength(4);
 
-    const hrefs = NAV_LINKS.map((l) => l.href);
+    const hrefs = NAVIGATION.header.map((l: { href: string }) => l.href);
     expect(hrefs).toContain('#hero');
     expect(hrefs).toContain('/sobre');
-    expect(hrefs).toContain('#portfolio-showcase');
+    expect(hrefs).toContain('/portfolio');
     expect(hrefs).toContain('#contact');
   });
 
   it('exposes the expected footer links matching the config', () => {
-    expect(FOOTER.links).toHaveLength(4);
-    const footerHrefs = FOOTER.links.map((l) => l.href);
+    expect(NAVIGATION.footer.links).toHaveLength(4);
+    const footerHrefs = NAVIGATION.footer.links.map((l: { href: string }) => l.href);
     expect(footerHrefs).toContain('#hero');
     expect(footerHrefs).toContain('#portfolio-showcase');
     expect(footerHrefs).toContain('/sobre');

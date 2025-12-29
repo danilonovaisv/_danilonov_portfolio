@@ -1,5 +1,10 @@
-import { useRef, useEffect } from 'react';
-import { useScroll, useTransform, useMotionValueEvent, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  useSpring,
+} from 'framer-motion';
 import { useAntigravityStore } from '@/store/antigravity.store';
 
 interface ScrollNarrativeConfig {
@@ -9,8 +14,12 @@ interface ScrollNarrativeConfig {
 
 export const useScrollNarrative = (config: ScrollNarrativeConfig = {}) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const setNarrativeState = useAntigravityStore((state) => state.setNarrativeState);
-  const setScrollProgress = useAntigravityStore((state) => state.setScrollProgress);
+  const setNarrativeState = useAntigravityStore(
+    (state) => state.setNarrativeState
+  );
+  const setScrollProgress = useAntigravityStore(
+    (state) => state.setScrollProgress
+  );
   const flags = useAntigravityStore((state) => state.flags);
 
   // Native Framer Motion Scroll
@@ -23,12 +32,12 @@ export const useScrollNarrative = (config: ScrollNarrativeConfig = {}) => {
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   // Narrative Logic Mapper
   // This maps linear scroll (0-1) to discrete semantic states
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     setScrollProgress(latest);
 
     if (flags.reducedMotion) {
@@ -61,7 +70,7 @@ export const useScrollNarrative = (config: ScrollNarrativeConfig = {}) => {
     transforms: {
       heroOpacity,
       manifestoScale,
-      manifestoRadius
-    }
+      manifestoRadius,
+    },
   };
 };

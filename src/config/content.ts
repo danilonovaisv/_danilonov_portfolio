@@ -81,7 +81,7 @@ export const HOME_CONTENT = {
 export const PORTFOLIO_MOSAIC_DATA = [
   {
     id: 'row-1',
-    columns: 2,
+    columns: 2 as const,
     items: [
       {
         id: 'magic-brand',
@@ -105,7 +105,7 @@ export const PORTFOLIO_MOSAIC_DATA = [
   },
   {
     id: 'row-2',
-    columns: 1,
+    columns: 1 as const,
     items: [
       {
         id: 'tech-web',
@@ -120,7 +120,7 @@ export const PORTFOLIO_MOSAIC_DATA = [
   },
   {
     id: 'row-3',
-    columns: 2,
+    columns: 2 as const,
     items: [
       {
         id: 'branding-confidential',

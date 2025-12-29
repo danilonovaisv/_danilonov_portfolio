@@ -112,7 +112,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   return (
     <header
       className={headerClassName}
-      // eslint-disable-next-line
+
       style={headerStyle}
     >
       <div

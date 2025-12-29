@@ -27,9 +27,9 @@ const Clients: React.FC = () => {
         </motion.div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-12 items-center justify-items-center">
-          {HOME_CONTENT.clients.map(({ src, name }, index) => (
+          {HOME_CONTENT.clients.logos.map((src, index) => (
             <motion.div
-              key={name}
+              key={index}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-20px' }}
@@ -43,13 +43,13 @@ const Clients: React.FC = () => {
             >
               <Image
                 src={src}
-                alt={name}
+                alt={`Client ${index + 1}`}
                 fill
                 className="object-contain brightness-0 invert"
                 sizes="(max-width: 768px) 33vw, 16vw"
-                aria-label={`Logo da ${name}`}
+                aria-label={`Logo of Client ${index + 1}`}
               />
-              <span className="sr-only">{name}</span>
+              <span className="sr-only">{`Client ${index + 1}`}</span>
             </motion.div>
           ))}
         </div>
