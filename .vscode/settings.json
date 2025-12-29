@@ -22,5 +22,6 @@
         "copilot/gpt-5-mini"
       ]
     }
-  }
+  },
+  "Lingma.aI Chat.mcpToolsInAgentMode": true
 }
