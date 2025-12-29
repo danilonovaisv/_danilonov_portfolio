@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -30,26 +31,25 @@ function HeaderFallback({
   logoUrl,
   className,
 }: HeaderFallbackProps) {
+  // Static tokens can be replaced with utility classes or kept standard style if needed dynamic.
+  // Since tokens are constants, we can just use them.
+  // Converting to Link component as well.
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-40 flex justify-center lg:block ${className ?? ''}`}
-      style={{ height: `${headerTokens.layout.height}px` }}
     >
       <div
-        className="mx-auto flex h-full w-full max-w-5xl items-center justify-between rounded-full border border-white/10 bg-white/8 px-6 py-3 text-sm text-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-2xl lg:px-8"
-        style={{
-          paddingLeft: `${headerTokens.layout.paddingX}px`,
-          paddingRight: `${headerTokens.layout.paddingX}px`,
-        }}
+        className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between rounded-full border border-white/10 bg-white/8 px-6 py-3 text-sm text-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-2xl lg:px-8"
       >
-        <a
+        <Link
           href="/"
           className="flex items-center gap-3"
           aria-label="Ir para a home"
         >
           <img
             src={logoUrl}
-            alt="Logotipo"
+            alt={`Logo ${BRAND.name}`}
             width={32}
             height={32}
             className="h-8 w-8"
@@ -57,11 +57,11 @@ function HeaderFallback({
           <span className="text-[15px] font-semibold tracking-tight text-white">
             {BRAND.name}
           </span>
-        </a>
+        </Link>
 
         <nav className="flex items-center gap-5 text-[14px] font-medium uppercase tracking-[0.08em] text-white/90">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               aria-label={item.ariaLabel || item.label}
@@ -70,7 +70,7 @@ function HeaderFallback({
               rel={item.external ? 'noreferrer' : undefined}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
@@ -80,7 +80,11 @@ function HeaderFallback({
 
 export default function SiteHeader({
   navItems,
+  logoUrl,
+  gradient,
+  accentColor,
   disableWebGL,
+  reducedMotion,
   forcedMode,
   className,
 }: SiteHeaderProps) {
@@ -88,12 +92,12 @@ export default function SiteHeader({
   const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   useEffect(() => {
-    if (disableWebGL) {
+    if (disableWebGL || reducedMotion) {
       setSupportsWebGL(false);
       return;
     }
     setSupportsWebGL(checkWebGLSupport());
-  }, [disableWebGL]);
+  }, [disableWebGL, reducedMotion]);
 
   const resolvedMode = forcedMode ?? (isDesktop ? 'desktop' : 'mobile');
 
@@ -114,7 +118,7 @@ export default function SiteHeader({
       return (
         <HeaderFallback
           navItems={items}
-          logoUrl={BRAND.logos.faviconLight} // Using light favicon for fallback (dark bg)
+          logoUrl={logoUrl ?? BRAND.logos.faviconLight} // Fallback uses light icon
           className={className}
         />
       );
@@ -129,6 +133,8 @@ export default function SiteHeader({
           chromaticAberration: 0.08,
           anisotropy: 0.02,
           smoothness: 0.9,
+          followDamping: headerTokens.motion.glass.followDamping,
+          maxTranslateX: headerTokens.motion.glass.maxTranslateX,
         }}
         height={headerTokens.layout.height}
         onNavigate={() => undefined}
@@ -140,12 +146,9 @@ export default function SiteHeader({
   return (
     <MobileStaggeredMenu
       navItems={items}
-      logoUrl={BRAND.logos.dark} // Mobile menu usually light theme background?
-      gradient={[
-        '#0d0d10',
-        '#1a1a20',
-      ]}
-      accentColor={BRAND.colors.primary}
+      logoUrl={logoUrl ?? BRAND.logos.dark} // Mobile menu uses dark logo (on light/gradient bg)
+      gradient={gradient ?? ['#0d0d10', '#1a1a20']}
+      accentColor={accentColor ?? BRAND.colors.primary}
       isFixed
       onOpen={() => undefined}
       onClose={() => undefined}

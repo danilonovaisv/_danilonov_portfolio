@@ -48,14 +48,14 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
     >
       {/* Wrapper with fixed aspect ratio to prevent CLS */}
       <div
-        className="relative w-full"
-        style={{ paddingBottom: `${paddingBottomPercentage}%` }}
+        className="relative w-full pb-(--pb-pct)"
+        style={{ '--pb-pct': `${paddingBottomPercentage}%` } as React.CSSProperties}
       >
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 bg-(image:--item-gradient)"
           style={{
-            background: item.gradient,
-          }}
+            '--item-gradient': item.gradient,
+          } as React.CSSProperties}
           aria-hidden="true"
         />
 

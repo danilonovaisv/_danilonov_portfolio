@@ -1,11 +1,15 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { NAVIGATION, SOCIALS } from '@/config/navigation';
 import { motion } from 'framer-motion';
 import { Instagram, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const Footer: React.FC = () => {
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+
   // Helper to map social keys to icons
   const getSocialIcon = (key: string) => {
     switch (key) {
@@ -25,46 +29,81 @@ const Footer: React.FC = () => {
       icon: getSocialIcon(key)
     }));
 
+  const footerLinks = NAVIGATION.footer.links;
+
+  // Animation only for desktop initial render
+  const footerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.4 } },
+  };
+
   return (
     <motion.footer
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-      className="fixed bottom-0 w-full z-50 bg-[#0057FF] text-white border-t border-white/10"
+      initial={isDesktop ? "hidden" : undefined}
+      animate={isDesktop ? "visible" : undefined}
+      variants={footerVariants}
+      className="w-full bg-[#0057FF] text-white overflow-hidden relative lg:fixed lg:bottom-0 lg:left-0 lg:z-50 lg:border-t lg:border-white/10"
     >
-      <div className="container mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        {/* Copyright */}
-        <div className="order-2 md:order-1 text-center md:text-left text-xs md:text-sm text-white/90">
+      <div
+        className="
+          container mx-auto 
+          flex flex-col lg:flex-row 
+          justify-between items-center 
+          gap-6 lg:gap-4 
+          py-10 lg:py-4 px-6
+        "
+      >
+        {/* Copyright - Mobile: Top, Desktop: Left */}
+        <div className="order-1 text-center lg:text-left text-sm text-white/90">
           <p>{NAVIGATION.footer.copyright}</p>
         </div>
 
-        {/* Navigation & Socials */}
-        <div className="order-1 md:order-2 flex flex-col md:flex-row items-center gap-6 md:gap-8">
+        {/* Navigation & Socials - Mobile: Stacked below, Desktop: Right */}
+        <div className="order-2 flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
+          {/* Nav Links */}
           <nav>
-            <ul className="flex flex-wrap justify-center gap-4 md:gap-6">
-              {NAVIGATION.footer.links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="relative text-xs md:text-sm font-medium lowercase text-white/85 transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF] rounded"
-                  >
+            <ul className="flex flex-col lg:flex-row items-center gap-3 lg:gap-4">
+              {footerLinks.map((link) => {
+                const isInternal = link.href.startsWith('/');
+                const isAnchor = link.href.startsWith('#');
+
+                const content = (
+                  <span className="relative">
                     {link.label}
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-full scale-x-0 bg-white transition-transform duration-200 origin-left hover:scale-x-100" />
-                  </a>
-                </li>
-              ))}
+                    {/* Desktop Hover Underline */}
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-full scale-x-0 bg-white transition-transform duration-200 origin-left group-hover:scale-x-100 hidden lg:block" />
+                  </span>
+                );
+
+                const className = "group relative text-sm font-medium lowercase text-white/85 transition-opacity duration-300 hover:text-white lg:hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF] rounded px-2 py-1";
+
+                return (
+                  <li key={link.label}>
+                    {isInternal && !isAnchor ? (
+                      <Link href={link.href} className={className} aria-label={`Ir para ${link.label}`}>
+                        {content}
+                      </Link>
+                    ) : (
+                      <a href={link.href} className={className} aria-label={`Ir para ${link.label}`}>
+                        {content}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
-          <div className="flex gap-4 border-l border-white/20 pl-0 md:pl-6">
+          {/* Social Icons */}
+          <div className="flex gap-4 lg:border-l lg:border-white/20 lg:pl-6 pt-2 lg:pt-0">
             {socialLinks.map((social) => (
               <a
                 key={social.platform}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/85 hover:text-white hover:scale-110 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF] rounded-full"
-                aria-label={social.platform}
+                className="text-white/85 transition-all duration-300 hover:text-white lg:hover:scale-105 lg:hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0057FF] rounded-full p-1"
+                aria-label={`Visitar ${social.platform}`}
               >
                 <span className="sr-only">{social.platform}</span>
                 {social.icon}

@@ -42,6 +42,8 @@ type FluidGlassMaterialProps = {
   chromaticAberration: number;
   anisotropy: number;
   smoothness: number;
+  followDamping?: number;
+  maxTranslateX?: number;
 };
 
 const FluidMaterial = shaderMaterial(
@@ -306,26 +308,34 @@ function GlassBar({
     gl.render(renderScene, camera);
     gl.setRenderTarget(null);
 
-    const tx = (pointer.x - 0.5) * 1.4;
-    const ty = (pointer.y - 0.5) * 0.5;
+    // Apply motion logic
+    // Using maxTranslateX as a factor. Default 50px approx -> 1.4 world units? 
+    // Let's assume 1.4 is good for defaults and scale relative to it if needed.
+    // Spec: "Movimento apenas no eixo X". We can dampen Y significantly or remove.
+    const rangeX = materialProps.maxTranslateX ? (materialProps.maxTranslateX / 50) * 1.4 : 1.4;
+    const damping = materialProps.followDamping ?? headerTokens.motion.glass.followDamping;
+
+    const tx = (pointer.x - 0.5) * rangeX;
+    const ty = (pointer.y - 0.5) * 0.5; // Reduced Y influence as per spec "apenas no eixo X" mainly
+
     easing.damp3(
       meshRef.current.position,
-      [tx * 0.5, -0.05 + parallax * -0.8 + ty * 0.05, 3.3],
-      headerTokens.motion.glassDamping,
+      [tx * 0.5, -0.05 + parallax * -0.8 + ty * 0.05, 3.3], // subtle Y still needed for parallax/feel? Spec says 'apenas eixo X'. Let's keep Y minimal.
+      damping,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'y',
       reducedMotion ? 0 : tx * 0.5,
-      headerTokens.motion.glassDamping + 0.02,
+      damping + 0.02,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'x',
-      reducedMotion ? 0 : -ty * 0.25,
-      headerTokens.motion.glassDamping + 0.04,
+      reducedMotion ? 0 : -ty * 0.1, // Reduced tilt X
+      damping + 0.04,
       delta
     );
 
@@ -359,10 +369,10 @@ function GlassBar({
     return Array.isArray(materialProps.scale)
       ? (materialProps.scale as [number, number, number])
       : ([materialProps.scale, materialProps.scale, materialProps.scale] as [
-          number,
-          number,
-          number
-        ]);
+        number,
+        number,
+        number
+      ]);
   }, [materialProps.scale]);
 
   return (

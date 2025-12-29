@@ -64,9 +64,9 @@ const CategoryExpanded: FC<CategoryExpandedProps> = ({ category }) => {
           <h4 className="text-xs uppercase tracking-[0.25em] text-gray-500 mb-6 font-bold border-b border-gray-100 pb-3">
             Destaques
           </h4>
-          <ul className="space-y-3 mb-10">
+          <div className="space-y-3 mb-10">
             {[1, 2, 3].map((i) => (
-              <motion.li
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -81,9 +81,9 @@ const CategoryExpanded: FC<CategoryExpandedProps> = ({ category }) => {
                 <div className="group-hover/item:translate-x-1.5 transition-transform duration-500">
                   Projeto Exemplo {i}
                 </div>
-              </motion.li>
+              </motion.div>
             ))}
-          </ul>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">

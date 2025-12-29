@@ -38,7 +38,7 @@ export const NarrativeSection: React.FC<NarrativeSectionProps> = ({
             />
 
             {/* Content Layer */}
-            <div className="relative z-10 w-full max-w-[var(--container-width,1440px)] px-4 md:px-8">
+            <div className="relative z-10 w-full max-w-(--container-width,1440px) px-4 md:px-8">
                 {children}
             </div>
 

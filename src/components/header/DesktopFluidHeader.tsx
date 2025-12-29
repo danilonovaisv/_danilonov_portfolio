@@ -9,7 +9,6 @@ import { headerTokens } from '@/design-system/headerTokens';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import FluidGlass from './webgl/FluidGlass';
 import type { DesktopFluidHeaderProps, NavItem } from './types';
-import FaviconLight from '@/assets/logos/FaviconLight.svg';
 
 const cursorUrl =
   'url(\'data:image/svg+xml,%3Csvg width=\"44\" height=\"44\" viewBox=\"0 0 44 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Ccircle cx=\"22\" cy=\"22\" r=\"14\" fill=\"%23ffffff\" fill-opacity=\"0.12\"/%3E%3Ccircle cx=\"22\" cy=\"22\" r=\"6\" fill=\"%236da8ff\" fill-opacity=\"0.62\"/%3E%3C/svg%3E\') 22 22, pointer';
@@ -31,6 +30,7 @@ const checkWebGLSupport = (): boolean => {
 
 const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   navItems,
+  logoUrl,
   glass,
   height = headerTokens.layout.height,
   onNavigate,
@@ -48,8 +48,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
 
   const magnetizedNavItems = useMemo<NavItem[]>(() => navItems, [navItems]);
   const isCustomHeight = height !== headerTokens.layout.height;
-  const headerClassName = `header-height fixed left-0 top-0 z-40 hidden w-full lg:block ${className ?? ''} ${isCustomHeight ? 'header-custom-height' : ''}`;
-  const headerStyle = isCustomHeight ? { ['--header-height' as string]: `${height}px` } as React.CSSProperties : undefined;
+  const headerClassName = `fixed left-0 top-0 z-40 hidden w-full lg:block ${className ?? ''} ${isCustomHeight ? `h-[${height}px]` : 'h-16'}`;
 
   useEffect(() => {
     setSupportsWebGL(checkWebGLSupport());
@@ -112,8 +111,6 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   return (
     <header
       className={headerClassName}
-
-      style={headerStyle}
     >
       <div
         ref={containerRef}
@@ -150,7 +147,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
             className="group flex items-center gap-3"
           >
             <Image
-              src={FaviconLight}
+              src={logoUrl ?? BRAND.logos.faviconLight}
               alt={`Logo ${BRAND.name}`}
               width={32}
               height={32}

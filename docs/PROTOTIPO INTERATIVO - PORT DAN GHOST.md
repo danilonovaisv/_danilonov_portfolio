@@ -1609,7 +1609,7 @@ export const CTAProjectCard = () => (
 
 > **Inspiração:** [Lo&Behold Studio](https://loandbehold.studio)  
 > **Objetivo final:** Criar uma experiência editorial premium que equilibra **clareza**, **ritmo visual** e **interatividade suave** — sem distrair do conteúdo principal: os projetos.
-```
+
 
 ---
 
@@ -1713,6 +1713,7 @@ opacity: 1, y: 0, scale: 1 }}
 12.
 `https://aymuvxysygrwoicsjgxj.supabase
 .co/storage/v1/object/public/client-logos/client12.svg`
+
 **DATA HOOKS / TRACKING:**
 - Eventos de hover nos logos para analytics
 **DEPENDENCIES:**
@@ -1838,92 +1839,270 @@ ring-offset-[#f5f5f7]
 ---
 
 
-## **SECTION NAME: Footer**
-**SECTION PURPOSE:**
-- Fornecer informações legais e de contato
-- Permitir que os usuários voltem ao topo da página
-**PRIMARY MESSAGE / HEADLINE:**
-- N/A
-**SECONDARY MESSAGE / SUPPORT TEXT:**
-- "© 2025 Danilo Novais Vilela — todos os direitos reservados"
-**KEY CONTENT ELEMENTS:**
-- Copyright
-- Links de navegação (Home, Portfolio Showcase, Brands, Contact)
-- Redes sociais
-**CALL TO ACTION:**
-- N/A
-**LAYOUT TYPE:**
-- Barra fixa no rodapé da página
-**ALIGNMENT:**
-- Horizontal: Copyright à esquerda, links e redes sociais à direita
-- Vertical: Centralizado verticalmente
-**SPACING:**
-- Padding interno: `py-4`
-- Margem entre os elementos: `space-x-4`
-**BACKGROUND:**
-- Cor sólida azul (`bg-[#0057FF]`)
-**SECTION COLORS:**
-- Texto: `text-white`
-- Links: `text-white`, `hover:text-[#0057FF]`
-**TYPOGRAPHY:**
-- Fonte: Sans-serif neo-grotesca (Inter ou similar)
-- Peso: Regular
-- Tamanho: `text-sm`
-**IMAGERY:**
-- Ícones de redes sociais
-**MEDIA:**
-- N/A
-**COMPONENTS USED:**
-- `<footer>`, `<div>`, `<p>`, `<ul>`, `<li>`, `<a>`
-**STATE VARIANTS:**
-- Hover nos links: Muda a cor do texto para azul (`text-[#0057FF]`)
-**INTERACTIONS:**
-- Clique nos links: Redireciona para a página ou faz scroll até a seção
-- Clique nas redes sociais: Abre o link em nova aba
-**SCROLL BEHAVIOUR:**
-- Fixo no rodapé da página (`fixed bottom-0 left-0 right-0`)
-**ANIMATIONS:**
-- Apenas um fadeIn simples:
-- initial={{ opacity: 0 }}
-- whileInView={{ opacity: 1 }}
-- Links com sublinhado animado igual ao header; ícones sociais com hover
-scale(1.05) + leve mudança de opacidade
-**MICRO-INTERACTIONS:**
-- Feedback visual ao hover nos links
-**TEXT LIMITS:**
-- Copyright: Máximo 100 caracteres
-- Links: Máximo 30 caracteres
-**CONTENT PRIORITY:**
-- Alta: Copyright e links de navegação
-- Média: Redes sociais
-**ALTERNATIVE CONTENT:**
-- Se nenhuma rede social for exibida, mostrar uma mensagem de erro
-**LINKS / DESTINATIONS:**
-- Copyright:
-- Home: `© 2025 Danilo Novais Vilela — todos os direitos reservados.`
-- Footer seção: `© 2023 Danilo Novais Vilela. Todos os direitos
-reservados.`
-- Links:
-- `home` → `#hero`
-- `portfólio showcase` → `#portfolio-showcase`
-- `sobre` → `#clients`
-- `contato` → `#contact`
-**DATA HOOKS / TRACKING:**
-- Eventos de clique nos links e redes sociais para analytics
-**DEPENDENCIES:**
-- `HOMEPAGE_CONTENT.footer`
-**ACCESSIBILITY NOTES:**
-- Todos os links devem ter `aria-label` descritivo
-- O footer deve ser navegável via teclado (tab)
-**SPECIAL STATES:**
-- N/A
-**NOTES / INSPIRATION:**
-- Layout inspirado em `HOME-PORTFOLIO-LAYOUYT_ESPERADO.jpg`
-**NON-NEGOTIABLES:**
-- Footer fixo
-- Copyright
-- Links de navegação
-- Redes sociais
+
+
+# **SECTION NAME: Footer**
+
+⸻
+
+SECTION PURPOSE
+    •    Fornecer informações legais e institucionais
+    •    Oferecer navegação secundária clara
+    •    Disponibilizar acesso às redes sociais
+    •    Encerrar a experiência de forma limpa e editorial (especialmente no mobile)
+
+⸻
+
+PRIMARY MESSAGE / HEADLINE
+    •    N/A
+
+⸻
+
+SECONDARY MESSAGE / SUPPORT TEXT
+    •    © 2025 Danilo Novais Vilela — todos os direitos reservados
+
+⸻
+
+KEY CONTENT ELEMENTS
+    •    Copyright
+    •    Links de navegação (Home, Portfólio Showcase, Sobre, Contato)
+    •    Links para redes sociais
+
+⸻
+
+CALL TO ACTION
+    •    N/A
+
+⸻
+
+LAYOUT TYPE
+
+🖥️ Desktop (≥1024px)
+    •    Barra fixa no rodapé da viewport
+    •    Comportamento persistente
+    •    Atua como “âncora” institucional do site
+
+📱 Mobile & Tablet (≤1023px)
+    •    Footer estático no fluxo da página
+    •    Renderizado como seção final
+    •    Nunca fixo
+    •    Nunca sobrepõe conteúdo
+    •    Nunca compete com CTAs ou Manifesto
+
+⸻
+
+ALIGNMENT
+
+Desktop
+    •    Horizontal:
+    •    Copyright → esquerda
+    •    Links de navegação + redes sociais → direita
+    •    Vertical:
+    •    Conteúdo centralizado verticalmente na barra
+
+Mobile
+    •    Vertical (stacked):
+    •    Copyright
+    •    Links de navegação
+    •    Redes sociais
+    •    Alinhamento central ou left-aligned (preferência editorial)
+
+⸻
+
+SPACING
+
+Desktop
+    •    Padding interno: py-4 px-6
+    •    Espaçamento horizontal entre elementos: space-x-4
+
+Mobile
+    •    Padding vertical: py-10
+    •    Espaçamento entre blocos: space-y-6
+    •    Espaçamento entre links: space-y-3
+    •    Área mínima de toque: 48px
+
+⸻
+
+BACKGROUND
+    •    Cor sólida azul institucional: bg-[#0057FF]
+
+⸻
+
+SECTION COLORS
+    •    Texto: text-white
+    •    Links:
+    •    Estado normal: text-white
+    •    Hover (desktop): leve redução de opacidade (opacity-80)
+    •    ⚠️ Em mobile, sem hover visual dependente
+
+⸻
+
+TYPOGRAPHY
+    •    Fonte: Sans-serif neo-grotesca (Inter ou fallback do sistema)
+    •    Peso: Regular
+    •    Tamanho:
+    •    Desktop: text-sm
+    •    Mobile: text-sm (com maior espaçamento)
+
+⸻
+
+IMAGERY
+    •    Ícones SVG monocromáticos para redes sociais
+
+⸻
+
+MEDIA
+    •    N/A
+
+⸻
+
+COMPONENTS USED
+    •    <footer>
+    •    <nav>
+    •    <ul>, <li>
+    •    <p>
+    •    <a>
+
+⸻
+
+STATE VARIANTS
+
+Desktop
+    •    Hover nos links:
+    •    Mudança sutil de opacidade
+    •    Sublinhado animado (mesmo padrão do header)
+    •    Hover nos ícones sociais:
+    •    scale(1.05)
+    •    Leve mudança de opacidade
+
+Mobile
+    •    Sem dependência de hover
+    •    Feedback apenas no :active / :focus-visible
+
+⸻
+
+INTERACTIONS
+    •    Clique nos links:
+    •    Desktop: scroll suave para seção ou navegação
+    •    Mobile: navegação direta (sem animações complexas)
+    •    Clique nas redes sociais:
+    •    Abre em nova aba (target="_blank", rel="noopener noreferrer")
+
+⸻
+
+SCROLL BEHAVIOUR
+
+Desktop
+    •    Footer fixo:
+    •    position: fixed
+    •    bottom: 0
+    •    left: 0
+    •    right: 0
+
+Mobile
+    •    Footer não fixo
+    •    Fluxo natural do documento
+    •    Última seção da página
+    •    Nunca ocupa viewport persistentemente
+
+⸻
+
+ANIMATIONS
+
+Desktop
+    •    Fade-in simples na primeira renderização:
+
+initial={{ opacity: 0 }}
+animate={{ opacity: 1 }}
+transition={{ duration: 0.4 }}
+
+
+
+Mobile
+    •    Sem animação obrigatória
+    •    Respeitar prefers-reduced-motion
+
+⸻
+
+MICRO-INTERACTIONS
+    •    Desktop:
+    •    Hover visual discreto
+    •    Mobile:
+    •    Feedback de toque via :active / focus-visible
+
+⸻
+
+TEXT LIMITS
+    •    Copyright:
+    •    Máx. 100 caracteres
+    •    Links:
+    •    Máx. 30 caracteres
+
+⸻
+
+CONTENT PRIORITY
+    •    Alta:
+    •    Copyright
+    •    Links de navegação
+    •    Média:
+    •    Redes sociais
+
+⸻
+
+ALTERNATIVE CONTENT
+    •    Se não houver redes sociais:
+    •    Simplesmente não renderizar o bloco
+    •    ❌ Nenhuma mensagem de erro visível ao usuário
+
+⸻
+
+LINKS / DESTINATIONS
+    •    home → #hero
+    •    portfólio showcase → #portfolio-showcase
+    •    sobre → /sobre (preferível a âncora)
+    •    contato → #contact
+
+⚠️ Sugestão aplicada: remover âncora #clients como “sobre” no footer.
+
+⸻
+
+DATA HOOKS / TRACKING
+    •    footer_link_click
+    •    footer_social_click
+
+⸻
+
+DEPENDENCIES
+    •    HOMEPAGE_CONTENT.footer
+
+⸻
+
+ACCESSIBILITY NOTES
+    •    Todos os links com aria-label descritivo
+    •    Navegável via teclado
+    •    Ordem lógica de tabulação
+    •    Área mínima de toque garantida em mobile
+    •    Contraste AA garantido (branco sobre azul)
+
+⸻
+
+NON-NEGOTIABLES
+    •    Footer fixo apenas no desktop
+    •    Footer não fixo no mobile
+    •    Copyright
+    •    Links de navegação
+    •    Redes sociais
+    •    Sem competição visual com Hero ou Manifesto
+
+⸻
+
+✅ RESULTADO FINAL ESPERADO
+    •    Desktop: footer institucional, discreto e sempre presente
+    •    Mobile: encerramento limpo, confortável e sem fricção
+    •    UX consistente, sem overlays invasivos
+    •    Sistema coerente com a filosofia editorial do projeto
+
+
 ---
 
 

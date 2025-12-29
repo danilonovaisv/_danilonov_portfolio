@@ -12,7 +12,17 @@ export const headerTokens = {
   },
   motion: {
     hoverOpacity: 0.85,
-    glassDamping: 0.15,
-    staggerDelay: 0.1,
+    glass: {
+      followDamping: 0.1, // 0.08 - 0.12s
+      maxTranslateX: 50, // 40 - 60px
+      maxScaleX: 1.05,
+      maxScaleY: 1.02,
+    },
+    mobile: {
+      overlayDuration: 0.25, // 200-250ms
+      panelDuration: 0.3, // 260-320ms - fluid spring
+      staggerDelay: 0.08, // slightly faster stagger
+      itemDuration: 0.22,
+    },
   },
 } as const;

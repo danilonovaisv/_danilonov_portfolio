@@ -21,18 +21,21 @@ const listVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: headerTokens.motion.staggerDelay,
-      delayChildren: headerTokens.motion.staggerDelay * 1.2,
+      staggerChildren: headerTokens.motion.mobile.staggerDelay,
+      delayChildren: headerTokens.motion.mobile.staggerDelay,
     },
   },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 16 }, // Spec says 16px
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const },
+    transition: {
+      duration: headerTokens.motion.mobile.itemDuration,
+      ease: [0.22, 1, 0.36, 1] as const
+    },
   },
 };
 
@@ -115,17 +118,18 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             transition={
               prefersReducedMotion
                 ? { duration: 0.1 }
-                : { duration: 0.35, ease: [0.22, 1, 0.36, 1] }
+                : { duration: headerTokens.motion.mobile.panelDuration, ease: [0.22, 1, 0.36, 1] }
             }
             role="dialog"
             aria-modal="true"
           >
             <div className="relative h-full w-full">
               <div
-                className="absolute inset-0"
+                className="absolute inset-0 bg-[linear-gradient(135deg,var(--menu-gradient-start),var(--menu-gradient-end))]"
                 style={{
-                  background: `linear-gradient(135deg, ${resolvedGradient[0]}, ${resolvedGradient[1]})`,
-                }}
+                  '--menu-gradient-start': resolvedGradient[0],
+                  '--menu-gradient-end': resolvedGradient[1],
+                } as React.CSSProperties}
               />
               <motion.div
                 className="absolute -top-24 -left-16 h-64 w-64 rounded-full bg-white/15 blur-3xl"
@@ -219,15 +223,15 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             aria-expanded={isOpen ? 'true' : 'false'}
             className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${isOpen
               ? 'border-white/50 bg-white/85 text-black'
-              : 'border-white/30 bg-white/10 text-[#e9e9ef]'
+              : 'bg-white/10'
               }`}
             style={
               isOpen
                 ? undefined
-                : {
+                : ({
                   color: accentColor,
                   borderColor: `${accentColor}40`,
-                }
+                } as React.CSSProperties)
             }
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -256,7 +260,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             </AnimatePresence>
           </button>
         </div>
-      </header>
+      </header >
     </>
   );
 };
