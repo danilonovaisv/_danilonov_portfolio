@@ -42,13 +42,13 @@ const ProjectCard: FC<ProjectCardProps> = ({
     >
       <Link href={`/portfolio/${project.slug}`} className="block w-full h-full">
         {/* Imagem Container - Ocupa toda a área do card */}
-        <div className="relative h-full w-full overflow-hidden rounded-3xl transition-[transform,opacity] duration-[650ms]">
+        <div className="relative h-full w-full overflow-hidden rounded-3xl transition-[transform,opacity] duration-650">
           {/* Imagem com fill */}
           <Image
             src={project.img}
             alt={project.title}
             fill
-            className={`object-cover transition-transform duration-[650ms] ${easeClass} will-change-transform ${mediaHoverClass}`}
+            className={`object-cover transition-transform duration-650 ${easeClass} will-change-transform ${mediaHoverClass}`}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
 
@@ -73,7 +73,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
             {/* Botão Circular Azul com seta diagonal */}
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0057FF] text-white shadow-lg shadow-blue-500/30 transition-transform duration-[650ms] ${easeClass} will-change-transform ${arrowHoverClass}`}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-focus-ring text-white shadow-lg shadow-blue-500/30 transition-transform duration-650 ${easeClass} will-change-transform ${arrowHoverClass}`}
             >
               <ArrowUpRight className="w-5 h-5" />
             </div>
