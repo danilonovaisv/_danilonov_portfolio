@@ -157,6 +157,7 @@ export default function FeaturedProjectsSection() {
 
   return (
     <section
+      id="featured-projects"
       aria-label="Projetos em Destaque"
       className="bg-[#F4F5F7] py-16 md:py-24"
     >
