@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useReducedMotion, useScroll } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroPreloader from './HeroPreloader';
 import HeroCopy from './HeroCopy';
 import GhostStage from './GhostStage';
 import ManifestoSection from './ManifestoSection';
-import HeroVideoThumb, { ManifestoThumb } from './HeroVideoThumb';
+import { ManifestoThumb } from './HeroVideoThumb';
 
 export default function HomeHero() {
   const reducedMotion = useReducedMotion();
@@ -18,10 +18,6 @@ export default function HomeHero() {
   const videoTextRef = useRef<HTMLDivElement | null>(null);
   const toggleSoundRef = useRef<HTMLButtonElement | null>(null);
   const [muted, setMuted] = useState(true);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end end'],
-  });
 
   // Entrada da thumb (fade + slide) com stagger para texto/botão de som
   useEffect(() => {
@@ -156,7 +152,7 @@ export default function HomeHero() {
         <div
           ref={videoWrapperRef}
           aria-label="Vídeo manifesto"
-          className="video-wrapper group/video z-30 relative mx-auto mt-10 flex aspect-9/14 w-[220px] max-w-[360px] flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-in-out md:absolute md:bottom-[5vw] md:right-[5vw] md:w-[min(520px,34vw)] md:aspect-video md:hover:scale-[1.05]"
+          className="video-wrapper group/video z-30 relative mx-auto mt-10 hidden aspect-9/14 w-[220px] max-w-[360px] flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-in-out md:absolute md:bottom-[5vw] md:right-[5vw] md:flex md:w-[min(520px,34vw)] md:aspect-video md:hover:scale-[1.05]"
           onClick={() => {
             if (typeof window === 'undefined') return;
             if (window.innerWidth >= 768 && heroRef.current) {
@@ -228,9 +224,6 @@ export default function HomeHero() {
           </button>
         </div>
       </section>
-
-      {/* Thumb flutuante sincronizada com o scroll da Hero */}
-      <HeroVideoThumb scrollProgress={scrollYProgress} />
 
       {/* Mobile manifesto como seção independente */}
       <ManifestoSection />
