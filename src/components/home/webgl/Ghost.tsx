@@ -1,7 +1,7 @@
 // src/components/home/webgl/Ghost.tsx
 'use client';
 
-import { MutableRefObject, useMemo, useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import Eyes from './Eyes';
@@ -14,72 +14,52 @@ export default function Ghost({ speedRef }: GhostProps) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const glowRef = useRef<THREE.Mesh>(null!);
 
-  const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(2, 56, 56);
-    const positions = geo.attributes.position.array as Float32Array;
-
-    // Create the ghost "skirt" wavy bottom
-    for (let i = 0; i < positions.length; i += 3) {
-      if (positions[i + 1] < -0.4) {
-        const x = positions[i];
-        const z = positions[i + 2];
-        const noise = Math.sin(x * 4) * 0.35 + Math.cos(z * 3) * 0.28;
-        positions[i + 1] = -2.0 + noise;
-      }
-    }
-    geo.computeVertexNormals();
-    return geo;
-  }, []);
-
   useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    const speed = speedRef?.current ?? 0;
-    const speedNormalized = THREE.MathUtils.clamp(speed * 0.08, 0, 7);
+    if (!meshRef.current) return;
 
-    // Pulsing core
-    const pulse = Math.sin(t * 1.8) * 0.2;
+    const t = state.clock.getElapsedTime();
+
+    // "Movimento senoidal orgânico" SPECIFIC FROM WORKFLOW
+    const floatY =
+      Math.sin(t * 0.8) * 0.1 +
+      Math.sin(t * 0.3) * 0.05;
+
+    meshRef.current.position.y = floatY;
+    if (glowRef.current) glowRef.current.position.y = floatY;
+
+    // Optional: Emissive Pulse if using StandardMaterial
     const material = meshRef.current.material as THREE.MeshStandardMaterial;
-    material.emissiveIntensity = 6.5 + pulse * 9 + speedNormalized;
+    if (material) {
+      // Keeping some of the existing pulse logic but integrating it
+      material.emissiveIntensity = 2.0 + Math.sin(t * 2.0) * 0.5;
+    }
 
-    // Floating animation
-    const float = Math.sin(t * 1.2) * 0.2;
-    meshRef.current.position.y = float;
-    glowRef.current.position.y = float;
-
-    // Scale breathing
-    const s = 1.1 + Math.sin(t * 0.8) * 0.06 + speedNormalized * 0.012;
-    meshRef.current.scale.setScalar(s);
-    glowRef.current.scale.setScalar(s * (1.45 + speedNormalized * 0.02));
-
-    // Rotation wobble
-    meshRef.current.rotation.y = Math.sin(t * 0.8) * 0.1;
-    meshRef.current.rotation.z = Math.sin(t * 0.4) * 0.05;
+    // Rotation wobble (optional but good for life)
+    meshRef.current.rotation.y = Math.sin(t * 0.5) * 0.1;
   });
 
   return (
-    <group scale={1.2}>
-      {/* INTERNAL CORE - Semi-solid but glowing */}
-      <mesh ref={meshRef} geometry={geometry}>
+    <group>
+      {/* INTERNAL CORE */}
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[2, 64, 64]} />
         <meshStandardMaterial
           color="#060a1f"
           emissive="#0e5dff"
-          emissiveIntensity={6.5}
-          transparent
-          opacity={0.82}
-          roughness={0}
-          metalness={1}
-          side={THREE.DoubleSide}
+          emissiveIntensity={2.0}
+          roughness={0.2}
+          metalness={0.8}
         />
         <Eyes speedRef={speedRef} />
       </mesh>
 
-      {/* EXTERNAL HALO - The "Soft Light" reveal component */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[2.5, 32, 32]} />
+      {/* EXTERNAL HALO */}
+      <mesh ref={glowRef} scale={1.2}>
+        <sphereGeometry args={[2, 32, 32]} />
         <meshBasicMaterial
           color="#3b82f6"
           transparent
-          opacity={0.28}
+          opacity={0.15}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />

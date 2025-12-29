@@ -47,8 +47,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   const navItemRefs = useRef<Array<HTMLAnchorElement | undefined>>([]);
 
   const magnetizedNavItems = useMemo<NavItem[]>(() => navItems, [navItems]);
-  const isCustomHeight = height !== headerTokens.layout.height;
-  const headerClassName = `fixed left-0 top-0 z-40 hidden w-full lg:block ${className ?? ''} ${isCustomHeight ? `h-[${height}px]` : 'h-16'}`;
+  const headerClassName = `fixed left-0 top-6 z-40 hidden w-full lg:block ${className ?? ''} h-16`;
 
   useEffect(() => {
     setSupportsWebGL(checkWebGLSupport());
@@ -109,9 +108,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   };
 
   return (
-    <header
-      className={headerClassName}
-    >
+    <header className={headerClassName} style={{ height }}>
       <div
         ref={containerRef}
         className="fluid-header-shell header-padding relative mx-auto flex h-full w-full max-w-5xl items-center justify-between px-6 py-3"
@@ -126,7 +123,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
             pointer={prefersReducedMotion ? { x: 0.5, y: 0.5 } : pointer}
             parallax={parallax}
             reducedMotion={prefersReducedMotion}
-            className="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-full"
+            className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-full"
             barProps={{
               scale: [1.2, 0.25, 0.2],
               ior: glass.ior,
@@ -137,7 +134,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
             }}
           />
         ) : (
-          <div className="absolute inset-0 -z-1 rounded-full bg-linear-to-r from-white/60 via-white/35 to-white/18 backdrop-blur-xl" />
+          <div className="absolute inset-0 -z-10 rounded-full bg-linear-to-r from-white/60 via-white/35 to-white/18 backdrop-blur-xl" />
         )}
 
         <div className="relative z-10 flex w-full items-center justify-between">

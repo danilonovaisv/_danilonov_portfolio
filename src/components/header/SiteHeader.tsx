@@ -6,6 +6,7 @@ import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { headerTokens } from '@/components/header/headerTokens.ts';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import type {
   HeaderFallbackProps,
   SiteHeaderProps,
@@ -37,7 +38,7 @@ function HeaderFallback({
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 flex justify-center lg:block ${className ?? ''}`}
+      className={`fixed inset-x-0 top-6 z-40 flex justify-center lg:block ${className ?? ''}`}
     >
       <div
         className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between rounded-full border border-white/10 bg-white/8 px-6 py-3 text-sm text-white shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-2xl lg:px-8"
@@ -90,14 +91,15 @@ export default function SiteHeader({
 }: SiteHeaderProps) {
   const [supportsWebGL, setSupportsWebGL] = useState(!disableWebGL);
   const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    if (disableWebGL || reducedMotion) {
+    if (disableWebGL || reducedMotion || prefersReducedMotion) {
       setSupportsWebGL(false);
       return;
     }
     setSupportsWebGL(checkWebGLSupport());
-  }, [disableWebGL, reducedMotion]);
+  }, [disableWebGL, reducedMotion, prefersReducedMotion]);
 
   const resolvedMode = forcedMode ?? (isDesktop ? 'desktop' : 'mobile');
 
@@ -129,9 +131,9 @@ export default function SiteHeader({
         navItems={items}
         glass={{
           ior: 1.15,
-          thickness: 4,
-          chromaticAberration: 0.08,
-          anisotropy: 0.02,
+          thickness: 2,
+          chromaticAberration: 0.05,
+          anisotropy: 0.01,
           smoothness: 0.9,
           followDamping: headerTokens.motion.glass.followDamping,
           maxTranslateX: headerTokens.motion.glass.maxTranslateX,

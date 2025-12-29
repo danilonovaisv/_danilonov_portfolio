@@ -61,9 +61,9 @@ function GhostScene() {
 
     // Smooth dampening
     ghostGroupRef.current.position.x +=
-      (anchorX + targetX - ghostGroupRef.current.position.x) * 0.06;
+      (anchorX + targetX - ghostGroupRef.current.position.x) * 0.05;
     ghostGroupRef.current.position.y +=
-      (anchorY + targetY - ghostGroupRef.current.position.y) * 0.06;
+      (anchorY + targetY - ghostGroupRef.current.position.y) * 0.05;
 
     // Scale adjustment for mobile
     const baseScale = isMobile ? 0.9 : 1.4;

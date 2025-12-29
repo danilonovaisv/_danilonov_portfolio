@@ -6,18 +6,19 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
   ContactShadows,
   Environment,
-  Float,
   Lightformer,
   OrthographicCamera,
   SpotLight,
   shaderMaterial,
   useFBO,
+  useGLTF,
 } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three-stdlib';
 import { easing } from 'maath';
 import { headerTokens } from '@/components/header/headerTokens.ts';
 
 export type FluidGlassMode = 'bar';
+const BAR_GLB_PATH = '/assets/3d/bar.glb';
 
 export interface FluidGlassProps {
   mode: FluidGlassMode;
@@ -216,10 +217,31 @@ function GlassBar({
   const materialRef = useRef<FluidMaterialType | null>(null);
   const { size, viewport } = useThree();
   const fbo = useFBO({ samples: 4 });
+  const { nodes } = useGLTF(BAR_GLB_PATH) as {
+    nodes: Record<string, THREE.Mesh>;
+  };
   const geometry = useMemo(
     () => new RoundedBoxGeometry(6.5, 1.6, 0.65, 12, 0.38),
     []
   );
+  const glbGeometry = useMemo(() => {
+    const mesh = Object.values(nodes ?? {}).find(
+      (node) => node instanceof THREE.Mesh
+    );
+    return mesh?.geometry ?? geometry;
+  }, [nodes, geometry]);
+  const resolvedScale = useMemo(() => {
+    if (!materialProps.scale) {
+      return [1.2, 0.25, 0.2] as [number, number, number];
+    }
+    return Array.isArray(materialProps.scale)
+      ? (materialProps.scale as [number, number, number])
+      : ([materialProps.scale, materialProps.scale, materialProps.scale] as [
+          number,
+          number,
+          number
+        ]);
+  }, [materialProps.scale]);
   const material = useMemo(() => {
     const mat = new FluidMaterial();
     mat.transparent = true;
@@ -309,32 +331,32 @@ function GlassBar({
     gl.setRenderTarget(null);
 
     // Apply motion logic
-    // Using maxTranslateX as a factor. Default 50px approx -> 1.4 world units? 
-    // Let's assume 1.4 is good for defaults and scale relative to it if needed.
-    // Spec: "Movimento apenas no eixo X". We can dampen Y significantly or remove.
-    const rangeX = materialProps.maxTranslateX ? (materialProps.maxTranslateX / 50) * 1.4 : 1.4;
+    const maxTranslateX =
+      materialProps.maxTranslateX ?? headerTokens.motion.glass.maxTranslateX;
+    const rangeX = (maxTranslateX * viewport.width) / size.width;
     const damping = materialProps.followDamping ?? headerTokens.motion.glass.followDamping;
 
-    const tx = (pointer.x - 0.5) * rangeX;
-    const ty = (pointer.y - 0.5) * 0.5; // Reduced Y influence as per spec "apenas no eixo X" mainly
+    const normalizedX = reducedMotion ? 0 : (pointer.x - 0.5) * 2;
+    const tx = normalizedX * rangeX;
+    const ty = reducedMotion ? -0.05 : -0.05 + parallax * -0.8;
 
     easing.damp3(
       meshRef.current.position,
-      [tx * 0.5, -0.05 + parallax * -0.8 + ty * 0.05, 3.3], // subtle Y still needed for parallax/feel? Spec says 'apenas eixo X'. Let's keep Y minimal.
+      [tx, ty, 3.3],
       damping,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'y',
-      reducedMotion ? 0 : tx * 0.5,
+      0,
       damping + 0.02,
       delta
     );
     easing.damp(
       meshRef.current.rotation,
       'x',
-      reducedMotion ? 0 : -ty * 0.1, // Reduced tilt X
+      0,
       damping + 0.04,
       delta
     );
@@ -345,6 +367,26 @@ function GlassBar({
         'opacity',
         0.15 + Math.abs(tx) * 0.08,
         0.2,
+        delta
+      );
+    }
+
+    const scaleAmount = Math.min(1, Math.abs(normalizedX));
+    const scaleX =
+      1 + (headerTokens.motion.glass.maxScaleX - 1) * scaleAmount;
+    const scaleY =
+      1 + (headerTokens.motion.glass.maxScaleY - 1) * scaleAmount;
+    const targetScale: [number, number, number] = [
+      resolvedScale[0] * scaleX,
+      resolvedScale[1] * scaleY,
+      resolvedScale[2],
+    ];
+    easing.damp3(meshRef.current.scale, targetScale, damping, delta);
+    if (glowRef.current) {
+      easing.damp3(
+        glowRef.current.scale,
+        [targetScale[0] * 1.03, targetScale[1] * 1.03, targetScale[2] * 1.03],
+        damping,
         delta
       );
     }
@@ -362,49 +404,30 @@ function GlassBar({
     materialRef.current.uOpacity = 0.82 + smoothness * 0.14;
   });
 
-  const resolvedScale = useMemo(() => {
-    if (!materialProps.scale) {
-      return [1.2, 0.25, 0.2] as [number, number, number];
-    }
-    return Array.isArray(materialProps.scale)
-      ? (materialProps.scale as [number, number, number])
-      : ([materialProps.scale, materialProps.scale, materialProps.scale] as [
-        number,
-        number,
-        number
-      ]);
-  }, [materialProps.scale]);
-
   return (
     <>
-      <Float
-        speed={0.8}
-        floatIntensity={reducedMotion ? 0 : 0.5}
-        rotationIntensity={reducedMotion ? 0 : 0.3}
+      <mesh ref={meshRef} geometry={glbGeometry} scale={resolvedScale}>
+        <primitive object={material} attach="material" />
+      </mesh>
+      <mesh
+        ref={glowRef}
+        geometry={glbGeometry}
+        scale={
+          [resolvedScale[0] * 1.03, resolvedScale[1] * 1.03, resolvedScale[2] * 1.03] as [
+            number,
+            number,
+            number
+          ]
+        }
       >
-        <mesh ref={meshRef} geometry={geometry} scale={resolvedScale}>
-          <primitive object={material} attach="material" />
-        </mesh>
-        <mesh
-          ref={glowRef}
-          geometry={geometry}
-          scale={
-            [resolvedScale[0] * 1.03, resolvedScale[1] * 1.03, resolvedScale[2] * 1.03] as [
-              number,
-              number,
-              number
-            ]
-          }
-        >
-          <meshBasicMaterial
-            color="#6ab2ff"
-            blending={THREE.AdditiveBlending}
-            transparent
-            opacity={0.15}
-            depthWrite={false}
-          />
-        </mesh>
-      </Float>
+        <meshBasicMaterial
+          color="#6ab2ff"
+          blending={THREE.AdditiveBlending}
+          transparent
+          opacity={0.15}
+          depthWrite={false}
+        />
+      </mesh>
 
       <ContactShadows
         position={[0, -1.1, 0]}
@@ -479,9 +502,9 @@ export function FluidGlass({
 
   const materialProps: FluidGlassMaterialProps = {
     ior: 1.15,
-    thickness: 4,
-    chromaticAberration: 0.08,
-    anisotropy: 0.02,
+    thickness: 2,
+    chromaticAberration: 0.05,
+    anisotropy: 0.01,
     smoothness: 0.9,
     ...barProps,
   };
@@ -511,5 +534,7 @@ export function FluidGlass({
     </div>
   );
 }
+
+useGLTF.preload(BAR_GLB_PATH);
 
 export default FluidGlass;

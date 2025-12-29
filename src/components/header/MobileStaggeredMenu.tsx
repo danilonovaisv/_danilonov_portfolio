@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
@@ -44,13 +44,45 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   logoUrl,
   gradient,
   accentColor,
+  isOpen,
   isFixed = true,
   onOpen,
   onClose,
   className,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const resolvedIsOpen = typeof isOpen === 'boolean' ? isOpen : internalOpen;
+  const setOpen = (next: boolean) => {
+    if (typeof isOpen !== 'boolean') {
+      setInternalOpen(next);
+    }
+    if (next) {
+      onOpen?.();
+    } else {
+      onClose?.();
+    }
+  };
+
+  useEffect(() => {
+    if (!resolvedIsOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [resolvedIsOpen]);
+
+  useEffect(() => {
+    if (!resolvedIsOpen) return undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [resolvedIsOpen]);
 
   const resolvedOverlayVariants = useMemo(() => {
     if (prefersReducedMotion) {
@@ -89,28 +121,19 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
   );
 
   const toggleMenu = () => {
-    setIsOpen((prev) => {
-      const next = !prev;
-      if (next) {
-        onOpen?.();
-      } else {
-        onClose?.();
-      }
-      return next;
-    });
+    setOpen(!resolvedIsOpen);
   };
 
   const closeMenu = () => {
-    setIsOpen(false);
-    onClose?.();
+    setOpen(false);
   };
 
   return (
     <>
       <AnimatePresence>
-        {isOpen && (
+        {resolvedIsOpen && (
           <motion.aside
-            className="fixed inset-0 z-40 flex justify-end lg:hidden"
+            className="fixed inset-0 z-50 flex justify-end lg:hidden"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -122,8 +145,14 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             }
             role="dialog"
             aria-modal="true"
+            onClick={closeMenu}
+            style={
+              {
+                '--menu-accent': accentColor,
+              } as React.CSSProperties
+            }
           >
-            <div className="relative h-full w-full">
+            <div className="relative h-full w-full" onClick={(event) => event.stopPropagation()}>
               <div
                 className="absolute inset-0 bg-[linear-gradient(135deg,var(--menu-gradient-start),var(--menu-gradient-end))]"
                 style={{
@@ -170,13 +199,16 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
                       variants={resolvedItemVariants}
                       className="flex items-center gap-4 py-3"
                     >
-                      <span className="text-xs font-medium tracking-[0.3em] text-white/50">
+                      <span
+                        className="text-xs font-medium tracking-[0.3em] text-white/50"
+                        style={{ color: accentColor }}
+                      >
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       <Link
                         href={link.href}
                         onClick={closeMenu}
-                        className="text-3xl font-medium tracking-tight text-white transition-opacity hover:opacity-[0.85]"
+                        className="text-3xl font-medium uppercase tracking-tight text-white transition-colors hover:text-[var(--menu-accent)]"
                         aria-label={link.ariaLabel}
                         target={link.external ? '_blank' : undefined}
                         rel={link.external ? 'noreferrer' : undefined}
@@ -219,14 +251,14 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
           <button
             type="button"
             onClick={toggleMenu}
-            aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-            aria-expanded={isOpen ? 'true' : 'false'}
-            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${isOpen
+            aria-label={resolvedIsOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={resolvedIsOpen ? 'true' : 'false'}
+            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${resolvedIsOpen
               ? 'border-white/50 bg-white/85 text-black'
               : 'bg-white/10'
               }`}
             style={
-              isOpen
+              resolvedIsOpen
                 ? undefined
                 : ({
                   color: accentColor,
@@ -235,7 +267,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             }
           >
             <AnimatePresence mode="wait" initial={false}>
-              {isOpen ? (
+              {resolvedIsOpen ? (
                 <motion.span
                   key="close"
                   initial={{ rotate: -90, opacity: 0 }}
