@@ -1,28 +1,5 @@
 export const headerTokens = {
-  color: {
-    primary: '#0057FF',
-    gradient: ['#0057FF', '#7A27FF'],
-    text: '#000000',
-    textInverse: '#FFFFFF',
-    neutralLight: '#F5F5F5',
-  },
-  typography: {
-    fontFamily: {
-      primary: 'TT Norms Pro',
-      fallback: 'ui-sans-serif, system-ui',
-    },
-    fontSize: {
-      logo: { min: 18, max: 22 },
-      nav: { min: 15, max: 16 },
-    },
-    fontWeight: {
-      logo: 600,
-      nav: 500,
-    },
-    tracking: {
-      nav: '-0.01em',
-    },
-  },
+  // Colors & Typography now sourced from @/config/brand.ts
   layout: {
     height: 64,
     paddingX: 24,

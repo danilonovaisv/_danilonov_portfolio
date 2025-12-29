@@ -9,7 +9,7 @@ import ManifestoThumb from './ManifestoThumb';
 import GhostStage from './GhostStage';
 
 import { useExperienceStore } from '@/store/experience.store';
-import { resolveScrollState } from '@/antigravity';
+import { resolveScrollState } from '@/lib/scroll-utils';
 
 export default function HomeHero() {
   const ref = useRef<HTMLDivElement>(null);

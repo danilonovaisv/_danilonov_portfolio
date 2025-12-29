@@ -6,6 +6,9 @@ agents:
       - '.agent/rules/00-project-context.md'
       - '.agent/rules/01-tech-stack.md'
       - '.agent/rules/03-non-negotiables.md'
+      - '.agent/rules/web-application-development.md'
+      - '.agent/rules/asset-integrity.md'
+      - '.agent/rules/responsivity-mobile.md'
       - 'docs/PROTOTIPO INTERATIVO - PORT DAN GHOST.md'
     temperature: 0.2 # Preciso para lógica e estrutura de dados
 
@@ -15,6 +18,9 @@ agents:
     knowledge_base:
       - '.agent/rules/05-r3f-glass-system.md'
       - '.agent/rules/02-ux-motion-principles.md'
+      - '.agent/rules/04-accessibility-performance.md'
+      - '.agent/rules/responsivity-mobile.md'
+      - '.agent/rules/asset-integrity.md'
       - 'docs/PROTOTIPO INTERATIVO - PORT DAN GHOST.md'
     temperature: 0.7 # Criativo para shaders e animações atmosféricas
 
@@ -23,4 +29,9 @@ agents:
     description: 'Guardião de Web Vitals e Acessibilidade (A11y). Garante contraste, navegação por teclado e suporte a "prefers-reduced-motion".'
     knowledge_base:
       - '.agent/rules/04-accessibility-performance.md'
+      - '.agent/rules/00-project-context.md'
+      - '.agent/rules/asset-integrity.md'
+      - '.agent/rules/responsivity-mobile.md'
+      - 'docs/AUDITORIA.md'
       - 'docs/PROTOTIPO INTERATIVO - PORT DAN GHOST.md'
+    temperature: 0.2

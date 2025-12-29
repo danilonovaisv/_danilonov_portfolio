@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { BRAND } from '@/config/brand';
 import HomeHero from '@/components/home/HomeHero';
 import ManifestoSection from '@/components/home/ManifestoSection';
 import PortfolioShowcase from '@/components/home/PortfolioShowcase';
@@ -7,7 +8,7 @@ import Clients from '@/components/home/Clients';
 import Contact from '@/components/home/Contact';
 
 export const metadata: Metadata = {
-  title: 'Danilo Novais | Creative Developer & Interactive Designer',
+  title: `${BRAND.name} | Creative Developer & Interactive Designer`,
   description:
     'Exploração visual e técnica de Danilo Novais. Creative Developer especializado em WebGL, R3F e experiências digitais interativas de alto impacto.',
 };

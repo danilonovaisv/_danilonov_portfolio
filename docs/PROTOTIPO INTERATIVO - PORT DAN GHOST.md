@@ -228,346 +228,202 @@ Footer
 ---
 
 # **SECTION NAME: Header (SiteHeader)**
-### Desktop: Fluid Glass Navigation  
-### Mobile & Tablet: Staggered Menu Navigation
+### Desktop: Fluid Glass Header (WebGL)  
+### Mobile & Tablet: Staggered Menu Header
 
+---
 
 ## 🎯 SECTION PURPOSE
-- Fornecer navegação global e identidade visual do site.  
-- Permanecer visível em todas as páginas.  
-- Reforçar a identidade **premium + experimental** do projeto.  
-- Atuar como camada atmosférica complementar à **Hero Ghost**.  
+
+- Entregar uma **navegação principal clara e acessível**, sempre visível.  
+- Criar uma **camada atmosférica premium** que conversa com a Hero, mas não compete com ela.  
+- Mostrar imediatamente as principais seções (ex.: Home, Sobre, Portfólio, Contato).  
+- Reforçar a identidade visual com o efeito de **vidro fluido (desktop)** e o **menu em cascata (mobile)**.
+
+> Regra geral: o Header é moldura, não protagonista. Ele complementa a Hero em vez de disputar atenção.
 
 ---
 
-## 🎨 DESIGN TOKENS
+## 🎨 DESIGN & TOKENS
 
-### Colors
-| Token | Value | Description |
-|--------|--------|-------------|
-| `primary` | `#0057FF` | Cor de destaque e interação |
-| `bg` | `#f0f0f0` | Fundo padrão neutro |
-| `text` | `#000000` | Texto padrão |
-| `textInverse` | `#FFFFFF` | Texto sobre fundo escuro |
-| `neutralLight` | `#F5F5F5` | Fundo secundário e elementos suaves |
+- **Cores**  
+  - Fundo do header: vidro translúcido usando `primary`, `gradientStart`, `gradientEnd`.  
+  - Texto de navegação: `text` em desktop; `textInverse` quando necessário para contraste.  
+  - Ícones (menu/close): usam `accentColor` do sistema.
 
----
+- **Tipografia**  
+  - Logo / Marca: mesma fonte do logotipo (ou variação display).  
+  - Itens de navegação: `font-medium`, tracking levemente positivo.  
+  - Itens secundários (social, etc. em mobile): `font-normal`, menor que nav principal.
 
-### Typography
-- **Fonte principal:** TT Norms Pro *(self-host, se licenciado)*  
-- **Fallbacks:** `ui-sans-serif`, `system-ui`  
-- **Tamanhos e pesos:**
-  - Logo: `18–22px`, `font-semibold`
-  - Navegação: `15–16px`, `font-medium`, `tracking-tight`
+- **Z-Index / Camadas**  
+  - `z-0` → Background da página / Hero.  
+  - `z-20` → Conteúdo da Hero.  
+  - `z-40` → SiteHeader (sempre por cima da Hero).  
+
+> Regra: sempre garantir contraste suficiente entre o header e o que estiver atrás (Hero, conteúdo, etc.).
 
 ---
 
 ## 💠 LAYOUT
 
-| Device | Tipo | Comportamento |
-|---------|------|---------------|
-| Desktop ≥1024px | **Fluid Glass Header (modo "bar")** | Objeto óptico fluido horizontal com refração leve e movimento sutil |
-| Tablet ≤1023px | **Staggered Menu** | Menu fullscreen com animação em cascata |
-| Mobile ≤640px | **Staggered Menu** | Menu lateral animado minimalista |
+### Desktop (≥1024px) — Fluid Glass Header
+
+- Posicionamento:
+  - Header flutuante, **fixo no topo** (`position: sticky` ou `fixed`, a definir), com margem superior.  
+  - Largura parcial (não full-width), centralizado horizontalmente.
+- Estilo:
+  - Container com **bordas bem arredondadas** (pill).  
+  - Fundo com vidro translúcido (blur + refração WebGL).  
+  - Padding confortável em X e Y (altura aproximada: 56–72px).
+- Conteúdo interno:
+  - Esquerda: logo / marca.  
+  - Centro/Direita: lista horizontal de navegação (4–6 itens).  
+  - Opcional: call-to-action discreto ou ícones sociais.
+
+### Tablet & Mobile (≤1023px) — Staggered Menu Header
+
+- Barra superior fixa, full-width:
+  - Esquerda: logo.  
+  - Direita: ícone de menu (hamburger) que vira “X” ao abrir.
+- Altura semelhante ao desktop (48–64px), mas sem vidro flutuante “largo” — aqui o header é mais funcional.
+- Ao abrir o menu:
+  - Menu em **overlay fullscreen** (ou quase), vindo da direita, com gradiente de fundo.  
+  - Navegação em coluna, com texto grande e bem espaçado.
 
 ---
 
-### Desktop — Fluid Glass Header (modo `"bar"`)
+## ⚙️ INTERACTIONS & MOTION
 
-**Visual Behavior**
-- Referencia= ["https://reactbits.dev/components/fluid-glass"]
-- Barra translúcida horizontal com refração e distorção óptica suave.  
-- Movimento fluido horizontal acompanhando o cursor.  
-- Permite visualizar o conteúdo por trás (sem fundo sólido).  
-- Interações sutis: hover com opacidade, sem underline.  
+### Desktop — Fluid Glass (WebGL)
 
-**Conteúdo**
-- Favicon Light  
-- Navegação:
-  - Home → `/` ou `#hero`
-  - Sobre → `/sobre` -  ["portifoliodanilo.com/sobre"]
-  - Portfólio → `/portfolio` - ["portifoliodanilo.com/portfolio"]
-  - Contato → `#contact`
+**Comportamento principal:**
 
-**Layout**
-- Header flutuante, centralizado horizontalmente.  
-- Altura compacta (~64px).  
-- Padding horizontal: 24px.  
-- Não ocupa 100% da largura — aparência de “objeto independente”.  
+- Header funciona como um “bloco de vidro líquido” que reage levemente ao cursor:
+  - Movimento **apenas no eixo X** (horizontal), acompanhado por uma leve escala.  
+  - Efeito de elasticidade / mola (spring), nunca “teleportando” pro cursor.
 
----
+**Parâmetros sugeridos (tokens de motion):**
 
-### Mobile & Tablet — Staggered Menu Navigation
+- `motion.glassDamping`  
+  - `followDamping` ≈ 0.08–0.12s (tempo para “alcançar” o cursor).  
+  - `maxTranslateX` ≈ 40–60px (deslocamento máximo).  
+  - `maxScaleX` ≈ 1.05  
+  - `maxScaleY` ≈ 1.02  
+  - Easing: spring suave (leve overshoot, sem bounce exagerado).
 
-**Visual Behavior**
-- Referencia=["https://reactbits.dev/components/staggered-menu"]
-- Menu fullscreen com entrada lateral.  
-- Animação “staggered editorial” (itens surgem em cascata).  
-- Ícone Menu ↔ Close com morph suave.  
-- Cores de gradiente e camadas animadas.  
+**Efeito visual do vidro:**
 
-**Menu Links**
-- Logo Dark  
-- Navegação:
-  - Home → `/` ou `#hero`
-  - Sobre → `/sobre` -  ["portifoliodanilo.com/sobre"]
-  - Portfólio → `/portfolio` - ["portifoliodanilo.com/portfolio"]
-  - Contato → `#contact`
+- Refração e distorção sutil do conteúdo de fundo.  
+- Cromatismo leve nas bordas (aberração RGB discreta).  
+- Blur de fundo ajustado para manter legibilidade do texto.
 
-**Layout**
-- Logo à esquerda, botão Menu à direita.  
-- Fundo gradiente: `#0057ff → #7a27ff`.  
-- Texto branco puro (`#FFFFFF`).  
+**Interações de navegação:**
+
+- Hover em itens de nav:
+  - `opacity: 0.8 → 1`.  
+  - Subtle underline ou deslocamento Y de 1–2px no máximo.  
+  - Transição de 120–180ms, ease-out.
+- Clique:
+  - Navega para seção correspondente.  
+  - Scroll suave quando for âncora interna (a ser definido na implementação).
 
 ---
 
-## 2. Responsive Strategy
+### Fallback Desktop (sem WebGL / reduced motion)
 
-| Breakpoint | Strategy | Tech |
-|-----------|----------|------|
-| ≥1024px | Fluid Glass Header (bar) | WebGL / Three.js |
-| 641–1023px | Staggered Menu | GSAP |
-| ≤640px | Staggered Menu | GSAP |
+Para `disableWebGL` ou `prefers-reduced-motion: reduce`:
 
----
+- Header mantém a **mesma forma, layout e tipografia**, mas:
+  - Sem refração, sem aberração cromática, sem follow ao cursor.  
+  - Usa blur padrão (`backdrop-filter`) ou um fundo sólido/gradient suave.
+- Motion:
+  - Nenhum movimento ligado ao cursor.  
+  - Apenas transições simples de opacidade / leve translate (se necessário).
 
-## 3. Design Tokens
-
-### 3.1 Tokens — JSON (agnóstico)
-
-```json
-{
-  "color": {
-    "primary": "#0057FF",
-    "gradientStart": "#0057FF",
-    "gradientEnd": "#7A27FF",
-    "text": "#000000",
-    "textInverse": "#FFFFFF",
-    "neutralLight": "#F5F5F5"
-  },
-  "typography": {
-    "fontFamily": {
-      "primary": "TT Norms Pro",
-      "fallback": "ui-sans-serif, system-ui"
-    },
-    "fontSize": {
-      "logo": { "min": 18, "max": 22 },
-      "nav": { "min": 15, "max": 16 }
-    },
-    "fontWeight": {
-      "logo": 600,
-      "nav": 500
-    },
-    "tracking": {
-      "nav": "-0.01em"
-    }
-  },
-  "layout": {
-    "headerHeight": 64,
-    "paddingX": 24,
-    "touchTarget": 48
-  },
-  "zIndex": {
-    "header": 40,
-    "hero": 20,
-    "webgl": 0
-  },
-  "motion": {
-    "hoverOpacity": 0.85,
-    "glassDamping": 0.15,
-    "staggerDelay": 0.1
-  }
-}
-```
+> Regra: o fallback deve ser visualmente consistente, mas sem depender de WebGL.
 
 ---
 
-### 3.2 Tokens — TypeScript
+### Mobile & Tablet — Staggered Menu
 
-```ts
-export const headerTokens = {
-  color: {
-    primary: '#0057FF',
-    gradient: ['#0057FF', '#7A27FF'],
-    text: '#000000',
-    textInverse: '#FFFFFF',
-    neutralLight: '#F5F5F5'
-  },
-  typography: {
-    fontFamily: {
-      primary: 'TT Norms Pro',
-      fallback: 'ui-sans-serif, system-ui'
-    },
-    fontSize: {
-      logo: { min: 18, max: 22 },
-      nav: { min: 15, max: 16 }
-    },
-    fontWeight: {
-      logo: 600,
-      nav: 500
-    },
-    tracking: {
-      nav: '-0.01em'
-    }
-  },
-  layout: {
-    height: 64,
-    paddingX: 24,
-    minTouchTarget: 48
-  },
-  zIndex: {
-    header: 40,
-    hero: 20,
-    webgl: 0
-  },
-  motion: {
-    hoverOpacity: 0.85,
-    glassDamping: 0.15,
-    staggerDelay: 0.1
-  }
-} as const;
-```
+**Estados do menu:**
+
+- `closed`  
+  - Header simples no topo.  
+  - Ícone de menu (hamburger).  
+  - Corpo da página rolando normalmente.
+
+- `opening`  
+  - Overlay gradiente: `opacity 0 → 1` em ~200–250ms.  
+  - Painel lateral (menu): `translateX 100% → 0` em ~260–320ms (spring leve).  
+  - Ícone de menu faz morph para ícone “X”.
+
+- `open`  
+  - Menu ocupa praticamente toda a tela.  
+  - Scroll do `body` bloqueado.  
+  - Itens de navegação aparecem em **stagger** (cascata):
+    - Cada item:  
+      - `opacity 0 → 1`  
+      - `translateY 16px → 0`  
+      - `duration` ≈ 220ms  
+    - Delay incremental usando `motion.staggerDelay` (ex.: 0ms, 100ms, 200ms, 300ms…).
+
+- `closing`  
+  - Animações reversas: itens somem em ordem inversa, painel recua, overlay some.  
+  - Ícone volta para hamburger.
+
+**Interações de fechar menu:**
+
+- Tap no ícone “X”.  
+- Tap em qualquer item de navegação:
+  - Fecha o menu + navega.  
+- Tap fora da área principal (overlay clicável) deve fechar o menu.  
+- (Opcional) Tecla ESC / gesto de back no navegador deve fechar quando relevante.
 
 ---
 
-## 4. Tailwind Configuration (`theme.extend`)
+## 🧱 COMPONENTS & ARQUITETURA
 
-```ts
-// tailwind.config.ts
-import { headerTokens } from './src/design-system/headerTokens';
-
-export default {
-  theme: {
-    extend: {
-      colors: {
-        primary: headerTokens.color.primary,
-        text: headerTokens.color.text,
-        textInverse: headerTokens.color.textInverse,
-        neutralLight: headerTokens.color.neutralLight
-      },
-      fontFamily: {
-        sans: [
-          headerTokens.typography.fontFamily.primary,
-          headerTokens.typography.fontFamily.fallback
-        ]
-      },
-      zIndex: {
-        header: headerTokens.zIndex.header,
-        hero: headerTokens.zIndex.hero
-      },
-      spacing: {
-        header: `${headerTokens.layout.height}px`
-      }
-    }
-  }
-};
-```
-
----
-
-## 5. CSS Variables + Reduced Motion
-
-```css
-:root {
-  --header-height: 64px;
-  --header-padding-x: 24px;
-
-  --color-primary: #0057ff;
-  --color-gradient-start: #0057ff;
-  --color-gradient-end: #7a27ff;
-  --color-text: #000;
-  --color-text-inverse: #fff;
-
-  --motion-hover-opacity: 0.85;
-  --motion-glass-damping: 0.15;
-  --motion-stagger-delay: 0.1s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --motion-hover-opacity: 1;
-    --motion-glass-damping: 0;
-    --motion-stagger-delay: 0s;
-  }
-
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-```
-
----
-
-## 6. Navigation Model
+### Contratos de tipos sugeridos
 
 ```ts
 export interface NavItem {
   label: string;
   href: string;
-  ariaLabel: string;
   external?: boolean;
 }
-```
 
----
-
-## 7. Component Contracts
-
-### 7.1 SiteHeader
-
-```ts
 export interface SiteHeaderProps {
   navItems: NavItem[];
+  logoUrl: string;
+  gradient: [string, string]; // gradiente principal para mobile
+  accentColor: string;
   disableWebGL?: boolean;
-  forcedMode?: 'desktop' | 'mobile';
-  className?: string;
+  reducedMotion?: boolean;
 }
-```
+````
 
----
-
-### 7.2 DesktopFluidHeader
+#### DesktopFluidHeader
 
 ```ts
 export interface DesktopFluidHeaderProps {
   navItems: NavItem[];
+  height?: number;
+  onNavigate: (href: string) => void;
   glass: {
     ior: number;
     thickness: number;
     chromaticAberration: number;
     anisotropy: number;
     smoothness: number;
+    maxTranslateX?: number;
+    followDamping?: number;   // mapeia para motion.glassDamping
   };
-  height?: number;
-  onNavigate: (href: string) => void;
 }
 ```
 
----
-
-### 7.3 FluidGlass
-
-```ts
-export type FluidGlassMode = 'bar' | 'lens' | 'cube';
-
-export interface FluidGlassProps {
-  mode: FluidGlassMode;
-  barProps?: {
-    scale?: [number, number, number];
-    ior?: number;
-    thickness?: number;
-    chromaticAberration?: number;
-    anisotropy?: number;
-    smoothness?: number;
-  };
-  reducedMotion?: boolean;
-}
-```
-
----
-
-### 7.4 MobileStaggeredMenu
+#### MobileStaggeredMenu
 
 ```ts
 export interface MobileStaggeredMenuProps {
@@ -575,134 +431,66 @@ export interface MobileStaggeredMenuProps {
   logoUrl: string;
   gradient: [string, string];
   accentColor: string;
+  isOpen: boolean;            // controlado pelo SiteHeader
   isFixed?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
+  staggerDelay?: number;      // mapeia para motion.staggerDelay
 }
 ```
 
----
+### Organização de arquivos (sugerida)
 
-## 8. Fallback Contract
-
-```ts
-export interface HeaderFallbackProps {
-  navItems: NavItem[];
-  logoUrl: string;
-}
-```
+* `components/header/SiteHeader.tsx`
+* `components/header/DesktopFluidHeader.tsx`
+* `components/header/MobileStaggeredMenu.tsx`
+* `components/header/headerTokens.ts`
+* `components/webgl/header/HeaderGlassCanvas.tsx` (quando necessário)
 
 ---
 
-## 9. Architectural Rules
+## ♿ ACCESSIBILITY & PERFORMANCE
 
-- Tokens são fonte única de verdade
-- WebGL isolado em `/webgl`
-- Mobile nunca monta Canvas
-- `SiteHeader` não importa Three.js
-- Feature detection > UA sniffing
+* Header sempre visível, com contraste adequado em todas as páginas.
 
----
+* Suporte a `prefers-reduced-motion: reduce`:
 
-## 10. Non‑Negotiables
+  * Desabilitar WebGL e movimentos baseados no cursor.
+  * Animações substituídas por transições discretas ou instantâneas.
 
-- Header não compete com Hero
-- Sem glass fake em CSS
-- Sem animação decorativa
-- Desktop = experiencial
-- Mobile = leve e acessível
+* Navegação por teclado:
 
----
+  * Foco visível nos links do header e itens de menu mobile.
+  * Ordem de tabulação coerente (logo → nav → CTA).
 
-**Status:** Unified & Production‑Ready  
-**Owner:** UI Systems  
-## ⚙️ INTERACTIONS
+* ARIA:
 
-| Ação | Efeito |
-|------|---------|
-| Hover nos links | Aumento leve de opacidade |
-| Pointer move | Vidro acompanha suavemente o cursor (movimento horizontal) |
-| Scroll | Header fixo, sem morph de tamanho |
-| Tap (mobile) | Abrir/fechar menu fullscreen |
-| Tap item (mobile) | Navegar e fechar menu |
+  * Header marcado semanticamente (`<header>`).
+  * Ícone de menu com `aria-label` (“Abrir menu”, “Fechar menu”) e `aria-expanded`.
+
+* Performance:
+
+  * WebGL do header deve ser leve (mesh / shader simples) e pausado ou simplificado em dispositivos fracos quando possível.
+  * Evitar re-renderizações desnecessárias no scroll.
 
 ---
 
-## 🧱 COMPONENTS USED
+## 🚫 NON-NEGOTIABLES
 
-components/header/
-├─ SiteHeader.tsx
-├─ DesktopFluidHeader.tsx
-├─ MobileStaggeredMenu.tsx
-└─ webgl/
-└─ FluidGlass.tsx
+* ❌ Header não pode comprometer legibilidade do conteúdo nem da Hero.
+* ❌ Sem animações agressivas de seguir cursor (nada “chiclete”).
+* ❌ Sem transições longas que atrasem a abertura do menu mobile.
+* ✅ Desktop: efeito Fluid Glass elegante, com interação moderada.
+* ✅ Mobile/Tablet: menu em cascata, rápido, claro e acessível.
+* ✅ Fallback sem WebGL totalmente funcional e visualmente coerente.
 
 ---
 
-## ⚡ CONFIGURAÇÕES PADRÃO
+## STATUS
 
-### Fluid Glass (modo `"bar"`)
+**Status:** Prototipado e refinado para implementação
+**Owner:** UI Systems / Header
 
-```
-tsx
-<FluidGlass
-  mode="bar"
-  barProps={{
-    scale: [1.2, 0.25, 0.2],
-    ior: 1.15,
-    thickness: 4,
-    chromaticAberration: 0.08,
-    anisotropy: 0.02,
-    smoothness: 0.9
-  }}
-/>
-
-Staggered Menu
-
-<StaggeredMenu
-  position="right"
-  items={menuItems}
-  socialItems={socialItems}
-  displaySocials={true}
-  displayItemNumbering={true}
-  menuButtonColor="#e9e9ef"
-  openMenuButtonColor="#000"
-  changeMenuColorOnOpen={true}
-  colors={['#B19EEF', '#5227FF']}
-  accentColor="#5227FF"
-  isFixed
-/>
-```
-
-⸻
-
-### Z-INDEX STRATEGY
-
-z-40 → Header / Menu  
-z-20 → Hero Content  
-z-0  → WebGL Hero Canvas
-
-
-⸻
-
-### ♿ ACCESSIBILITY
-    •    Navegação por teclado funcional.
-    •    Links com aria-label.
-    •    Fallback HTML (logo + links estáticos) se WebGL não estiver disponível.
-    •    Contraste mínimo 4.5:1.
-    •    Botões e ícones com área mínima de toque 48×48px.
-
-⸻
-
-### 🚫 NON-NEGOTIABLES
-    •    ❌ Header não compete com a Hero.
-    •    ❌ Sem glassmorphism fake em CSS.
-    •    ❌ Sem animações decorativas gratuitas.
-    •    ✅ WebGL apenas no Desktop.
-    •    ✅ Mobile sem efeitos pesados.
-    •    ✅ Fallback funcional obrigatório.
-
-⸻
 
 ### 🧩 ASSETS GLOBAIS — Logos
 

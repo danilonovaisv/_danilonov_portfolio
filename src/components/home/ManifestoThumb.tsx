@@ -3,7 +3,11 @@
 import { motion } from 'framer-motion';
 import { BRAND } from '@/config/brand';
 
-export default function ManifestoThumb() {
+interface ManifestoThumbProps {
+  narrativeState: string;
+}
+
+export default function ManifestoThumb({ narrativeState: _narrativeState }: ManifestoThumbProps) {
   return (
     <motion.video
       src={BRAND.video.manifesto}

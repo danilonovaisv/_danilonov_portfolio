@@ -4,12 +4,12 @@
 
 @theme {
   /* Site Theme Colors */
-  --color-background: #f4f5f7;
-  --color-foreground: #111111;
+  --color-background: #f0f0f0;
+  --color-foreground: #000000;
   --color-primary: #0057ff;
   --color-primary-hover: #0046cc;
-  --color-secondary: #111111;
-  --color-muted: #555555;
+  --color-secondary: #000000;
+  --color-muted: #F5F5F5;
   --color-white: #ffffff;
 
   /* Ghost/Ethereal Theme Colors */

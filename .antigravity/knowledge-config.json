@@ -10,6 +10,14 @@
         "description": "Especificação técnica mestre do projeto atual (Ghost Concept)."
       },
       {
+        "name": "Project_Audit_Specs",
+        "type": "local_file",
+        "config": {
+          "path": "docs/AUDITORIA.md"
+        },
+        "description": "Guia de auditoria e validação de qualidade (QA/A11y/Performance)."
+      },
+      {
         "name": "DatabaseAgentNext_Repos",
         "type": "github_repository",
         "config": {

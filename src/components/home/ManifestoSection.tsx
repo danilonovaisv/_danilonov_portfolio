@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ASSETS } from '@/lib/constants';
+import { BRAND } from '@/config/brand';
 
 export default function ManifestoSection() {
   const ref = useRef(null);
@@ -15,10 +15,10 @@ export default function ManifestoSection() {
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="block md:hidden w-full bg-[#06071f] aspect-video flex items-center justify-center"
+      className="flex md:hidden w-full bg-ghost-void aspect-video items-center justify-center"
     >
       <video
-        src={ASSETS.videoManifesto}
+        src={BRAND.video.manifesto}
         autoPlay
         loop
         muted
