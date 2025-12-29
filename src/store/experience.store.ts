@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ExperienceFlags } from '@/antigravity';
+import { ExperienceFlags } from '@/lib/antigravity';
 
 interface ExperienceState {
   flags: ExperienceFlags;

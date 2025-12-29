@@ -86,4 +86,10 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-```
+
+# Firebase
+.firebase/
+
+# Heavy Docs Media
+docs/*.mp4
+docs/*.mov
