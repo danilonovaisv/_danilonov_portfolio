@@ -33,7 +33,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const cursorUrl =
-  "url('data:image/svg+xml,%3Csvg width=\"44\" height=\"44\" viewBox=\"0 0 44 44\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Ccircle cx=\"22\" cy=\"22\" r=\"14\" fill=\"%23ffffff\" fill-opacity=\"0.12\"/%3E%3Ccircle cx=\"22\" cy=\"22\" r=\"6\" fill=\"%236da8ff\" fill-opacity=\"0.62\"/%3E%3C/svg%3E') 22 22, pointer";
+  'url(\'data:image/svg+xml,%3Csvg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="22" cy="22" r="14" fill="%23ffffff" fill-opacity="0.12"/%3E%3Ccircle cx="22" cy="22" r="6" fill="%236da8ff" fill-opacity="0.62"/%3E%3C/svg%3E\') 22 22, pointer';
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -70,7 +70,8 @@ const DesktopFluidHeader: React.FC = () => {
     if (typeof window === 'undefined') return;
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(mq.matches);
-    const handler = (event: MediaQueryListEvent) => setIsDarkMode(event.matches);
+    const handler = (event: MediaQueryListEvent) =>
+      setIsDarkMode(event.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);

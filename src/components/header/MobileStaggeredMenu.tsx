@@ -104,7 +104,11 @@ const MobileStaggeredMenu: React.FC = () => {
                     ? undefined
                     : { y: [0, 20, 0], x: [0, 10, 0] }
                 }
-                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 12,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               />
               <motion.div
                 className="absolute bottom-10 -right-20 h-56 w-56 rounded-full bg-black/10 blur-3xl"
@@ -113,11 +117,19 @@ const MobileStaggeredMenu: React.FC = () => {
                     ? undefined
                     : { y: [0, -20, 0], x: [0, -12, 0] }
                 }
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               />
 
               <div className="relative flex h-full flex-col justify-between px-8 pb-12 pt-24 text-white">
-                <motion.nav variants={resolvedListVariants} initial="hidden" animate="visible">
+                <motion.nav
+                  variants={resolvedListVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
                   {HEADER_LINKS_MOBILE.map((link, index) => (
                     <motion.div
                       key={link.href}
@@ -150,7 +162,11 @@ const MobileStaggeredMenu: React.FC = () => {
 
       <header className="fixed inset-x-0 top-0 z-40 lg:hidden">
         <div className="flex items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center" aria-label="Ir para a home">
+          <Link
+            href="/"
+            className="flex items-center"
+            aria-label="Ir para a home"
+          >
             <Image
               src={LogoDark}
               alt={`Logo ${BRAND.name}`}

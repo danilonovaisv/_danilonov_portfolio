@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 import GhostStage from './GhostStage';
 import HeroCopy from './HeroCopy';
@@ -29,8 +29,8 @@ function HomeHeroContent() {
   }, []);
 
   const scaleVideo = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
-  const posYVideo = useTransform(scrollYProgress, [0, 1], ["50%", "0%"]);
-  const borderRadius = useTransform(scrollYProgress, [0, 1], ["16px", "0px"]);
+  const posYVideo = useTransform(scrollYProgress, [0, 1], ['50%', '0%']);
+  const borderRadius = useTransform(scrollYProgress, [0, 1], ['16px', '0px']);
   const opacityText = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   return (
@@ -51,7 +51,7 @@ function HomeHeroContent() {
       </div>
 
       {/* Layer 10 — Conteúdo estático */}
-      <motion.div 
+      <motion.div
         style={{ opacity: opacityText }}
         className="absolute z-10 inset-0 flex flex-col items-center justify-center text-center px-4"
       >
@@ -64,7 +64,7 @@ function HomeHeroContent() {
           style={{
             scale: scaleVideo,
             y: posYVideo,
-            borderRadius: borderRadius
+            borderRadius: borderRadius,
           }}
           className="absolute bottom-10 right-10 z-30 w-[30vw] aspect-video overflow-hidden rounded-2xl shadow-lg"
         >

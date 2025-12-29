@@ -5,10 +5,8 @@ import * as THREE from 'three';
 import React, { Suspense, useMemo, useRef } from 'react';
 import {
   Canvas,
-  extend,
   useFrame,
   useThree,
-  type ThreeElements,
 } from '@react-three/fiber';
 import {
   ContactShadows,
@@ -207,9 +205,7 @@ const FluidMaterial = shaderMaterial(
   `
 );
 
-extend({ FluidMaterial });
-
-type FluidMaterialImpl = ThreeElements['fluidMaterial'];
+type FluidMaterialType = InstanceType<typeof FluidMaterial>;
 
 function GlassBar({
   materialProps,
@@ -224,14 +220,26 @@ function GlassBar({
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.Mesh>(null);
-  const matRef = useRef<FluidMaterialImpl>(null);
+  const materialRef = useRef<FluidMaterialType | null>(null);
   const { size, viewport } = useThree();
   const fbo = useFBO({ samples: 4, depth: false });
   const geometry = useMemo(
     () => new RoundedBoxGeometry(6.5, 1.6, 0.65, 12, 0.38),
     []
   );
-  const { scene: renderScene, gradientMaterial, gradientPlane } = useMemo(() => {
+  const material = useMemo(() => {
+    const mat = new FluidMaterial();
+    mat.transparent = true;
+    mat.toneMapped = false;
+    mat.uOpacity = 0.95;
+    return mat;
+  }, []);
+  materialRef.current = material;
+  const {
+    scene: renderScene,
+    gradientMaterial,
+    gradientPlane,
+  } = useMemo(() => {
     const scene = new THREE.Scene();
     const gradient = new THREE.ShaderMaterial({
       uniforms: {
@@ -292,7 +300,7 @@ function GlassBar({
   }, []);
 
   useFrame((state, delta) => {
-    if (!meshRef.current || !matRef.current) return;
+    if (!meshRef.current || !materialRef.current) return;
 
     const { gl, camera } = state;
     if (gradientPlane) {
@@ -315,8 +323,20 @@ function GlassBar({
       0.16,
       delta
     );
-    easing.damp(meshRef.current.rotation, 'y', reducedMotion ? 0 : tx * 0.5, 0.18, delta);
-    easing.damp(meshRef.current.rotation, 'x', reducedMotion ? 0 : -ty * 0.25, 0.2, delta);
+    easing.damp(
+      meshRef.current.rotation,
+      'y',
+      reducedMotion ? 0 : tx * 0.5,
+      0.18,
+      delta
+    );
+    easing.damp(
+      meshRef.current.rotation,
+      'x',
+      reducedMotion ? 0 : -ty * 0.25,
+      0.2,
+      delta
+    );
 
     if (glowRef.current) {
       easing.damp(
@@ -328,23 +348,29 @@ function GlassBar({
       );
     }
 
-    matRef.current.uTime = state.clock.elapsedTime;
-    matRef.current.uScene = fbo.texture;
-    matRef.current.uResolution.set(size.width, size.height);
-    matRef.current.uMouse.set(pointer.x, 1 - pointer.y);
-    matRef.current.uParallax = parallax;
-    matRef.current.uIOR = materialProps.ior ?? 1.15;
-    matRef.current.uChromaticAberration =
+    materialRef.current.uTime = state.clock.elapsedTime;
+    materialRef.current.uScene = fbo.texture;
+    materialRef.current.uResolution.set(size.width, size.height);
+    materialRef.current.uMouse.set(pointer.x, 1 - pointer.y);
+    materialRef.current.uParallax = parallax;
+    materialRef.current.uIOR = materialProps.ior ?? 1.15;
+    materialRef.current.uChromaticAberration =
       materialProps.chromaticAberration ?? 0.05;
-    matRef.current.uThickness = materialProps.thickness ?? 2;
-    matRef.current.uAnisotropy = materialProps.anisotropy ?? 0.01;
+    materialRef.current.uThickness = materialProps.thickness ?? 2;
+    materialRef.current.uAnisotropy = materialProps.anisotropy ?? 0.01;
   });
 
   const resolvedScale = useMemo(() => {
-    if (!materialProps.scale) return [1.15, 0.24, 0.24] as [number, number, number];
+    if (!materialProps.scale) {
+      return [1.15, 0.24, 0.24] as [number, number, number];
+    }
     return Array.isArray(materialProps.scale)
-      ? materialProps.scale
-      : [materialProps.scale, materialProps.scale, materialProps.scale];
+      ? (materialProps.scale as [number, number, number])
+      : ([materialProps.scale, materialProps.scale, materialProps.scale] as [
+          number,
+          number,
+          number
+        ]);
   }, [materialProps.scale]);
 
   return (
@@ -355,18 +381,18 @@ function GlassBar({
         rotationIntensity={reducedMotion ? 0 : 0.3}
       >
         <mesh ref={meshRef} geometry={geometry} scale={resolvedScale}>
-          <fluidMaterial
-            ref={matRef}
-            transparent
-            toneMapped={false}
-            uOpacity={0.95}
-            attach="material"
-          />
+          <primitive object={material} attach="material" />
         </mesh>
         <mesh
           ref={glowRef}
           geometry={geometry}
-          scale={resolvedScale.map((s) => s * 1.03) as [number, number, number]}
+          scale={
+            [resolvedScale[0] * 1.03, resolvedScale[1] * 1.03, resolvedScale[2] * 1.03] as [
+              number,
+              number,
+              number
+            ]
+          }
         >
           <meshBasicMaterial
             color={materialProps.attenuationColor ?? '#6ab2ff'}
@@ -464,7 +490,11 @@ export function FluidGlassHeader({
       <Canvas
         shadows
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+        }}
         frameloop={reducedMotion ? 'demand' : 'always'}
       >
         <OrthographicCamera makeDefault position={[0, 0, 10]} zoom={90} />
