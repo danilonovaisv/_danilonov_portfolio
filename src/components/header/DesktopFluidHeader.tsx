@@ -8,12 +8,12 @@ import { BRAND } from '@/config/brand';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import FluidGlassHeader from './webgl/FluidGlass';
 
-type NavItem = {
+interface NavItem {
   label: string;
   href: string;
   ariaLabel: string;
   description?: string;
-};
+}
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '#hero', ariaLabel: 'Ir para a Home' },
@@ -53,11 +53,14 @@ const checkWebGLSupport = () => {
 const DesktopFluidHeader: React.FC = () => {
   const [supportsWebGL, setSupportsWebGL] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [pointer, setPointer] = useState({ x: 0.5, y: 0.5 });
+  const [pointer, setPointer] = useState<{ x: number; y: number }>({
+    x: 0.5,
+    y: 0.5,
+  });
   const [parallax, setParallax] = useState(0);
   const prefersReducedMotion = usePrefersReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
-  const navItemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const navItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
 
   useEffect(() => {
     setSupportsWebGL(checkWebGLSupport());
