@@ -15,7 +15,7 @@ export interface MobileStaggeredMenuProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  onNavigate: (href: string) => void;
+  onNavigate: (_href: string) => void;
 }
 
 function isExternalHref(href: string) {
@@ -87,20 +87,12 @@ export default function MobileStaggeredMenu({
   };
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 z-[40]">
-      <div
-        className="h-[56px] px-4 flex items-center justify-between"
-        style={{
-          background: 'rgba(6, 7, 31, 0.72)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          borderBottom: '1px solid rgba(255,255,255,0.10)',
-        }}
-      >
+    <header className="lg:hidden fixed top-0 left-0 right-0 z-40">
+      <div className="h-[56px] px-4 flex items-center justify-between bg-ghost-void/72 backdrop-blur-[10px] border-b border-white/10">
         <Link
           href="/"
           aria-label="Ir para Home"
-          className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#06071f] rounded-md"
+          className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-void rounded-md"
         >
           <Image
             src={logoUrl}
@@ -116,8 +108,8 @@ export default function MobileStaggeredMenu({
           type="button"
           onClick={isOpen ? onClose : onOpen}
           aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-          aria-expanded={isOpen}
-          className="h-10 w-10 grid place-items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#06071f]"
+          aria-expanded={isOpen ? 'true' : 'false'}
+          className="h-10 w-10 grid place-items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-void"
         >
           <div className="relative h-5 w-6">
             <span
@@ -142,7 +134,7 @@ export default function MobileStaggeredMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[45]"
+            className="fixed inset-0 z-45"
             initial="closed"
             animate="open"
             exit="closed"

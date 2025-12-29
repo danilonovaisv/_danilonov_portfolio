@@ -85,7 +85,7 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-[#E6EFEF]/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-[#111111]"
+              className="bg-[#E6EFEF]/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-medium text-text-dark"
             >
               {tag}
             </span>
@@ -109,7 +109,7 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
 
       <div className="mt-4 flex justify-between items-start gap-4">
         <div>
-          <h3 className="text-lg md:text-xl font-medium leading-tight text-[#111111]">
+          <h3 className="text-lg md:text-xl font-medium leading-tight text-text-dark">
             {project.title}
           </h3>
           <p className="text-[#6B7280] text-sm">
@@ -135,7 +135,7 @@ function CTAProjectCard() {
   return (
     <Link
       href="/portfolio"
-      className="group flex flex-col h-full justify-center p-6 md:p-8 bg-[#0057FF] text-white rounded-md hover:bg-[#E6F0FF] hover:text-[#0057FF] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded-md"
+      className="group flex flex-col h-full justify-center p-6 md:p-8 bg-[#0057FF] text-white rounded-md hover:bg-[#E6F0FF] hover:text-[#0057FF] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF]"
       aria-label="Ver todos os projetos"
     >
       <h3 className="text-xl md:text-2xl font-bold mb-4">Like what you see?</h3>

@@ -203,7 +203,7 @@ type FluidMaterialType = InstanceType<typeof FluidMaterial>;
 
 function GlassBar({
   materialProps,
-  pointer,
+  pointer: _pointer,
   parallax,
   reducedMotion,
 }: {
@@ -336,9 +336,15 @@ function GlassBar({
     const rangeX = (maxTranslateX * viewport.width) / size.width;
     const damping = materialProps.followDamping ?? 0.1;
 
-    const normalizedX = reducedMotion ? 0 : (pointer.x - 0.5) * 2;
-    const tx = normalizedX * rangeX;
-    const ty = reducedMotion ? -0.05 : -0.05 + parallax * -0.8;
+    // Use R3F state.pointer (normalized -1 to 1) for interaction
+    const { pointer: statePointer } = state;
+    const normalizedX = reducedMotion ? 0 : statePointer.x;
+
+    // Smooth interaction
+    const tx = normalizedX * rangeX * 0.5; // Scale down movement
+    const ty = reducedMotion
+      ? -0.05
+      : -0.05 + parallax * -0.8 + statePointer.y * 0.1;
 
     easing.damp3(meshRef.current.position, [tx, ty, 3.3], damping, delta);
     easing.damp(meshRef.current.rotation, 'y', 0, damping + 0.02, delta);
@@ -376,7 +382,11 @@ function GlassBar({
     materialRef.current.uTime = state.clock.elapsedTime;
     materialRef.current.uScene = fbo.texture;
     materialRef.current.uResolution.set(size.width, size.height);
-    materialRef.current.uMouse.set(pointer.x, 1 - pointer.y);
+    // Remap -1..1 to 0..1 for shader UV
+    materialRef.current.uMouse.set(
+      (state.pointer.x + 1) / 2,
+      (state.pointer.y + 1) / 2
+    );
     materialRef.current.uParallax = parallax;
     materialRef.current.uIOR = materialProps.ior;
     materialRef.current.uChromaticAberration =
@@ -425,7 +435,7 @@ function GlassBar({
 
 function Scene({
   materialProps,
-  pointer,
+  pointer: _pointer,
   parallax,
   reducedMotion,
 }: {
@@ -464,7 +474,7 @@ function Scene({
       </Environment>
       <GlassBar
         materialProps={materialProps}
-        pointer={pointer}
+        pointer={_pointer}
         parallax={parallax}
         reducedMotion={reducedMotion}
       />
@@ -475,7 +485,7 @@ function Scene({
 export function FluidGlass({
   mode = 'bar',
   barProps,
-  pointer = { x: 0.5, y: 0.5 },
+  pointer: _pointer = { x: 0.5, y: 0.5 },
   parallax = 0,
   reducedMotion = false,
   className,
@@ -515,7 +525,7 @@ export function FluidGlass({
         <Suspense fallback={null}>
           <Scene
             materialProps={materialProps}
-            pointer={pointer}
+            pointer={_pointer}
             parallax={parallax}
             reducedMotion={reducedMotion}
           />

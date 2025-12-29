@@ -37,7 +37,7 @@ export default function SiteFooter() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: reducedMotion ? 0.2 : 0.4 }}
-        className="hidden lg:block fixed bottom-0 left-0 right-0 z-[30]"
+        className="hidden lg:block fixed bottom-0 left-0 right-0 z-30"
         style={{ background: '#0057FF' }}
         aria-label="Footer"
       >

@@ -20,7 +20,7 @@ export interface DesktopFluidHeaderProps {
   logoUrl: string;
   accentColor: string;
   disableWebGL?: boolean;
-  onNavigate: (href: string) => void;
+  onNavigate: (_href: string) => void;
   activeHref?: string;
 }
 

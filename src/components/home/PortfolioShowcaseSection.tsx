@@ -66,7 +66,7 @@ function AccordionRow({ category }: { category: Category }) {
           </motion.div>
         </div>
 
-        <h3 className="text-2xl md:text-5xl/none font-medium whitespace-nowrap text-[#111111]">
+        <h3 className="text-2xl md:text-5xl/none font-medium whitespace-nowrap text-text-dark">
           {category.title}
         </h3>
 
@@ -129,7 +129,7 @@ export default function PortfolioShowcaseSection() {
             duration: reducedMotion ? 0.2 : 0.8,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="text-4xl md:text-6xl font-bold text-center mb-14 md:mb-20 text-[#111111]"
+          className="text-4xl md:text-6xl font-bold text-center mb-14 md:mb-20 text-text-dark"
         >
           portfólio showcase
         </motion.h2>

@@ -135,6 +135,8 @@ export default function ContactSection() {
                   name={f.name}
                   type={f.type}
                   required={f.name !== 'phone'}
+                  title={f.label}
+                  placeholder={f.label}
                   className="w-full rounded-lg px-4 py-3 bg-white border border-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5f5f7]"
                 />
               </motion.label>
@@ -151,13 +153,15 @@ export default function ContactSection() {
               }}
               className="block mb-5"
             >
-              <span className="block text-sm text-[#111111]/70 mb-1">
+              <span className="block text-sm text-text-dark/70 mb-1">
                 Sua mensagem
               </span>
               <textarea
                 name="message"
                 required
                 rows={5}
+                title="Sua mensagem"
+                placeholder="Escreva sua mensagem aqui..."
                 className="w-full rounded-lg px-4 py-3 bg-white border border-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f5f5f7]"
               />
             </motion.label>

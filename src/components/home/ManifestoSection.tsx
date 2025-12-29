@@ -18,7 +18,7 @@ export default function ManifestoSection() {
         duration: reducedMotion ? 0.25 : 0.6,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="block md:hidden w-full bg-[#06071f] aspect-video overflow-hidden"
+      className="block md:hidden w-full bg-ghost-void aspect-video overflow-hidden"
       aria-label="Manifesto (vídeo)"
     >
       <video

@@ -35,11 +35,7 @@ export default function HomeHero() {
       <section
         id="hero"
         ref={ref}
-        className="relative h-[200vh] overflow-hidden"
-        style={{
-          background:
-            'radial-gradient(circle at 30% 30%, #0b0d3a 0%, #06071f 55%, #06071f 100%)',
-        }}
+        className="relative h-[200vh] overflow-hidden bg-[radial-gradient(circle_at_30%_30%,#0b0d3a_0%,#06071f_55%,#06071f_100%)]"
         aria-label="Hero"
       >
         <HeroPreloader />

@@ -14,7 +14,7 @@ export default function HeroPreloader() {
         delay: reducedMotion ? 0.5 : 1.5,
         duration: reducedMotion ? 0.35 : 1,
       }}
-      className="fixed inset-0 z-[50] flex flex-col items-center justify-center"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
       style={{
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
       }}
@@ -36,7 +36,7 @@ export default function HeroPreloader() {
         Summoning spirits
       </p>
 
-      <div className="w-24 h-0.5 bg-[#06071f] rounded-full overflow-hidden">
+      <div className="w-24 h-0.5 bg-ghost-void rounded-full overflow-hidden">
         <motion.div
           className="h-full"
           style={{
