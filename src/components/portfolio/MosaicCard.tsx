@@ -75,7 +75,7 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
         <motion.div
           variants={overlayVariants}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="absolute inset-0 bg-[#0057FF] flex flex-col justify-end px-6 pb-6 pt-10 text-white"
+          className="absolute inset-0 bg-focus-ring flex flex-col justify-end px-6 pb-6 pt-10 text-white"
         >
           <motion.span
             variants={textVariants}
