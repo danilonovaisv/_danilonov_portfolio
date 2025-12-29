@@ -8,7 +8,8 @@ import { BRAND } from '@/config/brand';
 import { cn } from '@/lib/utils';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import FluidGlass from './webgl/FluidGlass';
-import LogoLight from '@/assets/logos/LogoLight.svg';
+import FaviconLight from '@/assets/logos/FaviconLight.svg';
+import { headerTokens } from '@/design-system/headerTokens';
 
 const checkWebGLSupport = () => {
   if (typeof window === 'undefined') return false;
@@ -48,7 +49,7 @@ const DesktopFluidHeader: React.FC = () => {
     <header className="fixed top-6 left-1/2 z-40 hidden w-[min(980px,92vw)] -translate-x-1/2 lg:block">
       <div
         className={cn(
-          'relative h-16 overflow-hidden rounded-full px-6',
+          'relative overflow-hidden rounded-full',
           'flex items-center justify-between',
           supportsWebGL
             ? 'text-black'
@@ -56,6 +57,11 @@ const DesktopFluidHeader: React.FC = () => {
         )}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
+        style={{
+          height: headerTokens.layout.height,
+          paddingLeft: headerTokens.layout.paddingX,
+          paddingRight: headerTokens.layout.paddingX,
+        }}
       >
         {supportsWebGL ? (
           <FluidGlass
@@ -77,30 +83,30 @@ const DesktopFluidHeader: React.FC = () => {
         <div className="relative z-10 flex items-center gap-3">
           <Link
             href="/"
-            className="flex items-center gap-3"
+            className="flex items-center"
             aria-label="Ir para a home"
           >
             <Image
-              src={LogoLight}
+              src={FaviconLight}
               alt={`Logo ${BRAND.name}`}
               width={32}
               height={32}
               className="h-8 w-8"
               priority
             />
-            <span className="text-[18px] font-semibold tracking-tight">
-              {BRAND.name}
-            </span>
           </Link>
         </div>
 
-        <nav aria-label="Navegação principal" className="flex items-center gap-8">
+        <nav
+          aria-label="Navegação principal"
+          className="relative z-10 flex items-center gap-8"
+        >
           {HEADER_LINKS_DESKTOP.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              aria-label={`Ir para ${link.label}`}
-              className="text-[15px] font-medium tracking-tight text-black/80 transition-opacity hover:opacity-70"
+              aria-label={link.ariaLabel}
+              className="text-[15px] font-medium tracking-tight text-black/80 transition-opacity hover:opacity-[0.85]"
             >
               {link.label}
             </Link>
