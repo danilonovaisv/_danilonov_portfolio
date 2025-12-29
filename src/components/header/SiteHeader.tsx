@@ -27,6 +27,11 @@ const checkWebGLSupport = () => {
   }
 };
 
+/**
+ * HeaderFallback (Static, non-WebGL)
+ *
+ * STACKING: z-40 mantém consistência com DesktopFluidHeader
+ */
 function HeaderFallback({
   navItems,
   logoUrl,

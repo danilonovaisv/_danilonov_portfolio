@@ -11,6 +11,19 @@ import GhostStage from './GhostStage';
 import { useAntigravityStore } from '@/store/antigravity.store';
 import { TIMELINE } from '@/config/timeline';
 
+/**
+ * HomeHero Component
+ * 
+ * Z-INDEX STACKING ORDER:
+ * - z-50: HeroPreloader (temporário, desaparece após carregamento)
+ * - z-40: Header (SiteHeader/DesktopFluidHeader) — SEMPRE ACIMA
+ * - z-30: ManifestoThumb (vídeo scroll-driven)
+ * - z-20: GhostStage (WebGL ethereal effect)
+ * - z-10: HeroCopy (texto editorial)
+ * - z-0:  Background radial gradient
+ * 
+ * O Header deve SEMPRE estar visível acima de todos os elementos da Hero.
+ */
 export default function HomeHero() {
   const ref = useRef<HTMLDivElement>(null);
   const { flags, narrativeState } = useAntigravityStore();

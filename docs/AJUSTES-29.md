@@ -591,7 +591,7 @@ REFRENCIAS ANIMAÇÃO:
 
 **Regras**
 - ✅ Mobile-first
-- ✅ Comparar com: `docs/HOME-HERO-MOBILE.jpg`
+- ✅ Comparar com: `docs/HOME-HERO-MOBILE.jpg` E `/docs/HEADER`
 
 **Critérios de aceite (Checklist)**
 - [ ] Sem scroll do body com menu aberto

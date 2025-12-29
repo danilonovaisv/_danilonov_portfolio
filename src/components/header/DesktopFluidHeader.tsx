@@ -28,6 +28,16 @@ const checkWebGLSupport = (): boolean => {
   }
 };
 
+/**
+ * DesktopFluidHeader
+ *
+ * STACKING: z-40 garante que o header fique SEMPRE acima da Hero section:
+ * - HomeHero Ghost (z-20)
+ * - HomeHero Video (z-30)
+ * - Header (z-40) ← ESTE COMPONENTE
+ *
+ * O efeito FluidGlass está em -z-10 relativo ao header, ficando atrás do conteúdo.
+ */
 const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
   navItems,
   logoUrl,
