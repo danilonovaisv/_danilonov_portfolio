@@ -12,6 +12,18 @@
   --color-muted: #F5F5F5;
   --color-white: #ffffff;
 
+  /* Text Colors */
+  --color-text-dark: #111111;
+  --color-text-muted: #666666;
+
+  /* Section & Component Backgrounds */
+  --color-section-bg: #F4F5F7;
+  --color-section-bg-hover: #ECEDF0;
+  --color-card-bg: #f7f7f7;
+
+  /* Focus Ring Colors */
+  --color-focus-ring: #0057FF;
+
   /* Ghost/Ethereal Theme Colors */
   --color-ghost-bg: #050505;
   --color-ghost-dark: #0f2027;

@@ -38,10 +38,10 @@ const ContactDetails: FC = () => {
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
     >
-      <h2 className="text-4xl md:text-5xl font-bold text-[#0057FF] mb-4 text-center md:text-left">
+      <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4 text-center md:text-left">
         Contato
       </h2>
-      <p className="text-xl text-[#111111] mb-12 text-center md:text-left">
+      <p className="text-xl text-text-dark mb-12 text-center md:text-left">
         Tem uma pergunta ou quer trabalhar junto?
       </p>
 
@@ -51,9 +51,9 @@ const ContactDetails: FC = () => {
             key={idx}
             href={item.href}
             variant="ghost"
-            className="justify-start text-lg font-medium text-[#111111] hover:text-[#0057FF] hover:bg-black/5 gap-4 h-auto py-3 px-4"
+            className="justify-start text-lg font-medium text-text-dark hover:text-primary hover:bg-black/5 gap-4 h-auto py-3 px-4"
           >
-            <span className="rounded-full bg-blue-50 p-2 text-[#0057FF] shadow-sm group-hover:scale-110 transition-transform">
+            <span className="rounded-full bg-blue-50 p-2 text-primary shadow-sm group-hover:scale-110 transition-transform">
               {item.icon}
             </span>
             {item.label}
@@ -70,7 +70,7 @@ const ContactDetails: FC = () => {
             target="_blank"
             variant="secondary"
             size="icon"
-            className="rounded-full bg-gray-100 text-[#111111] shadow-sm hover:text-[#0057FF] hover:bg-gray-200 h-12 w-12 border border-black/5"
+            className="rounded-full bg-gray-100 text-text-dark shadow-sm hover:text-primary hover:bg-gray-200 h-12 w-12 border border-black/5"
             aria-label={social.platform}
           >
             {social.icon}

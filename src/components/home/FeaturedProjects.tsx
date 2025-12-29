@@ -19,7 +19,7 @@ const FeaturedProjects: React.FC = () => {
       id="featured-projects"
       ref={containerRef}
       aria-label="Featured Projects"
-      className="relative py-8 md:py-12 bg-[#F4F5F7] overflow-hidden"
+      className="relative py-8 md:py-12 bg-section-bg overflow-hidden"
     >
       <div className="container mx-auto px-4 md:px-8 lg:px-12 max-w-[95%] xl:max-w-[1800px] relative z-10">
         {/* Grid Layout - Bento Style como na referência */}
@@ -64,15 +64,15 @@ const FeaturedProjects: React.FC = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="md:col-span-5 h-[280px] md:h-[340px] group relative flex flex-col justify-center items-center p-8 md:p-10 rounded-3xl bg-[#F4F5F7] hover:bg-[#ECEDF0] transition-colors duration-500"
+            className="md:col-span-5 h-[280px] md:h-[340px] group relative flex flex-col justify-center items-center p-8 md:p-10 rounded-3xl bg-section-bg hover:bg-section-bg-hover transition-colors duration-500"
           >
             {/* Background Pattern (opcional) */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none overflow-hidden rounded-3xl">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,#0057FF_0%,transparent_50%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,var(--color-primary)_0%,transparent_50%)]" />
             </div>
 
             <div className="relative z-10 flex flex-col gap-6 items-center text-center">
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-sans tracking-tight text-[#111111] leading-[0.95]">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold font-sans tracking-tight text-text-dark leading-[0.95]">
                 Like what
                 <br />
                 you see?
@@ -80,7 +80,7 @@ const FeaturedProjects: React.FC = () => {
 
               <Link
                 href="/portfolio"
-                className="inline-flex items-center gap-3 w-fit rounded-full bg-[#0057FF] px-7 py-3.5 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center gap-3 w-fit rounded-full bg-primary px-7 py-3.5 text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300"
               >
                 <span className="text-sm font-bold tracking-wide uppercase">
                   view projects

@@ -4,12 +4,13 @@ import {
   useTransform,
   useMotionValueEvent,
   useSpring,
+  type UseScrollOptions,
 } from 'framer-motion';
 import { useAntigravityStore } from '@/store/antigravity.store';
 import { TIMELINE } from '@/config/timeline';
 
 interface ScrollNarrativeConfig {
-  offset?: any; // Framer motion offset array
+  offset?: UseScrollOptions['offset'];
   damping?: number;
 }
 

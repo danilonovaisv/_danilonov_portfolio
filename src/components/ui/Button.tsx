@@ -35,18 +35,18 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   ) => {
     // Base Classes
     const baseStyles =
-      'inline-flex items-center justify-center gap-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 ring-offset-white disabled:pointer-events-none disabled:opacity-50 select-none';
+      'inline-flex items-center justify-center gap-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ring-offset-white disabled:pointer-events-none disabled:opacity-50 select-none';
 
     // Variants
     const variants = {
       primary:
-        'bg-[#0057FF] text-white shadow-lg shadow-[#0057FF]/25 hover:shadow-[#0057FF]/40 border border-transparent',
+        'bg-primary text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 border border-transparent',
       secondary:
-        'bg-white text-[#111111] border border-neutral-200 hover:bg-neutral-50 shadow-sm',
+        'bg-white text-text-dark border border-neutral-200 hover:bg-neutral-50 shadow-sm',
       outline:
-        'bg-transparent text-[#111111] border border-neutral-200 hover:bg-neutral-50 hover:text-black',
-      ghost: 'bg-transparent text-[#111111] hover:bg-neutral-100',
-      link: 'text-[#0057FF] hover:underline underline-offset-4 p-0 h-auto font-medium shadow-none',
+        'bg-transparent text-text-dark border border-neutral-200 hover:bg-neutral-50 hover:text-black',
+      ghost: 'bg-transparent text-text-dark hover:bg-neutral-100',
+      link: 'text-primary hover:underline underline-offset-4 p-0 h-auto font-medium shadow-none',
     };
 
     // Sizes
@@ -71,10 +71,10 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     const isInteractive = variant !== 'link' && !disabled && !loading;
     const motionProps = isInteractive
       ? {
-          whileHover: { scale: 1.05 },
-          whileTap: { scale: 0.95 },
-          transition: { type: 'spring' as const, stiffness: 400, damping: 17 },
-        }
+        whileHover: { scale: 1.05 },
+        whileTap: { scale: 0.95 },
+        transition: { type: 'spring' as const, stiffness: 400, damping: 17 },
+      }
       : {};
 
     const content = (
