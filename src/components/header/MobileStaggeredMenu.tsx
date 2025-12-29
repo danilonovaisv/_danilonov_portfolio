@@ -16,6 +16,24 @@ const overlayVariants: Variants = {
   exit: { x: '100%', opacity: 0 },
 };
 
+const panelVariants: Variants = {
+  hidden: { x: '100%' },
+  visible: { x: 0 },
+  exit: { x: '100%' },
+};
+
+const preLayerVariants: Variants = {
+  hidden: { x: '100%' },
+  visible: (index: number) => ({
+    x: 0,
+    transition: { delay: index * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+  }),
+  exit: (index: number) => ({
+    x: '100%',
+    transition: { delay: index * 0.04, duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
 const listVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -119,6 +137,10 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
     () => gradient ?? ['#0d0d10', '#1a1a20'],
     [gradient]
   );
+  const prelayerColors = useMemo(
+    () => [resolvedGradient[0], resolvedGradient[1], '#0b0b12'],
+    [resolvedGradient]
+  );
 
   const toggleMenu = () => {
     setOpen(!resolvedIsOpen);
@@ -153,13 +175,38 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             }
           >
             <div className="relative h-full w-full" onClick={(event) => event.stopPropagation()}>
-              <div
-                className="absolute inset-0 bg-[linear-gradient(135deg,var(--menu-gradient-start),var(--menu-gradient-end))]"
-                style={{
-                  '--menu-gradient-start': resolvedGradient[0],
-                  '--menu-gradient-end': resolvedGradient[1],
-                } as React.CSSProperties}
-              />
+              <div className="absolute inset-0 bg-black/10" />
+              <div className="absolute inset-0 flex justify-end">
+                <div className="relative h-full w-full max-w-[420px]">
+                  <div className="absolute inset-0">
+                    {prelayerColors.map((color, index) => (
+                      <motion.div
+                        key={color}
+                        className="absolute inset-0"
+                        style={{
+                          background: color,
+                          opacity: 0.35 - index * 0.08,
+                        }}
+                        custom={index}
+                        variants={preLayerVariants}
+                      />
+                    ))}
+                  </div>
+                  <motion.div
+                    className="absolute inset-0 bg-[linear-gradient(135deg,var(--menu-gradient-start),var(--menu-gradient-end))]"
+                    style={{
+                      '--menu-gradient-start': resolvedGradient[0],
+                      '--menu-gradient-end': resolvedGradient[1],
+                    } as React.CSSProperties}
+                    variants={panelVariants}
+                    transition={
+                      prefersReducedMotion
+                        ? { duration: 0.1 }
+                        : { duration: headerTokens.motion.mobile.panelDuration, ease: [0.22, 1, 0.36, 1] }
+                    }
+                  />
+                </div>
+              </div>
               <motion.div
                 className="absolute -top-24 -left-16 h-64 w-64 rounded-full bg-white/15 blur-3xl"
                 animate={
@@ -187,7 +234,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
                 }}
               />
 
-              <div className="relative flex h-full flex-col justify-between px-8 pb-12 pt-24 text-white">
+              <div className="relative ml-auto flex h-full w-full max-w-[420px] flex-col justify-between px-8 pb-12 pt-24 text-white">
                 <motion.nav
                   variants={resolvedListVariants}
                   initial="hidden"
@@ -253,7 +300,7 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
             onClick={toggleMenu}
             aria-label={resolvedIsOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={resolvedIsOpen ? 'true' : 'false'}
-            className={`flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${resolvedIsOpen
+            className={`flex h-12 items-center gap-2 rounded-full border px-5 text-xs font-semibold uppercase tracking-[0.3em] transition-colors ${resolvedIsOpen
               ? 'border-white/50 bg-white/85 text-black'
               : 'bg-white/10'
               }`}
@@ -266,6 +313,20 @@ const MobileStaggeredMenu: React.FC<MobileStaggeredMenuProps> = ({
                 } as React.CSSProperties)
             }
           >
+            <span className="relative h-4 overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={resolvedIsOpen ? 'close-label' : 'menu-label'}
+                  initial={{ y: 12, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -12, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="block"
+                >
+                  {resolvedIsOpen ? 'Close' : 'Menu'}
+                </motion.span>
+              </AnimatePresence>
+            </span>
             <AnimatePresence mode="wait" initial={false}>
               {resolvedIsOpen ? (
                 <motion.span
