@@ -1,9 +1,9 @@
 export const HOME_CONTENT = {
   hero: {
-    tag: '[BRAND AWARENESS]',
+    tag: 'Frontend Engineer • React & Next.js',
     title: ['Design, não é', 'só estética.'],
-    subtitle: '[É intenção, é estratégia, é experiência.]',
-    cta: 'get to know me better →',
+    subtitle: 'Transformando ideias em experiências digitais.',
+    cta: 'Explore meu portfólio',
     scrollHint: '#manifesto',
   },
 

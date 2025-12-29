@@ -38,7 +38,7 @@ export default function PortfolioMosaicGrid({
         {/* Grid Editorial */}
         <div className="flex flex-col gap-8 md:gap-12 pb-10">
           {rows.map((row) => (
-            <div key={row.id} className="grid grid-cols-12 gap-8 md:gap-12">
+            <div key={row.id} className="grid grid-cols-12 gap-4 md:gap-6">
               {row.items.map((item) => {
                 const tabletSpan =
                   row.columns === 1 ? 'md:col-span-12' : 'md:col-span-6';

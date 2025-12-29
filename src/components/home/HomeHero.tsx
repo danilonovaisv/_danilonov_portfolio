@@ -119,7 +119,7 @@ export default function HomeHero() {
       aria-label="Hero Section"
     >
       {/* STICKY CONTAINER - Keeps content visible during scroll */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-dvh w-full overflow-hidden">
         {/* BACKGROUND RADIAL (z-0) */}
         <div
           className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,#0b0d3a_0%,#06071f_60%)] pointer-events-none"
@@ -129,13 +129,13 @@ export default function HomeHero() {
         {/* PRELOADER (z-50) */}
         <HeroPreloader onComplete={handlePreloaderComplete} />
 
-        {/* 👻 WEBGL (z-20) — ENTRY + SCROLL ANIMATION */}
+        {/* 👻 WEBGL (z-10) — ENTRY + SCROLL ANIMATION */}
         <motion.div
           animate={
             preloaderComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }
           }
           transition={{ duration: 1.5, ease: 'easeOut' }}
-          className="absolute inset-0 z-20 pointer-events-none"
+          className="absolute inset-0 z-10 pointer-events-none"
         >
           <motion.div
             style={{ opacity: scrollOpacityGhost }}
@@ -145,17 +145,23 @@ export default function HomeHero() {
           </motion.div>
         </motion.div>
 
-        {/* TEXTO EDITORIAL (z-10) */}
+        {/* OVERLAY GLASS (z-20) - Improve text contrast */}
+        <div
+          className="absolute inset-0 z-20 bg-black/30 backdrop-blur-[30px] pointer-events-none"
+          aria-hidden="true"
+        />
+
+        {/* TEXTO EDITORIAL (z-30) */}
         <motion.div
           style={{ opacity: opacityText }}
-          className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
         >
           <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex justify-center pointer-events-auto">
             <HeroCopy />
           </div>
         </motion.div>
 
-        {/* 🎞️ MANIFESTO THUMB (z-30) — APENAS DESKTOP */}
+        {/* 🎞️ MANIFESTO THUMB (z-40) — APENAS DESKTOP */}
         {flags.enableManifestoScroll && (
           <motion.div
             style={{
@@ -164,7 +170,7 @@ export default function HomeHero() {
               x: posXVideo,
               borderRadius,
             }}
-            className="absolute inset-0 z-30 hidden md:flex items-center justify-center overflow-hidden origin-bottom-right"
+            className="absolute inset-0 z-40 hidden md:flex items-center justify-center overflow-hidden origin-bottom-right"
           >
             <div className="w-full h-full">
               <ManifestoThumb

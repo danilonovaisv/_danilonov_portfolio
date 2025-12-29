@@ -117,7 +117,7 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
       className={`${headerClassName} fluid-header-shell`}
       style={{ height: _height }}
     >
-      <div className="absolute inset-0 z-0 bg-[#0b0c14]/75 backdrop-blur-2xl" />
+      <div className="absolute inset-0 z-0 bg-[#0b0c14]/90 supports-[backdrop-filter:blur(0px)]:bg-white/5 supports-[backdrop-filter:blur(0px)]:backdrop-blur-[20px]" />
       <div className="absolute inset-x-0 bottom-0 z-20 h-px bg-linear-to-r from-transparent via-sky-300/70 to-transparent" />
       <div className="absolute inset-x-0 top-0 z-20 h-px bg-linear-to-r from-transparent via-white/35 to-transparent" />
 
@@ -180,11 +180,12 @@ const DesktopFluidHeader: React.FC<DesktopFluidHeaderProps> = ({
                 key={link.href}
                 href={link.href}
                 aria-label={link.ariaLabel}
+                aria-current={isActive ? 'page' : undefined}
                 ref={(node) => {
                   navItemRefs.current[idx] = node ?? undefined;
                 }}
                 onClick={() => onNavigate(link.href)}
-                className={`group relative px-2 py-1 transition-all duration-300 hover:text-white ${isActive ? 'text-focus-ring' : ''}`}
+                className={`group relative px-2 py-1 transition-all duration-200 ease-out hover:scale-105 hover:text-white focus-visible:outline-2 focus-visible:outline-focus-ring ${isActive ? 'text-focus-ring' : ''}`}
                 target={link.external ? '_blank' : undefined}
                 rel={link.external ? 'noreferrer' : undefined}
               >
