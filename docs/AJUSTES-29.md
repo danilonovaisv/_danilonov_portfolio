@@ -14,8 +14,8 @@ REFRENCIAS VISUAIS:
 3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
 
 REFRENCIAS ANIMAÇÃO:
-1. /docs/HEADER
-2. /docs/REFERENCIA_HERO-GHOST
+1. /docs/HEADER - HEADER=["https://reactbits.dev/components/fluid-glass?p=%7B%2522mode%2522:%2522bar%2522%7D”]
+2. /docs/REFERENCIA_HERO-GHOST - HERO=["https://codepen.io/danilonovaisv/pen/azZbdQo"] 
 
 
 

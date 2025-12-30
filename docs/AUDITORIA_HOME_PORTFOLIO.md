@@ -1,653 +1,587 @@
-# 🧠 Auditoria + Correções (Prompts Atômicos) — HOME + PORTFOLIO  
-**Projeto:** _danilonov_portfolio (Next.js App Router + TS + Tailwind + R3F + Framer Motion)  
-**Foco crítico:** HEADER + HERO (Home) + PORTFOLIO page  
-**Lei absoluta:** Fidelidade total às referências:
-- `docs/HERO-PORTFOLIO-GHOST.jpg`
-- `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
-- `docs/PORTFOLIO-PAGE-LAYOUYT.jpg`
-- Animações: `docs/HEADER/*` e `docs/REFERENCIA_HERO-GHOST/*`
+# 🧠 Auditoria + Correções (Prompts Atômicos) — HOME + PORTFOLIO 'use client';
 
-> ⚠️ Nota de auditoria (limitação do ambiente): aqui eu consigo validar **estrutura do repositório** e **assets de docs**, mas não consigo ler o conteúdo completo dos arquivos TSX via API com consistência.  
-> Por isso, os prompts abaixo são **cirúrgicos e executáveis**: instruem o Agente a abrir arquivos, comparar pixel-a-pixel com as imagens em `docs/*` e ajustar o código real sem “inventar layout”.
+ * Relatório em Markdown (copie/cole em um arquivo .md se preferir).
+ *
+ * Observação importante:
+ * - Este relatório foi produzido a partir do spec fornecido na conversa e da comparação visual com as imagens anexadas.
+ * - A inspeção “linha a linha” do código do repositório não foi possível aqui, então os prompts para agente são “cirúrgicos”
+ *   no sentido de serem verificáveis e aplicáveis diretamente, mas pedem checagem do estado atual em cada arquivo/trecho.
+ */
+export const HOME_PORTFOLIO_AUDIT_MD = String.raw`# Auditoria Técnica — HOME + PORTFOLIO (Header + Hero em foco)
+**Projeto:** Portfólio Institucional de Danilo Novais  
+**Stack:** Next.js App Router + TS + Tailwind + R3F/Drei/Three + Framer Motion  
+**Lei absoluta:** Fidelidade visual às referências \`HERO-PORTFOLIO-GHOST.jpg\` + \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\` + \`PORTFOLIO-PAGE-LAYOUYT.jpg\`
+
+ Ajuste o projeto utilizando as etapas essenciais para execução:
+1. Analise o escopo detalhado fornecido.
+2. Monte um plano de execução com base nesse escopo.
+3. Implemente os ajustes necessários no código.
+4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
+5. Ao concluir, revise e valide se:
+   - Todas as alterações foram aplicadas corretamente.
+   - O sistema está funcionando como esperado.
+   - O visual está 100% fiel às referências.
+REFRENCIAS VISUAIS:
+1. /docs/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
+
+REFRENCIAS ANIMAÇÃO:
+1. /docs/HEADER - HEADER=["https://reactbits.dev/components/fluid-glass?p=%7B%2522mode%2522:%2522bar%2522%7D”]
+2. /docs/REFERENCIA_HERO-GHOST - HERO=["https://codepen.io/danilonovaisv/pen/azZbdQo"] 
+
 
 ---
 
-# FASE 1 — Diagnóstico técnico + visual (Home + Portfolio)
+## 1️⃣ Visão Geral
 
-## 1️⃣ Visão Geral (estado atual vs referência)
+### Estado atual (alto nível)
+- A arquitetura proposta no spec (separação de Header e Hero em componentes) **parece alinhada conceitualmente** ao que é necessário.
+- Visualmente, pelas imagens anexadas, **o Hero está muito próximo do esperado** (ghost à esquerda, texto editorial central, manifesto thumb desktop no canto inferior direito e manifesto fullscreen no mobile).
+- O maior risco técnico/visual está na **integração Header + Hero** (camadas/z-index, competição visual, consistência entre desktop/mobile e consistência de margens laterais).
+- Há risco de “excesso de glow/motion” em assets/estilos do projeto: exemplos de CSS com glow/hover agressivo e blur/glassmorphism existem nos arquivos disponíveis no bundle/arquivos analisados  :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6MH0"} — isso é um red flag porque o spec exige motion editorial sutil e proíbe poluição visual.
 
-Pelo screenshot fornecido, a Home está **muito próxima** do layout final esperado:
-
-- Header em formato “pill” com logo à esquerda e nav à direita.
-- Hero dark com ghost glow à esquerda, título grande (“Design, não é só estética.”), CTA em **pill button** azul e thumb do manifesto no canto inferior direito (desktop).
-- Portfolio showcase com:
-  - título “portfólio showcase” e linhas “Brand & Campaigns”, “Videos & Motions”, “Web Campaigns, Websites & Tech”
-  - alternância de alinhamento por linha (direita / centro / esquerda)
-  - dot azul como identificador no final da linha.
-- Featured projects em grid bento.
-- Faixa azul de brands.
-- Contact 2 colunas.
-- Footer azul (fixo no desktop, no fluxo no mobile).
-
-**O risco crítico agora é**: garantir que essa proximidade visual se mantenha em:
-- **mobile/tablet**
-- **reduced motion**
-- **performance (Canvas / DPR / postprocessing)**
-- e que não existam “saltos” de grid entre seções (edge rhythm).
+### Escopo auditado com prioridade
+- HOME: Header + Hero (incl. Ghost WebGL + Manifesto Thumb + Manifesto Mobile)
+- PORTFOLIO: Header (consistência) + grid/margens (alto nível; faltam referências visuais da página /portfolio anexadas aqui para verificação pixel-perfect)
 
 ---
 
 ## 2️⃣ Diagnóstico por Dimensão
 
-### Estrutura
-- Estrutura do repo está bem “domain-based”:
-  - Header: `src/components/header/*`
-  - Hero: `src/components/home/*` + `src/components/home/webgl/*`
-  - Portfolio route: `src/app/portfolio/*` + `src/components/portfolio/*`
+### Estrutura / Arquitetura
+- **Risco médio:** duplicação/variação de componentes que podem gerar inconsistência (ex.: Header “A” vs “B”, Thumb “A” vs “B”), causando divergências visuais entre rotas.
+- **Ação:** garantir fonte única de verdade para \`SiteHeader\` e para \`HomeHero\`.
 
-**Risco:** wrappers diferentes por seção → edge rhythm quebra.
+### UI (hierarquia tipográfica, grid, ritmo)
+- **Risco alto:** consistência do “edge rhythm” (margens laterais) entre Header ↔ Hero ↔ próximas seções.
+- **Ação:** padronizar container (mesma fórmula de padding lateral) e alinhar colunas.
 
-**Severidade:** 🔴 alta
+### UX / Interação
+- **Risco médio:** menu mobile precisa bloquear scroll do body, suportar tap fora, ESC e foco/teclado sem glitches.
+- **Ação:** checklist de acessibilidade + scroll lock.
 
-### UI / Fidelidade visual
-Pontos que precisam ser pixel-match (baseado no screenshot + refs):
-- Nav com labels **minúsculos**: `home`, `sobre`, `portfolio showcase`, `contato`.
-- Estado ativo do nav: `home` destacado (azul/underline) no header.
-- CTA do hero é **button pill** (não apenas link inline).
-- Thumb manifesto possui **ícone/indicador** (seta) fora/ao lado (não overlay intrusivo no vídeo).
+### Fidelidade visual
+- **Risco alto:** qualquer variação de posicionamento/escala do ghost, do texto editorial e do manifesto thumb vira BUG.
+- **Ação:** travar layout com tokens (padding clamp, breakpoints, z-index fixo).
 
-**Severidade:** 🔴 alta
+### Responsividade (mobile-first)
+- **Risco alto:** canvas/WebGL em mobile (DPR alto + postprocessing) pode degradar performance, aquecer, travar e piorar LCP.
+- **Ação:** DPR controlado + fallback + desligar follow/bloom em reduced motion e em mobile/tablet.
 
-### UX (Mobile-first)
-Regras do spec (não-negociáveis):
-- Header mobile/tablet: **sem WebGL pesado**, usar overlay fullscreen com stagger.
-- Menu mobile precisa: scroll lock, ESC, click outside e foco.
+### Motion / Animações
+- **Risco alto:** manifesto thumb precisa motion “premium editorial” sem exagero; e reduced-motion precisa funcionar.
+- **Ação:** limitar transform/opacity; timings curtos; easing premium; sem efeitos “glow/elastic” (exemplo de padrões agressivos em CSS deve ser evitado  :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6MX0"}).
 
-**Severidade:** 🔴 alta
+### WebGL / 3D
+- **Risco alto:** camadas (z-index, pointer events, depth) e pós-processamento.
+- **Ação:** Canvas isolado, pointer-events none, DPR clamp, antialias false, fallback CSS.
 
-### Alinhamento “duas laterais” (edge rhythm)
-- As seções claras (Portfolio/Featured/Contact/Footer) precisam alinhar com o mesmo gutter do hero/header.
-- O header pill não pode “flutuar” com padding diferente do container geral (senão a moldura quebra).
-
-**Severidade:** 🔴 alta
-
-### Motion/Animações
-- Motion deve ser editorial, sutil e premium (inspirado em Lo&Behold).
-- Evitar “animação gratuita”: thumb e ghost não competem.
-
-**Severidade:** 🔴 alta
-
-### WebGL / 3D (Ghost)
-- Follow mouse apenas desktop.
-- `prefers-reduced-motion`: reduzir/zerar follow + reduzir bloom/grain/jitter.
-- Canvas não pode causar CLS e nem capturar pointer events do DOM.
-
-**Severidade:** 🔴 alta
-
-### Performance
-- DPR clamp no Canvas (`[1,2]`).
-- Desligar antialias.
-- Postprocessing condicional (desktop only / reduced motion off).
-- Evitar re-render do Canvas por state do menu/scroll.
-
-**Severidade:** 🔴 alta
+### Performance (LCP/CLS)
+- **Risco alto no Hero:** vídeo e canvas podem afetar LCP/CLS se não tiverem sizing estável e lazy/dynamic import correto.
+- **Ação:** dimensões fixas (aspect-video), placeholder estável, dynamic import do Canvas.
 
 ### Acessibilidade
-- Menu mobile: `aria-expanded`, `aria-controls`, foco visível, ESC.
-- Vídeos sempre `muted` e `playsInline`.
-- Links com labels claros.
-
-**Severidade:** 🟡 média (vira 🔴 se menu não for navegável)
+- **Risco médio:** aria/teclado no header/menu e foco visível.
+- **Ação:** aria-expanded, aria-label, focus-visible ring, ordem de tabulação.
 
 ---
 
-# 3️⃣ Diagnóstico por Seção (Obrigatório)
+## 3️⃣ Diagnóstico por Seção (Obrigatório)
 
 ## 🎯 Seção: Header (SiteHeader)
 
-- 📌 Fidelidade visual (referência): ✗ — `docs/HERO-PORTFOLIO-GHOST.jpg` + `docs/HEADER/*`
+- 📌 Fidelidade visual (referência): ✗ — comparar com \`HERO-PORTFOLIO-GHOST.jpg\` (header como moldura) e docs/HEADER (animação)
 - 📐 Grid e margens laterais: ✗
 - ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: ✗
-- 🧩 Componentes envolvidos:  
-  `src/components/layout/Header.tsx` → `src/components/header/SiteHeader.tsx` → (`DesktopFluidHeader.tsx` | `MobileStaggeredMenu.tsx`) → `src/components/header/webgl/FluidGlass.tsx`
-- 🔗 Integrações: `Layout → Header wrapper → SiteHeader → Desktop/Mobile`
+- 📱 Mobile (sm/md): ✓ (aparenta correto nas imagens anexadas: logo + hamburger)
+- 🎞️ Motion/Animações: ✗ (não confirmado: stagger, scroll-lock, tap-outside, reduced-motion)
+- 🧩 Componentes envolvidos: \`SiteHeader\` → \`DesktopFluidHeader\` / \`MobileStaggeredMenu\`
+- 🔗 Integrações: \`layout.tsx\`/Home → \`SiteHeader\` → (desktop) fluid glass / (mobile) stagger overlay
 
 ### ❌ Problema (objetivo, mensurável)
-1) Header pode estar com **nav labels/case** diferente do screenshot (precisa ser minúsculo e com spacing “portfolio showcase”).  
-2) Header pode não ter estado ativo (underline/azul no item `home` na Home).  
-3) Header mobile pode estar iniciando WebGL indevidamente (contra regra).  
-4) Header pode não respeitar `z-40` acima do hero.
+1) **Header desktop potencialmente inconsistente com a “moldura” esperada**: risco de estar full-width ou com estilo/contraste competindo com a Hero, em vez de um pill flutuante discreto (conforme spec do Header).  
+2) **Edge rhythm não garantido**: padding lateral do header pode não bater com o padding lateral do conteúdo (HeroCopy, seções seguintes), gerando “saltos” visuais.  
+3) **A11y e comportamento do menu mobile não comprovados**: falta garantir aria, foco, ESC, tap-outside, scroll lock do body, e stagger real.
 
 ### 🔧 Correção Técnica (ação exata)
-- Forçar:
-  - labels e tracking idênticos ao screenshot (`home`, `sobre`, `portfolio showcase`, `contato`)
-  - estilo de active state do item atual (ex.: underline azul e/ou `text-[#0057FF]`)
-- Mobile/tablet:
-  - não renderizar `FluidGlass`/Canvas
-  - implementar overlay fullscreen stagger
-- `z-index`:
-  - wrapper do header deve ser sempre `z-40` acima da hero
+- Garantir que o header desktop use container **centralizado** com largura parcial + border-radius pill + z-index acima da hero.
+- Garantir que o header use **o mesmo padding lateral** do container da Home (\`px-[clamp(24px,5vw,96px)]\` ou equivalente) para alinhar com o grid.
+- No mobile: implementar overlay fullscreen com stagger, scroll lock do body, aria-expanded, focus trap (mínimo: foco visível e retorno de foco).
 
 ### ✅ Resultado esperado (comparável)
-- Header idêntico a `docs/HEADER/HEADER.mp4` e `docs/HERO-PORTFOLIO-GHOST.jpg`.
+- Header desktop “moldura”: visualmente discreto, sempre legível, sem competir com ghost/texto.  
+- Header e Hero compartilham o mesmo alinhamento de bordas (margem esquerda/direita).  
+- Mobile menu abre com cascata (stagger) fluida, rápida e acessível, conforme docs/HEADER.
+
+### ✅ Checklist de fidelidade (Header)
+- Grid corresponde à imagem? **Não**
+- Margens laterais equivalentes? **Não**
+- Alinhamento “duas laterais” consistente? **Não**
+- Hierarquia tipográfica equivalente? **Não confirmado**
+- Espaçamento vertical equivalente? **Não confirmado**
+- Elementos 3D/WebGL na mesma posição/escala? **N/A (Header)**
+- Mobile equivalente ao esperado? **Sim**
+- Sem overflow horizontal? **Não confirmado (precisa QA real)**
 
 ---
 
-## 🎯 Seção: Hero (HomeHero)
+## 🎯 Seção: Hero (Ghost Atmosphere + Texto Editorial + Manifesto)
 
-- 📌 Fidelidade visual (referência): ✗ — `docs/HERO-PORTFOLIO-GHOST.jpg`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: ✗
-- 🧩 Componentes envolvidos:  
-  `src/components/home/HomeHero.tsx` → `HeroPreloader.tsx` + `HeroCopy.tsx` + `ManifestoThumb.tsx` + `GhostStage.tsx` → `src/components/home/webgl/GhostCanvas.tsx` (+ `Ghost.tsx`, `Eyes.tsx`, `Particles.tsx`, `Fireflies.tsx`, `AtmosphereVeil.tsx`, `postprocessing/*`)
-- 🔗 Integrações: `Home page → HomeHero → GhostStage → GhostCanvas`
+- 📌 Fidelidade visual (referência): ✓ — comparar com \`HERO-PORTFOLIO-GHOST.jpg\`
+- 📐 Grid e margens laterais: ✗ (edge rhythm com header e próximas seções não comprovado)
+- ↔️ Alinhamento duas laterais: ✗ (risco de desalinhamento entre hero e próximas seções)
+- 📱 Mobile (sm/md): ✓ (aparenta: manifesto fullscreen abaixo da Hero)
+- 🎞️ Motion/Animações: ✗ (não confirmado: timing/easing premium, reduced-motion)
+- 🧩 Componentes envolvidos: \`HomeHero\` → \`HeroPreloader\` / \`HeroCopy\` / \`ManifestoThumb\` / \`GhostStage\` → \`GhostCanvas\`
+- 🔗 Integrações: \`HomeHero\` (camadas) → manifesto thumb (hover/scroll/click) → manifesto section (mobile)
 
 ### ❌ Problema (objetivo, mensurável)
-1) CTA do hero: no screenshot é **button pill azul** (não link simples).  
-2) Thumb manifesto: precisa ter **entrada premium** e hover refinado (não competir com ghost).  
-3) Stack de camadas precisa respeitar:
-   - z-50 preloader
-   - z-30 manifesto thumb
-   - z-20 ghost canvas
-   - z-10 texto editorial
-4) Ghost follow mouse deve ser **desktop-only**.
-5) `prefers-reduced-motion` deve reduzir/zerar follow e efeitos.
+1) **Risco de conflito de regras do próprio spec**: há trechos do spec dizendo “texto editorial 100% estático” vs “overlay text opacity 1 → 0 no scroll do morph do vídeo”. Se o texto estiver animando além do fade-out necessário para o morph, isso viola “sem texto animado”.  
+2) **Manifesto thumb precisa motion premium e contido**: sem exagero (evitar padrões “glow/elastic/overshoot” — exemplos agressivos de hover/glow deve :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6Mn0"}m ser evitados ).  
+3) **WebGL Ghost**: precisa garantir (a) follow apenas desktop, (b) reduced motion desativa follow + bloom intenso, (c) fallback se WebGL falhar, (d) DPR controlado, (e) canvas não captura input.
 
 ### 🔧 Correção Técnica (ação exata)
-- HeroCopy:
-  - garantir CTA como pill button com círculo/ícone à direita (como no screenshot)
-- ManifestoThumb:
-  - entrada (opacity + y + scale leve)
-  - hover (scale 1.03~1.05 + arrow rotate -45→0)
-  - reduced motion: apenas fade simples
-- GhostCanvas:
-  - DPR clamp, antialias false, postprocessing condicional
+- Hero: garantir stack de z-index conforme spec (preloader z-50, manifesto z-30, ghost z-20, copy z-10, bg z-0).
+- Manifesto (desktop): entrada com \`opacity/translate/scale\` sutil; hover scale 1 → 1.05 e seta -45 → 0; scroll morph com \`useScroll/useTransform\`; click (desktop) salta para estado final; click (mobile) alterna mute.
+- WebGL: dynamic import do canvas; \`dpr={[1,2]}\`, \`antialias:false\`; reduced motion e mobile: desativar follow e/ou reduzir efeitos.
 
 ### ✅ Resultado esperado (comparável)
-- Visual e ritmo idênticos ao `docs/HERO-PORTFOLIO-GHOST.jpg`.
+- Primeiro frame: ghost atmosférico vivo + texto editorial legível + manifesto thumb discreto no canto inferior direito (desktop).  
+- Ao scroll: manifesto cresce e centraliza, texto some (apenas o necessário), sem cortes abruptos.  
+- Mobile: manifesto fullscreen logo abaixo da Hero, com reveal sutil e sem travar a navegação.
+
+### ✅ Checklist de fidelidade (Hero)
+- Grid corresponde à imagem? **Sim (aparente)**
+- Margens laterais equivalentes? **Não confirmado**
+- Alinhamento “duas laterais” consistente? **Não**
+- Hierarquia tipográfica equivalente? **Sim (aparente)**
+- Espaçamento vertical equivalente? **Sim (aparente)**
+- Elementos 3D/WebGL na mesma posição/escala? **Sim (aparente)**
+- Mobile equivalente ao esperado? **Sim**
+- Sem overflow horizontal? **Não confirmado (precisa QA real)**
 
 ---
 
-## 🎯 Seção: Portfolio Showcase (Home)
+## 🎯 Seção: Portfolio Page (/portfolio)
 
-- 📌 Fidelidade visual (referência): ✗ — `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: ✗
-- 🧩 Componentes envolvidos: `src/components/home/PortfolioShowcase.tsx` + `CategoryStripe.tsx`
-- 🔗 Integrações: `Home page → PortfolioShowcase → CategoryStripe`
-
-### ❌ Problema (objetivo, mensurável)
-1) Alternância de alinhamento precisa ser exatamente:
-   - linha 1: direita
-   - linha 2: centro
-   - linha 3: esquerda
-2) Títulos precisam respeitar que “Web Campaigns, Websites & Tech” quebra em múltiplas linhas (sem overflow).
-3) Dot azul no final da linha deve existir e ficar na posição correta.
-4) Hover reveal no desktop não pode gerar CLS.
-
-### 🔧 Correção Técnica (ação exata)
-- Garantir classes de layout por stripe com alignment alternado no `md+`.
-- Garantir que a terceira categoria suporte quebra e mantenha o dot alinhado.
-- Hover: reservar espaço do thumbnail (ou usar overlay interno sem alterar width do layout).
-
-### ✅ Resultado esperado (comparável)
-- Showcase idêntico ao `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`.
-
----
-
-## 🎯 Seção: Featured Projects (Home)
-
-- 📌 Fidelidade visual (referência): ✗ — `docs/PROTFOLIO_CARDS.png`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: ✗
-- 🧩 Componentes envolvidos: `src/components/home/FeaturedProjects.tsx` + `ProjectCard.tsx`
-- 🔗 Integrações: `Home page → FeaturedProjects → ProjectCard`
+- 📌 Fidelidade visual (referência): ✗ — **não validável aqui** sem a imagem \`PORTFOLIO-PAGE-LAYOUYT.jpg\` anexada nesta conversa
+- 📐 Grid e margens laterais: ✗ (não validável)
+- ↔️ Alinhamento duas laterais: ✗ (não validável)
+- 📱 Mobile (sm/md): ✗ (não validável)
+- 🎞️ Motion/Animações: ✗ (não validável)
+- 🧩 Componentes envolvidos: rota \`/portfolio\` + header
+- 🔗 Integrações: \`/portfolio\` deve manter consistência de header e containers com Home
 
 ### ❌ Problema (objetivo, mensurável)
-- Proporções do bento grid devem bater com a referência (5/7, 12, 8/4) e sem CLS em mídia.
+- Falta de evidência visual nesta conversa para validar pixel-perfect da página /portfolio.
 
 ### 🔧 Correção Técnica (ação exata)
-- Ajustar grid do desktop para col-spans exatos e fixar alturas de cards conforme spec.
-- Garantir que o card CTA (“Like what you see?”) tenha o mesmo estilo da referência.
+- Rodar auditoria visual comparando /portfolio com \`PORTFOLIO-PAGE-LAYOUYT.jpg\` e ajustar containers/margens/typography.
 
 ### ✅ Resultado esperado (comparável)
-- Bento idêntico ao `docs/PROTFOLIO_CARDS.png`.
-
----
-
-## 🎯 Seção: Clients / Brands (Home)
-
-- 📌 Fidelidade visual (referência): ✓ — `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
-- 📐 Grid e margens laterais: ✓
-- ↔️ Alinhamento duas laterais: ✓
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: ✗
-- 🧩 Componentes envolvidos: `src/components/home/Clients.tsx`
-- 🔗 Integrações: `Home page → Clients`
-
-### ❌ Problema (objetivo, mensurável)
-- Logos precisam de contraste consistente (monocromático claro) e stagger de entrada (sutil).
-
-### 🔧 Correção Técnica (ação exata)
-- Aplicar `filter brightness-0 invert` quando necessário.
-- whileInView com stagger leve e reduced motion fallback.
-
-### ✅ Resultado esperado (comparável)
-- Faixa azul idêntica ao layout esperado.
-
----
-
-## 🎯 Seção: Contact (Home)
-
-- 📌 Fidelidade visual (referência): ✓ — `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: 🟡
-- 🧩 Componentes envolvidos: `src/components/home/Contact.tsx`
-- 🔗 Integrações: `Home page → Contact`
-
-### ❌ Problema (objetivo, mensurável)
-- Edge rhythm pode quebrar no contact (margens e colunas).
-- A11y: inputs sem label associado.
-
-### 🔧 Correção Técnica (ação exata)
-- Padronizar container/gutters iguais à home.
-- Garantir `label + htmlFor` em todos inputs.
-
-### ✅ Resultado esperado (comparável)
-- Contact alinhado ao grid global como na referência.
-
----
-
-## 🎯 Seção: Footer (Home)
-
-- 📌 Fidelidade visual (referência): ✗ — `docs/FOOTER.png`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: 🟡
-- 🧩 Componentes envolvidos: `src/components/layout/Footer.tsx`
-- 🔗 Integrações: `Layout → Footer`
-
-### ❌ Problema (objetivo, mensurável)
-- Footer deve ser fixo **somente no desktop**; no mobile deve ficar no fluxo.
-- Link “sobre” deve ir para `/sobre` (não para âncora errada).
-
-### 🔧 Correção Técnica (ação exata)
-- Condicionar `fixed` apenas em `lg+`.
-- Ajustar rotas/âncoras conforme spec.
-
-### ✅ Resultado esperado (comparável)
-- Desktop: barra fixa.
-- Mobile: footer no fluxo.
-
----
-
-## 🎯 Seção: Portfolio Page (rota /portfolio)
-
-- 📌 Fidelidade visual (referência): ✗ — `docs/PORTFOLIO-PAGE-LAYOUYT.jpg`
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✗
-- 🎞️ Motion/Animações: 🟡
-- 🧩 Componentes envolvidos:  
-  `src/app/portfolio/page.tsx` → `src/components/portfolio/PortfolioHero.tsx` + `PortfolioMosaicGrid.tsx` + `MosaicCard.tsx`
-- 🔗 Integrações: `Portfolio route → PortfolioHero + MosaicGrid`
-
-### ❌ Problema (objetivo, mensurável)
-- Mosaic grid costuma quebrar gutters e proporções vs referência.
-
-### 🔧 Correção Técnica (ação exata)
-- Padronizar container igual à Home.
-- Ajustar mosaic para bater com `docs/PORTFOLIO-PAGE-LAYOUYT.jpg`.
-- Reservar tamanho de mídia para CLS zero.
-
-### ✅ Resultado esperado (comparável)
-- /portfolio idêntica à referência.
+- /portfolio com o mesmo edge rhythm da Home e sem divergências em grid/spacing.
 
 ---
 
 # 4️⃣ Lista de Problemas (com severidade)
 
-## 🔴 Alta
-1) Container/gutters inconsistentes entre seções (edge rhythm).
-2) Header mobile iniciando WebGL (deve ser DOM overlay).
-3) Nav labels/case e active state divergindo do screenshot (home destacado).
-4) CTA do hero divergindo (deve ser pill button).
-5) Ghost follow mouse e postprocessing sem gating (desktop-only + reduced motion).
-6) Z-index stack da hero (preloader/thumb/canvas/text) inconsistente.
-7) Portfolio showcase alternância + dot + quebra de linha da 3ª categoria.
+## 🔴 Alta (bloqueia fidelidade/UX/performance)
+1) Header desktop não comprovadamente “moldura” (risco de competir com hero / inconsistência de pill flutuante).  
+2) Edge rhythm (margens laterais) não garantido entre Header ↔ Hero ↔ seções seguintes.  
+3) WebGL Ghost sem garantias explícitas de fallback + reduced-motion + DPR controlado.  
+4) Manifesto thumb: sem garantias de motion editorial contido (evitar exageros e padrões de glow/elastic; exemplos agressivos exist :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6M30"}em em estilos analisados ).  
+5) /portfolio não validado visualmente nesta conversa (fidelidade não confirmada).
 
-## 🟡 Média
-8) Menu mobile A11y (ESC/click outside/focus trap).
-9) Hover reveal causando CLS em stripes/cards.
-10) Contact sem labels e foco inconsistente.
+## 🟡 Média (perceptível mas não bloqueia)
+6) A11y do menu mobile: aria-expanded, ESC, foco visível, tap-outside e scroll-lock precisam ser garantidos.  
+7) Possível duplicidade de componentes (header/thumb) gerando divergência entre rotas.  
+8) Potenciais problemas de LCP/CLS (vídeo + canvas) se sizing não for estável.
 
-## 🟢 Baixa
-11) Micro ajustes de easing/duration (hover underline, arrow rotation timing).
+## 🟢 Baixa (polimento)
+9) Microinterações de hover/focus podem precisar calibragem de timing/easing (premium sutil).  
+10) Ajustes finos de contraste do header sobre o fundo do hero.
 
 ---
 
 # 5️⃣ Recomendações Prioritárias (ordem de execução)
 
-1) **Sistema de container/gutters** (impacta tudo).
-2) **Header mobile (overlay + a11y + scroll lock + sem WebGL)**.
-3) **Hero layering + manifesto thumb motion + reduced motion**.
-4) **Ghost Canvas gating/perf**.
-5) **Portfolio showcase (alternância, dot, sem CLS)**.
-6) **Footer fixed desktop-only**.
-7) **Portfolio page mosaic grid**.
+1) **Travar layout e edge rhythm (container único)**: porque afeta todas as seções e impede “saltos” visuais.  
+2) **Header (desktop + mobile)**: z-index, forma, legibilidade e comportamento do menu.  
+3) **Hero (manifesto thumb + scroll morph)**: timing/easing premium + reduced motion.  
+4) **WebGL Ghost**: DPR/antialias/fallback, follow apenas desktop, performance.  
+5) **/portfolio**: auditoria visual completa com referência \`PORTFOLIO-PAGE-LAYOUYT.jpg\`.
 
 ---
 
-# FASE 2 — 🤖 PROMPTS TÉCNICOS PARA AGENTE EXECUTOR (atômicos e executáveis)
+# 🤖 PROMPTS TÉCNICOS PARA AGENTE EXECUTOR (OBRIGATÓRIO)
 
-> Regras globais:
-> - ❌ Não alterar textos (conteúdo), apenas estilo/comportamento
-> - ❌ Não inventar layout/efeitos
-> - ✅ Tailwind + App Router
-> - ✅ Mobile-first
-> - ✅ Comparar com imagens em `docs/*`
+> Cada prompt é atômico (1 problema).  
+> Regra: ❌ não alterar textos / ❌ não inventar layout / ✅ comparar com as imagens de referência.
 
 ---
 
-### 🛠️ Prompt #01 — Padronizar container/gutters (edge rhythm global)
+### 🛠️ Prompt #01 — Garantir “fonte única” do Header usado no site
 
 **Objetivo**
-- Garantir mesma coluna útil e mesmos gutters em Header/Hero/Seções (pixel-match com `HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`).
+- Garantir que HOME e /portfolio renderizem o mesmo componente de header (sem divergências visuais entre rotas).
 
 **Arquivos/Rotas envolvidas**
-- `src/app/page.tsx`
-- `src/components/layout/Header.tsx`
-- `src/components/home/*` (wrappers das seções)
-- `src/components/layout/Footer.tsx`
+- \`src/app/layout.tsx\`
+- \`src/app/page.tsx\`
+- \`src/app/portfolio/page.tsx\`
+- \`src/components/header/SiteHeader.tsx\`
+- (se existir em uso) \`src/components/layout/Header.tsx\`
 
 **Ações**
-1. Identificar wrappers e classes atuais por seção (ex.: `px-4`, `container`, `max-w-*`).
-2. Criar um padrão único (ex.: `max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]`).
-3. Aplicar exatamente o mesmo padrão em todas as seções + header/footer.
+1. Localize onde o header é renderizado (layout global e/ou por página).
+2. Se houver mais de um header sendo usado, padronize para **apenas um** (preferir \`SiteHeader\`).
+3. Verifique visualmente HOME e /portfolio lado a lado após a mudança.
 
 **Regras**
-- ❌ Não mudar ordem das seções
-- ✅ Comparar com: `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Tailwind + App Router
+- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
 
-**Critérios de aceite**
-- [ ] Margens laterais idênticas entre todas as seções
-- [ ] Sem “saltos” de coluna útil
-- [ ] Sem overflow-x no mobile
+**Critérios de aceite (Checklist)**
+- [ ] Mesmo header em HOME e /portfolio
+- [ ] Sem regressão visual no hero
+- [ ] Sem overflow horizontal (mobile)
 
 ---
 
-### 🛠️ Prompt #02 — Header: labels minúsculos + active state no “home”
+### 🛠️ Prompt #02 — Desktop Header: “pill flutuante” (moldura) com largura parcial
 
 **Objetivo**
-- Fazer o header bater com o screenshot: labels minúsculos e item `home` ativo (azul/underline) na rota `/`.
+- Fazer o header desktop ficar como moldura discreta: pill flutuante centralizado e não full-width.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/header/SiteHeader.tsx`
-- `src/components/header/DesktopFluidHeader.tsx`
+- \`src/components/header/SiteHeader.tsx\`
+- \`src/components/header/DesktopFluidHeader.tsx\`
 
 **Ações**
-1. Ajustar labels exatamente: `home`, `sobre`, `portfolio showcase`, `contato`.
-2. Implementar active state baseado em `usePathname()` (Next) e/ou hash atual.
-3. Garantir underline/estilo ativo idêntico à referência.
+1. No desktop (≥1024px), ajuste container para largura parcial (ex.: \`max-w-[...]\` + \`mx-auto\`) e bordas arredondadas (pill).
+2. Garanta altura/padding do header conforme spec (56–72px).
+3. Ajuste contraste para não competir com a Hero.
 
 **Regras**
-- ❌ Não criar novos itens
-- ✅ Comparar com: `docs/HERO-PORTFOLIO-GHOST.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
 
-**Critérios de aceite**
-- [ ] Labels e casing idênticos ao screenshot
-- [ ] `home` aparece ativo na Home
-- [ ] A11y: foco visível nos links
+**Critérios de aceite (Checklist)**
+- [ ] Header não é full-width no desktop
+- [ ] Header é pill flutuante e discreto
+- [ ] Legibilidade do menu 100%
 
 ---
 
-### 🛠️ Prompt #03 — Header mobile: overlay fullscreen stagger (sem WebGL)
+### 🛠️ Prompt #03 — Edge rhythm: unificar padding lateral entre Header e Hero
 
 **Objetivo**
-- Em `<=1023px`, renderizar apenas overlay DOM com stagger e scroll lock; não iniciar WebGL do header.
+- Garantir que a borda esquerda/direita do Header alinhe com a borda esquerda/direita do conteúdo da Hero.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/header/SiteHeader.tsx`
-- `src/components/header/MobileStaggeredMenu.tsx`
-- `src/components/header/webgl/FluidGlass.tsx`
+- \`src/components/header/*\`
+- \`src/components/home/HomeHero.tsx\` e/ou wrapper/container da Home
+- \`src/app/page.tsx\`
 
 **Ações**
-1. Desativar render do `FluidGlass` no mobile/tablet.
-2. Implementar overlay fullscreen:
-   - overlay fade 200–250ms
-   - painel slide 260–320ms (spring leve)
-   - itens: stagger (opacity 0→1, y 16→0)
-3. Implementar scroll lock do body.
-4. Implementar fechar: botão, click outside, ESC.
+1. Defina um padrão de padding lateral (ex.: \`px-[clamp(24px,5vw,96px)]\`) e aplique ao header e ao container da home.
+2. Garanta que o hero copy e CTAs respeitam a mesma largura útil.
+3. Faça QA em 1440px e 1920px.
 
 **Regras**
-- ✅ Comparar com: `docs/HEADER/HEADER-MOBILE.mov`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\`
 
-**Critérios de aceite**
-- [ ] Mobile sem Canvas do header
-- [ ] Scroll lock OK
-- [ ] ESC/click outside OK
-- [ ] Sem lag perceptível
+**Critérios de aceite (Checklist)**
+- [ ] Grid e margens iguais à referência
+- [ ] Sem “saltos” de alinhamento entre seções
+- [ ] Sem overflow horizontal
 
 ---
 
-### 🛠️ Prompt #04 — Hero: CTA como pill button (igual screenshot)
+### 🛠️ Prompt #04 — Mobile Menu: overlay fullscreen com stagger real + scroll lock
 
 **Objetivo**
-- Trocar/ajustar o CTA do hero para o formato pill button azul com ícone/círculo à direita, igual referência.
+- Implementar menu mobile fullscreen com animação stagger e travar o scroll do body quando aberto.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/home/HeroCopy.tsx`
+- \`src/components/header/MobileStaggeredMenu.tsx\`
+- \`src/components/header/SiteHeader.tsx\`
 
 **Ações**
-1. Ajustar markup do CTA para button/link com:
-   - container pill (rounded-full)
-   - background azul
-   - ícone em círculo à direita
-2. Garantir alinhamento e tamanho conforme screenshot (center).
-3. Garantir hover sutil e `prefers-reduced-motion` sem transform exagerado.
+1. Ao abrir, renderize overlay fullscreen com gradiente e painel (se aplicável).
+2. Bloqueie scroll do body (\`document.body.style.overflow = 'hidden'\`) e reverta ao fechar.
+3. Aplique stagger nos itens (opacity 0→1 e y 16→0).
+4. Permita fechar via: X, clique em item, clique fora, tecla ESC.
 
 **Regras**
-- ❌ Não alterar texto do CTA
-- ✅ Comparar com: `docs/HERO-PORTFOLIO-GHOST.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Mobile-first
+- ✅ Comparar com: docs/HEADER (animação)
 
-**Critérios de aceite**
-- [ ] CTA visual idêntico ao screenshot
-- [ ] Sem CLS
-- [ ] A11y: foco visível
+**Critérios de aceite (Checklist)**
+- [ ] Scroll do body bloqueado no menu aberto
+- [ ] Stagger funciona e é rápido
+- [ ] Tap-outside fecha
+- [ ] ESC fecha
+- [ ] aria-expanded correto
 
 ---
 
-### 🛠️ Prompt #05 — Hero: stack z-index + pointer-events
+### 🛠️ Prompt #05 — Acessibilidade do Header (desktop + mobile)
 
 **Objetivo**
-- Garantir o stack final: z-50 preloader, z-30 manifesto, z-20 ghost, z-10 texto, z-0 background.
+- Garantir navegação por teclado e ARIA completos no header e menu.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/home/HomeHero.tsx`
-- `src/components/home/HeroPreloader.tsx`
-- `src/components/home/GhostStage.tsx`
-- `src/components/home/ManifestoThumb.tsx`
+- \`src/components/header/SiteHeader.tsx\`
+- \`src/components/header/MobileStaggeredMenu.tsx\`
+- \`src/components/header/DesktopFluidHeader.tsx\`
 
 **Ações**
-1. Auditar e corrigir z-index real.
-2. Garantir Canvas com `pointer-events-none` (não bloquear cliques do CTA/Thumb).
-3. Garantir preloader removível e sem bloquear após terminar.
+1. Botão hamburger: \`aria-label\` (abrir/fechar), \`aria-expanded\`, \`aria-controls\`.
+2. Links: foco visível (\`focus-visible:ring\`), ordem de tab coerente.
+3. ESC fecha menu; foco retorna ao botão.
 
 **Regras**
-- ✅ Comparar com: `docs/HERO-PORTFOLIO-GHOST.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
 
-**Critérios de aceite**
-- [ ] Camadas corretas
-- [ ] CTA e Thumb clicáveis
-- [ ] Sem conflitos de clique
+**Critérios de aceite (Checklist)**
+- [ ] Navegável via teclado
+- [ ] Foco visível
+- [ ] ARIA consistente
 
 ---
 
-### 🛠️ Prompt #06 — ManifestoThumb: entrada premium + hover sutil (Lo&Behold)
+### 🛠️ Prompt #06 — Hero: garantir stack de z-index e pointer-events do Canvas
 
 **Objetivo**
-- Implementar reveal editorial no manifesto thumb (fade/y/scale leve) e hover premium (scale + arrow rotate), sem competir com ghost.
+- Garantir que Canvas do Ghost não roube interações e que as camadas respeitem a hierarquia do spec.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/home/ManifestoThumb.tsx`
+- \`src/components/home/HomeHero.tsx\`
+- \`src/components/home/GhostStage.tsx\`
+- \`src/components/home/webgl/GhostCanvas.tsx\`
 
 **Ações**
-1. Entrada:
-   - opacity 0→1
-   - y 12→0
-   - scale 0.98→1
-   - easing `[0.22,1,0.36,1]`
-2. Hover desktop:
-   - scale 1→1.03/1.05
-   - arrow rotate -45→0 (500ms)
-3. Reduced motion:
-   - remover scale/y; manter fade simples.
+1. Garanta camadas: preloader z-50, manifesto z-30, ghost z-20, copy z-10, bg z-0.
+2. Aplique \`pointer-events-none\` no wrapper do Canvas (ou no canvas).
+3. Garanta que o header fique acima da Hero (z-40 no header).
 
 **Regras**
-- ✅ Comparar com: `docs/HERO_E_VIDEO_MANIFESTO.png` + `docs/HERO-PORTFOLIO-GHOST.jpg`
+- ❌ Não alterar textos
+- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
 
-**Critérios de aceite**
-- [ ] Motion premium e sutil
+**Critérios de aceite (Checklist)**
+- [ ] CTA e links clicáveis
+- [ ] Canvas não bloqueia scroll/click
+- [ ] Z-index consistente
+
+---
+
+### 🛠️ Prompt #07 — WebGL Ghost: DPR/antialias/perf + reduced motion
+
+**Objetivo**
+- Controlar performance do Ghost e respeitar prefers-reduced-motion.
+
+**Arquivos/Rotas envolvidas**
+- \`src/components/home/webgl/GhostCanvas.tsx\`
+- \`src/components/home/GhostStage.tsx\`
+
+**Ações**
+1. Setar Canvas com \`dpr={[1,2]}\` e \`gl={{ antialias:false }}\`.
+2. Em \`prefers-reduced-motion: reduce\`: desativar follow/parallax e reduzir bloom/decay (ou desligar postprocessing pesado).
+3. Em mobile/tablet: reduzir DPR e/ou desligar follow.
+
+**Regras**
+- ❌ Não alterar textos
+- ✅ Mobile-first
+
+**Critérios de aceite (Checklist)**
+- [ ] Sem travamentos no mobile
+- [ ] Reduced-motion remove follow/efeitos agressivos
+- [ ] Visual continua fiel ao still (ghost atmosférico)
+
+---
+
+### 🛠️ Prompt #08 — Manifesto Thumb: motion editorial premium (entrada + hover)
+
+**Objetivo**
+- Implementar entrada premium e hover contido para o manifesto thumb (sem competir com ghost).
+
+**Arquivos/Rotas envolvidas**
+- \`src/components/home/ManifestoThumb.tsx\` (ou componente equivalente)
+- \`src/components/home/HomeHero.tsx\`
+
+**Ações**
+1. Entrada: \`opacity 0→1\`, \`y 12→0\`, \`scale 0.98→1\`, easing \`[0.22,1,0.36,1]\`, duração ~600ms.
+2. Hover (desktop): \`scale 1→1.05\`; seta \`-45deg→0deg\`.
+3. Respeitar reduced motion (remover hover scale e usar transição simples).
+
+**Regras**
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
+
+**Critérios de aceite (Checklist)**
+- [ ] Animação sutil (sem glow exagerado)
 - [ ] Reduced motion respeitado
-- [ ] Thumb no canto correto
+- [ ] Não compete com ghost
 
 ---
 
-### 🛠️ Prompt #07 — GhostCanvas: follow desktop-only + reduced motion + DPR clamp
+### 🛠️ Prompt #09 — Manifesto Thumb: scroll morph (thumb → fullscreen)
 
 **Objetivo**
-- Follow mouse só no desktop; no mobile e reduced motion, reduzir efeitos e garantir performance.
+- Fazer o manifesto crescer e centralizar com scroll dentro da seção Hero, com radius indo a 0.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/home/webgl/GhostCanvas.tsx`
-- `src/components/home/webgl/postprocessing/*`
+- \`src/components/home/HomeHero.tsx\`
 
 **Ações**
-1. Implementar gating por viewport e reduced motion.
-2. DPR clamp (`[1,2]`) e `antialias:false`.
-3. Postprocessing pesado apenas desktop e motion normal.
+1. Garantir Hero com altura suficiente (ex.: 200vh) para o scrub.
+2. Usar \`useScroll\` + \`useTransform\` para scale/position/borderRadius.
+3. Garantir sizing estável (\`aspect-video\`) para evitar CLS.
 
 **Regras**
-- ✅ Comparar com: `docs/HERO-PORTFOLIO-GHOST.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: docs/REFERENCIA_HERO-GHOST
 
-**Critérios de aceite**
-- [ ] Desktop segue cursor suavemente
-- [ ] Mobile não segue cursor
-- [ ] Reduced motion sem jitter/bloom forte
-
----
-
-### 🛠️ Prompt #08 — Portfolio Showcase: alternância + dot + quebra de linha
-
-**Objetivo**
-- Reproduzir alternância (end/center/start), dot azul e quebra correta da 3ª categoria, sem overflow.
-
-**Arquivos/Rotas envolvidas**
-- `src/components/home/PortfolioShowcase.tsx`
-- `src/components/home/CategoryStripe.tsx`
-
-**Ações**
-1. Alternar alignment por item no desktop.
-2. Garantir dot azul posicionado como na referência.
-3. Garantir multiline “Web Campaigns, Websites & Tech” sem quebrar layout.
-4. Hover reveal sem CLS.
-
-**Regras**
-- ✅ Comparar com: `docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg`
-
-**Critérios de aceite**
-- [ ] Alternância correta
-- [ ] Dot correto
-- [ ] Sem overflow mobile
-
----
-
-### 🛠️ Prompt #09 — Featured Projects: bento grid (5/7, 12, 8/4)
-
-**Objetivo**
-- Ajustar o grid para bater com `PROTFOLIO_CARDS.png`.
-
-**Arquivos/Rotas envolvidas**
-- `src/components/home/FeaturedProjects.tsx`
-- `src/components/home/ProjectCard.tsx`
-
-**Ações**
-1. Desktop: col-spans e alturas conforme spec.
-2. Mobile: empilhar e CTA por último.
-3. Garantir mídia com reserva de dimensão (CLS zero).
-
-**Regras**
-- ✅ Comparar com: `docs/PROTFOLIO_CARDS.png`
-
-**Critérios de aceite**
-- [ ] Grid idêntico ao spec
+**Critérios de aceite (Checklist)**
+- [ ] Thumb inicia no canto inferior direito (desktop)
+- [ ] Termina fullscreen central
+- [ ] Border radius 12–16px → 0
 - [ ] Sem CLS
 
 ---
 
-### 🛠️ Prompt #10 — Footer: fixo somente no desktop; “sobre” aponta para /sobre
+### 🛠️ Prompt #10 — Manifesto: comportamento de click (desktop vs mobile)
 
 **Objetivo**
-- Garantir footer fixo no desktop e no fluxo no mobile, e links corretos.
+- Desktop: click “salta” para o estado final do morph; Mobile: click alterna som.
 
 **Arquivos/Rotas envolvidas**
-- `src/components/layout/Footer.tsx`
+- \`src/components/home/ManifestoThumb.tsx\`
+- \`src/components/home/HomeHero.tsx\`
+- (mobile) \`src/components/home/ManifestoSection.tsx\` (se existir)
 
 **Ações**
-1. Aplicar `fixed bottom-0` apenas em `lg+`.
-2. Ajustar link “sobre” para `/sobre`.
-3. Garantir touch target e foco visível.
+1. Desktop (≥768px): ao clicar, scroll para o final do range do morph.
+2. Mobile (≤767px): toggle muted/unmuted no vídeo manifesto.
+3. Adicionar feedback mínimo no mobile (ícone/estado), sem overlay pesado.
 
 **Regras**
-- ✅ Comparar com: `docs/FOOTER.png`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
 
-**Critérios de aceite**
-- [ ] Desktop fixo, mobile no fluxo
-- [ ] Links corretos
+**Critérios de aceite (Checklist)**
+- [ ] Desktop pula para fullscreen
+- [ ] Mobile alterna som
+- [ ] Sem overlays agressivos
 
 ---
 
-### 🛠️ Prompt #11 — /portfolio: mosaic grid fiel à referência
+### 🛠️ Prompt #11 — Mobile: ManifestoSection fullscreen logo abaixo da Hero
 
 **Objetivo**
-- Reproduzir layout e gutters da página `/portfolio` conforme `PORTFOLIO-PAGE-LAYOUYT.jpg`.
+- Garantir manifesto como seção independente no mobile, com reveal sutil ao entrar na viewport.
 
 **Arquivos/Rotas envolvidas**
-- `src/app/portfolio/page.tsx`
-- `src/components/portfolio/PortfolioHero.tsx`
-- `src/components/portfolio/PortfolioMosaicGrid.tsx`
-- `src/components/portfolio/MosaicCard.tsx`
+- \`src/components/home/ManifestoSection.tsx\` (se existir)
+- \`src/components/home/HomeHero.tsx\`
 
 **Ações**
-1. Unificar container/gutters com Home.
-2. Ajustar mosaic grid (colunas/gaps/proporções).
-3. Reservar dimensões de mídia.
+1. Renderizar manifesto section somente em \`md:hidden\`.
+2. Aplicar \`whileInView\` / \`useInView\` com \`opacity\` + \`scale\` sutil.
+3. Garantir \`aspect-video\` e \`object-cover\`.
 
 **Regras**
-- ✅ Comparar com: `docs/PORTFOLIO-PAGE-LAYOUYT.jpg`
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\`
 
-**Critérios de aceite**
-- [ ] Mosaic idêntico à referência
-- [ ] Sem CLS/overflow
+**Critérios de aceite (Checklist)**
+- [ ] Mobile mostra manifesto fullscreen abaixo da hero
+- [ ] Sem overflow horizontal
+- [ ] Reveal suave, sem exagero
+
+---
+
+### 🛠️ Prompt #12 — /portfolio: auditoria visual completa e correção de containers
+
+**Objetivo**
+- Ajustar /portfolio para ficar pixel-perfect com \`PORTFOLIO-PAGE-LAYOUYT.jpg\`.
+
+**Arquivos/Rotas envolvidas**
+- \`src/app/portfolio/page.tsx\`
+- Componentes da página portfolio (se existir em \`src/components/portfolio/*\`)
+- \`src/components/header/SiteHeader.tsx\`
+
+**Ações**
+1. Compare /portfolio com a referência (grid, gutters, tipografia, espaçamento).
+2. Ajuste containers para respeitar o mesmo padding/clamp da Home.
+3. Garantir consistência do header e edge rhythm.
+
+**Regras**
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+- ✅ Comparar com: \`PORTFOLIO-PAGE-LAYOUYT.jpg\`
+
+**Critérios de aceite (Checklist)**
+- [ ] Grid e margens iguais à referência
+- [ ] Alinhamento duas laterais consistente
+- [ ] Mobile sem overflow
+- [ ] Fidelidade visual confirmada
 
 ---
 
-## QA mínimo (antes de dar “done”)
-- Lighthouse mobile: LCP/CLS e memória.
-- Testar `prefers-reduced-motion`.
-- Testar menu mobile: scroll lock + ESC + click outside + tab order.
-- Testar iOS Safari (playsInline + autoplay muted).
+### 🛠️ Prompt #13 — Remover/neutralizar padrões de glow/hover agressivo (se estiverem afetando o site)
+
+**Objetivo**
+- Garantir que não existam efeitos de glow/hover “fortes” competindo com o Hero (motion editorial sutil).
+
+**Arquivos/Rotas envolvidas**
+- \`src/app/globals.css\` (ou css global equivalente)
+- Qualquer css/module que aplique glow/box-shadow intenso
+
+**Ações**
+1. Localize estilos com box-shadows e animações de glow agressivas (exemplo de padrão a evitar: \`landing-button\` com m :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6NH0"}últiplas sombras e animação “glow-pulse” ).
+2. Se esses estilos estiverem aplicados nas páginas HOME/PORTFOLIO, reduza para transições discretas (opacity/transform).
+3. Respeitar reduced motion: desativar animações contínuas.
+
+**Regras**
+- ❌ Não alterar textos
+- ❌ Não inventar layout
+
+**Critérios de aceite (Checklist)**
+- [ ] Sem glow exagerado no header/CTAs
+- [ ] Motion premium e contido
+- [ ] Reduced motion respeitado
 
 ---
+`;
+
+export default function HomePortfolioAuditReport() {
+  return (
+    <main className="min-h-dvh bg-neutral-950 text-neutral-100">
+      <div className="mx-auto w-full max-w-5xl px-6 py-10">
+        <h1 className="text-balance text-2xl font-semibold">Home + Portfolio — Audit Report (Markdown)</h1>
+        <p className="mt-2 text-sm text-neutral-300">
+          Este componente apenas exibe o relatório em Markdown. Copie/cole em um arquivo <code>.md</code> se preferir.
+        </p>
+
+        <pre className="mt-6 whitespace-pre-wrap rounded-xl border border-white/10 bg-black/30 p-5 text-[13px] leading-relaxed">
+          {HOME_PORTFOLIO_AUDIT_MD}
+        </pre>
+      </div>
+    </main>
+  );
+}
