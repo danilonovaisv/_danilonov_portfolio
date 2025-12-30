@@ -37,6 +37,7 @@ export default function MobileStaggeredMenu({
   onNavigate,
 }: MobileStaggeredMenuProps) {
   const reducedMotion = useReducedMotion();
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -88,7 +89,7 @@ export default function MobileStaggeredMenu({
   };
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 z-50">
+    <header className="lg:hidden fixed top-0 left-0 right-0 z-40">
       <div className="h-[56px] px-4 flex items-center justify-between bg-ghost-void/72 backdrop-blur-[10px] border-b border-white/10">
         <Link
           href="/"
@@ -106,10 +107,12 @@ export default function MobileStaggeredMenu({
         </Link>
 
         <button
+          ref={triggerRef}
           type="button"
           onClick={isOpen ? onClose : onOpen}
           aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-          aria-expanded={isOpen ? 'true' : 'false'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu-panel"
           className="h-10 w-10 grid place-items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-void"
         >
           <div className="relative h-5 w-6">
@@ -129,10 +132,18 @@ export default function MobileStaggeredMenu({
         </button>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence
+        onExitComplete={() => {
+          // Retorna o foco ao botão quando o menu termina de fechar
+          triggerRef.current?.focus();
+        }}
+      >
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-50"
+            id="mobile-menu-panel"
+            className="fixed inset-0 z-40"
+            role="dialog"
+            aria-modal="true"
             initial="closed"
             animate="open"
             exit="closed"

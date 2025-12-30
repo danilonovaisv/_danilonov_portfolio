@@ -76,83 +76,101 @@ export default function DesktopFluidHeader({
 
   return (
     <header className="hidden lg:block fixed top-6 left-0 right-0 z-[40] pointer-events-none">
-      <motion.div
-        ref={wrapRef}
-        onPointerMove={onPointerMove}
-        onPointerLeave={onPointerLeave}
-        style={{ x, scaleX, scaleY }}
-        className="pointer-events-auto mx-auto w-[min(1100px,calc(100vw-48px))]"
-      >
-        <div
-          className="relative overflow-hidden rounded-full"
-          style={{
-            height: HEADER_TOKENS.desktop.height,
-            boxShadow: '0 18px 55px rgba(0,0,0,0.35)',
-          }}
+      <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
+        <motion.div
+          ref={wrapRef}
+          onPointerMove={onPointerMove}
+          onPointerLeave={onPointerLeave}
+          style={{ x, scaleX, scaleY }}
+          className="pointer-events-auto mx-auto w-full max-w-[1100px]"
         >
-          {/* glass background */}
-          <div className="absolute inset-0">
-            {!disableWebGL && !reducedMotion ? (
-              <HeaderGlassCanvas accentColor={accentColor} />
-            ) : (
-              <div
-                className="h-full w-full"
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                }}
-              />
-            )}
-          </div>
-
-          {/* subtle border */}
           <div
-            className="absolute inset-0 rounded-full"
+            className="relative overflow-hidden rounded-full"
             style={{
-              border: '1px solid rgba(255,255,255,0.14)',
+              height: HEADER_TOKENS.desktop.height,
+              boxShadow: '0 18px 55px rgba(0,0,0,0.35)',
             }}
-          />
+          >
+            {/* glass background */}
+            <div className="absolute inset-0">
+              {!disableWebGL && !reducedMotion ? (
+                <HeaderGlassCanvas accentColor={accentColor} />
+              ) : (
+                <div
+                  className="h-full w-full"
+                  style={{
+                    background:
+                      'linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                  }}
+                />
+              )}
+            </div>
 
-          {/* content */}
-          <div className="relative z-10 h-full px-6 flex items-center justify-between gap-6">
-            <Link
-              href="/"
-              aria-label="Ir para Home"
-              className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
-            >
-              <Image
-                src={logoUrl}
-                alt="Danilo"
-                width={24}
-                height={24}
-                className="h-6 w-auto"
-                unoptimized
-              />
-            </Link>
+            {/* subtle border */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                border: '1px solid rgba(255,255,255,0.14)',
+              }}
+            />
 
-            <nav
-              aria-label="Navegação principal"
-              className="flex items-center gap-7"
-            >
-              {nav.map((item) => {
-                const isActive = activeHref === item.href;
+            {/* content */}
+            <div className="relative z-10 h-full px-6 flex items-center justify-between gap-6">
+              <Link
+                href="/"
+                aria-label="Ir para Home"
+                className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+              >
+                <Image
+                  src={logoUrl}
+                  alt="Danilo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-auto"
+                  unoptimized
+                />
+              </Link>
 
-                const common =
-                  'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
-                const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
-                const underline = isActive
-                  ? 'after:w-full'
-                  : 'after:w-0 group-hover:after:w-full';
+              <nav
+                aria-label="Navegação principal"
+                className="flex items-center gap-7"
+              >
+                {nav.map((item) => {
+                  const isActive = activeHref === item.href;
 
-                if (isExternalHref(item.href) || item.external) {
+                  const common =
+                    'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
+                  const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
+                  const underline = isActive
+                    ? 'after:w-full'
+                    : 'after:w-0 group-hover:after:w-full';
+
+                  if (isExternalHref(item.href) || item.external) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group relative ${common} ${textColor}`}
+                      >
+                        <span className="text-[15px] font-medium tracking-tight">
+                          {item.label}
+                        </span>
+                        <span
+                          className={`absolute -bottom-1 left-0 h-[2px] bg-[#0057FF] transition-all duration-200 ${underline}`}
+                        />
+                      </a>
+                    );
+                  }
+
                   return (
-                    <a
+                    <button
                       key={item.href}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      type="button"
+                      onClick={() => onNavigate(item.href)}
                       className={`group relative ${common} ${textColor}`}
                     >
                       <span className="text-[15px] font-medium tracking-tight">
@@ -161,30 +179,14 @@ export default function DesktopFluidHeader({
                       <span
                         className={`absolute -bottom-1 left-0 h-[2px] bg-[#0057FF] transition-all duration-200 ${underline}`}
                       />
-                    </a>
+                    </button>
                   );
-                }
-
-                return (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => onNavigate(item.href)}
-                    className={`group relative ${common} ${textColor}`}
-                  >
-                    <span className="text-[15px] font-medium tracking-tight">
-                      {item.label}
-                    </span>
-                    <span
-                      className={`absolute -bottom-1 left-0 h-[2px] bg-[#0057FF] transition-all duration-200 ${underline}`}
-                    />
-                  </button>
-                );
-              })}
-            </nav>
+                })}
+              </nav>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </header>
   );
 }

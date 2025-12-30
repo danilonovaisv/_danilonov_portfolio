@@ -193,13 +193,13 @@ const GhostCanvas = memo(function GhostCanvas({
 
       <EffectComposer multisampling={0}>
         <Bloom
-          intensity={2.8}
+          intensity={reducedMotion ? 1.0 : 2.8}
           luminanceThreshold={0.1}
           luminanceSmoothing={0.9}
           mipmapBlur
         />
-        <Noise opacity={0.12} />
-        <Scanline density={1.25} opacity={0.18} />
+        <Noise opacity={reducedMotion ? 0.05 : 0.12} />
+        <Scanline density={1.25} opacity={reducedMotion ? 0.08 : 0.18} />
         <Vignette eskil={false} offset={0.25} darkness={0.55} />
       </EffectComposer>
     </Canvas>

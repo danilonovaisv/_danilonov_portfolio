@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import HeroPreloader from './HeroPreloader';
@@ -141,84 +141,96 @@ export default function HomeHero() {
         </div>
 
         {/* Editorial Copy */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-[clamp(24px,5vw,96px)] text-center">
           <HeroCopy />
         </div>
 
         {/* Manifesto Thumb Wrapper - Desktop */}
-        <div
-          ref={videoWrapperRef}
-          aria-label="Vídeo manifesto"
-          className="video-wrapper fixed bottom-8 right-8 z-30 hidden md:flex flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] cursor-pointer group/video"
-          onClick={() => {
-            if (typeof window === 'undefined') return;
-            if (window.innerWidth >= 768 && heroRef.current) {
-              const top = heroRef.current.offsetTop + (heroRef.current.clientHeight * 0.82);
-              window.scrollTo({
-                top,
-                behavior: reducedMotion ? 'auto' : 'smooth',
-              });
-              return;
-            }
-            setMuted((prev) => !prev);
+        <motion.div
+          initial={{ opacity: 0, y: 12, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{
+            duration: reducedMotion ? 0.3 : 0.6,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 1.8, // Wait for preloader fade-out
           }}
+          className="fixed bottom-8 right-8 z-30 hidden md:flex group/video-container"
+          style={{ willChange: 'opacity, transform' }}
         >
-          <ManifestoThumb ref={videoRef} muted={muted} />
-
-          {/* Seta Hover */}
-          <div className="pointer-events-none absolute right-4 top-4 z-40">
-            <div className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/20 backdrop-blur-sm">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
-                className="manifesto-arrow -rotate-45 transition-transform duration-500 ease-in-out group-hover/video:rotate-0"
-              >
-                <path
-                  d="M7 17L17 7"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9 7H17V15"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
-
-          {/* Label Manifesto */}
           <div
-            ref={videoTextRef}
-            className="video-text pointer-events-none absolute left-4 bottom-4 z-40 rounded-full bg-black/60 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-500"
-          >
-            manifesto
-          </div>
-
-          {/* Botão de Som */}
-          <button
-            ref={toggleSoundRef}
-            type="button"
-            className="toggle-sound absolute left-4 top-4 z-40 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-white opacity-0 transition-all duration-500 hover:bg-black/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 pointer-events-auto"
-            onClick={(event) => {
-              event.stopPropagation();
+            ref={videoWrapperRef}
+            aria-label="Vídeo manifesto"
+            className="video-wrapper relative flex flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] cursor-pointer group/video transition-transform duration-500 ease-out hover:scale-[1.05]"
+            onClick={() => {
+              if (typeof window === 'undefined') return;
+              if (window.innerWidth >= 768 && heroRef.current) {
+                const top = heroRef.current.offsetTop + heroRef.current.clientHeight; // Go to full screen state
+                window.scrollTo({
+                  top,
+                  behavior: reducedMotion ? 'auto' : 'smooth',
+                });
+                return;
+              }
               setMuted((prev) => !prev);
             }}
           >
-            <span>{muted ? 'sound off' : 'sound on'}</span>
-            <span
-              className={`inline-block h-2 w-2 rounded-full transition-colors ${muted ? 'bg-white/40' : 'bg-[#0057FF]'}`}
-              aria-hidden="true"
-            />
-          </button>
-        </div>
+            <ManifestoThumb ref={videoRef} muted={muted} />
+
+            {/* Seta Hover */}
+            <div className="pointer-events-none absolute right-4 top-4 z-40">
+              <div className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/20 backdrop-blur-sm">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                  className="manifesto-arrow -rotate-45 transition-transform duration-500 ease-in-out group-hover/video-container:rotate-0"
+                >
+                  <path
+                    d="M7 17L17 7"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M9 7H17V15"
+                    stroke="white"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Label Manifesto */}
+            <div
+              ref={videoTextRef}
+              className="video-text pointer-events-none absolute left-4 bottom-4 z-40 rounded-full bg-black/60 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-500"
+            >
+              manifesto
+            </div>
+
+            {/* Botão de Som */}
+            <button
+              ref={toggleSoundRef}
+              type="button"
+              className="toggle-sound absolute left-4 top-4 z-40 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-white opacity-0 transition-all duration-500 hover:bg-black/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 pointer-events-auto"
+              onClick={(event) => {
+                event.stopPropagation();
+                setMuted((prev) => !prev);
+              }}
+            >
+              <span>{muted ? 'sound off' : 'sound on'}</span>
+              <span
+                className={`inline-block h-2 w-2 rounded-full transition-colors ${muted ? 'bg-white/40' : 'bg-[#0057FF]'}`}
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </motion.div>
       </section>
 
       {/* Mobile manifesto como seção independente */}
