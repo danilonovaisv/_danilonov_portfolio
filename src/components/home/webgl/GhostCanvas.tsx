@@ -4,76 +4,85 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import Ghost from './Ghost';
-// Removido import de Eyes, pois já está dentro de Ghost
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
-import AnalogDecayPass from './postprocessing/AnalogDecayPass'; // Importamos o nosso efeito customizado
+import * as THREE from 'three';
 
+// Importando efeitos padrão da biblioteca
 import {
-  EffectComposer,
-  Bloom,
-  Noise,
-  Vignette,
+    EffectComposer,
+    Bloom,
+    Noise,
+    Vignette,
+    Scanline,
+    ChromaticAberration
 } from '@react-three/postprocessing';
-import { KernelSize } from 'postprocessing';
+import { BlendFunction } from 'postprocessing';
 
 export default function GhostCanvas() {
-  // Ajuste de DPI para performance em telas retina
-  const dpr: [number, number] =
-    typeof window === 'undefined'
-      ? [1, 1.5]
-      : [1, Math.min(2, window.devicePixelRatio || 1)];
+    const dpr: [number, number] =
+        typeof window === 'undefined'
+            ? [1, 1.5]
+            : [1, Math.min(2, window.devicePixelRatio || 1)];
 
-  return (
-    <Canvas
-      dpr={dpr}
-      gl={{
-        antialias: false, // Desliga antialias padrão pois o PostProcessing cuida disso
-        alpha: true,
-        powerPreference: 'high-performance',
-        stencil: false,
-        depth: true,
-      }}
-      // Câmera um pouco mais longe (z: 4) e FOV maior para sensação de profundidade
-      camera={{ position: [0, 0, 4.5], fov: 45 }}
-    >
-      <color attach="background" args={['#06071f']} />
+    return (
+        <Canvas
+            dpr={dpr}
+            gl={{
+                antialias: false,
+                alpha: true,
+                powerPreference: 'high-performance',
+                toneMapping: THREE.NoToneMapping, // Importante para cores neon
+            }}
+            camera={{ position: [0, 0, 6], fov: 35 }}
+        >
+            {/* Fundo escuro azulado como no print */}
+            <color attach="background" args={['#050511']} />
 
-      <Suspense fallback={null}>
-        <AtmosphereVeil />
+            <Suspense fallback={null}>
+                {/* Elementos da Cena */}
+                <AtmosphereVeil />
+                <Ghost scale={0.2} position={[0, -0.2, 0]} />
+                <Particles />
+                <Fireflies />
 
-        {/* GHOST:
-           scale={0.16} -> Tamanho agradável, nem gigante nem minúsculo.
-           position={[0, -0.2, 0]} -> Centralizado verticalmente.
-        */}
-        <Ghost scale={0.16} position={[0, -0.2, 0]} />
+                {/* EFEITOS VISUAIS (O "Look" do vídeo) */}
+                <EffectComposer disableNormalPass>
 
-        {/* Ambient Effects */}
-        <Particles />
-        <Fireflies />
+                    {/* 1. Bloom: O brilho intenso */}
+                    <Bloom
+                        luminanceThreshold={1} // Só brilha o que for muito claro (emissive > 1)
+                        mipmapBlur // Suaviza o brilho
+                        intensity={1.8}
+                        radius={0.6}
+                    />
 
-        {/* Pós-Processamento - A ordem importa! */}
-        <EffectComposer multisampling={0} disableNormalPass>
-          {/* 1. Bloom: Faz o brilho do fantasma "vazar" */}
-          <Bloom
-            intensity={1.8}
-            luminanceThreshold={0.5} // Só brilha o que for muito claro
-            luminanceSmoothing={0.9}
-            kernelSize={KernelSize.LARGE}
-            mipmapBlur // Deixa o glow mais suave e menos pixelado
-          />
+                    {/* 2. Aberração Cromática: O efeito de "glitch" nas bordas */}
+                    <ChromaticAberration
+                        offset={[0.002, 0.002]} // Deslocamento sutil das cores RGB
+                        radialModulation={false}
+                        modulationOffset={0}
+                    />
 
-          {/* 2. Nosso efeito customizado de TV Velha/VHS */}
-          <AnalogDecayPass />
+                    {/* 3. Scanlines: Linhas de TV horizontal */}
+                    <Scanline
+                        density={1.5} // Quantidade de linhas
+                        opacity={0.3} // Visibilidade das linhas
+                    />
 
-          {/* 3. Noise adicional para textura extra */}
-          <Noise premultiply opacity={0.15} />
+                    {/* 4. Noise: Granulação de filme */}
+                    <Noise
+                        opacity={0.15}
+                        premultiply
+                        blendFunction={BlendFunction.OVERLAY}
+                    />
 
-          {/* 4. Vignette para focar o olhar no centro */}
-          <Vignette eskil={false} offset={0.1} darkness={0.9} />
-        </EffectComposer>
-      </Suspense>
-    </Canvas>
-  );
+                    {/* 5. Vignette: Escurecer as bordas */}
+                    <Vignette eskil={false} offset={0.1} darkness={1.0} />
+
+                </EffectComposer>
+            </Suspense>
+        </Canvas>
+    );
 }

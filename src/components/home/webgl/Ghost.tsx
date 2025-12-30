@@ -7,15 +7,14 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
-  bodyColor: '#0f2027',
-  glowColor: '#0080ff',
-  eyeColor: '#8a2be2',
-  emissiveIntensity: 2.5, // Reduzi um pouco para não estourar em escalas menores
+  bodyColor: '#e0f7fa', // Um branco azulado
+  glowColor: '#00ffff', // Ciano puro para brilhar muito no Bloom
+  eyeColor: '#ffffff',
+  emissiveIntensity: 4.5, // Aumentei para garantir o "neon" do vídeo
   floatSpeed: 1.6,
   followSpeed: 0.07,
 };
 
-// Agora aceitamos props (como scale, position, rotation) do arquivo Pai
 export default function Ghost(props: any) {
   const group = useRef<Group>(null);
   const bodyMesh = useRef<Mesh>(null);
@@ -24,12 +23,9 @@ export default function Ghost(props: any) {
   const rightEyeMat = useRef<any>(null);
 
   const { viewport } = useThree();
-
-  // Variáveis de física
   const prevPosition = useRef(new Vector3(0, 0, 0));
   const targetPosition = useRef(new Vector3(0, 0, 0));
 
-  // 1. Geometria (Mantive a lógica, mas ela será escalada pelo Group)
   const ghostGeometry = useMemo(() => {
     const geometry = new THREE.SphereGeometry(2, 64, 64);
     const positionAttribute = geometry.getAttribute('position');
@@ -58,55 +54,47 @@ export default function Ghost(props: any) {
     const t = state.clock.getElapsedTime();
     const pointer = state.pointer;
 
-    // Movimento ajustado para seguir o mouse suavemente
-    // Divide por números maiores para restringir a área de movimento
+    // Movimento suave seguindo o mouse
     const xTarget = pointer.x * (viewport.width / 4);
     const yTarget = pointer.y * (viewport.height / 4);
-
     targetPosition.current.set(xTarget, yTarget, 0);
 
-    // Aplica movimento ao GRUPO inteiro
-    // O 0.1 no lerp deixa o movimento mais "orgânico/atrasado"
     group.current.position.lerp(targetPosition.current, GHOST_CONFIG.followSpeed);
 
-    // Detecta movimento para acender os olhos
+    // Física dos olhos
     const currentDist = group.current.position.distanceTo(prevPosition.current);
     prevPosition.current.copy(group.current.position);
 
-    const isMoving = currentDist > 0.005; // Mais sensível pois o objeto é menor
-    const targetEyeOpacity = isMoving ? 1 : 0.2;
+    const isMoving = currentDist > 0.005;
+    const targetEyeOpacity = isMoving ? 1 : 0.3; // Olhos não apagam totalmente, ficam 0.3
 
     if (leftEyeMat.current && rightEyeMat.current) {
       leftEyeMat.current.opacity += (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
       rightEyeMat.current.opacity = leftEyeMat.current.opacity;
     }
 
-    // Animações de "Respiro" e Wobble
+    // Pulso do brilho
     if (bodyMaterial.current) {
-      const pulse = Math.sin(t * 1.6) * 0.6;
+      const pulse = Math.sin(t * 2) * 0.5;
       bodyMaterial.current.emissiveIntensity = GHOST_CONFIG.emissiveIntensity + pulse;
     }
 
-    // Flutuação Local (apenas visual, não muda a posição x/y do mouse)
+    // Flutuação e Inclinação
     const floatY = Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2;
     bodyMesh.current.position.y = floatY;
 
-    // Tilt (Inclinação ao mover)
     const moveX = (targetPosition.current.x - group.current.position.x);
     bodyMesh.current.rotation.z = -moveX * 0.2;
     bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1;
   });
 
   return (
-      // Adicionei {...props} aqui. Agora o pai controla scale, position, etc.
-      // Defini um scale padrão de 0.2 (20% do tamanho original)
-      <group ref={group} scale={0.2} {...props}>
+      <group ref={group} {...props}>
+        {/* Luzes de borda para dar volume 3D */}
+        <directionalLight position={[-8, 6, -4]} intensity={2} color="#00ffff" />
+        <directionalLight position={[8, -4, -6]} intensity={2} color="#ff00ff" />
 
-        {/* Luzes internas para garantir volume mesmo se a cena for escura */}
-        <directionalLight position={[-8, 6, -4]} intensity={2} color="#4a90e2" />
-        <directionalLight position={[8, -4, -6]} intensity={1.5} color="#50e3c2" />
-
-        <mesh ref={bodyMesh} geometry={ghostGeometry} castShadow receiveShadow>
+        <mesh ref={bodyMesh} geometry={ghostGeometry}>
           <meshStandardMaterial
               ref={bodyMaterial}
               color={GHOST_CONFIG.bodyColor}
@@ -115,14 +103,13 @@ export default function Ghost(props: any) {
               transparent
               opacity={0.9}
               roughness={0.1}
-              metalness={0.1}
+              metalness={0.2}
               side={THREE.DoubleSide}
-              toneMapped={false}
+              toneMapped={false} // CRUCIAL para o Bloom funcionar
           />
 
-          {/* OLHOS */}
+          {/* Olhos */}
           <group position={[0, 0, 0]}>
-            {/* Olho Esquerdo */}
             <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
               <mesh position={[0, 0, -0.1]}>
                 <sphereGeometry args={[0.45, 16, 16]} />
@@ -130,17 +117,9 @@ export default function Ghost(props: any) {
               </mesh>
               <mesh position={[0, 0, 0.1]}>
                 <sphereGeometry args={[0.20, 16, 16]} />
-                <meshBasicMaterial
-                    ref={leftEyeMat}
-                    color={GHOST_CONFIG.eyeColor}
-                    transparent
-                    opacity={0}
-                    toneMapped={false}
-                />
+                <meshBasicMaterial ref={leftEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
               </mesh>
             </group>
-
-            {/* Olho Direito */}
             <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
               <mesh position={[0, 0, -0.1]}>
                 <sphereGeometry args={[0.45, 16, 16]} />
@@ -148,13 +127,7 @@ export default function Ghost(props: any) {
               </mesh>
               <mesh position={[0, 0, 0.1]}>
                 <sphereGeometry args={[0.20, 16, 16]} />
-                <meshBasicMaterial
-                    ref={rightEyeMat}
-                    color={GHOST_CONFIG.eyeColor}
-                    transparent
-                    opacity={0}
-                    toneMapped={false}
-                />
+                <meshBasicMaterial ref={rightEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
               </mesh>
             </group>
           </group>
