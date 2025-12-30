@@ -1,15 +1,24 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React from 'react';
 import { useReducedMotion } from 'framer-motion';
 
-const GhostCanvas = dynamic(
-  () => import('@/components/home/webgl/GhostCanvas'),
-  { ssr: false }
-);
+const GhostCanvas = dynamic(() => import('./webgl/GhostCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+  ),
+});
 
 export default function GhostStage() {
-  const reducedMotion = useReducedMotion();
-  return <GhostCanvas reducedMotion={!!reducedMotion} />;
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    // Fallback visual leve quando o usuário prefere menos motion
+    return (
+      <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+    );
+  }
+
+  return <GhostCanvas />;
 }

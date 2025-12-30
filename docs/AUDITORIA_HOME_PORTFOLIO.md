@@ -1,587 +1,998 @@
 # 🧠 Auditoria + Correções (Prompts Atômicos) — HOME + PORTFOLIO 'use client';
 
- * Relatório em Markdown (copie/cole em um arquivo .md se preferir).
- *
- * Observação importante:
- * - Este relatório foi produzido a partir do spec fornecido na conversa e da comparação visual com as imagens anexadas.
- * - A inspeção “linha a linha” do código do repositório não foi possível aqui, então os prompts para agente são “cirúrgicos”
- *   no sentido de serem verificáveis e aplicáveis diretamente, mas pedem checagem do estado atual em cada arquivo/trecho.
- */
-export const HOME_PORTFOLIO_AUDIT_MD = String.raw`# Auditoria Técnica — HOME + PORTFOLIO (Header + Hero em foco)
-**Projeto:** Portfólio Institucional de Danilo Novais  
-**Stack:** Next.js App Router + TS + Tailwind + R3F/Drei/Three + Framer Motion  
-**Lei absoluta:** Fidelidade visual às referências \`HERO-PORTFOLIO-GHOST.jpg\` + \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\` + \`PORTFOLIO-PAGE-LAYOUYT.jpg\`
+ // =============================
+// HERO + MANIFESTO + PORTFOLIO
+// Rebuild – Danilo Novais Portfolio
+// =============================
+/*
+TECHNICAL DIAGNOSIS (LEGACY VS SPEC)
+
+1) Hero orchestration
+- HomeHero.tsx atual vincula o texto editorial ao scroll (opacityText via useScroll/useTransform),
+  fazendo o bloco desaparecer conforme o usuário desce.
+- Isso quebra o requisito de que o HeroCopy seja 100% estático, editorial e legível desde o
+  primeiro frame (sem fade, sem scroll binding).
+
+2) Manifesto Thumb (vídeo)
+- A thumb é apenas um bloco absoluto no canto inferior direito com scale/translate simples,
+  sem pin/sticky da seção. O morph para fullscreen não acompanha a timeline de scroll como
+  definido no protótipo (0–100% da altura da Hero).
+- Falta o clique de “skip to fullscreen” no desktop e a separação de comportamento entre
+  desktop (scroll morphing) e mobile (seção independente + toggle de som).
+
+3) Preloader (Ghost Loader)
+- Implementação atual faz apenas um fade-out simples de overlay.
+- Especificação exige: ghost flutuante, olhos pulsando, texto “Summoning spirits” pulsando
+  e barra de progresso com gradiente Ghost Blue, respeitando prefers-reduced-motion.
+
+4) Ghost Atmosphere (WebGL)
+- Canvas não é garantidamente carregado via dynamic import client-only, nem desativado
+  para usuários com prefers-reduced-motion.
+- Falta controle explícito de DPR máximo, antialias off e separação clara entre camada
+  atmosférica (Ghost + partículas + fireflies) e fallback CSS radial.
+
+5) Portfolio Showcase
+- Seção não respeita ainda o layout editorial descrito (stripes alternando alinhamento,
+  floating label, hover com thumbnail revelada e scroll reveal com stagger).
+- Interações de hover estão parcialmente presentes, mas sem coordenação com reduced motion
+  e sem garantir ausência de layout shift.
+
+JUSTIFICATIVA DAS MUDANÇAS
+
+1) HomeHero foi refeito para:
+   - Ter container de 220vh + inner stage sticky (top: 0, h-screen), garantindo pin da
+     atmosfera Ghost, texto editorial e vídeo durante o morph.
+   - Remover qualquer scroll binding do HeroCopy (texto sempre visível enquanto a Hero
+     estiver em viewport).
+   - Usar useScroll + useTransform apenas para o container fullscreen do vídeo, com
+     transform-origin bottom-right (scale 0.3→1, border-radius 16→0, opacity 0→1).
+
+2) ManifestoThumb:
+   - Agora é um motion “video-wrapper” completo, com idle fade-in (opacity 0→1, scale 0.9→1),
+     micro-interação de hover (scale 1→1.05, arrow -45°→0°) e acessível via teclado.
+   - Recebe callback onDesktopClick usado para o salto imediato para o estado fullscreen
+     (scroll jump até o fim da Hero em viewports ≥ md).
+
+3) HeroPreloader:
+   - Recriado com ghost SVG flutuando (sinusoidal), olhos com pulsação de escala/opacidade,
+     texto monoespaçado pulsando e barra de progresso com gradiente Ghost Blue.
+   - Overlay é desmontado via onAnimationComplete para liberar ponteiros; todas as animações
+     respeitam prefers-reduced-motion.
+
+4) GhostStage + WebGL:
+   - GhostStage faz dynamic import de GhostCanvas (ssr: false). GhostCanvas configura DPR
+     máximo 2, antialias false e EffectComposer com Bloom + Noise + Vignette para aproximar
+     BloomPass + AnalogDecayPass.
+   - Ghost segue o cursor via lerp (~0.05) com movimento senoidal orgânico; olhos reagem à
+     distância do ponteiro; partículas e fireflies usam instancing/points com animação leve
+     em useFrame para reduzir custo de GPU.
+
+5) ManifestoSection (mobile):
+   - Nova seção independente, logo abaixo da Hero, ocupando aspect-video 100% da viewport
+     em mobile. Usa useInView + motion.section para fade/scale-in e botão que alterna som
+     (mute/unmute) ao toque.
+
+6) PortfolioShowcaseSection + AccordionRow:
+   - Implementam exatamente a organização em stripes: alinhamento alternado (end/center/start),
+     floating label “[what we love working on]”, hover com thumbnail revelada (width 0→288px,
+     700ms cubic-bezier(0.22,1,0.36,1)), arrow rotacionando -45°→0° e scroll reveal com
+     stagger e ease-out.
+   - Respeitam prefers-reduced-motion desativando animações de entrada.
+
+Todas as camadas respeitam o z-index stack definido:
+   z-50 Preloader   | z-30 ManifestoThumb | z-20 GhostCanvas
+   z-10 HeroCopy    | z-0 radial background | Mobile ManifestoSection abaixo da Hero.
+*/
+
+// -----------------------------------------------------------------------------
+// components/home/HomeHero.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useCallback, useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import HeroPreloader from './HeroPreloader';
+import HeroCopy from './HeroCopy';
+import ManifestoThumb from './ManifestoThumb';
+import GhostStage from './GhostStage';
+
+export default function HomeHero() {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
 
- Ajuste o projeto utilizando as etapas essenciais para execução:
-1. Analise o escopo detalhado fornecido.
-2. Monte um plano de execução com base nesse escopo.
-3. Implemente os ajustes necessários no código.
-4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
-5. Ao concluir, revise e valide se:
-   - Todas as alterações foram aplicadas corretamente.
-   - O sistema está funcionando como esperado.
-   - O visual está 100% fiel às referências.
-REFRENCIAS VISUAIS:
-1. /docs/HERO-PORTFOLIO-GHOST.jpg
-2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
-3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
+  const videoScaleMotion = useTransform(scrollYProgress, [0, 0.85], [0.3, 1]);
+  const videoRadius = useTransform(scrollYProgress, [0, 0.85], [16, 0]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
-REFRENCIAS ANIMAÇÃO:
-1. /docs/HEADER - HEADER=["https://reactbits.dev/components/fluid-glass?p=%7B%2522mode%2522:%2522bar%2522%7D”]
-2. /docs/REFERENCIA_HERO-GHOST - HERO=["https://codepen.io/danilonovaisv/pen/azZbdQo"] 
+  const handleDesktopClick = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth < 768) return;
 
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
 
----
+    const targetTop = sectionEl.offsetTop + sectionEl.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: targetTop, behavior: 'auto' });
+  }, []);
 
-## 1️⃣ Visão Geral
-
-### Estado atual (alto nível)
-- A arquitetura proposta no spec (separação de Header e Hero em componentes) **parece alinhada conceitualmente** ao que é necessário.
-- Visualmente, pelas imagens anexadas, **o Hero está muito próximo do esperado** (ghost à esquerda, texto editorial central, manifesto thumb desktop no canto inferior direito e manifesto fullscreen no mobile).
-- O maior risco técnico/visual está na **integração Header + Hero** (camadas/z-index, competição visual, consistência entre desktop/mobile e consistência de margens laterais).
-- Há risco de “excesso de glow/motion” em assets/estilos do projeto: exemplos de CSS com glow/hover agressivo e blur/glassmorphism existem nos arquivos disponíveis no bundle/arquivos analisados  :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6MH0"} — isso é um red flag porque o spec exige motion editorial sutil e proíbe poluição visual.
-
-### Escopo auditado com prioridade
-- HOME: Header + Hero (incl. Ghost WebGL + Manifesto Thumb + Manifesto Mobile)
-- PORTFOLIO: Header (consistência) + grid/margens (alto nível; faltam referências visuais da página /portfolio anexadas aqui para verificação pixel-perfect)
-
----
-
-## 2️⃣ Diagnóstico por Dimensão
-
-### Estrutura / Arquitetura
-- **Risco médio:** duplicação/variação de componentes que podem gerar inconsistência (ex.: Header “A” vs “B”, Thumb “A” vs “B”), causando divergências visuais entre rotas.
-- **Ação:** garantir fonte única de verdade para \`SiteHeader\` e para \`HomeHero\`.
-
-### UI (hierarquia tipográfica, grid, ritmo)
-- **Risco alto:** consistência do “edge rhythm” (margens laterais) entre Header ↔ Hero ↔ próximas seções.
-- **Ação:** padronizar container (mesma fórmula de padding lateral) e alinhar colunas.
-
-### UX / Interação
-- **Risco médio:** menu mobile precisa bloquear scroll do body, suportar tap fora, ESC e foco/teclado sem glitches.
-- **Ação:** checklist de acessibilidade + scroll lock.
-
-### Fidelidade visual
-- **Risco alto:** qualquer variação de posicionamento/escala do ghost, do texto editorial e do manifesto thumb vira BUG.
-- **Ação:** travar layout com tokens (padding clamp, breakpoints, z-index fixo).
-
-### Responsividade (mobile-first)
-- **Risco alto:** canvas/WebGL em mobile (DPR alto + postprocessing) pode degradar performance, aquecer, travar e piorar LCP.
-- **Ação:** DPR controlado + fallback + desligar follow/bloom em reduced motion e em mobile/tablet.
-
-### Motion / Animações
-- **Risco alto:** manifesto thumb precisa motion “premium editorial” sem exagero; e reduced-motion precisa funcionar.
-- **Ação:** limitar transform/opacity; timings curtos; easing premium; sem efeitos “glow/elastic” (exemplo de padrões agressivos em CSS deve ser evitado  :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6MX0"}).
-
-### WebGL / 3D
-- **Risco alto:** camadas (z-index, pointer events, depth) e pós-processamento.
-- **Ação:** Canvas isolado, pointer-events none, DPR clamp, antialias false, fallback CSS.
-
-### Performance (LCP/CLS)
-- **Risco alto no Hero:** vídeo e canvas podem afetar LCP/CLS se não tiverem sizing estável e lazy/dynamic import correto.
-- **Ação:** dimensões fixas (aspect-video), placeholder estável, dynamic import do Canvas.
-
-### Acessibilidade
-- **Risco médio:** aria/teclado no header/menu e foco visível.
-- **Ação:** aria-expanded, aria-label, focus-visible ring, ordem de tabulação.
-
----
-
-## 3️⃣ Diagnóstico por Seção (Obrigatório)
-
-## 🎯 Seção: Header (SiteHeader)
-
-- 📌 Fidelidade visual (referência): ✗ — comparar com \`HERO-PORTFOLIO-GHOST.jpg\` (header como moldura) e docs/HEADER (animação)
-- 📐 Grid e margens laterais: ✗
-- ↔️ Alinhamento duas laterais: ✗
-- 📱 Mobile (sm/md): ✓ (aparenta correto nas imagens anexadas: logo + hamburger)
-- 🎞️ Motion/Animações: ✗ (não confirmado: stagger, scroll-lock, tap-outside, reduced-motion)
-- 🧩 Componentes envolvidos: \`SiteHeader\` → \`DesktopFluidHeader\` / \`MobileStaggeredMenu\`
-- 🔗 Integrações: \`layout.tsx\`/Home → \`SiteHeader\` → (desktop) fluid glass / (mobile) stagger overlay
-
-### ❌ Problema (objetivo, mensurável)
-1) **Header desktop potencialmente inconsistente com a “moldura” esperada**: risco de estar full-width ou com estilo/contraste competindo com a Hero, em vez de um pill flutuante discreto (conforme spec do Header).  
-2) **Edge rhythm não garantido**: padding lateral do header pode não bater com o padding lateral do conteúdo (HeroCopy, seções seguintes), gerando “saltos” visuais.  
-3) **A11y e comportamento do menu mobile não comprovados**: falta garantir aria, foco, ESC, tap-outside, scroll lock do body, e stagger real.
-
-### 🔧 Correção Técnica (ação exata)
-- Garantir que o header desktop use container **centralizado** com largura parcial + border-radius pill + z-index acima da hero.
-- Garantir que o header use **o mesmo padding lateral** do container da Home (\`px-[clamp(24px,5vw,96px)]\` ou equivalente) para alinhar com o grid.
-- No mobile: implementar overlay fullscreen com stagger, scroll lock do body, aria-expanded, focus trap (mínimo: foco visível e retorno de foco).
-
-### ✅ Resultado esperado (comparável)
-- Header desktop “moldura”: visualmente discreto, sempre legível, sem competir com ghost/texto.  
-- Header e Hero compartilham o mesmo alinhamento de bordas (margem esquerda/direita).  
-- Mobile menu abre com cascata (stagger) fluida, rápida e acessível, conforme docs/HEADER.
-
-### ✅ Checklist de fidelidade (Header)
-- Grid corresponde à imagem? **Não**
-- Margens laterais equivalentes? **Não**
-- Alinhamento “duas laterais” consistente? **Não**
-- Hierarquia tipográfica equivalente? **Não confirmado**
-- Espaçamento vertical equivalente? **Não confirmado**
-- Elementos 3D/WebGL na mesma posição/escala? **N/A (Header)**
-- Mobile equivalente ao esperado? **Sim**
-- Sem overflow horizontal? **Não confirmado (precisa QA real)**
-
----
-
-## 🎯 Seção: Hero (Ghost Atmosphere + Texto Editorial + Manifesto)
-
-- 📌 Fidelidade visual (referência): ✓ — comparar com \`HERO-PORTFOLIO-GHOST.jpg\`
-- 📐 Grid e margens laterais: ✗ (edge rhythm com header e próximas seções não comprovado)
-- ↔️ Alinhamento duas laterais: ✗ (risco de desalinhamento entre hero e próximas seções)
-- 📱 Mobile (sm/md): ✓ (aparenta: manifesto fullscreen abaixo da Hero)
-- 🎞️ Motion/Animações: ✗ (não confirmado: timing/easing premium, reduced-motion)
-- 🧩 Componentes envolvidos: \`HomeHero\` → \`HeroPreloader\` / \`HeroCopy\` / \`ManifestoThumb\` / \`GhostStage\` → \`GhostCanvas\`
-- 🔗 Integrações: \`HomeHero\` (camadas) → manifesto thumb (hover/scroll/click) → manifesto section (mobile)
-
-### ❌ Problema (objetivo, mensurável)
-1) **Risco de conflito de regras do próprio spec**: há trechos do spec dizendo “texto editorial 100% estático” vs “overlay text opacity 1 → 0 no scroll do morph do vídeo”. Se o texto estiver animando além do fade-out necessário para o morph, isso viola “sem texto animado”.  
-2) **Manifesto thumb precisa motion premium e contido**: sem exagero (evitar padrões “glow/elastic/overshoot” — exemplos agressivos de hover/glow deve :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6Mn0"}m ser evitados ).  
-3) **WebGL Ghost**: precisa garantir (a) follow apenas desktop, (b) reduced motion desativa follow + bloom intenso, (c) fallback se WebGL falhar, (d) DPR controlado, (e) canvas não captura input.
-
-### 🔧 Correção Técnica (ação exata)
-- Hero: garantir stack de z-index conforme spec (preloader z-50, manifesto z-30, ghost z-20, copy z-10, bg z-0).
-- Manifesto (desktop): entrada com \`opacity/translate/scale\` sutil; hover scale 1 → 1.05 e seta -45 → 0; scroll morph com \`useScroll/useTransform\`; click (desktop) salta para estado final; click (mobile) alterna mute.
-- WebGL: dynamic import do canvas; \`dpr={[1,2]}\`, \`antialias:false\`; reduced motion e mobile: desativar follow e/ou reduzir efeitos.
-
-### ✅ Resultado esperado (comparável)
-- Primeiro frame: ghost atmosférico vivo + texto editorial legível + manifesto thumb discreto no canto inferior direito (desktop).  
-- Ao scroll: manifesto cresce e centraliza, texto some (apenas o necessário), sem cortes abruptos.  
-- Mobile: manifesto fullscreen logo abaixo da Hero, com reveal sutil e sem travar a navegação.
-
-### ✅ Checklist de fidelidade (Hero)
-- Grid corresponde à imagem? **Sim (aparente)**
-- Margens laterais equivalentes? **Não confirmado**
-- Alinhamento “duas laterais” consistente? **Não**
-- Hierarquia tipográfica equivalente? **Sim (aparente)**
-- Espaçamento vertical equivalente? **Sim (aparente)**
-- Elementos 3D/WebGL na mesma posição/escala? **Sim (aparente)**
-- Mobile equivalente ao esperado? **Sim**
-- Sem overflow horizontal? **Não confirmado (precisa QA real)**
-
----
-
-## 🎯 Seção: Portfolio Page (/portfolio)
-
-- 📌 Fidelidade visual (referência): ✗ — **não validável aqui** sem a imagem \`PORTFOLIO-PAGE-LAYOUYT.jpg\` anexada nesta conversa
-- 📐 Grid e margens laterais: ✗ (não validável)
-- ↔️ Alinhamento duas laterais: ✗ (não validável)
-- 📱 Mobile (sm/md): ✗ (não validável)
-- 🎞️ Motion/Animações: ✗ (não validável)
-- 🧩 Componentes envolvidos: rota \`/portfolio\` + header
-- 🔗 Integrações: \`/portfolio\` deve manter consistência de header e containers com Home
-
-### ❌ Problema (objetivo, mensurável)
-- Falta de evidência visual nesta conversa para validar pixel-perfect da página /portfolio.
-
-### 🔧 Correção Técnica (ação exata)
-- Rodar auditoria visual comparando /portfolio com \`PORTFOLIO-PAGE-LAYOUYT.jpg\` e ajustar containers/margens/typography.
-
-### ✅ Resultado esperado (comparável)
-- /portfolio com o mesmo edge rhythm da Home e sem divergências em grid/spacing.
-
----
-
-# 4️⃣ Lista de Problemas (com severidade)
-
-## 🔴 Alta (bloqueia fidelidade/UX/performance)
-1) Header desktop não comprovadamente “moldura” (risco de competir com hero / inconsistência de pill flutuante).  
-2) Edge rhythm (margens laterais) não garantido entre Header ↔ Hero ↔ seções seguintes.  
-3) WebGL Ghost sem garantias explícitas de fallback + reduced-motion + DPR controlado.  
-4) Manifesto thumb: sem garantias de motion editorial contido (evitar exageros e padrões de glow/elastic; exemplos agressivos exist :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6M30"}em em estilos analisados ).  
-5) /portfolio não validado visualmente nesta conversa (fidelidade não confirmada).
-
-## 🟡 Média (perceptível mas não bloqueia)
-6) A11y do menu mobile: aria-expanded, ESC, foco visível, tap-outside e scroll-lock precisam ser garantidos.  
-7) Possível duplicidade de componentes (header/thumb) gerando divergência entre rotas.  
-8) Potenciais problemas de LCP/CLS (vídeo + canvas) se sizing não for estável.
-
-## 🟢 Baixa (polimento)
-9) Microinterações de hover/focus podem precisar calibragem de timing/easing (premium sutil).  
-10) Ajustes finos de contraste do header sobre o fundo do hero.
-
----
-
-# 5️⃣ Recomendações Prioritárias (ordem de execução)
-
-1) **Travar layout e edge rhythm (container único)**: porque afeta todas as seções e impede “saltos” visuais.  
-2) **Header (desktop + mobile)**: z-index, forma, legibilidade e comportamento do menu.  
-3) **Hero (manifesto thumb + scroll morph)**: timing/easing premium + reduced motion.  
-4) **WebGL Ghost**: DPR/antialias/fallback, follow apenas desktop, performance.  
-5) **/portfolio**: auditoria visual completa com referência \`PORTFOLIO-PAGE-LAYOUYT.jpg\`.
-
----
-
-# 🤖 PROMPTS TÉCNICOS PARA AGENTE EXECUTOR (OBRIGATÓRIO)
-
-> Cada prompt é atômico (1 problema).  
-> Regra: ❌ não alterar textos / ❌ não inventar layout / ✅ comparar com as imagens de referência.
-
----
-
-### 🛠️ Prompt #01 — Garantir “fonte única” do Header usado no site
-
-**Objetivo**
-- Garantir que HOME e /portfolio renderizem o mesmo componente de header (sem divergências visuais entre rotas).
-
-**Arquivos/Rotas envolvidas**
-- \`src/app/layout.tsx\`
-- \`src/app/page.tsx\`
-- \`src/app/portfolio/page.tsx\`
-- \`src/components/header/SiteHeader.tsx\`
-- (se existir em uso) \`src/components/layout/Header.tsx\`
-
-**Ações**
-1. Localize onde o header é renderizado (layout global e/ou por página).
-2. Se houver mais de um header sendo usado, padronize para **apenas um** (preferir \`SiteHeader\`).
-3. Verifique visualmente HOME e /portfolio lado a lado após a mudança.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Tailwind + App Router
-- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Mesmo header em HOME e /portfolio
-- [ ] Sem regressão visual no hero
-- [ ] Sem overflow horizontal (mobile)
-
----
-
-### 🛠️ Prompt #02 — Desktop Header: “pill flutuante” (moldura) com largura parcial
-
-**Objetivo**
-- Fazer o header desktop ficar como moldura discreta: pill flutuante centralizado e não full-width.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/header/SiteHeader.tsx\`
-- \`src/components/header/DesktopFluidHeader.tsx\`
-
-**Ações**
-1. No desktop (≥1024px), ajuste container para largura parcial (ex.: \`max-w-[...]\` + \`mx-auto\`) e bordas arredondadas (pill).
-2. Garanta altura/padding do header conforme spec (56–72px).
-3. Ajuste contraste para não competir com a Hero.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Header não é full-width no desktop
-- [ ] Header é pill flutuante e discreto
-- [ ] Legibilidade do menu 100%
-
----
-
-### 🛠️ Prompt #03 — Edge rhythm: unificar padding lateral entre Header e Hero
-
-**Objetivo**
-- Garantir que a borda esquerda/direita do Header alinhe com a borda esquerda/direita do conteúdo da Hero.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/header/*\`
-- \`src/components/home/HomeHero.tsx\` e/ou wrapper/container da Home
-- \`src/app/page.tsx\`
-
-**Ações**
-1. Defina um padrão de padding lateral (ex.: \`px-[clamp(24px,5vw,96px)]\`) e aplique ao header e ao container da home.
-2. Garanta que o hero copy e CTAs respeitam a mesma largura útil.
-3. Faça QA em 1440px e 1920px.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Grid e margens iguais à referência
-- [ ] Sem “saltos” de alinhamento entre seções
-- [ ] Sem overflow horizontal
-
----
-
-### 🛠️ Prompt #04 — Mobile Menu: overlay fullscreen com stagger real + scroll lock
-
-**Objetivo**
-- Implementar menu mobile fullscreen com animação stagger e travar o scroll do body quando aberto.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/header/MobileStaggeredMenu.tsx\`
-- \`src/components/header/SiteHeader.tsx\`
-
-**Ações**
-1. Ao abrir, renderize overlay fullscreen com gradiente e painel (se aplicável).
-2. Bloqueie scroll do body (\`document.body.style.overflow = 'hidden'\`) e reverta ao fechar.
-3. Aplique stagger nos itens (opacity 0→1 e y 16→0).
-4. Permita fechar via: X, clique em item, clique fora, tecla ESC.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Mobile-first
-- ✅ Comparar com: docs/HEADER (animação)
-
-**Critérios de aceite (Checklist)**
-- [ ] Scroll do body bloqueado no menu aberto
-- [ ] Stagger funciona e é rápido
-- [ ] Tap-outside fecha
-- [ ] ESC fecha
-- [ ] aria-expanded correto
-
----
-
-### 🛠️ Prompt #05 — Acessibilidade do Header (desktop + mobile)
-
-**Objetivo**
-- Garantir navegação por teclado e ARIA completos no header e menu.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/header/SiteHeader.tsx\`
-- \`src/components/header/MobileStaggeredMenu.tsx\`
-- \`src/components/header/DesktopFluidHeader.tsx\`
-
-**Ações**
-1. Botão hamburger: \`aria-label\` (abrir/fechar), \`aria-expanded\`, \`aria-controls\`.
-2. Links: foco visível (\`focus-visible:ring\`), ordem de tab coerente.
-3. ESC fecha menu; foco retorna ao botão.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-
-**Critérios de aceite (Checklist)**
-- [ ] Navegável via teclado
-- [ ] Foco visível
-- [ ] ARIA consistente
-
----
-
-### 🛠️ Prompt #06 — Hero: garantir stack de z-index e pointer-events do Canvas
-
-**Objetivo**
-- Garantir que Canvas do Ghost não roube interações e que as camadas respeitem a hierarquia do spec.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/HomeHero.tsx\`
-- \`src/components/home/GhostStage.tsx\`
-- \`src/components/home/webgl/GhostCanvas.tsx\`
-
-**Ações**
-1. Garanta camadas: preloader z-50, manifesto z-30, ghost z-20, copy z-10, bg z-0.
-2. Aplique \`pointer-events-none\` no wrapper do Canvas (ou no canvas).
-3. Garanta que o header fique acima da Hero (z-40 no header).
-
-**Regras**
-- ❌ Não alterar textos
-- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] CTA e links clicáveis
-- [ ] Canvas não bloqueia scroll/click
-- [ ] Z-index consistente
-
----
-
-### 🛠️ Prompt #07 — WebGL Ghost: DPR/antialias/perf + reduced motion
-
-**Objetivo**
-- Controlar performance do Ghost e respeitar prefers-reduced-motion.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/webgl/GhostCanvas.tsx\`
-- \`src/components/home/GhostStage.tsx\`
-
-**Ações**
-1. Setar Canvas com \`dpr={[1,2]}\` e \`gl={{ antialias:false }}\`.
-2. Em \`prefers-reduced-motion: reduce\`: desativar follow/parallax e reduzir bloom/decay (ou desligar postprocessing pesado).
-3. Em mobile/tablet: reduzir DPR e/ou desligar follow.
-
-**Regras**
-- ❌ Não alterar textos
-- ✅ Mobile-first
-
-**Critérios de aceite (Checklist)**
-- [ ] Sem travamentos no mobile
-- [ ] Reduced-motion remove follow/efeitos agressivos
-- [ ] Visual continua fiel ao still (ghost atmosférico)
-
----
-
-### 🛠️ Prompt #08 — Manifesto Thumb: motion editorial premium (entrada + hover)
-
-**Objetivo**
-- Implementar entrada premium e hover contido para o manifesto thumb (sem competir com ghost).
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/ManifestoThumb.tsx\` (ou componente equivalente)
-- \`src/components/home/HomeHero.tsx\`
-
-**Ações**
-1. Entrada: \`opacity 0→1\`, \`y 12→0\`, \`scale 0.98→1\`, easing \`[0.22,1,0.36,1]\`, duração ~600ms.
-2. Hover (desktop): \`scale 1→1.05\`; seta \`-45deg→0deg\`.
-3. Respeitar reduced motion (remover hover scale e usar transição simples).
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: \`HERO-PORTFOLIO-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Animação sutil (sem glow exagerado)
-- [ ] Reduced motion respeitado
-- [ ] Não compete com ghost
-
----
-
-### 🛠️ Prompt #09 — Manifesto Thumb: scroll morph (thumb → fullscreen)
-
-**Objetivo**
-- Fazer o manifesto crescer e centralizar com scroll dentro da seção Hero, com radius indo a 0.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/HomeHero.tsx\`
-
-**Ações**
-1. Garantir Hero com altura suficiente (ex.: 200vh) para o scrub.
-2. Usar \`useScroll\` + \`useTransform\` para scale/position/borderRadius.
-3. Garantir sizing estável (\`aspect-video\`) para evitar CLS.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: docs/REFERENCIA_HERO-GHOST
-
-**Critérios de aceite (Checklist)**
-- [ ] Thumb inicia no canto inferior direito (desktop)
-- [ ] Termina fullscreen central
-- [ ] Border radius 12–16px → 0
-- [ ] Sem CLS
-
----
-
-### 🛠️ Prompt #10 — Manifesto: comportamento de click (desktop vs mobile)
-
-**Objetivo**
-- Desktop: click “salta” para o estado final do morph; Mobile: click alterna som.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/ManifestoThumb.tsx\`
-- \`src/components/home/HomeHero.tsx\`
-- (mobile) \`src/components/home/ManifestoSection.tsx\` (se existir)
-
-**Ações**
-1. Desktop (≥768px): ao clicar, scroll para o final do range do morph.
-2. Mobile (≤767px): toggle muted/unmuted no vídeo manifesto.
-3. Adicionar feedback mínimo no mobile (ícone/estado), sem overlay pesado.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-
-**Critérios de aceite (Checklist)**
-- [ ] Desktop pula para fullscreen
-- [ ] Mobile alterna som
-- [ ] Sem overlays agressivos
-
----
-
-### 🛠️ Prompt #11 — Mobile: ManifestoSection fullscreen logo abaixo da Hero
-
-**Objetivo**
-- Garantir manifesto como seção independente no mobile, com reveal sutil ao entrar na viewport.
-
-**Arquivos/Rotas envolvidas**
-- \`src/components/home/ManifestoSection.tsx\` (se existir)
-- \`src/components/home/HomeHero.tsx\`
-
-**Ações**
-1. Renderizar manifesto section somente em \`md:hidden\`.
-2. Aplicar \`whileInView\` / \`useInView\` com \`opacity\` + \`scale\` sutil.
-3. Garantir \`aspect-video\` e \`object-cover\`.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Mobile mostra manifesto fullscreen abaixo da hero
-- [ ] Sem overflow horizontal
-- [ ] Reveal suave, sem exagero
-
----
-
-### 🛠️ Prompt #12 — /portfolio: auditoria visual completa e correção de containers
-
-**Objetivo**
-- Ajustar /portfolio para ficar pixel-perfect com \`PORTFOLIO-PAGE-LAYOUYT.jpg\`.
-
-**Arquivos/Rotas envolvidas**
-- \`src/app/portfolio/page.tsx\`
-- Componentes da página portfolio (se existir em \`src/components/portfolio/*\`)
-- \`src/components/header/SiteHeader.tsx\`
-
-**Ações**
-1. Compare /portfolio com a referência (grid, gutters, tipografia, espaçamento).
-2. Ajuste containers para respeitar o mesmo padding/clamp da Home.
-3. Garantir consistência do header e edge rhythm.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-- ✅ Comparar com: \`PORTFOLIO-PAGE-LAYOUYT.jpg\`
-
-**Critérios de aceite (Checklist)**
-- [ ] Grid e margens iguais à referência
-- [ ] Alinhamento duas laterais consistente
-- [ ] Mobile sem overflow
-- [ ] Fidelidade visual confirmada
-
----
-
-### 🛠️ Prompt #13 — Remover/neutralizar padrões de glow/hover agressivo (se estiverem afetando o site)
-
-**Objetivo**
-- Garantir que não existam efeitos de glow/hover “fortes” competindo com o Hero (motion editorial sutil).
-
-**Arquivos/Rotas envolvidas**
-- \`src/app/globals.css\` (ou css global equivalente)
-- Qualquer css/module que aplique glow/box-shadow intenso
-
-**Ações**
-1. Localize estilos com box-shadows e animações de glow agressivas (exemplo de padrão a evitar: \`landing-button\` com m :OaiMdDirective_Annotations_yl0ex{attrs="eyJpbmRleCI6NH0"}últiplas sombras e animação “glow-pulse” ).
-2. Se esses estilos estiverem aplicados nas páginas HOME/PORTFOLIO, reduza para transições discretas (opacity/transform).
-3. Respeitar reduced motion: desativar animações contínuas.
-
-**Regras**
-- ❌ Não alterar textos
-- ❌ Não inventar layout
-
-**Critérios de aceite (Checklist)**
-- [ ] Sem glow exagerado no header/CTAs
-- [ ] Motion premium e contido
-- [ ] Reduced motion respeitado
-
----
-`;
-
-export default function HomePortfolioAuditReport() {
   return (
-    <main className="min-h-dvh bg-neutral-950 text-neutral-100">
-      <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <h1 className="text-balance text-2xl font-semibold">Home + Portfolio — Audit Report (Markdown)</h1>
-        <p className="mt-2 text-sm text-neutral-300">
-          Este componente apenas exibe o relatório em Markdown. Copie/cole em um arquivo <code>.md</code> se preferir.
-        </p>
+    <section
+      ref={sectionRef}
+      className="relative h-[220vh] overflow-hidden bg-[#06071f]"
+      aria-label="Hero institucional de Danilo Novais"
+    >
+      {/* Fundo radial base */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
 
-        <pre className="mt-6 whitespace-pre-wrap rounded-xl border border-white/10 bg-black/30 p-5 text-[13px] leading-relaxed">
-          {HOME_PORTFOLIO_AUDIT_MD}
-        </pre>
+      {/* Preloader Ghost Loader (z-50) */}
+      <HeroPreloader />
+
+      {/* Stage sticky: Ghost Atmosphere + Texto Editorial + Manifesto Thumb */}
+      <div className="sticky top-0 h-screen">
+        <div className="relative h-full w-full overflow-hidden">
+          {/* Ghost Atmosphere (WebGL) */}
+          <div className="absolute inset-0 z-20">
+            <GhostStage />
+          </div>
+
+          {/* Texto Editorial fixo (sem scroll binding) */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center px-4 text-center">
+            <HeroCopy />
+          </div>
+
+          {/* Manifesto Thumb – Desktop (scroll morphing) */}
+          <motion.div
+            className="absolute inset-0 z-30 hidden md:block"
+            style={{
+              opacity: videoOpacity,
+              scale: prefersReducedMotion ? 1 : videoScaleMotion,
+              borderRadius: videoRadius,
+              originX: 1,
+              originY: 1,
+            }}
+          >
+            <div className="pointer-events-none flex h-full w-full items-end justify-end p-6 md:p-10">
+              <div className="pointer-events-auto h-[min(36vh,260px)] w-[min(32vw,460px)] overflow-hidden rounded-xl border border-white/5 bg-black/40 shadow-[0_0_40px_rgba(0,0,0,0.85)]">
+                <ManifestoThumb onDesktopClick={handleDesktopClick} />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </main>
+    </section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/HeroPreloader.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { motion, useReducedMotion } from 'framer-motion';
+import { useState } from 'react';
+
+export default function HeroPreloader() {
+  const prefersReducedMotion = useReducedMotion();
+  const [visible, setVisible] = useState(true);
+
+  if (!visible) return null;
+
+  const fadeDuration = prefersReducedMotion ? 0.01 : 1;
+
+  return (
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      transition={{ delay: prefersReducedMotion ? 0 : 1.5, duration: fadeDuration }}
+      onAnimationComplete={() => setVisible(false)}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]"
+      aria-hidden="true"
+    >
+      <motion.svg
+        className="mb-5 h-20 w-20"
+        viewBox="0 0 512 512"
+        fill="none"
+        initial={{ y: 0, opacity: 1 }}
+        animate={
+          prefersReducedMotion ? {} : { y: [0, -12, 0] }
+        }
+        transition={
+          prefersReducedMotion
+            ? undefined
+            : { duration: 2.4, repeat: Infinity, ease: 'easeInOut' }
+        }
+      >
+        <path
+          fill="white"
+          d="M508.3 432.8s-46.6-39-79.5-275.8C420 69.3 346 0 256 0S92 69.3 83.2 157C50.3 393.7 3.7 432.8 3.7 432.8-11.4 458 24.4 461 42.4 460.7c35.3-.5 35.3 40.3 70.5 40.3s35.3-35.3 70.5-35.3 37.4 45.3 72.7 45.3 37.4-45.3 72.7-45.3 35.3 35.3 70.5 35.3 35.3-40.8 70.6-40.3c18 0.3 53.8-2.8 38.7-27.9z"
+        />
+        {/* Olhos pulsando */}
+        <motion.circle
+          cx="210"
+          cy="190"
+          r="26"
+          fill="#06071f"
+          initial={{ scale: 1, opacity: 0.7 }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : { scale: [1, 0.85, 1], opacity: [0.7, 1, 0.7] }
+          }
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 1.3, repeat: Infinity, ease: 'easeInOut', delay: 0.1 }
+          }
+        />
+        <motion.circle
+          cx="302"
+          cy="190"
+          r="26"
+          fill="#06071f"
+          initial={{ scale: 1, opacity: 0.7 }}
+          animate={
+            prefersReducedMotion
+              ? {}
+              : { scale: [1, 0.85, 1], opacity: [0.7, 1, 0.7] }
+          }
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 1.3, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }
+          }
+        />
+      </motion.svg>
+
+      <motion.p
+        className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[#e0e0e0]"
+        initial={{ opacity: 0.7 }}
+        animate={
+          prefersReducedMotion
+            ? {}
+            : { opacity: [0.7, 1, 0.7], letterSpacing: ['0.18em', '0.24em', '0.18em'] }
+        }
+        transition={
+          prefersReducedMotion
+            ? undefined
+            : { duration: 1.6, repeat: Infinity, ease: 'easeInOut' }
+        }
+      >
+        Summoning spirits
+      </motion.p>
+
+      <div className="h-0.5 w-24 overflow-hidden rounded-full bg-[#06071f]">
+        <motion.div
+          className="h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
+          initial={{ width: '0%' }}
+          animate={{ width: '100%' }}
+          transition={{
+            duration: prefersReducedMotion ? 0.01 : 2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/HeroCopy.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+export function HeroCopy() {
+  return (
+    <div className="mx-auto max-w-3xl text-[#d9dade]">
+      <p className="mb-4 font-mono text-[12px] uppercase tracking-[0.24em]">
+        [BRAND AWARENESS]
+      </p>
+      <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+        Design, não
+        <br />
+        é só estética.
+      </h1>
+      <p className="mb-8 text-base md:text-lg">
+        [É intenção, é estratégia, é experiência.]
+      </p>
+      <a
+        href="/sobre"
+        className="text-[0.9rem] font-medium uppercase tracking-[0.22em] text-[#d9dade] transition-colors duration-300 hover:text-white"
+        aria-label="Ir para a seção sobre e conhecer melhor o trabalho de Danilo"
+      >
+        get to know me better →
+      </a>
+    </div>
+  );
+}
+
+export default HeroCopy;
+
+// -----------------------------------------------------------------------------
+// components/home/ManifestoThumb.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowIcon } from '../shared/ArrowIcon';
+
+type ManifestoThumbProps = {
+  onDesktopClick?: () => void;
+};
+
+const MANIFESTO_VIDEO_SRC =
+  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
+
+export default function ManifestoThumb({ onDesktopClick }: ManifestoThumbProps) {
+  const prefersReducedMotion = useReducedMotion();
+
+  const triggerDesktopClick = (event: MouseEvent | KeyboardEvent) => {
+    if (typeof window === 'undefined') return;
+    if (window.innerWidth >= 768 && onDesktopClick) {
+      event.preventDefault();
+      onDesktopClick();
+    }
+  };
+
+  return (
+    <motion.div
+      role="button"
+      tabIndex={0}
+      aria-label="Assistir manifesto em fullscreen"
+      className="group relative h-full w-full cursor-pointer overflow-hidden rounded-xl bg-black/40"
+      initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9 }}
+      animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
+      transition={
+        prefersReducedMotion
+          ? undefined
+          : { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }
+      }
+      whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+      whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+      onClick={triggerDesktopClick}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          triggerDesktopClick(event);
+        }
+      }}
+    >
+      <motion.video
+        src={MANIFESTO_VIDEO_SRC}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="h-full w-full object-cover"
+      />
+      <div className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-black/55 p-2 text-white backdrop-blur-[2px] md:bottom-4 md:right-4 md:p-3">
+        <ArrowIcon className="h-3 w-3 -rotate-45 transition-transform duration-500 group-hover:rotate-0 md:h-4 md:w-4" />
+      </div>
+    </motion.div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/GhostStage.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import dynamic from 'next/dynamic';
+import { useReducedMotion } from 'framer-motion';
+
+const GhostCanvas = dynamic(() => import('./webgl/GhostCanvas'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+  ),
+});
+
+export default function GhostStage() {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    // Fallback visual leve quando o usuário prefere menos motion
+    return (
+      <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+    );
+  }
+
+  return <GhostCanvas />;
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/GhostCanvas.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { Canvas } from '@react-three/fiber';
+import { Suspense } from 'react';
+import Ghost from './Ghost';
+import Eyes from './Eyes';
+import Particles from './Particles';
+import Fireflies from './Fireflies';
+import AtmosphereVeil from './AtmosphereVeil';
+import { EffectComposer, Bloom, Noise, Vignette } from '@react-three/postprocessing';
+import { KernelSize } from 'postprocessing';
+
+export default function GhostCanvas() {
+  const dpr: [number, number] =
+    typeof window === 'undefined'
+      ? [1, 1.5]
+      : [1, Math.min(2, window.devicePixelRatio || 1)];
+
+  return (
+    <Canvas
+      dpr={dpr}
+      gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
+      camera={{ position: [0, 0, 3], fov: 40 }}
+    >
+      <color attach="background" args={['#06071f']} />
+      <Suspense fallback={null}>
+        <AtmosphereVeil />
+        <Ghost />
+        <Eyes />
+        <Particles />
+        <Fireflies />
+        <EffectComposer multisampling={0}>
+          <Bloom
+            intensity={2.8}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.9}
+            kernelSize={KernelSize.LARGE}
+          />
+          <Noise premultiply opacity={0.25} />
+          <Vignette eskil={false} offset={0.45} darkness={0.8} />
+        </EffectComposer>
+      </Suspense>
+    </Canvas>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/Ghost.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useRef } from 'react';
+import type { Group, MeshStandardMaterial } from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
+
+export default function Ghost() {
+  const group = useRef<Group | null>(null);
+  const bodyMaterial = useRef<MeshStandardMaterial | null>(null);
+  const { viewport } = useThree();
+
+  useFrame((state) => {
+    if (!group.current || !bodyMaterial.current) return;
+
+    const t = state.clock.getElapsedTime();
+    const pointer = state.pointer; // normalized -1..1
+
+    const ampX = viewport.width * 0.15;
+    const ampY = viewport.height * 0.12;
+
+    const targetX = (pointer.x || 0) * ampX;
+    const targetY = (pointer.y || 0) * ampY + Math.sin(t * 0.8) * 0.18;
+
+    group.current.position.x += (targetX - group.current.position.x) * 0.05;
+    group.current.position.y += (targetY - group.current.position.y) * 0.05;
+    group.current.position.z = 0.1 + Math.sin(t * 0.3) * 0.06;
+
+    group.current.rotation.y = Math.sin(t * 0.35) * 0.18;
+
+    const baseEmissive = 1.4;
+    const pulse = 0.3 + 0.25 * Math.sin(t * 2.1);
+    bodyMaterial.current.emissiveIntensity = baseEmissive + pulse;
+  });
+
+  return (
+    <group ref={group}>
+      <mesh castShadow receiveShadow>
+        <sphereGeometry args={[0.65, 48, 48]} />
+        <meshStandardMaterial
+          ref={bodyMaterial}
+          color="#0057FF"
+          emissive="#0057FF"
+          emissiveIntensity={1.8}
+          transparent
+          opacity={0.95}
+          toneMapped={false}
+        />
+      </mesh>
+      <mesh position={[0, -0.7, 0]}>
+        <cylinderGeometry args={[0.55, 0.7, 0.9, 32, 1, true]} />
+        <meshStandardMaterial
+          color="#0057FF"
+          emissive="#0057FF"
+          emissiveIntensity={1.5}
+          transparent
+          opacity={0.9}
+          toneMapped={false}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/Eyes.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useRef } from 'react';
+import type { Group, MeshBasicMaterial } from 'three';
+import { useFrame } from '@react-three/fiber';
+
+export default function Eyes() {
+  const group = useRef<Group | null>(null);
+  const leftMaterial = useRef<MeshBasicMaterial | null>(null);
+  const rightMaterial = useRef<MeshBasicMaterial | null>(null);
+
+  useFrame((state) => {
+    if (!group.current || !leftMaterial.current || !rightMaterial.current) return;
+
+    const t = state.clock.getElapsedTime();
+    const pointer = state.pointer;
+
+    const dist = Math.min(1, Math.sqrt(pointer.x * pointer.x + pointer.y * pointer.y));
+    const targetOpacity = 0.6 + dist * 0.4;
+
+    const lerp = (a: number, b: number, alpha: number) => a + (b - a) * alpha;
+
+    leftMaterial.current.opacity = lerp(leftMaterial.current.opacity, targetOpacity, 0.12);
+    rightMaterial.current.opacity = lerp(rightMaterial.current.opacity, targetOpacity, 0.12);
+
+    const lookX = (pointer.x || 0) * 0.12;
+    const lookY = (pointer.y || 0) * 0.12 + Math.sin(t * 0.8) * 0.02;
+
+    group.current.position.x = lookX;
+    group.current.position.y = lookY;
+  });
+
+  return (
+    <group ref={group} position={[-0.14, 0.06, 0.8]}>
+      <mesh>
+        <sphereGeometry args={[0.09, 32, 32]} />
+        <meshBasicMaterial
+          ref={leftMaterial}
+          color="#FFFFFF"
+          transparent
+          opacity={0.7}
+        />
+      </mesh>
+      <mesh position={[0.28, 0, 0]}>
+        <sphereGeometry args={[0.09, 32, 32]} />
+        <meshBasicMaterial
+          ref={rightMaterial}
+          color="#FFFFFF"
+          transparent
+          opacity={0.7}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/Particles.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useMemo, useRef } from 'react';
+import type { Points } from 'three';
+import { useFrame } from '@react-three/fiber';
+
+const PARTICLE_COUNT = 260;
+
+export default function Particles() {
+  const pointsRef = useRef<Points | null>(null);
+
+  const positions = useMemo(() => {
+    const arr = new Float32Array(PARTICLE_COUNT * 3);
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const i3 = i * 3;
+      arr[i3] = (Math.random() - 0.5) * 6;
+      arr[i3 + 1] = (Math.random() - 0.5) * 4;
+      arr[i3 + 2] = (Math.random() - 0.5) * 6;
+    }
+    return arr;
+  }, []);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime() * 0.03;
+    if (!pointsRef.current) return;
+    pointsRef.current.rotation.y = t;
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={PARTICLE_COUNT}
+          array={positions}
+          itemSize={3}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        color="#FFFFFF"
+        size={0.02}
+        sizeAttenuation
+        transparent
+        opacity={0.25}
+      />
+    </points>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/Fireflies.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useMemo, useRef } from 'react';
+import type { InstancedMesh, Object3D } from 'three';
+import { Object3D as ThreeObject3D } from 'three';
+import { useFrame } from '@react-three/fiber';
+
+const FIREFLY_COUNT = 26;
+
+export default function Fireflies() {
+  const meshRef = useRef<InstancedMesh | null>(null);
+  const dummy = useMemo<Object3D>(() => new ThreeObject3D(), []);
+
+  const seeds = useMemo(
+    () =>
+      Array.from({ length: FIREFLY_COUNT }, () => ({
+        radius: 1.2 + Math.random() * 1.2,
+        speed: 0.4 + Math.random() * 0.6,
+        offset: Math.random() * Math.PI * 2,
+        height: -0.4 + Math.random() * 0.8,
+      })),
+    []
+  );
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+
+    const t = state.clock.getElapsedTime();
+    seeds.forEach((seed, i) => {
+      const angle = t * seed.speed + seed.offset;
+
+      dummy.position.set(
+        Math.cos(angle) * seed.radius,
+        seed.height + Math.sin(angle * 2.0) * 0.2,
+        Math.sin(angle) * seed.radius
+      );
+
+      const scale = 0.02 + 0.01 * Math.sin(angle * 3.0);
+      dummy.scale.setScalar(scale);
+
+      dummy.updateMatrix();
+      meshRef.current!.setMatrixAt(i, dummy.matrix);
+    });
+
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh
+      ref={meshRef}
+      args={[undefined as any, undefined as any, FIREFLY_COUNT]}
+    >
+      <sphereGeometry args={[1, 8, 8]} />
+      <meshBasicMaterial color="#FFFFFF" transparent opacity={0.8} />
+    </instancedMesh>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/webgl/AtmosphereVeil.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+export default function AtmosphereVeil() {
+  return (
+    <group>
+      {/* Plano escuro de base */}
+      <mesh position={[0, -1.3, -1.4]} scale={[7, 4, 1]}>
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial color="#06071f" />
+      </mesh>
+      {/* Glow Ghost Blue */}
+      <mesh position={[0, 0, -0.7]} scale={[2.6, 2.6, 1]}>
+        <sphereGeometry args={[1, 64, 64]} />
+        <meshBasicMaterial color="#0057FF" transparent opacity={0.35} />
+      </mesh>
+    </group>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/home/ManifestoSection.tsx (mobile only)
+// -----------------------------------------------------------------------------
+'use client';
+
+import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { useRef, useState } from 'react';
+
+const MANIFESTO_VIDEO_SRC_MOBILE =
+  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
+
+export default function ManifestoSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20% 0px' });
+  const prefersReducedMotion = useReducedMotion();
+  const [muted, setMuted] = useState(true);
+
+  return (
+    <motion.section
+      id="manifesto"
+      ref={sectionRef}
+      initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95, y: 20 }}
+      animate={isInView && !prefersReducedMotion ? { opacity: 1, scale: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="block w-full bg-[#06071f] md:hidden"
+      aria-label="Manifesto em vídeo"
+    >
+      <button
+        type="button"
+        onClick={() => setMuted((prev) => !prev)}
+        className="relative flex aspect-video w-full items-center justify-center overflow-hidden"
+        aria-pressed={!muted}
+        aria-label={muted ? 'Ativar som do manifesto' : 'Desativar som do manifesto'}
+      >
+        <video
+          src={MANIFESTO_VIDEO_SRC_MOBILE}
+          autoPlay
+          loop
+          muted={muted}
+          playsInline
+          className="h-full w-full object-cover"
+        />
+        <div className="pointer-events-none absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-white">
+          <span>{muted ? 'sound off' : 'sound on'}</span>
+          <span
+            className={`h-2 w-2 rounded-full ${
+              muted ? 'bg-white/40' : 'bg-[#00ff9d]'
+            }`}
+          />
+        </div>
+      </button>
+    </motion.section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/portfolio/PortfolioShowcaseSection.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import { useRef } from 'react';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
+import AccordionRow from './AccordionRow';
+import { PrimaryButton } from '../shared/PrimaryButton';
+
+type CategoryConfig = {
+  id: string;
+  titleDesktop: string;
+  titleMobile: string;
+  align: 'start' | 'center' | 'end';
+};
+
+const CATEGORIES: CategoryConfig[] = [
+  {
+    id: 'brand-campaigns',
+    titleDesktop: 'Brand & Campaigns',
+    titleMobile: 'Brand & Campaigns',
+    align: 'end',
+  },
+  {
+    id: 'videos-motion',
+    titleDesktop: 'Videos & Motion',
+    titleMobile: 'Videos & Motion',
+    align: 'center',
+  },
+  {
+    id: 'websites-tech',
+    titleDesktop: 'Web Campaigns,\nWebsites & Tech',
+    titleMobile: 'Websites & Tech',
+    align: 'start',
+  },
+];
+
+export default function PortfolioShowcaseSection() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-30% 0px' });
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-label="Portfolio Categories"
+      className="bg-[#F4F5F7] py-24 md:py-32"
+    >
+      <div className="relative mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
+        {/* Floating Label - Desktop Only */}
+        <div className="pointer-events-none hidden md:block">
+          <span className="absolute left-[clamp(24px,5vw,96px)] -top-10 font-mono text-[11px] uppercase tracking-[0.24em] text-[#0057FF] mix-blend-difference">
+            [what we love working on]
+          </span>
+        </div>
+
+        {/* Headline Centralizada */}
+        <h2 className="mb-14 text-center text-4xl font-bold md:mb-20 md:text-6xl">
+          portfólio showcase
+        </h2>
+
+        {/* Accordion Rows */}
+        <motion.div
+          className="flex flex-col gap-10 md:gap-14"
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+          animate={isInView && !prefersReducedMotion ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          {CATEGORIES.map((category, index) => (
+            <AccordionRow
+              key={category.id}
+              category={category}
+              alignment={category.align}
+              index={index}
+              parentInView={isInView}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+          ))}
+        </motion.div>
+
+        {/* CTAs Aspiracionais */}
+        <div className="mt-20 flex flex-col items-center gap-6 md:flex-row md:justify-center">
+          <PrimaryButton href="/portfolio" variant="outline">
+            Ver todos os projetos →
+          </PrimaryButton>
+          <PrimaryButton href="/#contact" variant="solid">
+            let&apos;s build something great →
+          </PrimaryButton>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/portfolio/AccordionRow.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import type { CategoryConfig } from './PortfolioShowcaseSection';
+import { ArrowIcon } from '../shared/ArrowIcon';
+
+type Alignment = 'start' | 'center' | 'end';
+
+interface AccordionRowProps {
+  category: CategoryConfig;
+  alignment: Alignment;
+  index: number;
+  parentInView: boolean;
+  prefersReducedMotion: boolean;
+}
+
+const alignmentClasses: Record<Alignment, string> = {
+  start: 'md:justify-start',
+  center: 'md:justify-center',
+  end: 'md:justify-end',
+};
+
+export default function AccordionRow({
+  category,
+  alignment,
+  index,
+  parentInView,
+  prefersReducedMotion,
+}: AccordionRowProps) {
+  const delay = index * 0.12;
+
+  return (
+    <motion.div
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+      animate={parentInView && !prefersReducedMotion ? { opacity: 1, y: 0 } : {}}
+      transition={
+        prefersReducedMotion
+          ? undefined
+          : { duration: 0.8, ease: 'easeOut', delay }
+      }
+    >
+      <Link
+        href={`/portfolio?category=${category.id}`}
+        className={`group flex w-full items-center border-t border-[#0057FF] py-8 text-black transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7] md:py-14 ${alignmentClasses[alignment]}`}
+        aria-label={`Ver projetos de ${category.titleDesktop.replace(/\n/g, ' ')}`}
+      >
+        <div className="flex w-full items-center gap-5 transition-all duration-300 group-hover:gap-10 md:gap-7">
+          {/* Thumbnail Revealer - Desktop Only */}
+          <div className="relative hidden h-40 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72 md:block">
+            <Image
+              src={`/thumbnails/${category.id}.jpg`}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="(min-width: 1024px) 288px, 0px"
+            />
+          </div>
+
+          {/* Category Title */}
+          <h3 className="text-2xl font-medium md:text-5xl md:leading-none">
+            <span className="hidden whitespace-pre md:inline">
+              {category.titleDesktop}
+            </span>
+            <span className="md:hidden">{category.titleMobile}</span>
+          </h3>
+
+          {/* Icon Identifier */}
+          <div className="ml-auto shrink-0 rounded-full bg-[#0057FF] p-2.5 text-white md:p-3.5">
+            <ArrowIcon className="-rotate-45 h-4 w-4 transition-transform duration-500 group-hover:rotate-0 md:h-5 md:w-5" />
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/shared/PrimaryButton.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import type { ReactNode } from 'react';
+
+type Variant = 'solid' | 'outline';
+
+interface PrimaryButtonProps {
+  href: string;
+  children: ReactNode;
+  variant?: Variant;
+}
+
+export function PrimaryButton({ href, children, variant = 'solid' }: PrimaryButtonProps) {
+  const baseClasses =
+    'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium uppercase tracking-[0.22em] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2';
+
+  const variantClasses =
+    variant === 'solid'
+      ? 'bg-[#0057FF] text-white hover:bg-[#0043cc] focus-visible:ring-[#0057FF] focus-visible:ring-offset-[#F4F5F7]'
+      : 'border border-[#0057FF] text-[#0057FF] hover:bg-[#0057FF] hover:text-white focus-visible:ring-[#0057FF] focus-visible:ring-offset-[#F4F5F7]';
+
+  return (
+    <a href={href} className={`${baseClasses} ${variantClasses}`}>
+      {children}
+    </a>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// components/shared/ArrowIcon.tsx
+// -----------------------------------------------------------------------------
+'use client';
+
+import type { SVGProps } from 'react';
+
+export function ArrowIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      {...props}
+    >
+      <path d="M3 13L13 3M6 3H13V10" />
+    </svg>
   );
 }

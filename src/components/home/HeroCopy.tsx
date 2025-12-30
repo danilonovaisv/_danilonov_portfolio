@@ -1,30 +1,28 @@
 'use client';
 
-import React from 'react';
-import { HOME_CONTENT } from '@/config/content';
-
-export default function HeroCopy() {
+export function HeroCopy() {
   return (
-    <div className="text-[#d9dade] max-w-3xl mx-auto">
-      <p className="font-mono text-sm uppercase tracking-widest mb-3">
-        {HOME_CONTENT.hero.tag}
+    <div className="mx-auto max-w-3xl text-[#d9dade]">
+      <p className="mb-4 font-mono text-[12px] uppercase tracking-[0.24em]">
+        [BRAND AWARENESS]
       </p>
-
-      <h1 className="font-bold text-5xl md:text-6xl leading-tight mb-6">
-        {HOME_CONTENT.hero.title[0]}
+      <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
+        Design, não
         <br />
-        {HOME_CONTENT.hero.title[1]}
+        é só estética.
       </h1>
-
-      <p className="text-lg mb-8">{HOME_CONTENT.hero.subtitle}</p>
-
+      <p className="mb-8 text-base md:text-lg">
+        [É intenção, é estratégia, é experiência.]
+      </p>
       <a
         href="/sobre"
-        aria-label="Ir para a página Sobre"
-        className="inline-flex items-center gap-2 text-[#d9dade] hover:text-white transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] rounded"
+        className="text-[0.9rem] font-medium uppercase tracking-[0.22em] text-[#d9dade] transition-colors duration-300 hover:text-white"
+        aria-label="Ir para a seção sobre e conhecer melhor o trabalho de Danilo"
       >
-        {HOME_CONTENT.hero.cta} <span aria-hidden="true">→</span>
+        get to know me better →
       </a>
     </div>
   );
 }
+
+export default HeroCopy;

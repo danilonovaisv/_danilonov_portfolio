@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowIcon } from '@/components/ui/ArrowIcon';
+import { ArrowIcon } from '@/components/shared/ArrowIcon';
 
 type FeaturedProject = {
   id: number;
