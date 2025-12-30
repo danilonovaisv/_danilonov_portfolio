@@ -1,4 +1,5 @@
 # 🔗 Ajuste de Links e Logos do Header
+
 **Data:** 2025-12-29 20:29:57 -03:00
 
 ---
@@ -10,6 +11,7 @@
 #### Arquivo: `src/config/navigation.tsx`
 
 **Mudanças:**
+
 - Alterado label "portfolio showcase" para apenas "portfolio" em todos os arrays de navegação
 - Mantida a ordem correta: Home → Sobre → Portfolio → Contato
 
@@ -20,7 +22,7 @@ export const HEADER_LINKS_DESKTOP = [
   { label: 'home', href: '/', ariaLabel: 'Ir para a home' },
   { label: 'sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
   {
-    label: 'portfolio',  // ✅ Alterado de 'portfolio showcase'
+    label: 'portfolio', // ✅ Alterado de 'portfolio showcase'
     href: '/portfolio',
     ariaLabel: 'Ir para portfólio',
   },
@@ -31,7 +33,7 @@ export const HEADER_LINKS_MOBILE = [
   { label: 'home', href: '/', ariaLabel: 'Ir para a home' },
   { label: 'sobre', href: '/sobre', ariaLabel: 'Ir para sobre' },
   {
-    label: 'portfolio',  // ✅ Alterado de 'portfolio showcase'
+    label: 'portfolio', // ✅ Alterado de 'portfolio showcase'
     href: '/portfolio',
     ariaLabel: 'Ir para portfólio',
   },
@@ -46,6 +48,7 @@ export const HEADER_LINKS_MOBILE = [
 #### Arquivo: `src/components/header/types.ts`
 
 **Mudanças:**
+
 - Adicionada prop `logoUrlMobile?` ao tipo `SiteHeaderProps`
 - Permite usar logos diferentes entre desktop e mobile
 
@@ -65,6 +68,7 @@ export interface SiteHeaderProps {
 #### Arquivo: `src/components/header/SiteHeader.tsx`
 
 **Mudanças:**
+
 - Adicionado suporte à prop `logoUrlMobile`
 - Desktop usa `logoUrl`
 - Mobile usa `logoUrlMobile` com fallback para `logoUrl`
@@ -79,7 +83,7 @@ export default function SiteHeader({
   disableWebGL,
 }: SiteHeaderProps) {
   // ...
-  
+
   return (
     <>
       <DesktopFluidHeader
@@ -103,6 +107,7 @@ export default function SiteHeader({
 #### Arquivo: `src/components/layout/Header.tsx`
 
 **Mudanças:**
+
 - Desktop agora usa `BRAND.logos.faviconLight`
 - Mobile agora usa `BRAND.logos.dark`
 
@@ -125,20 +130,22 @@ export default function Header() {
 ## 📋 Mapeamento de Links Implementado
 
 ### **Desktop (DesktopFluidHeader)**
-| Label | Href | Ação | Logo |
-|-------|------|------|------|
-| home | `/` | Navega para homepage | **FaviconLight.svg** |
-| sobre | `/sobre` | Navega para portfoliodanilo.com/sobre | FaviconLight.svg |
-| portfolio | `/portfolio` | Navega para portfoliodanilo.com/portfolio | FaviconLight.svg |
-| contato | `#contact` | Scroll para seção de contato | FaviconLight.svg |
+
+| Label     | Href         | Ação                                      | Logo                 |
+| --------- | ------------ | ----------------------------------------- | -------------------- |
+| home      | `/`          | Navega para homepage                      | **FaviconLight.svg** |
+| sobre     | `/sobre`     | Navega para portfoliodanilo.com/sobre     | FaviconLight.svg     |
+| portfolio | `/portfolio` | Navega para portfoliodanilo.com/portfolio | FaviconLight.svg     |
+| contato   | `#contact`   | Scroll para seção de contato              | FaviconLight.svg     |
 
 ### **Mobile (MobileStaggeredMenu)**
-| Label | Href | Ação | Logo |
-|-------|------|------|------|
-| home | `/` | Navega para homepage | **LogoDark.svg** |
-| sobre | `/sobre` | Navega para portfoliodanilo.com/sobre | LogoDark.svg |
-| portfolio | `/portfolio` | Navega para portfoliodanilo.com/portfolio | LogoDark.svg |
-| contato | `#contact` | Scroll para seção de contato | LogoDark.svg |
+
+| Label     | Href         | Ação                                      | Logo             |
+| --------- | ------------ | ----------------------------------------- | ---------------- |
+| home      | `/`          | Navega para homepage                      | **LogoDark.svg** |
+| sobre     | `/sobre`     | Navega para portfoliodanilo.com/sobre     | LogoDark.svg     |
+| portfolio | `/portfolio` | Navega para portfoliodanilo.com/portfolio | LogoDark.svg     |
+| contato   | `#contact`   | Scroll para seção de contato              | LogoDark.svg     |
 
 ---
 
@@ -149,14 +156,17 @@ export default function Header() {
 export const BRAND = {
   logos: {
     // ✅ Desktop
-    faviconLight: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg',
-    
+    faviconLight:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg',
+
     // ✅ Mobile
     dark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg',
-    
+
     // Outros logos disponíveis
-    light: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg',
-    favicon: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg',
+    light:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg',
+    favicon:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg',
   },
 };
 ```
@@ -166,19 +176,23 @@ export const BRAND = {
 ## 🔄 Comportamento dos Links
 
 ### **Home (`/`)**
+
 - **Desktop:** Clique no logo ou item "home" sempre retorna para `/`
 - **Mobile:** Clique no logo ou item "home" sempre retorna para `/`
 - **Comportamento:** Usa `router.push('/')` do Next.js
 
 ### **Sobre (`/sobre`)**
+
 - **Navega para:** `https://portfoliodanilo.com/sobre`
 - **Comportamento:** Client-side navigation
 
 ### **Portfolio (`/portfolio`)**
+
 - **Navega para:** `https://portfoliodanilo.com/portfolio`
 - **Comportamento:** Client-side navigation
 
 ### **Contato (`#contact`)**
+
 - **Desktop:** Scroll suave para seção `#contact` na página atual
 - **Mobile:** Fecha o menu e faz scroll suave para `#contact`
 - **Comportamento:** Usa `scrollIntoView({ behavior: 'smooth' })`
@@ -188,6 +202,7 @@ export const BRAND = {
 ## ✅ Validação
 
 ### **Build Status**
+
 ```bash
 ✓ Compiled successfully in 3.9s
 ✓ Finished TypeScript in 3.7s
@@ -195,12 +210,14 @@ export const BRAND = {
 ```
 
 ### **Arquivos Modificados**
+
 1. ✅ `src/config/navigation.tsx` - Links atualizados
 2. ✅ `src/components/header/types.ts` - Tipo atualizado
 3. ✅ `src/components/header/SiteHeader.tsx` - Lógica de logos
 4. ✅ `src/components/layout/Header.tsx` - Configuração final
 
 ### **Comportamento Responsivo**
+
 - ✅ Desktop (≥1024px): Usa `FaviconLight.svg`
 - ✅ Mobile (<1024px): Usa `LogoDark.svg`
 - ✅ Fallback: Se `logoUrlMobile` não fornecido, usa `logoUrl`
@@ -210,16 +227,19 @@ export const BRAND = {
 ## 📝 Notas Técnicas
 
 ### **TypeScript Safety**
+
 - Todos os tipos foram atualizados corretamente
 - Prop opcional `logoUrlMobile?` com fallback implementado
 - Sem erros de build ou TypeScript
 
 ### **Acessibilidade**
+
 - Todos os links mantêm `aria-label` descritivos
 - Logo tem `aria-label="Ir para Home"`
 - Links de contato usam smooth scroll acessível
 
 ### **Performance**
+
 - Logos carregam com `unoptimized` flag (SVGs do Supabase)
 - Client-side navigation mantida para rotas internas
 - Scroll behavior responde a `prefers-reduced-motion`
@@ -232,7 +252,7 @@ export const BRAND = {
 ✅ **Mobile Menu:** Exibe LogoDark.svg (logo completo)  
 ✅ **Links de Navegação:** Ordem correta (Home, Sobre, Portfolio, Contato)  
 ✅ **Comportamento:** Scroll suave para #contact, navegação para rotas  
-✅ **Build:** Passing sem erros  
+✅ **Build:** Passing sem erros
 
 ---
 

@@ -19,7 +19,8 @@ export default function HeroPreloader() {
       }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none transition-[visibility] delay-[2500ms] invisible"
       style={{
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
+        background:
+          'linear-gradient(135deg, var(--color-ghost-void) 0%, var(--color-ghost-abyss) 100%)',
       }}
     >
       <svg
@@ -34,16 +35,15 @@ export default function HeroPreloader() {
           d="M508.3 432.8s-46.6-39-79.5-275.8C420 69.3 346 0 256 0S92 69.3 83.2 157C50.3 393.7 3.7 432.8 3.7 432.8-11.4 458 24.4 461 42.4 460.7c35.3-.5 35.3 40.3 70.5 40.3s35.3-35.3 70.5-35.3 37.4 45.3 72.7 45.3 37.4-45.3 72.7-45.3 35.3 35.3 70.5 35.3 35.3-40.8 70.6-40.3c18 0.3 53.8-2.8 38.7-27.9z"
         />
       </svg>
-
-      <p className="font-mono text-xs uppercase tracking-widest text-[#e0e0e0] mb-2">
+      <p className="font-mono text-xs uppercase tracking-widest text-ghost-text mb-2">
         Summoning spirits
       </p>
-
       <div className="w-24 h-0.5 bg-ghost-void rounded-full overflow-hidden">
         <motion.div
           className="h-full"
           style={{
-            background: 'linear-gradient(90deg, #0057FF 0%, #5227FF 100%)',
+            background:
+              'linear-gradient(90deg, var(--color-primary) 0%, #5227FF 100%)',
           }}
           initial={{ width: 0 }}
           animate={{ width: '100%' }}

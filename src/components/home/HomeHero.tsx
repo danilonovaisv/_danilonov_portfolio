@@ -130,7 +130,7 @@ export default function HomeHero() {
       <section
         id="hero"
         ref={heroRef}
-        className="relative min-h-screen md:min-h-[200vh] overflow-hidden bg-[radial-gradient(circle_at_30%_30%,#0b0d3a_0%,#06071f_55%,#06071f_100%)]"
+        className="relative min-h-screen md:min-h-[200vh] overflow-hidden bg-[radial-gradient(circle_at_30%_30%,var(--color-ghost-abyss)_0%,var(--color-ghost-void)_55%,var(--color-ghost-void)_100%)]"
         aria-label="Hero"
       >
         <HeroPreloader />
@@ -164,7 +164,8 @@ export default function HomeHero() {
             onClick={() => {
               if (typeof window === 'undefined') return;
               if (window.innerWidth >= 768 && heroRef.current) {
-                const top = heroRef.current.offsetTop + heroRef.current.clientHeight; // Go to full screen state
+                const top =
+                  heroRef.current.offsetTop + heroRef.current.clientHeight; // Go to full screen state
                 window.scrollTo({
                   top,
                   behavior: reducedMotion ? 'auto' : 'smooth',
@@ -225,7 +226,7 @@ export default function HomeHero() {
             >
               <span>{muted ? 'sound off' : 'sound on'}</span>
               <span
-                className={`inline-block h-2 w-2 rounded-full transition-colors ${muted ? 'bg-white/40' : 'bg-[#0057FF]'}`}
+                className={`inline-block h-2 w-2 rounded-full transition-colors ${muted ? 'bg-white/40' : 'bg-primary'}`}
                 aria-hidden="true"
               />
             </button>

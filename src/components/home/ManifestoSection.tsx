@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -13,10 +13,12 @@ const ManifestoSection: React.FC = () => {
   return (
     <div className="w-full">
       <motion.div
-        initial={reducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }}
+        initial={
+          reducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }
+        }
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
         className="relative w-full aspect-video overflow-hidden bg-black"
       >
         {!hasError ? (

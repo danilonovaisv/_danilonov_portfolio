@@ -1,4 +1,5 @@
 # 🎬 ManifestoThumb Correção - Miniatura Flutuante
+
 **Data:** 2025-12-29 21:15:11 -03:00
 
 ---
@@ -8,6 +9,7 @@
 O `ManifestoThumb` estava renderizando no centro da tela ao invés de aparecer como uma miniatura flutuante no canto inferior direito.
 
 **Erro Visual:**
+
 - ❌ Vídeo centralizado ocupando grande parte da tela
 - ❌ Sem posicionamento fixed
 - ❌ Sem dimensões de miniatura
@@ -20,24 +22,28 @@ O `ManifestoThumb` estava renderizando no centro da tela ao invés de aparecer c
 ### **ManifestoThumb.tsx** - Miniatura Desktop
 
 **Posicionamento Correto:**
+
 ```tsx
-className="fixed bottom-8 right-8 z-30"
+className = 'fixed bottom-8 right-8 z-30';
 ```
 
 **Dimensões de Miniatura:**
+
 ```tsx
 w-[280px] md:w-[320px] aspect-video
 ```
 
 **Estilo Visual:**
+
 ```tsx
-rounded-xl 
-overflow-hidden 
+rounded-xl
+overflow-hidden
 shadow-[0_20px_80px_rgba(0,0,0,0.55)]
 cursor-pointer
 ```
 
 **Animação Fade-In:**
+
 ```tsx
 initial={{ opacity: 0, scale: 0.9 }}
 animate={{ opacity: 1, scale: 1 }}
@@ -45,6 +51,7 @@ transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
 ```
 
 **Hover Effect:**
+
 ```tsx
 whileHover={{ scale: 1.05 }}
 transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -55,11 +62,13 @@ transition={{ duration: 0.5, ease: 'easeInOut' }}
 ### **ManifestoSection.tsx** - Versão Mobile
 
 **Posicionamento:**
+
 - ✅ Aparece apenas em mobile (`md:hidden`)
 - ✅ Fullscreen abaixo da Hero
 - ✅ Aspect ratio 16:9
 
 **Animação:**
+
 ```tsx
 initial={{ opacity: 0, scale: 0.95, y: 20 }}
 animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
@@ -67,6 +76,7 @@ transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
 ```
 
 **Simplificação:**
+
 - ✅ Removidos inline styles
 - ✅ Removido gradiente overlay
 - ✅ Removida complexidade desnecessária
@@ -78,37 +88,39 @@ transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
 
 ### **Desktop (≥768px):**
 
-| Propriedade | Valor |
-|-------------|-------|
-| Posição | `fixed bottom-8 right-8` |
-| Z-index | `z-30` |
-| Largura | `280px` (mobile) / `320px` (desktop) |
-| Aspect Ratio | `16:9` (aspect-video) |
-| Border Radius | `12px` (rounded-xl) |
-| Shadow | `0 20px 80px rgba(0,0,0,0.55)` |
-| Cursor | `pointer` |
+| Propriedade   | Valor                                |
+| ------------- | ------------------------------------ |
+| Posição       | `fixed bottom-8 right-8`             |
+| Z-index       | `z-30`                               |
+| Largura       | `280px` (mobile) / `320px` (desktop) |
+| Aspect Ratio  | `16:9` (aspect-video)                |
+| Border Radius | `12px` (rounded-xl)                  |
+| Shadow        | `0 20px 80px rgba(0,0,0,0.55)`       |
+| Cursor        | `pointer`                            |
 
 ### **Mobile (<768px):**
 
-| Propriedade | Valor |
-|-------------|-------|
-| Display | `flex` (apenas mobile) |
-| Width | `100vw` |
-| Aspect Ratio | `16:9` |
-| Background | `#06071f` (ghost-void) |
-| Position | Seção independente após Hero |
+| Propriedade  | Valor                        |
+| ------------ | ---------------------------- |
+| Display      | `flex` (apenas mobile)       |
+| Width        | `100vw`                      |
+| Aspect Ratio | `16:9`                       |
+| Background   | `#06071f` (ghost-void)       |
+| Position     | Seção independente após Hero |
 
 ---
 
 ## 🎬 Estados e Transições
 
 ### **Estado Inicial (Idle)**
+
 ```tsx
-opacity: 0
-scale: 0.9
+opacity: 0;
+scale: 0.9;
 ```
 
 ### **Estado Animado (Loaded)**
+
 ```tsx
 opacity: 1
 scale: 1
@@ -118,6 +130,7 @@ delay: 0.3s
 ```
 
 ### **Estado Hover (Desktop)**
+
 ```tsx
 scale: 1 → 1.05
 duration: 0.5s
@@ -138,6 +151,7 @@ className="w-full h-full object-cover"
 ```
 
 **URL do Vídeo:**
+
 ```
 https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4
 ```
@@ -146,24 +160,26 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos
 
 ## 🧱 Z-Index Stack (Atualizado)
 
-| Z-Index | Elemento | Descrição |
-|---------|----------|-----------|
-| z-50 | Header Mobile | Menu e overlay |
-| z-40 | Header Desktop | Navigation bar |
+| Z-Index  | Elemento           | Descrição                         |
+| -------- | ------------------ | --------------------------------- |
+| z-50     | Header Mobile      | Menu e overlay                    |
+| z-40     | Header Desktop     | Navigation bar                    |
 | **z-30** | **ManifestoThumb** | **Miniatura flutuante (desktop)** |
-| z-20 | GhostCanvas | Ghost + partículas |
-| z-10 | HeroCopy | Texto editorial |
-| z-0 | Background | Gradiente radial |
+| z-20     | GhostCanvas        | Ghost + partículas                |
+| z-10     | HeroCopy           | Texto editorial                   |
+| z-0      | Background         | Gradiente radial                  |
 
 ---
 
 ## 📱 Comportamento Responsivo
 
 ### **Desktop (md:)**
+
 - ✅ ManifestoThumb visível (fixed bottom-right)
 - ✅ ManifestoSection escondido
 
 ### **Mobile:**
+
 - ✅ ManifestoThumb escondido
 - ✅ ManifestoSection visível (fullscreen abaixo Hero)
 
@@ -188,6 +204,7 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos
 ## ✅ Resultado Final
 
 ### **Desktop:**
+
 ```
 ┌─────────────────────────────┐
 │                             │
@@ -201,6 +218,7 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos
 ```
 
 ### **Mobile:**
+
 ```
 ┌─────────────────┐
 │   HERO CONTENT  │

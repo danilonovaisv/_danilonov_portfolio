@@ -85,10 +85,9 @@ export default function DesktopFluidHeader({
           className="pointer-events-auto mx-auto w-full max-w-[1100px]"
         >
           <div
-            className="relative overflow-hidden rounded-full"
+            className="relative overflow-hidden rounded-full shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
             style={{
               height: HEADER_TOKENS.desktop.height,
-              boxShadow: '0 18px 55px rgba(0,0,0,0.35)',
             }}
           >
             {/* glass background */}
@@ -97,23 +96,14 @@ export default function DesktopFluidHeader({
                 <HeaderGlassCanvas accentColor={accentColor} />
               ) : (
                 <div
-                  className="h-full w-full"
-                  style={{
-                    background:
-                      'linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))',
-                    backdropFilter: 'blur(14px)',
-                    WebkitBackdropFilter: 'blur(14px)',
-                  }}
+                  className="h-full w-full bg-white/12 backdrop-blur-[14px] bg-gradient-to-b from-white/12 to-white/6"
                 />
               )}
             </div>
 
             {/* subtle border */}
             <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                border: '1px solid rgba(255,255,255,0.14)',
-              }}
+              className="absolute inset-0 rounded-full border border-white/14"
             />
 
             {/* content */}
@@ -142,7 +132,9 @@ export default function DesktopFluidHeader({
 
                   const common =
                     'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
-                  const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
+                  const textColor = isActive
+                    ? 'text-[#0057FF]'
+                    : 'text-white/80 hover:text-white';
                   const underline = isActive
                     ? 'after:w-full'
                     : 'after:w-0 group-hover:after:w-full';

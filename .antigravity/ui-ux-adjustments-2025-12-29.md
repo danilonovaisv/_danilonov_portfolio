@@ -1,4 +1,5 @@
 # 🔧 Ajustes UI/UX - Home Page
+
 **Data:** 2025-12-29 21:03:31 -03:00
 
 ---
@@ -13,15 +14,19 @@
 **Solução:** Alterada a cor do texto ativo para #0057FF (azul institucional)
 
 **Mudanças:**
+
 ```typescript
 // Antes
 const active = isActive ? 'text-white' : '';
 
 // Depois
-const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
+const textColor = isActive
+  ? 'text-[#0057FF]'
+  : 'text-white/80 hover:text-white';
 ```
 
 **Resultado:**
+
 - ✅ Link da página atual aparece em azul (#0057FF)
 - ✅ Underline ativo visível
 - ✅ Outros links em branco com hover
@@ -36,6 +41,7 @@ const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white'
 **Solução:** "portfólio" em preto, "showcase" em azul (#0057FF)
 
 **Mudanças:**
+
 ```tsx
 // Antes
 <h2 className="text-text-dark">
@@ -50,6 +56,7 @@ const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white'
 ```
 
 **Resultado:**
+
 - ✅ Título com duas cores conforme especificação
 - ✅ Alinhamento central mantido
 
@@ -66,15 +73,17 @@ const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white'
 **Solução:** Opacidade reduzida para 60%
 
 **Mudanças:**
+
 ```tsx
 // Removido
-<motion.h2>Projetos em Destaque</motion.h2>
+<motion.h2>Projetos em Destaque</motion.h2>;
 
 // Tags - opacidade ajustada
-className="bg-[#E6EFEF]/60 ... opacity-60"
+className = 'bg-[#E6EFEF]/60 ... opacity-60';
 ```
 
 **Resultado:**
+
 - ✅ Título removido
 - ✅ Tags com 60% de opacidade
 - ✅ Visual mais limpo conforme PROTFOLIO_CARDS.png
@@ -89,12 +98,14 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 **Solução:** Removido gradiente overlay desnecessário
 
 **Mudanças:**
+
 ```tsx
 // Removido
 <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
 ```
 
 **Resultado:**
+
 - ✅ Vídeo sem faixa transparente
 - ✅ Visual limpo
 - ✅ Aspect ratio correto (16:9)
@@ -109,6 +120,7 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 **Solução:** Aumentado z-index para z-50
 
 **Mudanças:**
+
 ```tsx
 // Header mobile
 <header className="lg:hidden fixed top-0 left-0 right-0 z-50">
@@ -118,6 +130,7 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 ```
 
 **Resultado:**
+
 - ✅ Menu mobile agora tem prioridade máxima
 - ✅ Botão hamburger funcional
 - ✅ Overlay visível
@@ -126,13 +139,13 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 
 ## 📊 Resumo das Mudanças
 
-| Componente | Mudança | Status |
-|------------|---------|--------|
-| **DesktopFluidHeader** | Link ativo em azul #0057FF | ✅ |
-| **PortfolioShowcaseSection** | Título bicolor (preto + azul) | ✅ |
-| **FeaturedProjectsSection** | Título removido, tags 60% opacidade | ✅ |
-| **ManifestoThumb** | Gradiente overlay removido | ✅ |
-| **MobileStaggeredMenu** | Z-index aumentado para z-50 | ✅ |
+| Componente                   | Mudança                             | Status |
+| ---------------------------- | ----------------------------------- | ------ |
+| **DesktopFluidHeader**       | Link ativo em azul #0057FF          | ✅     |
+| **PortfolioShowcaseSection** | Título bicolor (preto + azul)       | ✅     |
+| **FeaturedProjectsSection**  | Título removido, tags 60% opacidade | ✅     |
+| **ManifestoThumb**           | Gradiente overlay removido          | ✅     |
+| **MobileStaggeredMenu**      | Z-index aumentado para z-50         | ✅     |
 
 ---
 
@@ -148,23 +161,28 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 ## 🔍 Problemas Resolvidos
 
 ### ✅ Header Desktop
+
 - [x] Links ativos agora aparecem em azul
 - [x] Underline visível na página atual
 
 ### ✅ Portfolio Showcase
+
 - [x] Título bicolor implementado ("portfólio" preto, "showcase" azul)
 - [x] Alinhamento conforme imagem de referência
 
 ### ✅ Featured Projects
+
 - [x] Título "Projetos em Destaque" removido
 - [x] Tags com 60% de opacidade
 - [x] Layout conforme PROTFOLIO_CARDS.png
 
 ### ✅ Manifesto Thumb
+
 - [x] Faixa transparente removida
 - [x] Vídeo limpo sem gradiente
 
 ### ✅ Mobile Menu
+
 - [x] Z-index aumentado (z-40 → z-50)
 - [x] Menu agora tem prioridade sobre outros elementos
 
@@ -179,6 +197,7 @@ className="bg-[#E6EFEF]/60 ... opacity-60"
 3. ✅ Thumb do manifesto agora hidden no mobile, visível apenas no desktop
 
 **Recomendação:** Se a animação scroll ainda apresentar problemas, será necessário ajustar o `HomeHero.tsx` diretamente com os parâmetros GSAP de:
+
 - ScrollTrigger start/end
 - Pin duration
 - Scaling timeline
