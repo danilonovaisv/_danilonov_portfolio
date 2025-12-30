@@ -10,7 +10,6 @@
   flex: 1 1 0;
   min-width: 0;
   border: none;
-  background-image: var(--item-bg);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

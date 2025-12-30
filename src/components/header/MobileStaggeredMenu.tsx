@@ -37,7 +37,6 @@ export default function MobileStaggeredMenu({
   onNavigate,
 }: MobileStaggeredMenuProps) {
   const reducedMotion = useReducedMotion();
-  const triggerRef = React.useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -89,7 +88,7 @@ export default function MobileStaggeredMenu({
   };
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 z-40">
+    <header className="lg:hidden fixed top-0 left-0 right-0 z-50">
       <div className="h-[56px] px-4 flex items-center justify-between bg-ghost-void/72 backdrop-blur-[10px] border-b border-white/10">
         <Link
           href="/"
@@ -107,46 +106,33 @@ export default function MobileStaggeredMenu({
         </Link>
 
         <button
-          ref={triggerRef}
           type="button"
           onClick={isOpen ? onClose : onOpen}
           aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={isOpen ? 'true' : 'false'}
-          aria-controls="mobile-menu-panel"
-          className="h-10 w-10 grid place-items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-void"
+          className="h-10 w-10 grid place-items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-void"
         >
           <div className="relative h-5 w-6">
             <span
-              className={`absolute left-0 top-1 h-[2px] w-full bg-white transition-transform duration-200 ${
-                isOpen ? 'translate-y-[6px] rotate-45' : ''
-              }`}
+              className={`absolute left-0 top-1 h-[2px] w-full bg-white transition-transform duration-200 ${isOpen ? 'translate-y-[6px] rotate-45' : ''
+                }`}
             />
             <span
-              className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full bg-white transition-opacity duration-200 ${
-                isOpen ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full bg-white transition-opacity duration-200 ${isOpen ? 'opacity-0' : 'opacity-100'
+                }`}
             />
             <span
-              className={`absolute left-0 bottom-1 h-[2px] w-full bg-white transition-transform duration-200 ${
-                isOpen ? '-translate-y-[6px] -rotate-45' : ''
-              }`}
+              className={`absolute left-0 bottom-1 h-[2px] w-full bg-white transition-transform duration-200 ${isOpen ? '-translate-y-[6px] -rotate-45' : ''
+                }`}
             />
           </div>
         </button>
       </div>
 
-      <AnimatePresence
-        onExitComplete={() => {
-          // Retorna o foco ao botão quando o menu termina de fechar
-          triggerRef.current?.focus();
-        }}
-      >
+      <AnimatePresence>
         {isOpen && (
           <motion.div
-            id="mobile-menu-panel"
-            className="fixed inset-0 z-40"
-            role="dialog"
-            aria-modal="true"
+            className="fixed inset-0 z-50"
             initial="closed"
             animate="open"
             exit="closed"

@@ -9,10 +9,6 @@ export const BRAND = {
     text: '#000000', // Texto padrão
     textInverse: '#FFFFFF', // Texto sobre fundo escuro
     neutralLight: '#F5F5F5', // Fundo secundário
-    headerGradient: ['rgba(0,87,255,0.55)', 'rgba(82,39,255,0.45)'] as [
-      string,
-      string,
-    ],
   },
 
   typography: {

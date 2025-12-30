@@ -33,7 +33,8 @@ export default function SiteFooter() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: reducedMotion ? 0.2 : 0.4 }}
-        className="hidden lg:block fixed bottom-0 left-0 right-0 z-30 bg-primary"
+        className="hidden lg:block fixed bottom-0 left-0 right-0 z-30"
+        style={{ background: '#0057FF' }}
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-6 py-4 flex items-center justify-between text-white text-sm">
@@ -73,7 +74,7 @@ export default function SiteFooter() {
       </motion.footer>
 
       <footer
-        className="lg:hidden bg-primary text-white py-10"
+        className="lg:hidden bg-[#0057FF] text-white py-10"
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] space-y-6">

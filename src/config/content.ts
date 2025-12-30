@@ -39,13 +39,7 @@ export const HOME_CONTENT = {
       category: 'branding & campanha',
       client: 'Magic',
       year: 2023,
-      tags: ['Branding', 'Strategy', 'Campaign'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-      layout: {
-        h: 'h-[500px]',
-        cols: 'md:col-span-5',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 44vw, 36vw',
-      },
     },
     {
       slug: 'branding-project-01',
@@ -53,13 +47,7 @@ export const HOME_CONTENT = {
       category: 'branding',
       client: 'Cliente confidencial',
       year: 2022,
-      tags: ['Branding', 'Identity'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-      layout: {
-        h: 'h-[500px]',
-        cols: 'md:col-span-7',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 56vw, 58vw',
-      },
     },
     {
       slug: 'key-visual-campaign',
@@ -67,13 +55,7 @@ export const HOME_CONTENT = {
       category: 'campanha',
       client: 'Cliente confidencial',
       year: 2021,
-      tags: ['Campaign', 'Print', 'Art Direction'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-      layout: {
-        h: 'h-[600px]',
-        cols: 'md:col-span-12',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 94vw, 100vw',
-      },
     },
     {
       slug: 'webdesigner-motion',
@@ -81,13 +63,7 @@ export const HOME_CONTENT = {
       category: 'web & motion',
       client: 'Cliente confidencial',
       year: 2023,
-      tags: ['Web', 'Motion', 'UX'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      layout: {
-        h: 'h-[400px]',
-        cols: 'md:col-span-8',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 68vw, 64vw',
-      },
     },
   ],
 

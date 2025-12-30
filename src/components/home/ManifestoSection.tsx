@@ -1,35 +1,33 @@
-'use client';
+"use client";
 
 import React, { useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { BRAND } from '@/config/brand';
+import { motion } from 'framer-motion';
+import { ASSETS } from '../../lib/constants';
 import { AlertCircle } from 'lucide-react';
 
-const ManifestoSection: React.FC = () => {
+const Manifesto: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const reducedMotion = useReducedMotion();
 
   return (
-    <div className="w-full">
+    <section id="manifesto" className="w-full bg-[#F4F5F7]">
       <motion.div
-        initial={
-          reducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }
-        }
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="relative w-full aspect-video overflow-hidden bg-black"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        className="relative w-full aspect-video md:aspect-[21/9] overflow-hidden bg-gray-100 shadow-sm"
       >
         {!hasError ? (
           <video
             ref={videoRef}
-            src={BRAND.video.manifesto}
+            src={ASSETS.videoManifesto}
             className="w-full h-full object-cover"
             autoPlay
             muted
             loop
             playsInline
+            controls
             onError={() => setHasError(true)}
             aria-label="Vídeo Manifesto do Portfólio"
           />
@@ -38,18 +36,18 @@ const ManifestoSection: React.FC = () => {
             <AlertCircle className="w-10 h-10 mb-3 opacity-50" />
             <p className="font-medium">Não foi possível carregar o vídeo.</p>
             <a
-              href={BRAND.video.manifesto}
+              href={ASSETS.videoManifesto}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 text-[#0057FF] text-sm hover:underline underline-offset-4"
+              className="mt-2 text-primary text-sm hover:underline underline-offset-4"
             >
               Assistir diretamente
             </a>
           </div>
         )}
       </motion.div>
-    </div>
+    </section>
   );
 };
 
-export default ManifestoSection;
+export default Manifesto;

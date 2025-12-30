@@ -4,7 +4,6 @@ import Image from 'next/image';
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
-import styles from './ClientsBrandsSection.module.css';
 
 const logos = HOME_CONTENT.clients.logos.map((src, i) => ({
   src,
@@ -31,7 +30,7 @@ export default function ClientsBrandsSection() {
       };
 
   return (
-    <section id="clients" className="bg-primary py-12" aria-label="Marcas">
+    <section id="clients" className="bg-[#0057FF] py-12" aria-label="Marcas">
       <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
         <motion.h2
           initial={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
@@ -74,7 +73,8 @@ export default function ClientsBrandsSection() {
                   alt={l.alt}
                   fill
                   unoptimized
-                  className={`object-contain transition duration-300 ${styles.clientLogo}`}
+                  className="object-contain transition duration-300"
+                  style={{ filter: 'brightness(0) invert(1)', opacity: 0.92 }}
                 />
               </motion.div>
             ))}

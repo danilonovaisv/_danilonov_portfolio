@@ -52,6 +52,7 @@ export default function PortfolioHero() {
         >
           <motion.div
             className={styles.galleryWrap}
+            style={{ minHeight: '400px' }}
             initial={{ scale: 0.98 }}
             animate={{ scale: 1 }}
             transition={{
@@ -65,7 +66,7 @@ export default function PortfolioHero() {
                 type="button"
                 className={styles.item}
                 aria-label={item.label}
-                style={{ '--item-bg': `url(${item.image})` } as React.CSSProperties}
+                style={{ backgroundImage: `url(${item.image})` }}
                 initial={{ opacity: 0, y: 12, flex: 1 }}
                 animate={{
                   opacity: 1,
