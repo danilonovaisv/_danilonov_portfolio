@@ -1,26 +1,30 @@
 // src/components/home/webgl/Ghost.tsx
 'use client';
 
-import React, { useMemo, useRef } from 'react';
+import React, { useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
-import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
-  bodyColor: '#192c55', // Um branco azulado
-  glowColor: '#00ffff', // Ciano puro para brilhar muito no Bloom
-  eyeColor: '#610ab8',
-  emissiveIntensity: 5.5, // Aumentei para garantir o "neon" do vídeo
-  floatSpeed: 2.6,
+  bodyColor: '#e0f7fa',
+  glowColor: '#00ffff',
+  eyeColor: '#ffffff',
+  emissiveIntensity: 4.5,
+  floatSpeed: 1.6,
   followSpeed: 0.07,
 };
 
-export default function Ghost(props: ThreeElements['group']) {
+// Envolvemos o componente em forwardRef para expor o grupo (group.current) ao pai
+const Ghost = forwardRef<Group, any>((props, ref) => {
   const group = useRef<Group>(null);
   const bodyMesh = useRef<Mesh>(null);
   const bodyMaterial = useRef<MeshStandardMaterial>(null);
-  const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
-  const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
+  const leftEyeMat = useRef<any>(null);
+  const rightEyeMat = useRef<any>(null);
+
+  // Conecta a ref interna (group) com a ref externa (ref passada pelo pai)
+  useImperativeHandle(ref, () => group.current as Group);
 
   const { viewport } = useThree();
   const prevPosition = useRef(new Vector3(0, 0, 0));
@@ -54,50 +58,40 @@ export default function Ghost(props: ThreeElements['group']) {
     const t = state.clock.getElapsedTime();
     const pointer = state.pointer;
 
-    // Movimento suave seguindo o mouse
     const xTarget = pointer.x * (viewport.width / 4);
     const yTarget = pointer.y * (viewport.height / 4);
     targetPosition.current.set(xTarget, yTarget, 0);
 
-    group.current.position.lerp(
-      targetPosition.current,
-      GHOST_CONFIG.followSpeed
-    );
+    group.current.position.lerp(targetPosition.current, GHOST_CONFIG.followSpeed);
 
-    // Física dos olhos
     const currentDist = group.current.position.distanceTo(prevPosition.current);
     prevPosition.current.copy(group.current.position);
 
     const isMoving = currentDist > 0.005;
-    const targetEyeOpacity = isMoving ? 1 : 0.3; // Olhos não apagam totalmente, ficam 0.3
+    const targetEyeOpacity = isMoving ? 1 : 0.3;
 
     if (leftEyeMat.current && rightEyeMat.current) {
-      leftEyeMat.current.opacity +=
-        (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
+      leftEyeMat.current.opacity += (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
       rightEyeMat.current.opacity = leftEyeMat.current.opacity;
     }
 
-    // Pulso do brilho
     if (bodyMaterial.current) {
       const pulse = Math.sin(t * 2) * 0.5;
-      bodyMaterial.current.emissiveIntensity =
-        GHOST_CONFIG.emissiveIntensity + pulse;
+      bodyMaterial.current.emissiveIntensity = GHOST_CONFIG.emissiveIntensity + pulse;
     }
 
-    // Flutuação e Inclinação
     const floatY = Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2;
     bodyMesh.current.position.y = floatY;
 
-    const moveX = targetPosition.current.x - group.current.position.x;
+    const moveX = (targetPosition.current.x - group.current.position.x);
     bodyMesh.current.rotation.z = -moveX * 0.2;
     bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1;
   });
 
   return (
     <group ref={group} {...props}>
-      {/* Luzes de borda para dar volume 3D */}
-      <directionalLight position={[-8, 6, -4]} intensity={10} color="#00b3ff" />
-      <directionalLight position={[10, -4, -6]} intensity={1} color="#9a08fc" />
+      <directionalLight position={[-8, 6, -4]} intensity={2} color="#00ffff" />
+      <directionalLight position={[8, -4, -6]} intensity={2} color="#ff00ff" />
 
       <mesh ref={bodyMesh} geometry={ghostGeometry}>
         <meshStandardMaterial
@@ -107,13 +101,12 @@ export default function Ghost(props: ThreeElements['group']) {
           emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
           transparent
           opacity={0.9}
-          roughness={0.2}
+          roughness={0.1}
           metalness={0.2}
           side={THREE.DoubleSide}
-          toneMapped={false} // CRUCIAL para o Bloom funcionar
+          toneMapped={false}
         />
 
-        {/* Olhos */}
         <group position={[0, 0, 0]}>
           <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
             <mesh position={[0, 0, -0.1]}>
@@ -121,14 +114,8 @@ export default function Ghost(props: ThreeElements['group']) {
               <meshBasicMaterial color="black" />
             </mesh>
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.2, 16, 16]} />
-              <meshBasicMaterial
-                ref={leftEyeMat}
-                color={GHOST_CONFIG.eyeColor}
-                transparent
-                opacity={0.3}
-                toneMapped={false}
-              />
+              <sphereGeometry args={[0.20, 16, 16]} />
+              <meshBasicMaterial ref={leftEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
             </mesh>
           </group>
           <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
@@ -137,18 +124,15 @@ export default function Ghost(props: ThreeElements['group']) {
               <meshBasicMaterial color="black" />
             </mesh>
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.2, 16, 16]} />
-              <meshBasicMaterial
-                ref={rightEyeMat}
-                color={GHOST_CONFIG.eyeColor}
-                transparent
-                opacity={0.3}
-                toneMapped={false}
-              />
+              <sphereGeometry args={[0.20, 16, 16]} />
+              <meshBasicMaterial ref={rightEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
             </mesh>
           </group>
         </group>
       </mesh>
     </group>
   );
-}
+});
+
+Ghost.displayName = 'Ghost';
+export default Ghost;

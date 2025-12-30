@@ -2,21 +2,21 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
+import * as THREE from 'three';
 import Ghost from './Ghost';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
-import * as THREE from 'three';
+import RevealingText from './RevealingText'; // Importe o novo componente
 
-// Importando efeitos padrão da biblioteca
 import {
   EffectComposer,
   Bloom,
   Noise,
   Vignette,
   Scanline,
-  ChromaticAberration,
+  ChromaticAberration
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
@@ -26,6 +26,9 @@ export default function GhostCanvas() {
       ? [1, 1.5]
       : [1, Math.min(2, window.devicePixelRatio || 1)];
 
+  // 1. Criamos a ref que vai guardar a posição do fantasma
+  const ghostRef = useRef<THREE.Group>(null);
+
   return (
     <Canvas
       dpr={dpr}
@@ -33,40 +36,46 @@ export default function GhostCanvas() {
         antialias: false,
         alpha: true,
         powerPreference: 'high-performance',
-        toneMapping: THREE.NoToneMapping, // Importante para cores neon
+        toneMapping: THREE.NoToneMapping,
       }}
-      camera={{ position: [1, 0, 6], fov: 25 }}
+      camera={{ position: [0, 0, 6], fov: 35 }}
     >
-      {/* Ambient Light para volume base */}
-      <ambientLight intensity={0.5} />
+      {/* Background removido para permitir visibilidade do HeroCopy (Z-10) e gradiente radial (Z-0) */}
 
       <Suspense fallback={null}>
-        {/* Elementos da Cena */}
         <AtmosphereVeil />
-        <Ghost scale={0.2} position={[0, -0.2, 0]} />
+
+        {/* 2. Passamos a ref para o Ghost preencher */}
+        <Ghost ref={ghostRef} scale={0.2} position={[0, -0.2, 0]} />
+
+        {/* 3. Passamos a mesma ref para o Texto ler */}
+        <RevealingText ghostRef={ghostRef} />
+
         <Particles />
         <Fireflies />
 
-        {/* EFEITOS VISUAIS (O "Look" do vídeo) */}
         <EffectComposer enableNormalPass={false}>
           <Bloom
             luminanceThreshold={1}
             mipmapBlur
-            intensity={1.5}
-            radius={0.5}
+            intensity={1.8}
+            radius={0.6}
           />
           <ChromaticAberration
-            offset={new THREE.Vector2(0.013, 0.003)}
+            offset={[0.002, 0.002]}
             radialModulation={false}
             modulationOffset={0}
           />
-          <Scanline density={1.5} opacity={0.3} />
+          <Scanline
+            density={1.5}
+            opacity={0.3}
+          />
           <Noise
-            opacity={0.75}
+            opacity={0.15}
             premultiply
             blendFunction={BlendFunction.OVERLAY}
           />
-          <Vignette eskil={false} offset={0.4} darkness={1.2} />
+          <Vignette eskil={false} offset={0.1} darkness={1.0} />
         </EffectComposer>
       </Suspense>
     </Canvas>

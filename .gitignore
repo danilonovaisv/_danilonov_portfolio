@@ -1,95 +1,69 @@
-```
 # Dependencies
 node_modules/
+.pnp
+.pnp.js
 
-# Build outputs
-dist/
-build/
+# Testing
+coverage/
+
+# Next.js
 .next/
 out/
 
+# Production
+build/
+dist/
+
 # Logs
 *.log
-
-# Environment variables
-.env
-.env.local
-.env.*
-
-# Editor/IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-
-# Node.js
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-node_modules/
-jspm_packages/
+pnpm-debug.log*
 
-# Compiled and build artifacts
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Coverage
-coverage/
-htmlcov/
+# Vercel
+.vercel
+
+# IDE/Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+*.tmp
+
+# TS Build Info
+*.tsbuildinfo
+
+# Tooling
+qodana.sarif.json
+.agent/
+.antigravity/
+
+# Firebase
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
 
 # Compressed files
 *.zip
 *.gz
 *.tar
-*.tgz
-*.bz2
-*.xz
 *.7z
 *.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
-
-# Firebase
-.firebase/
 
 # Heavy Docs Media
 docs/*.mp4
 docs/*.mov
+docs/*.pdf
+docs/*.jpg
+docs/*.png

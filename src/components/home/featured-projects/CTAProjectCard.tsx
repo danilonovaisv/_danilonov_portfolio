@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { useReducedMotion } from 'framer-motion';
-import { ArrowIcon } from '@/components/shared/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 export default function CTAProjectCard() {
     const reducedMotion = useReducedMotion();
@@ -25,8 +25,8 @@ export default function CTAProjectCard() {
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/10">
                     <ArrowIcon
                         className={`w-4 h-4 text-white transition-transform ${reducedMotion
-                                ? ''
-                                : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
+                            ? ''
+                            : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
                             }`}
                     />
                 </div>

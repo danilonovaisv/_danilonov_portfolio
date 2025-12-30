@@ -9,7 +9,7 @@ import type { NavItem } from './types';
 import { HEADER_TOKENS } from './headerTokens';
 
 const HeaderGlassCanvas = dynamic(
-  () => import('@/components/webgl/header/HeaderGlassCanvas'),
+  () => import('@/components/canvas/header/HeaderGlassCanvas'),
   {
     ssr: false,
   }

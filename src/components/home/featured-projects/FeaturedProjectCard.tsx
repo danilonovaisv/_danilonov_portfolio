@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { useReducedMotion } from 'framer-motion';
-import { ArrowIcon } from '@/components/shared/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 export type FeaturedProject = {
     id: number;
@@ -33,8 +33,8 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
         >
             <div
                 className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white shadow-[0_12px_48px_-28px_rgba(0,87,255,0.35)] transition-shadow duration-500 ${reducedMotion
-                        ? ''
-                        : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.26)]'
+                    ? ''
+                    : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.26)]'
                     }`}
             >
                 <div className="absolute top-4 right-4 z-20 flex gap-1.5 flex-wrap justify-end">
@@ -54,8 +54,8 @@ export default function FeaturedProjectCard({ project }: FeaturedProjectCardProp
                     fill
                     sizes={project.layout.sizes}
                     className={`object-cover transition-transform duration-500 ${reducedMotion
-                            ? ''
-                            : 'group-hover:scale-[1.03] group-hover:-translate-y-1'
+                        ? ''
+                        : 'group-hover:scale-[1.03] group-hover:-translate-y-1'
                         }`}
                 />
             </div>

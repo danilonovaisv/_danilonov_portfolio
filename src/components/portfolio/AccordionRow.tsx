@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { CategoryConfig } from './PortfolioShowcaseSection';
-import { ArrowIcon } from '../shared/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 type Alignment = 'start' | 'center' | 'end';
 

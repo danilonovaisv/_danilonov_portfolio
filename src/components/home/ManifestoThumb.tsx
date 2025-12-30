@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowIcon } from '../shared/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 type ManifestoThumbProps = {
   onDesktopClickAction?: () => void;

@@ -1,134 +1,64 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { motion, type HTMLMotionProps } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
 
-const MotionLink = motion.create(Link);
-
-export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'ref'> {
-  href?: string;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon';
-  loading?: boolean;
-  asExternal?: boolean;
-  target?: string;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    href?: string;
+    variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
+    size?: 'sm' | 'md' | 'lg' | 'icon';
+    children: React.ReactNode;
+    asExternal?: boolean; // Added for compatibility
+    target?: string;
 }
 
-const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = 'primary',
-      size = 'md',
-      href,
-      loading,
-      disabled,
-      children,
-      asExternal,
-      target,
-      ...props
-    },
-    ref
-  ) => {
-    // Base Classes
-    const baseStyles =
-      'inline-flex items-center justify-center gap-2 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ring-offset-white disabled:pointer-events-none disabled:opacity-50 select-none';
+export const Button = ({
+    href,
+    variant = 'primary',
+    size = 'md',
+    className = '',
+    children,
+    asExternal,
+    target,
+    ...props
+}: ButtonProps) => {
+    const baseStyles = 'inline-flex items-center justify-center font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none group';
 
-    // Variants
     const variants = {
-      primary:
-        'bg-primary text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 border border-transparent',
-      secondary:
-        'bg-white text-text-dark border border-neutral-200 hover:bg-neutral-50 shadow-sm',
-      outline:
-        'bg-transparent text-text-dark border border-neutral-200 hover:bg-neutral-50 hover:text-black',
-      ghost: 'bg-transparent text-text-dark hover:bg-neutral-100',
-      link: 'text-primary hover:underline underline-offset-4 p-0 h-auto font-medium shadow-none',
+        primary: 'bg-[#0057FF] text-white hover:bg-[#0046CC]',
+        secondary: 'bg-white text-black hover:bg-gray-100',
+        outline: 'border border-white/20 text-white hover:bg-white/10',
+        ghost: 'text-white hover:bg-white/10',
+        link: 'text-[#0057FF] hover:underline p-0 h-auto',
     };
 
-    // Sizes
     const sizes = {
-      sm: 'min-h-[36px] h-auto py-2 px-4 text-xs font-bold uppercase tracking-wider',
-      md: 'min-h-[44px] h-auto py-2.5 px-6 text-sm font-semibold',
-      lg: 'min-h-[56px] h-auto py-4 px-8 text-base md:text-lg font-semibold',
-      xl: 'min-h-[64px] h-auto py-5 px-10 text-lg md:text-xl font-bold',
-      icon: 'h-11 w-11 p-0',
+        sm: 'px-4 py-2 text-sm',
+        md: 'px-6 py-3 text-base',
+        lg: 'px-8 py-4 text-lg',
+        icon: 'p-2',
     };
 
-    const combinedClassName = cn(
-      baseStyles,
-      variants[variant],
-      sizes[size],
-      // Text wrapping logic for long labels
-      size !== 'icon' && 'text-center text-balance',
-      className
-    );
+    const combinedClasses = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
-    // Motion Props for "Premium" feel (only for solid/outline buttons usually)
-    const isInteractive = variant !== 'link' && !disabled && !loading;
-    const motionProps = isInteractive
-      ? {
-          whileHover: { scale: 1.05 },
-          whileTap: { scale: 0.95 },
-          transition: { type: 'spring' as const, stiffness: 400, damping: 17 },
-        }
-      : {};
-
-    const content = (
-      <>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {children}
-      </>
-    );
-
-    // 1. Link Logic
     if (href) {
-      if (asExternal) {
+        if (asExternal || target === '_blank' || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+            return (
+                <a href={href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined} className={combinedClasses}>
+                    {children}
+                </a>
+            );
+        }
         return (
-          <motion.a
-            ref={ref as React.Ref<HTMLAnchorElement>}
-            href={href}
-            target={target}
-            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-            className={combinedClassName}
-            {...motionProps}
-            {...(props as unknown as HTMLMotionProps<'a'>)}
-          >
-            {content}
-          </motion.a>
+            <Link href={href} className={combinedClasses}>
+                {children}
+            </Link>
         );
-      }
-      return (
-        <MotionLink
-          ref={ref as React.Ref<HTMLAnchorElement>}
-          href={href}
-          className={combinedClassName}
-          {...motionProps}
-          {...(props as unknown as HTMLMotionProps<'a'>)}
-        >
-          {content}
-        </MotionLink>
-      );
     }
 
-    // 2. Button Logic
     return (
-      <motion.button
-        ref={ref as React.Ref<HTMLButtonElement>}
-        className={combinedClassName}
-        disabled={disabled || loading}
-        {...motionProps}
-        {...props}
-      >
-        {content}
-      </motion.button>
+        <button className={combinedClasses} {...props}>
+            {children}
+        </button>
     );
-  }
-);
-
-Button.displayName = 'Button';
-
-export { Button };
+};

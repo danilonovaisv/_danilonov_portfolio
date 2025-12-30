@@ -87,17 +87,20 @@ const CategoryExpanded: FC<CategoryExpandedProps> = ({ category }) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <Button
-            href={`/portfolio?category=${category.id}`}
-            variant="link"
-            className="justify-start gap-3 text-base md:text-lg pl-0 h-auto"
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Ver todos os projetos
-            <ArrowUpRight className="w-5 h-5" />
-          </Button>
+            <Button
+              href={`/portfolio?category=${category.id}`}
+              variant="link"
+              className="justify-start gap-3 text-base md:text-lg pl-0 h-auto"
+            >
+              Ver todos os projetos
+              <ArrowUpRight className="w-5 h-5" />
+            </Button>
+          </motion.div>
         </div>
       </div>
     </motion.div>
