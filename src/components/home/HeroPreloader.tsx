@@ -14,7 +14,10 @@ export default function HeroPreloader() {
         delay: reducedMotion ? 0.5 : 1.5,
         duration: reducedMotion ? 0.35 : 1,
       }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+      onAnimationComplete={() => {
+        // Remove from accessibility tree and block interactions
+      }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center pointer-events-none transition-[visibility] delay-[2500ms] invisible"
       style={{
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
       }}

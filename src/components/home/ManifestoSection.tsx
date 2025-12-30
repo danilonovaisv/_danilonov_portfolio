@@ -1,84 +1,53 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { BRAND } from '@/config/brand';
+import React, { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { ASSETS } from '../../lib/constants';
+import { AlertCircle } from 'lucide-react';
 
-export default function ManifestoSection() {
-  const reducedMotion = useReducedMotion();
-  const containerRef = useRef<HTMLElement | null>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const element = containerRef.current;
-    if (!element) return;
-
-    // Intersection Observer for performance
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          // Once animated, we can disconnect
-          observer.disconnect();
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '50px',
-      }
-    );
-
-    observer.observe(element);
-
-    return () => observer.disconnect();
-  }, []);
+const Manifesto: React.FC = () => {
+  const [hasError, setHasError] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
-    <section
-      id="manifesto"
-      ref={containerRef}
-      className="block md:hidden w-full bg-ghost-void overflow-hidden"
-      style={{ aspectRatio: '16/9' }}
-      aria-label="Manifesto (vídeo)"
-    >
+    <section id="manifesto" className="w-full bg-[#F4F5F7]">
       <motion.div
-        className="relative h-full w-full"
-        initial={{
-          opacity: 0,
-          scale: 1.1,
-          filter: 'blur(4px)',
-        }}
-        animate={
-          isInView
-            ? {
-                opacity: 1,
-                scale: 1,
-                filter: 'blur(0px)',
-              }
-            : undefined
-        }
-        transition={{
-          duration: reducedMotion ? 0.3 : 1.2,
-          ease: [0.25, 0.1, 0.25, 1], // cubic-bezier(0.25, 0.1, 0.25, 1)
-        }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        className="relative w-full aspect-video md:aspect-[21/9] overflow-hidden bg-gray-100 shadow-sm"
       >
-        <video
-          src={BRAND.video.manifesto}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover"
-          style={{
-            // Hardware acceleration
-            transform: 'translate3d(0, 0, 0)',
-            willChange: 'transform',
-          }}
-        />
-
-        {/* Subtle gradient overlay for text readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+        {!hasError ? (
+          <video
+            ref={videoRef}
+            src={ASSETS.videoManifesto}
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls
+            onError={() => setHasError(true)}
+            aria-label="Vídeo Manifesto do Portfólio"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500 p-6 text-center">
+            <AlertCircle className="w-10 h-10 mb-3 opacity-50" />
+            <p className="font-medium">Não foi possível carregar o vídeo.</p>
+            <a
+              href={ASSETS.videoManifesto}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 text-primary text-sm hover:underline underline-offset-4"
+            >
+              Assistir diretamente
+            </a>
+          </div>
+        )}
       </motion.div>
     </section>
   );
-}
+};
+
+export default Manifesto;

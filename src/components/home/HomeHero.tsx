@@ -8,7 +8,7 @@ import HeroPreloader from './HeroPreloader';
 import HeroCopy from './HeroCopy';
 import GhostStage from './GhostStage';
 import ManifestoSection from './ManifestoSection';
-import { ManifestoThumb } from './HeroVideoThumb';
+import ManifestoThumb from './ManifestoThumb';
 
 export default function HomeHero() {
   const reducedMotion = useReducedMotion();
@@ -61,17 +61,18 @@ export default function HomeHero() {
     if (reducedMotion) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const mm = gsap.matchMedia();
 
     const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
       mm.add('(min-width: 768px)', () => {
         const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: hero,
             start: 'top top',
-            end: '+=180%',
+            end: '+=200%',
             pin: true,
-            scrub: true,
+            scrub: 1,
           },
         });
 
@@ -80,27 +81,26 @@ export default function HomeHero() {
           toggleSoundRef.current,
         ].filter(Boolean) as HTMLElement[];
 
+        // Morphing animation conforme spec
         timeline.fromTo(
           wrapper,
           {
-            bottom: '5vw',
-            right: '5vw',
-            width: 'min(520px, 34vw)',
-            height: 'auto',
-            borderRadius: 18,
-            scale: 1,
-            transformOrigin: '100% 100%',
+            width: '320px',
+            height: '180px',
+            bottom: '2rem',
+            right: '2rem',
+            borderRadius: '18px',
+            x: 0,
+            y: 0,
           },
           {
-            top: 0,
-            left: 0,
-            right: 0,
+            width: '100vw',
+            height: '100vh',
             bottom: 0,
-            width: '100%',
-            height: '100%',
-            borderRadius: 0,
-            scale: 1,
-            transformOrigin: '50% 50%',
+            right: 0,
+            borderRadius: '0px',
+            x: 0,
+            y: 0,
             ease: 'none',
           }
         );
@@ -108,17 +108,14 @@ export default function HomeHero() {
         if (overlayTargets.length) {
           timeline.to(
             overlayTargets,
-            { autoAlpha: 0, yPercent: 20, ease: 'none' },
-            0
+            { opacity: 0, y: 20, ease: 'power1.out' },
+            0.1 // Começa logo depois do início da expansão
           );
         }
       });
     }, hero);
 
-    return () => {
-      mm.revert();
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, [reducedMotion]);
 
   // Toggle de som
@@ -139,44 +136,41 @@ export default function HomeHero() {
         <HeroPreloader />
 
         {/* WebGL Layer */}
-        <div className="absolute inset-0 z-20">
+        <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage />
         </div>
 
-        {/* Editorial Copy (SEM animação / SEM binding de scroll) */}
+        {/* Editorial Copy */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
           <HeroCopy />
         </div>
 
-        {/* Manifesto Thumb - Desktop */}
+        {/* Manifesto Thumb Wrapper - Desktop */}
         <div
           ref={videoWrapperRef}
           aria-label="Vídeo manifesto"
-          className="video-wrapper group/video z-30 relative mx-auto mt-10 hidden aspect-9/14 w-[220px] max-w-[360px] flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-in-out md:absolute md:bottom-[5vw] md:right-[5vw] md:flex md:w-[min(520px,34vw)] md:aspect-video md:hover:scale-[1.05]"
+          className="video-wrapper fixed bottom-8 right-8 z-30 hidden md:flex flex-col items-end overflow-hidden rounded-[18px] shadow-[0_20px_80px_rgba(0,0,0,0.55)] cursor-pointer group/video"
           onClick={() => {
             if (typeof window === 'undefined') return;
             if (window.innerWidth >= 768 && heroRef.current) {
-              const top =
-                (heroRef.current?.offsetTop ?? 0) +
-                (heroRef.current?.clientHeight ?? 0) -
-                window.innerHeight;
+              const top = heroRef.current.offsetTop + (heroRef.current.clientHeight * 0.82);
               window.scrollTo({
                 top,
                 behavior: reducedMotion ? 'auto' : 'smooth',
               });
               return;
             }
-
             setMuted((prev) => !prev);
           }}
         >
           <ManifestoThumb ref={videoRef} muted={muted} />
 
-          <div className="pointer-events-none absolute right-3 top-3">
-            <div className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/10">
+          {/* Seta Hover */}
+          <div className="pointer-events-none absolute right-4 top-4 z-40">
+            <div className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/20 backdrop-blur-sm">
               <svg
-                width="18"
-                height="18"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 aria-hidden="true"
@@ -185,14 +179,14 @@ export default function HomeHero() {
                 <path
                   d="M7 17L17 7"
                   stroke="white"
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
                 <path
                   d="M9 7H17V15"
                   stroke="white"
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -200,17 +194,19 @@ export default function HomeHero() {
             </div>
           </div>
 
+          {/* Label Manifesto */}
           <div
             ref={videoTextRef}
-            className="video-text pointer-events-none absolute left-4 bottom-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium uppercase tracking-[0.15em] text-white"
+            className="video-text pointer-events-none absolute left-4 bottom-4 z-40 rounded-full bg-black/60 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-500"
           >
             manifesto
           </div>
 
+          {/* Botão de Som */}
           <button
             ref={toggleSoundRef}
             type="button"
-            className="toggle-sound pointer-events-none absolute left-4 top-4 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            className="toggle-sound absolute left-4 top-4 z-40 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-white opacity-0 transition-all duration-500 hover:bg-black/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 pointer-events-auto"
             onClick={(event) => {
               event.stopPropagation();
               setMuted((prev) => !prev);
@@ -218,7 +214,7 @@ export default function HomeHero() {
           >
             <span>{muted ? 'sound off' : 'sound on'}</span>
             <span
-              className={`inline-block h-2 w-2 rounded-full ${muted ? 'bg-red-500' : 'bg-green-500'}`}
+              className={`inline-block h-2 w-2 rounded-full transition-colors ${muted ? 'bg-white/40' : 'bg-[#0057FF]'}`}
               aria-hidden="true"
             />
           </button>

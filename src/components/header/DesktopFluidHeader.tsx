@@ -140,8 +140,8 @@ export default function DesktopFluidHeader({
                 const isActive = activeHref === item.href;
 
                 const common =
-                  'text-white/80 hover:text-white transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
-                const active = isActive ? 'text-white' : '';
+                  'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
+                const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
                 const underline = isActive
                   ? 'after:w-full'
                   : 'after:w-0 group-hover:after:w-full';
@@ -153,7 +153,7 @@ export default function DesktopFluidHeader({
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`group relative ${common} ${active}`}
+                      className={`group relative ${common} ${textColor}`}
                     >
                       <span className="text-[15px] font-medium tracking-tight">
                         {item.label}
@@ -170,7 +170,7 @@ export default function DesktopFluidHeader({
                     key={item.href}
                     type="button"
                     onClick={() => onNavigate(item.href)}
-                    className={`group relative ${common} ${active}`}
+                    className={`group relative ${common} ${textColor}`}
                   >
                     <span className="text-[15px] font-medium tracking-tight">
                       {item.label}

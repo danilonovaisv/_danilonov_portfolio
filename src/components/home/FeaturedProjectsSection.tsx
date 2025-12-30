@@ -95,17 +95,16 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
       aria-label={`Ver projeto: ${project.title}`}
     >
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white shadow-[0_12px_48px_-28px_rgba(0,87,255,0.35)] transition-shadow duration-500 ${
-          reducedMotion
-            ? ''
-            : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.26)]'
-        }`}
+        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white shadow-[0_12px_48px_-28px_rgba(0,87,255,0.35)] transition-shadow duration-500 ${reducedMotion
+          ? ''
+          : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.26)]'
+          }`}
       >
         <div className="absolute top-4 right-4 z-20 flex gap-1.5 flex-wrap justify-end">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-[#E6EFEF]/80 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-text-dark"
+              className="bg-[#E6EFEF]/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-text-dark opacity-60"
             >
               {tag}
             </span>
@@ -118,11 +117,10 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
           alt={project.title}
           fill
           sizes={project.layout.sizes}
-          className={`object-cover transition-transform duration-500 ${
-            reducedMotion
-              ? ''
-              : 'group-hover:scale-[1.03] group-hover:-translate-y-1'
-          }`}
+          className={`object-cover transition-transform duration-500 ${reducedMotion
+            ? ''
+            : 'group-hover:scale-[1.03] group-hover:-translate-y-1'
+            }`}
         />
       </div>
 
@@ -145,9 +143,8 @@ function ProjectCard({ project }: { project: FeaturedProject }) {
         </div>
 
         <div
-          className={`bg-[#0057FF] w-11 h-11 rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-700 ${
-            reducedMotion ? '' : 'group-hover:translate-x-5'
-          }`}
+          className={`bg-[#0057FF] w-11 h-11 rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-700 ${reducedMotion ? '' : 'group-hover:translate-x-5'
+            }`}
         >
           <ArrowIcon className="w-4 h-4" />
         </div>
@@ -187,11 +184,11 @@ export default function FeaturedProjectsSection() {
     show: reducedMotion
       ? { opacity: 1 }
       : {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-        },
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+      },
   };
 
   return (
@@ -201,19 +198,6 @@ export default function FeaturedProjectsSection() {
       className="bg-[#F4F5F7] py-16 md:py-24"
     >
       <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
-        <motion.h2
-          initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{
-            duration: reducedMotion ? 0.2 : 0.7,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="text-2xl md:text-3xl font-bold text-[#0057FF] text-center mb-12 md:mb-16"
-        >
-          Projetos em Destaque
-        </motion.h2>
-
         <motion.div
           initial={reducedMotion ? 'show' : 'hidden'}
           whileInView="show"

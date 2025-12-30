@@ -88,7 +88,7 @@ export default function MobileStaggeredMenu({
   };
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 z-40">
+    <header className="lg:hidden fixed top-0 left-0 right-0 z-50">
       <div className="h-[56px] px-4 flex items-center justify-between bg-ghost-void/72 backdrop-blur-[10px] border-b border-white/10">
         <Link
           href="/"
@@ -114,19 +114,16 @@ export default function MobileStaggeredMenu({
         >
           <div className="relative h-5 w-6">
             <span
-              className={`absolute left-0 top-1 h-[2px] w-full bg-white transition-transform duration-200 ${
-                isOpen ? 'translate-y-[6px] rotate-45' : ''
-              }`}
+              className={`absolute left-0 top-1 h-[2px] w-full bg-white transition-transform duration-200 ${isOpen ? 'translate-y-[6px] rotate-45' : ''
+                }`}
             />
             <span
-              className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full bg-white transition-opacity duration-200 ${
-                isOpen ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 h-[2px] w-full bg-white transition-opacity duration-200 ${isOpen ? 'opacity-0' : 'opacity-100'
+                }`}
             />
             <span
-              className={`absolute left-0 bottom-1 h-[2px] w-full bg-white transition-transform duration-200 ${
-                isOpen ? '-translate-y-[6px] -rotate-45' : ''
-              }`}
+              className={`absolute left-0 bottom-1 h-[2px] w-full bg-white transition-transform duration-200 ${isOpen ? '-translate-y-[6px] -rotate-45' : ''
+                }`}
             />
           </div>
         </button>
@@ -135,7 +132,7 @@ export default function MobileStaggeredMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-45"
+            className="fixed inset-0 z-50"
             initial="closed"
             animate="open"
             exit="closed"
