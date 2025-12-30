@@ -1,0 +1,12 @@
+/* src/components/portfolio/MosaicCard.module.css */
+.cardWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: var(--aspect-padding);
+}
+
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--card-gradient);
+}

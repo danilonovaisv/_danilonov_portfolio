@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
+import styles from './ClientsBrandsSection.module.css';
 
 const logos = HOME_CONTENT.clients.logos.map((src, i) => ({
   src,
@@ -73,8 +74,7 @@ export default function ClientsBrandsSection() {
                   alt={l.alt}
                   fill
                   unoptimized
-                  className="object-contain transition duration-300"
-                  style={{ filter: 'brightness(0) invert(1)', opacity: 0.92 }}
+                  className={`object-contain transition duration-300 ${styles.clientLogo}`}
                 />
               </motion.div>
             ))}

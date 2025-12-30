@@ -25,8 +25,9 @@ export const InputField: React.FC<InputFieldProps> = ({
       id={id}
       aria-invalid={error ? true : undefined}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`w-full rounded-xl border-none bg-[#F5F5F7] px-6 py-4 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white ${error ? 'ring-2 ring-red-500' : ''
-        } ${className}`}
+      className={`w-full rounded-xl border-none bg-[#F5F5F7] px-6 py-4 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+        error ? 'ring-2 ring-red-500' : ''
+      } ${className}`}
       {...props}
     />
     {error && (
@@ -60,8 +61,9 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
       id={id}
       aria-invalid={error ? true : undefined}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`w-full resize-none rounded-xl border-none bg-[#F5F5F7] px-6 py-4 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white ${error ? 'ring-2 ring-red-500' : ''
-        } ${className}`}
+      className={`w-full resize-none rounded-xl border-none bg-[#F5F5F7] px-6 py-4 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+        error ? 'ring-2 ring-red-500' : ''
+      } ${className}`}
       {...props}
     />
     {error && (

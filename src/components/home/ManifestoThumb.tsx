@@ -1,34 +1,20 @@
+// src/components/home/ManifestoThumb.tsx
+
 'use client';
 
-import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
-import { BRAND } from '@/config/brand';
 
-type ManifestoThumbProps = {
-  muted?: boolean;
-};
-
-const ManifestoThumb = forwardRef<HTMLVideoElement, ManifestoThumbProps>(
-  ({ muted = true }, ref) => {
-    return (
-      <motion.video
-        ref={ref}
-        src={BRAND.video.manifesto}
-        autoPlay
-        muted={muted}
-        loop
-        playsInline
-        className="w-full h-full object-cover"
-        style={{
-          // Hardware acceleration
-          transform: 'translate3d(0, 0, 0)',
-          willChange: 'transform',
-        }}
-      />
-    );
-  }
-);
-
-ManifestoThumb.displayName = 'ManifestoThumb';
-
-export default ManifestoThumb;
+export default function ManifestoThumb() {
+  return (
+    <motion.video
+      src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      className="w-full h-full object-cover cursor-pointer"
+      whileHover={{ scale: 1.05 }}
+      transition={{ duration: 0.5, ease: 'easeInOut' }}
+    />
+  );
+}

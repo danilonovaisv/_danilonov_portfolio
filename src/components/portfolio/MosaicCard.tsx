@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { MosaicItem } from './types';
+import styles from './MosaicCard.module.css';
 
 type MosaicCardProps = {
   item: MosaicItem;
@@ -48,14 +49,14 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
     >
       {/* Wrapper with fixed aspect ratio to prevent CLS */}
       <div
-        className="relative w-full"
-        style={{ paddingBottom: `${paddingBottomPercentage}%` }}
+        className={styles.cardWrapper}
+        style={{ '--aspect-padding': `${paddingBottomPercentage}%` } as React.CSSProperties}
       >
         <div
-          className="absolute inset-0"
+          className={styles.gradientOverlay}
           style={{
-            background: item.gradient,
-          }}
+            '--card-gradient': item.gradient,
+          } as React.CSSProperties}
           aria-hidden="true"
         />
 

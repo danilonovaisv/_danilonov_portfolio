@@ -4,7 +4,8 @@
 
 import { motion } from 'framer-motion';
 import SpectralGhost from './SpectralGhost';
-import { useSpectralGhost } from '@/hooks/useSpectralGhost'; // Caminho para o hook
+import { useSpectralGhost } from '@/hooks/useSpectralGhost';
+import ManifestoThumb from './ManifestoThumb';
 
 const HeroSection = () => {
   const isGhostLoaded = useSpectralGhost();
@@ -13,14 +14,12 @@ const HeroSection = () => {
     <section className="hero-section">
       <div className="hero-content-wrapper">
         {/* O SpectralGhost será o fundo interativo */}
-        <SpectralGhost onLoaded={() => console.log('Ghost loaded')} />
+        <SpectralGhost onLoaded={() => {}} />
 
         {/* Os textos e botão serão sobrepostos ao canvas 3D */}
         {isGhostLoaded && (
           <div className="hero-text-overlay">
-            <h1 className="hero-title">
-              Design, não é só estética.
-            </h1>
+            <h1 className="hero-title">Design, não é só estética.</h1>
             <p className="hero-subtitle">
               [É intenção, é estratégia, é experiência.]
             </p>
@@ -33,6 +32,13 @@ const HeroSection = () => {
               get to know me better →
             </motion.button>
           </div>
+        )}
+
+        {/* Vídeo Manifesto - Desktop */}
+        {isGhostLoaded && (
+          <motion.div className="absolute bottom-10 right-10 z-30 w-[30vw] aspect-video overflow-hidden rounded-2xl shadow-lg hidden md:block">
+            <ManifestoThumb />
+          </motion.div>
         )}
       </div>
     </section>
