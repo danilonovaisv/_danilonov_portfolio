@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
  * Falls back to 0.3 if --ghost-energy CSS variable is not defined
  */
 export function useGhostEnergy(): number {
-  const [energy, setEnergy] = useState(0.3);
+  const [energy, setEnergy] = useState(0.2);
 
   useEffect(() => {
     const update = () => {

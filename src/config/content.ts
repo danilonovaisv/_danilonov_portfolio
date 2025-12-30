@@ -14,18 +14,22 @@ export const HOME_CONTENT = {
       {
         id: 'brand-campaigns',
         label: 'Brand & Campaigns',
+        align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
       {
-        id: 'videos-motions',
-        label: 'Videos & Motions',
+        id: 'videos-motion',
+        label: 'Videos & Motion',
+        align: 'center',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       },
       {
-        id: 'websites-webcampaigns-tech',
-        label: 'Web Campaigns, Websites & Tech',
+        id: 'websites-tech',
+        label: 'Web Campaigns,\nWebsites & Tech',
+        labelMobile: 'Websites & Tech',
+        align: 'start',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
       },

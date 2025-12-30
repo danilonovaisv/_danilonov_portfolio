@@ -37,7 +37,7 @@ export default function GhostCanvas() {
             kernelSize={KernelSize.LARGE}
           />
           <Noise premultiply opacity={0.25} />
-          <Vignette eskil={false} offset={0.45} darkness={0.8} />
+          <Vignette eskil={false} offset={0.55} darkness={0.8} />
         </EffectComposer>
       </Suspense>
     </Canvas>
