@@ -62,7 +62,10 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
     const yTarget = pointer.y * (viewport.height / 4);
     targetPosition.current.set(xTarget, yTarget, 0);
 
-    group.current.position.lerp(targetPosition.current, GHOST_CONFIG.followSpeed);
+    group.current.position.lerp(
+      targetPosition.current,
+      GHOST_CONFIG.followSpeed
+    );
 
     const currentDist = group.current.position.distanceTo(prevPosition.current);
     prevPosition.current.copy(group.current.position);
@@ -71,19 +74,21 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
     const targetEyeOpacity = isMoving ? 1 : 0.3;
 
     if (leftEyeMat.current && rightEyeMat.current) {
-      leftEyeMat.current.opacity += (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
+      leftEyeMat.current.opacity +=
+        (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
       rightEyeMat.current.opacity = leftEyeMat.current.opacity;
     }
 
     if (bodyMaterial.current) {
       const pulse = Math.sin(t * 2) * 0.5;
-      bodyMaterial.current.emissiveIntensity = GHOST_CONFIG.emissiveIntensity + pulse;
+      bodyMaterial.current.emissiveIntensity =
+        GHOST_CONFIG.emissiveIntensity + pulse;
     }
 
     const floatY = Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2;
     bodyMesh.current.position.y = floatY;
 
-    const moveX = (targetPosition.current.x - group.current.position.x);
+    const moveX = targetPosition.current.x - group.current.position.x;
     bodyMesh.current.rotation.z = -moveX * 0.2;
     bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1;
   });
@@ -114,8 +119,14 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
               <meshBasicMaterial color="black" />
             </mesh>
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.20, 16, 16]} />
-              <meshBasicMaterial ref={leftEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
+              <sphereGeometry args={[0.2, 16, 16]} />
+              <meshBasicMaterial
+                ref={leftEyeMat}
+                color={GHOST_CONFIG.eyeColor}
+                transparent
+                opacity={0.3}
+                toneMapped={false}
+              />
             </mesh>
           </group>
           <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
@@ -124,8 +135,14 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
               <meshBasicMaterial color="black" />
             </mesh>
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.20, 16, 16]} />
-              <meshBasicMaterial ref={rightEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
+              <sphereGeometry args={[0.2, 16, 16]} />
+              <meshBasicMaterial
+                ref={rightEyeMat}
+                color={GHOST_CONFIG.eyeColor}
+                transparent
+                opacity={0.3}
+                toneMapped={false}
+              />
             </mesh>
           </group>
         </group>

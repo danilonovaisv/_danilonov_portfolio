@@ -108,7 +108,11 @@ class AnalogDecayEffectImpl extends Effect {
     });
   }
 
-  update(renderer: THREE.WebGLRenderer, inputBuffer: THREE.WebGLRenderTarget, deltaTime: number) {
+  update(
+    renderer: THREE.WebGLRenderer,
+    inputBuffer: THREE.WebGLRenderTarget,
+    deltaTime: number
+  ) {
     const uTime = this.uniforms.get('uTime');
     if (uTime) uTime.value += deltaTime;
   }

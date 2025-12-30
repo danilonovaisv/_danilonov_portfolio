@@ -43,63 +43,71 @@ const revealVertexShader = `
 `;
 
 interface RevealingTextProps {
-    ghostRef: React.RefObject<THREE.Group | null>; // Referência ao objeto do fantasma
+  ghostRef: React.RefObject<THREE.Group | null>; // Referência ao objeto do fantasma
 }
 
 export default function RevealingText({ ghostRef }: RevealingTextProps) {
-    const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-    // Criamos o material apenas uma vez
-    const shaderMaterial = useMemo(() => {
-        return new THREE.ShaderMaterial({
-            uniforms: {
-                uGhostPosition: { value: new THREE.Vector3(0, 0, 0) },
-                uRevealRadius: { value: 3.5 }, // Aumente/diminua para mudar o tamanho da luz
-                uColor: { value: new THREE.Color('#ffffff') }
-            },
-            vertexShader: revealVertexShader,
-            fragmentShader: revealFragmentShader,
-            transparent: true,
-            depthWrite: false, // Importante para não bugar a transparência com outros objetos
-        });
-    }, []);
-
-    useFrame(() => {
-        // Atualiza a posição do fantasma no shader a cada frame
-        if (ghostRef.current && materialRef.current) {
-            // Lerp suave para a luz não "tremer" demais se o fantasma se mover rápido
-            materialRef.current.uniforms.uGhostPosition.value.lerp(ghostRef.current.position, 0.1);
-        }
+  // Criamos o material apenas uma vez
+  const shaderMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        uGhostPosition: { value: new THREE.Vector3(0, 0, 0) },
+        uRevealRadius: { value: 3.5 }, // Aumente/diminua para mudar o tamanho da luz
+        uColor: { value: new THREE.Color('#ffffff') },
+      },
+      vertexShader: revealVertexShader,
+      fragmentShader: revealFragmentShader,
+      transparent: true,
+      depthWrite: false, // Importante para não bugar a transparência com outros objetos
     });
+  }, []);
 
-    return (
-        <group position={[0, -1, -2]}> {/* Z = -2 coloca o texto ATRÁS do fantasma */}
-            <Text
-                font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-                fontSize={0.8}
-                maxWidth={8}
-                lineHeight={1}
-                letterSpacing={-0.05}
-                textAlign="center"
-                anchorX="center"
-                anchorY="middle"
-            >
-                <primitive object={shaderMaterial} ref={materialRef} attach="material" />
-                DESIGN, NÃO É{"\n"}SÓ ESTÉTICA.
-            </Text>
+  useFrame(() => {
+    // Atualiza a posição do fantasma no shader a cada frame
+    if (ghostRef.current && materialRef.current) {
+      // Lerp suave para a luz não "tremer" demais se o fantasma se mover rápido
+      materialRef.current.uniforms.uGhostPosition.value.lerp(
+        ghostRef.current.position,
+        0.1
+      );
+    }
+  });
 
-            <Text
-                font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-                fontSize={0.25}
-                maxWidth={6}
-                position={[0, -1.2, 0]} // Subtexto um pouco mais abaixo
-                textAlign="center"
-                anchorX="center"
-                anchorY="middle"
-            >
-                <primitive object={shaderMaterial} attach="material" />
-                [ É INTENÇÃO, É ESTRATÉGIA, É EXPERIÊNCIA ]
-            </Text>
-        </group>
-    );
+  return (
+    <group position={[0, -1, -2]}>
+      {' '}
+      {/* Z = -2 coloca o texto ATRÁS do fantasma */}
+      <Text
+        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
+        fontSize={0.8}
+        maxWidth={8}
+        lineHeight={1}
+        letterSpacing={-0.05}
+        textAlign="center"
+        anchorX="center"
+        anchorY="middle"
+      >
+        <primitive
+          object={shaderMaterial}
+          ref={materialRef}
+          attach="material"
+        />
+        DESIGN, NÃO É{'\n'}SÓ ESTÉTICA.
+      </Text>
+      <Text
+        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
+        fontSize={0.25}
+        maxWidth={6}
+        position={[0, -1.2, 0]} // Subtexto um pouco mais abaixo
+        textAlign="center"
+        anchorX="center"
+        anchorY="middle"
+      >
+        <primitive object={shaderMaterial} attach="material" />[ É INTENÇÃO, É
+        ESTRATÉGIA, É EXPERIÊNCIA ]
+      </Text>
+    </group>
+  );
 }

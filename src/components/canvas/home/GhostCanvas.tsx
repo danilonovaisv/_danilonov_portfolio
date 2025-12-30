@@ -16,7 +16,7 @@ import {
   Noise,
   Vignette,
   Scanline,
-  ChromaticAberration
+  ChromaticAberration,
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
@@ -66,10 +66,7 @@ export default function GhostCanvas() {
             radialModulation={false}
             modulationOffset={0}
           />
-          <Scanline
-            density={1.5}
-            opacity={0.3}
-          />
+          <Scanline density={1.5} opacity={0.3} />
           <Noise
             opacity={0.15}
             premultiply
