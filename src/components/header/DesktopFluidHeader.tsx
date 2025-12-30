@@ -85,10 +85,7 @@ export default function DesktopFluidHeader({
           className="pointer-events-auto mx-auto w-full max-w-[1100px]"
         >
           <div
-            className="relative overflow-hidden rounded-full shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
-            style={{
-              height: HEADER_TOKENS.desktop.height,
-            }}
+            className="relative overflow-hidden rounded-full shadow-[0_18px_55px_rgba(0,0,0,0.35)] h-16"
           >
             {/* glass background */}
             <div className="absolute inset-0">
@@ -96,7 +93,7 @@ export default function DesktopFluidHeader({
                 <HeaderGlassCanvas accentColor={accentColor} />
               ) : (
                 <div
-                  className="h-full w-full bg-white/12 backdrop-blur-[14px] bg-gradient-to-b from-white/12 to-white/6"
+                  className="h-full w-full bg-white/12 backdrop-blur-[14px] bg-linear-to-b from-white/12 to-white/6"
                 />
               )}
             </div>

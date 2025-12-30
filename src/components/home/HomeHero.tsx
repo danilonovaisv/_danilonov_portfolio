@@ -154,7 +154,7 @@ export default function HomeHero() {
             ease: [0.22, 1, 0.36, 1],
             delay: 1.8, // Wait for preloader fade-out
           }}
-          className="fixed bottom-8 right-8 z-30 hidden md:flex group/video-container"
+          className="fixed bottom-8 right-[clamp(24px,5vw,96px)] z-30 hidden md:flex group/video-container"
           style={{ willChange: 'opacity, transform' }}
         >
           <div
