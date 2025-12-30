@@ -5,20 +5,22 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowIcon } from '../shared/ArrowIcon';
 
 type ManifestoThumbProps = {
-  onDesktopClick?: () => void;
+  onDesktopClickAction?: () => void;
 };
 
 const MANIFESTO_VIDEO_SRC =
   'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
 
-export default function ManifestoThumb({ onDesktopClick }: ManifestoThumbProps) {
+export default function ManifestoThumb({
+  onDesktopClickAction,
+}: ManifestoThumbProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const triggerDesktopClick = (event: MouseEvent | KeyboardEvent) => {
     if (typeof window === 'undefined') return;
-    if (window.innerWidth >= 768 && onDesktopClick) {
+    if (window.innerWidth >= 768 && onDesktopClickAction) {
       event.preventDefault();
-      onDesktopClick();
+      onDesktopClickAction();
     }
   };
 

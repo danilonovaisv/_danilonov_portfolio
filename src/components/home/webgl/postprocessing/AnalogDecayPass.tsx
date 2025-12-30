@@ -1,6 +1,9 @@
-import { forwardRef, useMemo } from 'react';
+// src/components/home/webgl/AnalogDecayPass.tsx
+'use client';
+
 import { Uniform } from 'three';
 import { Effect } from 'postprocessing';
+import { wrapEffect } from '@react-three/postprocessing';
 
 const fragmentShader = `
 uniform float uTime;
@@ -16,15 +19,12 @@ uniform float uLimboMode;
 float random(vec2 st) {
   return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
 }
-
 float random(float x) {
   return fract(sin(x) * 43758.5453123);
 }
-
 float gaussian(float z, float u, float o) {
   return (1.0 / (o * sqrt(2.0 * 3.1415))) * exp(-(((z - u) * (z - u)) / (2.0 * (o * o))));
 }
-
 vec3 grain(vec2 uv, float time, float intensity) {
   float seed = dot(uv, vec2(12.9898, 78.233));
   float noise = fract(sin(seed) * 43758.5453 + time * 2.0);
@@ -36,7 +36,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
   float time = uTime * 1.8;
   vec2 jitteredUV = uv;
 
-  // Analog Jitter
+  // Jitter
   if (uAnalogJitter > 0.01) {
     float jitterAmount = (random(vec2(floor(time * 60.0))) - 0.5) * 0.003 * uAnalogJitter * uAnalogIntensity;
     jitteredUV.x += jitterAmount;
@@ -50,21 +50,17 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     jitteredUV.y += vsyncRoll * vsyncChance;
   }
 
-  // Sample input buffer
   vec4 color = texture2D(inputBuffer, jitteredUV);
 
   // Bleeding
   if (uAnalogBleeding > 0.01) {
     float bleedAmount = 0.012 * uAnalogBleeding * uAnalogIntensity;
     float offsetPhase = time * 1.5 + uv.y * 20.0;
-
     vec2 redOffset = vec2(sin(offsetPhase) * bleedAmount, 0.0);
     vec2 blueOffset = vec2(-sin(offsetPhase * 1.1) * bleedAmount * 0.8, 0.0);
-
     float r = texture2D(inputBuffer, jitteredUV + redOffset).r;
     float g = texture2D(inputBuffer, jitteredUV).g;
     float b = texture2D(inputBuffer, jitteredUV + blueOffset).b;
-
     color = vec4(r, g, b, color.a);
   }
 
@@ -81,9 +77,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     float scanlinePattern = sin(uv.y * scanlineFreq) * 0.5 + 0.5;
     float scanlineIntensity = 0.1 * uAnalogScanlines * uAnalogIntensity;
     color.rgb *= (1.0 - scanlinePattern * scanlineIntensity);
-
-    float horizontalLines = sin(uv.y * scanlineFreq * 0.1) * 0.02 * uAnalogScanlines * uAnalogIntensity;
-    color.rgb *= (1.0 - horizontalLines);
   }
 
   // Vignette
@@ -91,12 +84,6 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     vec2 vignetteUV = (uv - 0.5) * 2.0;
     float vignette = 1.0 - dot(vignetteUV, vignetteUV) * 0.3 * uAnalogVignette * uAnalogIntensity;
     color.rgb *= vignette;
-  }
-
-  // Limbo Mode
-  if (uLimboMode > 0.5) {
-    float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-    color.rgb = vec3(gray);
   }
 
   outputColor = color;
@@ -110,11 +97,11 @@ class AnalogDecayEffectImpl extends Effect {
         ['uTime', new Uniform(0.0)],
         ['uAnalogGrain', new Uniform(0.4)],
         ['uAnalogBleeding', new Uniform(0.9)],
-        ['uAnalogVSync', new Uniform(1.7)],
-        ['uAnalogScanlines', new Uniform(1.0)],
-        ['uAnalogVignette', new Uniform(2.4)],
-        ['uAnalogJitter', new Uniform(0.5)],
-        ['uAnalogIntensity', new Uniform(0.9)],
+        ['uAnalogVSync', new Uniform(0.2)],
+        ['uAnalogScanlines', new Uniform(0.6)],
+        ['uAnalogVignette', new Uniform(1.8)],
+        ['uAnalogJitter', new Uniform(0.2)],
+        ['uAnalogIntensity', new Uniform(1.0)],
         ['uLimboMode', new Uniform(0.0)],
       ]),
     });
@@ -126,9 +113,7 @@ class AnalogDecayEffectImpl extends Effect {
   }
 }
 
-const AnalogDecayPass = forwardRef(function AnalogDecayPass(props: any, ref) {
-  const effect = useMemo(() => new AnalogDecayEffectImpl(), []);
-  return <primitive object={effect} ref={ref} />;
-});
+// wrapEffect cria o componente React automaticamente
+const AnalogDecayPass = wrapEffect(AnalogDecayEffectImpl);
 
 export default AnalogDecayPass;

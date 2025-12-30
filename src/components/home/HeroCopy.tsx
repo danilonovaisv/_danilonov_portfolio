@@ -7,9 +7,8 @@ export function HeroCopy() {
         [BRAND AWARENESS]
       </p>
       <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-        Design, não
-        <br />
-        é só estética.
+        Design, não é
+        <br />só estética.
       </h1>
       <p className="mb-8 text-base md:text-lg">
         [É intenção, é estratégia, é experiência.]

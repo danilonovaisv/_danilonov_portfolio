@@ -1,7 +1,12 @@
 'use client';
 
 import { useCallback, useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'framer-motion';
 import HeroPreloader from './HeroPreloader';
 import HeroCopy from './HeroCopy';
 import ManifestoThumb from './ManifestoThumb';
@@ -27,7 +32,8 @@ export default function HomeHero() {
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
-    const targetTop = sectionEl.offsetTop + sectionEl.offsetHeight - window.innerHeight;
+    const targetTop =
+      sectionEl.offsetTop + sectionEl.offsetHeight - window.innerHeight;
     window.scrollTo({ top: targetTop, behavior: 'auto' });
   }, []);
 
@@ -69,7 +75,7 @@ export default function HomeHero() {
           >
             <div className="pointer-events-none flex h-full w-full items-end justify-end p-6 md:p-10">
               <div className="pointer-events-auto h-[min(36vh,260px)] w-[min(32vw,460px)] overflow-hidden rounded-xl border border-white/5 bg-black/40 shadow-[0_0_40px_rgba(0,0,0,0.85)]">
-                <ManifestoThumb onDesktopClick={handleDesktopClick} />
+                <ManifestoThumb onDesktopClickAction={handleDesktopClick} />
               </div>
             </div>
           </motion.div>

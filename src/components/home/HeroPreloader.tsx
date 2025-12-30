@@ -15,7 +15,10 @@ export default function HeroPreloader() {
     <motion.div
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
-      transition={{ delay: prefersReducedMotion ? 0 : 1.5, duration: fadeDuration }}
+      transition={{
+        delay: prefersReducedMotion ? 0 : 1.5,
+        duration: fadeDuration,
+      }}
       onAnimationComplete={() => setVisible(false)}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]"
       aria-hidden="true"
@@ -25,9 +28,7 @@ export default function HeroPreloader() {
         viewBox="0 0 512 512"
         fill="none"
         initial={{ y: 0, opacity: 1 }}
-        animate={
-          prefersReducedMotion ? {} : { y: [0, -12, 0] }
-        }
+        animate={prefersReducedMotion ? {} : { y: [0, -12, 0] }}
         transition={
           prefersReducedMotion
             ? undefined
@@ -53,7 +54,12 @@ export default function HeroPreloader() {
           transition={
             prefersReducedMotion
               ? undefined
-              : { duration: 1.3, repeat: Infinity, ease: 'easeInOut', delay: 0.1 }
+              : {
+                  duration: 1.3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 0.1,
+                }
           }
         />
         <motion.circle
@@ -70,7 +76,12 @@ export default function HeroPreloader() {
           transition={
             prefersReducedMotion
               ? undefined
-              : { duration: 1.3, repeat: Infinity, ease: 'easeInOut', delay: 0.25 }
+              : {
+                  duration: 1.3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 0.25,
+                }
           }
         />
       </motion.svg>
@@ -81,7 +92,10 @@ export default function HeroPreloader() {
         animate={
           prefersReducedMotion
             ? {}
-            : { opacity: [0.7, 1, 0.7], letterSpacing: ['0.18em', '0.24em', '0.18em'] }
+            : {
+                opacity: [0.7, 1, 0.7],
+                letterSpacing: ['0.18em', '0.24em', '0.18em'],
+              }
         }
         transition={
           prefersReducedMotion

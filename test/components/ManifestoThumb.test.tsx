@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { ManifestoThumb } from '@/components/home/HeroVideoThumb';
+import ManifestoThumb from '@/components/home/ManifestoThumb';
 
 // Mock do IntersectionObserver
 beforeAll(() => {
@@ -36,28 +36,28 @@ describe('ManifestoThumb Component', () => {
   it('deve renderizar a seção do manifesto corretamente', () => {
     render(<ManifestoThumb />);
 
-    // Verifica se o vídeo existe pelo label acessível
-    const video = screen.getByLabelText('Manifesto video presentation');
-    expect(video).toBeInTheDocument();
+    // Verifica se o container principal existe pelo label acessível
+    const container = screen.getByLabelText('Assistir manifesto em fullscreen');
+    expect(container).toBeInTheDocument();
   });
 
-  it('deve renderizar o vídeo com os atributos corretos de acessibilidade', () => {
-    render(<ManifestoThumb />);
+  it('deve renderizar o vídeo com os atributos corretos', () => {
+    const { container } = render(<ManifestoThumb />);
 
-    // Procura o vídeo pelo aria-label definido no componente
-    const video = screen.getByLabelText('Manifesto video presentation');
+    // Procura o vídeo dentro do componente
+    const video = container.querySelector('video');
     expect(video).toBeInTheDocument();
 
     // Verifica atributos essenciais de vídeo
     expect(video).toHaveAttribute('playsInline');
     expect(video).toHaveAttribute('loop');
-    expect((video as HTMLVideoElement).muted).toBe(true); // Verificamos a propriedade funcional
+    expect((video as HTMLVideoElement).muted).toBe(true);
     expect((video as HTMLVideoElement).autoplay).toBe(true);
   });
 
-  it('não deve exibir controles ou responder ao mouse', () => {
-    render(<ManifestoThumb />);
-    const video = screen.getByLabelText('Manifesto video presentation');
+  it('não deve exibir controles', () => {
+    const { container } = render(<ManifestoThumb />);
+    const video = container.querySelector('video');
     expect(video).not.toHaveAttribute('controls');
   });
 });

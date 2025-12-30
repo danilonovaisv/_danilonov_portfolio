@@ -75,7 +75,7 @@ export default function DesktopFluidHeader({
   const nav = useMemo(() => navItems, [navItems]);
 
   return (
-    <header className="hidden lg:block fixed top-6 left-0 right-0 z-[40] pointer-events-none">
+    <header className="hidden lg:block fixed top-6 left-0 right-0 z-40 pointer-events-none">
       <motion.div
         ref={wrapRef}
         onPointerMove={onPointerMove}
@@ -141,7 +141,9 @@ export default function DesktopFluidHeader({
 
                 const common =
                   'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
-                const textColor = isActive ? 'text-[#0057FF]' : 'text-white/80 hover:text-white';
+                const textColor = isActive
+                  ? 'text-[#0057FF]'
+                  : 'text-white/80 hover:text-white';
                 const underline = isActive
                   ? 'after:w-full'
                   : 'after:w-0 group-hover:after:w-full';
