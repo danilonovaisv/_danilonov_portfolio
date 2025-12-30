@@ -21,9 +21,9 @@ export default function HomeHero() {
     offset: ['start start', 'end end'],
   });
 
-  const videoScaleMotion = useTransform(scrollYProgress, [0, 0.85], [0.3, 1]);
-  const videoRadius = useTransform(scrollYProgress, [0, 0.85], [16, 0]);
-  const videoOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
+  const videoScaleMotion = useTransform(scrollYProgress, [0.1, 0.9], [0.32, 1]);
+  const videoRadius = useTransform(scrollYProgress, [0.1, 0.9], [16, 0]);
+  const videoOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 1]); // Sempre visível no início
 
   const handleDesktopClick = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -40,11 +40,11 @@ export default function HomeHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[220vh] overflow-hidden bg-[#06071f]"
+      className="relative h-[220vh] overflow-hidden bg-ghost-void"
       aria-label="Hero institucional de Danilo Novais"
     >
       {/* Fundo radial base */}
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,var(--color-ghost-abyss)_0,var(--color-ghost-void)_60%)]" />
 
       {/* Preloader Ghost Loader (z-50) */}
       <HeroPreloader />
@@ -57,14 +57,14 @@ export default function HomeHero() {
             <GhostStage />
           </div>
 
-          {/* Texto Editorial fixo (sem scroll binding) */}
-          <div className="absolute inset-0 z-10 flex items-center justify-center px-4 text-center">
+          {/* Texto Editorial (Acima do Ghost para garantir leitura) */}
+          <div className="absolute inset-0 z-30 flex items-center justify-center px-4 text-center">
             <HeroCopy />
           </div>
 
           {/* Manifesto Thumb – Desktop (scroll morphing) */}
           <motion.div
-            className="absolute inset-0 z-30 hidden md:block"
+            className="absolute inset-0 z-40 hidden md:block"
             style={{
               opacity: videoOpacity,
               scale: prefersReducedMotion ? 1 : videoScaleMotion,

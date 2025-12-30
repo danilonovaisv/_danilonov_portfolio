@@ -1,26 +1,26 @@
 // src/components/home/webgl/Ghost.tsx
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { useFrame, useThree } from '@react-three/fiber';
+import { ThreeElements, useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
-  bodyColor: '#e0f7fa', // Um branco azulado
+  bodyColor: '#192c55', // Um branco azulado
   glowColor: '#00ffff', // Ciano puro para brilhar muito no Bloom
-  eyeColor: '#ffffff',
-  emissiveIntensity: 4.5, // Aumentei para garantir o "neon" do vídeo
-  floatSpeed: 1.6,
+  eyeColor: '#610ab8',
+  emissiveIntensity: 5.5, // Aumentei para garantir o "neon" do vídeo
+  floatSpeed: 2.6,
   followSpeed: 0.07,
 };
 
-export default function Ghost(props: any) {
+export default function Ghost(props: ThreeElements['group']) {
   const group = useRef<Group>(null);
   const bodyMesh = useRef<Mesh>(null);
   const bodyMaterial = useRef<MeshStandardMaterial>(null);
-  const leftEyeMat = useRef<any>(null);
-  const rightEyeMat = useRef<any>(null);
+  const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
+  const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
 
   const { viewport } = useThree();
   const prevPosition = useRef(new Vector3(0, 0, 0));
@@ -59,7 +59,10 @@ export default function Ghost(props: any) {
     const yTarget = pointer.y * (viewport.height / 4);
     targetPosition.current.set(xTarget, yTarget, 0);
 
-    group.current.position.lerp(targetPosition.current, GHOST_CONFIG.followSpeed);
+    group.current.position.lerp(
+      targetPosition.current,
+      GHOST_CONFIG.followSpeed
+    );
 
     // Física dos olhos
     const currentDist = group.current.position.distanceTo(prevPosition.current);
@@ -69,69 +72,83 @@ export default function Ghost(props: any) {
     const targetEyeOpacity = isMoving ? 1 : 0.3; // Olhos não apagam totalmente, ficam 0.3
 
     if (leftEyeMat.current && rightEyeMat.current) {
-      leftEyeMat.current.opacity += (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
+      leftEyeMat.current.opacity +=
+        (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
       rightEyeMat.current.opacity = leftEyeMat.current.opacity;
     }
 
     // Pulso do brilho
     if (bodyMaterial.current) {
       const pulse = Math.sin(t * 2) * 0.5;
-      bodyMaterial.current.emissiveIntensity = GHOST_CONFIG.emissiveIntensity + pulse;
+      bodyMaterial.current.emissiveIntensity =
+        GHOST_CONFIG.emissiveIntensity + pulse;
     }
 
     // Flutuação e Inclinação
     const floatY = Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2;
     bodyMesh.current.position.y = floatY;
 
-    const moveX = (targetPosition.current.x - group.current.position.x);
+    const moveX = targetPosition.current.x - group.current.position.x;
     bodyMesh.current.rotation.z = -moveX * 0.2;
     bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1;
   });
 
   return (
-      <group ref={group} {...props}>
-        {/* Luzes de borda para dar volume 3D */}
-        <directionalLight position={[-8, 6, -4]} intensity={2} color="#00ffff" />
-        <directionalLight position={[8, -4, -6]} intensity={2} color="#ff00ff" />
+    <group ref={group} {...props}>
+      {/* Luzes de borda para dar volume 3D */}
+      <directionalLight position={[-8, 6, -4]} intensity={10} color="#00b3ff" />
+      <directionalLight position={[10, -4, -6]} intensity={1} color="#9a08fc" />
 
-        <mesh ref={bodyMesh} geometry={ghostGeometry}>
-          <meshStandardMaterial
-              ref={bodyMaterial}
-              color={GHOST_CONFIG.bodyColor}
-              emissive={GHOST_CONFIG.glowColor}
-              emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
-              transparent
-              opacity={0.9}
-              roughness={0.1}
-              metalness={0.2}
-              side={THREE.DoubleSide}
-              toneMapped={false} // CRUCIAL para o Bloom funcionar
-          />
+      <mesh ref={bodyMesh} geometry={ghostGeometry}>
+        <meshStandardMaterial
+          ref={bodyMaterial}
+          color={GHOST_CONFIG.bodyColor}
+          emissive={GHOST_CONFIG.glowColor}
+          emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
+          transparent
+          opacity={0.9}
+          roughness={0.2}
+          metalness={0.2}
+          side={THREE.DoubleSide}
+          toneMapped={false} // CRUCIAL para o Bloom funcionar
+        />
 
-          {/* Olhos */}
-          <group position={[0, 0, 0]}>
-            <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
-              <mesh position={[0, 0, -0.1]}>
-                <sphereGeometry args={[0.45, 16, 16]} />
-                <meshBasicMaterial color="black" />
-              </mesh>
-              <mesh position={[0, 0, 0.1]}>
-                <sphereGeometry args={[0.20, 16, 16]} />
-                <meshBasicMaterial ref={leftEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
-              </mesh>
-            </group>
-            <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
-              <mesh position={[0, 0, -0.1]}>
-                <sphereGeometry args={[0.45, 16, 16]} />
-                <meshBasicMaterial color="black" />
-              </mesh>
-              <mesh position={[0, 0, 0.1]}>
-                <sphereGeometry args={[0.20, 16, 16]} />
-                <meshBasicMaterial ref={rightEyeMat} color={GHOST_CONFIG.eyeColor} transparent opacity={0.3} toneMapped={false} />
-              </mesh>
-            </group>
+        {/* Olhos */}
+        <group position={[0, 0, 0]}>
+          <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
+            <mesh position={[0, 0, -0.1]}>
+              <sphereGeometry args={[0.45, 16, 16]} />
+              <meshBasicMaterial color="black" />
+            </mesh>
+            <mesh position={[0, 0, 0.1]}>
+              <sphereGeometry args={[0.2, 16, 16]} />
+              <meshBasicMaterial
+                ref={leftEyeMat}
+                color={GHOST_CONFIG.eyeColor}
+                transparent
+                opacity={0.3}
+                toneMapped={false}
+              />
+            </mesh>
           </group>
-        </mesh>
-      </group>
+          <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
+            <mesh position={[0, 0, -0.1]}>
+              <sphereGeometry args={[0.45, 16, 16]} />
+              <meshBasicMaterial color="black" />
+            </mesh>
+            <mesh position={[0, 0, 0.1]}>
+              <sphereGeometry args={[0.2, 16, 16]} />
+              <meshBasicMaterial
+                ref={rightEyeMat}
+                color={GHOST_CONFIG.eyeColor}
+                transparent
+                opacity={0.3}
+                toneMapped={false}
+              />
+            </mesh>
+          </group>
+        </group>
+      </mesh>
+    </group>
   );
 }

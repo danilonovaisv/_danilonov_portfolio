@@ -31,50 +31,56 @@ export default function AccordionRow({
     prefersReducedMotion,
     thumb,
 }: AccordionRowProps) {
-    const delay = index * 0.12;
+    const delay = index * 0.15;
 
     return (
         <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
             animate={parentInView && !prefersReducedMotion ? { opacity: 1, y: 0 } : {}}
             transition={
                 prefersReducedMotion
                     ? undefined
-                    : { duration: 0.8, ease: 'easeOut', delay }
+                    : { duration: 1, ease: [0.22, 1, 0.36, 1], delay }
             }
             className="w-full"
         >
             <Link
                 href={`/portfolio?category=${category.id}`}
-                className={`group flex w-full items-center border-t border-[#0057FF] py-10 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7] md:py-14 ${alignmentClasses[alignment]}`}
+                className={`group flex w-full items-center border-t border-[#0057FF] py-10 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0057FF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F4F5F7] md:py-16 ${alignmentClasses[alignment]}`}
                 aria-label={`Ver projetos de ${category.titleDesktop.replace(/\n/g, ' ')}`}
             >
-                <div className="flex items-center gap-7 transition-all duration-300 group-hover:gap-10 md:gap-8">
+                <div className="flex items-center gap-7 transition-all duration-300 group-hover:gap-12 md:gap-14">
                     {/* Thumbnail Revealer - Desktop Only */}
-                    <div className="relative hidden h-40 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72 md:block">
+                    <div className="relative hidden h-40 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-80 md:block">
                         {thumb && (
                             <Image
                                 src={thumb}
                                 alt=""
                                 fill
-                                className="object-cover"
-                                sizes="(min-width: 1024px) 288px, 0px"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                sizes="(min-width: 1024px) 320px, 0px"
                             />
                         )}
                     </div>
 
-                    {/* Category Title */}
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <h3 className="text-3xl font-medium leading-tight text-black md:text-[clamp(2.5rem,4vw,5rem)] md:leading-[1.1]">
+                    {/* Category Title & Indicators */}
+                    <div className="flex items-center gap-6 md:gap-10">
+                        <h3 className="text-3xl font-medium leading-[1.1] tracking-tighter text-black transition-colors duration-500 group-hover:text-[#0057FF] md:text-[clamp(2.5rem,5vw,6rem)]">
                             <span className="hidden whitespace-pre md:inline">
                                 {category.titleDesktop}
                             </span>
                             <span className="md:hidden">{category.titleMobile}</span>
                         </h3>
 
-                        {/* Icon Identifier */}
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0057FF] text-white transition-transform duration-300 group-hover:scale-110 md:h-14 md:w-14">
-                            <ArrowIcon className="-rotate-45 h-5 w-5 transition-transform duration-500 group-hover:rotate-0 md:h-6 md:w-6" />
+                        {/* Dot & Arrow Indicator */}
+                        <div className="flex items-center gap-2 md:gap-4">
+                            {/* Dot Icon [●] */}
+                            <div className="h-2 w-2 rounded-full bg-black transition-colors duration-500 group-hover:bg-[#0057FF] md:h-3 md:w-3" />
+
+                            {/* Arrow Icon [→] */}
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0057FF] text-white transition-all duration-500 group-hover:scale-110 md:h-16 md:w-16">
+                                <ArrowIcon className="-rotate-45 h-5 w-5 transition-transform duration-500 group-hover:rotate-0 md:h-8 md:w-8" />
+                            </div>
                         </div>
                     </div>
                 </div>

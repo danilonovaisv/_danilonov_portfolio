@@ -38,36 +38,68 @@ export const HOME_CONTENT = {
 
   featuredProjects: [
     {
+      id: 1,
       slug: 'magic-radio-branding',
       title: 'Magic — devolvendo a magia ao rádio',
       category: 'branding & campanha',
       client: 'Magic',
       year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      tags: ['Branding', 'Strategy', 'Campaign'],
+      image:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      layout: {
+        h: 'h-[500px]',
+        cols: 'md:col-span-5',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 44vw, 36vw',
+      },
     },
     {
+      id: 2,
       slug: 'branding-project-01',
       title: 'Uma marca ousada e consistente',
       category: 'branding',
       client: 'Cliente confidencial',
       year: 2022,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+      tags: ['Branding', 'Identity'],
+      image:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+      layout: {
+        h: 'h-[500px]',
+        cols: 'md:col-span-7',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 56vw, 58vw',
+      },
     },
     {
+      id: 3,
       slug: 'key-visual-campaign',
       title: 'Key visual para campanha sazonal',
       category: 'campanha',
       client: 'Cliente confidencial',
       year: 2021,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      tags: ['Campaign', 'Print', 'Art Direction'],
+      image:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      layout: {
+        h: 'h-[600px]',
+        cols: 'md:col-span-12',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 94vw, 100vw',
+      },
     },
     {
+      id: 4,
       slug: 'webdesigner-motion',
       title: 'Experiência web em movimento',
       category: 'web & motion',
       client: 'Cliente confidencial',
       year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+      tags: ['Web', 'Motion', 'UX'],
+      image:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+      layout: {
+        h: 'h-[400px]',
+        cols: 'md:col-span-8',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 68vw, 64vw',
+      },
     },
   ],
 

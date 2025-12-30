@@ -1045,7 +1045,6 @@ components/home/
 ---
 
 ## **CALL TO ACTION (if any)**
-- `Ver todos os projetos →` → `/portfolio?category={id}`
 - `let’s build something great →` → `/#contact`
 
 ---
@@ -1142,7 +1141,8 @@ onHover(Stripe) => {
 
 ### SCROLL REVEAL
 - **Trigger:** Intersection Observer (30% no viewport)
-- **Animation:** Staggered Fade Up
+- **Animation:** Staggered Fade Up - e texto fica azul ('#0057FF')
+
   - `opacity: 0 → 1`
   - `translateY: 24px → 0px`
   - `duration: 0.8s ease-out`

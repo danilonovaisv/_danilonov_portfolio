@@ -21,14 +21,13 @@ export default function ManifestoSection() {
         isInView && !prefersReducedMotion ? { opacity: 1, scale: 1, y: 0 } : {}
       }
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="block w-full bg-[#06071f] md:hidden"
-      aria-label="Manifesto em vídeo"
+      className="block w-full bg-ghost-void md:hidden"
     >
       <button
         type="button"
         onClick={() => setMuted((prev) => !prev)}
         className="relative flex aspect-video w-full items-center justify-center overflow-hidden"
-        aria-pressed={!muted}
+        aria-pressed={!muted ? true : false}
         aria-label={
           muted ? 'Ativar som do manifesto' : 'Desativar som do manifesto'
         }
@@ -44,9 +43,8 @@ export default function ManifestoSection() {
         <div className="pointer-events-none absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-white">
           <span>{muted ? 'sound off' : 'sound on'}</span>
           <span
-            className={`h-2 w-2 rounded-full ${
-              muted ? 'bg-white/40' : 'bg-[#00ff9d]'
-            }`}
+            className={`h-2 w-2 rounded-full ${muted ? 'bg-white/40' : 'bg-[#00ff9d]'
+              }`}
           />
         </div>
       </button>

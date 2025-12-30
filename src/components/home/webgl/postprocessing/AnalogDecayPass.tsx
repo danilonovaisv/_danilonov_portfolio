@@ -1,6 +1,7 @@
 // src/components/home/webgl/AnalogDecayPass.tsx
 'use client';
 
+import * as THREE from 'three';
 import { Uniform } from 'three';
 import { Effect } from 'postprocessing';
 import { wrapEffect } from '@react-three/postprocessing';
@@ -107,7 +108,7 @@ class AnalogDecayEffectImpl extends Effect {
     });
   }
 
-  update(renderer: any, inputBuffer: any, deltaTime: number) {
+  update(renderer: THREE.WebGLRenderer, inputBuffer: THREE.WebGLRenderTarget, deltaTime: number) {
     const uTime = this.uniforms.get('uTime');
     if (uTime) uTime.value += deltaTime;
   }
