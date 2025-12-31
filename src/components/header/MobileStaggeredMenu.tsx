@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Instagram, Linkedin, Mail } from 'lucide-react';
 import { SOCIALS } from '@/config/navigation';
 
 export interface NavItem {
@@ -155,20 +156,33 @@ export default function MobileStaggeredMenu({
               <h3 className="text-sm font-medium text-[#0057FF] mb-4 uppercase tracking-wider">
                 Connect
               </h3>
-              <div className="flex gap-6">
+              <div className="flex gap-4">
                 {[
-                  { label: 'LinkedIn', href: SOCIALS.linkedin },
-                  { label: 'Instagram', href: SOCIALS.instagram },
-                  { label: 'Email', href: `mailto:${SOCIALS.emailSecondary}` },
+                  {
+                    label: 'LinkedIn',
+                    href: SOCIALS.linkedin,
+                    icon: <Linkedin className="w-5 h-5" />,
+                  },
+                  {
+                    label: 'Instagram',
+                    href: SOCIALS.instagram,
+                    icon: <Instagram className="w-5 h-5" />,
+                  },
+                  {
+                    label: 'Email',
+                    href: `mailto:${SOCIALS.emailSecondary}`,
+                    icon: <Mail className="w-5 h-5" />,
+                  },
                 ].map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/70 hover:text-white transition-colors"
+                    aria-label={s.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-[#0057FF] hover:border-[#0057FF] hover:scale-110"
                   >
-                    {s.label}
+                    {s.icon}
                   </a>
                 ))}
               </div>

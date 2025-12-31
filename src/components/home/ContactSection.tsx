@@ -11,7 +11,7 @@ import {
   Facebook,
   Globe,
 } from 'lucide-react';
-import { SOCIALS, CONTACT_FORM } from '@/config/navigation';
+import { SOCIALS } from '@/config/navigation';
 import { HOME_CONTENT } from '@/config/content';
 import ContactForm from './contact/ContactForm';
 
@@ -65,17 +65,6 @@ export default function ContactSection() {
       icon: <Globe className="h-5 w-5" aria-hidden="true" />,
     },
   ];
-
-  const formFieldVariants = reducedMotion
-    ? { hidden: { opacity: 1, y: 0 }, show: { opacity: 1, y: 0 } }
-    : {
-        hidden: { opacity: 0, y: 14 },
-        show: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.35 },
-        },
-      };
 
   return (
     <section

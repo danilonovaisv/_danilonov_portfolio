@@ -41,7 +41,7 @@ export function HeroPreloader({ onComplete }: HeroPreloaderProps) {
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
       transition={baseTransition}
-      className="pointer-events-none fixed inset-0 z-[100] flex flex-col items-center justify-center bg-linear-to-br from-[#050509] to-[#111827]"
+      className="pointer-events-none fixed inset-0 z-100 flex flex-col items-center justify-center bg-linear-to-br from-[#050509] to-[#111827]"
     >
       <motion.svg
         className="mb-4"

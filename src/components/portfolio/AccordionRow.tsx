@@ -66,7 +66,7 @@ export default function AccordionRow({
                     {/* Content Container */}
                     <div className="flex items-center gap-4 md:gap-6">
                         {/* Category Title */}
-                        <h3 className="text-3xl font-medium leading-[1.0] tracking-tighter text-white transition-colors duration-500 group-hover:text-[#0057FF] md:text-[clamp(2.5rem,5.5vw,6rem)] text-center md:text-left">
+                        <h3 className="text-3xl font-medium leading-none tracking-tighter text-white transition-colors duration-500 group-hover:text-[#0057FF] md:text-[clamp(2.5rem,5.5vw,6rem)] text-center md:text-left">
                             <span className="hidden whitespace-pre md:inline">
                                 {category.titleDesktop}
                             </span>
