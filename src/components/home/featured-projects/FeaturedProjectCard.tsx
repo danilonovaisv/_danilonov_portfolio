@@ -84,7 +84,7 @@ export default function FeaturedProjectCard({
           className={`bg-[#0057FF] w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 transition-all duration-500 ${
             reducedMotion
               ? ''
-              : 'group-hover:scale-110 group-hover:bg-[#4fe6ff] group-hover:text-[#0d003b]'
+              : 'group-hover:scale-110 group-hover:bg-[#4fe6ff] group-hover:text-[#000022]'
           }`}
         >
           <motion.div

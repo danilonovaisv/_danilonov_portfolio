@@ -5,7 +5,7 @@
 
 export const headerColors = {
   primary: '#0048ff',
-  background: '#0d003b',
+  background: '#000022',
   text: '#fcffff',
   textInverse: '#0e0e0e',
   accent: '#4fe6ff',

@@ -74,7 +74,7 @@ export default function AccordionRow({
                         </h3>
 
                          {/* Arrow Icon [→] - Always Visible */}
-                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0057FF] text-white transition-all duration-500 group-hover:scale-110 group-hover:bg-[#4fe6ff] group-hover:text-[#0d003b] md:h-16 md:w-16">
+                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0057FF] text-white transition-all duration-500 group-hover:scale-110 group-hover:bg-[#4fe6ff] group-hover:text-[#000022] md:h-16 md:w-16">
                             <ArrowIcon className="-rotate-45 h-5 w-5 transition-transform duration-500 group-hover:rotate-0 md:h-8 md:w-8" />
                         </div>
                     </div>

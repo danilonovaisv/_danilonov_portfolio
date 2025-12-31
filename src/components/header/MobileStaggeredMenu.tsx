@@ -93,9 +93,9 @@ export default function MobileStaggeredMenu({
           <Image
             src={logoUrl}
             alt="Danilo"
-            width={32}
-            height={32}
-            className="w-8 h-auto object-contain"
+            width={56}
+            height={56}
+            className="w-14 h-auto object-contain"
             unoptimized
           />
         </Link>
