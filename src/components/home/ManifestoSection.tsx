@@ -1,54 +1,65 @@
 'use client';
 
+// ============================================================================
+// src/components/home/ManifestoSection.tsx
+// Versão mobile do manifesto — seção independente logo abaixo da Hero
+// ============================================================================
+
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useRef, useState } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 
-const MANIFESTO_VIDEO_SRC_MOBILE =
+const MANIFESTO_VIDEO_SRC =
   'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
 
-export default function ManifestoSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-20% 0px' });
+export function ManifestoSection() {
+  const ref = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const isInView = useInView(ref, { once: true });
   const prefersReducedMotion = useReducedMotion();
-  const [muted, setMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
 
   return (
     <motion.section
       id="manifesto"
-      ref={sectionRef}
+      ref={ref}
       initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.95, y: 20 }}
-      animate={
-        isInView && !prefersReducedMotion ? { opacity: 1, scale: 1, y: 0 } : {}
-      }
+      animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="block w-full bg-ghost-void md:hidden"
+      className="block md:hidden w-full bg-[#06071f] aspect-video relative"
     >
+      <video
+        ref={videoRef}
+        src={MANIFESTO_VIDEO_SRC}
+        autoPlay
+        loop
+        muted={isMuted}
+        playsInline
+        className="w-full h-full object-cover"
+      />
+
+      {/* Sound Toggle Button */}
       <button
         type="button"
-        onClick={() => setMuted((prev) => !prev)}
-        className="relative flex aspect-video w-full items-center justify-center overflow-hidden"
-        aria-pressed={!muted ? 'true' : 'false'}
-        aria-label={
-          muted ? 'Ativar som do manifesto' : 'Desativar som do manifesto'
-        }
+        onClick={toggleSound}
+        className="absolute bottom-4 right-4 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white transition-colors hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
+        aria-label={isMuted ? 'Ativar som' : 'Desativar som'}
       >
-        <video
-          src={MANIFESTO_VIDEO_SRC_MOBILE}
-          autoPlay
-          loop
-          muted={muted}
-          playsInline
-          className="h-full w-full object-cover"
-        />
-        <div className="pointer-events-none absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-white">
-          <span>{muted ? 'sound off' : 'sound on'}</span>
-          <span
-            className={`h-2 w-2 rounded-full ${
-              muted ? 'bg-white/40' : 'bg-ghost-green'
-            }`}
-          />
-        </div>
+        {isMuted ? (
+          <VolumeX className="w-5 h-5" />
+        ) : (
+          <Volume2 className="w-5 h-5" />
+        )}
       </button>
     </motion.section>
   );
 }
+
+export default ManifestoSection;

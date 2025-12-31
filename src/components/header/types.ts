@@ -23,7 +23,7 @@ export interface DesktopFluidHeaderProps {
   navItems: NavItem[];
   logoUrl: string;
   height?: number;
-  onNavigate: (href: string) => void;
+  onNavigate: (_href: string) => void;
   activeHref?: string;
   glass?: {
     ior?: number;
@@ -45,6 +45,6 @@ export interface MobileStaggeredMenuProps {
   isFixed?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
-  onNavigate?: (href: string) => void;
+  onNavigate?: (_href: string) => void;
   staggerDelay?: number;
 }

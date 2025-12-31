@@ -1,27 +1,47 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useReducedMotion } from 'framer-motion';
+// ============================================================================
+// src/components/home/GhostStage.tsx
+// Wrapper da camada WebGL, respeitando prefers-reduced-motion / fallback
+// ============================================================================
 
+import * as React from 'react';
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamic import para evitar SSR do Canvas WebGL
 const GhostCanvas = dynamic(
-  () => import('@/components/canvas/home/GhostCanvas'),
+  () =>
+    import('@/components/canvas/home/GhostCanvas').then((mod) => mod.default),
   {
     ssr: false,
     loading: () => (
-      <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+      <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
     ),
   }
 );
 
-export default function GhostStage() {
-  const prefersReducedMotion = useReducedMotion();
+interface GhostStageProps {
+  reducedMotion?: boolean;
+}
 
-  if (prefersReducedMotion) {
-    // Fallback visual leve quando o usuário prefere menos motion
+export function GhostStage({ reducedMotion }: GhostStageProps) {
+  if (reducedMotion) {
+    // Fallback estático em gradiente radial (sem WebGL)
     return (
-      <div className="h-full w-full bg-[radial-gradient(circle_at_center,#0b0d3a_0,#06071f_60%)]" />
+      <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
     );
   }
 
-  return <GhostCanvas />;
+  return (
+    <Suspense
+      fallback={
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
+      }
+    >
+      <GhostCanvas />
+    </Suspense>
+  );
 }
+
+export default GhostStage;
