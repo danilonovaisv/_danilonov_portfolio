@@ -8,7 +8,7 @@ import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
   bodyColor: '#fcffff',
-  glowColor: '#0048ff',
+  glowColor: '#0057ff',
   eyeColor: '#ffffff',
   emissiveIntensity: 5.0,
   floatSpeed: 1.6,
@@ -97,8 +97,16 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
 
   return (
     <group ref={group} {...props}>
-      <directionalLight position={[-8, 6, -4]} intensity={2.5} color="#4fe6ff" />
-      <directionalLight position={[8, -4, -6]} intensity={1.5} color="#0048ff" />
+      <directionalLight
+        position={[-8, 6, -4]}
+        intensity={2.5}
+        color="#4fe6ff"
+      />
+      <directionalLight
+        position={[8, -4, -6]}
+        intensity={1.5}
+        color="#0057ff"
+      />
 
       <mesh ref={bodyMesh} geometry={ghostGeometry}>
         <meshStandardMaterial

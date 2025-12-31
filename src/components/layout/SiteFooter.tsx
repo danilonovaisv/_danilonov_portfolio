@@ -81,7 +81,9 @@ export default function SiteFooter() {
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex flex-col gap-10">
           <div className="flex flex-col gap-4">
-            <p className="text-xs opacity-60 uppercase tracking-widest">Navigation</p>
+            <p className="text-xs opacity-60 uppercase tracking-widest">
+              Navigation
+            </p>
             <nav aria-label="Links do footer">
               <ul className="flex flex-wrap gap-x-6 gap-y-3">
                 {footerLinks.map((l) => (
@@ -103,7 +105,9 @@ export default function SiteFooter() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <p className="text-xs opacity-60 uppercase tracking-widest">Social</p>
+            <p className="text-xs opacity-60 uppercase tracking-widest">
+              Social
+            </p>
             <div className="flex flex-wrap gap-6">
               {social.map((s) => (
                 <a
@@ -120,7 +124,9 @@ export default function SiteFooter() {
           </div>
 
           <div className="pt-8 border-t border-white/10">
-            <p className="text-[10px] opacity-40 uppercase tracking-widest">{FOOTER.copyright}</p>
+            <p className="text-[10px] opacity-40 uppercase tracking-widest">
+              {FOOTER.copyright}
+            </p>
           </div>
         </div>
       </footer>

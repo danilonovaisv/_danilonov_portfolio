@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
@@ -50,7 +56,6 @@ export default function MobileStaggeredMenu({
   const plusVRef = useRef<HTMLSpanElement | null>(null);
   const iconRef = useRef<HTMLSpanElement | null>(null);
 
-
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const closeTweenRef = useRef<gsap.core.Tween | null>(null);
   const spinTweenRef = useRef<gsap.core.Timeline | null>(null);
@@ -72,7 +77,9 @@ export default function MobileStaggeredMenu({
 
       if (!panel || !plusH || !plusV || !icon) return;
 
-      const preLayers = Array.from(preContainer?.querySelectorAll('.sm-prelayer') || []) as HTMLElement[];
+      const preLayers = Array.from(
+        preContainer?.querySelectorAll('.sm-prelayer') || []
+      ) as HTMLElement[];
       preLayerElsRef.current = preLayers;
 
       // Initial offscreen position
@@ -96,10 +103,18 @@ export default function MobileStaggeredMenu({
     closeTweenRef.current?.kill();
     itemEntranceTweenRef.current?.kill();
 
-    const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
-    const numberEls = Array.from(panel.querySelectorAll('.sm-panel-item-number')) as HTMLElement[];
-    const socialTitle = panel.querySelector('.sm-socials-title') as HTMLElement | null;
-    const socialLinks = Array.from(panel.querySelectorAll('.sm-socials-link')) as HTMLElement[];
+    const itemEls = Array.from(
+      panel.querySelectorAll('.sm-panel-itemLabel')
+    ) as HTMLElement[];
+    const numberEls = Array.from(
+      panel.querySelectorAll('.sm-panel-item-number')
+    ) as HTMLElement[];
+    const socialTitle = panel.querySelector(
+      '.sm-socials-title'
+    ) as HTMLElement | null;
+    const socialLinks = Array.from(
+      panel.querySelectorAll('.sm-socials-link')
+    ) as HTMLElement[];
 
     // Reset initial states for entry
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
@@ -111,7 +126,12 @@ export default function MobileStaggeredMenu({
 
     // 1. Pre-layers sweep
     layers.forEach((layer, i) => {
-      tl.fromTo(layer, { xPercent: 100 }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
+      tl.fromTo(
+        layer,
+        { xPercent: 100 },
+        { xPercent: 0, duration: 0.5, ease: 'power4.out' },
+        i * 0.07
+      );
     });
 
     // 2. Main panel entrance
@@ -158,7 +178,12 @@ export default function MobileStaggeredMenu({
     // 4. Socials entrance
     if (socialTitle || socialLinks.length) {
       const socialsStart = panelInsertTime + panelDuration * 0.4;
-      if (socialTitle) tl.to(socialTitle, { opacity: 1, duration: 0.5, ease: 'power2.out' }, socialsStart);
+      if (socialTitle)
+        tl.to(
+          socialTitle,
+          { opacity: 1, duration: 0.5, ease: 'power2.out' },
+          socialsStart
+        );
       if (socialLinks.length) {
         tl.to(
           socialLinks,
@@ -233,22 +258,18 @@ export default function MobileStaggeredMenu({
     }
   }, []);
 
-
-  const animateColor = useCallback(
-    (opening: boolean) => {
-      const btn = toggleBtnRef.current;
-      if (!btn) return;
-      colorTweenRef.current?.kill();
-      const targetColor = opening ? '#000000' : '#ffffff';
-      colorTweenRef.current = gsap.to(btn, {
-        color: targetColor,
-        delay: 0.18,
-        duration: 0.3,
-        ease: 'power2.out',
-      });
-    },
-    []
-  );
+  const animateColor = useCallback((opening: boolean) => {
+    const btn = toggleBtnRef.current;
+    if (!btn) return;
+    colorTweenRef.current?.kill();
+    const targetColor = opening ? '#000000' : '#ffffff';
+    colorTweenRef.current = gsap.to(btn, {
+      color: targetColor,
+      delay: 0.18,
+      duration: 0.3,
+      ease: 'power2.out',
+    });
+  }, []);
 
   const toggleMenu = useCallback(
     (target: boolean) => {
@@ -293,10 +314,13 @@ export default function MobileStaggeredMenu({
           ref={toggleBtnRef}
           onClick={handleToggleClick}
           className="pointer-events-auto flex items-center justify-center w-12 h-12 bg-transparent border-0 cursor-pointer text-white mix-blend-difference"
-          aria-expanded={internalOpen}
+          aria-expanded={internalOpen ? 'true' : 'false'}
           aria-label={internalOpen ? 'Fechar menu' : 'Abrir menu'}
         >
-          <span ref={iconRef} className="relative w-5 h-5 flex items-center justify-center">
+          <span
+            ref={iconRef}
+            className="relative w-5 h-5 flex items-center justify-center"
+          >
             <span
               ref={plusHRef}
               className="absolute w-full h-[2px] bg-current rounded-full"
@@ -309,7 +333,10 @@ export default function MobileStaggeredMenu({
         </button>
       </header>
 
-      <div ref={preLayersRef} className="fixed inset-0 pointer-events-none z-45">
+      <div
+        ref={preLayersRef}
+        className="fixed inset-0 pointer-events-none z-45"
+      >
         {[gradient[0], gradient[1], '#ffffff'].map((it, i) => (
           <div
             key={i}
@@ -321,12 +348,15 @@ export default function MobileStaggeredMenu({
       <aside
         ref={panelRef}
         className="fixed inset-0 h-full w-full bg-white flex flex-col p-24 pb-12 overflow-y-auto z-50"
-        aria-hidden={!internalOpen}
+        aria-hidden={!internalOpen ? 'true' : 'false'}
       >
         <nav className="flex-1 flex flex-col justify-center">
           <ul className="list-none m-0 p-0 flex flex-col gap-8">
             {navItems.map((it, idx) => (
-              <li key={it.href} className="relative overflow-hidden leading-none">
+              <li
+                key={it.href}
+                className="relative overflow-hidden leading-none"
+              >
                 <button
                   className="group relative text-black font-semibold text-5xl sm:text-7xl cursor-pointer leading-none tracking-tight uppercase transition-colors inline-block no-underline text-left w-full"
                   onClick={() => onNavigate(it.href)}
@@ -344,7 +374,9 @@ export default function MobileStaggeredMenu({
         </nav>
 
         <div className="mt-auto pt-12 border-t border-black/5 flex flex-col gap-4">
-          <h3 className="sm-socials-title text-sm font-medium text-[#0057FF] uppercase tracking-wider">Socials</h3>
+          <h3 className="sm-socials-title text-sm font-medium text-[#0057FF] uppercase tracking-wider">
+            Socials
+          </h3>
           <ul className="list-none m-0 p-0 flex flex-row items-center gap-6 flex-wrap">
             {[
               { label: 'LinkedIn', link: SOCIALS.linkedin },
@@ -371,9 +403,15 @@ export default function MobileStaggeredMenu({
           /* Prevents layout shift during animation */
           backface-visibility: hidden;
         }
-        .sm-prelayer-0 { background-color: ${gradient[0]}; }
-        .sm-prelayer-1 { background-color: ${gradient[1]}; }
-        .sm-prelayer-2 { background-color: #ffffff; }
+        .sm-prelayer-0 {
+          background-color: ${gradient[0]};
+        }
+        .sm-prelayer-1 {
+          background-color: ${gradient[1]};
+        }
+        .sm-prelayer-2 {
+          background-color: #ffffff;
+        }
       `}</style>
     </div>
   );

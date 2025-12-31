@@ -11,7 +11,7 @@ export default function AtmosphereVeil() {
       {/* Glow Ghost Blue */}
       <mesh position={[0, 0, -0.8]} scale={[2.6, 2.6, 1]}>
         <sphereGeometry args={[1, 64, 64]} />
-        <meshBasicMaterial color="#0048ff" transparent opacity={0.25} />
+        <meshBasicMaterial color="#0057ff" transparent opacity={0.25} />
       </mesh>
     </group>
   );

@@ -27,7 +27,7 @@ export default function ManifestoSection() {
         type="button"
         onClick={() => setMuted((prev) => !prev)}
         className="relative flex aspect-video w-full items-center justify-center overflow-hidden"
-        aria-pressed={!muted ? 'true' : 'false'}
+        aria-pressed={!muted}
         aria-label={
           muted ? 'Ativar som do manifesto' : 'Desativar som do manifesto'
         }
@@ -43,8 +43,9 @@ export default function ManifestoSection() {
         <div className="pointer-events-none absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-black/55 px-3 py-1.5 text-[11px] uppercase tracking-[0.22em] text-white">
           <span>{muted ? 'sound off' : 'sound on'}</span>
           <span
-            className={`h-2 w-2 rounded-full ${muted ? 'bg-white/40' : 'bg-ghost-green'
-              }`}
+            className={`h-2 w-2 rounded-full ${
+              muted ? 'bg-white/40' : 'bg-ghost-green'
+            }`}
           />
         </div>
       </button>

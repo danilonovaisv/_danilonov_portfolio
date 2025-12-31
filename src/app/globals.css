@@ -6,8 +6,8 @@
   /* Site Theme Colors */
   --color-background: #0d003b;
   --color-foreground: #fcffff;
-  --color-primary: #0048ff;
-  --color-primary-hover: #0037cc;
+  --color-primary: #0057ff;
+  --color-primary-hover: #0043cc;
   --color-secondary: #0e0e0e;
   --color-muted: #f5f5f5;
   --color-white: #ffffff;
@@ -17,8 +17,8 @@
   --color-text-muted: #666666;
 
   /* Section & Component Backgrounds */
-  --color-section-bg: #f4f5f7;
-  --color-section-bg-hover: #ecedf0;
+  --color-section-bg: #f0f0f0;
+  --color-section-bg-hover: #e6e6e6;
   --color-card-bg: #f7f7f7;
 
   /* Focus Ring Colors */
@@ -27,7 +27,7 @@
   /* Ghost/Ethereal Theme Colors */
   --color-ghost-bg: #0d003b;
   --color-ghost-dark: #0d003b;
-  --color-ghost-blue: #0048ff;
+  --color-ghost-blue: #0057ff;
   --color-ghost-green: #4fe6ff;
   --color-ghost-ambient: #0b0d3a;
   --color-ghost-text: #fcffff;
@@ -37,7 +37,7 @@
   /* Ghost/Ethereal Surface Variables (Already in :root) */
   --color-surface-main: #0d003b;
   --color-text-main: #fcffff;
-  --color-accent-blue: #0048ff;
+  --color-accent-blue: #4fe6ff;
 
   /* Typography */
   --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
@@ -107,8 +107,8 @@
   --sidebar-ring: oklch(0.708 0 0);
   --header-height: 72px;
   --header-padding-x: 24px;
-  --header-color-primary: #0048ff;
-  --header-color-gradient-start: #0048ff;
+  --header-color-primary: #0057ff;
+  --header-color-gradient-start: #0057ff;
   --header-color-gradient-end: #4fe6ff;
   --header-color-text: #fcffff;
   --header-color-text-inverse: #0e0e0e;

@@ -55,11 +55,11 @@ export default function HeroPreloader() {
             prefersReducedMotion
               ? undefined
               : {
-                duration: 1.3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 0.1,
-              }
+                  duration: 1.3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 0.1,
+                }
           }
         />
         <motion.circle
@@ -77,11 +77,11 @@ export default function HeroPreloader() {
             prefersReducedMotion
               ? undefined
               : {
-                duration: 1.3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 0.25,
-              }
+                  duration: 1.3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: 0.25,
+                }
           }
         />
       </motion.svg>
@@ -93,9 +93,9 @@ export default function HeroPreloader() {
           prefersReducedMotion
             ? {}
             : {
-              opacity: [0.7, 1, 0.7],
-              letterSpacing: ['0.18em', '0.24em', '0.18em'],
-            }
+                opacity: [0.7, 1, 0.7],
+                letterSpacing: ['0.18em', '0.24em', '0.18em'],
+              }
         }
         transition={
           prefersReducedMotion
@@ -108,7 +108,7 @@ export default function HeroPreloader() {
 
       <div className="h-0.5 w-24 overflow-hidden rounded-full bg-ghost-void">
         <motion.div
-          className="h-full bg-linear-to-r from-[#0048ff] to-[#4fe6ff]"
+          className="h-full bg-linear-to-r from-ghost-blue to-ghost-green"
           initial={{ width: '0%' }}
           animate={{ width: '100%' }}
           transition={{

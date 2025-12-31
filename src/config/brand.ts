@@ -4,7 +4,7 @@ export const BRAND = {
 
   // Design Tokens
   colors: {
-    primary: '#0048ff', // Destaque e interação
+    primary: '#0057ff', // Ghost Blue — destaque e interação
     bg: '#0d003b', // Fundo padrão (Surface Main)
     text: '#fcffff', // Texto padrão (Text Main)
     textInverse: '#0e0e0e',
