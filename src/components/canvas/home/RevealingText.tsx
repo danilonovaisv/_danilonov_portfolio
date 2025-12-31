@@ -1,9 +1,9 @@
-// src/components/home/webgl/RevealingText.tsx
+// src/components/canvas/home/postprocessing/RevealingText.tsx
 'use client';
 
 import { Text } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useRef, useMemo } from 'react';
+import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
 // Shader personalizado para o efeito de "Reveal"

@@ -49,23 +49,23 @@ export default function AccordionRow({
                 className={`group flex w-full items-center border-t border-[#0057FF]/30 py-10 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:py-16 ${alignmentClasses[alignment]}`}
                 aria-label={`Ver projetos de ${category.titleDesktop.replace(/\n/g, ' ')}`}
             >
-                <div className="flex items-center gap-7 transition-all duration-300 group-hover:gap-12 md:gap-14">
+                <div className="flex w-fit items-center gap-7 transition-all duration-300 group-hover:gap-12 md:gap-14 max-w-[90%] md:max-w-[80%]">
                     {/* Thumbnail Revealer - Desktop Only */}
-                    <div className="relative hidden h-40 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-80 md:block">
+                    <div className="relative hidden h-32 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-64 md:block">
                         {thumb && (
                             <Image
                                 src={thumb}
                                 alt=""
                                 fill
                                 className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                sizes="(min-width: 1024px) 320px, 0px"
+                                sizes="(min-width: 1024px) 256px, 0px"
                             />
                         )}
                     </div>
 
                     {/* Category Title & Indicators */}
                     <div className="flex items-center gap-6 md:gap-10">
-                        <h3 className="text-3xl font-medium leading-[1.1] tracking-tighter text-white transition-colors duration-500 group-hover:text-[#0057FF] md:text-[clamp(2.5rem,5vw,6rem)]">
+                        <h3 className="text-3xl font-medium leading-[1.0] tracking-tighter text-white transition-colors duration-500 group-hover:text-[#0057FF] md:text-[clamp(2.5rem,5.5vw,6rem)]">
                             <span className="hidden whitespace-pre md:inline">
                                 {category.titleDesktop}
                             </span>
@@ -73,7 +73,7 @@ export default function AccordionRow({
                         </h3>
 
                         {/* Dot & Arrow Indicator */}
-                        <div className="flex items-center gap-2 md:gap-4">
+                        <div className="flex items-center gap-2 md:gap-4 shrink-0">
                             {/* Dot Icon [●] - Blue by default in the image */}
                             <div className="h-2 w-2 rounded-full bg-[#0057FF] md:h-3 md:w-3" />
 

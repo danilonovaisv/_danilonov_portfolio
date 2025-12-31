@@ -4,7 +4,7 @@ import { useMemo, useRef } from 'react';
 import type { Points } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-const PARTICLE_COUNT = 260;
+const PARTICLE_COUNT = 360;
 
 export default function Particles() {
   const pointsRef = useRef<Points | null>(null);
@@ -32,7 +32,7 @@ export default function Particles() {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        color="#FFFFFF"
+        color="#f501d3F"
         size={0.02}
         sizeAttenuation
         transparent

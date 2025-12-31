@@ -5,7 +5,7 @@ import type { InstancedMesh, Object3D } from 'three';
 import { Object3D as ThreeObject3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-const FIREFLY_COUNT = 36;
+const FIREFLY_COUNT = 46;
 
 export default function Fireflies() {
   const meshRef = useRef<InstancedMesh | null>(null);
@@ -50,7 +50,7 @@ export default function Fireflies() {
       ref={meshRef}
       args={[undefined as any, undefined as any, FIREFLY_COUNT]}
     >
-      <sphereGeometry args={[1, 6, 6]} />
+      <sphereGeometry args={[1, 3, 6]} />
       <meshBasicMaterial color="#8705f2" transparent opacity={0.8} />
     </instancedMesh>
   );

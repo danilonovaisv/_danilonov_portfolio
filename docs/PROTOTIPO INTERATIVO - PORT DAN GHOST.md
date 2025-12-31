@@ -1021,7 +1021,7 @@ mobile-only    ManifestoSection    Fullscreen abaixo da Hero
 
 
 ## **PRIMARY MESSAGE / HEADLINE**
-- `portfólio (Branco) showcase (#5227FF)`
+- `portfólio (Branco) showcase (#5227FF)` - centralizado
 
 ---
 

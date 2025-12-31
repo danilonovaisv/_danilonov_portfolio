@@ -10,8 +10,8 @@ const GHOST_CONFIG = {
   bodyColor: '#0048ff',
   glowColor: '#4fe6ff',
   eyeColor: '#f501d3',
-  emissiveIntensity: 5.0,
-  floatSpeed: 1.6,
+  emissiveIntensity: 8.0,
+  floatSpeed: 2.6,
   followSpeed: 0.07,
 };
 
@@ -134,7 +134,7 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
                 ref={leftEyeMat}
                 color={GHOST_CONFIG.eyeColor}
                 transparent
-                opacity={0.3}
+                opacity={0.9}
                 toneMapped={false}
               />
             </mesh>

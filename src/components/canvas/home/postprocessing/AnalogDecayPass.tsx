@@ -1,4 +1,4 @@
-// src/components/home/webgl/AnalogDecayPass.tsx
+// src/components/canvas/home/postprocessing/AnalogDecayPass.tsx
 'use client';
 
 import * as THREE from 'three';
@@ -81,7 +81,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
   }
 
   // Vignette
-  if (uAnalogVignette > 0.01) {
+  if (uAnalogVignette > 0.6) {
     vec2 vignetteUV = (uv - 0.5) * 2.0;
     float vignette = 1.0 - dot(vignetteUV, vignetteUV) * 0.3 * uAnalogVignette * uAnalogIntensity;
     color.rgb *= vignette;
@@ -95,14 +95,14 @@ class AnalogDecayEffectImpl extends Effect {
   constructor() {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
-        ['uTime', new Uniform(0.0)],
-        ['uAnalogGrain', new Uniform(0.4)],
-        ['uAnalogBleeding', new Uniform(0.9)],
-        ['uAnalogVSync', new Uniform(0.2)],
+        ['uTime', new Uniform(0.2)],
+        ['uAnalogGrain', new Uniform(1.4)],
+        ['uAnalogBleeding', new Uniform(3.9)],
+        ['uAnalogVSync', new Uniform(2.2)],
         ['uAnalogScanlines', new Uniform(0.6)],
-        ['uAnalogVignette', new Uniform(1.8)],
+        ['uAnalogVignette', new Uniform(4.8)],
         ['uAnalogJitter', new Uniform(0.2)],
-        ['uAnalogIntensity', new Uniform(1.0)],
+        ['uAnalogIntensity', new Uniform(3.0)],
         ['uLimboMode', new Uniform(0.0)],
       ]),
     });

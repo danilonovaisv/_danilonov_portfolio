@@ -26,11 +26,24 @@ export default function PortfolioShowcaseSection() {
       className="bg-background py-24 md:py-32 relative overflow-hidden"
     >
       <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
+        {/* Headline da Sessão - Centralizado */}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-20 md:mb-32 flex justify-center"
+        >
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter lowercase leading-[0.9] text-center">
+            <span className="text-white">portfólio</span>{' '}
+            <span className="text-[#5227FF]">showcase</span>
+          </h2>
+        </motion.div>
 
         <div className="relative">
-          {/* Floating Label - Desktop Only - Alinhado ao primeiro item */}
-          <div className="pointer-events-none absolute left-0 top-[18px] hidden md:block z-20">
-            <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#4fe6ff]">
+          {/* Floating Label - LightBlue (#4fe6ff) - Posicionado ao lado do primeiro item */}
+          <div className="pointer-events-none absolute left-0 top-[-40px] md:top-[24px] z-20">
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#4fe6ff]">
               [what we love working on]
             </span>
           </div>
