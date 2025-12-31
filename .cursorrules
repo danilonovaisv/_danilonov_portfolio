@@ -1,0 +1,18 @@
+# Danilo Novais - Portfolio Agent Rules
+
+## Technology Stack (Sync with Project Reality)
+- **Framework:** Next.js 14+ (App Router).
+- **Styling:** Tailwind CSS **v4**. 
+  - ALWAYS use v4 syntax for gradients: `bg-linear-to-r` instead of `bg-gradient-to-r`.
+  - Use project tokens: `bg-ghost-void`, `text-text-muted`, `bg-primary`.
+- **3D/Motion:** React Three Fiber + Framer Motion.
+
+## Design Principles
+- **Atmosphere:** "Ghost Blue" etéreo. Use `#0057FF` for primary glows and `#06071f` for deep backgrounds.
+- **A11y:** Respect `prefers-reduced-motion`. Disable WebGL and complex parallax when active.
+- **Micro-interactions:** Keep them premium but subtle. Follow CSS module patterns for complex header animations.
+
+## Code Standards
+- **Imports:** Remove unused imports. Use `@/` alias for src.
+- **TS:** Strict types. Avoid `any`.
+- **CSS:** Prefer Tailwind utility classes. Use CSS Modules for complex logic-heavy animations (e.g., Header).

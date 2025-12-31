@@ -5,7 +5,6 @@ import { useFrame } from '@react-three/fiber';
 import { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
-// O Fragment Shader calcula a distância entre o pixel do texto e o fantasma
 const revealFragmentShader = `
   varying vec3 vWorldPosition;
   uniform vec3 uGhostPosition;
@@ -16,14 +15,13 @@ const revealFragmentShader = `
   void main() {
     float dist = distance(vWorldPosition.xy, uGhostPosition.xy);
     
-    // Cria uma "lanterna": 1.0 (visível) perto do centro, 0.0 (invisível) longe
-    // uRevealRadius define o tamanho da luz
-    float alpha = 1.0 - smoothstep(uRevealRadius * 0.4, uRevealRadius, dist);
+    // Suavização da luz (Lanterna)
+    float alpha = 1.0 - smoothstep(uRevealRadius * 0.2, uRevealRadius, dist);
     
-    // Aplica a opacidade calculada
-    alpha = clamp(alpha, 0.0, 1.0) * uOpacity;
+    // GARANTIA: Nunca deixa o texto totalmente invisível (min 0.05) para debug
+    float finalAlpha = max(alpha, 0.05) * uOpacity;
     
-    gl_FragColor = vec4(uColor, alpha);
+    gl_FragColor = vec4(uColor, finalAlpha);
   }
 `;
 
@@ -43,42 +41,33 @@ interface RevealingTextProps {
 export default function RevealingText({ ghostRef }: RevealingTextProps) {
     const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-    // Configuramos o material do texto
     const shaderMaterial = useMemo(() => {
         return new THREE.ShaderMaterial({
             uniforms: {
                 uGhostPosition: { value: new THREE.Vector3(0, 0, 0) },
-                uRevealRadius: { value: 4.0 }, // Aumente este valor para aumentar a área iluminada
+                uRevealRadius: { value: 6.0 }, // Aumentei o raio para ser mais fácil de ver
                 uColor: { value: new THREE.Color('#ffffff') },
-                uOpacity: { value: 1.0 },
+                uOpacity: { value: 1.0 }
             },
             vertexShader: revealVertexShader,
             fragmentShader: revealFragmentShader,
             transparent: true,
-            depthWrite: false, // Importante para não bugar com o fantasma transparente
+            depthWrite: false,
         });
     }, []);
 
     useFrame(() => {
         if (ghostRef.current && materialRef.current) {
-            // Atualiza a posição da luz suavemente seguindo o fantasma
-            materialRef.current.uniforms.uGhostPosition.value.lerp(
-                ghostRef.current.position,
-                0.1
-            );
+            // Sincroniza a posição da luz com o fantasma
+            materialRef.current.uniforms.uGhostPosition.value.lerp(ghostRef.current.position, 0.1);
         }
     });
 
-    // URL da fonte (pode ser substituído por uma fonte local em /public/fonts se preferir)
-    const fontUrl =
-        'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff';
-
+    // REMOVI A PROPRIEDADE 'font' para usar a fonte padrão (Arial/Roboto)
+    // Isso evita erros de carregamento de URL
     return (
-        <group position={[0, -0.8, -1.5]}>
-            {' '}
-            {/* Z=-1.5 coloca o texto "no fundo", atrás do fantasma */}
+        <group position={[0, -0.5, 0]}> {/* Z=0 para garantir que não está escondido no fundo */}
             <Text
-                font={fontUrl}
                 fontSize={0.8}
                 maxWidth={8}
                 lineHeight={1.1}
@@ -88,20 +77,19 @@ export default function RevealingText({ ghostRef }: RevealingTextProps) {
                 anchorY="middle"
             >
                 <primitive object={shaderMaterial} attach="material" />
-                Design, não é{'\n'}só estética.
+                DESIGN, NÃO É{"\n"}SÓ ESTÉTICA.
             </Text>
+
             <Text
-                font={fontUrl}
                 fontSize={0.25}
                 maxWidth={6}
-                position={[0, -1.4, 0]}
+                position={[0, -1.2, 0]}
                 textAlign="center"
                 anchorX="center"
                 anchorY="middle"
-                letterSpacing={0.1}
             >
-                <primitive object={shaderMaterial} attach="material" />[ É INTENÇÃO, É
-                ESTRATÉGIA, É EXPERIÊNCIA ]
+                <primitive object={shaderMaterial} attach="material" />
+                [ É INTENÇÃO, É ESTRATÉGIA, É EXPERIÊNCIA ]
             </Text>
         </group>
     );

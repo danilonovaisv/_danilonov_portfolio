@@ -5,10 +5,11 @@ export const BRAND = {
   // Design Tokens
   colors: {
     primary: '#0057FF', // Destaque e interação
-    bg: '#f0f0f0', // Fundo padrão neutro
-    text: '#000000', // Texto padrão
-    textInverse: '#FFFFFF', // Texto sobre fundo escuro
-    neutralLight: '#F5F5F5', // Fundo secundário
+    bg: '#050505', // Fundo padrão (Surface Main)
+    text: '#d9dade', // Texto padrão (Text Main)
+    textInverse: '#FFFFFF',
+    ghostVoid: '#06071f', // Profundidade Ghost
+    neutralLight: '#1a1a1a', // Fundo secundário escuro
   },
 
   typography: {

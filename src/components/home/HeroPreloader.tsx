@@ -20,7 +20,7 @@ export default function HeroPreloader() {
         duration: fadeDuration,
       }}
       onAnimationComplete={() => setVisible(false)}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-[#0a0a0a] to-[#1a1a1a]"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-linear-to-br from-[#0a0a0a] to-[#1a1a1a]"
       aria-hidden="true"
     >
       <motion.svg
@@ -44,7 +44,7 @@ export default function HeroPreloader() {
           cx="210"
           cy="190"
           r="26"
-          fill="#06071f"
+          className="fill-ghost-void"
           initial={{ scale: 1, opacity: 0.7 }}
           animate={
             prefersReducedMotion
@@ -55,18 +55,18 @@ export default function HeroPreloader() {
             prefersReducedMotion
               ? undefined
               : {
-                  duration: 1.3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: 0.1,
-                }
+                duration: 1.3,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 0.1,
+              }
           }
         />
         <motion.circle
           cx="302"
           cy="190"
           r="26"
-          fill="#06071f"
+          className="fill-ghost-void"
           initial={{ scale: 1, opacity: 0.7 }}
           animate={
             prefersReducedMotion
@@ -77,11 +77,11 @@ export default function HeroPreloader() {
             prefersReducedMotion
               ? undefined
               : {
-                  duration: 1.3,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                  delay: 0.25,
-                }
+                duration: 1.3,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 0.25,
+              }
           }
         />
       </motion.svg>
@@ -93,9 +93,9 @@ export default function HeroPreloader() {
           prefersReducedMotion
             ? {}
             : {
-                opacity: [0.7, 1, 0.7],
-                letterSpacing: ['0.18em', '0.24em', '0.18em'],
-              }
+              opacity: [0.7, 1, 0.7],
+              letterSpacing: ['0.18em', '0.24em', '0.18em'],
+            }
         }
         transition={
           prefersReducedMotion
@@ -106,9 +106,9 @@ export default function HeroPreloader() {
         Summoning spirits
       </motion.p>
 
-      <div className="h-0.5 w-24 overflow-hidden rounded-full bg-[#06071f]">
+      <div className="h-0.5 w-24 overflow-hidden rounded-full bg-ghost-void">
         <motion.div
-          className="h-full bg-gradient-to-r from-[#0057FF] to-[#5227FF]"
+          className="h-full bg-linear-to-r from-[#0057FF] to-[#5227FF]"
           initial={{ width: '0%' }}
           animate={{ width: '100%' }}
           transition={{

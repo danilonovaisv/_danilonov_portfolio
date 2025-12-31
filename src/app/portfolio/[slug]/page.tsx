@@ -48,18 +48,18 @@ export default async function ProjectPage({ params }: Props) {
               {project.title}
             </h1>
             <div className="flex flex-col gap-1 text-right md:text-right">
-              <span className="text-xs font-bold tracking-widest uppercase text-[#666666]">Client</span>
+              <span className="text-xs font-bold tracking-widest uppercase text-text-muted">Client</span>
               <span className="text-lg md:text-xl font-medium">{project.client}</span>
             </div>
           </div>
 
           <div className="flex gap-4 md:gap-8 border-t border-white/10 pt-6 mt-6">
             <div>
-              <span className="block text-xs font-bold tracking-widest uppercase text-[#666666] mb-1">Category</span>
+              <span className="block text-xs font-bold tracking-widest uppercase text-text-muted mb-1">Category</span>
               <span className="text-base uppercase tracking-wide">{project.category}</span>
             </div>
             <div>
-              <span className="block text-xs font-bold tracking-widest uppercase text-[#666666] mb-1">Year</span>
+              <span className="block text-xs font-bold tracking-widest uppercase text-text-muted mb-1">Year</span>
               <span className="text-base uppercase tracking-wide">{project.year}</span>
             </div>
           </div>
