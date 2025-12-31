@@ -44,7 +44,7 @@ export default function FeaturedProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-[#E6EFEF]/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-[#111111]"
+              className="bg-[#E6EFEF]/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-text-dark"
             >
               {tag}
             </span>

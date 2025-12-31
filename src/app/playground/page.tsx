@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function LayoutPlayground() {
   const [opacity, setOpacity] = useState(0.5);
@@ -73,12 +74,13 @@ export default function LayoutPlayground() {
 
       {/* The Reference Image Overlay */}
       {isOverlayVisible && (
-        <div
+        <motion.div
           className="fixed inset-0 z-50 pointer-events-none"
-          style={{
+          animate={{
             opacity,
             mixBlendMode: blendMode as any,
           }}
+          transition={{ duration: 0.2 }}
         >
           <div className="relative w-full h-full max-w-[1680px] mx-auto">
             <Image

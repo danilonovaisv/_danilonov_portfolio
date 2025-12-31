@@ -27,7 +27,7 @@ export default function ManifestoSection() {
         type="button"
         onClick={() => setMuted((prev) => !prev)}
         className="relative flex aspect-video w-full items-center justify-center overflow-hidden"
-        aria-pressed={!muted}
+        aria-pressed={!muted ? 'true' : 'false'}
         aria-label={
           muted ? 'Ativar som do manifesto' : 'Desativar som do manifesto'
         }

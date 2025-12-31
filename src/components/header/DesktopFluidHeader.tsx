@@ -84,12 +84,7 @@ export default function DesktopFluidHeader({
         style={{ x, scaleX, scaleY }}
         className="pointer-events-auto mx-auto w-[min(1100px,calc(100vw-48px))]"
       >
-        <div
-          className={styles.headerContainer}
-          style={{
-            height: HEADER_TOKENS.desktop.height,
-          }}
-        >
+        <div className={`${styles.headerContainer} h-16`}>
           {/* glass background */}
           <div className="absolute inset-0">
             {!disableWebGL && !reducedMotion ? (
