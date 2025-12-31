@@ -30,11 +30,15 @@ Ordem das seções da Home
 🎨 Design Tokens
 
 Colors
-• primary: #0057FF — Cor de destaque e interação
-• bg: #f0f0f0 — Fundo padrão neutro
-• text: #000000 — Texto padrão
-• textInverse: #FFFFFF — Texto sobre fundo escuro
+• primary: #0048ff — Cor de destaque e interação
+• Background: #0d003b — fundo escuro
+• Background para formns: #f0f0f0 — Fundo padrão neutro
+• Textopadrão: #fcffff — Texto padrão
+• textInverse: #0e0e0e — Texto sobre fundo claro
+• TextoDestac: #0048ff — Texto padrão
 • neutralLight: #F5F5F5 — Fundo secundário e elementos suaves
+• CTA: #0048ff 
+• ElementsDetalis: #4fe6ff
 
 ⸻
 
@@ -70,11 +74,10 @@ Hero
 • Título: Você não vê o design.
 • Subtítulo: Mas ele vê você.
 • CTA (label): step inside →
-• CTA secundário (scroll): #manifesto
 • WebGL Atmosférico: Ghost abstrato + pós-processamento
 
 Tipografia:
-• Fonte: TT Norms Pro
+• Fonte: TT Norms Pro - black and medium
 
 Manifesto (Vídeo)
 • Vídeo URL (usado na Hero e na seção Manifesto):
@@ -226,6 +229,10 @@ Footer
 ## ESPECIFICAÇÃO POR SEÇÃO (TEMPLATE COMPLETO)
 ---
 
+
+
+
+
 # **SECTION NAME: Header (SiteHeader)**
 ### Desktop: Fluid Glass Header (WebGL)  
 ### Mobile & Tablet: Staggered Menu Header
@@ -267,12 +274,12 @@ Footer
 
 ## **LINKS DE DIRECIONAMENTO:**
 - Logo - lado esquerdo
- - **Favicon Light:** - Desktop: ["https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg"]
- - **Logo Dark:**  - Mobile ["https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg"]
-- Navigation links:
+ - **Favicon Light:** - Desktop e Mobile: ["https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg"]
+ 
+  - Navigation links:
   - Home → `/` ou `#hero` - sempre retorna para homepage ["portfoliodanilo.com"]
   - Sobre → `/sobre` - ["portfoliodanilo.com/sobre"]
-  - Portfolio → `/portfolio` - ["portfoliodanilo.com/portifolio"]
+  - Portfólio → `/portfolio` - ["portfoliodanilo.com/portifolio"]
   - Contato → `#contact` - sempre é direcionado para sessão contato de cada uma das paginas
   
   
@@ -529,7 +536,7 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favi
 
 
 
-#  **HERO + MANIFESTO — Portfólio Institucional de Danilo Novais**
+#  **SECTION NAME: HERO + MANIFESTO**
 
 ## SECTION NAME
 **Hero (Ghost Atmosphere + Texto Editorial + Manifesto Subsection)**
@@ -551,10 +558,10 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favi
 | Token | Value | Description |
 |--------|--------|-------------|
 | `primary` | `#0057FF` | Cor principal da atmosfera “Ghost Blue” |
-| `accent` | `#5227FF` | Glow e emissive secundário |
-| `bg` | `#06071f` | Fundo escuro de base |
+| `accent` | `#4fe6ff` | Glow e emissive secundário |
+| `bg` | `#0d003b` | Fundo escuro de base |
 | `neutral` | `#0b0d3a` | Gradiente de transição para o fundo |
-| `text` | `#d9dade` | Texto editorial principal |
+| `text` | `#FFFFFF` | Texto editorial principal |
 | `highlight` | `#FFFFFF` | Picos de luminosidade e brilho de partículas |
 
 ---
@@ -574,10 +581,10 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favi
 | Ordem | Layer | Descrição |
 |-------|--------|------------|
 | **z-50** | 🩵 **Preloader (Ghost Loader)** | SVG animado “Summoning spirits” com barra de progresso |
-| **z-30** | 🎞️ **Thumb Vídeo Manifesto** | Vídeo interativo flutuante (subcategoria da Hero) |
+| **z-30** | 🎞️ **Thumb Vídeo Manifesto** | Vídeo interativo flutuante - auto-looping - 16:9 - posição inicial canto inferior direito da HERO |
 | **z-20** | 👻 **Animação Ghost (WebGL)** | Atmosfera viva: Ghost, partículas e fireflies |
 | **z-10** | ✍️ **Texto Editorial (HeroCopy)** | Conteúdo fixo e centralizado |
-| **z-0** | 🌌 **Gradiente Base** | Fundo `#06071f` + radial `#0b0d3a` |
+| **z-0** | 🌌 **Gradiente Base** | Fundo `#0d003b` + radial `#04097b` |
 
 ---
 
@@ -589,16 +596,16 @@ components/home/
 ├─ HeroCopy.tsx            ← Texto editorial fixo
 ├─ ManifestoThumb.tsx      ← Vídeo manifesto flutuante (desktop)
 ├─ GhostStage.tsx          ← Wrapper dinâmico (Canvas 3D)
-└─ webgl/
+├─ GhostStage.module.css
+components/canvas/home/
 ├─ GhostCanvas.tsx
 ├─ Ghost.tsx
-├─ Eyes.tsx
 ├─ Particles.tsx
 ├─ Fireflies.tsx
 ├─ AtmosphereVeil.tsx
+├─ RevealingText.tsx
 └─ postprocessing/
 ├─ AnalogDecayPass.ts
-└─ BloomPass.ts
 
 ---
 
@@ -726,17 +733,21 @@ export default function HeroCopy() {
 ### ✍️ 3. HERO TEXT BLOCK
 **Conteúdo editorial centralizado (HeroCopy.tsx)**  
 
-[BRAND AWARENESS]
-Design, não
-é só estética.
-[É intenção, é estratégia, é experiência.]
+• Tag: [BRAND AWARENESS]
+• Título: Você não vê o design.
+• Subtítulo: Mas ele vê você.
+
+
+Tipografia:
+• Fonte: TT Norms Pro - black and medium
 
 **Características:**
 - 100% estático, sem fade ou scroll binding.  
 - `text-[#d9dade]` sobre fundo `#06071f`.  
 - Centralizado (`flex-col`, `items-center`, `text-center`).  
-- CTA: `"get to know me better →"` com hover branco.  
-
+- **CTA Botão**: `"step inside →"` com ícone de seta  
+- **Hover**: Fundo troca para `lightBlue`, seta faz `translate-x-1`
+- **Idle (opcional)**: Animação sutil de loop na seta (`0 → 4px → 0`)
 ---
 
 ### 🎞️ 4. MANIFESTO THUMB (SUBSECTION DESKTOP)
@@ -774,6 +785,17 @@ export default function ManifestoThumb() {
 | Scroll | Usuário desce | Vídeo cresce e centraliza, cobrindo o texto |
 | Click | Desktop | Salta para estado fullscreen instantâneo |
 | Click | Mobile | Alterna som (mute/unmute) |
+
+Sequência exata da animação on-page-load (trigger: viewport intersection ou load + 0.3s delay):
+
+Estado inicial (0%): opacity 0, scale 0.92, translateY(60px) ligeiramente borrada (filter: blur(10px)).
+De 0s a 1.2s (duration total):
+0-0.4s: fade-in suave opacity de 0 a 0.6 + blur de 10px a 0px (ease-out).
+0.4s-0.8s (overlap): scale de 0.92 a 1.02 (overshoot sutil), translateY de 60px a 0px (slide-up from bottom).
+0.8s-1.2s: settle para opacity 1, scale 1, com elastic/ease-in-out para bounce mínimo.
+Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94) ou 'easeOutExpo'.
+Fundo: gradiente escuro ou overlay sutil, texto hero fade-in após 0.6s.
+Suave, premium, 60fps, compatível web (GSAP/ScrollTrigger style), sem loop."
 
 **Transições:**
 - `ease-in-out`, `duration-500ms`.  
@@ -968,28 +990,6 @@ mobile-only    ManifestoSection    Fullscreen abaixo da Hero
 
 ⸻
 
-###📐 FILE ARCHITECTURE SUMMARY
-
-components/home/
-├─ HomeHero.tsx
-├─ HeroPreloader.tsx
-├─ HeroCopy.tsx
-├─ ManifestoThumb.tsx
-├─ GhostStage.tsx
-├─ ManifestoSection.tsx  ← apenas para mobile
-└─ webgl/
-   ├─ GhostCanvas.tsx
-   ├─ Ghost.tsx
-   ├─ Eyes.tsx
-   ├─ Particles.tsx
-   ├─ Fireflies.tsx
-   ├─ AtmosphereVeil.tsx
-   └─ postprocessing/
-       ├─ AnalogDecayPass.ts
-       └─ BloomPass.ts
-
-
-⸻
 
 ###🪞 EXPECTED RESULT
     •    Hero silenciosa e cinematográfica.
@@ -1021,7 +1021,7 @@ components/home/
 
 
 ## **PRIMARY MESSAGE / HEADLINE**
-- `portfólio (preto) showcase (#5227FF)`
+- `portfólio (Branco) showcase (#5227FF)`
 
 ---
 
@@ -1031,7 +1031,7 @@ components/home/
 ---
 
 ## **SECONDARY MESSAGE / SUPPORT TEXT**
-- `[what we love working on]`
+- `[what we love working on]` - alinhado ao texto do primeiro serviço ao lado direito do stripe
 
 ---
 
@@ -1049,8 +1049,8 @@ components/home/
 ---
 
 ## **LINKS GLOBAIS**
-- Integração com `/portfolio` (com filtro por categoria).
-- Integração com `/#contact`.
+- Serviços Integração com `/portfolio` (com filtro por categoria).
+- CTA Integração com `/#contact`.
 
 ---
 
@@ -1063,9 +1063,10 @@ components/home/
 ### 🎨 PALETA DE CORES
 ```js
 {
-  background: '#F4F5F7',
-  textPrimary: '#111111',
-  brandBlue: '#0057FF',
+  background: '#0d003b',
+  textPrimary: '#fcffff',
+  textSelect: '#0048ff',
+  brandBlue: '#0048ff',
   textSecondary: 'neutros suaves'
 }
 ```
@@ -1083,8 +1084,10 @@ A seção do portfólio é exibida em uma única coluna centralizada com os segu
   - **Segundo card**: “Videos & Motion [●] [→]” — **centralizado** (`justify-center`)
   - **Terceiro card**: “Web Campaigns, Websites & Tech [●] [→]” — alinhado à **esquerda** (`justify-start`) quebrar sempre em duas linhas - linha1 ["Web Campaigns,"] e linha2 ["Websites & Tech"]
 
-- **call-to-actions**, centralizado abaixo dos cards:
-  - “let's build something great →”
+- **call-to-actions**, centralizado abaixo dos stripes:
+  - “let's build something great →” com ícone de seta
+  - **Hover**: Fundo troca para `lightBlue`, seta faz `translate-x-1`
+- **Idle (opcional)**: Animação sutil de loop na seta (`0 → 4px → 0`)
   
   ## **ALIGNMENT**
 
@@ -1108,7 +1111,7 @@ A mesma seção é reorganizada para uma experiência vertical e fluida:
   - “Brand & Campaigns [→]”
   - “Videos & Motion [→]”
   - “Websites & Tech [→]”
-- Cada card é exibido um abaixo do outro, com padding horizontal e bordas visuais consistentes
+- Cada card é exibido um abaixo do outro, todos centralizados, com padding horizontal e bordas visuais consistentes
 - **call-to-actions**, centralizado abaixo dos cards:
   - “let's build something great →”
 
@@ -1445,11 +1448,12 @@ const featuredProjects = [
 ### Cores
 ```js
 {
-  background: "#F4F5F7",
-  textPrimary: "#111111",
-  brandBlue: "#0057FF",
-  lightBlue: "#E6F0FF",
-  pillBg: "#E6EFEF",
+  background: "#0d003b",
+  textPrimary: "#fcffff",
+  textSecundary: "#a1a3a3",
+  brandBlue: "#0048ff",
+  lightBlue: "#4fe6ff",
+  pillBg: "#E6EFEF", 70% de opacidade.
   pillText: "#111111"
 }
 ```
@@ -1667,7 +1671,7 @@ export const CTAProjectCard = () => (
 
 
 
-# **SECTION NAME: Clients/Brands**
+
 
 # **SECTION NAME: Clients/Brands**
 
@@ -1700,7 +1704,7 @@ export const CTAProjectCard = () => (
 - Margem entre os logos: `gap-4`  
 
 ## **BACKGROUND**
-- Cor sólida azul (`bg-[#0057FF]`)  
+- Cor sólida azul (`bg-[#0048ff]`)  
 
 ## **SECTION COLORS**
 - Título: `text-white`  
@@ -1828,12 +1832,12 @@ export const CTAProjectCard = () => (
 - Cor sólida branca (`bg-white`)  
 
 ## **SECTION COLORS**
-- Título: `text-[#0057FF]`  
+- Título: `text-[#0048ff]`  
 - Texto: `text-[#111111]`  
-- Botão: `bg-[#0057FF]`, `text-white`  
+- Botão: `bg-[#0048ff]`, `text-white`  
 
 ## **TYPOGRAPHY**
-- Fonte: Sans-serif neo-grotesca (Inter ou similar)  
+- Fonte principal: TT Norms Pro (self-host, se licenciado)
 - Peso: **Bold** para o título, **Regular** para o conteúdo  
 - Tamanho: Título `text-2xl`, Conteúdo `text-lg`  
 
