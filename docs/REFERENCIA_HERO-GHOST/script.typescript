@@ -261,7 +261,7 @@ composer.addPass(outputPass);
 
 // Production parameters with user's specified defaults
 const params = {
-  // Ghost appearance
+  //Ghost appearance
   bodyColor: 0x0f2027,
   glowColor: "blue",
   eyeGlowColor: "violet",

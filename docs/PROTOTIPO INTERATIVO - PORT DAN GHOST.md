@@ -1031,8 +1031,7 @@ mobile-only    ManifestoSection    Fullscreen abaixo da Hero
 ---
 
 ## **SECONDARY MESSAGE / SUPPORT TEXT**
-- `[what we love working on]` - alinhado ao texto do primeiro serviço ao lado direito do stripe
-
+- `[what we love working on]` - LightBlue: '#4fe6ff', posicionada de forma absoluta junto a primeiro intem, “Brand & Campaigns", posicionado ao lado esquerdo.
 ---
 
 ## **KEY CONTENT ELEMENTS**
@@ -1077,7 +1076,7 @@ mobile-only    ManifestoSection    Fullscreen abaixo da Hero
 A seção do portfólio é exibida em uma única coluna centralizada com os seguintes elementos empilhados verticalmente:
 
 - **Título principal**: “portfólio showcase” (centralizado na parte superior)
-- **Floating label interativa**: “[what we love working on]”, posicionada de forma absoluta junto a primeiro intem, “Brand & Campaigns", posicionado ao lado esquerdo.
+- **Floating label interativa**: “[what we love working on]”, LightBlue: '#4fe6ff', posicionada de forma absoluta junto a primeiro intem, “Brand & Campaigns", posicionado ao lado esquerdo.
 
 - **Três cards de categoria**, cada um com largura máxima limitada (não 100%) e alinhamento horizontal variável:
   - **Primeiro card**: “Brand & Campaigns [●] [→]” — alinhado à **direita** (`justify-end`)

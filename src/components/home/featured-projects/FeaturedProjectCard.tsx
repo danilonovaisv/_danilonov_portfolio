@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowIcon } from '@/components/ui/ArrowIcon';
 
 export type FeaturedProject = {
@@ -44,7 +44,7 @@ export default function FeaturedProjectCard({
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-text-dark opacity-60"
+              className="bg-[#E6EFEF]/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-[#111111]"
             >
               {tag}
             </span>
@@ -66,7 +66,7 @@ export default function FeaturedProjectCard({
 
       <div className="mt-4 flex justify-between items-start gap-4">
         <div>
-          <div className="flex items-center gap-2 text-text-muted text-sm md:text-base leading-tight">
+          <div className="flex items-center gap-2 text-[#fcffff]/60 text-sm md:text-base leading-tight">
             <span className="uppercase tracking-wide text-xs md:text-sm">
               {project.category}
             </span>
@@ -77,17 +77,24 @@ export default function FeaturedProjectCard({
               {project.client} • {project.year}
             </span>
           </div>
-          <h3 className="text-lg md:text-xl font-medium leading-tight text-text-dark mt-1.5">
+          <h3 className="text-lg md:text-xl font-medium leading-tight text-[#fcffff] mt-1.5">
             {project.title}
           </h3>
         </div>
 
         <div
-          className={`bg-primary w-11 h-11 rounded-full flex items-center justify-center text-white shrink-0 transition-transform duration-700 ${
-            reducedMotion ? '' : 'group-hover:translate-x-5'
+          className={`bg-[#0057FF] w-12 h-12 rounded-full flex items-center justify-center text-white shrink-0 transition-all duration-500 ${
+            reducedMotion
+              ? ''
+              : 'group-hover:scale-110 group-hover:bg-[#4fe6ff] group-hover:text-[#0d003b]'
           }`}
         >
-          <ArrowIcon className="w-4 h-4" />
+          <motion.div
+            animate={reducedMotion ? {} : { x: [0, 3, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <ArrowIcon className="w-5 h-5" />
+          </motion.div>
         </div>
       </div>
     </Link>

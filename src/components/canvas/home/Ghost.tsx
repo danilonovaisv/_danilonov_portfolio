@@ -7,9 +7,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
-  bodyColor: '#fcffff',
-  glowColor: '#0057ff',
-  eyeColor: '#ffffff',
+  bodyColor: '#0048ff',
+  glowColor: '#4fe6ff',
+  eyeColor: '#f501d3',
   emissiveIntensity: 5.0,
   floatSpeed: 1.6,
   followSpeed: 0.07,

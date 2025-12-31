@@ -34,14 +34,19 @@ export default function SiteFooter() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: reducedMotion ? 0.2 : 0.6 }}
-        className="hidden lg:block w-full bg-primary py-10"
+        className="hidden lg:block w-full bg-[#0d003b] py-12 border-t border-white/5"
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex items-center justify-between text-white text-sm">
-          <p className="opacity-80">{FOOTER.copyright}</p>
+          <p className="opacity-40 uppercase tracking-widest text-[10px]">
+            {FOOTER.copyright}
+          </p>
 
-          <nav aria-label="Links do footer" className="flex items-center gap-8">
-            <div className="flex gap-6 pr-6 border-r border-white/20">
+          <nav
+            aria-label="Links do footer"
+            className="flex items-center gap-12"
+          >
+            <div className="flex gap-8">
               {footerLinks.map((l) => (
                 <button
                   key={l.href}
@@ -50,21 +55,21 @@ export default function SiteFooter() {
                     if (isHashHref(l.href)) scrollToHash(l.href);
                     else window.location.href = l.href;
                   }}
-                  className="hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded uppercase tracking-widest text-[10px] font-bold"
+                  className="hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded uppercase tracking-widest text-[10px] font-bold"
                 >
                   {l.label}
                 </button>
               ))}
             </div>
 
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-6">
               {social.map((s) => (
                 <a
                   key={s.href}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded text-xs font-medium"
+                  className="hover:text-[#0057FF] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded text-xs font-medium uppercase tracking-tighter"
                   aria-label={`Abrir ${s.label}`}
                 >
                   {s.label}
@@ -76,7 +81,7 @@ export default function SiteFooter() {
       </motion.footer>
 
       <footer
-        className="lg:hidden bg-primary text-white py-12"
+        className="lg:hidden bg-[#0d003b] text-white py-12 border-t border-white/5"
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex flex-col gap-10">

@@ -53,7 +53,7 @@ export default function ClientsBrandsSection() {
                 transition: { staggerChildren: reducedMotion ? 0 : 0.03 },
               },
             }}
-            className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 items-center justify-items-center"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-16 items-center justify-items-center"
           >
             {logos.map((l) => (
               <motion.div

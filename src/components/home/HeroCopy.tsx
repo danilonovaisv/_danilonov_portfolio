@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export function HeroCopy() {
   return (
-    <div className="mx-auto max-w-4xl text-white relative z-10 flex flex-col items-center justify-center text-center px-4">
+    <div className="mx-auto max-w-[1680px] w-full text-white relative z-10 flex flex-col items-center justify-center text-center px-[clamp(24px,5vw,96px)]">
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -14,29 +14,46 @@ export function HeroCopy() {
         [BRAND AWARENESS]
       </motion.p>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 1 }}
-        className="font-bold text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tighter mb-10 text-[#fcffff]"
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mb-12">
+        {/* Ghost Icon/Visual from Image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.8, duration: 1 }}
+          className="w-32 h-32 md:w-48 md:h-48 relative shrink-0"
+        >
+          {/* Blue Ghost Glow */}
+          <div className="absolute inset-0 bg-[#0057FF] rounded-full blur-2xl opacity-40 animate-pulse" />
+          <div className="relative w-full h-full bg-[url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/ghost-character.webp')] bg-contain bg-center bg-no-repeat filter drop-shadow-[0_0_20px_rgba(79,230,255,0.6)]" />
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.8, duration: 1 }}
+          className="font-bold text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tighter text-left text-[#fcffff]"
+        >
+          Você não <br /> vê o design.
+        </motion.h1>
+      </div>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="text-2xl md:text-4xl font-medium text-[#fcffff]/80 mb-12"
       >
-        Você não vê o design.
-        <br />
         Mas ele vê você.
-      </motion.h1>
+      </motion.p>
 
       <motion.a
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 1 }}
-        whileHover={{ x: 5 }}
-        href="/sobre"
-        className="pointer-events-auto inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#fcffff] transition-colors hover:text-primary"
+        href="/portfolio"
+        className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-[#0057FF] px-10 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-[#fcffff] transition-all hover:bg-primary-hover hover:scale-105 shadow-[0_0_30px_rgba(0,87,255,0.3)]"
       >
-        step inside{' '}
-        <span className="text-primary transition-transform group-hover:translate-x-1">
-          →
-        </span>
+        step inside →
       </motion.a>
     </div>
   );

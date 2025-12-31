@@ -80,7 +80,7 @@ export default function ContactSection() {
     <section
       id="contact"
       aria-label="Contato"
-      className="bg-section-bg py-12 md:py-24"
+      className="bg-white py-12 md:py-24"
     >
       <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
         <motion.div

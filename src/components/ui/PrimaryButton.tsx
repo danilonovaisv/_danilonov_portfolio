@@ -20,8 +20,8 @@ export function PrimaryButton({
 
   const variantClasses =
     variant === 'solid'
-      ? 'bg-[#0057FF] text-white hover:bg-[#0043cc] focus-visible:ring-[#0057FF] focus-visible:ring-offset-[#F4F5F7]'
-      : 'border border-[#0057FF] text-[#0057FF] hover:bg-[#0057FF] hover:text-white focus-visible:ring-[#0057FF] focus-visible:ring-offset-[#F4F5F7]';
+      ? 'bg-[#0057FF] text-white hover:bg-[#0043cc] focus-visible:ring-[#0057FF] focus-visible:ring-offset-background'
+      : 'border border-[#0057FF] text-[#0057FF] hover:bg-[#0057FF] hover:text-white focus-visible:ring-[#0057FF] focus-visible:ring-offset-background';
 
   return (
     <a href={href} className={`${baseClasses} ${variantClasses}`}>

@@ -7,6 +7,7 @@ import React, { useCallback, useMemo, useRef } from 'react';
 import { motion, useReducedMotion, useSpring } from 'framer-motion';
 import type { NavItem } from './types';
 import { HEADER_TOKENS } from './headerTokens';
+import styles from './DesktopFluidHeader.module.css';
 
 const HeaderGlassCanvas = dynamic(
   () => import('@/components/canvas/header/HeaderGlassCanvas'),
@@ -84,10 +85,9 @@ export default function DesktopFluidHeader({
         className="pointer-events-auto mx-auto w-[min(1100px,calc(100vw-48px))]"
       >
         <div
-          className="relative overflow-hidden rounded-full"
+          className={styles.headerContainer}
           style={{
             height: HEADER_TOKENS.desktop.height,
-            boxShadow: '0 18px 55px rgba(0,0,0,0.35)',
           }}
         >
           {/* glass background */}
@@ -95,25 +95,12 @@ export default function DesktopFluidHeader({
             {!disableWebGL && !reducedMotion ? (
               <HeaderGlassCanvas accentColor={accentColor} />
             ) : (
-              <div
-                className="h-full w-full"
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06))',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                }}
-              />
+              <div className={styles.fallbackBackground} />
             )}
           </div>
 
           {/* subtle border */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              border: '1px solid rgba(255,255,255,0.14)',
-            }}
-          />
+          <div className={styles.subtleBorder} />
 
           {/* content */}
           <div className="relative z-10 h-full px-6 flex items-center justify-between gap-6">
