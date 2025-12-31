@@ -2,46 +2,48 @@
 trigger: always_on
 ---
 
-# Contexto do Projeto: Portfólio Danilo Novais
+# Contexto do Projeto: Portfólio Danilo Novais (Ghost Era)
 
 ## Visão Geral
 
-Portfólio interativo de alta fidelidade para Danilo Novais (Creative Developer). O objetivo é posicionar a marca pessoal com a mensagem: "Design, não é só estética".
+Portfólio interativo de alta fidelidade focado em **Creative Coding** e **Performance**.
+A marca pessoal de Danilo Novais é centrada na intersecção entre design minimalista e atmosferas imersivas (WebGL).
 
-## Estrutura da Home Page
+## Estrutura da Home Page (Section Order)
 
-1. Contexto do Projeto
-   • Projeto: Portfólio Institucional de Danilo Novais
-   • Páginas principais:
-   • Home
-   • Sobre
-   • Portfólio
-   • Contato
+1. **Header**: Fluid Floating Glass/Ghost (Mobile: Staggered Menu).
+2. **Hero Section**: Ghost WebGL Atmosphere + Manifesto Thumb Video.
+3. **Portfolio Showcase**: Interactive Grid with category filtering.
+4. **Featured Projects**: High-contrast scroll-narrative cards.
+5. **Clients / Brands**: Monochromatic grid over institutional blue background.
+6. **Contact**: Clean, accessible form.
+7. **Footer**: Static site closure.
 
-Ordem das seções da Home
+## Design System: Ghost/Dark Theme
 
-1. Header
-2. Hero + thumb video manifesto
-3. Portfolio Showcase
-4. Featured Projects
-5. Clients / Brands
-6. Contact
-7. Footer
+### Colors (Tailwind v4 tokens)
 
-## Design System (Ghost Theme)
+- `primary`: `#0057FF` (Electric Blue / Interaction focus)
+- `bg-main`: `#050505` (Deep Void Surface)
+- `bg-accent`: `#06071f` (Atmospheric Blue Abyss)
+- `bg-form`: `#f0f0f0` (Neutral light background for inputs)
+- `text-primary`: `#d9dade` (Standard Content)
+- `text-white`: `#FFFFFF` (Peak highlights)
+- `text-dark`: `#0e0e0e` (Inverse text for light surfaces)
+- `ghost-flare`: `#4fe6ff` (Cyan highlights for energy effects)
 
--Colors
-• primary: #0057FF — Cor de destaque e interação
-• bg: #f0f0f0 — Fundo padrão neutro
-• text: #000000 — Texto padrão
-• textInverse: #FFFFFF — Texto sobre fundo escuro
-• neutralLight: #F5F5F5 — Fundo secundário e elementos suaves
+### Typography
 
-⸻
+- **Primary Font:** TT Norms Pro / Inter.
+- **Weights:**
+  - `font-medium`: UI and labels.
+  - `font-semibold`: Section headings and titles.
+  - `font-bold`: Hero headlines.
 
-Typography
-• Fonte principal: TT Norms Pro (self-host, se licenciado)
-• Fallbacks: ui-sans-serif, system-ui
-• Tamanhos e pesos:
-• Logo: 18–22px, font-semibold
-• Navegação: 15–16px, font-medium, tracking-tight
+## Atmospheric Principles
+
+- **Ghost Blue:** Visual escuro e etéreo com emissividade azul "HDR" (estourando no Bloom).
+- **Efemeridade:** Elementos WebGL com Fresnel, opacidade dinâmica e ruído analógico.
+- **Smoothness:** Lenis para scroll e GSAP/Framer Motion para coreografias fluidas.
+- **Micro-interactions:** Altíssimo refinamento (premium feel), sem comprometer a usabilidade.
+- **Visual Fidelity:** 100% alinhado com as referências em `/docs/`.

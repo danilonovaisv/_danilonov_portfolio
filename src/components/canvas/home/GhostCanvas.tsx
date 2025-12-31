@@ -40,7 +40,7 @@ export default function GhostCanvas() {
       }}
       camera={{ position: [0, 0, 6], fov: 35 }}
     >
-      <color attach="background" args={['#050511']} />
+      <color attach="background" args={['#0d003b']} />
 
       <Suspense fallback={null}>
         <AtmosphereVeil />

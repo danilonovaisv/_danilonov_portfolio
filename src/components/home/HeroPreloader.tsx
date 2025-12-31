@@ -20,7 +20,7 @@ export default function HeroPreloader() {
         duration: fadeDuration,
       }}
       onAnimationComplete={() => setVisible(false)}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-linear-to-br from-[#0a0a0a] to-[#1a1a1a]"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0d003b]"
       aria-hidden="true"
     >
       <motion.svg
@@ -108,7 +108,7 @@ export default function HeroPreloader() {
 
       <div className="h-0.5 w-24 overflow-hidden rounded-full bg-ghost-void">
         <motion.div
-          className="h-full bg-linear-to-r from-[#0057FF] to-[#5227FF]"
+          className="h-full bg-linear-to-r from-[#0048ff] to-[#4fe6ff]"
           initial={{ width: '0%' }}
           animate={{ width: '100%' }}
           transition={{

@@ -40,7 +40,7 @@ export default function HomeHero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[220vh] overflow-hidden bg-ghost-void"
+      className="relative h-[200vh] overflow-hidden bg-[#0d003b]"
       aria-label="Hero institucional de Danilo Novais"
     >
       {/* Fundo radial base [Z-0] */}

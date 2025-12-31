@@ -4,11 +4,11 @@
 
 @theme {
   /* Site Theme Colors */
-  --color-background: #f0f0f0;
-  --color-foreground: #000000;
-  --color-primary: #0057ff;
-  --color-primary-hover: #0046cc;
-  --color-secondary: #000000;
+  --color-background: #0d003b;
+  --color-foreground: #fcffff;
+  --color-primary: #0048ff;
+  --color-primary-hover: #0037cc;
+  --color-secondary: #0e0e0e;
   --color-muted: #f5f5f5;
   --color-white: #ffffff;
 
@@ -25,19 +25,19 @@
   --color-focus-ring: #0057ff;
 
   /* Ghost/Ethereal Theme Colors */
-  --color-ghost-bg: #050505;
-  --color-ghost-dark: #0f2027;
-  --color-ghost-blue: #4a90e2;
-  --color-ghost-green: #50e3c2;
-  --color-ghost-ambient: #0a0a2e;
-  --color-ghost-text: #d9dade;
-  --color-ghost-void: #06071f;
+  --color-ghost-bg: #0d003b;
+  --color-ghost-dark: #0d003b;
+  --color-ghost-blue: #0048ff;
+  --color-ghost-green: #4fe6ff;
+  --color-ghost-ambient: #0b0d3a;
+  --color-ghost-text: #fcffff;
+  --color-ghost-void: #0d003b;
   --color-ghost-abyss: #0b0d3a;
 
   /* Ghost/Ethereal Surface Variables (Already in :root) */
-  --color-surface-main: #050505;
-  --color-text-main: #d9dade;
-  --color-accent-blue: #0057ff;
+  --color-surface-main: #0d003b;
+  --color-text-main: #fcffff;
+  --color-accent-blue: #0048ff;
 
   /* Typography */
   --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
@@ -107,11 +107,11 @@
   --sidebar-ring: oklch(0.708 0 0);
   --header-height: 72px;
   --header-padding-x: 24px;
-  --header-color-primary: #0057ff;
-  --header-color-gradient-start: #0057ff;
-  --header-color-gradient-end: #7a27ff;
-  --header-color-text: #000000;
-  --header-color-text-inverse: #ffffff;
+  --header-color-primary: #0048ff;
+  --header-color-gradient-start: #0048ff;
+  --header-color-gradient-end: #4fe6ff;
+  --header-color-text: #fcffff;
+  --header-color-text-inverse: #0e0e0e;
   --header-motion-hover-opacity: 0.85;
   --header-motion-glass-damping: 0.15;
   --header-motion-stagger-delay: 0.1s;
@@ -190,7 +190,7 @@ body {
   line-height: 1.02;
   letter-spacing: -0.02em;
   font-size: clamp(2.25rem, 5vw, 4.75rem);
-  color: #d9dade;
+  color: #fcffff;
 }
 
 .hero-reveal {

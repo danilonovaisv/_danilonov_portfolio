@@ -7,10 +7,10 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 const GHOST_CONFIG = {
-  bodyColor: '#e0f7fa',
-  glowColor: '#00ffff',
+  bodyColor: '#fcffff',
+  glowColor: '#0048ff',
   eyeColor: '#ffffff',
-  emissiveIntensity: 4.5,
+  emissiveIntensity: 5.0,
   floatSpeed: 1.6,
   followSpeed: 0.07,
 };
@@ -97,8 +97,8 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
 
   return (
     <group ref={group} {...props}>
-      <directionalLight position={[-8, 6, -4]} intensity={2} color="#00ffff" />
-      <directionalLight position={[8, -4, -6]} intensity={2} color="#ff00ff" />
+      <directionalLight position={[-8, 6, -4]} intensity={2.5} color="#4fe6ff" />
+      <directionalLight position={[8, -4, -6]} intensity={1.5} color="#0048ff" />
 
       <mesh ref={bodyMesh} geometry={ghostGeometry}>
         <meshStandardMaterial

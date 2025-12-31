@@ -293,7 +293,7 @@ export default function MobileStaggeredMenu({
           ref={toggleBtnRef}
           onClick={handleToggleClick}
           className="pointer-events-auto flex items-center justify-center w-12 h-12 bg-transparent border-0 cursor-pointer text-white mix-blend-difference"
-          aria-expanded={internalOpen ? 'true' : 'false'}
+          aria-expanded={internalOpen}
           aria-label={internalOpen ? 'Fechar menu' : 'Abrir menu'}
         >
           <span ref={iconRef} className="relative w-5 h-5 flex items-center justify-center">
@@ -321,7 +321,7 @@ export default function MobileStaggeredMenu({
       <aside
         ref={panelRef}
         className="fixed inset-0 h-full w-full bg-white flex flex-col p-24 pb-12 overflow-y-auto z-50"
-        aria-hidden={!internalOpen ? 'true' : 'false'}
+        aria-hidden={!internalOpen}
       >
         <nav className="flex-1 flex flex-col justify-center">
           <ul className="list-none m-0 p-0 flex flex-col gap-8">

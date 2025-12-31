@@ -16,7 +16,7 @@ export const siteMetadata: Metadata = {
   },
 
   description:
-    'Portfólio de Danilo Novais - Creative Developer especializado em design digital, branding e motion design. Design, não é só estética.',
+    'Portfólio de Danilo Novais - Creative Developer especializado em design digital, branding e motion design. Você não vê o design. Mas ele vê você.',
 
   keywords: [
     'creative developer',
@@ -39,7 +39,8 @@ export const siteMetadata: Metadata = {
     url: `https://${BRAND.domain}`,
     siteName: BRAND.name,
     title: `${BRAND.name} | Creative Developer`,
-    description: 'Design, não é só estética. Portfólio de projetos criativos.',
+    description:
+      'Você não vê o design. Mas ele vê você. Portfólio de projetos criativos.',
     images: [
       {
         url: '/opengraph-image',
@@ -53,7 +54,7 @@ export const siteMetadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${BRAND.name} | Creative Developer`,
-    description: 'Design, não é só estética.',
+    description: 'Você não vê o design. Mas ele vê você.',
     images: ['/opengraph-image'],
     creator: '@_novais',
   },
@@ -88,7 +89,7 @@ export const siteViewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f0f0f0' },
-    { media: '(prefers-color-scheme: dark)', color: '#050505' },
+    { media: '(prefers-color-scheme: light)', color: '#0d003b' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d003b' },
   ],
 };
