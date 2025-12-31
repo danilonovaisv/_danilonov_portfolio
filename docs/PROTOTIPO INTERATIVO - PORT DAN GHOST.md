@@ -67,12 +67,11 @@ https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favi
 
 Hero
 • Tag: [BRAND AWARENESS]
-• Título: Design, não é
-  só estética.
-• Subtítulo: [É intenção, é estratégia, é experiência.]
-• CTA (label): get to know me better →
+• Título: Você não vê o design.
+• Subtítulo: Mas ele vê você.
+• CTA (label): step inside →
 • CTA secundário (scroll): #manifesto
-• WebGL Atmosférico: Ghost abstrato + pós-processamento (substitui qualquer modelo GLB)
+• WebGL Atmosférico: Ghost abstrato + pós-processamento
 
 Tipografia:
 • Fonte: TT Norms Pro
@@ -252,7 +251,8 @@ Footer
   - Ícones (menu/close): usam `accentColor` do sistema.
 
 - **Tipografia**  
-  - Logo / Marca: mesma fonte do logotipo (ou variação display).  
+  - Fonte principal: TT Norms Pro (self-host, se licenciado)
+  - Fallbacks: ui-sans-serif, system-ui
   - Itens de navegação: `font-medium`, tracking levemente positivo.  
   - Itens secundários (social, etc. em mobile): `font-normal`, menor que nav principal.
 
@@ -690,9 +690,8 @@ export default function HeroCopy() {
   return (
     <div className="text-[#d9dade] max-w-3xl mx-auto">
       <p className="font-mono text-sm uppercase tracking-widest mb-3">[BRAND AWARENESS]</p>
-      <h1 className="font-bold text-5xl md:text-6xl leading-tight mb-6">Design, não<br />é só estética.</h1>
-      <p className="text-lg mb-8">[É intenção, é estratégia, é experiência.]</p>
-      <a href="/sobre" className="text-[#d9dade] hover:text-white transition-colors duration-300">get to know me better →</a>
+      <h1 className="font-bold text-5xl md:text-6xl leading-tight mb-6">Você não vê o design.<br />Mas ele vê você.</h1>
+      <a href="/sobre" className="text-[#d9dade] hover:text-white transition-colors duration-300">step inside →</a>
     </div>
   );
 }
