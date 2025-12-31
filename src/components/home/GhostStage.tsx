@@ -8,8 +8,9 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
-// Dynamic import para evitar SSR do Canvas WebGL
+// Dynamic import par evitar SSR do Canvas WebGL
 const GhostCanvas = dynamic(
   () =>
     import('@/components/canvas/home/GhostCanvas').then((mod) => mod.default),
@@ -26,21 +27,21 @@ interface GhostStageProps {
 }
 
 export function GhostStage({ reducedMotion }: GhostStageProps) {
+  const fallback = (
+    <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
+  );
+
   if (reducedMotion) {
     // Fallback estático em gradiente radial (sem WebGL)
-    return (
-      <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
-    );
+    return fallback;
   }
 
   return (
-    <Suspense
-      fallback={
-        <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
-      }
-    >
-      <GhostCanvas />
-    </Suspense>
+    <ErrorBoundary fallback={fallback}>
+      <Suspense fallback={fallback}>
+        <GhostCanvas />
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

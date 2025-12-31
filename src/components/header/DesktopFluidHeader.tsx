@@ -76,99 +76,92 @@ export default function DesktopFluidHeader({
   const nav = useMemo(() => navItems, [navItems]);
 
   return (
-    <header className="hidden lg:block fixed top-6 left-0 right-0 z-40 pointer-events-none">
-      <motion.div
-        ref={wrapRef}
-        onPointerMove={onPointerMove}
-        onPointerLeave={onPointerLeave}
-        style={{ x, scaleX, scaleY }}
-        className="pointer-events-auto mx-auto w-[min(1100px,calc(100vw-48px))]"
-      >
-        <div className={`${styles.headerContainer} h-16`}>
-          {/* glass background */}
-          <div className="absolute inset-0">
-            {!disableWebGL && !reducedMotion ? (
-              <HeaderGlassCanvas accentColor={accentColor} />
-            ) : (
-              <div className={styles.fallbackBackground} />
-            )}
-          </div>
+    <header className="hidden lg:block sticky top-6 z-40 pointer-events-none inset-x-0">
+      <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
+        <motion.div
+          ref={wrapRef}
+          onPointerMove={onPointerMove}
+          onPointerLeave={onPointerLeave}
+          style={{ x, scaleX, scaleY }}
+          className="pointer-events-auto mx-auto w-full max-w-[1100px] relative"
+        >
+          <div
+            className={`${styles.headerContainer} h-16 rounded-full backdrop-blur-md border border-white/10 shadow-lg bg-black/5`}
+          >
+            {/* glass background */}
+            <div className="absolute inset-0 rounded-full overflow-hidden">
+              {!disableWebGL && !reducedMotion ? (
+                <HeaderGlassCanvas accentColor={accentColor} />
+              ) : (
+                <div className={styles.fallbackBackground} />
+              )}
+            </div>
 
-          {/* subtle border */}
-          <div className={styles.subtleBorder} />
+            {/* content */}
+            <div className="relative z-10 h-full px-8 flex items-center justify-between gap-6">
+              <Link
+                href="/"
+                aria-label="Ir para Home"
+                className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+              >
+                <Image
+                  src={logoUrl}
+                  alt="Danilo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-auto"
+                  unoptimized
+                />
+              </Link>
 
-          {/* content */}
-          <div className="relative z-10 h-full px-6 flex items-center justify-between gap-6">
-            <Link
-              href="/"
-              aria-label="Ir para Home"
-              className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
-            >
-              <Image
-                src={logoUrl}
-                alt="Danilo"
-                width={24}
-                height={24}
-                className="h-6 w-auto"
-                unoptimized
-              />
-            </Link>
+              <nav
+                aria-label="Navegação principal"
+                className="flex items-center gap-7"
+              >
+                {nav.map((item) => {
+                  const isActive = activeHref === item.href;
 
-            <nav
-              aria-label="Navegação principal"
-              className="flex items-center gap-7"
-            >
-              {nav.map((item) => {
-                const isActive = activeHref === item.href;
+                  const common =
+                    'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
+                  const textColor = isActive
+                    ? 'text-primary font-medium'
+                    : 'text-white/70 hover:text-white font-medium';
+                  const underline = isActive
+                    ? 'after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px] after:bg-primary'
+                    : 'after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-primary group-hover:after:w-full after:transition-all after:duration-300';
 
-                const common =
-                  'transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
-                const textColor = isActive
-                  ? 'text-primary'
-                  : 'text-white/80 hover:text-white';
-                const underline = isActive
-                  ? 'after:w-full'
-                  : 'after:w-0 group-hover:after:w-full';
+                  if (isExternalHref(item.href) || item.external) {
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group ${common} ${textColor} relative flex items-center`}
+                      >
+                        <span className="tracking-tight">{item.label}</span>
+                        <span className={underline} />
+                      </a>
+                    );
+                  }
 
-                if (isExternalHref(item.href) || item.external) {
                   return (
-                    <a
+                    <button
                       key={item.href}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`group relative ${common} ${textColor}`}
+                      type="button"
+                      onClick={() => onNavigate(item.href)}
+                      className={`group ${common} ${textColor} relative flex items-center`}
                     >
-                      <span className="text-[15px] font-medium tracking-tight">
-                        {item.label}
-                      </span>
-                      <span
-                        className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-200 ${underline}`}
-                      />
-                    </a>
+                      <span className="tracking-tight">{item.label}</span>
+                      <span className={underline} />
+                    </button>
                   );
-                }
-
-                return (
-                  <button
-                    key={item.href}
-                    type="button"
-                    onClick={() => onNavigate(item.href)}
-                    className={`group relative ${common} ${textColor}`}
-                  >
-                    <span className="text-[15px] font-medium tracking-tight">
-                      {item.label}
-                    </span>
-                    <span
-                      className={`absolute -bottom-1 left-0 h-[2px] bg-primary transition-all duration-200 ${underline}`}
-                    />
-                  </button>
-                );
-              })}
-            </nav>
+                })}
+              </nav>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </header>
   );
 }

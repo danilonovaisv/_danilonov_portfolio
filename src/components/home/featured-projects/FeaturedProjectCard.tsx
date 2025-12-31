@@ -34,17 +34,17 @@ export default function FeaturedProjectCard({
       aria-label={`Ver projeto: ${project.title}`}
     >
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white shadow-[0_12px_48px_-28px_rgba(0,87,255,0.35)] transition-shadow duration-500 ${
+        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-[#06071f] border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
           reducedMotion
             ? ''
-            : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.26)]'
+            : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.15)] group-hover:border-white/10'
         }`}
       >
         <div className="absolute top-4 right-4 z-20 flex gap-1.5 flex-wrap justify-end">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-[#E6EFEF]/70 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-text-dark"
+              className="bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-xs md:text-sm font-medium uppercase tracking-wide text-white/90"
             >
               {tag}
             </span>
@@ -56,10 +56,8 @@ export default function FeaturedProjectCard({
           alt={project.title}
           fill
           sizes={project.layout.sizes}
-          className={`object-cover transition-transform duration-500 ${
-            reducedMotion
-              ? ''
-              : 'group-hover:scale-[1.03] group-hover:-translate-y-1'
+          className={`object-cover transition-transform duration-700 ${
+            reducedMotion ? '' : 'group-hover:scale-[1.03]'
           }`}
         />
       </div>

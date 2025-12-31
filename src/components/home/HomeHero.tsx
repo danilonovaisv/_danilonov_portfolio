@@ -88,6 +88,7 @@ export function HomeHero() {
   const [isMuted, setIsMuted] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Scroll tracking
   const { scrollYProgress } = useScroll({
@@ -150,7 +151,7 @@ export function HomeHero() {
   // STATE MACHINE - Robust Bi-directional Logic
   // ============================================================================
   useMotionValueEvent(scrollYProgress, 'change', (progress) => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || isLoading) return;
 
     const { fullscreenThreshold } = CONFIG.timing;
 
@@ -305,7 +306,11 @@ export function HomeHero() {
         aria-label="Hero section with animated video manifesto"
       >
         {/* Preloader (z-50) */}
-        <HeroPreloader />
+        <AnimatePresence>
+          {isLoading && (
+            <HeroPreloader onComplete={() => setIsLoading(false)} />
+          )}
+        </AnimatePresence>
 
         {/* Sticky container - pins content during scroll */}
         <div className="sticky top-0 h-screen w-full overflow-hidden">

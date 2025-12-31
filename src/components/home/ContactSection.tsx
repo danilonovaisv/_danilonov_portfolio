@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { SOCIALS, CONTACT_FORM } from '@/config/navigation';
 import { HOME_CONTENT } from '@/config/content';
+import ContactForm from './contact/ContactForm';
 
 export default function ContactSection() {
   const reducedMotion = useReducedMotion();
@@ -156,77 +157,9 @@ export default function ContactSection() {
               </div>
             </div>
           </motion.div>
-
-          <motion.form
-            action={CONTACT_FORM.action}
-            method="POST"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={{
-              hidden: reducedMotion
-                ? { opacity: 1, y: 0 }
-                : { opacity: 0, y: 12 },
-              show: {
-                opacity: 1,
-                y: 0,
-                transition: { staggerChildren: reducedMotion ? 0 : 0.08 },
-              },
-            }}
-            className="bg-white rounded-xl p-6 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-black/5"
-          >
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-
-            {[
-              { label: 'Seu nome', name: 'name', type: 'text' },
-              { label: 'Seu email', name: 'email', type: 'email' },
-              { label: 'Telefone', name: 'phone', type: 'text' },
-            ].map((f) => (
-              <motion.label
-                key={f.name}
-                variants={formFieldVariants}
-                className="block mb-4"
-              >
-                <span className="block text-sm text-text-dark/70 mb-1">
-                  {f.label}
-                </span>
-                <input
-                  name={f.name}
-                  type={f.type}
-                  required={f.name !== 'phone'}
-                  title={f.label}
-                  placeholder={f.label}
-                  maxLength={100}
-                  className="w-full rounded-lg px-4 py-3 bg-section-bg/50 border border-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                />
-              </motion.label>
-            ))}
-
-            <motion.label variants={formFieldVariants} className="block mb-5">
-              <span className="block text-sm text-text-dark/70 mb-1">
-                Sua mensagem
-              </span>
-              <textarea
-                name="message"
-                required
-                rows={5}
-                title="Sua mensagem"
-                placeholder="Escreva sua mensagem aqui..."
-                maxLength={500}
-                className="w-full rounded-lg px-4 py-3 bg-section-bg/50 border border-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              />
-            </motion.label>
-
-            <motion.button
-              type="submit"
-              whileHover={reducedMotion ? undefined : { scale: 1.02, y: -1 }}
-              whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-              className="w-full rounded-lg bg-primary text-white py-3 font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-            >
-              Enviar Mensagem →
-            </motion.button>
-          </motion.form>
+          <div className="w-full">
+            <ContactForm />
+          </div>
         </div>
       </div>
     </section>

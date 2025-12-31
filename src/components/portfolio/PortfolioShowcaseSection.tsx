@@ -27,18 +27,7 @@ export default function PortfolioShowcaseSection() {
     >
       <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
         {/* Headline da Sessão - Centralizado */}
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20 md:mb-32 flex justify-center"
-        >
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter lowercase leading-[0.9] text-center">
-            <span className="text-white">portfólio</span>{' '}
-            <span className="text-[#5227FF]">showcase</span>
-          </h2>
-        </motion.div>
+{/* Headline removed for Absolute Layout style */}
 
         <div className="relative">
           {/* Floating Label - LightBlue (#4fe6ff) - Posicionado ao lado do primeiro item */}

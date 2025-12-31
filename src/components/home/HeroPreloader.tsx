@@ -5,10 +5,31 @@
 // Preloader Ghost Loader — z-50, com respeito a prefers-reduced-motion
 // ============================================================================
 
+import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-export function HeroPreloader() {
+interface HeroPreloaderProps {
+  onComplete?: () => void;
+}
+
+export function HeroPreloader({ onComplete }: HeroPreloaderProps) {
   const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    // Lock scroll
+    document.body.style.overflow = 'hidden';
+
+    const duration = prefersReducedMotion ? 500 : 2500;
+    const timer = setTimeout(() => {
+      document.body.style.overflow = '';
+      if (onComplete) onComplete();
+    }, duration);
+
+    return () => {
+      document.body.style.overflow = '';
+      clearTimeout(timer);
+    };
+  }, [onComplete, prefersReducedMotion]);
 
   const baseTransition = {
     delay: prefersReducedMotion ? 0 : 1.5,
@@ -20,7 +41,7 @@ export function HeroPreloader() {
       initial={{ opacity: 1 }}
       animate={{ opacity: 0 }}
       transition={baseTransition}
-      className="pointer-events-none fixed inset-0 z-50 flex flex-col items-center justify-center bg-linear-to-br from-[#050509] to-[#111827]"
+      className="pointer-events-none fixed inset-0 z-[100] flex flex-col items-center justify-center bg-linear-to-br from-[#050509] to-[#111827]"
     >
       <motion.svg
         className="mb-4"
@@ -51,7 +72,10 @@ export function HeroPreloader() {
           className="h-full bg-linear-to-r from-[#0057FF] to-[#5227FF]"
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
-          transition={{ duration: prefersReducedMotion ? 0.6 : 2 }}
+          transition={{
+            duration: prefersReducedMotion ? 0.4 : 2,
+            ease: 'easeInOut',
+          }}
         />
       </div>
     </motion.div>

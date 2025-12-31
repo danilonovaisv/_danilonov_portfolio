@@ -9,7 +9,6 @@ const footerLinks = FOOTER.links;
 const social = [
   { label: 'Instagram', href: SOCIALS.instagram },
   { label: 'LinkedIn', href: SOCIALS.linkedin },
-  { label: 'Facebook', href: SOCIALS.facebook },
   { label: 'Twitter', href: SOCIALS.twitter },
 ];
 
@@ -29,12 +28,13 @@ export default function SiteFooter() {
 
   return (
     <>
+      {/* Desktop Footer */}
       <motion.footer
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: reducedMotion ? 0.2 : 0.6 }}
-        className="hidden lg:block w-full bg-[#0d003b] py-12 border-t border-white/5"
+        className="hidden lg:block w-full bg-[#050505] py-12 border-t border-white/5 relative z-10"
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex items-center justify-between text-white text-sm">
@@ -80,8 +80,9 @@ export default function SiteFooter() {
         </div>
       </motion.footer>
 
+      {/* Mobile Footer */}
       <footer
-        className="lg:hidden bg-[#0d003b] text-white py-12 border-t border-white/5"
+        className="lg:hidden bg-[#050505] text-white py-12 border-t border-white/5 relative z-10"
         aria-label="Footer"
       >
         <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] flex flex-col gap-10">
@@ -99,7 +100,7 @@ export default function SiteFooter() {
                         if (isHashHref(l.href)) scrollToHash(l.href);
                         else window.location.href = l.href;
                       }}
-                      className="text-sm font-medium hover:opacity-70"
+                      className="text-sm font-medium hover:opacity-70 active:text-[#0057FF]"
                     >
                       {l.label}
                     </button>
@@ -120,7 +121,7 @@ export default function SiteFooter() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium hover:opacity-70"
+                  className="text-sm font-medium hover:opacity-70 active:text-[#0057FF]"
                 >
                   {s.label}
                 </a>
