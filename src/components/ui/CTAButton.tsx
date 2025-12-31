@@ -33,17 +33,17 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
 
   const variants = {
     primary: {
-      bg: 'bg-[#0048ff]',
+      bg: 'bg-[#0048ff] shadow-[0_0_30px_-5px_rgba(0,72,255,0.6)]',
       text: 'text-white',
-      iconBg: 'bg-[#0048ff]',
+      iconBg: 'bg-[#0048ff] shadow-[0_0_30px_-5px_rgba(0,72,255,0.6)]',
     },
     secondary: {
-      bg: 'bg-transparent border-2 border-[#0048ff]',
+      bg: 'bg-transparent border-2 border-[#0048ff] shadow-[0_0_20px_-5px_rgba(0,72,255,0.2)]',
       text: 'text-[#0048ff]',
-      iconBg: 'bg-[#0048ff]',
+      iconBg: 'bg-[#0048ff] shadow-[0_0_20px_-5px_rgba(0,72,255,0.2)]',
     },
     accent: {
-      bg: 'bg-[#4fe6ff]',
+      bg: 'bg-[#4fe6ff] shadow-[0_0_30px_-5px_rgba(79,230,255,0.5)]',
       text: 'text-[#0e0e0e]',
       iconBg: 'bg-[#0048ff]',
     },
@@ -58,14 +58,14 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
     <>
       {/* Text Container - Full Pill Shape */}
       <span
-        className={`inline-flex items-center px-8 py-3 ${v.bg} ${v.text} font-medium uppercase tracking-wide text-sm rounded-full`}
+        className={`inline-flex items-center px-10 py-4 ${v.bg} ${v.text} font-medium uppercase tracking-wide text-base rounded-full`}
       >
         {children}
       </span>
 
       {/* Icon Container - Circular Badge Overlapping Right */}
       <span
-        className={`flex items-center justify-center w-12 h-12 ${v.iconBg} text-white rounded-full -ml-4`}
+        className={`flex items-center justify-center w-14 h-14 ${v.iconBg} text-white rounded-full -ml-5 z-10`}
       >
         <ArrowRight
           className={`w-5 h-5 -rotate-45 ${

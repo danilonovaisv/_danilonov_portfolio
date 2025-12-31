@@ -7,6 +7,7 @@
 // - H1/H2: 5-8rem, Black weight, tracking-tight
 // - Color: #d9dade on #06071f background
 // ============================================================================
+import CTAButton from '@/components/ui/CTAButton';
 
 export function HeroCopy() {
   return (
@@ -25,25 +26,12 @@ export function HeroCopy() {
       </h2>
 
       {/* CTA Button */}
-      <a
-        href="/sobre"
-        className="group inline-flex items-center gap-2 rounded-full border border-[#4fe6ff] 
-                   px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.22em] 
-                   text-[#d9dade] transition-all duration-300
-                   hover:bg-[#4fe6ff] hover:text-[#06071f] 
-                   focus-visible:outline-none focus-visible:ring-2
-                   focus-visible:ring-[#4fe6ff] focus-visible:ring-offset-2 
-                   focus-visible:ring-offset-[#06071f]"
-        aria-label="Step inside — conhecer mais sobre Danilo"
-      >
-        step inside
-        <span
-          className="transition-transform duration-300 group-hover:translate-x-1"
-          aria-hidden="true"
-        >
-          →
-        </span>
-      </a>
+      {/* Uses standard layout: Pill + Circle Arrow */}
+      <div className="flex justify-center">
+        <CTAButton href="/sobre" variant="primary">
+          step inside
+        </CTAButton>
+      </div>
     </div>
   );
 }

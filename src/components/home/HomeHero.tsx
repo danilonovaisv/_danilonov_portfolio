@@ -7,8 +7,8 @@
 // DESKTOP BEHAVIOR:
 // - Thumb starts FIXED at bottom-right corner of VIEWPORT
 // - As user scrolls, thumb grows to FULLSCREEN
-// - When fullscreen: 2-second HOLD + sound unmute
-// - After hold: fade out, continue scroll
+// - When fullscreen: 2-second HOLD + sound unmute (Scroll LOCKED)
+// - After hold: Scroll unlocks, Z-index drops, next section scrolls OVER video
 //
 // MOBILE BEHAVIOR:
 // - NO thumb in Hero
@@ -147,37 +147,46 @@ export function HomeHero() {
   );
 
   // ============================================================================
-  // STATE MACHINE
+  // STATE MACHINE - Robust Bi-directional Logic
   // ============================================================================
   useMotionValueEvent(scrollYProgress, 'change', (progress) => {
     if (prefersReducedMotion) return;
 
     const { fullscreenThreshold } = CONFIG.timing;
 
-    // Show video while in Hero section
-    if (progress <= 1) {
+    // Safety: ensure video is mounted while in transition zone
+    if (progress <= 1 && !showVideo && videoState !== 'released') {
       setShowVideo(true);
     }
 
-    if (progress < morphEnd * 0.5) {
-      if (videoState !== 'thumbnail' && videoState !== 'transition') {
+    // 1. BACK TO THUMBNAIL (Top of page)
+    if (progress < 0.1) {
+      if (videoState !== 'thumbnail') {
+        // Cancel any pending hold release if user scrolled back up
+        if (holdTimeoutRef.current) clearTimeout(holdTimeoutRef.current);
+
         setVideoState('thumbnail');
+        setShowVideo(true);
         muteVideo();
       }
-    } else if (progress >= morphEnd * 0.5 && progress < fullscreenThreshold) {
-      if (videoState === 'thumbnail') {
+    }
+    // 2. IN TRANSITION (Middle of scroll)
+    else if (progress >= 0.1 && progress < fullscreenThreshold) {
+      if (videoState !== 'transition') {
+        // Cancel pending hold release
+        if (holdTimeoutRef.current) clearTimeout(holdTimeoutRef.current);
+
         setVideoState('transition');
-      }
-    } else if (progress >= fullscreenThreshold) {
-      if (videoState === 'transition') {
-        enterFullscreenHold();
+        setShowVideo(true);
+        muteVideo();
       }
     }
-
-    // Scrolling back up
-    if (progress < morphEnd * 0.3 && videoState === 'released') {
-      setVideoState('thumbnail');
-      setShowVideo(true);
+    // 3. ENTERING FULLSCREEN HOLD (Bottom of scroll)
+    else if (progress >= fullscreenThreshold) {
+      if (videoState === 'transition') {
+        // Only trigger hold if coming from transition (scrolling down)
+        enterFullscreenHold();
+      }
     }
   });
 
@@ -192,13 +201,29 @@ export function HomeHero() {
       clearTimeout(holdTimeoutRef.current);
     }
 
+    // Hold for duration, then release (NO FADE OUT, just unlock scroll and drop Z-index)
     holdTimeoutRef.current = setTimeout(() => {
       setVideoState('released');
       muteVideo();
-      // Hide video after release
-      setTimeout(() => setShowVideo(false), 500);
+      // NOTE: We don't hide video (setShowVideo(false)) anymore.
+      // It will stay on screen with lower Z-index, allowing next section to scroll over it.
     }, CONFIG.holdDuration);
   }, []);
+
+  // ============================================================================
+  // SCROLL LOCKING (During Hold)
+  // ============================================================================
+  useEffect(() => {
+    if (videoState === 'fullscreenHold') {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [videoState]);
 
   // ============================================================================
   // SOUND CONTROLS
@@ -241,6 +266,8 @@ export function HomeHero() {
       if (holdTimeoutRef.current) {
         clearTimeout(holdTimeoutRef.current);
       }
+      // Ensure scroll is restored on unmount
+      document.body.style.overflow = '';
     };
   }, []);
 
@@ -301,13 +328,22 @@ export function HomeHero() {
 
       {/* 
         FIXED VIDEO OVERLAY - OUTSIDE the section!
-        Uses position: fixed to stay anchored to viewport
-        Only visible on desktop (md:block)
+        Uses position: fixed. 
+        Z-index logic:
+        - High (100) typical state
+        - Low (0) when released (so next section z-50 scrolls over it)
       */}
       <AnimatePresence>
         {showVideo && (
           <motion.div
-            className="fixed z-[100] overflow-hidden will-change-transform hidden md:block pointer-events-auto"
+            className="fixed overflow-hidden will-change-transform hidden md:block pointer-events-auto"
+            // Dynamic Z-Index + Entrance Animations
+            animate={{
+              zIndex: videoState === 'released' ? 0 : 100,
+              opacity: 1, // Ensure visibility
+              scale: CONFIG.entrance.animate.scale,
+              y: CONFIG.entrance.animate.y,
+            }}
             style={{
               width,
               height,
@@ -317,13 +353,7 @@ export function HomeHero() {
               boxShadow,
             }}
             initial={CONFIG.entrance.initial}
-            animate={{
-              opacity: videoState === 'released' ? 0 : 1,
-              scale: CONFIG.entrance.animate.scale,
-              y: CONFIG.entrance.animate.y,
-            }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={CONFIG.entrance.transition}
+            // Entrance animation only
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={handleThumbClick}
@@ -351,7 +381,7 @@ export function HomeHero() {
                 {videoState === 'fullscreenHold' && !isMuted && (
                   <motion.div
                     className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 
-                               bg-black/60 backdrop-blur-sm rounded-full px-4 py-2"
+                               bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 z-20"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
