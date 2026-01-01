@@ -10,7 +10,7 @@ export function AboutHero() {
 
   return (
     <section className="relative h-screen flex items-center bg-(--ghost-bg) overflow-hidden">
-      {/* Background Videos */}
+      {/* Background Videos - Atmosphere, not protagonist */}
       <video
         src={ABOUT_CONTENT.hero.videos.desktop}
         autoPlay
@@ -18,7 +18,7 @@ export function AboutHero() {
         loop
         playsInline
         preload="metadata"
-        className="hidden lg:block absolute inset-0 w-full h-full object-cover opacity-60"
+        className="hidden lg:block absolute inset-0 w-full h-full object-cover object-top opacity-[0.55]"
       />
       <video
         src={ABOUT_CONTENT.hero.videos.mobile}
@@ -27,18 +27,14 @@ export function AboutHero() {
         loop
         playsInline
         preload="metadata"
-        className="block lg:hidden absolute inset-0 w-full h-full object-cover opacity-60"
+        className="block lg:hidden absolute inset-0 w-full h-full object-cover object-top opacity-[0.55]"
       />
 
-      {/* Dark Overlay Filter */}
-      <div className="absolute inset-0 bg-black/40 pointer-events-none z-1" />
+      {/* Strong Dark Overlay for Legibility */}
+      <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/65 to-black/90 pointer-events-none z-1" />
 
-      {/* Gradients */}
-      <div className="absolute inset-0 bg-linear-to-t from-(--ghost-bg) via-transparent to-transparent z-2 opacity-80" />
-      <div className="absolute inset-0 bg-linear-to-r from-black/60 via-transparent to-black/20 z-2" />
-
-      {/* Content wrapper aligned right according to spec */}
-      <div className="relative z-10 w-full px-6 lg:px-24">
+      {/* Content wrapper with invisible grid (ml-auto + padding) */}
+      <div className="relative z-10 w-full pr-[8vw] px-6">
         <div className="ml-auto max-w-[680px] text-right">
           <motion.div
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
@@ -47,45 +43,46 @@ export function AboutHero() {
               visible: {
                 transition: {
                   staggerChildren: 0.2,
-                  delayChildren: 0.4,
+                  delayChildren: 0, // Headline starts at 0
                 },
               },
             }}
-            className="space-y-4 md:space-y-6"
+            className="space-y-12"
           >
-            {/* Headline Group */}
+            {/* Headline Group - Hero Title Specs */}
             <div className="space-y-2">
               <motion.h1
                 variants={motionTokens.fadeGhost}
-                className="text-4xl md:text-6xl lg:text-7xl text-(--ghost-text) font-semibold tracking-tighter leading-[1.1]"
+                className="text-[clamp(44px,4.5vw,64px)] text-(--ghost-text) font-medium tracking-[-0.02em] leading-[1.08]"
               >
                 Sou {kw('Danilo Novais.')}
               </motion.h1>
 
               <motion.p
                 variants={motionTokens.fadeGhost}
-                className="text-2xl md:text-3xl lg:text-4xl text-(--ghost-text) font-medium tracking-tight leading-tight"
+                className="text-[clamp(32px,3.5vw,48px)] text-(--ghost-text) font-medium tracking-[-0.02em] leading-[1.08]"
               >
                 {kw('Você não vê')} tudo o que eu faço.
               </motion.p>
 
               <motion.p
                 variants={motionTokens.fadeGhost}
-                className="text-2xl md:text-3xl lg:text-4xl text-[var(--ghost-text)] font-medium tracking-tight leading-tight"
+                className="text-[clamp(32px,3.5vw,48px)] text-(--ghost-text) font-medium tracking-[-0.02em] leading-[1.08]"
               >
                 Mas sente quando {kw('funciona.')}
               </motion.p>
             </div>
 
-            {/* Paragraph Group with optional delay for "pause" effect inferred from stagger */}
+            {/* Paragraph Group - Hero Text Specs with 0.4s pause effect */}
             <motion.div
               variants={motionTokens.fadeGhost}
-              className="pt-6 space-y-2"
+              transition={{ delay: 0.4 }} // 0.4s pause after headlines
+              className="space-y-4 ml-auto max-w-[520px]"
             >
               {ABOUT_CONTENT.hero.description.map((line, idx) => (
                 <p
                   key={idx}
-                  className="text-lg md:text-2xl lg:text-3xl text-(--ghost-text-secondary) font-light tracking-tight leading-snug"
+                  className="text-base text-(--ghost-text-secondary) font-light leading-[1.8] tracking-tight"
                 >
                   {idx === 2 ? (
                     <>{kw('estratégia e tecnologia')} — na medida certa.</>

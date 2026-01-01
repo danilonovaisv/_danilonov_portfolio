@@ -7,7 +7,6 @@ import Ghost from './Ghost';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
-import RevealingText from './RevealingText';
 
 import {
   EffectComposer,
@@ -22,7 +21,7 @@ import { BlendFunction } from 'postprocessing';
 // ============================================================================
 // CONFIGURAÇÃO CRÍTICA: A COR DO FUNDO DEVE SER IDÊNTICA À COR DA MÁSCARA
 // ============================================================================
-const BACKGROUND_COLOR = '#050511';
+const BACKGROUND_COLOR = '#06071f';
 
 export default function GhostCanvas() {
   const dpr: [number, number] =
@@ -43,26 +42,13 @@ export default function GhostCanvas() {
       }}
       camera={{ position: [0, 0, 6], fov: 35 }}
     >
-      {/* BACKGROUND: COR DEVE SER EXATAMENTE #050511 */}
       <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <Suspense fallback={null}>
-        {/* Camada atmosférica de fundo */}
         <AtmosphereVeil />
 
-        {/* ================================================================
-            HIERARQUIA DE Z (da câmera para o fundo):
-            1. Ghost (Z ~ 0) - Mais próximo da câmera
-            2. RevealingText contém:
-               - Máscara (Z = -0.1)
-               - Texto (Z = -0.5)
-            ================================================================ */}
-
-        {/* Ghost na frente (Z ~ 0) */}
+        {/* Ghost (Z ~ 0) */}
         <Ghost ref={ghostRef} scale={0.22} position={[0, -0.2, 0]} />
-
-        {/* Texto + Máscara atrás */}
-        <RevealingText ghostRef={ghostRef} />
 
         {/* Partículas decorativas */}
         <Particles />

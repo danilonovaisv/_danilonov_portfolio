@@ -17,7 +17,7 @@ const GhostCanvas = dynamic(
 
 export function GhostStage({ reducedMotion }: GhostStageProps) {
   const fallback = (
-    <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
+    <div className="h-full w-full bg-[radial-gradient(circle,#0b0d3a,#06071f)]" />
   );
 
   if (reducedMotion) return fallback;

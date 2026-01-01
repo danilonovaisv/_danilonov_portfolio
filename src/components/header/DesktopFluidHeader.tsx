@@ -76,14 +76,14 @@ export default function DesktopFluidHeader({
   const nav = useMemo(() => navItems, [navItems]);
 
   return (
-    <header className="hidden lg:block sticky top-6 z-40 pointer-events-none inset-x-0">
-      <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
+    <header className="hidden lg:block sticky top-0 z-40 w-full pointer-events-none">
+      <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] pt-4 flex justify-center">
         <motion.div
           ref={wrapRef}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
           style={{ x, scaleX, scaleY }}
-          className="pointer-events-auto mx-auto w-full max-w-[1100px] relative"
+          className="pointer-events-auto w-full max-w-[1100px] relative"
         >
           <div
             className={`${styles.headerContainer} h-16 rounded-full backdrop-blur-md border border-white/10 shadow-lg bg-black/5`}

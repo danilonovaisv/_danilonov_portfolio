@@ -13,7 +13,7 @@ import { HeroCopy } from './HeroCopy';
 import { GhostStage } from './GhostStage';
 
 const CONFIG = {
-  preloadMs: 800,
+  preloadMs: 2000,
   videoSrc:
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   bgColor: '#050511',
@@ -47,8 +47,6 @@ const CONFIG = {
   },
 } as const;
 
-type VideoState = 'thumbnail' | 'transition' | 'fullscreenHold' | 'released';
-
 function usePrefersReducedMotion() {
   const [pref, setPref] = useState(false);
   useEffect(() => {
@@ -70,75 +68,69 @@ function usePrefersReducedMotion() {
 
 export default function HomeHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-  const [videoState, setVideoState] = useState<VideoState>('thumbnail');
+  const [isFullscreenHold, setIsFullscreenHold] = useState(false);
+  const [hasReachedEnd, setHasReachedEnd] = useState(false);
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Scroll progress da seção do hero
+  // Scroll progress para morph do vídeo
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start end', 'end start'],
+    offset: ['start start', 'end end'],
   });
 
-  // Mapeia o progresso para ranges úteis
-  const progress = useTransform(
-    scrollYProgress,
-    [0, 0.33, 0.66, 1],
-    [0, 0.5, 0.9, 1]
-  );
-  const thumbScale = useTransform(progress, [0, 0.2, 0.35], [1, 1.12, 1.25]);
-  const thumbRadius = useTransform(progress, [0, 0.25, 0.4], [16, 12, 0]);
-  const thumbOpacity = useTransform(progress, [0, 0.15], [1, 0.15]);
+  // Morph transforms (Thumb 30vw -> Fullscreen approx 100vw)
+  // progress 0 a 0.9: morphing
+  const morphProgress = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
 
-  // Dispara os estados por limiar de scroll
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const unsub = progress.on('change', (v) => {
-      if (v > 0.18 && videoState === 'thumbnail') setVideoState('transition');
-      if (v > 0.32 && videoState === 'transition')
-        setVideoState('fullscreenHold');
-      if (v > 0.5 && videoState === 'fullscreenHold') setVideoState('released');
-    });
-    return () => unsub();
-  }, [progress, prefersReducedMotion, videoState]);
+  // Para cobrir a tela vindo de 30vw (bottom-right), precisamos de scale ~3.4
+  // e origin na ponta inferior direita.
+  const videoScale = useTransform(morphProgress, [0, 1], [1, 3.4]);
+  const borderRadius = useTransform(morphProgress, [0, 0.7], [16, 0]);
 
-  // Hold em fullscreen trava o scroll por 2s
+  // Audio & Hold Logic
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    // Entra no hold ao atingir o final da seção
+    if (latest >= 0.99 && !isFullscreenHold && !hasReachedEnd) {
+      setIsFullscreenHold(true);
+    }
+
+    // Mute se o usuário subir o scroll significativamente
+    if (latest < 0.9) {
+      manifestoRef.current?.setMuted(true);
+      setHasReachedEnd(false);
+    }
+
+    // Auto-mute ao sair da seção
+    if (latest < 0.01 || latest > 1.05) {
+      manifestoRef.current?.setMuted(true);
+    }
+  });
+
   useEffect(() => {
-    if (videoState === 'fullscreenHold') {
-      const prev = document.body.style.overflow;
+    if (isFullscreenHold) {
+      const prevOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
-      const t = setTimeout(() => setVideoState('released'), 2000);
+
+      // Unmute no hold
+      manifestoRef.current?.setMuted(false);
+
+      const timer = setTimeout(() => {
+        document.body.style.overflow = prevOverflow;
+        setIsFullscreenHold(false);
+        setHasReachedEnd(true);
+        manifestoRef.current?.setMuted(true);
+      }, 2000);
+
       return () => {
-        document.body.style.overflow = prev;
-        clearTimeout(t);
+        document.body.style.overflow = prevOverflow;
+        clearTimeout(timer);
       };
     }
-  }, [videoState]);
-
-  // Auto-mute quando sai da viewport
-  const [isInView, setIsInView] = useState(true);
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => setIsInView(e.isIntersecting),
-      { threshold: 0.2 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  useEffect(() => {
-    if (!isInView && !isMuted) {
-      if (videoRef.current) {
-        videoRef.current.muted = true;
-        setIsMuted(true);
-      }
-    }
-  }, [isInView, isMuted]);
+  }, [isFullscreenHold]);
 
   const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
 
@@ -146,119 +138,67 @@ export default function HomeHero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen md:h-[200vh] overflow-hidden bg-[#050511]"
+      className="relative h-[200vh] bg-[#06071f] overflow-hidden"
       aria-label="Hero section"
     >
-      {/* Preloader */}
-      <AnimatePresence>
-        {isLoading && (
-          <Preloader
-            durationMs={CONFIG.preloadMs}
-            onComplete={handlePreloaderDone}
-            label="Summoning spirits"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* WebGL (desliga com reduced-motion) */}
-      <div className="absolute inset-0 z-10 pointer-events-auto">
-        <GhostStage reducedMotion={prefersReducedMotion} />
-      </div>
-
-      {/* CTA Button - acima de tudo (z-30) */}
-      <div className="absolute inset-0 z-30 pointer-events-none">
-        <div className="w-full h-full flex items-end justify-center pb-16 sm:pb-20 lg:pb-24 px-6">
-          <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 2.5 }}
-            className="pointer-events-auto"
-          >
-            <HeroCopy />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Área sticky para a morph do vídeo (desktop) */}
-      {!prefersReducedMotion && (
-        <div className="sticky top-0 h-screen w-full z-30 pointer-events-none">
-          {/* Thumb -> fullscreen */}
-          {videoState !== 'released' && (
-            <motion.div
-              className="absolute bottom-8 right-8 md:block hidden pointer-events-auto"
-              style={{ scale: thumbScale, opacity: thumbOpacity }}
-              initial={CONFIG.entrance.initial}
-              animate={CONFIG.entrance.animate}
-              transition={CONFIG.entrance.transition}
-            >
-              <motion.div
-                className="w-[320px] h-[180px] overflow-hidden border border-white/10 backdrop-blur bg-white/5 shadow-xl cursor-pointer"
-                style={{ borderRadius: thumbRadius }}
-                whileHover={
-                  videoState === 'thumbnail'
-                    ? { scale: CONFIG.hover.scale }
-                    : undefined
-                }
-                whileTap={{ scale: 0.98 }}
-                transition={CONFIG.hover.transition}
-                onClick={() =>
-                  setVideoState((s) => (s === 'thumbnail' ? 'transition' : s))
-                }
-              >
-                <div className="relative w-full h-full">
-                  <video
-                    ref={videoRef}
-                    src={CONFIG.videoSrc}
-                    autoPlay
-                    muted={isMuted}
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                    aria-label="Portfolio showreel video"
-                  />
-                  <motion.div
-                    className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none"
-                    animate={{ opacity: videoState === 'thumbnail' ? 0.7 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
+      {/* Sticky Wrapper - Mantém Ghost, Texto e Vídeo na viewport */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Preloader */}
+        <AnimatePresence>
+          {isLoading && (
+            <Preloader
+              durationMs={CONFIG.preloadMs}
+              onComplete={handlePreloaderDone}
+              label="Summoning spirits"
+            />
           )}
+        </AnimatePresence>
 
-          {/* Camada fullscreen durante a transição/hold */}
-          <AnimatePresence>
-            {(videoState === 'transition' ||
-              videoState === 'fullscreenHold') && (
-              <motion.div
-                key="fs"
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <motion.div
-                  className="absolute inset-0"
-                  initial={{ borderRadius: 12, scale: 0.98 }}
-                  animate={{ borderRadius: 0, scale: 1 }}
-                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <video
-                    src={CONFIG.videoSrc}
-                    autoPlay
-                    muted={isMuted}
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                    aria-label="Portfolio showreel fullscreen"
-                  />
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* WebGL Stage */}
+        <div className="absolute inset-0 z-10">
+          <GhostStage reducedMotion={prefersReducedMotion} />
         </div>
-      )}
+
+        {/* Editorial Text Block (HeroCopy) */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center px-6 pointer-events-none">
+          <div className="pointer-events-auto">
+            <HeroCopy />
+          </div>
+        </div>
+
+        {/* Video Manifesto (Desktop Only) */}
+        {!prefersReducedMotion && (
+          <motion.div
+            className="fixed bottom-6 right-6 md:right-10 z-30 pointer-events-auto hidden md:block"
+            style={{
+              scale: videoScale,
+              borderRadius,
+              width: '30vw',
+              aspectRatio: '16/9',
+              originX: 1,
+              originY: 1,
+              overflow: 'hidden',
+            }}
+            initial={CONFIG.entrance.initial}
+            animate={CONFIG.entrance.animate}
+            transition={CONFIG.entrance.transition}
+          >
+            <ManifestoThumb
+              ref={manifestoRef}
+              onClick={() => {
+                // Clique na thumb scrolla para o final para trigger do hold
+                window.scrollTo({
+                  top: window.innerHeight * 2,
+                  behavior: 'smooth',
+                });
+              }}
+            />
+          </motion.div>
+        )}
+      </div>
+
+      {/* Placeholder para ocupar o scroll de 200vh */}
+      <div className="h-screen w-full pointer-events-none" />
     </section>
   );
 }

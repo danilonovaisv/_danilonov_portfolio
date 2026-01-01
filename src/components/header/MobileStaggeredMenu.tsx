@@ -76,6 +76,39 @@ export default function MobileStaggeredMenu({
     };
   }, [isOpen]);
 
+  const menuRef = useRef<HTMLElement>(null);
+
+  // Trap focus
+  useEffect(() => {
+    if (!isOpen || !menuRef.current) return;
+    const focusableElements = menuRef.current.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          lastElement.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          firstElement.focus();
+          e.preventDefault();
+        }
+      }
+    };
+
+    firstElement?.focus();
+    window.addEventListener('keydown', handleTab);
+    return () => window.removeEventListener('keydown', handleTab);
+  }, [isOpen]);
+
   // Handle ESC key
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -127,6 +160,7 @@ export default function MobileStaggeredMenu({
       <AnimatePresence>
         {isOpen && (
           <motion.nav
+            ref={menuRef}
             initial="closed"
             animate="open"
             exit="closed"
