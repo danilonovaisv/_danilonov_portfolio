@@ -28,7 +28,7 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const generatedId = useId();
-  const uniqueId = id || generatedId;
+  const uniqueId = id || `cta-btn-${generatedId.replace(/:/g, '')}`;
 
   const variants = {
     primary: {

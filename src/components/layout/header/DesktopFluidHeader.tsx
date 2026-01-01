@@ -45,10 +45,12 @@ export default function DesktopFluidHeader({
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const x = useSpring(0, { stiffness: 180, damping: 22, mass: 0.6 });
+  const y = useSpring(0, { stiffness: 200, damping: 24, mass: 0.5 }); // Novo: movimento Y
   const scaleX = useSpring(1, { stiffness: 140, damping: 20, mass: 0.6 });
   const scaleY = useSpring(1, { stiffness: 140, damping: 20, mass: 0.6 });
 
   const maxTranslateX = HEADER_TOKENS.desktop.maxTranslateX;
+  const maxTranslateY = 6; // Movimento vertical sutil (6px max)
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent) => {
@@ -58,31 +60,35 @@ export default function DesktopFluidHeader({
 
       const rect = el.getBoundingClientRect();
       const px = (e.clientX - rect.left) / rect.width; // 0..1
-      const centered = (px - 0.5) * 2; // -1..1
+      const py = (e.clientY - rect.top) / rect.height; // 0..1
+      const centeredX = (px - 0.5) * 2; // -1..1
+      const centeredY = (py - 0.5) * 2; // -1..1
 
-      x.set(centered * maxTranslateX);
+      x.set(centeredX * maxTranslateX);
+      y.set(centeredY * maxTranslateY);
       scaleX.set(HEADER_TOKENS.desktop.maxScaleX);
       scaleY.set(HEADER_TOKENS.desktop.maxScaleY);
     },
-    [maxTranslateX, reducedMotion, scaleX, scaleY, x]
+    [maxTranslateX, maxTranslateY, reducedMotion, scaleX, scaleY, x, y]
   );
 
   const onPointerLeave = useCallback(() => {
     x.set(0);
+    y.set(0);
     scaleX.set(1);
     scaleY.set(1);
-  }, [scaleX, scaleY, x]);
+  }, [scaleX, scaleY, x, y]);
 
   const nav = useMemo(() => navItems, [navItems]);
 
   return (
-    <header className="hidden lg:block fixed top-0 left-0 right-0 z-[100] w-full pointer-events-none">
+    <header className="hidden lg:block fixed top-0 left-0 right-0 z-100 w-full pointer-events-none">
       <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] pt-4 flex justify-center">
         <motion.div
           ref={wrapRef}
           onPointerMove={onPointerMove}
           onPointerLeave={onPointerLeave}
-          style={{ x, scaleX, scaleY }}
+          style={{ x, y, scaleX, scaleY }}
           className="pointer-events-auto w-full max-w-[1100px] relative"
         >
           <div

@@ -121,7 +121,7 @@ export default function MobileStaggeredMenu({
   return (
     <div className="lg:hidden">
       {/* Header bar fixed */}
-      <header className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 py-6 pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-6 py-6 pointer-events-none">
         <Link href="/" onClick={onClose} className="pointer-events-auto">
           <Image
             src={logoUrl}
@@ -136,8 +136,8 @@ export default function MobileStaggeredMenu({
         <button
           onClick={isOpen ? onClose : onOpen}
           aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
-          aria-expanded={isOpen ? 'true' : 'false'}
-          className="pointer-events-auto w-12 h-12 flex items-center justify-center text-white focus:outline-none z-[110]"
+          aria-expanded={isOpen}
+          className="pointer-events-auto w-12 h-12 flex items-center justify-center text-white focus:outline-none z-110"
         >
           <div className="relative w-6 h-6 flex flex-col justify-center items-center gap-[6px]">
             <motion.span

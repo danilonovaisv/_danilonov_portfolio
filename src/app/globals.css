@@ -4,7 +4,7 @@
 
 @theme {
   /* Site Theme Colors */
-  --color-background: #000022;
+  --color-background: #050511;
   --color-foreground: #fcffff;
   --color-primary: #0057ff;
   --color-primary-hover: #0043cc;
@@ -70,7 +70,7 @@
 }
 
 :root {
-  --ghost-bg: #000022;
+  --ghost-bg: #050511;
   --ghost-text: #fcffff;
   --ghost-text-secondary: #a1a3a3;
   --ghost-blue: #0048ff;

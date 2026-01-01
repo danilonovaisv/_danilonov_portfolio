@@ -4,8 +4,8 @@
 // ============================================================================
 
 export const headerColors = {
-  primary: '#0048ff',
-  background: '#000022',
+  primary: '#0057ff',
+  background: '#050511', // Ghost Void
   text: '#fcffff',
   textInverse: '#0e0e0e',
   accent: '#4fe6ff',
