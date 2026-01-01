@@ -1,20 +1,24 @@
-// src/components/Preloader.tsx
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 type Props = {
-  ready: boolean; // quando true, dispara o fade-out e desmonta
+  /** Controlado: some quando `ready === true` */
+  ready?: boolean;
+  /** Compatibilidade: encerra sozinho e chama callback */
+  onComplete?: () => void;
+  /** Duração usada com `onComplete` (ms) */
+  durationMs?: number;
   label?: string;
   className?: string;
-  onComplete?: () => void;
 };
 
 export function Preloader({
   ready,
+  onComplete,
+  durationMs = 800,
   label = 'Summoning spirits',
   className,
-  onComplete,
 }: Props) {
   const [show, setShow] = useState(true);
   const reduced = useMemo(
@@ -26,17 +30,33 @@ export function Preloader({
   );
 
   useEffect(() => {
-    if (!ready) return;
-    const t = setTimeout(() => setShow(false), reduced ? 200 : 1000);
-    return () => clearTimeout(t);
-  }, [ready, reduced]);
+    // Modo A: controlado por 'ready'
+    if (typeof ready === 'boolean') {
+      if (!ready) return;
+      const t = setTimeout(() => setShow(false), reduced ? 200 : 1000);
+      return () => clearTimeout(t);
+    }
+    // Modo B: compatibilidade com onComplete
+    if (onComplete) {
+      const t = setTimeout(
+        () => {
+          setShow(false);
+          try {
+            onComplete();
+          } catch {}
+        },
+        Math.max(0, durationMs)
+      );
+      return () => clearTimeout(t);
+    }
+  }, [ready, onComplete, durationMs, reduced]);
 
   return (
-    <AnimatePresence onExitComplete={onComplete}>
+    <AnimatePresence>
       {show && (
         <motion.div
           className={
-            'fixed inset-0 z-1000 grid place-items-center bg-[radial-gradient(ellipse_at_center,#0a0a0a,#1a1a1a_50%,#0a0a0a_100%)] ' +
+            'fixed inset-0 z-[1000] grid place-items-center bg-[radial-gradient(ellipse_at_center,_#0a0a0a,_#1a1a1a_50%,_#0a0a0a_100%)] ' +
             (className ?? '')
           }
           initial={{ opacity: 1 }}

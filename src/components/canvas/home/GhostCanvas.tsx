@@ -19,6 +19,11 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
+// ============================================================================
+// CONFIGURAÇÃO CRÍTICA: A COR DO FUNDO DEVE SER IDÊNTICA À COR DA MÁSCARA
+// ============================================================================
+const BACKGROUND_COLOR = '#050511';
+
 export default function GhostCanvas() {
   const dpr: [number, number] =
     typeof window === 'undefined'
@@ -38,40 +43,51 @@ export default function GhostCanvas() {
       }}
       camera={{ position: [0, 0, 6], fov: 35 }}
     >
-      {/* COR DO FUNDO: DEVE SER IGUAL À COR DA MÁSCARA EM RevealingText.tsx */}
-      <color attach="background" args={['#050511']} />
+      {/* BACKGROUND: COR DEVE SER EXATAMENTE #050511 */}
+      <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <Suspense fallback={null}>
+        {/* Camada atmosférica de fundo */}
         <AtmosphereVeil />
 
-        {/* Fantasma na frente (Z~0) */}
+        {/* ================================================================
+            HIERARQUIA DE Z (da câmera para o fundo):
+            1. Ghost (Z ~ 0) - Mais próximo da câmera
+            2. RevealingText contém:
+               - Máscara (Z = -0.1)
+               - Texto (Z = -0.5)
+            ================================================================ */}
+
+        {/* Ghost na frente (Z ~ 0) */}
         <Ghost ref={ghostRef} scale={0.22} position={[0, -0.2, 0]} />
 
-        {/* Texto e Máscara atrás (Z~-0.2) */}
+        {/* Texto + Máscara atrás */}
         <RevealingText ghostRef={ghostRef} />
 
+        {/* Partículas decorativas */}
         <Particles />
         <Fireflies />
 
+        {/* Post-processing */}
         <EffectComposer multisampling={0}>
           <Bloom
-            luminanceThreshold={1}
+            luminanceThreshold={0.9}
             mipmapBlur
-            intensity={1.5}
-            radius={0.6}
+            intensity={1.8}
+            radius={0.5}
           />
           <ChromaticAberration
-            offset={[0.002, 0.002]}
+            offset={[0.0015, 0.0015]}
             radialModulation={false}
             modulationOffset={0}
           />
-          <Scanline density={1.5} opacity={0.15} />
+          <Scanline density={1.2} opacity={0.12} />
           <Noise
-            opacity={0.15}
+            opacity={0.12}
             premultiply
             blendFunction={BlendFunction.OVERLAY}
           />
-          <Vignette eskil={false} offset={0.1} darkness={1.0} />
+          <Vignette eskil={false} offset={0.15} darkness={0.9} />
         </EffectComposer>
       </Suspense>
     </Canvas>

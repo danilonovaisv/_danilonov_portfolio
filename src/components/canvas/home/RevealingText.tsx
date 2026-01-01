@@ -5,34 +5,16 @@ import { useFrame, useThree } from '@react-three/fiber';
 import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 
-// --- SHADER DA CORTINA (MÁSCARA) ---
-const darknessFragmentShader = `
+// ============================================================================
+// Shader da "Darkness Layer" (Cortina de Escuridão)
+// CONCEITO: Renderizamos um Plane opaco na cor do fundo. Onde o Ghost
+// estiver, o Alpha cai para 0 (transparente), revelando o texto.
+// ============================================================================
+
+const MASK_VERTEX_SHADER = `
   varying vec2 vUv;
   varying vec3 vWorldPosition;
   
-  uniform vec3 uGhostPosition;
-  uniform float uRevealRadius;
-  uniform vec3 uBackgroundColor; // Cor do fundo do site
-
-  void main() {
-    float dist = distance(vWorldPosition.xy, uGhostPosition.xy);
-    
-    // Lógica da Lanterna Invertida:
-    // Perto do fantasma (dist 0) -> Alpha 0.0 (Transparente -> Mostra o texto)
-    // Longe do fantasma -> Alpha 1.0 (Opaco -> Esconde o texto com a cor do fundo)
-    float alpha = smoothstep(uRevealRadius * 0.3, uRevealRadius, dist);
-    
-    // Garante opacidade total longe da luz
-    alpha = clamp(alpha, 0.0, 1.0);
-    
-    // Pinta com a cor do fundo e aplica a transparência calculada
-    gl_FragColor = vec4(uBackgroundColor, alpha);
-  }
-`;
-
-const darknessVertexShader = `
-  varying vec2 vUv;
-  varying vec3 vWorldPosition;
   void main() {
     vUv = uv;
     vec4 worldPosition = modelMatrix * vec4(position, 1.0);
@@ -41,106 +23,157 @@ const darknessVertexShader = `
   }
 `;
 
+const MASK_FRAGMENT_SHADER = `
+  uniform vec3 uGhostPosition;
+  uniform float uRevealRadius;
+  uniform vec3 uBackgroundColor;
+  uniform float uTime;
+  
+  varying vec2 vUv;
+  varying vec3 vWorldPosition;
+  
+  void main() {
+    // Distância 2D entre o pixel atual e a posição do Ghost
+    float dist = distance(vWorldPosition.xy, uGhostPosition.xy);
+    
+    // Pulso sutil no raio de revelação
+    float dynamicRadius = uRevealRadius + sin(uTime * 2.0) * 0.2;
+    
+    // smoothstep: 
+    //   - Se dist < dynamicRadius * 0.3 → alpha = 0.0 (buraco, transparente)
+    //   - Se dist > dynamicRadius → alpha = 1.0 (opaco, cor do fundo)
+    //   - Entre os dois: gradiente suave
+    float alpha = smoothstep(dynamicRadius * 0.25, dynamicRadius, dist);
+    
+    // Adiciona leve fade nas bordas para suavizar
+    alpha = pow(alpha, 0.9);
+    
+    // Pintar com a cor do fundo e aplicar a transparência
+    gl_FragColor = vec4(uBackgroundColor, alpha);
+  }
+`;
+
+// ============================================================================
+// CONFIGURAÇÕES
+// ============================================================================
+const BACKGROUND_COLOR = '#050511'; // DEVE SER IDÊNTICO AO CANVAS BACKGROUND
+
+// Fonte TTF local disponível no projeto
+const FONT_ROBOTO_BLACK = '/fonts/RobotoBlack.ttf';
+const FONT_ROBOTO_VARIABLE = '/fonts/Roboto-VariableFont_wdth,wght.ttf';
+
 interface RevealingTextProps {
   ghostRef: React.RefObject<THREE.Group | null>;
 }
 
 export default function RevealingText({ ghostRef }: RevealingTextProps) {
   const maskMaterialRef = useRef<THREE.ShaderMaterial>(null);
-  const { viewport } = useThree();
-  const isMobile = viewport.width < 5;
+  const { viewport, size } = useThree();
+  const isMobile = size.width < 768;
 
-  // Material da Cortina
+  // Criar o material da máscara uma vez
   const darknessMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
         uGhostPosition: { value: new THREE.Vector3(0, 0, 0) },
-        uRevealRadius: { value: isMobile ? 2.5 : 3.8 }, // Tamanho da lanterna
-        // AQUI: A cor deve ser EXATAMENTE a cor do fundo do Canvas (#050511)
-        uBackgroundColor: { value: new THREE.Color('#050511') },
+        uRevealRadius: { value: isMobile ? 2.0 : 3.2 },
+        uBackgroundColor: { value: new THREE.Color(BACKGROUND_COLOR) },
+        uTime: { value: 0 },
       },
-      vertexShader: darknessVertexShader,
-      fragmentShader: darknessFragmentShader,
+      vertexShader: MASK_VERTEX_SHADER,
+      fragmentShader: MASK_FRAGMENT_SHADER,
       transparent: true,
-      depthWrite: false, // Importante para não bugar a renderização
+      depthWrite: false, // CRÍTICO: não bloqueia depth
+      depthTest: true,
+      side: THREE.DoubleSide,
     });
   }, [isMobile]);
 
-  useFrame(() => {
-    // A cortina segue o fantasma para criar o buraco
+  useFrame((state) => {
+    // Atualizar posição do Ghost no shader
     if (ghostRef.current && maskMaterialRef.current) {
       maskMaterialRef.current.uniforms.uGhostPosition.value.lerp(
         ghostRef.current.position,
-        0.1
+        0.12
       );
+      maskMaterialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
     }
   });
 
+  // ============================================================================
+  // HIERARQUIA DE Z:
+  //   - Texto: Z = -0.5 (mais distante da câmera)
+  //   - Máscara: Z = -0.1 (na frente do texto, mas atrás do Ghost)
+  //   - Ghost: Z ~ 0 (mais próximo da câmera)
+  // ============================================================================
+
   return (
     <group>
-      {/* 1. TEXTO BRANCO (Fica atrás da cortina, Z = -0.2) */}
-      {/* Usamos fonte padrão para garantir que aparece */}
-      <group position={[0, 0.2, -0.2]}>
-        {/* TAG */}
+      {/* ====================================================================
+          1. GRUPO DO TEXTO (Z = -0.5)
+          O texto é branco simples, usando fonte TTF local.
+          ==================================================================== */}
+      <group position={[0, 0, -0.5]}>
+        {/* TAG - [ BRAND AWARENESS ] */}
         <Text
-          fontSize={isMobile ? 0.09 : 0.1}
-          position={[0, isMobile ? 1.3 : 1.5, 0]}
-          letterSpacing={0.2}
+          fontSize={isMobile ? 0.08 : 0.09}
+          position={[0, isMobile ? 1.1 : 1.35, 0]}
+          letterSpacing={0.25}
           textAlign="center"
           anchorX="center"
           anchorY="middle"
-          color="white"
-          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6aAZ9hjp-Ek-_EeA.woff"
+          color="#ffffff"
+          font={FONT_ROBOTO_VARIABLE}
         >
           [ BRAND AWARENESS ]
         </Text>
 
-        {/* TÍTULO - Peso Heavy/Bold */}
+        {/* H1 - TÍTULO PRINCIPAL (Bold - usando Roboto Black) */}
         <Text
-          fontSize={isMobile ? 0.45 : 0.7}
+          fontSize={isMobile ? 0.38 : 0.62}
           lineHeight={1}
           textAlign="center"
           anchorX="center"
           anchorY="bottom"
           position={[0, 0.1, 0]}
-          color="white"
-          fontWeight="bold" // Força o negrito
-          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff"
+          color="#ffffff"
+          font={FONT_ROBOTO_BLACK}
         >
           você não vê
         </Text>
         <Text
-          fontSize={isMobile ? 0.45 : 0.7}
+          fontSize={isMobile ? 0.38 : 0.62}
           lineHeight={1}
           textAlign="center"
           anchorX="center"
           anchorY="top"
-          position={[0, -0.1, 0]}
-          color="white"
-          fontWeight="bold"
-          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hjp-Ek-_EeA.woff"
+          position={[0, -0.05, 0]}
+          color="#ffffff"
+          font={FONT_ROBOTO_BLACK}
         >
           o design.
         </Text>
 
-        {/* SUBTÍTULO - Peso Light/Regular */}
+        {/* H2 - SUBTÍTULO (Regular) */}
         <Text
-          fontSize={isMobile ? 0.25 : 0.35}
-          position={[0, isMobile ? -1.0 : -1.1, 0]}
+          fontSize={isMobile ? 0.22 : 0.32}
+          position={[0, isMobile ? -0.85 : -1.0, 0]}
           textAlign="center"
           anchorX="center"
           anchorY="middle"
-          color="white"
-          font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuDyFAZ9hjp-Ek-_EeA.woff"
+          color="#cccccc"
+          font={FONT_ROBOTO_VARIABLE}
         >
           mas ele vê você.
         </Text>
       </group>
 
-      {/* 2. CORTINA DE ESCURIDÃO (Z = -0.1) */}
-      {/* Fica NA FRENTE do texto, escondendo-o, exceto onde o fantasma passa */}
-      <mesh position={[0, 0, -0.1]}>
-        <planeGeometry args={[viewport.width * 2, viewport.height * 2]} />
+      {/* ====================================================================
+          2. MÁSCARA DE ESCURIDÃO (Z = -0.1)
+          Um Plane que cobre tudo com a cor do fundo, exceto onde o Ghost está.
+          ==================================================================== */}
+      <mesh position={[0, 0, -0.1]} renderOrder={10}>
+        <planeGeometry args={[viewport.width * 2.5, viewport.height * 2.5]} />
         <primitive
           object={darknessMaterial}
           ref={maskMaterialRef}

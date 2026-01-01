@@ -26,6 +26,7 @@ export function HeroHeader() {
     };
 
     const onLeave = () => {
+      // Fallback pro centro do hero
       const rect = el.getBoundingClientRect();
       el.style.setProperty('--gx', `${rect.width * 0.5}px`);
       el.style.setProperty('--gy', `${rect.height * 0.4}px`);

@@ -1,40 +1,26 @@
 'use client';
 
-// ============================================================================
-// src/components/home/GhostStage.tsx
-// Wrapper da camada WebGL, respeitando prefers-reduced-motion / fallback
-// ============================================================================
-
 import * as React from 'react';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
-// Dynamic import par evitar SSR do Canvas WebGL
-const GhostCanvas = dynamic(
-  () =>
-    import('@/components/canvas/home/GhostCanvas').then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
-    ),
-  }
-);
-
 interface GhostStageProps {
   reducedMotion?: boolean;
 }
+
+// Import dinâmico evita SSR do canvas
+const GhostCanvas = dynamic(
+  () => import('@/components/canvas/home/GhostCanvas').then((m) => m.default),
+  { ssr: false }
+);
 
 export function GhostStage({ reducedMotion }: GhostStageProps) {
   const fallback = (
     <div className="h-full w-full bg-[radial-gradient(circle_at_top,#1d4ed8_0,#06071f_55%,#020617_100%)]" />
   );
 
-  if (reducedMotion) {
-    // Fallback estático em gradiente radial (sem WebGL)
-    return fallback;
-  }
+  if (reducedMotion) return fallback;
 
   return (
     <ErrorBoundary fallback={fallback}>
