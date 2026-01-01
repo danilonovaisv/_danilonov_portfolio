@@ -1,18 +1,18 @@
 'use client';
 
 // ============================================================================
-// src/components/home/HeroPreloader.tsx
+// src/components/home/Preloader.tsx
 // Preloader Ghost Loader — z-50, com respeito a prefers-reduced-motion
 // ============================================================================
 
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 
-interface HeroPreloaderProps {
+interface PreloaderProps {
   onComplete?: () => void;
 }
 
-export function HeroPreloader({ onComplete }: HeroPreloaderProps) {
+export function Preloader({ onComplete }: PreloaderProps) {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -82,4 +82,4 @@ export function HeroPreloader({ onComplete }: HeroPreloaderProps) {
   );
 }
 
-export default HeroPreloader;
+export default Preloader;

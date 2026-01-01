@@ -25,7 +25,7 @@ import {
   useReducedMotion,
   AnimatePresence,
 } from 'framer-motion';
-import { HeroPreloader } from './HeroPreloader';
+import { Preloader } from './Preloader';
 import { HeroCopy } from './HeroCopy';
 import { GhostStage } from './GhostStage';
 
@@ -283,7 +283,7 @@ export function HomeHero() {
         className="relative min-h-screen bg-[#06071f] overflow-hidden"
         aria-label="Hero section"
       >
-        <HeroPreloader />
+        <Preloader />
         <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage reducedMotion={true} />
         </div>
@@ -307,9 +307,7 @@ export function HomeHero() {
       >
         {/* Preloader (z-50) */}
         <AnimatePresence>
-          {isLoading && (
-            <HeroPreloader onComplete={() => setIsLoading(false)} />
-          )}
+          {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
         </AnimatePresence>
 
         {/* Sticky container - pins content during scroll */}

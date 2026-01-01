@@ -21,7 +21,6 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
   const leftEyeMat = useRef<any>(null);
   const rightEyeMat = useRef<any>(null);
 
-  // Expõe a ref corretamente para o RevealText funcionar
   useImperativeHandle(ref, () => group.current as Group);
 
   const { viewport, size } = useThree();
@@ -54,18 +53,16 @@ const Ghost = forwardRef<Group, any>((props, ref) => {
 
     const t = state.clock.getElapsedTime();
     const pointer = state.pointer;
-
-    // Detecção Mobile simples
     const isMobile = size.width < 768;
 
     let xTarget, yTarget;
 
     if (isMobile) {
-      // Movimento automático Mobile (Loop amplo)
+      // Movimento automático Mobile
+      // Ajustado para cobrir a área do texto
       xTarget = Math.sin(t * 0.6) * (viewport.width * 0.35);
-      yTarget = Math.cos(t * 0.9) * 0.6;
+      yTarget = Math.cos(t * 0.8) * 0.6;
     } else {
-      // Movimento Desktop (Mouse)
       xTarget = pointer.x * (viewport.width / 3.5);
       yTarget = pointer.y * (viewport.height / 3.5);
     }

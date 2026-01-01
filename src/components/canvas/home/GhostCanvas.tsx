@@ -25,7 +25,6 @@ export default function GhostCanvas() {
       ? [1, 1.5]
       : [1, Math.min(2, window.devicePixelRatio || 1)];
 
-  // Ref do Fantasma (para passar posição ao texto)
   const ghostRef = useRef<THREE.Group>(null);
 
   return (
@@ -39,21 +38,21 @@ export default function GhostCanvas() {
       }}
       camera={{ position: [0, 0, 6], fov: 35 }}
     >
+      {/* COR DO FUNDO: DEVE SER IGUAL À COR DA MÁSCARA EM RevealingText.tsx */}
       <color attach="background" args={['#050511']} />
 
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
-        {/* Fantasma */}
+        {/* Fantasma na frente (Z~0) */}
         <Ghost ref={ghostRef} scale={0.22} position={[0, -0.2, 0]} />
 
-        {/* Texto + Máscara de Luz */}
+        {/* Texto e Máscara atrás (Z~-0.2) */}
         <RevealingText ghostRef={ghostRef} />
 
         <Particles />
         <Fireflies />
 
-        {/* Efeitos VHS/Cyberpunk */}
         <EffectComposer disableNormalPass multisampling={0}>
           <Bloom
             luminanceThreshold={1}
