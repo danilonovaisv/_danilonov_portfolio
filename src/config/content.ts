@@ -48,7 +48,7 @@ export const HOME_CONTENT = {
       image:
         'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(10).webp',
       layout: {
-        h: 'h-[500px]',
+        h: 'h-[340px] md:h-[500px]',
         cols: 'md:col-span-5',
         sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 44vw, 36vw',
       },
@@ -64,7 +64,7 @@ export const HOME_CONTENT = {
       image:
         'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(4).webp',
       layout: {
-        h: 'h-[500px]',
+        h: 'h-[340px] md:h-[500px]',
         cols: 'md:col-span-7',
         sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 56vw, 58vw',
       },
@@ -80,7 +80,7 @@ export const HOME_CONTENT = {
       image:
         'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(5).webp',
       layout: {
-        h: 'h-[600px]',
+        h: 'h-[340px] md:h-[600px]',
         cols: 'md:col-span-12',
         sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 94vw, 100vw',
       },
@@ -96,7 +96,7 @@ export const HOME_CONTENT = {
       image:
         'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEOMANIFESTOGLAD_2.mp4',
       layout: {
-        h: 'h-[400px]',
+        h: 'h-[280px] md:h-[400px]',
         cols: 'md:col-span-8',
         sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 68vw, 64vw',
       },
@@ -207,6 +207,23 @@ export const ABOUT_CONTENT = {
   method: {
     video:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/VideoAboutMethod.mp4',
+    title: {
+      text: 'Criatividade com método.',
+      highlight: 'método.',
+    },
+    intro: [
+      'Antes da estética, existe intenção.',
+      'Antes do layout, existe lógica.',
+      'Antes do impacto, existe silêncio.',
+    ],
+    steps: [
+      'Briefings bem construídos para decisões claras',
+      'Estratégia como base de qualquer criação',
+      'Design com propósito, não só beleza',
+      'Revisões inteligentes, sem ruído desnecessário',
+      'IA e automações para escalar com qualidade',
+      'Métricas criativas: engajamento, retenção e resultado',
+    ],
   },
   bio: [
     'Sou um Creative Developer brasileiro, obcecado pela intersecção entre Design e Tecnologia.',

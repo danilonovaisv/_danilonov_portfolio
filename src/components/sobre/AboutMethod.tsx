@@ -11,18 +11,14 @@ import { ABOUT_CONTENT } from '@/config/content';
 import { motionTokens } from './motion';
 import { kw } from './keywords';
 
-const processList = [
-  'Briefings bem construídos para decisões claras',
-  'Estratégia como base de qualquer criação',
-  'Design com propósito, não só beleza',
-  'Revisões inteligentes, sem ruído desnecessário',
-  'IA e automações para escalar com qualidade',
-  'Métricas criativas: engajamento, retenção e resultado',
-];
+// ... imports remain the same
+
+// Removed local processList
 
 export default function AboutMethod() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const { title, intro, steps } = ABOUT_CONTENT.method; // Destructure new content
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -64,17 +60,18 @@ export default function AboutMethod() {
             className="mb-16"
           >
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-(--ghost-text) tracking-tighter leading-none mb-8">
-              Criatividade com {kw('método.')}
+              {title.text.replace(title.highlight, '')}
+              {kw(title.highlight)}
             </h2>
             <div className="text-xl md:text-2xl text-(--ghost-text-secondary) font-light leading-relaxed space-y-2">
-              <p>Antes da estética, existe intenção.</p>
-              <p>Antes do layout, existe lógica.</p>
-              <p>Antes do impacto, existe silêncio.</p>
+              {intro.map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
             </div>
           </motion.div>
 
           <div className="grid grid-cols-1 gap-y-10">
-            {processList.map((item, i) => (
+            {steps.map((item, i) => (
               <motion.div
                 key={i}
                 variants={motionTokens.riseSoft}

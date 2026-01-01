@@ -17,10 +17,10 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-(--ghost-bg) text-white">
       <AboutHero />
-      <AboutOrigin />
       <AboutWhatIDo />
-      <AboutMethod />
+      <AboutOrigin />
       <AboutBeliefs />
+      <AboutMethod />
       <AboutClosing />
     </main>
   );

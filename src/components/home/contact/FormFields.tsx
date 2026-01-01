@@ -23,7 +23,7 @@ export const InputField: React.FC<InputFieldProps> = ({
     </label>
     <input
       id={id}
-      aria-invalid={error ? true : undefined}
+      aria-invalid={error ? 'true' : 'false'}
       aria-describedby={error ? `${id}-error` : undefined}
       className={`w-full rounded-lg border border-gray-200 bg-section-bg px-4 py-3 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 ${
         error ? 'border-red-500 ring-2 ring-red-500/20' : ''
@@ -59,7 +59,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
     </label>
     <textarea
       id={id}
-      aria-invalid={error ? true : undefined}
+      aria-invalid={error ? 'true' : 'false'}
       aria-describedby={error ? `${id}-error` : undefined}
       className={`w-full resize-none rounded-lg border border-gray-200 bg-section-bg px-4 py-3 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 ${
         error ? 'border-red-500 ring-2 ring-red-500/20' : ''
