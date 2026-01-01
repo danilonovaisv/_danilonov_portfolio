@@ -36,7 +36,7 @@ export function AboutWhatIDo() {
             key={i}
             variants={motionTokens.riseSoft}
             whileHover={prefersReducedMotion ? undefined : { opacity: 1 }}
-            className="text-lg text-(--ghost-text) opacity-95 transition-opacity duration-300"
+            className="text-lg text-(--ghost-text-secondary) opacity-95 transition-opacity duration-300"
           >
             {item}
           </motion.li>

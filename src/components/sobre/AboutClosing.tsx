@@ -14,16 +14,16 @@ export function AboutClosing() {
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-10%' }}
-        className="max-w-[560px] text-white"
+        className="max-w-[560px] text-(--ghost-text)"
       >
         <p className="mb-8">
           Hoje sou Diretor de Criação, com mais de 10 anos de estrada. Quero
           criar algo que {kw('permaneça')} — com você.
         </p>
 
-        <div className="flex gap-6">
-          <a className="cta text-white">Fale comigo</a>
-          <a className="cta text-white">Download CV</a>
+        <div className="flex flex-wrap gap-8">
+          <a className="cta">Fale comigo</a>
+          <a className="cta">Download CV</a>
         </div>
       </motion.div>
     </section>

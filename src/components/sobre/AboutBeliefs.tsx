@@ -1,70 +1,57 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { fadeGhost } from '@/lib/motionTokens';
+import { kw } from './keywords';
 
-export default function AboutBeliefs() {
+export function AboutBeliefs() {
   const prefersReducedMotion = useReducedMotion();
 
+  const manifestoVariants = {
+    hidden: { opacity: 0, filter: 'blur(10px)' },
+    visible: (custom: number) => ({
+      opacity: 1,
+      filter: 'blur(0px)',
+      transition: {
+        delay: prefersReducedMotion ? 0 : custom,
+        duration: prefersReducedMotion ? 0 : 0.9,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      },
+    }),
+  };
+
   return (
-    <section
-      className="relative min-h-screen py-24 flex items-center justify-center bg-[#000022]"
-      aria-label="O Que Me Move"
-    >
-      <div className="w-full max-w-4xl px-6 text-center space-y-24 md:space-y-32">
-        <motion.div
-          initial={prefersReducedMotion ? 'visible' : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
-          variants={fadeGhost}
+    <section className="min-h-screen flex items-center justify-center text-center bg-(--ghost-bg) py-24">
+      <div className="max-w-(--max-manifesto) space-y-10 px-6">
+        <motion.p
           custom={0}
-        >
-          <p className="text-2xl md:text-4xl font-light leading-relaxed text-white">
-            Acredito no design que muda o dia de alguém.
-            <br />
-            Não pelo choque —<br />
-            <span className="font-medium text-[#0057FF]">
-              mas pela conexão.
-            </span>
-          </p>
-        </motion.div>
-
-        <motion.div
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
-          variants={fadeGhost}
-          custom={1.4}
+          animate="visible"
+          variants={manifestoVariants}
+          className="text-xl md:text-3xl lg:text-4xl text-(--ghost-text) leading-relaxed"
         >
-          <p className="text-xl md:text-3xl font-light leading-relaxed text-white/80">
-            Um vídeo que respira.
-            <br />
-            Uma marca que se reconhece.
-            <br />
-            Um detalhe que fica.
-          </p>
-        </motion.div>
+          Acredito no design que muda o dia de alguém. Não pelo {kw('choque')} —
+          mas pela conexão.
+        </motion.p>
 
-        <motion.div
+        <motion.p
+          custom={1.2}
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
-          whileInView="visible"
-          viewport={{ once: true, margin: '-10%' }}
-          variants={fadeGhost}
-          custom={2.8}
+          animate="visible"
+          variants={manifestoVariants}
+          className="text-xl md:text-3xl lg:text-4xl text-(--ghost-text) leading-relaxed"
         >
-          <p className="text-2xl md:text-4xl font-light leading-relaxed text-white">
-            Crio para gerar presença.
-            <br />
-            Mesmo quando não estou ali.
-            <br />
-            Mesmo quando ninguém percebe o esforço.
-            <br />
-            <br />
-            <span className="font-bold text-white block mt-6 text-3xl md:text-5xl tracking-tight">
-              Isso é ghost design.
-            </span>
-          </p>
-        </motion.div>
+          Um vídeo que {kw('respira')}. Uma marca que se reconhece.
+        </motion.p>
+
+        <motion.p
+          custom={2.4}
+          initial={prefersReducedMotion ? 'visible' : 'hidden'}
+          animate="visible"
+          variants={manifestoVariants}
+          className="text-xl md:text-3xl lg:text-4xl text-(--ghost-text) leading-relaxed"
+        >
+          Isso é {kw('ghost design')}.
+        </motion.p>
       </div>
     </section>
   );

@@ -6,10 +6,10 @@ import {
   useReducedMotion,
 } from 'framer-motion';
 import { useRef } from 'react';
-import { fadeGhost } from '@/lib/motionTokens';
 
-const VIDEO_BG =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE%20-%20FRASE.mp4';
+import { ABOUT_CONTENT } from '@/config/content';
+import { motionTokens } from './motion';
+import { kw } from './keywords';
 
 const processList = [
   'Briefings bem construídos para decisões claras',
@@ -34,61 +34,60 @@ export default function AboutMethod() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[120vh] py-32 flex flex-col justify-center overflow-hidden bg-black"
+      className="relative min-h-screen py-32 flex flex-col justify-center overflow-hidden bg-(--ghost-bg)"
       aria-label="Como Eu Trabalho"
     >
       {/* Background - Full bleed video with parallax */}
       <motion.div
         style={{ y: prefersReducedMotion ? 0 : y }}
-        className="absolute inset-0 z-0 h-[120%] -top-[10%]"
+        className="absolute inset-0 z-0 h-[110%] -top-[5%]"
       >
         <video
-          src={VIDEO_BG}
+          src={ABOUT_CONTENT.method.video}
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-40 mix-blend-screen grayscale" // Adjusted opacity/grayscale for 'tech/lab' feel
+          preload="metadata"
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-black/80" />
+        <div className="absolute inset-0 bg-(--ghost-bg)/40" />
       </motion.div>
 
-      <div className="relative z-10 w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
-        <div className="max-w-4xl">
+      <div className="relative z-10 w-full max-w-[1680px] mx-auto px-6 md:px-24">
+        <div className="max-w-[560px]">
           <motion.div
-            variants={fadeGhost}
+            variants={motionTokens.fadeGhost}
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             whileInView="visible"
-            viewport={{ amount: 0.4 }}
+            viewport={{ once: true, amount: 0.4 }}
             className="mb-16"
           >
-            <h2 className="text-5xl md:text-8xl font-bold text-white tracking-tighter leading-[0.9] mb-8">
-              Criatividade com método.
-              <br />
-              <span className="text-white/40">Impacto sem ruído.</span>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-semibold text-(--ghost-text) tracking-tighter leading-none mb-8">
+              Criatividade com {kw('método.')}
             </h2>
-            <div className="text-xl md:text-2xl text-[#4fe6ff] font-mono leading-relaxed space-y-2">
+            <div className="text-xl md:text-2xl text-(--ghost-text-secondary) font-light leading-relaxed space-y-2">
               <p>Antes da estética, existe intenção.</p>
               <p>Antes do layout, existe lógica.</p>
               <p>Antes do impacto, existe silêncio.</p>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+          <div className="grid grid-cols-1 gap-y-10">
             {processList.map((item, i) => (
               <motion.div
                 key={i}
-                variants={fadeGhost}
+                variants={motionTokens.riseSoft}
                 initial={prefersReducedMotion ? 'visible' : 'hidden'}
                 whileInView="visible"
-                viewport={{ amount: 0.2 }}
-                custom={i * 0.1}
-                className="flex items-start gap-4 border-t border-white/20 pt-6"
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-start gap-4 border-t border-white/10 pt-6"
               >
                 <span className="font-mono text-[#0057FF] text-base font-bold">
                   0{i + 1}
                 </span>
-                <p className="text-lg md:text-xl text-white/90 font-light">
+                <p className="text-lg md:text-xl text-(--ghost-text-secondary) font-light">
                   {item}
                 </p>
               </motion.div>

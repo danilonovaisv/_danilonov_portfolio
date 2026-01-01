@@ -1,6 +1,16 @@
 @import 'tailwindcss/preflight';
 @tailwind utilities;
 
+:root {
+  --ghost-bg: #050505;
+  --ghost-bg-accent: #06071f;
+  --ghost-primary: #0057FF;
+  --ghost-text: #FFFFFF;
+  --ghost-text-secondary: #d9dade;
+  --ghost-blue-soft: rgba(0, 87, 255, 0.6);
+  --max-manifesto: 800px;
+}
+
 .header-custom-height {
   --header-height: 100px; /* Default value */
 }
@@ -11,16 +21,33 @@
 
 @layer base {
   body {
-    background-color: #000022;
-    color: white;
+    background-color: var(--ghost-bg);
+    color: var(--ghost-text);
   }
 }
 
 .ghost-accent {
   font-weight: 600;
-  color: rgba(0, 72, 255, 0.6);
+  color: var(--ghost-blue-soft);
   transition: color 0.4s ease;
 }
 .ghost-accent:hover {
-  color: #0048ff;
+  color: var(--ghost-primary);
+}
+
+.cta {
+  display: inline-flex;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ghost-text);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  border-bottom: 1px solid var(--ghost-primary);
+  cursor: pointer;
+}
+.cta:hover {
+  opacity: 1;
 }

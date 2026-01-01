@@ -5,7 +5,7 @@ import { AboutHero } from '@/components/sobre/AboutHero';
 import AboutOrigin from '@/components/sobre/AboutOrigin';
 import { AboutWhatIDo } from '@/components/sobre/AboutWhatIDo';
 import AboutMethod from '@/components/sobre/AboutMethod';
-import { AboutManifesto } from '@/components/sobre/AboutManifesto';
+import { AboutBeliefs } from '@/components/sobre/AboutBeliefs';
 import { AboutClosing } from '@/components/sobre/AboutClosing';
 
 export default function AboutPage() {
@@ -15,7 +15,7 @@ export default function AboutPage() {
       <AboutOrigin />
       <AboutWhatIDo />
       <AboutMethod />
-      <AboutManifesto />
+      <AboutBeliefs />
       <AboutClosing />
     </main>
   );
