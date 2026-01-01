@@ -15,3 +15,12 @@
     color: white;
   }
 }
+
+.ghost-accent {
+  font-weight: 600;
+  color: rgba(0, 72, 255, 0.6);
+  transition: color 0.4s ease;
+}
+.ghost-accent:hover {
+  color: #0048ff;
+}

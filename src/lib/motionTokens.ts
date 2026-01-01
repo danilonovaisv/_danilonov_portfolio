@@ -84,16 +84,15 @@ export const floatMemory: Variants = {
 
 // imageFloat: Entrada suave para imagens intercaladas
 // Uso: Imagens da seção Origem (sem blur, opacity controlada)
+// NOTA: Sem scale/bounce/rotate conforme Ghost Design System
 export const imageFloat: Variants = {
   hidden: {
     opacity: 0,
     y: 30,
-    scale: 0.98,
   },
   visible: (customDelay = 0) => ({
     opacity: 0.65, // Opacity 0.6-0.7 conforme spec
     y: 0,
-    scale: 1,
     transition: {
       duration: 1,
       delay: customDelay,

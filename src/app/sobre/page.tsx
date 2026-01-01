@@ -1,30 +1,22 @@
 'use client';
 
 import React from 'react';
-import AboutHero from '@/components/sobre/AboutHero';
+import { AboutHero } from '@/components/sobre/AboutHero';
 import AboutOrigin from '@/components/sobre/AboutOrigin';
-import AboutServices from '@/components/sobre/AboutServices';
+import { AboutWhatIDo } from '@/components/sobre/AboutWhatIDo';
 import AboutMethod from '@/components/sobre/AboutMethod';
-import AboutBeliefs from '@/components/sobre/AboutBeliefs';
-import AboutClosing from '@/components/sobre/AboutClosing';
-import ClientsBrandsSection from '@/components/home/ClientsBrandsSection';
-import ContactSection from '@/components/home/ContactSection';
+import { AboutManifesto } from '@/components/sobre/AboutManifesto';
+import { AboutClosing } from '@/components/sobre/AboutClosing';
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#000022] text-white">
+    <main className="min-h-screen bg-(--ghost-bg) text-white">
       <AboutHero />
       <AboutOrigin />
-      <AboutServices />
+      <AboutWhatIDo />
       <AboutMethod />
-      <AboutBeliefs />
+      <AboutManifesto />
       <AboutClosing />
-
-      {/* Reused Home Sections */}
-      <ClientsBrandsSection />
-      <ContactSection />
-
-      {/* Footer is handled by the global layout */}
     </main>
   );
 }

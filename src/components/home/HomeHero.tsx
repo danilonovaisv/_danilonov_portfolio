@@ -17,6 +17,34 @@ const CONFIG = {
   videoSrc:
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   bgColor: '#050511',
+
+  // Thumb entrance animation (Ghost-style: slow, ethereal, floaty)
+  entrance: {
+    initial: {
+      opacity: 0,
+      scale: 0.92,
+      y: 60,
+    },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+    },
+    transition: {
+      duration: 1.2,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      delay: 0.5, // Wait for preloader fade
+    },
+  },
+
+  // Hover effect on thumbnail
+  hover: {
+    scale: 1.05,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
+  },
 } as const;
 
 type VideoState = 'thumbnail' | 'transition' | 'fullscreenHold' | 'released';
@@ -133,27 +161,22 @@ export default function HomeHero() {
       </AnimatePresence>
 
       {/* WebGL (desliga com reduced-motion) */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      <div className="absolute inset-0 z-10 pointer-events-auto">
         <GhostStage reducedMotion={prefersReducedMotion} />
       </div>
 
-      {/* Texto editorial */}
-      <div className="absolute inset-0 z-20 flex items-center justify-center px-6">
-        <motion.div
-          initial={
-            prefersReducedMotion
-              ? false
-              : { opacity: 0, y: 20, filter: 'blur(6px)' }
-          }
-          animate={
-            prefersReducedMotion
-              ? {}
-              : { opacity: 1, y: 0, filter: 'blur(0px)' }
-          }
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.15 }}
-        >
-          <HeroCopy />
-        </motion.div>
+      {/* CTA Button - acima de tudo (z-30) */}
+      <div className="absolute inset-0 z-30 pointer-events-none">
+        <div className="w-full h-full flex items-end justify-center pb-16 sm:pb-20 lg:pb-24 px-6">
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 2.5 }}
+            className="pointer-events-auto"
+          >
+            <HeroCopy />
+          </motion.div>
+        </div>
       </div>
 
       {/* Área sticky para a morph do vídeo (desktop) */}
@@ -164,14 +187,20 @@ export default function HomeHero() {
             <motion.div
               className="absolute bottom-8 right-8 md:block hidden pointer-events-auto"
               style={{ scale: thumbScale, opacity: thumbOpacity }}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              initial={CONFIG.entrance.initial}
+              animate={CONFIG.entrance.animate}
+              transition={CONFIG.entrance.transition}
             >
               <motion.div
-                className="w-[320px] h-[180px] overflow-hidden border border-white/10 backdrop-blur bg-white/5 shadow-xl"
+                className="w-[320px] h-[180px] overflow-hidden border border-white/10 backdrop-blur bg-white/5 shadow-xl cursor-pointer"
                 style={{ borderRadius: thumbRadius }}
+                whileHover={
+                  videoState === 'thumbnail'
+                    ? { scale: CONFIG.hover.scale }
+                    : undefined
+                }
                 whileTap={{ scale: 0.98 }}
+                transition={CONFIG.hover.transition}
                 onClick={() =>
                   setVideoState((s) => (s === 'thumbnail' ? 'transition' : s))
                 }

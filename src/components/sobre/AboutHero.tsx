@@ -8,14 +8,9 @@ import {
 } from 'framer-motion';
 import { useRef } from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { ghostIn } from '@/lib/motionTokens';
+import { ABOUT_CONTENT } from '@/config/content';
 
-const VIDEO_DESKTOP =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE.mp4';
-const VIDEO_MOBILE =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO_HERO_SOBRE_MOBILE_1.mp4';
-
-export default function AboutHero() {
+export function AboutHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const shouldReduceMotion = useReducedMotion();
@@ -25,107 +20,133 @@ export default function AboutHero() {
     target: containerRef,
     offset: ['start start', 'end start'],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
+  // Transition variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+      filter: 'blur(10px)',
+      y: 10,
+    },
+    visible: {
+      opacity: 1,
+      filter: 'blur(0px)',
+      y: 0,
+      transition: {
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      },
+    },
+  };
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center md:justify-end pt-24"
+      className="relative min-h-svh w-full overflow-hidden flex items-center justify-end"
     >
       {/* Video Background */}
-      <motion.div style={{ y, opacity }} className="absolute inset-0 z-0">
+      <motion.div
+        style={{ y, opacity }}
+        className="absolute inset-0 z-0 pointer-events-none"
+      >
         <video
-          src={isDesktop ? VIDEO_DESKTOP : VIDEO_MOBILE}
+          src={
+            isDesktop
+              ? ABOUT_CONTENT.hero.videos.desktop
+              : ABOUT_CONTENT.hero.videos.mobile
+          }
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover opacity-60 mix-blend-screen"
+          preload="metadata"
+          className="w-full h-full object-cover opacity-55 saturate-[0.8]"
         />
-        <div className="absolute inset-0 bg-black/60" /> {/* Dimming overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-[#000022] via-transparent to-transparent" />
+        {/* Darkening overlays for legibility */}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#050505] via-transparent to-transparent" />
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-4xl px-6 md:px-24 text-center mr-0 md:mr-12 lg:mr-24 flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-5xl px-6 md:px-12 lg:px-24">
         <motion.div
-          variants={ghostIn}
+          variants={containerVariants}
           initial={shouldReduceMotion ? 'visible' : 'hidden'}
-          animate="visible"
-          className="space-y-2 md:space-y-4"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="flex flex-col items-end text-right space-y-4 md:space-y-6"
         >
-          {/* Line 1 */}
-          <motion.h1
-            custom={0}
-            variants={ghostIn}
-            className="text-3xl md:text-5xl lg:text-6xl text-white font-light tracking-tight leading-tight"
-          >
-            Sou{' '}
-            <span className="font-bold text-[#0048ff] transition-colors duration-300 hover:text-[#4fe6ff] cursor-default">
-              Danilo Novais.
-            </span>
-          </motion.h1>
+          {/* Headline Group */}
+          <div className="space-y-1 md:space-y-2">
+            <motion.h1
+              variants={itemVariants}
+              className="text-4xl md:text-6xl lg:text-7xl text-white font-semibold tracking-tighter leading-[1.1]"
+            >
+              Sou <span className="ghost-accent">Danilo Novais.</span>
+            </motion.h1>
 
-          {/* Line 2 */}
-          <motion.p
-            custom={1}
-            variants={ghostIn}
-            className="text-2xl md:text-4xl lg:text-5xl text-white font-light tracking-tight leading-tight"
-          >
-            <span className="font-bold text-[#0048ff] transition-colors duration-300 hover:text-[#4fe6ff] cursor-default">
-              Você não vê
-            </span>{' '}
-            tudo o que eu faço.
-          </motion.p>
+            <motion.p
+              variants={itemVariants}
+              className="text-2xl md:text-3xl lg:text-4xl text-white/90 font-medium tracking-tight leading-tight"
+            >
+              <span className="ghost-accent">Você não vê</span> tudo o que eu
+              faço.
+            </motion.p>
 
-          {/* Line 3 */}
-          <motion.p
-            custom={2}
-            variants={ghostIn}
-            className="text-2xl md:text-4xl lg:text-5xl text-white font-light tracking-tight leading-tight"
-          >
-            Mas sente quando{' '}
-            <span className="font-bold text-[#0048ff] transition-colors duration-300 hover:text-[#4fe6ff] cursor-default">
-              funciona.
-            </span>
-          </motion.p>
+            <motion.p
+              variants={itemVariants}
+              className="text-2xl md:text-3xl lg:text-4xl text-white/90 font-medium tracking-tight leading-tight"
+            >
+              Mas sente quando <span className="ghost-accent">funciona.</span>
+            </motion.p>
+          </div>
 
-          {/* Spacer */}
-          <div className="h-4 md:h-8" />
+          {/* Pause simulation via staggerChildren in container and a small div if needed, 
+              but since variants stagger, it's natural. I'll add a bigger transition delay for the next block */}
 
-          {/* Line 4 */}
-          <motion.p
-            custom={3}
-            variants={ghostIn}
-            className="text-xl md:text-3xl lg:text-4xl text-white font-light tracking-tight leading-relaxed max-w-3xl mx-auto"
+          {/* Paragraph Group */}
+          <motion.div
+            variants={itemVariants}
+            className="pt-6 md:pt-10 space-y-1 md:space-y-2 max-w-2xl"
           >
-            <span className="font-bold text-[#0048ff] transition-colors duration-300 hover:text-[#4fe6ff] cursor-default">
-              Crio design
-            </span>{' '}
-            que observa, entende
-          </motion.p>
-
-          {/* Line 5 */}
-          <motion.p
-            custom={4}
-            variants={ghostIn}
-            className="text-xl md:text-3xl lg:text-4xl text-white font-light tracking-tight leading-relaxed max-w-3xl mx-auto"
-          >
-            e guia experiências com intenção,
-          </motion.p>
-
-          {/* Line 6 */}
-          <motion.p
-            custom={5}
-            variants={ghostIn}
-            className="text-xl md:text-3xl lg:text-4xl text-white font-light tracking-tight leading-relaxed max-w-3xl mx-auto"
-          >
-            <span className="font-bold text-[#0048ff] transition-colors duration-300 hover:text-[#4fe6ff] cursor-default">
-              estratégia e tecnologia
-            </span>{' '}
-            — na medida certa.
-          </motion.p>
+            {ABOUT_CONTENT.hero.description.map((line, idx) => (
+              <p
+                key={idx}
+                className="text-lg md:text-2xl lg:text-3xl text-white/70 font-light tracking-tight leading-snug"
+              >
+                {idx === 2 ? (
+                  <>
+                    <span className="ghost-accent">
+                      estratégia e tecnologia
+                    </span>{' '}
+                    — na medida certa.
+                  </>
+                ) : line.includes('design') ? (
+                  <>
+                    <span className="ghost-accent">Crio design</span> que
+                    observa, entende
+                  </>
+                ) : (
+                  line
+                )}
+              </p>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
     </section>

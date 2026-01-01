@@ -187,10 +187,26 @@ export const PORTFOLIO_MOSAIC_DATA = [
 
 export const ABOUT_CONTENT = {
   hero: {
-    title: 'More than pixels, logic_.',
-    subtitle: 'Danilo Novais — Creative Developer',
-    description:
-      'Combinando excelência técnica com visão artística para criar experiências digitais que se parecem vivas.',
+    videos: {
+      desktop:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4',
+      mobile:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4',
+    },
+    title: {
+      line1: 'Sou Danilo Novais.',
+      line2: 'Você não vê tudo o que eu faço.',
+      line3: 'Mas sente quando funciona.',
+    },
+    description: [
+      'Crio design que observa, entende',
+      'e guia experiências com intenção,',
+      'estratégia e tecnologia — na medida certa.',
+    ],
+  },
+  method: {
+    video:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/VideoAboutMethod.mp4',
   },
   bio: [
     'Sou um Creative Developer brasileiro, obcecado pela intersecção entre Design e Tecnologia.',

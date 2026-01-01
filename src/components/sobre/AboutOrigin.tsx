@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 import Image from 'next/image';
 import { ABOUT_CONTENT } from '@/config/content';
-import { fadeGhost, imageFloat } from '@/lib/motionTokens';
+import { motionTokens } from './motion';
 
 const { origin } = ABOUT_CONTENT;
 
@@ -82,13 +82,13 @@ export default function AboutOrigin() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[160vh] py-24 md:py-40 overflow-hidden"
+      className="relative min-h-[180vh] py-24 md:py-40 overflow-hidden bg-(--ghost-bg)"
       aria-label="Origem Criativa"
     >
       <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
         {/* Section Label */}
         <motion.h2
-          variants={fadeGhost}
+          variants={motionTokens.fadeGhost}
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-10%' }}
@@ -98,19 +98,35 @@ export default function AboutOrigin() {
         </motion.h2>
 
         {/* Conteúdo intercalado: Frase → Imagem → Frase → Imagem */}
-        <div className="space-y-24">
+        <div className="grid grid-cols-12 md:gap-y-32 gap-y-20 items-center">
           {origin.content.map((item, idx) => {
+            const pairIndex = Math.floor(idx / 2);
+            const textLayouts = [
+              'md:col-span-6 md:col-start-1',
+              'md:col-span-5 md:col-start-8 md:text-right',
+              'md:col-span-7 md:col-start-1',
+              'md:col-span-6 md:col-start-7 md:text-right',
+            ];
+            const imageLayouts = [
+              'md:col-span-6 md:col-start-7',
+              'md:col-span-7 md:col-start-1',
+              'md:col-span-5 md:col-start-8',
+              'md:col-span-6 md:col-start-1',
+            ];
+            const layoutIndex = pairIndex % textLayouts.length;
+            const textLayout = textLayouts[layoutIndex];
+            const imageLayout = imageLayouts[layoutIndex];
+
             if (item.type === 'text') {
               // Bloco de texto
               return (
                 <motion.div
                   key={idx}
-                  variants={fadeGhost}
+                  variants={motionTokens.fadeGhost}
                   initial={prefersReducedMotion ? 'visible' : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, margin: '-10%' }}
-                  custom={0.1}
-                  className="max-w-[560px]"
+                  className={`col-span-12 ${textLayout} max-w-[560px]`}
                 >
                   <p
                     className={`text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed ${
@@ -130,12 +146,11 @@ export default function AboutOrigin() {
             return (
               <motion.div
                 key={idx}
-                variants={imageFloat}
+                variants={motionTokens.imageFloat}
                 initial={prefersReducedMotion ? 'visible' : 'hidden'}
                 whileInView="visible"
                 viewport={{ once: true, margin: '-10%' }}
-                custom={0.15}
-                className="md:ml-auto md:mr-0 md:max-w-[50%] lg:max-w-[45%]"
+                className={`col-span-12 ${imageLayout}`}
               >
                 <MediaItem
                   src={item.src}

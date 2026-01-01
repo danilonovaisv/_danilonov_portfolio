@@ -70,6 +70,15 @@
 }
 
 :root {
+  --ghost-bg: #000022;
+  --ghost-text: #fcffff;
+  --ghost-text-secondary: #a1a3a3;
+  --ghost-blue: #0048ff;
+  --ghost-blue-soft: rgba(0, 72, 255, 0.6);
+  --max-text: 560px;
+  --max-manifesto: 680px;
+  --ease-ghost-in: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-linear-soft: cubic-bezier(0.4, 0, 0.6, 1);
   /* Fallback Ghost Position */
   --gx: 50vw;
   --gy: 35vh;
@@ -155,16 +164,23 @@ body {
 /* Ghost Accent - Destaques de palavras-chave */
 .ghost-accent {
   font-weight: 600;
-  color: var(--ghost-flare, #4fe6ff);
+  color: var(--ghost-blue-soft, rgba(0, 72, 255, 0.6));
   transition: color 0.4s ease;
 }
 .ghost-accent:hover {
-  color: var(--primary, #0057ff);
+  color: var(--ghost-blue, #0048ff);
 }
 @media (pointer: coarse) {
   .ghost-accent:active {
-    color: var(--primary, #0057ff);
+    color: var(--ghost-blue, #0048ff);
   }
+}
+
+.cta {
+  transition: opacity 0.4s ease;
+}
+.cta:hover {
+  opacity: 0.85;
 }
 
 .fluid-header-shell {
@@ -380,4 +396,13 @@ body {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+.ghost-accent {
+  font-weight: 600;
+  color: rgba(0, 72, 255, 0.65);
+  transition: color 0.35s ease;
+}
+
+.ghost-accent:hover {
+  color: #0048ff;
 }
