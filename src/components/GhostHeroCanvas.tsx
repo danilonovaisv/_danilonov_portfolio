@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Preloader } from './Preloader';
 
-type Props = { className?: string; bloom?: boolean };
+type Props = { className?: string };
 
-export function GhostHeroCanvas({ className, bloom = true }: Props) {
+export function GhostHeroCanvas({ className }: Props) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [ready, setReady] = useState(false);
   const reduced = useMemo(
@@ -147,7 +147,7 @@ export function GhostHeroCanvas({ className, bloom = true }: Props) {
       className={'relative w-full ' + (className ?? '')}
       aria-label="hero-3d"
     >
-      {!reduced && <div ref={mountRef} className="absolute inset-0 -z-0" />}
+      {!reduced && <div ref={mountRef} className="absolute inset-0 z-0" />}
       <Preloader ready={ready} />
     </div>
   );

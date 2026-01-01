@@ -25,7 +25,7 @@ import {
   useReducedMotion,
   AnimatePresence,
 } from 'framer-motion';
-import { Preloader } from './Preloader';
+import { Preloader } from '@/components/Preloader';
 import { HeroCopy } from './HeroCopy';
 import { GhostStage } from './GhostStage';
 
@@ -89,6 +89,11 @@ export function HomeHero() {
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Scroll tracking
   const { scrollYProgress } = useScroll({
@@ -283,7 +288,7 @@ export function HomeHero() {
         className="relative min-h-screen bg-[#06071f] overflow-hidden"
         aria-label="Hero section"
       >
-        <Preloader />
+        <Preloader ready={true} />
         <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage reducedMotion={true} />
         </div>
@@ -306,9 +311,9 @@ export function HomeHero() {
         aria-label="Hero section with animated video manifesto"
       >
         {/* Preloader (z-50) */}
-        <AnimatePresence>
-          {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
-        </AnimatePresence>
+        {isLoading && (
+          <Preloader ready={mounted} onComplete={() => setIsLoading(false)} />
+        )}
 
         {/* Sticky container - pins content during scroll */}
         <div className="sticky top-0 h-screen w-full overflow-hidden">

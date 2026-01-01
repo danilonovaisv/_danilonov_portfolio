@@ -53,7 +53,7 @@ export default function GhostCanvas() {
         <Particles />
         <Fireflies />
 
-        <EffectComposer disableNormalPass multisampling={0}>
+        <EffectComposer multisampling={0}>
           <Bloom
             luminanceThreshold={1}
             mipmapBlur
