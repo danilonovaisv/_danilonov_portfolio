@@ -1,9 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useReducedMotion } from 'framer-motion';
-import { motionTokens } from './motion';
 import { kw } from './keywords';
+import { useEditorialMotion } from '@/hooks/useEditorialMotion';
 
 const items = [
   <>Direção criativa que organiza o {kw('caos')}</>,
@@ -16,16 +15,12 @@ const items = [
 ];
 
 export function AboutWhatIDo() {
-  const prefersReducedMotion = useReducedMotion();
+  const { prefersReducedMotion, variants } = useEditorialMotion();
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-(--ghost-bg) py-24">
       <motion.ul
-        variants={{
-          visible: {
-            transition: { staggerChildren: 0.18 },
-          },
-        }}
+        variants={variants.staggerContainer} // Use standardized stagger
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-10%' }}
@@ -34,8 +29,8 @@ export function AboutWhatIDo() {
         {items.map((item, i) => (
           <motion.li
             key={i}
-            variants={motionTokens.riseSoft}
-            whileHover={prefersReducedMotion ? undefined : { opacity: 1 }}
+            variants={variants.riseSoft}
+            whileHover={prefersReducedMotion ? undefined : { opacity: 1, x: 5 }} // Added subtle hover move
             className="text-lg text-(--ghost-text-secondary) opacity-95 transition-opacity duration-300"
           >
             {item}
