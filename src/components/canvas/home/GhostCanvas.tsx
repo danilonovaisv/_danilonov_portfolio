@@ -24,9 +24,11 @@ const BACKGROUND_COLOR = '#020204';
 export default function GhostCanvas({
   active = true,
   onCreated,
+  onTextReady,
 }: {
   active?: boolean;
   onCreated?: () => void;
+  onTextReady?: () => void;
 }) {
   const ghostRef = useRef<THREE.Group>(null);
 
@@ -54,7 +56,7 @@ export default function GhostCanvas({
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
-        <RevealingText ghostRef={ghostRef} />
+        <RevealingText ghostRef={ghostRef} onReady={onTextReady} />
 
         <Ghost
           ref={ghostRef}

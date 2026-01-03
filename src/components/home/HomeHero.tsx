@@ -52,8 +52,8 @@ export default function HomeHero() {
     return !isMobile && !prefersReducedMotion;
   }, [mounted, isMobile, prefersReducedMotion]);
 
-  // Callback quando o contexto WebGL é criado com sucesso
-  const handleCanvasCreated = useCallback(() => {
+  // Callback quando o texto 3D é sincronizado com a fonte
+  const handleTextReady = useCallback(() => {
     setWebGLReady(true);
   }, []);
 
@@ -118,7 +118,7 @@ export default function HomeHero() {
           <GhostStage
             reducedMotion={!shouldRender3D}
             active={!isLoading && shouldRender3D}
-            onCanvasCreated={handleCanvasCreated}
+            onTextReady={handleTextReady}
           />
         </motion.div>
 

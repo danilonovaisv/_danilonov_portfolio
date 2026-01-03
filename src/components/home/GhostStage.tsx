@@ -17,12 +17,14 @@ interface GhostStageProps {
   reducedMotion?: boolean;
   active?: boolean;
   onCanvasCreated?: () => void;
+  onTextReady?: () => void;
 }
 
 export function GhostStage({
   reducedMotion = false,
   active = true,
   onCanvasCreated,
+  onTextReady,
 }: GhostStageProps) {
   if (reducedMotion) {
     return <div className={styles.fallbackBackground} />;
@@ -37,7 +39,11 @@ export function GhostStage({
         transition={{ duration: 1.5 }}
         className="absolute inset-0 w-full h-full"
       >
-        <GhostCanvas active={active} onCreated={onCanvasCreated} />
+        <GhostCanvas
+          active={active}
+          onCreated={onCanvasCreated}
+          onTextReady={onTextReady}
+        />
       </motion.div>
 
       {/* Gradiente de vinheta para ajudar na leitura do texto */}

@@ -153,8 +153,8 @@ export default function HomeHeroAuditReport() {
             </p>
             <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed">
               <li>
-                Passar explicitamente a URL WOFF2 correta no prop <code>font</code> (por exemplo a
-                Bold, já que não há Black).
+                Passar explicitamente a URL de fonte compatível no prop <code>font</code> (TTF/OTF/WOFF;
+                o <code>troika-three-text</code> não suporta WOFF2).
               </li>
               <li>
                 Garantir que o bucket do Supabase é público e serve{' '}

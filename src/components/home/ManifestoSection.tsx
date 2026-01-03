@@ -75,7 +75,7 @@ export function ManifestoSection() {
       initial={prefersReducedMotion ? {} : ANIMATION.initial}
       animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
       transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-section-manifesto aspect-video relative overflow-hidden"
+      className="lg:hidden w-full bg-ghost-bg aspect-video relative overflow-hidden"
     >
       {/* Video */}
       <video

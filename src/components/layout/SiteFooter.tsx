@@ -53,7 +53,7 @@ export default function SiteFooter() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: reducedMotion ? 0.2 : 0.8 }}
-        className="hidden lg:block w-full bg-ghost-bg-accent py-6 fixed bottom-0 left-0 z-50 shadow-[0_-1px_3px_rgba(0,0,0,0.1)]"
+        className="hidden lg:block w-full bg-section-footer py-6 fixed bottom-0 left-0 z-50 shadow-[0_-1px_3px_rgba(0,0,0,0.1)]"
         aria-label="Footer"
       >
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 flex items-center justify-between text-white">
@@ -117,7 +117,7 @@ export default function SiteFooter() {
 
       {/* Mobile Footer */}
       <footer
-        className="lg:hidden bg-ghost-bg-accent text-white py-8 relative z-10"
+        className="lg:hidden bg-section-footer text-white py-8 relative z-10"
         aria-label="Footer"
       >
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col gap-8">

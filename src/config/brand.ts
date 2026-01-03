@@ -45,4 +45,8 @@ export const BRAND = {
     regular:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Regular.woff2',
   },
+  fonts3d: {
+    bold: '/fonts/TT%20Norms%20Pro%20Bold.ttf',
+    regular: '/fonts/TT%20Norms%20Pro%20Regular.ttf',
+  },
 };

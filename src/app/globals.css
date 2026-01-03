@@ -16,7 +16,9 @@
   --color-ghost-surface-deep: #050511;
 
   /* Section Backgrounds */
-  --color-section-contact: #06071f;
+  --color-section-contact: #f0f0f0;
+  --color-section-footer: #0048ff;
+  --color-section-clients: #0048ff;
 
   /* Text Colors */
   --color-text-dark: #0e0e0e;

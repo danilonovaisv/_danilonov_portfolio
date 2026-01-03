@@ -23,7 +23,7 @@ export default function PortfolioShowcaseSection() {
       ref={sectionRef}
       id="portfolio-showcase"
       aria-label="Portfolio Categories"
-      className="relative z-10 bg-background py-24 md:py-32 overflow-hidden"
+      className="relative z-10 bg-ghost-bg py-24 md:py-32 overflow-hidden"
     >
       <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
         <div className="relative">
