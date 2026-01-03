@@ -61,7 +61,7 @@ export function AboutHero() {
 
       {/* Content Container */}
       <div className="relative z-10 w-full px-6 md:px-12 lg:px-[8vw] pt-24 md:pt-28 pb-24 lg:py-0 lg:h-full lg:flex lg:items-center">
-        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-left lg:-translate-y-8">
+        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-right lg:-translate-y-8">
           <motion.div
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             animate="visible"

@@ -11,7 +11,8 @@ interface CTAButtonProps {
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'accent';
+  // Adicionado 'ghost' à tipagem
+  variant?: 'primary' | 'secondary' | 'accent' | 'ghost';
   className?: string;
   id?: string;
 }
@@ -46,20 +47,27 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
       text: 'text-secondary',
       iconBg: 'bg-ghost-blue',
     },
+    // Nova variante Ghost (Minimalista/Transparente)
+    ghost: {
+      bg: 'bg-transparent hover:bg-white/5 border border-white/10 backdrop-blur-sm shadow-lg',
+      text: 'text-white/90 hover:text-white',
+      iconBg: 'bg-white/10 text-white',
+    },
   };
 
-  const v = variants[variant];
+  // Fallback de segurança: se variant não existir, usa primary
+  const v = variants[variant] || variants.primary;
 
   const buttonContent = (
     <>
       <span
-        className={`inline-flex items-center px-8 md:px-10 py-3 md:py-4 ${v.bg} ${v.text} font-medium uppercase tracking-wide text-sm md:text-base rounded-full whitespace-nowrap`}
+        className={`inline-flex items-center px-8 md:px-10 py-3 md:py-4 ${v.bg} ${v.text} font-medium uppercase tracking-wide text-sm md:text-base rounded-full whitespace-nowrap transition-all duration-300`}
       >
         {children}
       </span>
 
       <span
-        className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 ${v.iconBg} text-white rounded-full -ml-4 md:-ml-5 z-10`}
+        className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 ${v.iconBg} text-white rounded-full -ml-4 md:-ml-5 z-10 transition-all duration-300`}
       >
         <ArrowRight
           className={`w-4 h-4 md:w-5 md:h-5 -rotate-45 ${
@@ -73,7 +81,7 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
   );
 
   const baseClasses = `
-    inline-flex items-center group
+    inline-flex items-center group relative
     ${prefersReducedMotion ? '' : 'hover:-translate-y-px transition ease-out duration-200'}
     ${disabled ? 'opacity-50 pointer-events-none' : ''}
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-green focus-visible:ring-offset-4 focus-visible:ring-offset-transparent

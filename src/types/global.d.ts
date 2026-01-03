@@ -36,6 +36,13 @@ declare module '@react-three/fiber' {
     >;
     shaderPass: Object3DNode<ShaderPass, typeof ShaderPass>;
     revealShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>;
+    revealMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+      uGhostPos?: THREE.Vector3;
+      uRevealRadius?: number;
+      uColor?: THREE.Color;
+      uOpacity?: number;
+      transparent?: boolean;
+    };
   }
 }
 

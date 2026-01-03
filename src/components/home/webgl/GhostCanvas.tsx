@@ -4,12 +4,16 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import Ghost from './Ghost';
-import GhostEyes from './GhostEyes';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
+import RevealingText from './RevealingText';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
+<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+=======
+
+>>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 import {
   EffectComposer,
   Bloom,
@@ -20,12 +24,13 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
-const BACKGROUND_COLOR = '#06071f';
+// Preto profundo
+const BACKGROUND_COLOR = '#020204';
 
 export default function GhostCanvas({ active = true }: { active?: boolean }) {
-  const dpr: [number, number] = [1, 2];
   const ghostRef = useRef<THREE.Group>(null);
 
+<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
   // Strict Mobile & Reduced Motion Check
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
@@ -43,57 +48,72 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
 
   // STRICT RULE: No WebGL if reduced motion is preferred
   if (prefersReducedMotion) return null;
+=======
+  // Pixel ratio otimizado
+  const dpr: [number, number] =
+    typeof window !== 'undefined' && window.devicePixelRatio > 2
+      ? [1, 1.5]
+      : [1, 2];
+>>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 
   return (
     <Canvas
       dpr={dpr}
       gl={{
         antialias: false,
-        alpha: true,
+        alpha: false,
         powerPreference: 'high-performance',
         stencil: false,
         depth: true,
       }}
+<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
       camera={{ position: [0, 0, 6], fov: 35 }}
       style={{ pointerEvents: 'none' }} // Ensure it doesn't block interactions (Z-20 rule)
+=======
+      camera={{ position: [0, 0, 7], fov: 35 }}
+>>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
     >
       <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
+<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
         {/* Removed RevealingText to adhere to Z-10 DOM Text Rule */}
+=======
+        {/* ORDEM IMPORTA: Texto (fundo), depois Ghost (frente) */}
+        <RevealingText ghostRef={ghostRef} />
+>>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 
-        {/* Ghost (Z ~ -0.2) */}
         <Ghost
           ref={ghostRef}
           scale={0.22}
           position={[0, -0.2, 0]}
           active={active}
-        >
-          <GhostEyes />
-        </Ghost>
+        />
 
-        <Particles count={50} />
+        <Particles count={40} />
         <Fireflies />
 
         <EffectComposer multisampling={0} enableNormalPass={false}>
+<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
           {/* Analog Decay (VHS/Glitch) */}
+=======
+>>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
           <AnalogDecayPass />
-
           <Bloom
             luminanceThreshold={0.15}
             mipmapBlur
-            intensity={2.8}
-            radius={0.4}
+            intensity={1.8}
+            radius={0.5}
           />
           <ChromaticAberration
             offset={[0.0015, 0.0015]}
             radialModulation={true}
-            modulationOffset={0.5}
+            modulationOffset={0.7}
             blendFunction={BlendFunction.SCREEN}
           />
-          <Scanline density={1.4} opacity={0.1} />
+          <Scanline density={1.5} opacity={0.04} />
           <Noise
             opacity={0.08}
             premultiply
