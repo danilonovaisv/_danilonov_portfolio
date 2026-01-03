@@ -96,7 +96,6 @@ export default function RevealingText({
       {/* Z=-1.5 (Atrás do fantasma) */}
       {/* Título Principal */}
       <Text
-        font={fontUrl}
         fontSize={config.titleSize}
         lineHeight={1.0}
         letterSpacing={config.letterSpacing}
@@ -116,7 +115,6 @@ export default function RevealingText({
       </Text>
       {/* Subtítulo */}
       <Text
-        font={fontUrl}
         fontSize={config.subSize}
         letterSpacing={config.letterSpacing}
         textAlign="center"

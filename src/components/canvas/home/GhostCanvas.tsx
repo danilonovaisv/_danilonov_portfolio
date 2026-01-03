@@ -46,11 +46,10 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
       camera={{ position: [0, 0, 7], fov: 35 }}
       style={{ pointerEvents: 'none' }}
     >
-      <color attach="background" args={[BACKGROUND_COLOR]} />
       <ambientLight intensity={0.5} color="#0a0a2e" />
 
       <Suspense fallback={null}>
-        {/* <AtmosphereVeil ghostRef={ghostRef} /> */}
+        <AtmosphereVeil ghostRef={ghostRef} />
 
         <RevealingText ghostRef={ghostRef} />
 
@@ -66,8 +65,8 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
         <Particles count={50} />
         <Fireflies />
 
-        {/* <EffectComposer multisampling={0} enableNormalPass={false}>
-          {/* <AnalogDecayPass /> 
+        <EffectComposer multisampling={0} enableNormalPass={false}>
+          {/* <AnalogDecayPass /> */}
           <Bloom
             luminanceThreshold={0.15}
             mipmapBlur
@@ -87,7 +86,7 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
             blendFunction={BlendFunction.OVERLAY}
           />
           <Vignette eskil={false} offset={0.2} darkness={0.8} />
-        </EffectComposer> */}
+        </EffectComposer>
       </Suspense>
     </Canvas>
   );
