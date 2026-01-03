@@ -51,7 +51,7 @@ export function AboutBeliefs() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-center"
         >
           {/* Phrases */}
-          <div className="text-center max-w-[420px] mx-auto">
+          <div className="text-center lg:text-left max-w-[420px] mx-auto lg:mx-0">
             <div className="space-y-1 text-base md:text-lg text-white/90 leading-relaxed">
               <p>
                 Um vídeo que <span className="text-primary">respira</span>.

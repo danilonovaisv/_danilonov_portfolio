@@ -45,13 +45,20 @@ const RevealShaderMaterial = shaderMaterial(
 
 extend({ RevealShaderMaterial });
 
+// Material personalizado para o efeito de revelação (Type definition)
+interface RevealingShaderMaterialImpl extends THREE.ShaderMaterial {
+  uGhostPos: THREE.Vector3;
+  uRevealRadius: number;
+  uColor: THREE.Color;
+}
+
 export default function RevealingText({
   ghostRef,
 }: {
   ghostRef: React.RefObject<THREE.Group | null>;
 }) {
-  const titleMat = useRef<any>(null);
-  const subMat = useRef<any>(null);
+  const titleMat = useRef<RevealingShaderMaterialImpl | null>(null);
+  const subMat = useRef<RevealingShaderMaterialImpl | null>(null);
   const { viewport } = useThree();
 
   // Lógica responsiva
@@ -63,10 +70,12 @@ export default function RevealingText({
   useFrame(() => {
     // Sincroniza a posição do fantasma com o shader do texto
     if (ghostRef.current) {
-      if (titleMat.current)
+      if (titleMat.current) {
         titleMat.current.uGhostPos.copy(ghostRef.current.position);
-      if (subMat.current)
+      }
+      if (subMat.current) {
         subMat.current.uGhostPos.copy(ghostRef.current.position);
+      }
     }
   });
 

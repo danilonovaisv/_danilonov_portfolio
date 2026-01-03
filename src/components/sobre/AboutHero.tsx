@@ -43,7 +43,7 @@ export function AboutHero() {
         loop
         playsInline
         preload="metadata"
-        className="lg:hidden absolute inset-0 w-full h-full object-cover object-top opacity-[0.7]"
+        className="lg:hidden absolute inset-0 w-full h-full object-cover object-top opacity-[0.8]"
         aria-hidden="true"
       />
 
@@ -55,7 +55,7 @@ export function AboutHero() {
 
       {/* Dark Gradient Overlay for Legibility - Mobile */}
       <div
-        className="lg:hidden absolute inset-0 bg-linear-to-b from-black/60 via-black/75 to-ghost-surface-deep/95 pointer-events-none z-1"
+        className="lg:hidden absolute inset-0 bg-linear-to-b from-black/50 via-black/65 to-ghost-surface-deep/90 pointer-events-none z-1"
         aria-hidden="true"
       />
 

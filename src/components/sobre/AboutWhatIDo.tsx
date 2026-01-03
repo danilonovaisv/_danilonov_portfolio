@@ -33,7 +33,7 @@ export function AboutWhatIDo() {
 
   return (
     <section
-      className="min-h-screen bg-ghost-surface-deep py-20 relative overflow-hidden flex flex-col justify-center"
+      className="min-h-screen bg-ghost-surface-deep py-20 relative overflow-hidden"
       aria-label="O que eu faço"
     >
       <div className="container mx-auto px-6 max-w-[1200px] relative z-10">
@@ -48,7 +48,7 @@ export function AboutWhatIDo() {
         </motion.div>
 
         {/* 7 Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-4 auto-rows-fr">
+        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-7 gap-3 md:gap-4 auto-rows-fr">
           {CAPABILITIES.map((item, index) => {
             return (
               <motion.div
