@@ -6,7 +6,7 @@
 **Complexity:** The transition from a floating thumbnail (Hero) to a fullscreen immersive experience (Manifesto Section) requires precise state management and scroll synchronization.
 *   **Challenge:** Syncing DOM elements (Text fade-out) with the Video's transform (Scale/Translate) while managing audio state.
 *   **The "Hold" Mechanism:** The requirement for a "2-second hold" at fullscreen with audio enabled is a scroll-jacking pattern. This must be implemented carefully using "Pinning" (via `framer-motion`'s `useScroll` or CSS `sticky`) rather than blocking the scroll thread, to avoid UX frustration.
-*   **Audio Logic:**
+*   **Audio Logic:** 
     *   *Thumb:* Muted.
     *   *Transition:* Muted.
     *   *Fullscreen Hold:* Unmuted (Auto-play).
@@ -24,7 +24,7 @@
 ### 1.3 Performance Constraints
 **Complexity:** WebGL + Heavy Post-processing + Scroll Animations = High Risk of Frame Drops.
 *   **DPR Limits:** Strictly capped at `1.5` for generic screens and `2` for high-end. Never use `window.devicePixelRatio` directly without clamping.
-*   **Mobile Strategy:**
+*   **Mobile Strategy:** 
     *   *Disable Post-Processing:* Or significantly reduce pass count.
     *   *Fallback:* Static video or high-quality image if the GPU tier is low.
 *   **Memory:** Dispose of geometries/materials on unmount. Avoid re-creating materials inside the render loop.

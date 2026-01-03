@@ -177,7 +177,7 @@ export default function AboutOrigin() {
                     initial={prefersReducedMotion ? 'visible' : 'hidden'}
                     whileInView="visible"
                     viewport={{ once: true, margin: '-10%' }}
-                    className={`col-span-12 md:col-span-6 relative aspect-[4/5] md:aspect-auto h-[400px] md:h-auto
+                    className={`col-span-12 md:col-span-6 relative aspect-4/5 md:aspect-auto h-[400px] md:h-auto
                       ${isEven ? 'md:order-2 md:col-start-7' : 'md:order-1 md:col-start-1'}
                       order-2
                     `}

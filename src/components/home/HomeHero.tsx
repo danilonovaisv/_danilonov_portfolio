@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { HOME_CONTENT } from '@/config/content';
 import {
   AnimatePresence,
@@ -37,7 +37,7 @@ const CONFIG = {
     },
     transition: {
       duration: 1.2,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
       delay: 0.5,
     },
   },
@@ -48,7 +48,9 @@ export default function HomeHero() {
   const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const prefersReducedMotion = useMediaQuery(
+    '(prefers-reduced-motion: reduce)'
+  );
 
   // 0. Scroll Setup
   // We use a tall container (300vh) to create the "Hold" effect naturally via sticky positioning
@@ -69,7 +71,9 @@ export default function HomeHero() {
   // Scale: Starts at 1 (Thumbnail size logic handled via CSS/Layout), grows to viewport coverage
   // Note: We'll use a fixed position thumb that changes layout based on these transforms
 
-  const videoScale = useTransform(scrollYProgress, [0.3, 0.6], [1, 3.5], { ease: CONFIG.easing });
+  const videoScale = useTransform(scrollYProgress, [0.3, 0.6], [1, 3.5], {
+    ease: CONFIG.easing,
+  });
   const borderRadius = useTransform(scrollYProgress, [0.3, 0.55], [16, 0]);
 
   // Editorial Text Fade Out
@@ -94,7 +98,7 @@ export default function HomeHero() {
     // Jump straight to Hold phase
     if (sectionRef.current) {
       const sectionHeight = sectionRef.current.offsetHeight;
-      const targetScroll = sectionRef.current.offsetTop + (sectionHeight * 0.65); // Jump to 65%
+      const targetScroll = sectionRef.current.offsetTop + sectionHeight * 0.65; // Jump to 65%
       window.scrollTo({
         top: targetScroll,
         behavior: 'smooth',
@@ -111,7 +115,6 @@ export default function HomeHero() {
     >
       {/* Sticky Container: The Viewport Window */}
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
-
         {/* 1. Preloader */}
         <AnimatePresence>
           {isLoading && (
@@ -173,14 +176,13 @@ export default function HomeHero() {
 
         {/* Mobile Fallback for Video (Static or separate section below) */}
         {isMobile && (
-            // On mobile, the video is a separate section below the hero,
-            // handled by main page layout or a specific mobile component.
-            // For now, we leave the hero just with text + ghost fallback (if any).
-            <div className="absolute bottom-0 w-full p-4 flex justify-center z-30">
-                 {/* Mobile specific CTA or indicator could go here */}
-            </div>
+          // On mobile, the video is a separate section below the hero,
+          // handled by main page layout or a specific mobile component.
+          // For now, we leave the hero just with text + ghost fallback (if any).
+          <div className="absolute bottom-0 w-full p-4 flex justify-center z-30">
+            {/* Mobile specific CTA or indicator could go here */}
+          </div>
         )}
-
       </div>
     </section>
   );

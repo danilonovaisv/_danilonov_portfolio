@@ -9,11 +9,7 @@ import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
 import RevealingText from './RevealingText';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
-<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-=======
-
->>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 import {
   EffectComposer,
   Bloom,
@@ -30,10 +26,17 @@ const BACKGROUND_COLOR = '#020204';
 export default function GhostCanvas({ active = true }: { active?: boolean }) {
   const ghostRef = useRef<THREE.Group>(null);
 
-<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
   // Strict Mobile & Reduced Motion Check
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const prefersReducedMotion = useMediaQuery(
+    '(prefers-reduced-motion: reduce)'
+  );
+
+  // Pixel ratio otimizado
+  const dpr: [number, number] =
+    typeof window !== 'undefined' && window.devicePixelRatio > 2
+      ? [1, 1.5]
+      : [1, 2];
 
   // Hydration fix
   const [mounted, setMounted] = useState(false);
@@ -48,13 +51,6 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
 
   // STRICT RULE: No WebGL if reduced motion is preferred
   if (prefersReducedMotion) return null;
-=======
-  // Pixel ratio otimizado
-  const dpr: [number, number] =
-    typeof window !== 'undefined' && window.devicePixelRatio > 2
-      ? [1, 1.5]
-      : [1, 2];
->>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 
   return (
     <Canvas
@@ -66,24 +62,16 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
         stencil: false,
         depth: true,
       }}
-<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
-      camera={{ position: [0, 0, 6], fov: 35 }}
-      style={{ pointerEvents: 'none' }} // Ensure it doesn't block interactions (Z-20 rule)
-=======
       camera={{ position: [0, 0, 7], fov: 35 }}
->>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
+      style={{ pointerEvents: 'none' }} // Ensure it doesn't block interactions (Z-20 rule)
     >
       <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
-<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
-        {/* Removed RevealingText to adhere to Z-10 DOM Text Rule */}
-=======
         {/* ORDEM IMPORTA: Texto (fundo), depois Ghost (frente) */}
         <RevealingText ghostRef={ghostRef} />
->>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
 
         <Ghost
           ref={ghostRef}
@@ -96,10 +84,7 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
         <Fireflies />
 
         <EffectComposer multisampling={0} enableNormalPass={false}>
-<<<<<<< Updated upstream:src/components/home/webgl/GhostCanvas.tsx
           {/* Analog Decay (VHS/Glitch) */}
-=======
->>>>>>> Stashed changes:src/components/canvas/home/GhostCanvas.tsx
           <AnalogDecayPass />
           <Bloom
             luminanceThreshold={0.15}
