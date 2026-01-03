@@ -42,7 +42,7 @@ export function AboutClosing() {
 
   return (
     <section
-      className="min-h-[60vh] md:min-h-[80vh] flex items-center justify-center md:justify-start px-6 md:px-12 lg:px-24 bg-[#040013] py-16 md:py-24"
+      className="min-h-[70vh] flex items-center justify-center px-6 md:px-12 lg:px-20 bg-[#040013] py-20 md:py-28"
       aria-label="Fechamento"
     >
       <motion.div
@@ -50,10 +50,11 @@ export function AboutClosing() {
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-10%' }}
-        className="max-w-[560px] text-[#fcffff] text-center md:text-left"
+        className="w-full max-w-[1100px] text-[#fcffff]"
       >
+        <div className="h-px w-full bg-white/10 mb-10 md:mb-12" aria-hidden />
         {/* Texto de fechamento */}
-        <div className="mb-8 md:mb-12">
+        <div className="mb-10 md:mb-12 text-center md:text-left space-y-2">
           {CLOSING_CONTENT.text.map((line, i) =>
             line === '' ? (
               <br key={i} />
@@ -76,31 +77,32 @@ export function AboutClosing() {
         </div>
 
         {/* CTAs - Stack vertical mobile, row desktop */}
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8">
+        <div className="flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-6">
           {CLOSING_CONTENT.ctas.map((cta, i) =>
             cta.external ? (
               <a
                 key={i}
                 href={cta.href}
-                className="text-[#fcffff] uppercase tracking-widest text-xs md:text-sm font-semibold 
-                           border-b border-transparent hover:border-[#0048ff] 
-                           transition-all duration-300 pb-1
-                           min-h-[48px] flex items-center justify-center"
+                className="text-sm md:text-base font-semibold tracking-tight rounded-full px-6 md:px-7 py-3 
+                           bg-[#0048ff] text-white shadow-none
+                           hover:opacity-90 transition-opacity duration-200 min-h-[46px]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                [ {cta.label} ]
+                {cta.label}
               </a>
             ) : (
               <Link
                 key={i}
                 href={cta.href}
-                className="text-[#fcffff] uppercase tracking-widest text-xs md:text-sm font-semibold 
-                           border-b border-transparent hover:border-[#0048ff] 
-                           transition-all duration-300 pb-1
-                           min-h-[48px] flex items-center justify-center"
+                className={`text-sm md:text-base font-semibold tracking-tight rounded-full px-6 md:px-7 py-3 min-h-[46px]
+                           transition-opacity duration-200 ${
+                             i === 0
+                               ? 'bg-[#0048ff] text-white shadow-none hover:opacity-90'
+                               : 'border border-white/35 text-white hover:border-white/60 hover:opacity-90'
+                           }`}
               >
-                [ {cta.label} ]
+                {cta.label}
               </Link>
             )
           )}

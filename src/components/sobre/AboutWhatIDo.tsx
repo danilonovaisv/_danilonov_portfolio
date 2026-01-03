@@ -44,7 +44,7 @@ export function AboutWhatIDo() {
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center bg-[#040013] py-16 md:py-24 lg:py-32"
+      className="min-h-[90vh] flex items-center bg-[#040013] py-20 md:py-28 lg:py-32"
       aria-label="O que eu faço"
     >
       <motion.div
@@ -56,26 +56,26 @@ export function AboutWhatIDo() {
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-10%' }}
-        className="max-w-[600px] w-full px-6 md:px-8 flex flex-col items-center"
+        className="w-full max-w-[1100px] px-6 md:px-10 flex flex-col items-center"
       >
         {/* Título e subtítulo */}
-        <div className="text-center mb-10 md:mb-16 space-y-3 md:space-y-4">
+        <div className="text-center mb-12 md:mb-16 space-y-3 md:space-y-4 max-w-[760px]">
           <motion.h2
             variants={fadeGhost}
-            className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold text-[#fcffff] tracking-tight leading-tight"
+            className="text-2xl md:text-3xl lg:text-4xl xl:text-[42px] font-semibold text-[#fcffff] tracking-tight leading-tight"
           >
             {WHAT_I_DO_CONTENT.title}
           </motion.h2>
           <motion.p
             variants={fadeGhost}
-            className="text-base md:text-lg lg:text-xl xl:text-2xl text-[#a1a3a3] font-light"
+            className="text-base md:text-lg lg:text-xl text-[#a1a3a3] font-light"
           >
             {WHAT_I_DO_CONTENT.subtitle}
           </motion.p>
         </div>
 
-        {/* Lista de Cards - Touch targets 48px+ */}
-        <ul className="space-y-4 md:space-y-6 w-full max-w-[520px]">
+        {/* Grade de cartões em pills */}
+        <ul className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-[1100px]">
           {WHAT_I_DO_CONTENT.items.map((item, i) => (
             <motion.li
               key={i}
@@ -85,13 +85,15 @@ export function AboutWhatIDo() {
                   ? undefined
                   : {
                       opacity: 1,
+                      borderColor: 'rgba(79, 230, 255, 0.35)',
                       transition: { duration: 0.3 },
                     }
               }
-              className="text-sm md:text-base lg:text-lg text-[#a1a3a3] opacity-90 text-center 
-                         py-4 md:py-4 px-4 md:px-6 min-h-[48px]
-                         border border-white/5 rounded-lg bg-white/2 
-                         hover:bg-white/4 hover:border-white/10 
+              className="text-sm md:text-base text-[#e9ecff] text-center 
+                         px-4 md:px-5 lg:px-6 py-2.5 md:py-3 min-h-[44px]
+                         border border-[#2b2a55] rounded-full bg-[#0f0d36]/90 
+                         shadow-[0_12px_28px_rgba(0,0,0,0.16)]
+                         hover:bg-[#15144a]
                          transition-all duration-300 cursor-default"
             >
               {item}

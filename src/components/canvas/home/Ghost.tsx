@@ -34,7 +34,6 @@ const Ghost = forwardRef<
   useImperativeHandle(ref, () => group.current as Group);
 
   const { viewport, size } = useThree();
-  const prevPosition = useRef(new Vector3(0, 0, 0));
   const targetPosition = useRef(new Vector3(0, 0, 0));
   const startTime = useRef<number | null>(null);
 

@@ -117,7 +117,7 @@ export const HOME_CONTENT = {
 
   contact: {
     title: 'contato',
-    subtitle: 'Vamos construir algo grande juntos?',
+    subtitle: 'Tem uma pergunta ou quer trabalhar junto?',
   },
 };
 
@@ -191,9 +191,9 @@ export const ABOUT_CONTENT = {
   hero: {
     videos: {
       desktop:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE-DESKTOP.mp4',
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4',
       mobile:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE%20MOBILE.mp4',
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4',
     },
     title: {
       line1: 'Sou Danilo Novais.',

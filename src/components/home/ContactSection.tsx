@@ -72,7 +72,7 @@ export default function ContactSection() {
     <section
       id="contact"
       aria-label="Contato"
-      className="bg-white py-16 md:py-24 relative z-10"
+      className="bg-[#f5f5f5] py-16 md:py-24 relative z-10"
     >
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
         {/* Header */}
@@ -86,10 +86,10 @@ export default function ContactSection() {
           }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-primary italic">
+          <h2 className="text-[26px] md:text-[30px] font-semibold text-text-dark">
             {HOME_CONTENT.contact.title}
           </h2>
-          <p className="text-text-dark/70 mt-3 text-lg">
+          <p className="text-text-dark/70 mt-2 text-base md:text-lg">
             {HOME_CONTENT.contact.subtitle}
           </p>
         </motion.div>
@@ -121,12 +121,11 @@ export default function ContactSection() {
                 }
                 aria-label={link.ariaLabel}
                 className="flex items-center gap-4 group"
-                whileHover={reducedMotion ? undefined : { x: 4 }}
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/70 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
                   {link.icon}
                 </span>
-                <span className="text-lg font-medium text-text-dark group-hover:text-primary transition-colors">
+                <span className="text-base md:text-lg font-medium text-text-dark group-hover:text-primary transition-colors">
                   {link.label}
                 </span>
               </motion.a>

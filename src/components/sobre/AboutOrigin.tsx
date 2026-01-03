@@ -143,23 +143,24 @@ export default function AboutOrigin() {
 
   return (
     <section
-      className="relative min-h-screen py-16 md:py-24 lg:py-40 bg-[#040013] overflow-hidden"
+      className="relative min-h-[130vh] py-20 md:py-28 lg:py-36 bg-[#040013] overflow-hidden"
       aria-label="Origem Criativa"
     >
-      <div className="w-full max-w-[1680px] mx-auto px-6 md:px-12 lg:px-24">
-        {/* Section Label */}
+      <div className="w-full max-w-[1200px] mx-auto px-6 md:px-10 lg:px-16">
+        {/* Section Label + divider */}
+        <div className="h-px w-full bg-white/10 mb-8 md:mb-10" aria-hidden />
         <motion.h2
           variants={fadeGhost}
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-10%' }}
-          className="text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] mb-10 md:mb-16 font-bold"
+          className="text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] mb-12 md:mb-16 font-bold"
         >
           {ORIGIN_CONTENT.sectionLabel}
         </motion.h2>
 
         {/* Editorial Layout: Alternating Text <-> Media */}
-        <div className="space-y-16 md:space-y-24 lg:space-y-40">
+        <div className="space-y-12 md:space-y-20 lg:space-y-28">
           {ORIGIN_CONTENT.blocks.map((block, index) => {
             // Alternância: par = texto esquerda, ímpar = texto direita
             const isEven = index % 2 === 0;

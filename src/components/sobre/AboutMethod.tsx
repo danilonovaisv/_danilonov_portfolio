@@ -67,13 +67,13 @@ export default function AboutMethod() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen py-20 md:py-32 flex flex-col justify-center overflow-hidden bg-[#040013]"
+      className="relative min-h-[90vh] py-20 md:py-28 lg:py-32 overflow-hidden bg-[#040013]"
       aria-label="Como Eu Trabalho"
     >
-      {/* Background Video com parallax (desktop only) */}
+      {/* Background Video full-bleed */}
       <motion.div
         style={{ y: prefersReducedMotion ? 0 : y }}
-        className="absolute inset-0 z-0 h-[110%] -top-[5%] hidden md:block"
+        className="absolute inset-0 z-0"
       >
         <video
           src={METHOD_CONTENT.video}
@@ -82,72 +82,69 @@ export default function AboutMethod() {
           muted
           playsInline
           preload="metadata"
-          className="w-full h-full object-cover object-center opacity-50"
+          className="w-full h-full object-cover object-center opacity-75"
           aria-hidden="true"
         />
-        {/* Overlay gradiente para legibilidade */}
-        <div className="absolute inset-0 bg-linear-to-r from-[#040013] via-[#040013]/80 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#040013] via-[#040013]/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/10 to-[#040013]" />
       </motion.div>
 
-      {/* Mobile: Video poster estático para performance */}
-      <div className="absolute inset-0 z-0 block md:hidden bg-linear-to-br from-[#040013] to-[#06071f]" />
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-start">
+          <div className="max-w-[640px]">
+            {/* Títulos */}
+            <motion.div
+              variants={fadeGhost}
+              initial={prefersReducedMotion ? 'visible' : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.4 }}
+              className="mb-8 md:mb-10"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#fcffff] tracking-tight leading-tight mb-3">
+                Criatividade com <span className="ghost-accent">método.</span>
+              </h2>
+              <p className="text-2xl md:text-[28px] lg:text-3xl font-semibold text-[#fcffff] tracking-tight leading-tight">
+                {METHOD_CONTENT.subtitle}
+              </p>
+            </motion.div>
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-[1680px] mx-auto px-6 md:px-12 lg:px-24">
-        <div className="max-w-[560px]">
-          {/* Títulos */}
-          <motion.div
-            variants={fadeGhost}
-            initial={prefersReducedMotion ? 'visible' : 'hidden'}
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            className="mb-8 md:mb-12"
-          >
-            <h2 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-[#fcffff] tracking-tighter leading-none mb-2">
-              Criatividade com{' '}
-              <span className="ghost-accent">
-                {METHOD_CONTENT.titleHighlight}
-              </span>
-            </h2>
-            <p className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-[#fcffff] tracking-tighter leading-none">
-              {METHOD_CONTENT.subtitle}
-            </p>
-          </motion.div>
+            {/* Texto introdutório */}
+            <motion.div
+              variants={fadeGhost}
+              initial={prefersReducedMotion ? 'visible' : 'hidden'}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.4 }}
+              className="text-base md:text-lg lg:text-xl text-[#a1a3a3] font-light leading-relaxed space-y-3 mb-10 md:mb-12"
+            >
+              {METHOD_CONTENT.intro.map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </motion.div>
 
-          {/* Texto introdutório */}
-          <motion.div
-            variants={fadeGhost}
-            initial={prefersReducedMotion ? 'visible' : 'hidden'}
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            className="text-base md:text-lg lg:text-xl text-[#a1a3a3] font-light leading-relaxed space-y-2 mb-10 md:mb-16"
-          >
-            {METHOD_CONTENT.intro.map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </motion.div>
-
-          {/* Steps List */}
-          <div className="space-y-6">
-            {METHOD_CONTENT.steps.map((step, i) => (
-              <motion.div
-                key={i}
-                variants={cardRise}
-                initial={prefersReducedMotion ? 'visible' : 'hidden'}
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ delay: i * 0.1 }}
-                className="flex items-start gap-4 border-t border-white/10 pt-5"
-              >
-                <span className="font-mono text-[#0048ff] text-sm font-bold shrink-0">
-                  0{i + 1}
-                </span>
-                <p className="text-base md:text-lg text-[#a1a3a3] font-light">
-                  {step}
-                </p>
-              </motion.div>
-            ))}
+            {/* Steps List */}
+            <div className="space-y-5">
+              {METHOD_CONTENT.steps.map((step, i) => (
+                <motion.div
+                  key={i}
+                  variants={cardRise}
+                  initial={prefersReducedMotion ? 'visible' : 'hidden'}
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ delay: i * 0.08 }}
+                  className="flex items-start gap-4 border-t border-white/10 pt-4"
+                >
+                  <span className="font-mono text-[#4fe6ff] text-sm font-bold tracking-[0.08em] shrink-0">
+                    0{i + 1}
+                  </span>
+                  <p className="text-base md:text-lg text-[#d5d7e4] font-light">
+                    {step}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </div>
+
+          <div className="hidden lg:block" aria-hidden="true" />
         </div>
       </div>
     </section>

@@ -39,13 +39,10 @@ export default function ClientsBrandsSection() {
           initial={reducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="mb-16 md:mb-20"
+          className="mb-14 md:mb-16"
         >
-          <span className="block text-center font-mono text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/50 mb-4">
-            [trusted by]
-          </span>
           <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold text-center tracking-tight">
-            {HOME_CONTENT.clients.title}
+            {HOME_CONTENT.clients.title}.
           </h2>
         </motion.div>
 
@@ -76,7 +73,7 @@ export default function ClientsBrandsSection() {
                   alt={l.alt}
                   fill
                   unoptimized
-                  className="object-contain filter brightness-0 invert opacity-40 group-hover:opacity-100 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                  className="object-contain filter brightness-0 invert opacity-[0.65] group-hover:opacity-100 transition-all duration-500 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                 />
               </motion.div>
             ))}

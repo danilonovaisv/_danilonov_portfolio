@@ -3,11 +3,15 @@
 import React, { useEffect, useState } from 'react';
 import styles from './GhostEyes.module.css';
 
-const GhostEyes: React.FC = () => {
+const GhostEyes: React.FC<{ interactive?: boolean }> = ({
+  interactive = true,
+}) => {
   // Estado para armazenar a direção do olhar (-1, 0, ou 1)
   const [lookDir, setLookDir] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
+    if (!interactive) return;
+
     const handleMouseMove = (event: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const { clientX, clientY } = event;
@@ -34,7 +38,7 @@ const GhostEyes: React.FC = () => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [interactive]);
 
   return (
     // Inline style necessário para CSS custom properties dinâmicas (--target-x, --target-y)

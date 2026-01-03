@@ -55,7 +55,7 @@ export function AboutHero() {
 
       {/* Content Container - Centralizado mobile, direita desktop */}
       <div className="relative z-10 w-full px-6 md:px-12 lg:px-[8vw]">
-        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-right">
+        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-right md:-translate-y-6 lg:-translate-y-8">
           <motion.div
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             animate="visible"
@@ -67,7 +67,7 @@ export function AboutHero() {
                 },
               },
             }}
-            className="space-y-8 md:space-y-10"
+            className="space-y-9 md:space-y-12"
           >
             {/* H1 - Título principal */}
             <motion.h1
