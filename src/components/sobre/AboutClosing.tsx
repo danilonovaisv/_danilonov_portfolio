@@ -36,8 +36,8 @@ export function AboutClosing() {
           <h2 className="text-[30px] md:text-[36px] lg:text-[42px] font-bold leading-tight text-white max-w-[900px]">
             Hoje sou <span className="text-primary">Diretor de Criação</span>,
             <br />
-            com mais de{' '}
-            <span className="text-primary">10 anos de estrada</span>.
+            com mais de <span className="text-primary">10 anos de estrada</span>
+            .
           </h2>
           <div className="h-px w-full bg-[#4fe6ff]/60 mt-8 md:mt-10" />
         </div>

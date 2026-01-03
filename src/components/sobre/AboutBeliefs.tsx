@@ -57,8 +57,8 @@ export function AboutBeliefs() {
                 Um vídeo que <span className="text-primary">respira</span>.
               </p>
               <p>
-                Uma marca que se{' '}
-                <span className="text-primary">reconhece</span>.
+                Uma marca que se <span className="text-primary">reconhece</span>
+                .
               </p>
               <p>
                 Um detalhe que <span className="text-primary">fica</span>.

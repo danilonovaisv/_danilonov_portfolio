@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useRef, useEffect, useState } from 'react';
+import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 import Ghost from './Ghost';
 import Particles from './Particles';
@@ -9,7 +9,6 @@ import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
 import RevealingText from './RevealingText';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 import {
   EffectComposer,
   Bloom,
@@ -20,37 +19,18 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
-// Preto profundo
 const BACKGROUND_COLOR = '#020204';
 
 export default function GhostCanvas({ active = true }: { active?: boolean }) {
   const ghostRef = useRef<THREE.Group>(null);
 
-  // Strict Mobile & Reduced Motion Check
-  const isMobile = useMediaQuery('(max-width: 768px)');
-  const prefersReducedMotion = useMediaQuery(
-    '(prefers-reduced-motion: reduce)'
-  );
+  // AVISO: A lógica de "não renderizar em mobile" foi movida para HomeHero.tsx
+  // Isso evita que o componente retorne null internamente e cause falha no layout.
 
-  // Pixel ratio otimizado
   const dpr: [number, number] =
     typeof window !== 'undefined' && window.devicePixelRatio > 2
       ? [1, 1.5]
       : [1, 2];
-
-  // Hydration fix
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-  // STRICT RULE: No WebGL on Mobile to save battery/performance
-  if (isMobile) return null;
-
-  // STRICT RULE: No WebGL if reduced motion is preferred
-  if (prefersReducedMotion) return null;
 
   return (
     <Canvas
@@ -63,14 +43,13 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
         depth: true,
       }}
       camera={{ position: [0, 0, 7], fov: 35 }}
-      style={{ pointerEvents: 'none' }} // Ensure it doesn't block interactions (Z-20 rule)
+      style={{ pointerEvents: 'none' }}
     >
       <color attach="background" args={[BACKGROUND_COLOR]} />
 
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
-        {/* ORDEM IMPORTA: Texto (fundo), depois Ghost (frente) */}
         <RevealingText ghostRef={ghostRef} />
 
         <Ghost
@@ -84,7 +63,6 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
         <Fireflies />
 
         <EffectComposer multisampling={0} enableNormalPass={false}>
-          {/* Analog Decay (VHS/Glitch) */}
           <AnalogDecayPass />
           <Bloom
             luminanceThreshold={0.15}

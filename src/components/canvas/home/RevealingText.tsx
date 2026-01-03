@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react';
 import { Text, shaderMaterial } from '@react-three/drei';
-import { useFrame, extend, useThree, Object3DNode } from '@react-three/fiber';
+import { useFrame, extend, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 // Material Shader Simplificado
@@ -45,24 +45,16 @@ const RevealMaterial = shaderMaterial(
 extend({ RevealMaterial });
 
 declare module '@react-three/fiber' {
+  // eslint-disable-next-line no-unused-vars
   interface ThreeElements {
-    revealMaterial: Object3DNode<
-      THREE.ShaderMaterial,
-      typeof THREE.ShaderMaterial
-    > & {
-      uGhostPos?: THREE.Vector3;
-      uRevealRadius?: number;
-      uColor?: THREE.Color;
-      uOpacity?: number;
-      transparent?: boolean;
-    };
+    revealMaterial: any;
   }
 }
 
 export default function RevealingText({
   ghostRef,
 }: {
-  ghostRef: React.RefObject<THREE.Group>;
+  ghostRef: React.RefObject<THREE.Group | null>;
 }) {
   const titleMat = useRef<THREE.ShaderMaterial>(null);
   const subMat = useRef<THREE.ShaderMaterial>(null);
@@ -86,8 +78,12 @@ export default function RevealingText({
     if (ghostRef.current) {
       const ghostPos = ghostRef.current.position;
       // Atualiza uniformes
-      if (titleMat.current) titleMat.current.uGhostPos.copy(ghostPos);
-      if (subMat.current) subMat.current.uGhostPos.copy(ghostPos);
+      if (titleMat.current) {
+        (titleMat.current as any).uGhostPos.copy(ghostPos);
+      }
+      if (subMat.current) {
+        (subMat.current as any).uGhostPos.copy(ghostPos);
+      }
     }
   });
 

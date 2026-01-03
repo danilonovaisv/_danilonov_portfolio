@@ -41,16 +41,19 @@ Este agente é responsável por **analisar, criar e corrigir código** no projet
 ## 3. Workflows de Implementação (Battle Plan)
 
 ### Workflow A: Fundação WebGL (O Ghost)
+
 - **Cena:** Configurar Canvas com `dpr={[1, 1.5]}` e `gl={{ antialias: false }}`.
 - **Mesh:** Formas orgânicas com Noise e emissividade alta (Blue HDR).
 - **Post:** Bloom e Analog Noise (Scanlines) via `EffectComposer`.
 
 ### Workflow B: Orquestração de Scroll (A Narrativa)
+
 - **Hero Wrapper:** Container alto (`300vh`) para permitir pinning.
 - **Transformações:** Mapear `useScroll` para Escala do Vídeo e Opacidade do Texto.
 - **Audio:** Lógica de mute/unmute baseada na fase do scroll (Hold Phase).
 
 ### Workflow C: Integração & Polimento
+
 - **Mobile:** Remover WebGL pesado. Usar fallback estático ou vídeo leve.
 - **Teste:** Verificar Z-Index final. O texto DEVE estar legível sobre o fantasma.
 

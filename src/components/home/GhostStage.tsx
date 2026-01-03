@@ -1,60 +1,45 @@
 'use client';
 
-import * as React from 'react';
-import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { motion } from 'framer-motion';
 import styles from './GhostStage.module.css';
+
+// Carregamento dinâmico do Canvas para evitar erros de SSR (window is not defined)
+const GhostCanvas = dynamic(
+  () => import('@/components/canvas/home/GhostCanvas'),
+  {
+    ssr: false,
+    loading: () => <div className={styles.placeholder} />,
+  }
+);
 
 interface GhostStageProps {
   reducedMotion?: boolean;
   active?: boolean;
 }
 
-// Import dinâmico evita SSR do canvas
-const GhostCanvas = dynamic(
-  () => import('@/components/home/webgl/GhostCanvas').then((m) => m.default),
-  { ssr: false }
-);
-
-/**
- * Static fallback para reduced-motion ou erro WebGL
- * Simula atmosfera Ghost com gradientes CSS
- */
-function StaticGhostFallback() {
-  return (
-    <div
-      className={`h-full w-full relative overflow-hidden ${styles.fallbackContainer}`}
-      role="img"
-      aria-label="Atmospheric ghost background"
-    >
-      {/* Base radial gradient */}
-      <div className={`absolute inset-0 ${styles.fallbackBase}`} />
-
-      {/* Central glow (simula o Ghost) */}
-      <div className={`absolute inset-0 ${styles.fallbackGlow}`} />
-
-      {/* Accent flare */}
-      <div className={`absolute inset-0 ${styles.fallbackFlare}`} />
-
-      {/* Vignette */}
-      <div className={`absolute inset-0 ${styles.fallbackVignette}`} />
-    </div>
-  );
-}
-
-export function GhostStage({ reducedMotion, active = true }: GhostStageProps) {
+export function GhostStage({
+  reducedMotion = false,
+  active = true,
+}: GhostStageProps) {
   if (reducedMotion) {
-    return <StaticGhostFallback />;
+    return <div className={styles.fallbackBackground} />;
   }
 
   return (
-    <ErrorBoundary fallback={<StaticGhostFallback />}>
-      <Suspense fallback={<StaticGhostFallback />}>
+    <div className={styles.stageContainer}>
+      {/* O Canvas deve preencher tudo */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+        className="absolute inset-0 w-full h-full"
+      >
         <GhostCanvas active={active} />
-      </Suspense>
-    </ErrorBoundary>
+      </motion.div>
+
+      {/* Gradiente de vinheta para ajudar na leitura do texto */}
+      <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-[#020204] via-transparent to-[#020204]/50" />
+    </div>
   );
 }
-
-export default GhostStage;
