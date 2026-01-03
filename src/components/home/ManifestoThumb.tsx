@@ -8,9 +8,9 @@ import {
 
 import { HOME_CONTENT } from '@/config/content';
 
-// Video sources - prioritize local, fallback to Supabase
+// Video sources - prioritize remote (Single Source of Truth) from content.ts
+// We removed local fallback to ensure consistency with the design system.
 const VIDEO_SOURCES = {
-  local: '/assets/thumb-hero.mp4',
   remote: HOME_CONTENT.hero.video,
 } as const;
 
@@ -28,7 +28,6 @@ export const ManifestoThumb = forwardRef<
 >(({ onClick }, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoError, setVideoError] = useState(false);
 
   useImperativeHandle(ref, () => ({
     setMuted: (muted: boolean) => {
@@ -44,13 +43,12 @@ export const ManifestoThumb = forwardRef<
     },
   }));
 
-  const handleVideoError = useCallback(() => {
-    if (!videoError) {
-      setVideoError(true);
-    }
-  }, [videoError]);
-
-  const videoSrc = videoError ? VIDEO_SOURCES.remote : VIDEO_SOURCES.local;
+  /*
+   * SIMPLIFIED SOURCE LOGIC:
+   * We now trust the supabase CDN URL strictly.
+   * If error handling is needed later, we can add a toast or placeholder.
+   */
+  const videoSrc = VIDEO_SOURCES.remote;
 
   return (
     <div
@@ -69,7 +67,6 @@ export const ManifestoThumb = forwardRef<
         muted={isMuted}
         loop
         playsInline
-        onError={handleVideoError}
         className="w-full h-full object-cover"
         aria-label="Portfolio showreel video"
       />

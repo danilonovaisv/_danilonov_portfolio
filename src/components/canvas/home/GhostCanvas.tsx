@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 import Ghost from './Ghost';
+import GhostEyes from './GhostEyes';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
@@ -52,9 +53,11 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
           scale={0.22}
           position={[0, -0.2, 0]}
           active={active}
-        />
+        >
+          <GhostEyes />
+        </Ghost>
 
-        <Particles />
+        <Particles count={50} />
         <Fireflies />
 
         <EffectComposer multisampling={0} enableNormalPass={false}>

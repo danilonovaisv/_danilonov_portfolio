@@ -27,8 +27,6 @@ const Ghost = forwardRef<
   const group = useRef<Group>(null);
   const bodyMesh = useRef<Mesh>(null);
   const bodyMaterial = useRef<MeshStandardMaterial>(null);
-  const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
-  const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
 
   useImperativeHandle(ref, () => group.current as Group);
 
@@ -163,15 +161,14 @@ const Ghost = forwardRef<
       Math.sin(t * 1.4) * 0.05 * GHOST_CONFIG.wobbleAmount * movementInfluence;
 
     // Olhos
-    if (leftEyeMat.current && rightEyeMat.current) {
-      // Glow dos olhos aumenta quando se move
-      const eyeBaseOpacity = movementInfluence * 0.9;
-      leftEyeMat.current.opacity = eyeBaseOpacity;
-      rightEyeMat.current.opacity = eyeBaseOpacity;
-
-      leftEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
-      rightEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
-    }
+    // if (leftEyeMat.current && rightEyeMat.current) {
+    //   // Glow dos olhos aumenta quando se move
+    //   const eyeBaseOpacity = movementInfluence * 0.9;
+    //   leftEyeMat.current.opacity = eyeBaseOpacity;
+    //   rightEyeMat.current.opacity = eyeBaseOpacity;
+    //   leftEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
+    //   rightEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
+    // }
   });
 
   return (
@@ -198,37 +195,39 @@ const Ghost = forwardRef<
           toneMapped={false}
         />
 
-        <group position={[0, 0, 0]}>
-          <group position={[-0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
-            <mesh position={[0, 0, -0.1]}>
-              <sphereGeometry args={[0.45, 16, 16]} />
-              <meshBasicMaterial color="black" />
-            </mesh>
-            <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.3, 12, 12]} />
-              <meshBasicMaterial
-                ref={leftEyeMat}
-                transparent
-                toneMapped={false}
-              />
-            </mesh>
-          </group>
+        {/* 
+          <group position={[0, 0, 0]}>
+            <group position={[-0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
+              <mesh position={[0, 0, -0.1]}>
+                <sphereGeometry args={[0.45, 16, 16]} />
+                <meshBasicMaterial color="black" />
+              </mesh>
+              <mesh position={[0, 0, 0.1]}>
+                <sphereGeometry args={[0.3, 12, 12]} />
+                <meshBasicMaterial
+                  ref={leftEyeMat}
+                  transparent
+                  toneMapped={false}
+                />
+              </mesh>
+            </group>
 
-          <group position={[0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
-            <mesh position={[0, 0, -0.1]}>
-              <sphereGeometry args={[0.45, 16, 16]} />
-              <meshBasicMaterial color="black" />
-            </mesh>
-            <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.3, 12, 12]} />
-              <meshBasicMaterial
-                ref={rightEyeMat}
-                transparent
-                toneMapped={false}
-              />
-            </mesh>
-          </group>
-        </group>
+            <group position={[0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
+              <mesh position={[0, 0, -0.1]}>
+                <sphereGeometry args={[0.45, 16, 16]} />
+                <meshBasicMaterial color="black" />
+              </mesh>
+              <mesh position={[0, 0, 0.1]}>
+                <sphereGeometry args={[0.3, 12, 12]} />
+                <meshBasicMaterial
+                  ref={rightEyeMat}
+                  transparent
+                  toneMapped={false}
+                />
+              </mesh>
+            </group>
+          </group> 
+          */}
       </mesh>
     </group>
   );

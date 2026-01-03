@@ -70,12 +70,11 @@ export default function RevealingText({
   });
 
   return (
-    <group position={[0, 0, -1.5]}>
+    <group position={[0, 0, -1.0]}>
       {' '}
       {/* Posicionado atrás do fantasma (Z < -0.2) */}
       {/* Título */}
       <Text
-        font="/fonts/TT Norms Pro Bold.woff2"
         fontSize={titleSize}
         lineHeight={1.1}
         letterSpacing={-0.05}
@@ -94,7 +93,6 @@ export default function RevealingText({
       </Text>
       {/* Subtítulo */}
       <Text
-        font="/fonts/TT Norms Pro Medium.woff2"
         fontSize={subtitleSize}
         letterSpacing={0.02}
         textAlign="center"
