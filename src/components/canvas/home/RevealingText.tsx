@@ -1,23 +1,22 @@
+'use client';
+
 import { useRef, useMemo } from 'react';
 import { Text, shaderMaterial } from '@react-three/drei';
-import { useFrame, extend, useThree } from '@react-three/fiber';
-
+import { useFrame, extend, useThree, Object3DNode } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// 1. Definição do Material Shader
+// Material Shader Simplificado
 const RevealMaterial = shaderMaterial(
   {
     uGhostPos: new THREE.Vector3(0, 0, 0),
-    uRevealRadius: 3.5,
+    uRevealRadius: 4.0,
     uColor: new THREE.Color('#ffffff'),
     uOpacity: 1.0,
   },
   // Vertex Shader
   `
-    varying vec2 vUv;
     varying vec3 vPos;
     void main() {
-      vUv = uv;
       vPos = (modelMatrix * vec4(position, 1.0)).xyz;
       gl_Position = projectionMatrix * viewMatrix * vec4(vPos, 1.0);
     }
@@ -32,9 +31,12 @@ const RevealMaterial = shaderMaterial(
 
     void main() {
       float dist = distance(vPos.xy, uGhostPos.xy);
-      float alpha = 1.0 - smoothstep(uRevealRadius * 0.4, uRevealRadius, dist);
+      // Lógica de revelação: 1.0 (visível) perto, 0.0 (invisível) longe
+      float alpha = 1.0 - smoothstep(uRevealRadius * 0.3, uRevealRadius, dist);
       
-      if (alpha <= 0.01) discard;
+      // Garante um mínimo de visibilidade (0.02) para debug, se necessário remova para 0.0
+      alpha = max(alpha, 0.0); 
+
       gl_FragColor = vec4(uColor, alpha * uOpacity);
     }
   `
@@ -42,10 +44,25 @@ const RevealMaterial = shaderMaterial(
 
 extend({ RevealMaterial });
 
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    revealMaterial: Object3DNode<
+      THREE.ShaderMaterial,
+      typeof THREE.ShaderMaterial
+    > & {
+      uGhostPos?: THREE.Vector3;
+      uRevealRadius?: number;
+      uColor?: THREE.Color;
+      uOpacity?: number;
+      transparent?: boolean;
+    };
+  }
+}
+
 export default function RevealingText({
   ghostRef,
 }: {
-  ghostRef: React.RefObject<THREE.Group | null>;
+  ghostRef: React.RefObject<THREE.Group>;
 }) {
   const titleMat = useRef<THREE.ShaderMaterial>(null);
   const subMat = useRef<THREE.ShaderMaterial>(null);
@@ -55,16 +72,12 @@ export default function RevealingText({
 
   const config = useMemo(
     () => ({
-      // Ajuste fino para os tamanhos "5-8rem" e "4-6rem" visuais
-      titleSize: isMobile ? 0.6 : 1.0,
-      subSize: isMobile ? 0.4 : 0.7,
-
-      // Posições ajustadas para acomodar os CTAs
-      titleY: isMobile ? 0.25 : 0.4,
-      subY: isMobile ? -0.35 : -0.4,
-
-      radius: isMobile ? 3.0 : 4.5,
-      letterSpacing: -0.06, // Tracking-tight agressivo
+      titleSize: isMobile ? 0.6 : 1.1,
+      subSize: isMobile ? 0.4 : 0.75,
+      titleY: isMobile ? 0.3 : 0.5,
+      subY: isMobile ? -0.3 : -0.35,
+      radius: isMobile ? 3.5 : 5.5, // Raio aumentado para garantir visibilidade
+      letterSpacing: -0.05,
     }),
     [isMobile]
   );
@@ -72,19 +85,20 @@ export default function RevealingText({
   useFrame(() => {
     if (ghostRef.current) {
       const ghostPos = ghostRef.current.position;
-      // @ts-ignore - Propriedades uniformes existem no shaderMaterial
+      // Atualiza uniformes
       if (titleMat.current) titleMat.current.uGhostPos.copy(ghostPos);
-      // @ts-ignore
       if (subMat.current) subMat.current.uGhostPos.copy(ghostPos);
     }
   });
 
-  // Fonte: Certifica-te que o ficheiro existe em /public/fonts/
+  // Caminho da fonte (Certifique-se que TT Norms Pro Bold.woff2 está em public/fonts/)
   const fontUrl = '/fonts/TT Norms Pro Bold.woff2';
 
   return (
     <group position={[0, 0, -1.5]}>
-      {/* H1 */}
+      {' '}
+      {/* Z=-1.5 (Atrás do fantasma) */}
+      {/* Título Principal */}
       <Text
         font={fontUrl}
         fontSize={config.titleSize}
@@ -104,8 +118,7 @@ export default function RevealingText({
           uOpacity={1.0}
         />
       </Text>
-
-      {/* H2 */}
+      {/* Subtítulo */}
       <Text
         font={fontUrl}
         fontSize={config.subSize}
