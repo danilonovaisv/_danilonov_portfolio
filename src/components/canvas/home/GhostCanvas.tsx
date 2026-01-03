@@ -7,7 +7,9 @@ import Ghost from './Ghost';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
 import AtmosphereVeil from './AtmosphereVeil';
+import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 
+import RevealingText from './RevealingText';
 import {
   EffectComposer,
   Bloom,
@@ -18,14 +20,10 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
-// ============================================================================
-// CONFIGURAÇÃO CRÍTICA: A COR DO FUNDO DEVE SER IDÊNTICA À COR DA MÁSCARA
-// ============================================================================
 const BACKGROUND_COLOR = '#06071f';
 
 export default function GhostCanvas({ active = true }: { active?: boolean }) {
   const dpr: [number, number] = [1, 2];
-
   const ghostRef = useRef<THREE.Group>(null);
 
   return (
@@ -45,7 +43,10 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
       <Suspense fallback={null}>
         <AtmosphereVeil />
 
-        {/* Ghost (Z ~ 0) */}
+        {/* Texto que revela (atrás do fantasma) */}
+        <RevealingText ghostRef={ghostRef} />
+
+        {/* Ghost (Z ~ -0.2) */}
         <Ghost
           ref={ghostRef}
           scale={0.22}
@@ -53,12 +54,13 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
           active={active}
         />
 
-        {/* Partículas decorativas */}
         <Particles />
         <Fireflies />
 
-        {/* Post-processing (Ghost Atmosphere Spine) */}
         <EffectComposer multisampling={0} enableNormalPass={false}>
+          {/* Efeito Analog Decay (VHS/Glitch sutil) */}
+          <AnalogDecayPass />
+
           <Bloom
             luminanceThreshold={0.15}
             mipmapBlur

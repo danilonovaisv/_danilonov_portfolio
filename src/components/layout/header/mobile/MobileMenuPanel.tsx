@@ -30,8 +30,8 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       <nav
         ref={ref}
         id="mobile-menu-panel"
-        className="fixed top-0 right-0 w-full h-full bg-gradient-to-b from-[#050511] to-[#06071f] flex flex-col justify-center px-8 overflow-y-auto z-50 pointer-events-auto"
-        aria-hidden={open ? 'false' : 'true'}
+        className="fixed top-0 right-0 w-full h-full bg-linear-to-b from-section-manifesto to-ghost-surface-gradient-start flex flex-col justify-center px-8 overflow-y-auto z-50 pointer-events-auto"
+        aria-hidden={!open ? 'true' : 'false'}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             onClose();

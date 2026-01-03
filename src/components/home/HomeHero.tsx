@@ -153,11 +153,11 @@ export default function HomeHero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-[250vh] bg-[#050511] overflow-hidden"
+      className="relative h-dvh md:h-[250vh] bg-section-manifesto overflow-hidden"
       aria-label="Home hero section"
     >
       {/* Sticky Context */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-dvh w-full overflow-hidden">
         {/* Preloader Ghost */}
         <AnimatePresence>
           {isLoading && (
@@ -238,7 +238,7 @@ export default function HomeHero() {
       </div>
 
       {/* Scroll Space */}
-      <div className="h-screen w-full pointer-events-none" />
+      <div className="hidden md:block h-screen w-full pointer-events-none" />
     </section>
   );
 }

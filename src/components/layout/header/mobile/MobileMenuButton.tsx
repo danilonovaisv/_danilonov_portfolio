@@ -35,7 +35,7 @@ const MobileMenuButton = forwardRef<HTMLButtonElement, MobileMenuButtonProps>(
         aria-label={open ? 'Fechar menu' : 'Abrir menu'}
         aria-expanded={open ? 'true' : 'false'}
         className={`relative inline-flex items-center gap-2 bg-transparent border-0 cursor-pointer font-medium leading-none overflow-visible z-110 ${
-          isLight ? 'text-[#0048ff]' : 'text-white'
+          isLight ? 'text-section-clients' : 'text-white'
         }`}
       >
         {/* Animated text */}

@@ -17,9 +17,10 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
+import { HOME_CONTENT } from '@/config/content';
+
 // Video source (Supabase)
-const VIDEO_SRC =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
+const VIDEO_SRC = HOME_CONTENT.hero.video;
 
 // Animation config
 const ANIMATION = {
@@ -100,7 +101,7 @@ export function ManifestoSection() {
                    focus-visible:ring-[#4fe6ff] focus-visible:ring-offset-2
                    focus-visible:ring-offset-black/50"
         aria-label={isMuted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'}
-        aria-pressed={isMuted ? 'false' : 'true'}
+        aria-pressed={!isMuted ? 'true' : 'false'}
       >
         {isMuted ? (
           <VolumeX className="w-5 h-5" aria-hidden="true" />

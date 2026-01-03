@@ -1,5 +1,5 @@
 ---
-description: Hero ghost
+description: (O Fantasma, Luzes e Atmosfera).
 ---
 
 ### 🚀 Workflow Antigravity: Protocolo de Execução
@@ -298,5 +298,3 @@ import Particles from './Particles'; // Importar
 ```
 
 _(Nota: Podes colocar o `GhostEyes` dentro do componente `Ghost` ou como irmão, mas como ele segue a posição base, é melhor ser irmão dentro de um Group pai se o fantasma se mover muito, ou ajustamos a posição.)_
-
----

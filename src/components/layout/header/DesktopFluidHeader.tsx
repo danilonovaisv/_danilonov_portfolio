@@ -59,7 +59,7 @@ export default function DesktopFluidHeader({
           className="pointer-events-auto w-full max-w-[1100px] relative"
         >
           <div
-            className={`${styles.headerContainer} h-16 rounded-full backdrop-blur-[12px] border border-white/5 bg-gradient-to-b from-white/5 to-transparent`}
+            className={`${styles.headerContainer} h-16 rounded-full backdrop-blur-md border border-white/5 bg-linear-to-b from-white/5 to-transparent`}
           >
             {/* glass background */}
             <div className="absolute inset-0 rounded-full overflow-hidden">

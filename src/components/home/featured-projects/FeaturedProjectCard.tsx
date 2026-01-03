@@ -34,7 +34,7 @@ export default function FeaturedProjectCard({
       aria-label={`Ver projeto: ${project.title}`}
     >
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-[#050511] border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-section-manifesto border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
           reducedMotion
             ? ''
             : 'group-hover:shadow-[0_22px_54px_-26px_rgba(0,87,255,0.2)] group-hover:border-white/10'

@@ -26,8 +26,8 @@ export default function MobileHeaderBar({
       <div
         className={`w-full h-[60px] pointer-events-auto ${
           isLight
-            ? 'bg-white/95 border-b border-[#0048ff]/15 backdrop-blur-sm'
-            : 'bg-[#050511]/90 border-b border-white/5 backdrop-blur-sm'
+            ? 'bg-white/95 border-b border-section-clients/15 backdrop-blur-sm'
+            : 'bg-section-manifesto/90 border-b border-white/5 backdrop-blur-sm'
         }`}
       >
         <div className="flex items-center justify-between h-full px-4">

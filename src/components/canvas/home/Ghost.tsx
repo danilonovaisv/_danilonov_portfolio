@@ -6,20 +6,20 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 
 // ============================================================================
-// CONFIGURAÇÃO DO GHOST
+// CONFIGURAÇÃO DO GHOST (Atualizada conforme referência)
 // ============================================================================
 const GHOST_CONFIG = {
-  bodyColor: '#e0f7fa',
-  glowColor: '#00ffff',
-  eyeColor: '#ffffff',
-  emissiveIntensity: 3.5,
-  floatSpeed: 1.8,
+  bodyColor: '#0f2027', // Dark body
+  glowColor: '#0080ff', // Blue glow
+  eyeGlowColor: '#8a2be2', // Violet eyes
+  emissiveIntensity: 5.8, // High intensity
+  ghostOpacity: 0.88,
+  floatSpeed: 1.6,
   followSpeed: 0.05,
+  wobbleAmount: 0.35,
+  eyeGlowIntensity: 4.5,
 };
 
-// ============================================================================
-// Ghost Component (forwardRef para expor posição ao RevealingText)
-// ============================================================================
 const Ghost = forwardRef<
   Group,
   React.JSX.IntrinsicElements['group'] & { active?: boolean }
@@ -30,14 +30,13 @@ const Ghost = forwardRef<
   const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
   const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
 
-  // Expor o group.current via ref
   useImperativeHandle(ref, () => group.current as Group);
 
   const { viewport, size } = useThree();
   const targetPosition = useRef(new Vector3(0, 0, 0));
   const startTime = useRef<number | null>(null);
 
-  // Geometria do Ghost (modificada para ficar orgânica na base)
+  // Geometria orgânica
   const ghostGeometry = useMemo(() => {
     const geometry = new THREE.SphereGeometry(2, 64, 64);
     const positionAttribute = geometry.getAttribute('position');
@@ -67,42 +66,26 @@ const Ghost = forwardRef<
         bodyMaterial.current.opacity = 0;
         bodyMaterial.current.emissiveIntensity = 0;
       }
-      if (bodyMesh.current) bodyMesh.current.scale.setScalar(0.98);
-      // Reset start time so it's fresh when active becomes true
+      bodyMesh.current.scale.setScalar(0.98);
       startTime.current = null;
       return;
     }
 
-    // Set start time on first active frame
     if (startTime.current === null) {
       startTime.current = state.clock.getElapsedTime();
     }
 
     const t = state.clock.getElapsedTime() - startTime.current;
 
-    // ======================================================================
-    // TIMELINE DE ANIMAÇÃO CANÔNICA (PROMPT HERO GHOST)
-    // ======================================================================
-    // 0ms   -> 800ms  : Invisible
-    // 800ms -> 2000ms : Phantom (Opacity 0 -> 0.35, Scale 0.98 -> 1.0)
-    // 2000ms-> 3400ms : Presence (Opacity 0.35 -> 0.75)
-    // 3400ms-> 4200ms : Anchor (Opacity 0.75 -> 1.0)
-    // > 4200ms        : Idle State
-    // ======================================================================
-
+    // Timeline de Animação
     let currentOpacity = 0;
     let currentScale = 0.98;
     let currentEmissive = 0;
 
-    // Fases de entrada
     if (t < 0.8) {
-      // Invisible
       currentOpacity = 0;
-      currentScale = 0.98;
-      currentEmissive = 0;
     } else if (t < 2.0) {
-      // Phantom Phase (800ms -> 2000ms)
-      const progress = (t - 0.8) / 1.2; // 0 to 1
+      const progress = (t - 0.8) / 1.2;
       currentOpacity = THREE.MathUtils.lerp(0, 0.35, progress);
       currentScale = THREE.MathUtils.lerp(0.98, 1.0, progress);
       currentEmissive = THREE.MathUtils.lerp(
@@ -111,149 +94,136 @@ const Ghost = forwardRef<
         progress
       );
     } else if (t < 3.4) {
-      // Presence Phase (2000ms -> 3400ms)
       const progress = (t - 2.0) / 1.4;
-      currentOpacity = THREE.MathUtils.lerp(0.35, 0.75, progress);
+      currentOpacity = THREE.MathUtils.lerp(
+        0.35,
+        GHOST_CONFIG.ghostOpacity * 0.85,
+        progress
+      );
       currentScale = 1.0;
       currentEmissive = THREE.MathUtils.lerp(
         GHOST_CONFIG.emissiveIntensity * 0.4,
         GHOST_CONFIG.emissiveIntensity * 0.7,
         progress
       );
-    } else if (t < 4.2) {
-      // Anchor Phase (3400ms -> 4200ms)
-      const progress = (t - 3.4) / 0.8;
-      currentOpacity = THREE.MathUtils.lerp(0.75, 0.92, progress);
-      currentScale = 1.0;
-      currentEmissive = THREE.MathUtils.lerp(
-        GHOST_CONFIG.emissiveIntensity * 0.7,
-        GHOST_CONFIG.emissiveIntensity,
-        progress
-      );
     } else {
-      // Fully Present
-      currentOpacity = 0.92;
+      // Estado final estável
+      currentOpacity = GHOST_CONFIG.ghostOpacity;
       currentScale = 1.0;
 
-      // Idle Glow Oscillation (Duration 4-6s)
-      const idleTime = t - 4.2;
-      const glowSine = Math.sin(idleTime * 1.5) * 0.5 + 0.5; // 0..1
-      currentEmissive = THREE.MathUtils.lerp(
-        GHOST_CONFIG.emissiveIntensity * 0.8,
-        GHOST_CONFIG.emissiveIntensity * 1.1,
-        glowSine
-      );
+      // Pulso de respiração (Breathe)
+      const pulse = Math.sin(t * 1.6) * 0.6; // Pulse intensity 0.6
+      const breathe = Math.sin(t * 0.6) * 0.12;
+      currentEmissive = GHOST_CONFIG.emissiveIntensity + pulse + breathe;
     }
 
-    // Aplicar transformações
     if (bodyMaterial.current) {
       bodyMaterial.current.opacity = currentOpacity;
       bodyMaterial.current.emissiveIntensity = currentEmissive;
+      bodyMaterial.current.color.set(GHOST_CONFIG.bodyColor);
+      bodyMaterial.current.emissive.set(GHOST_CONFIG.glowColor);
     }
 
     bodyMesh.current.scale.setScalar(currentScale);
 
-    // Movimento (Idle e Mouse Follow) só começa suavemente após a fase Phantom
+    // Movimento do rato (ou automático no mobile)
     const movementInfluence = THREE.MathUtils.clamp((t - 2.0) / 2.0, 0, 1);
-
     const pointer = state.pointer;
-    const { width } = size;
-    const isMobile = width < 768;
+    const isMobile = size.width < 768;
 
     let xTarget: number;
     let yTarget: number;
 
     if (isMobile) {
-      xTarget = 0;
-      yTarget = 0;
+      // Automático no mobile para "revelar" o texto (sinusoidal sweep)
+      xTarget = Math.sin(t * 0.8) * (viewport.width * 0.25);
+      yTarget = Math.cos(t * 0.5) * (viewport.height * 0.1);
     } else {
-      xTarget = pointer.x * (viewport.width / 3.5);
-      yTarget = pointer.y * (viewport.height / 3.5);
+      // Interativo no desktop
+      xTarget = pointer.x * (viewport.width / 3);
+      yTarget = pointer.y * (viewport.height / 3);
     }
 
-    // Aplicar movimento com influência controlada
     targetPosition.current.set(xTarget, yTarget, 0);
     group.current.position.lerp(
       targetPosition.current,
       GHOST_CONFIG.followSpeed * movementInfluence
     );
 
-    // Idle vertical float
+    // Float e Wobble
     const floatY =
       Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2 * movementInfluence;
     bodyMesh.current.position.y = floatY;
 
-    // Olhos e Rotação
     const moveX = targetPosition.current.x - group.current.position.x;
-    bodyMesh.current.rotation.z = -moveX * 0.15 * movementInfluence;
-    bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1 * movementInfluence;
+    const tiltStrength = 0.1 * GHOST_CONFIG.wobbleAmount;
 
-    // Olhos flicker/opacity
+    bodyMesh.current.rotation.z = -moveX * tiltStrength * movementInfluence;
+    bodyMesh.current.rotation.y =
+      Math.sin(t * 1.4) * 0.05 * GHOST_CONFIG.wobbleAmount * movementInfluence;
+
+    // Olhos
     if (leftEyeMat.current && rightEyeMat.current) {
-      const eyeBaseOpacity = movementInfluence * 0.8; // Olhos só aparecem quando fantasma se revela
+      // Glow dos olhos aumenta quando se move
+      const eyeBaseOpacity = movementInfluence * 0.9;
       leftEyeMat.current.opacity = eyeBaseOpacity;
       rightEyeMat.current.opacity = eyeBaseOpacity;
+
+      leftEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
+      rightEyeMat.current.color.set(GHOST_CONFIG.eyeGlowColor);
     }
   });
 
   return (
     <group ref={group} {...props}>
-      {/* Iluminação direcional que acompanha o Ghost */}
-      <directionalLight position={[-8, 6, -4]} intensity={3} color="#00ffff" />
-      <directionalLight position={[8, -4, -6]} intensity={3} color="#d400ff" />
+      {/* Rim Lights atualizadas */}
+      <directionalLight
+        position={[-8, 6, -4]}
+        intensity={1.8}
+        color="#4a90e2"
+      />
+      <directionalLight
+        position={[8, -4, -6]}
+        intensity={1.26}
+        color="#50e3c2"
+      />
 
-      {/* Corpo do Ghost */}
       <mesh ref={bodyMesh} geometry={ghostGeometry}>
         <meshStandardMaterial
           ref={bodyMaterial}
-          color={GHOST_CONFIG.bodyColor}
-          emissive={GHOST_CONFIG.glowColor}
-          emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
           transparent
-          opacity={0.92}
-          roughness={0.0}
-          metalness={0.1}
+          roughness={0.02}
+          metalness={0.0}
           side={THREE.DoubleSide}
           toneMapped={false}
         />
 
-        {/* Olhos do Ghost */}
         <group position={[0, 0, 0]}>
-          {/* Olho esquerdo */}
-          <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
-            {/* Socket (fundo preto) */}
+          <group position={[-0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
             <mesh position={[0, 0, -0.1]}>
               <sphereGeometry args={[0.45, 16, 16]} />
               <meshBasicMaterial color="black" />
             </mesh>
-            {/* Brilho do olho */}
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.2, 16, 16]} />
+              <sphereGeometry args={[0.3, 12, 12]} />
               <meshBasicMaterial
                 ref={leftEyeMat}
-                color={GHOST_CONFIG.eyeColor}
                 transparent
-                opacity={0.3}
                 toneMapped={false}
               />
             </mesh>
           </group>
 
-          {/* Olho direito */}
-          <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
-            {/* Socket (fundo preto) */}
+          <group position={[0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>
             <mesh position={[0, 0, -0.1]}>
               <sphereGeometry args={[0.45, 16, 16]} />
               <meshBasicMaterial color="black" />
             </mesh>
-            {/* Brilho do olho */}
             <mesh position={[0, 0, 0.1]}>
-              <sphereGeometry args={[0.2, 16, 16]} />
+              <sphereGeometry args={[0.3, 12, 12]} />
               <meshBasicMaterial
                 ref={rightEyeMat}
-                color={GHOST_CONFIG.eyeColor}
                 transparent
-                opacity={0.3}
                 toneMapped={false}
               />
             </mesh>

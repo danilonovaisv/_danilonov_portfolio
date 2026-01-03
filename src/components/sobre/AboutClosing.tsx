@@ -20,7 +20,7 @@ export function AboutClosing() {
 
   return (
     <section
-      className="min-h-[70vh] flex items-center justify-center px-6 md:px-12 lg:px-20 bg-[#040013] py-20 md:py-28"
+      className="min-h-[70vh] flex items-center justify-center px-6 md:px-12 lg:px-20 bg-ghost-surface-deep py-20 md:py-28"
       aria-label="Fechamento"
     >
       <motion.div
@@ -31,7 +31,7 @@ export function AboutClosing() {
         className="w-full max-w-[1100px] flex flex-col items-center text-center"
       >
         {/* Título Principal */}
-        <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-[1.25] mb-8 md:mb-10 text-white max-w-[800px]">
+        <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight mb-8 md:mb-10 text-white max-w-[800px]">
           Hoje sou <span className="text-primary">Diretor de Criação</span>,
           <br />
           com mais de <span className="text-primary">10 anos de estrada</span>.

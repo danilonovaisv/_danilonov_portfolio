@@ -73,7 +73,7 @@ export default function ContactSection() {
       id="contact"
       aria-label="Contato"
       data-light-section
-      className="bg-[#f5f5f5] py-16 md:py-24 relative z-10"
+      className="bg-section-contact py-16 md:py-24 relative z-10"
     >
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
         {/* Header */}

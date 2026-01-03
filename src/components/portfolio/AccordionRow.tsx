@@ -49,19 +49,33 @@ export default function AccordionRow({
                 className={`group flex w-full items-center border-t border-[#0057FF]/30 py-10 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:py-16 justify-center ${alignmentClasses[alignment]}`}
                 aria-label={`Ver projetos de ${category.titleDesktop.replace(/\n/g, ' ')}`}
             >
-                <div className="flex w-full md:w-fit items-center justify-center md:justify-start gap-4 transition-all duration-300 group-hover:gap-6 md:gap-14 max-w-[90%]">
-                    {/* Thumbnail Revealer - Desktop Only */}
-                    <div className="relative hidden h-32 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72 md:block">
-                        {thumb && (
-                            <Image
-                                src={thumb}
-                                alt=""
-                                fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                sizes="(min-width: 1024px) 256px, 0px"
-                            />
-                        )}
-                    </div>
+                    {/* Content Container */}
+                    <div className="flex w-full flex-col md:flex-row items-center justify-center md:justify-start gap-4 transition-all duration-300 group-hover:gap-6 md:gap-14 max-w-[90%]">
+                        {/* Thumbnail - Mobile Only */}
+                        <div className="relative block w-full aspect-video overflow-hidden rounded-md mb-4 md:hidden">
+                            {thumb && (
+                                <Image
+                                    src={thumb}
+                                    alt=""
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 768px) 100vw, 0px"
+                                />
+                            )}
+                        </div>
+
+                        {/* Thumbnail Revealer - Desktop Only */}
+                        <div className="relative hidden h-32 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72 md:block">
+                            {thumb && (
+                                <Image
+                                    src={thumb}
+                                    alt=""
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    sizes="(min-width: 1024px) 256px, 0px"
+                                />
+                            )}
+                        </div>
 
                     {/* Content Container */}
                     <div className="flex items-center gap-4 md:gap-6">

@@ -9,7 +9,7 @@ interface HeroCopyProps {
 
 export function HeroCopy({ startEntrance = false }: HeroCopyProps) {
   return (
-    <div className="flex flex-col items-center text-center space-y-12">
+    <div className="flex flex-col items-center text-center space-y-8">
       {/* Tag */}
       <motion.span
         initial={{ opacity: 0, y: 10 }}
@@ -21,11 +21,11 @@ export function HeroCopy({ startEntrance = false }: HeroCopyProps) {
       </motion.span>
 
       {/* Main Headlines */}
+      {/* Main Headlines - Escondidos visualmente pois agora estão no WebGL (GhostCanvas) */}
+      {/* Mantemos no DOM para SEO e acessibilidade */}
       <motion.div
-        className="flex flex-col items-center leading-none"
-        initial={{ opacity: 0, y: 20 }}
-        animate={startEntrance ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ delay: 3.2, duration: 1.0, ease: 'easeOut' }}
+        className="flex flex-col items-center leading-none sr-only"
+        initial={{ opacity: 0 }}
       >
         <h1 className="text-[clamp(5rem,12vw,8rem)] font-black tracking-tight text-white">
           Você não vê <br /> o design.
@@ -37,7 +37,7 @@ export function HeroCopy({ startEntrance = false }: HeroCopyProps) {
 
       {/* CTA Button */}
       <motion.div
-        className="pt-8"
+        className="pt-12"
         initial={{ opacity: 0 }}
         animate={startEntrance ? { opacity: 1 } : { opacity: 0 }}
         transition={{ delay: 4.4, duration: 0.8 }}

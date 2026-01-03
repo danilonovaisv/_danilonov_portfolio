@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useReducedMotion } from 'framer-motion';
 
 // 7 Cards Content hardcoded to match prototype perfectly if not in config
@@ -32,7 +34,7 @@ export function AboutWhatIDo() {
 
   return (
     <section
-      className="min-h-screen bg-[#040013] py-20 relative overflow-hidden flex flex-col justify-center"
+      className="min-h-screen bg-ghost-surface-deep py-20 relative overflow-hidden flex flex-col justify-center"
       aria-label="O que eu faço"
     >
       {/* Background Ambience / Glow */}
@@ -71,7 +73,7 @@ export function AboutWhatIDo() {
                 className={`
                   group relative 
                   bg-[#1A1A2E]/90
-                  border-t-[2px] border-t-primary
+                  border-t-2 border-t-primary
                   rounded-xl
                   p-6 md:p-8
                   transition-all duration-300

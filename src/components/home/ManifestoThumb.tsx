@@ -6,11 +6,12 @@ import {
   useImperativeHandle,
 } from 'react';
 
+import { HOME_CONTENT } from '@/config/content';
+
 // Video sources - prioritize local, fallback to Supabase
 const VIDEO_SOURCES = {
   local: '/assets/thumb-hero.mp4',
-  remote:
-    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
+  remote: HOME_CONTENT.hero.video,
 } as const;
 
 export interface ManifestoThumbHandle {
