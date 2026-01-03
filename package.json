@@ -36,6 +36,7 @@
     "deploy": "pnpm run build && firebase deploy --only hosting --project portfolio-danilo-novais"
   },
   "dependencies": {
+    "@dataconnect/admin-generated": "link:src/dataconnect-admin-generated",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@react-three/postprocessing": "^3.0.4",
@@ -57,7 +58,8 @@
     "tailwind-merge": "^3.4.0",
     "three": "^0.182.0",
     "three-stdlib": "^2.36.1",
-    "zod": "^4.3.4"
+    "zod": "^4.3.4",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@jest/globals": "^30.2.0",

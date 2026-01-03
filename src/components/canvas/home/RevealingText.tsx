@@ -4,6 +4,7 @@ import { useRef, useMemo } from 'react';
 import { Text, shaderMaterial } from '@react-three/drei';
 import { useFrame, extend, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { BRAND } from '@/config/brand';
 
 // Shader de Revelação (Mantido igual, pois funciona bem)
 const RevealMaterial = shaderMaterial(
@@ -45,6 +46,14 @@ type RevealMaterialType = THREE.ShaderMaterial & {
   uOpacity: number;
 };
 
+// Add to R3F Intrinsic Elements
+// eslint-disable-next-line no-unused-vars
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    revealMaterial: any;
+  }
+}
+
 export default function RevealingText({
   ghostRef,
 }: {
@@ -79,9 +88,8 @@ export default function RevealingText({
     }
   });
 
-  // URL DA FONTE NO SUPABASE (Garante que o 3D funciona)
-  const fontUrl =
-    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2';
+  // URL DA FONTE NO SUPABASE (Centralizada)
+  const fontUrl = BRAND.fonts.bold;
 
   return (
     <group position={[0, 0, -1.5]}>

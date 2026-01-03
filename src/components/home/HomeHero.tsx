@@ -34,6 +34,7 @@ export default function HomeHero() {
   const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [webGLReady, setWebGLReady] = useState(false);
 
   // NOTE: isMobile logic is also used for enable3D
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -45,11 +46,19 @@ export default function HomeHero() {
     setMounted(true);
   }, []);
 
-  // LÓGICA DE ATIVAÇÃO DO 3D
-  const enable3D = useMemo(() => {
+  // LÓGICA DE ATIVAÇÃO DO 3D (Tentativa)
+  const shouldRender3D = useMemo(() => {
     if (!mounted) return false;
     return !isMobile && !prefersReducedMotion;
   }, [mounted, isMobile, prefersReducedMotion]);
+
+  // Callback quando o contexto WebGL é criado com sucesso
+  const handleCanvasCreated = useCallback(() => {
+    setWebGLReady(true);
+  }, []);
+
+  // Só escondemos o HTML se o 3D estiver de fato pronto
+  const hideHTMLText = shouldRender3D && webGLReady;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -107,8 +116,9 @@ export default function HomeHero() {
           transition={{ duration: 2.0, ease: 'linear' }}
         >
           <GhostStage
-            reducedMotion={!enable3D}
-            active={!isLoading && enable3D}
+            reducedMotion={!shouldRender3D}
+            active={!isLoading && shouldRender3D}
+            onCanvasCreated={handleCanvasCreated}
           />
         </motion.div>
 
@@ -118,8 +128,8 @@ export default function HomeHero() {
           className="absolute inset-0 z-10 pointer-events-none"
         >
           <div className="w-full h-full pointer-events-auto">
-            {/* Passamos o enable3D para controlar a visibilidade do texto HTML */}
-            <HeroCopy startEntrance={!isLoading} enable3D={enable3D} />
+            {/* Passamos o hideHTMLText para controlar a visibilidade do texto HTML */}
+            <HeroCopy startEntrance={!isLoading} enable3D={hideHTMLText} />
           </div>
         </motion.div>
 

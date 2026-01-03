@@ -79,7 +79,7 @@ export function AboutHero() {
             {/* H1 - Título principal */}
             <motion.h1
               variants={fadeGhost}
-              className="text-[32px] md:text-[64px] text-[#fcffff] font-bold tracking-tight leading-[1.1]"
+              className="text-display-about text-text-light"
             >
               Sou <span className="text-primary">Danilo Novais.</span>
             </motion.h1>
@@ -89,16 +89,16 @@ export function AboutHero() {
               variants={fadeGhost}
               className="space-y-0.5 md:space-y-2"
             >
-              <p className="text-[32px] md:text-[44px] text-[#fcffff] font-bold tracking-tight leading-[1.1]">
+              <p className="text-[32px] md:text-[44px] text-text-light font-bold tracking-tight leading-[1.1]">
                 <span className="text-primary">Você não vê</span> tudo
               </p>
-              <p className="text-[32px] md:text-[44px] text-[#fcffff] font-bold tracking-tight leading-[1.1]">
+              <p className="text-[32px] md:text-[44px] text-text-light font-bold tracking-tight leading-[1.1]">
                 o que eu faço.
               </p>
-              <p className="text-[32px] md:text-[44px] text-[#fcffff] font-bold tracking-tight leading-[1.1]">
+              <p className="text-[32px] md:text-[44px] text-text-light font-bold tracking-tight leading-[1.1]">
                 Mas sente quando
               </p>
-              <p className="text-[32px] md:text-[44px] text-[#fcffff] font-bold tracking-tight leading-[1.1]">
+              <p className="text-[32px] md:text-[44px] text-text-light font-bold tracking-tight leading-[1.1]">
                 <span className="text-primary">funciona.</span>
               </p>
             </motion.div>

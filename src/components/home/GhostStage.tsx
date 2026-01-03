@@ -16,11 +16,13 @@ const GhostCanvas = dynamic(
 interface GhostStageProps {
   reducedMotion?: boolean;
   active?: boolean;
+  onCanvasCreated?: () => void;
 }
 
 export function GhostStage({
   reducedMotion = false,
   active = true,
+  onCanvasCreated,
 }: GhostStageProps) {
   if (reducedMotion) {
     return <div className={styles.fallbackBackground} />;
@@ -35,7 +37,7 @@ export function GhostStage({
         transition={{ duration: 1.5 }}
         className="absolute inset-0 w-full h-full"
       >
-        <GhostCanvas active={active} />
+        <GhostCanvas active={active} onCreated={onCanvasCreated} />
       </motion.div>
 
       {/* Gradiente de vinheta para ajudar na leitura do texto */}

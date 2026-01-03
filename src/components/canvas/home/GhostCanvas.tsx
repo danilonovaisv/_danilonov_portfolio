@@ -21,7 +21,13 @@ import { BlendFunction } from 'postprocessing';
 
 const BACKGROUND_COLOR = '#020204';
 
-export default function GhostCanvas({ active = true }: { active?: boolean }) {
+export default function GhostCanvas({
+  active = true,
+  onCreated,
+}: {
+  active?: boolean;
+  onCreated?: () => void;
+}) {
   const ghostRef = useRef<THREE.Group>(null);
 
   const dpr: [number, number] =
@@ -41,6 +47,7 @@ export default function GhostCanvas({ active = true }: { active?: boolean }) {
       }}
       camera={{ position: [0, 0, 7], fov: 35 }}
       style={{ pointerEvents: 'none' }}
+      onCreated={() => onCreated?.()}
     >
       <color attach="background" args={[BACKGROUND_COLOR]} />
 

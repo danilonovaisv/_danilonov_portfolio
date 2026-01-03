@@ -38,14 +38,14 @@ export function HeroCopy({
       <div className="flex flex-col items-center justify-center flex-1 w-full relative">
         <div className={textContainerClass}>
           {/* H1: 5-8rem, Bold (Black), tracking-tight */}
-          <h1 className="text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold text-white tracking-tight leading-[0.9] mb-6">
+          {/* H1: 5-8rem (clampped) */}
+          <h1 className="text-display-hero text-white mb-6">
             Você não vê <br className="hidden md:block" /> o design.
           </h1>
 
           {/* H2: 4-6rem, Bold (Black), tracking-tight */}
-          <h2 className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-bold text-white/90 tracking-tight leading-[0.95]">
-            Mas ele vê você.
-          </h2>
+          {/* H2: 4-6rem (clampped) */}
+          <h2 className="text-display-sub text-white/90">Mas ele vê você.</h2>
         </div>
 
         {/* Espaçador para o botão quando o texto é 3D */}

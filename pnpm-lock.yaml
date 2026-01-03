@@ -12,6 +12,9 @@ overrides:
 importers:
   .:
     dependencies:
+      '@dataconnect/admin-generated':
+        specifier: link:src/dataconnect-admin-generated
+        version: link:src/dataconnect-admin-generated
       '@react-three/drei':
         specifier: ^10.7.7
         version: 10.7.7(@react-three/fiber@9.5.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.182.0))(@types/react@19.2.7)(@types/three@0.182.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.182.0)
@@ -78,6 +81,9 @@ importers:
       zod:
         specifier: ^4.3.4
         version: 4.3.4
+      zustand:
+        specifier: ^5.0.9
+        version: 5.0.9(@types/react@19.2.7)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
     devDependencies:
       '@jest/globals':
         specifier: ^30.2.0
@@ -135,7 +141,7 @@ importers:
         version: 7.37.5(eslint@9.39.2(jiti@2.6.1))
       firebase-tools:
         specifier: ^15.1.0
-        version: 15.1.0(@types/node@25.0.3)(encoding@0.1.13)(hono@4.11.1)(typescript@5.9.3)
+        version: 15.1.0(@types/node@25.0.3)(encoding@0.1.13)(hono@4.11.3)(typescript@5.9.3)
       jest:
         specifier: ^30.2.0
         version: 30.2.0(@types/node@25.0.3)(ts-node@10.9.2(@types/node@25.0.3)(typescript@5.9.3))
@@ -5607,10 +5613,10 @@ packages:
       }
     engines: { node: '>=0.10.0' }
 
-  hono@4.11.1:
+  hono@4.11.3:
     resolution:
       {
-        integrity: sha512-KsFcH0xxHes0J4zaQgWbYwmz3UPOOskdqZmItstUG93+Wk1ePBLkLGwbP9zlmh1BFUiL8Qp+Xfu9P7feJWpGNg==,
+        integrity: sha512-PmQi306+M/ct/m5s66Hrg+adPnkD5jiO6IjA7WhWw0gSBSo1EcRegwuI1deZ+wd5pzCGynCcn2DprnE4/yEV4w==,
       }
     engines: { node: '>=16.9.0' }
 
@@ -11079,9 +11085,9 @@ snapshots:
       protobufjs: 7.5.4
       yargs: 17.7.2
 
-  '@hono/node-server@1.19.7(hono@4.11.1)':
+  '@hono/node-server@1.19.7(hono@4.11.3)':
     dependencies:
-      hono: 4.11.1
+      hono: 4.11.3
 
   '@humanfs/core@0.19.1': {}
 
@@ -11566,9 +11572,9 @@ snapshots:
 
   '@mediapipe/tasks-vision@0.10.17': {}
 
-  '@modelcontextprotocol/sdk@1.25.1(hono@4.11.1)(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.25.1(hono@4.11.3)(zod@3.25.76)':
     dependencies:
-      '@hono/node-server': 1.19.7(hono@4.11.1)
+      '@hono/node-server': 1.19.7(hono@4.11.3)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
@@ -13803,7 +13809,7 @@ snapshots:
       micromatch: 4.0.8
       resolve-dir: 1.0.1
 
-  firebase-tools@15.1.0(@types/node@25.0.3)(encoding@0.1.13)(hono@4.11.1)(typescript@5.9.3):
+  firebase-tools@15.1.0(@types/node@25.0.3)(encoding@0.1.13)(hono@4.11.3)(typescript@5.9.3):
     dependencies:
       '@apphosting/build': 0.1.7(@types/node@25.0.3)(typescript@5.9.3)
       '@apphosting/common': 0.0.8
@@ -13812,7 +13818,7 @@ snapshots:
       '@google-cloud/cloud-sql-connector': 1.8.5
       '@google-cloud/pubsub': 5.2.0
       '@inquirer/prompts': 7.10.1(@types/node@25.0.3)
-      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.1)(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.3)(zod@3.25.76)
       abort-controller: 3.0.0
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
@@ -14284,7 +14290,7 @@ snapshots:
     dependencies:
       parse-passwd: 1.0.0
 
-  hono@4.11.1: {}
+  hono@4.11.3: {}
 
   hosted-git-info@7.0.2:
     dependencies:
