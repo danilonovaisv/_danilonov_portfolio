@@ -67,7 +67,7 @@ export function AboutWhatIDo() {
                   group relative
                   bg-[#1a0f2d]/90
                   border border-white/5
-                  rounded-lg
+                  rounded-xl
                   px-4 py-3 md:px-5 md:py-4
                   flex items-start gap-3
                   min-h-[72px] md:min-h-[88px]

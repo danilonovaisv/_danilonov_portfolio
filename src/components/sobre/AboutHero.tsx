@@ -105,7 +105,7 @@ export function AboutHero() {
               transition={{ delay: 0.4 }}
               className="max-w-[520px] mx-auto md:ml-auto md:mr-0"
             >
-              <p className="text-base md:text-lg text-ghost-text-secondary font-light leading-[1.7] tracking-tight">
+              <p className="text-base md:text-lg text-white/85 font-light leading-[1.6] tracking-tight">
                 Crio design que observa, entende
                 <br className="hidden md:block" />e guia experiências com
                 intenção,

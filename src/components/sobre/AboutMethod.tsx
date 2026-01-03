@@ -80,7 +80,7 @@ export default function AboutMethod() {
                 initial={prefersReducedMotion ? 'visible' : 'hidden'}
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.4 }}
-                className="text-base md:text-lg text-ghost-text-secondary font-light leading-relaxed space-y-1 mb-8 md:mb-10 max-w-[520px] mx-auto lg:mx-0 text-center lg:text-left"
+                className="text-base md:text-lg text-white/80 font-light leading-relaxed space-y-1 mb-8 md:mb-10 max-w-[520px] mx-auto lg:mx-0 text-center lg:text-left"
               >
                 {ABOUT_CONTENT.method.intro.map((line, i) => (
                   <p key={i}>{line}</p>

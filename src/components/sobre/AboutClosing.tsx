@@ -63,10 +63,10 @@ export function AboutClosing() {
           <div className="flex flex-row lg:flex-col items-center justify-center lg:justify-start lg:items-end gap-4 md:gap-5 lg:justify-self-end">
             <Link
               href="/contato"
-              className="group inline-flex items-center gap-3 rounded-full bg-primary text-white pl-6 pr-3 py-2.5 md:py-3 text-sm md:text-base font-medium shadow-lg shadow-primary/20 transition-transform duration-300 lowercase"
+              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-6 md:pr-3 md:py-3 text-[13px] md:text-sm font-medium shadow-lg shadow-primary/20 transition-transform duration-300 lowercase"
             >
               Fale comigo
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+              <span className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
                 ↗
               </span>
             </Link>
@@ -75,10 +75,10 @@ export function AboutClosing() {
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 rounded-full bg-primary text-white pl-6 pr-3 py-2.5 md:py-3 text-sm md:text-base font-medium shadow-lg shadow-primary/20 transition-transform duration-300 lowercase"
+              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-6 md:pr-3 md:py-3 text-[13px] md:text-sm font-medium shadow-lg shadow-primary/20 transition-transform duration-300 lowercase"
             >
               Baixar curriculum
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+              <span className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
                 ↗
               </span>
             </a>

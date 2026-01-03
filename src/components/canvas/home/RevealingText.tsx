@@ -48,7 +48,7 @@ extend({ RevealShaderMaterial });
 export default function RevealingText({
   ghostRef,
 }: {
-  ghostRef: React.RefObject<THREE.Group>;
+  ghostRef: React.RefObject<THREE.Group | null>;
 }) {
   const titleMat = useRef<any>(null);
   const subMat = useRef<any>(null);
