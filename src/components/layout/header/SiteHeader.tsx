@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { NavItem, SiteHeaderProps } from './types';
 import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useActiveSection } from './useActiveSection';
 import { useRouter } from 'next/navigation';
+import { BRAND } from '@/config/brand';
 
 function isHashHref(href: string) {
   return href.startsWith('#');
@@ -36,6 +37,7 @@ export default function SiteHeader({
 }: SiteHeaderProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isOnLightSection, setIsOnLightSection] = useState(false);
 
   const sectionIds = useMemo(
     () =>
@@ -69,11 +71,36 @@ export default function SiteHeader({
 
   const normalizedNavItems: NavItem[] = useMemo(() => navItems, [navItems]);
 
+  // Detecta quando o header está sobre seções claras (data-light-section)
+  useEffect(() => {
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>('[data-light-section]')
+    );
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const isLight = entries.some((e) => e.isIntersecting);
+        setIsOnLightSection(isLight);
+      },
+      { threshold: 0.12, rootMargin: '-60px 0px 0px 0px' }
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
+    return () => observer.disconnect();
+  }, []);
+
+  const logoDesktop = isOnLightSection ? BRAND.logos.dark : logoUrl;
+  const logoMobile = isOnLightSection
+    ? BRAND.logos.dark
+    : logoUrlMobile || logoUrl;
+
   return (
     <>
       <DesktopFluidHeader
         navItems={normalizedNavItems}
-        logoUrl={logoUrl}
+        logoUrl={logoDesktop}
+        isLight={isOnLightSection}
         accentColor={accentColor}
         disableWebGL={disableWebGL}
         onNavigate={onNavigate}
@@ -82,7 +109,8 @@ export default function SiteHeader({
 
       <MobileStaggeredMenu
         navItems={normalizedNavItems}
-        logoUrl={logoUrlMobile || logoUrl}
+        logoUrl={logoMobile}
+        isLight={isOnLightSection}
         gradient={gradient}
         accentColor={accentColor}
         isOpen={isOpen}

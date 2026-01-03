@@ -22,6 +22,7 @@ export interface DesktopFluidHeaderProps {
   disableWebGL?: boolean;
   onNavigate: (_href: string) => void;
   activeHref?: string;
+  isLight?: boolean;
 }
 
 function isExternalHref(href: string) {
@@ -39,6 +40,7 @@ export default function DesktopFluidHeader({
   disableWebGL,
   onNavigate,
   activeHref,
+  isLight,
 }: DesktopFluidHeaderProps) {
   const reducedMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -46,7 +48,11 @@ export default function DesktopFluidHeader({
   const nav = useMemo(() => navItems, [navItems]);
 
   return (
-    <header className="hidden lg:block fixed top-0 left-0 right-0 z-100 w-full pointer-events-none">
+    <header
+      className={`hidden lg:block fixed top-0 left-0 right-0 z-100 w-full pointer-events-none ${
+        isLight ? 'header--light' : ''
+      }`}
+    >
       <div className="w-full max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)] pt-4 flex justify-center">
         <div
           ref={wrapRef}
@@ -76,7 +82,7 @@ export default function DesktopFluidHeader({
                   alt="Danilo"
                   width={32}
                   height={32}
-                  className="h-8 w-auto"
+                  className="h-8 w-auto transition-colors"
                   unoptimized
                 />
               </Link>
@@ -90,9 +96,12 @@ export default function DesktopFluidHeader({
 
                   const common =
                     'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
+                  const baseText = isLight ? 'text-[#0048ff]' : 'text-white/70';
+                  const hoverText = isLight ? 'hover:text-[#0048ff]' : 'hover:text-white';
+                  const activeText = isLight ? 'text-[#0048ff]' : 'text-primary';
                   const textColor = isActive
-                    ? 'text-primary font-medium'
-                    : 'text-white/70 hover:text-white font-medium';
+                    ? `${activeText} font-medium`
+                    : `${baseText} ${hoverText} font-medium`;
                   const underline = isActive
                     ? 'after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px] after:bg-primary'
                     : 'after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-primary group-hover:after:w-full after:transition-all after:duration-300';

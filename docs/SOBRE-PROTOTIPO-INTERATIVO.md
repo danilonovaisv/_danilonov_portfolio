@@ -61,7 +61,7 @@ neutralLight    #F5F5F5    Seções claras
 - Video hero sobre Desktop: https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE-DESKTOP.mp4
 - Video hero sobre Mobile: https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO%20HERO%20-%20SOBRE%20MOBILE.mp4
 - `h-screen`
-- Texto centralizado verticalmente a direita (ligeiramente acima do centro)
+- Texto alinhado verticalmente a direita (ligeiramente acima do centro)
 - Vídeo hero (desktop e mobile)
 - Sem CTA
 
@@ -78,13 +78,12 @@ neutralLight    #F5F5F5    Seções claras
 ### Conteúdo
 **H1**
 > Sou Danilo Novais.
-
-**Texto manifesto**
-> Você não vê tudo 
-> o que eu faço.Mas 
+Você não vê tudo 
+> o que eu faço. Mas 
 > sente quando 
 > funciona.  
 >  
+**texto de apoio pequeno**
 > Crio design que observa, entende  
 > e guia experiências com intenção,  
 > estratégia e tecnologia — na medida certa.

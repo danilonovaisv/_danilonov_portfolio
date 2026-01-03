@@ -22,6 +22,7 @@ export interface SiteHeaderProps {
 export interface DesktopFluidHeaderProps {
   navItems: NavItem[];
   logoUrl: string;
+  isLight?: boolean;
   height?: number;
   onNavigate: (_href: string) => void;
   activeHref?: string;
@@ -39,6 +40,7 @@ export interface DesktopFluidHeaderProps {
 export interface MobileStaggeredMenuProps {
   navItems: NavItem[];
   logoUrl: string;
+  isLight?: boolean;
   gradient: [string, string];
   accentColor: string;
   isOpen: boolean;

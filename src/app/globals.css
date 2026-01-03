@@ -34,6 +34,23 @@
   --color-ghost-void: #0d003b;
   --color-ghost-abyss: #0b0d3a;
 
+  /* Extended Ghost Palette - Surfaces & Layers */
+  --color-ghost-surface-deep: #040013;
+  --color-ghost-surface-gradient-start: #06071f;
+  --color-ghost-surface-gradient-end: #050505;
+  --color-ghost-prelayer-1: #0a0b1a;
+  --color-ghost-prelayer-2: #0d0f26;
+  --color-ghost-accent-cyan: #4fe6ff;
+
+  /* Extended Text */
+  --color-ghost-text-secondary: #a1a3a3;
+  --color-ghost-text-bright: #fcffff;
+
+  /* Section Specific */
+  --color-section-clients: #0048ff;
+  --color-section-contact: #f5f5f5;
+  --color-section-manifesto: #050511;
+
   /* Ghost/Ethereal Surface Variables (Already in :root) */
   --color-surface-main: #0d003b;
   --color-text-main: #fcffff;
