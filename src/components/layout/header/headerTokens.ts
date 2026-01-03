@@ -17,9 +17,9 @@ export const headerZ = {
 };
 
 export const glassMotionTokens = {
-  maxTranslateX: 48,
-  scaleX: [1, 1.05] as [number, number],
-  scaleY: [1, 1.02] as [number, number],
+  maxTranslateX: 50,
+  scaleX: [1, 1] as [number, number],
+  scaleY: [1, 1] as [number, number],
   followDamping: 0.12,
 };
 

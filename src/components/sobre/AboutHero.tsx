@@ -20,7 +20,7 @@ export function AboutHero() {
 
   return (
     <section
-      className="relative h-screen flex items-center bg-ghost-surface-deep overflow-hidden"
+      className="relative min-h-screen lg:h-screen flex flex-col lg:block bg-ghost-surface-deep overflow-hidden"
       aria-label="Hero - Manifesto"
     >
       {/* Background Video - Desktop */}
@@ -36,26 +36,30 @@ export function AboutHero() {
       />
 
       {/* Background Video - Mobile */}
-      <video
-        src={ABOUT_CONTENT.hero.videos.mobile}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        className="block lg:hidden absolute inset-0 w-full h-full object-cover object-top opacity-[0.55]"
-        aria-hidden="true"
-      />
+      <div className="relative h-[55vh] w-full lg:hidden overflow-hidden">
+        <video
+          src={ABOUT_CONTENT.hero.videos.mobile}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover object-top opacity-[0.8]"
+          aria-hidden="true"
+        />
+        {/* Mobile Video Overlay */}
+        <div className="absolute inset-0 bg-linear-to-b from-transparent to-ghost-surface-deep pointer-events-none" />
+      </div>
 
-      {/* Dark Gradient Overlay for Legibility */}
+      {/* Dark Gradient Overlay for Legibility - Desktop Only */}
       <div
-        className="absolute inset-0 bg-linear-to-b from-black/70 via-black/60 to-ghost-surface-deep pointer-events-none z-1"
+        className="hidden lg:block absolute inset-0 bg-linear-to-b from-black/70 via-black/60 to-ghost-surface-deep pointer-events-none z-1"
         aria-hidden="true"
       />
 
-      {/* Content Container - Centralizado mobile, esquerda desktop dentro do bloco na direita */}
-      <div className="relative z-10 w-full px-6 md:px-12 lg:px-[8vw]">
-        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-left md:-translate-y-6 lg:-translate-y-8">
+      {/* Content Container */}
+      <div className="relative z-10 w-full px-6 md:px-12 lg:px-[8vw] bg-ghost-surface-deep lg:bg-transparent -mt-12 lg:mt-0 pt-12 pb-24 lg:py-0 lg:h-full lg:flex lg:items-center">
+        <div className="mx-auto md:ml-auto md:mr-0 max-w-[680px] text-center md:text-left lg:-translate-y-8">
           <motion.div
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             animate="visible"

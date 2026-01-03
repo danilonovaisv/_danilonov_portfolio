@@ -53,7 +53,7 @@ export default function SiteFooter() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: reducedMotion ? 0.2 : 0.8 }}
-        className="hidden lg:block w-full bg-primary py-6 relative z-10"
+        className="hidden lg:block w-full bg-primary py-6 fixed bottom-0 left-0 z-50 shadow-[0_-1px_3px_rgba(0,0,0,0.1)]"
         aria-label="Footer"
       >
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 flex items-center justify-between text-white">
@@ -63,7 +63,7 @@ export default function SiteFooter() {
           {/* Navigation Links */}
           <nav aria-label="Links do footer" className="flex items-center gap-8">
             {footerLinks.map((l, index) => {
-              const isActive = index === 0; // "home" is underlined in reference
+              const isActive = index === 0;
 
               if (l.href.startsWith('/')) {
                 return (
@@ -121,6 +121,9 @@ export default function SiteFooter() {
         aria-label="Footer"
       >
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col gap-8">
+          {/* Copyright */}
+          <p className="text-center text-xs opacity-80">{FOOTER.copyright}</p>
+
           {/* Navigation Links */}
           <nav
             aria-label="Links do footer"
@@ -170,9 +173,6 @@ export default function SiteFooter() {
               </a>
             ))}
           </div>
-
-          {/* Copyright */}
-          <p className="text-center text-xs opacity-80">{FOOTER.copyright}</p>
         </div>
       </footer>
     </>

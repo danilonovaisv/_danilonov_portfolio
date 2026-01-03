@@ -60,7 +60,7 @@ export default function FeaturedProjectCard({
           fill
           sizes={project.layout.sizes}
           className={`object-cover transition-transform duration-700 opacity-90 group-hover:opacity-100 ${
-            reducedMotion ? '' : 'group-hover:scale-[1.02]'
+            reducedMotion ? '' : 'group-hover:scale-[1.05]'
           }`}
         />
       </div>
@@ -87,7 +87,7 @@ export default function FeaturedProjectCard({
           className={`bg-white/5 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white shrink-0 border border-white/10 transition-all duration-500 ${
             reducedMotion
               ? ''
-              : 'group-hover:scale-110 group-hover:bg-[#0057FF] group-hover:border-[#0057FF] group-hover:shadow-[0_0_20px_rgba(0,87,255,0.4)]'
+              : 'group-hover:translate-x-5 group-hover:bg-[#0057FF] group-hover:border-[#0057FF] group-hover:shadow-[0_0_20px_rgba(0,87,255,0.4)]'
           }`}
         >
           <ArrowIcon className="w-5 h-5 md:w-6 md:h-6 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />

@@ -123,7 +123,7 @@ export default function AboutOrigin() {
         </motion.h2>
 
         {/* Editorial Layout: Alternating Text <-> Media */}
-        <div className="space-y-12 md:space-y-20 lg:space-y-28">
+        <div className="space-y-16 md:space-y-20 lg:space-y-28">
           {contentPairs.map((pair, index) => {
             const isEven = index % 2 === 0;
             const textBlock = pair.textBlock as any;
@@ -132,16 +132,18 @@ export default function AboutOrigin() {
             return (
               <div
                 key={index}
-                className="grid grid-cols-12 gap-y-8 md:gap-y-0 md:gap-x-12 items-center"
+                className="grid grid-cols-12 gap-y-8 md:gap-y-0 md:gap-x-0 items-center"
               >
-                {/* Texto - Mobile: sempre primeiro (order-1) */}
+                {/* Texto: Always First on Mobile (order-1), Alternates on Desktop */}
                 <motion.div
                   variants={fadeGhost}
                   initial={prefersReducedMotion ? 'visible' : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, margin: '-10%' }}
-                  className={`col-span-12 md:col-span-7 order-1 ${
-                    isEven ? 'md:order-1' : 'md:order-2'
+                  className={`col-span-12 md:col-span-5 order-1 ${
+                    isEven
+                      ? 'md:order-1 md:col-start-2'
+                      : 'md:order-2 md:col-start-7'
                   }`}
                 >
                   <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-light leading-relaxed text-[#fcffff]">
@@ -152,14 +154,16 @@ export default function AboutOrigin() {
                   </p>
                 </motion.div>
 
-                {/* Mídia - Mobile: sempre segundo (order-2) */}
+                {/* Mídia: Always Second on Mobile (order-2), Alternates on Desktop */}
                 <motion.div
                   variants={imageFloat}
                   initial={prefersReducedMotion ? 'visible' : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, margin: '-10%' }}
-                  className={`col-span-12 md:col-span-5 order-2 ${
-                    isEven ? 'md:order-2' : 'md:order-1'
+                  className={`col-span-12 md:col-span-6 order-2 ${
+                    isEven
+                      ? 'md:order-2 md:col-start-7'
+                      : 'md:order-1 md:col-start-1'
                   }`}
                 >
                   <MediaItem

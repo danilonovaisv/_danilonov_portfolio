@@ -204,7 +204,7 @@ const ContactForm: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-full transition-colors duration-200 hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="w-full flex items-center justify-center gap-2 bg-primary text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 hover:bg-primary-hover hover:scale-[1.02] hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             {isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
             <svg

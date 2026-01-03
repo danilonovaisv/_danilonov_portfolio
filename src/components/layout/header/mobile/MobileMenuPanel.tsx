@@ -18,16 +18,25 @@ interface MobileMenuPanelProps {
   itemsRef: RefObject<HTMLElement[]>;
   socialsRef: RefObject<HTMLDivElement | null>;
   onNavigate: (_href: string) => void;
+  onClose: () => void;
 }
 
 const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
-  ({ navItems, accentColor, open, itemsRef, socialsRef, onNavigate }, ref) => {
+  (
+    { navItems, accentColor, open, itemsRef, socialsRef, onNavigate, onClose },
+    ref
+  ) => {
     return (
       <nav
         ref={ref}
         id="mobile-menu-panel"
-        className="fixed top-0 right-0 w-full h-full bg-linear-to-b from-ghost-surface-gradient-start to-ghost-surface-gradient-end flex flex-col justify-center px-8 overflow-y-auto z-50 pointer-events-auto"
+        className="fixed top-0 right-0 w-full h-full bg-gradient-to-b from-[#050511] to-[#06071f] flex flex-col justify-center px-8 overflow-y-auto z-50 pointer-events-auto"
         aria-hidden={open ? 'false' : 'true'}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
       >
         {/* Menu items */}
         <ul className="flex flex-col gap-4" role="list">

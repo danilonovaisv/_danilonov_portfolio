@@ -24,13 +24,13 @@ export default function MobileHeaderBar({
       }`}
     >
       <div
-        className={`w-full h-[60px] backdrop-blur-md pointer-events-auto ${
+        className={`w-full h-[60px] pointer-events-auto ${
           isLight
-            ? 'bg-white/85 border-b border-[#0048ff]/15'
-            : 'bg-black/20 border-b border-white/10'
+            ? 'bg-white/95 border-b border-[#0048ff]/15 backdrop-blur-sm'
+            : 'bg-[#050511]/90 border-b border-white/5 backdrop-blur-sm'
         }`}
       >
-        <div className="flex items-center justify-between h-full px-6">
+        <div className="flex items-center justify-between h-full px-4">
           <Link href="/" onClick={onLogoClick}>
             <Image
               src={logoUrl}

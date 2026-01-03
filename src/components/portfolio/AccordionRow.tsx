@@ -51,7 +51,7 @@ export default function AccordionRow({
             >
                 <div className="flex w-full md:w-fit items-center justify-center md:justify-start gap-4 transition-all duration-300 group-hover:gap-6 md:gap-14 max-w-[90%]">
                     {/* Thumbnail Revealer - Desktop Only */}
-                    <div className="relative hidden h-32 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-64 md:block">
+                    <div className="relative hidden h-32 w-0 overflow-hidden rounded-md bg-black/5 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72 md:block">
                         {thumb && (
                             <Image
                                 src={thumb}

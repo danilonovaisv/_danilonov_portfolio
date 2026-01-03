@@ -14,7 +14,7 @@ const GHOST_CONFIG = {
   eyeColor: '#ffffff',
   emissiveIntensity: 3.5,
   floatSpeed: 1.8,
-  followSpeed: 0.08,
+  followSpeed: 0.05,
 };
 
 // ============================================================================
@@ -149,8 +149,6 @@ const Ghost = forwardRef<
     if (bodyMaterial.current) {
       bodyMaterial.current.opacity = currentOpacity;
       bodyMaterial.current.emissiveIntensity = currentEmissive;
-      // Simulate focus with roughness?
-      // bodyMaterial.current.roughness = THREE.MathUtils.lerp(0.6, 0.0, Math.min(Math.max((t - 0.8) / 3.4, 0), 1));
     }
 
     bodyMesh.current.scale.setScalar(currentScale);
@@ -166,9 +164,8 @@ const Ghost = forwardRef<
     let yTarget: number;
 
     if (isMobile) {
-      const amplitude = viewport.width * 0.4;
-      xTarget = Math.sin(t * 0.5) * amplitude;
-      yTarget = Math.sin(t * 0.8) * 0.5;
+      xTarget = 0;
+      yTarget = 0;
     } else {
       xTarget = pointer.x * (viewport.width / 3.5);
       yTarget = pointer.y * (viewport.height / 3.5);

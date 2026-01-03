@@ -413,6 +413,7 @@ export default function MobileStaggeredMenu({
         itemsRef={itemsRef}
         socialsRef={socialsRef}
         onNavigate={onNavigate}
+        onClose={onClose}
       />
     </div>
   );

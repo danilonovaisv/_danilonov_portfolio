@@ -25,11 +25,13 @@ const CONFIG = {
       opacity: 0,
       scale: 0.92,
       y: 60,
+      filter: 'blur(10px)',
     },
     animate: {
       opacity: 1,
-      scale: 1,
+      scale: [1.02, 1],
       y: 0,
+      filter: 'blur(0px)',
     },
     transition: {
       duration: 1.2,
@@ -46,7 +48,7 @@ const CONFIG = {
       ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   },
-} as const;
+};
 
 function usePrefersReducedMotion() {
   const [pref, setPref] = useState(false);
