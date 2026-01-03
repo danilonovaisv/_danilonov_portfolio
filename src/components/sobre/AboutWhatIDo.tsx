@@ -2,11 +2,20 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 
-// Ghost Motion Tokens
+// Ghost Motion Tokens - Only opacity/translateY, no scale/bounce/rotate
 const GHOST_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.18,
+    },
+  },
+};
+
 const fadeGhost = {
-  hidden: { opacity: 0, filter: 'blur(10px)' },
+  hidden: { opacity: 0, filter: 'blur(8px)' },
   visible: {
     opacity: 1,
     filter: 'blur(0px)',
@@ -14,12 +23,11 @@ const fadeGhost = {
   },
 };
 
-const cardRise = {
-  hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
+const itemRise = {
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 0.9, ease: GHOST_EASE },
   },
 };
@@ -44,57 +52,50 @@ export function AboutWhatIDo() {
 
   return (
     <section
-      className="min-h-[90vh] flex items-center bg-[#040013] py-20 md:py-28 lg:py-32"
+      className="min-h-[100vh] flex items-center justify-center bg-[#040013] py-24 md:py-32"
       aria-label="O que eu faço"
     >
       <motion.div
-        variants={{
-          visible: {
-            transition: { staggerChildren: 0.18 },
-          },
-        }}
+        variants={containerVariants}
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-10%' }}
-        className="w-full max-w-[1100px] px-6 md:px-10 flex flex-col items-center"
+        className="w-full max-w-[600px] px-6 md:px-10 mx-auto flex flex-col items-center"
       >
-        {/* Título e subtítulo */}
-        <div className="text-center mb-12 md:mb-16 space-y-3 md:space-y-4 max-w-[760px]">
+        {/* Título e subtítulo - Ghost Style */}
+        <div className="text-center mb-16 md:mb-20 space-y-4 md:space-y-5">
           <motion.h2
             variants={fadeGhost}
-            className="text-2xl md:text-3xl lg:text-4xl xl:text-[42px] font-semibold text-[#fcffff] tracking-tight leading-tight"
+            className="text-3xl md:text-4xl lg:text-[42px] font-semibold text-white tracking-tight leading-tight"
           >
             {WHAT_I_DO_CONTENT.title}
           </motion.h2>
           <motion.p
             variants={fadeGhost}
-            className="text-base md:text-lg lg:text-xl text-[#a1a3a3] font-light"
+            className="text-lg md:text-xl text-white/60 font-light"
           >
             {WHAT_I_DO_CONTENT.subtitle}
           </motion.p>
         </div>
 
-        {/* Grade de cartões em pills */}
-        <ul className="flex flex-wrap justify-center gap-3 md:gap-4 w-full max-w-[1100px]">
+        {/* Lista vertical minimalista - Ghost Style */}
+        <ul className="flex flex-col items-center w-full space-y-6 md:space-y-8">
           {WHAT_I_DO_CONTENT.items.map((item, i) => (
             <motion.li
               key={i}
-              variants={cardRise}
+              variants={itemRise}
               whileHover={
                 prefersReducedMotion
                   ? undefined
                   : {
-                      opacity: 1,
-                      borderColor: 'rgba(79, 230, 255, 0.35)',
-                      transition: { duration: 0.3 },
+                      opacity: 1.05,
+                      transition: { duration: 0.2 },
                     }
               }
-              className="text-sm md:text-base text-[#e9ecff] text-center 
-                         px-4 md:px-5 lg:px-6 py-2.5 md:py-3 min-h-[44px]
-                         border border-[#2b2a55] rounded-full bg-[#0f0d36]/90 
-                         shadow-[0_12px_28px_rgba(0,0,0,0.16)]
-                         hover:bg-[#15144a]
-                         transition-all duration-300 cursor-default"
+              className="text-lg md:text-xl lg:text-2xl text-white/80 text-center 
+                         font-light tracking-tight leading-relaxed
+                         transition-opacity duration-200 cursor-default
+                         hover:text-white"
             >
               {item}
             </motion.li>
