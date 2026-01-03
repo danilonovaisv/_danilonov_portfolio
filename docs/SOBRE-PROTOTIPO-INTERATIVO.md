@@ -1,21 +1,52 @@
-# 🧠 PROTÓTIPO INTERATIVO — PÁGINA “SOBRE”
+# 🧠 SOBRE — PROTÓTIPO INTERATIVO + DESIGN SYSTEM
 ## portifoliodanilo.com
-### Conceito: Ghost Design — presença que guia sem aparecer
+### Conceito-mãe: Ghost Design — presença que guia sem aparecer
 
 ---
-### 2.1 Color Palette
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `primary` | `#0048ff` | Primary brand color, interactive elements, CTAs |
-| `accent` | `#4fe6ff` | Secondary highlights, Ghost atmosphere glow |
-| `background` | `#000022` | Main dark background |
-| `backgroundLight` | `#f0f0f0` | Light sections (forms, alternating backgrounds) |
-| `text` | `#fcffff` | Primary text on dark backgrounds |
-| `textInverse` | `#0e0e0e` | Text on light backgrounds |
-| `textSecondary` | `#a1a3a3` | Secondary information, metadata |
-| `neutral` | `#0b0d3a` | Gradient transitions, subtle backgrounds |
-| `neutralLight` | `#F5F5F5` | Secondary section backgrounds |
+## 📌 ESTE DOCUMENTO É A FONTE ÚNICA DA VERDADE
+
+Este arquivo consolida **TODO** o conteúdo da página **/sobre**:
+- Narrativa
+- Conteúdo textual
+- Layout
+- Motion
+- Componentes
+- Tokens técnicos
+- Regras absolutas
+- Auditoria
+
+Nenhuma decisão fora deste documento é válida.
+
+---
+
+# PARTE 1 — PROTÓTIPO INTERATIVO (EXPERIÊNCIA)
+
+# 🧠 PROTÓTIPO INTERATIVO — PÁGINA “SOBRE”
+Domínio: portifoliodanilo.com
+Conceito-mãe: Ghost Design — presença que guia sem aparecer
+
+⸻
+
+🎯 OBJETIVO DA PÁGINA
+
+Criar conexão silenciosa, profundidade e confiança.
+Nada grita. Nada explica demais.
+O design age no subconsciente.
+
+⸻
+
+🎨 SISTEMA VISUAL — COLOR PALETTE
+
+Token    Valor    Uso
+primary    #0048ff    Marca, destaques, CTAs
+accent    #4fe6ff    Glow, atmosferas Ghost
+background    #040013    Fundo principal
+backgroundLight    #f0f0f0    Formulários e respiros
+text    #fcffff    Texto principal
+textSecondary    #a1a3a3    Metadados
+neutral    #0b0d3a    Gradientes
+neutralLight    #F5F5F5    Seções claras
 
 
 ## **HEADER O MESMO DA HOME
@@ -59,11 +90,17 @@
 > estratégia e tecnologia — na medida certa.
 
 ### Interação & Motion
-- Texto surge linha por linha
-- Opacity: 0 → 1  
-- Blur: 10px → 0  
-- Delay entre linhas: 0.2s–0.4s  
-- Duração média: 1.4s  
+Etapa    Estado
+0%    opacity 0 / blur 10px
+30%    linha 1
+60%    linha 2
+100%    texto completo
+
+    •    Entrada linha a linha
+    •    Delay: 0.2s – 0.4s
+    •    Duração média: 1.4s
+    •    Easing: ghostIn
+
 - Easing: ghostIn  
 - Background com loop lento (imperceptível)
 
@@ -516,3 +553,316 @@ Qualquer divergência = BUG.
 - Ritmo ghost preservado
 - UX silenciosa
 - PR aprovado apenas se todos os itens passarem
+
+
+---
+
+# PARTE 2 — DESIGN SYSTEM TÉCNICO (IMPLEMENTAÇÃO)
+
+# 🧠 GHOST DESIGN SYSTEM — TÉCNICO
+## Tokens + Componentes
+### portifoliodanilo.com
+
+---
+
+## 1. VISÃO GERAL
+
+**Ghost Design** é um sistema silencioso de interface.
+Ele prioriza:
+- Presença sem ruído
+- Movimento como respiração
+- Design como guia invisível
+
+Este documento é a **fonte técnica oficial** para design, frontend e motion.
+
+---
+
+# 2. DESIGN TOKENS
+
+## 2.1 Color Tokens
+
+```ts
+export const colors = {
+  primary: '#0048ff',
+  accent: '#4fe6ff',
+  ghostPurple: '#8705f2',
+
+  background: '#000022',
+  backgroundDark: '#040013',
+  backgroundLight: '#f0f0f0',
+
+  textPrimary: '#fcffff',
+  textSecondary: '#a1a3a3',
+  textInverse: '#0e0e0e',
+
+  neutral: '#0b0d3a',
+  neutralLight: '#F5F5F5',
+};
+```
+
+---
+
+## 2.2 Typography Tokens
+
+```ts
+export const typography = {
+  fontFamily: {
+    primary: '"Inter", system-ui, sans-serif',
+  },
+
+  fontSize: {
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '20px',
+    xl: '28px',
+    xxl: '40px',
+    display: '56px',
+  },
+
+  fontWeight: {
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+  },
+
+  lineHeight: {
+    tight: 1.2,
+    normal: 1.5,
+    relaxed: 1.7,
+  },
+};
+```
+
+---
+
+## 2.3 Spacing Tokens
+
+```ts
+export const spacing = {
+  xs: '4px',
+  sm: '8px',
+  md: '16px',
+  lg: '24px',
+  xl: '40px',
+  xxl: '64px',
+  section: '120px',
+};
+```
+
+---
+
+## 2.4 Motion Tokens (CRÍTICO)
+
+```ts
+export const motion = {
+  duration: {
+    fast: '0.6s',
+    base: '0.9s',
+    slow: '1.4s',
+  },
+
+  delay: {
+    none: '0s',
+    short: '0.2s',
+    base: '0.4s',
+    long: '1s',
+  },
+
+  easing: {
+    ghost: 'cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+};
+```
+
+🚫 Proibido:
+- scale
+- bounce
+- rotate
+
+Permitido:
+- opacity
+- blur
+- translateY (máx 18px)
+
+---
+
+# 3. COMPONENTES BASE
+
+## 3.1 `<GhostText />`
+
+**Uso:** Manifestos, frases-chave
+
+```tsx
+<GhostText as="p" delay={0.4}>
+  Você não vê tudo o que eu faço.
+</GhostText>
+```
+
+**Comportamento**
+- Fade + blur
+- Entrada por tempo ou viewport
+- Nunca reanima
+
+---
+
+## 3.2 `<GhostHeading />`
+
+```tsx
+<GhostHeading level="h1">
+  Sou Danilo Novais.
+</GhostHeading>
+```
+
+- Alinhamento fluido
+- Peso médio
+- Tracking negativo leve
+
+---
+
+## 3.3 `<GhostSection />`
+
+Wrapper padrão de seção.
+
+```tsx
+<GhostSection height="100vh">
+  {children}
+</GhostSection>
+```
+
+**Regras**
+- Uma seção = uma intenção
+- Nunca empilhar animações
+
+---
+
+## 3.4 `<GhostList />`
+
+```tsx
+<GhostList
+  items={[
+    'Direção criativa que organiza o caos',
+    'Design estratégico que guia decisões',
+  ]}
+/>
+```
+
+- Entrada item a item
+- Stagger fixo: `0.18s`
+- Hover só altera opacity
+
+---
+
+## 3.5 `<GhostMedia />`
+
+```tsx
+<GhostMedia
+  type="video"
+  src="/sobre/AI.mp4"
+/>
+```
+
+**Regras**
+- Opacity máx 0.85
+- Blur permanente sutil
+- Nunca texto sobre mídia
+
+---
+
+## 3.6 `<GhostCTA />`
+
+```tsx
+<GhostCTA href="/contato">
+  Fale comigo
+</GhostCTA>
+```
+
+- Sem glow
+- Hover silencioso
+- Sempre humano
+
+---
+
+# 4. LAYOUT SYSTEM
+
+## 4.1 Grid Invisível
+
+- Desktop: fluxo livre
+- Mobile: texto sempre antes da imagem
+- Nada centralizado por padrão
+
+---
+
+## 4.2 Section Heights
+
+| Tipo | Altura |
+|----|------|
+| Hero | 100vh |
+| Conteúdo | 120–140vh |
+| Fechamento | 80–100vh |
+
+---
+
+# 5. BREAKPOINTS
+
+```ts
+export const breakpoints = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+};
+```
+
+---
+
+# 6. ACESSIBILIDADE & PERFORMANCE
+
+- Respeitar `prefers-reduced-motion`
+- Nenhuma animação fora do viewport
+- Vídeos lazy + muted
+- Sem re-render em scroll contínuo
+
+---
+
+# 7. REGRAS ABSOLUTAS DO SISTEMA
+
+❌ Texto sobre imagem  
+❌ Animações chamativas  
+❌ Motion decorativo  
+
+✅ Ritmo  
+✅ Silêncio  
+✅ Presença  
+
+---
+
+# 8. MANIFESTO TÉCNICO
+
+O melhor design:
+- não explica
+- não chama atenção
+- não se impõe
+
+Ele permanece.
+
+Isso é **Ghost Design System**.
+
+
+---
+
+## 🧩 REGRA FINAL
+
+Se algo:
+- não está aqui
+- não respeita este documento
+- ou altera o ritmo Ghost
+
+➡️ **É BUG.**
+
+Ghost Design não é estilo.  
+É comportamento.
+
+---
+
+© Ghost Design / Danilo Novais
