@@ -2,10 +2,10 @@
 
 import { useRef, useMemo } from 'react';
 import { Text, shaderMaterial } from '@react-three/drei';
-import { useFrame, extend, useThree, Object3DNode } from '@react-three/fiber';
+import { useFrame, extend, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Material Shader
+// Shader de Revelação (Mantido igual, pois funciona bem)
 const RevealMaterial = shaderMaterial(
   {
     uGhostPos: new THREE.Vector3(0, 0, 0),
@@ -38,38 +38,33 @@ const RevealMaterial = shaderMaterial(
 
 extend({ RevealMaterial });
 
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    revealMaterial: Object3DNode<
-      THREE.ShaderMaterial,
-      typeof THREE.ShaderMaterial
-    > & {
-      uGhostPos?: THREE.Vector3;
-      uRevealRadius?: number;
-      uColor?: THREE.Color;
-      uOpacity?: number;
-      transparent?: boolean;
-    };
-  }
-}
+type RevealMaterialType = THREE.ShaderMaterial & {
+  uGhostPos: THREE.Vector3;
+  uRevealRadius: number;
+  uColor: THREE.Color;
+  uOpacity: number;
+};
 
 export default function RevealingText({
   ghostRef,
 }: {
-  ghostRef: React.RefObject<THREE.Group>;
+  ghostRef: React.RefObject<THREE.Group | null>;
 }) {
-  const titleMat = useRef<THREE.ShaderMaterial>(null);
-  const subMat = useRef<THREE.ShaderMaterial>(null);
+  const titleMat = useRef<RevealMaterialType>(null);
+  const subMat = useRef<RevealMaterialType>(null);
   const { viewport } = useThree();
 
   const isMobile = viewport.width < 5.5;
 
   const config = useMemo(
     () => ({
-      titleSize: isMobile ? 0.6 : 1.1,
-      subSize: isMobile ? 0.4 : 0.75,
-      titleY: isMobile ? 0.3 : 0.5,
-      subY: isMobile ? -0.3 : -0.35,
+      // Ajuste visual para bater com "5-8rem" no desktop
+      titleSize: isMobile ? 0.55 : 1.2,
+      // Ajuste visual para bater com "4-6rem" no desktop
+      subSize: isMobile ? 0.35 : 0.85,
+
+      titleY: isMobile ? 0.35 : 0.5,
+      subY: isMobile ? -0.35 : -0.4,
       radius: isMobile ? 3.5 : 6.0,
       letterSpacing: -0.05,
     }),
@@ -84,18 +79,17 @@ export default function RevealingText({
     }
   });
 
-  // SOLUÇÃO INFALÍVEL: Usar uma fonte do Google Fonts como fallback se a local falhar.
-  // Assim o texto aparece sempre.
+  // URL DA FONTE NO SUPABASE (Garante que o 3D funciona)
   const fontUrl =
-    'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff';
+    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2';
 
   return (
     <group position={[0, 0, -1.5]}>
-      {/* Título */}
+      {/* Título: "VOCÊ NÃO VÊ O DESIGN." */}
       <Text
         font={fontUrl}
         fontSize={config.titleSize}
-        lineHeight={1.0}
+        lineHeight={0.9} // Leading apertado
         letterSpacing={config.letterSpacing}
         textAlign="center"
         position={[0, config.titleY, 0]}
@@ -112,7 +106,7 @@ export default function RevealingText({
         />
       </Text>
 
-      {/* Subtítulo */}
+      {/* Subtítulo: "MAS ELE VÊ VOCÊ." */}
       <Text
         font={fontUrl}
         fontSize={config.subSize}
@@ -126,7 +120,7 @@ export default function RevealingText({
         <revealMaterial
           ref={subMat}
           transparent
-          uColor={new THREE.Color('#cccccc')}
+          uColor={new THREE.Color('#cccccc')} // Leve contraste
           uRevealRadius={config.radius}
           uOpacity={0.9}
         />

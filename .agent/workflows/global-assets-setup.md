@@ -27,11 +27,15 @@ export const BRAND = {
 
   // Design Tokens
   colors: {
-    primary: '#0057FF', // Destaque e interação
-    bg: '#f0f0f0', // Fundo padrão neutro
-    text: '#000000', // Texto padrão
-    textInverse: '#FFFFFF', // Texto sobre fundo escuro
-    neutralLight: '#F5F5F5', // Fundo secundário
+     primary | #0048ff | Primary brand color, interactive elements, CTAs |
+| accent | #4fe6ff | Secondary highlights, Ghost atmosphere glow |
+| background | #040013 | Main dark background |
+| backgroundLight | #f0f0f0 | Light sections (forms, alternating backgrounds) |
+| text | #fcffff | Primary text on dark backgrounds |
+| textInverse | #0e0e0e | Text on light backgrounds |
+| textSecondary | #a1a3a3 | Secondary information, metadata |
+| neutral | #0b0d3a | Gradient transitions, subtle backgrounds |
+| neutralLight | #F5F5F5 | Secondary section backgrounds |
   },
 
   typography: {

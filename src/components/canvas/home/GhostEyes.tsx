@@ -69,7 +69,8 @@ export default function GhostEyes() {
       const finalOpacity = baseOpacity + currentEyeOpacity.current * 0.4;
 
       leftEye.current.material.opacity = finalOpacity;
-      rightEye.current.material.opacity = finalOpacity;
+      (rightEye.current.material as THREE.MeshBasicMaterial).opacity =
+        finalOpacity;
 
       if (leftOuterGlow.current && rightOuterGlow.current) {
         (leftOuterGlow.current.material as THREE.MeshBasicMaterial).opacity =

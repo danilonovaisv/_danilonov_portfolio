@@ -21,7 +21,11 @@ const CONFIG = {
   entrance: {
     initial: { opacity: 0, scale: 0.92, y: 60, filter: 'blur(10px)' },
     animate: { opacity: 1, scale: [1.02, 1], y: 0, filter: 'blur(0px)' },
-    transition: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.5 },
+    transition: {
+      duration: 1.2,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+      delay: 0.5,
+    },
   },
 };
 
@@ -31,6 +35,7 @@ export default function HomeHero() {
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  // NOTE: isMobile logic is also used for enable3D
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useMediaQuery(
     '(prefers-reduced-motion: reduce)'
@@ -118,6 +123,7 @@ export default function HomeHero() {
           </div>
         </motion.div>
 
+        {/* Floating Video - Desktop Only */}
         {!prefersReducedMotion && !isMobile && (
           <motion.div
             className="absolute bottom-8 right-8 md:right-12 z-30 pointer-events-auto origin-bottom-right"

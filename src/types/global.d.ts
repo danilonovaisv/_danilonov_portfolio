@@ -2,7 +2,7 @@
  * Tipos globais para extensões do Three.js e React Three Fiber
  */
 import type { ShaderMaterial, Texture } from 'three';
-import type { Object3DNode } from '@react-three/fiber';
+
 import type { ShaderPass } from 'three-stdlib';
 
 /**
@@ -30,13 +30,19 @@ export interface AnalogDecayShaderMaterial extends ShaderMaterial {
 declare module '@react-three/fiber' {
   // eslint-disable-next-line no-unused-vars
   interface ThreeElements {
-    analogDecayShader: Object3DNode<
+    analogDecayShader: ReactThreeFiber.Object3DNode<
       AnalogDecayShaderMaterial,
       typeof AnalogDecayShaderMaterial
     >;
-    shaderPass: Object3DNode<ShaderPass, typeof ShaderPass>;
-    revealShaderMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial>;
-    revealMaterial: Object3DNode<ShaderMaterial, typeof ShaderMaterial> & {
+    shaderPass: ReactThreeFiber.Object3DNode<ShaderPass, typeof ShaderPass>;
+    revealShaderMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    >;
+    revealMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    > & {
       uGhostPos?: THREE.Vector3;
       uRevealRadius?: number;
       uColor?: THREE.Color;

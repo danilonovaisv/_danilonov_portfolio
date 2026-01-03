@@ -12,22 +12,24 @@ export function HeroCopy({
   startEntrance = false,
   enable3D = true,
 }: HeroCopyProps) {
-  // Se o 3D estiver ativo, escondemos o texto visualmente (mas mantemos para SEO).
-  // Se o 3D estiver inativo (mobile/erro), mostramos o texto.
+  // Lógica de visibilidade:
+  // Se 3D ativo (Desktop) -> Esconde texto (sr-only)
+  // Se 3D inativo (Mobile) -> Mostra texto
   const textContainerClass = enable3D
     ? 'sr-only'
     : 'flex flex-col items-center justify-center text-center relative z-20 px-4';
 
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-between z-10 py-[12vh] md:py-[10vh] pointer-events-none">
-      {/* TOPO: TAG */}
+      {/* TOPO: TAG [BRAND AWARENESS] */}
+      {/* Spec: 12px, uppercase, TT Norms Pro (sans) */}
       <motion.span
         initial={{ opacity: 0, y: -20 }}
         animate={
           startEntrance ? { opacity: 0.8, y: 0 } : { opacity: 0, y: -20 }
         }
         transition={{ delay: 3.0, duration: 1.0, ease: 'easeOut' }}
-        className="font-mono text-[10px] md:text-[12px] uppercase tracking-[0.2em] text-cyan-400"
+        className="font-sans text-[12px] uppercase tracking-[0.2em] text-cyan-400 font-normal"
       >
         [BRAND AWARENESS]
       </motion.span>
@@ -35,18 +37,21 @@ export function HeroCopy({
       {/* MEIO: TEXTO + BOTÃO */}
       <div className="flex flex-col items-center justify-center flex-1 w-full relative">
         <div className={textContainerClass}>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-4">
+          {/* H1: 5-8rem, Bold (Black), tracking-tight */}
+          <h1 className="text-[5rem] md:text-[6.5rem] lg:text-[8rem] font-bold text-white tracking-tight leading-[0.9] mb-6">
             Você não vê <br className="hidden md:block" /> o design.
           </h1>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-medium text-white/80 tracking-tight">
+
+          {/* H2: 4-6rem, Bold (Black), tracking-tight */}
+          <h2 className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-bold text-white/90 tracking-tight leading-[0.95]">
             Mas ele vê você.
           </h2>
         </div>
 
         {/* Espaçador para o botão quando o texto é 3D */}
-        {enable3D && <div className="h-[20vh] md:h-[30vh] w-full" />}
+        {enable3D && <div className="h-[25vh] md:h-[35vh] w-full" />}
 
-        {/* CTA Button */}
+        {/* CTA Button Principal */}
         <motion.div
           className={`pointer-events-auto ${enable3D ? 'mt-8 md:mt-12' : 'mt-12'}`}
           initial={{ opacity: 0, y: 20 }}

@@ -64,6 +64,7 @@ const parallaxPresets: Array<{
 ];
 
 const verticalNudges = [0, 10, -8, 12];
+const mediaLifts = [-22, -30, -16, -26];
 
 // Componente para renderizar keyword com ghost-accent
 function HighlightText({
@@ -168,6 +169,8 @@ function OriginPair({
 
   const preset = parallaxPresets[index % parallaxPresets.length];
   const baseNudge = isDesktop ? verticalNudges[index] || 0 : 0;
+  const mediaLift = isDesktop ? mediaLifts[index] || 0 : 0;
+  const showInlineRule = !(isDesktop && index === 0);
   const blockDelay = Math.min(0.1 + index * 0.08, 0.3);
   const textY = useTransform(
     scrollYProgress,
@@ -200,15 +203,17 @@ function OriginPair({
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-15%' }}
-          className={`flex flex-col gap-3 sm:gap-4 text-center items-center max-w-[360px] sm:max-w-[420px] md:max-w-[520px] mx-auto lg:mx-0 lg:max-w-[420px]
+          className={`flex flex-col gap-3 sm:gap-4 text-center items-center max-w-[360px] sm:max-w-[420px] md:max-w-[520px] mx-auto lg:max-w-[420px]
             ${
               isEven
-                ? 'lg:text-right lg:items-end lg:ml-auto'
-                : 'lg:text-left lg:items-start lg:mr-auto'
+                ? 'lg:text-center lg:items-center'
+                : 'lg:text-left lg:items-start lg:mr-auto lg:ml-0'
             }
           `}
         >
-          <div className="h-px w-[65%] sm:w-[60%] lg:w-full bg-[#4fe6ff]/60" />
+          {showInlineRule && (
+            <div className="h-px w-[65%] sm:w-[60%] lg:w-full bg-[#4fe6ff]/60" />
+          )}
           <p className="text-[15px] sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] font-light leading-[1.55] text-[#fcffff] tracking-[-0.01em]">
             <HighlightText
               text={textBlock.text}
@@ -220,7 +225,7 @@ function OriginPair({
 
       {/* MEDIA BLOCK */}
       <motion.div
-        style={{ y: mediaY }}
+        style={{ y: mediaY, marginTop: mediaLift }}
         className={`col-span-1 lg:col-span-6 lg:col-start-auto relative ${
           isEven ? 'lg:order-2' : 'lg:order-1'
         }`}
@@ -270,7 +275,21 @@ export default function AboutOrigin() {
     >
       <div className="w-full max-w-[1180px] mx-auto px-5 sm:px-6 md:px-10 lg:px-12">
         {/* Section Label */}
-        <div className="flex flex-col items-center gap-3 sm:gap-4 mb-12 md:mb-16">
+        <div className="hidden lg:grid grid-cols-12 items-center mb-8 md:mb-10">
+          <div className="col-span-5 col-start-2">
+            <div className="h-px w-full max-w-[420px] ml-auto bg-[#4fe6ff]/60" />
+          </div>
+          <motion.h2
+            variants={textReveal}
+            initial={prefersReducedMotion ? 'visible' : 'hidden'}
+            whileInView="visible"
+            viewport={{ once: true, margin: '-10%' }}
+            className="col-span-6 col-start-7 text-left text-[11px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] font-bold"
+          >
+            {ABOUT_CONTENT.origin.sectionLabel}
+          </motion.h2>
+        </div>
+        <div className="flex flex-col items-center gap-3 sm:gap-4 mb-10 md:mb-12 lg:hidden">
           <motion.h2
             variants={textReveal}
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
@@ -290,7 +309,7 @@ export default function AboutOrigin() {
               index={index}
               textBlock={pair.textBlock}
               mediaBlock={pair.mediaBlock}
-              prefersReducedMotion={prefersReducedMotion}
+              prefersReducedMotion={prefersReducedMotion ?? false}
               isDesktop={isDesktop}
             />
           ))}

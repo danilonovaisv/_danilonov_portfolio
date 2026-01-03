@@ -133,6 +133,59 @@ Logos:
 - Logo Light (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
 - Logo Dark (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 
+### 2.6 Fonts:
+ -  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+
+- font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+
+- font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+
+- font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+
+- font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+
+/* Fallback para Black (900) usando Bold, já que não temos o arquivo Black */
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fonte Mono para Tags */
+@font-face {
+  font-family: 'PPSupplyMono';
+  src: url('https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 Videos:
 - Manifesto Video: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4`
 
@@ -317,9 +370,9 @@ Ethereal, organic 3D atmosphere inspired by the "Ghost Blue" aesthetic. Main ele
 #### Editorial Text Block
 
 **Content:**
-- Tag: `[BRAND AWARENESS]` (12px, uppercase, mono)
-- H1: "Você não vê o design." (5–8rem, Black, tracking-tight)
-- H2: "Mas ele vê você." (4–6rem, Black, tracking-tight)
+- Tag: `[BRAND AWARENESS]` (12px, uppercase, mono) TT Norms Pro Normal
+- H1: "Você não vê o design." (5–8rem, TT Norms Pro Black, tracking-tight)
+- H2: "Mas ele vê você." (4–6rem, TT Norms Pro Black, tracking-tight)
 - CTA: "step inside →" (link to `/sobre`, hover effect: color change + arrow translation)
 - Same CTA button at bottom
 **Primary Font:** TT Norms Pro (self-hosted, fallback: `ui-sans-serif, system-ui`)
