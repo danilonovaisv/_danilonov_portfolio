@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@dataconnect/admin-generated": "link:src/dataconnect-admin-generated",
+    "@motionone/utils": "^10.18.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@react-three/postprocessing": "^3.0.4",

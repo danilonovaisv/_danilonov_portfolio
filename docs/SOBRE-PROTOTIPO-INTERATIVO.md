@@ -285,147 +285,185 @@ Mostra trajetória sem cronologia rígida, mas com ritmo.
 
 ---
 
-# 🟣 SEÇÃO 03 — O QUE EU FAÇO
-
-**Função:** Mostrar valor sem autopromoção.  
-Transformar capabilities em lista silenciosa de entregas.
+# 🟣 **SEÇÃO 03 — O QUE EU FAÇO**
+## Protótipo Interativo + Rodapé Animado (Ghost Design)
 
 ---
 
-## Layout — Desktop
+## 🎯 Função da Seção
 
-- **Altura de referência:** ≈100vh, mas permite scroll se necessário.
-- **Fundo:** `backgroundDark` (#040013).
-- **Container centralizado:** max-width ≈ 1120px com padding lateral 24–32px.
-
-### Título
-- Centralizado, em duas linhas, max-width ≈ 800px.
-- Espaçamento: **64–80px acima**, **48–64px abaixo**.
-- Primeira linha: "Do **insight** ao **impacto**." (insight e impacto em `primary`)
-- Segunda linha: "Mesmo quando você não percebe." (em branco)
-- Tipografia: font-size 40–48px, line-height 1.2, font-weight 600–700.
-
-### Lista de Cards
-- **Grid de 7 cards** (quantidade fixa conforme imagens).
-- **Layout responsivo:**
-  - `lg` (1024px+): **2 colunas** balanceadas
-  - `xl` (1280px+): **3 colunas** (linha 1: 3 cards | linha 2: 3 cards | linha 3: 1 card centralizado)
-- **Gap:** 20–24px entre cards.
-
-### Estrutura de cada Card
-- **Fundo:** `neutral` (#1A1A2E ou rgba(255,255,255,0.04))
-- **Borda superior:** 2px sólida em `primary` (#5B5FFF)
-- **Padding interno:** 24–28px
-- **Alinhamento:** texto à esquerda
-- **Opacity base:** 0.92
-- **Border-radius:** 8–12px
-
-**Conteúdo do card:**
-- **Ícone:** círculo pequeno (8–10px) preenchido em `primary`, alinhado com a primeira linha do título
-- **Título:** em `primary`, font-weight 600, font-size 18–20px
-- **Descrição:** em branco, font-weight 400, font-size 14–16px, line-height 1.5, spacing entre título e descrição: 8px
-
-
-### **Conteúdo do card:**
- - Animação Framer Motion: Scroll velocity com duas faixas de texto movimentando no sentido oposto uma da outra com as keywords dos cards no rodape da sessão
- - key words linha 01: Direção criativa  
- - key words linha 02: Inteligência artificial
- - background: o mesmo da sessão;
- - cor texto: Branca
+Mostrar valor sem autopromoção.  
+Transformar **capabilities** em uma lista silenciosa de entregas, finalizada com um **rodapé animado** que atua como fechamento rítmico da seção.
 
 ---
 
-## Layout — Mobile
+## 📐 Layout — Desktop
 
-- **Título:** 
-  - Centralizado, max-width 90%.
-  - Margem superior: **40–48px**.
-  - Margem inferior: **32–40px**.
-  - Font-size: 28–32px, line-height 1.2.
-
-### Lista de Cards
-- **1 coluna**, largura 100% do container (padding 16–20px lateral).
-- **7 cards empilhados verticalmente**.
-- **Espaçamento vertical:** 16–20px entre cards.
-- **Padding por card:** 20–24px.
-
-**Estrutura do card (mobile):**
-- Mantém borda superior em `primary`.
-- Ícone e texto alinhados verticalmente.
-- Font-size título: 16–18px.
-- Font-size descrição: 14–15px.
+- Altura de referência: ≈100vh  
+- Fundo: `backgroundDark` → `#040013`  
+- Container centralizado:
+  - max-width: 1120–1200px  
+  - padding-inline: 24–32px  
 
 ---
 
-## Responsividade Detalhada
+### 🟣 Título
 
-### Small (`sm`: 640px–767px)
-- 1 coluna de cards
-- Título: 28–30px
-- Padding container: 16px
+Texto:
+> Do **insight** ao **impacto**.  
+> Mesmo quando você não percebe.
 
-### Medium (`md`: 768px–1023px)
-- 1 coluna de cards (transição para 2 colunas próximo a `lg`)
-- Título: 32–36px
-- Padding container: 20–24px
+- Centralizado  
+- Duas linhas  
+- max-width ≈ 800px  
+- Espaçamento:
+  - 64–80px acima  
+  - 48–64px abaixo  
 
-### Large (`lg`: 1024px–1279px)
-- **2 colunas de cards**
-- Grid: `grid-template-columns: repeat(2, 1fr)`
-- Última linha com 1 card centralizado usando `grid-column: span 1` ou flexbox
-- Título: 38–42px
-
-### Extra Large (`xl`: 1280px+)
-- **3 colunas de cards**
-- Grid: `grid-template-columns: repeat(3, 1fr)`
-- Última linha com 1 card centralizado usando `grid-column: 2 / 3`
-- Título: 44–48px
-- Max-width container: 1120–1200px
+Tipografia:
+- font-size: 40–48px  
+- line-height: 1.2  
+- font-weight: 600–700  
 
 ---
 
-## Conteúdo dos 7 Cards
+## 🧩 Lista de Cards
 
-1. **Direção criativa** | que organiza o caos
-2. **Design estratégico** | que guia decisões
-3. **Identidades** | que permanecem na memória
-4. **Campanhas** | multicanais com lógica e emoção
-5. **Branding** | que não grita — mas marca
-6. **Inteligência artificial** | aplicada à criação e automação
-7. **Liderança criativa** | com visão e método
+### Grid — Desktop
+- Total: 7 cards  
+- lg (≥1024px): 2 colunas  
+- xl (≥1280px): 3 colunas  
+- Gap: 20–24px  
+
+### Estrutura do Card
+- Fundo: `rgba(255,255,255,0.04)`  
+- Borda superior: 2px em `primary`  
+- Padding: 24–28px  
+- Border-radius: 8–12px  
+- Opacity base: 0.92  
+
+---
+
+## 📌 Conteúdo dos Cards
+
+1. Direção criativa — que organiza o caos  
+2. Design estratégico — que guia decisões  
+3. Identidades — que permanecem na memória  
+4. Campanhas — multicanais com lógica e emoção  
+5. Branding — que não grita, mas marca  
+6. Inteligência artificial — aplicada à criação e automação  
+7. Liderança criativa — com visão e método  
 
 ---
 
-## Interação & Motion
+## **Rodapé Animado da Seção 03**
 
-### Animação de Entrada (Scroll)
-- Cada card entra individualmente ao entrar no viewport.
-- **Stagger:** 0.15–0.18s entre cada card.
-- **Efeito:**
-  - `opacity: 0 → 1`
-  - `translateY: 24px → 0`
-  - `duration: 0.5s`
-  - `easing: cubic-bezier(0.4, 0, 0.2, 1)`
-
-### Hover (Desktop)
-- **Opacity:** 0.92 → 1.0
-- **Borda superior:** aumenta de 2px → 3px
-- **Transform:** `translateY: 0 → -4px)` (elevação sutil)
-- **Transition:** 0.3s ease
-- Sem scale, sem underline.
-
-### Estados
-- **Default:** opacity 0.92
-- **Hover:** opacity 1.0 + elevação
-- **Focus:** outline em `primary` para acessibilidade
-
-### Acessibilidade
-- Respeitar `prefers-reduced-motion`:
-  - Sem translateY
-  - Apenas fade-in instantâneo (0.2s)
-  - Sem stagger perceptível
+## 📍 Posicionamento
+Inserido logo após o grid de cards, dentro da mesma seção.
 
 ---
+
+## 🧾 Conteúdo
+- Linha 01: Direção criativa  
+- Linha 02: Inteligência artificial  
+- Cor do texto: branca  
+- Opacity: ~0.75  
+- Background: mesmo da seção  
+
+---
+
+## 🎬 Motion
+- Duas faixas horizontais  
+- Direções opostas  
+- Velocidade influenciada pelo scroll  
+- Loop infinito  
+- Sem scale, sem bounce  
+
+---
+
+## 🧩 Implementação — Framer Motion
+
+```tsx
+'use client';
+
+import {
+  motion,
+  useScroll,
+  useVelocity,
+  useSpring,
+  useTransform,
+  useAnimationFrame,
+} from 'framer-motion';
+import { useRef } from 'react';
+
+const wrap = (min: number, max: number, v: number) => {
+  const range = max - min;
+  return ((((v - min) % range) + range) % range) + min;
+};
+
+function MarqueeLine({ text, baseVelocity }) {
+  const baseX = useRef(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  });
+
+  const velocityFactor = useTransform(
+    smoothVelocity,
+    [-1000, 0, 1000],
+    [-2, 0, 2]
+  );
+
+  const x = useTransform(baseX.current, (v) => `${wrap(-50, 0, v)}%`);
+
+  useAnimationFrame((_, delta) => {
+    let moveBy = baseVelocity * (delta / 1000);
+    moveBy += moveBy * velocityFactor.get();
+    baseX.current += moveBy;
+  });
+
+  return (
+    <div className="overflow-hidden whitespace-nowrap">
+      <motion.div className="flex gap-12" style={{ x }}>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <span
+            key={i}
+            className="text-white text-lg md:text-xl font-medium tracking-wide opacity-75"
+          >
+            {text}
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+export default function Section03Marquee() {
+  return (
+    <div className="mt-16 md:mt-20 py-6 md:py-8" aria-hidden="true">
+      <div className="flex flex-col gap-6">
+        <MarqueeLine text="DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・" baseVelocity={-10} />
+        <MarqueeLine text="BRANDING・INTELIGÊNCIA ARTIFICIAL・LIDERANÇA CRIATIVA・" baseVelocity={10} />
+      </div>
+    </div>
+  );
+}
+```
+
+---
+
+## ♿ Acessibilidade
+- Respeitar `prefers-reduced-motion`
+- Em modo reduzido: animação desativada, texto estático
+
+---
+
+**Ghost Design não explica.  
+Ele permanece.**
+
 
 ## Notas de Implementação
 

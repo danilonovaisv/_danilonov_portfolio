@@ -1,63 +1,68 @@
 'use client';
 
+import { useRef } from 'react';
 import {
   motion,
   useScroll,
-  useVelocity,
   useSpring,
   useTransform,
+  useMotionValue,
+  useVelocity,
   useAnimationFrame,
-  useReducedMotion,
 } from 'framer-motion';
-import { useRef } from 'react';
+import { wrap } from '@motionone/utils';
 
-const wrap = (min: number, max: number, v: number) => {
-  const range = max - min;
-  return ((((v - min) % range) + range) % range) + min;
-};
-
-type LineProps = {
-  text: string;
+interface ParallaxProps {
+  children: string;
   baseVelocity: number;
-};
+}
 
-function MarqueeLine({ text, baseVelocity }: LineProps) {
-  const baseX = useRef(0);
-  const prefersReducedMotion = useReducedMotion();
-
+function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
+  const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
-
   const smoothVelocity = useSpring(scrollVelocity, {
     damping: 50,
     stiffness: 400,
   });
 
-  const velocityFactor = useTransform(
-    smoothVelocity,
-    [-1000, 0, 1000],
-    [-2, 0, 2]
-  );
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false,
+  });
 
-  const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+  const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
 
-  useAnimationFrame((_, delta) => {
-    if (prefersReducedMotion) return;
+  const directionFactor = useRef<number>(1);
 
-    let moveBy = baseVelocity * (delta / 1000);
-    moveBy += moveBy * velocityFactor.get();
-    baseX.current += moveBy;
+  useAnimationFrame((t, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -1;
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 1;
+    }
+
+    moveBy += directionFactor.current * moveBy * velocityFactor.get();
+    baseX.set(baseX.get() + moveBy);
   });
 
   return (
-    <div className="overflow-hidden whitespace-nowrap">
-      <motion.div className="flex gap-12" style={{ x }}>
-        {Array.from({ length: 6 }).map((_, i) => (
+    // leading-[0.8] aperta muito as linhas (estilo poster)
+    // py-3 dá uma margem segura para as letras não cortarem
+    <div className="overflow-hidden m-0 whitespace-nowrap flex flex-nowrap leading-[0.8] py-0.5 bg-[#0048ff]">
+      <motion.div className="flex whitespace-nowrap flex-nowrap" style={{ x }}>
+        {[...Array(3)].map((_, i) => (
           <span
             key={i}
-            className="text-white text-lg md:text-xl font-medium tracking-wide opacity-75"
+            // TEXTO GIGANTE E APERTADO:
+            // text-5xl a text-7xl para impacto visual
+            // tracking-tighter para juntar as letras horizontalmente
+            className={
+              'block mr-6 text-accent-purple text-4xl md:text-7xl font-bold uppercase tracking-tighter'
+            }
           >
-            {text}
+            {children}
           </span>
         ))}
       </motion.div>
@@ -67,13 +72,22 @@ function MarqueeLine({ text, baseVelocity }: LineProps) {
 
 export default function Section03Marquee() {
   return (
-    <div className="mt-16 md:mt-20 py-6 md:py-8" aria-hidden="true">
-      <div className="flex flex-col gap-6">
-        {/* Linha superior → esquerda */}
-        <MarqueeLine text="Direção criativa" baseVelocity={-10} />
-
-        {/* Linha inferior → direita */}
-        <MarqueeLine text="Inteligência artificial" baseVelocity={10} />
+    <div
+      // absolute bottom-0: Cola no fundo da secção pai
+      // z-20: Garante que fica visível
+      className="absolute bottom-0 left-0 w-full z-20"
+    >
+      {/* gap-0 colado */}
+      <div className="flex flex-col gap-0 w-full">
+        <ParallaxText baseVelocity={-2}>
+          Direção Criativa・Design
+          Estratégico・Identidades・Campanhas・Branding・Inteligência
+          Artificial・Liderança Criativa・
+        </ParallaxText>
+        <ParallaxText baseVelocity={2}>
+          Branding・Inteligência Artificial・Liderança Criativa・Direção
+          Criativa・Design Estratégico・Identidades・Campanhas・
+        </ParallaxText>
       </div>
     </div>
   );

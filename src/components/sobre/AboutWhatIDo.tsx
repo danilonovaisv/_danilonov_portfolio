@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import Section03Marquee from './Section03Marquee';
 
-// 7 Cards Content hardcoded to match prototype perfectly if not in config
 const CAPABILITIES = [
   { title: 'Direção criativa', desc: 'que organiza o caos' },
   { title: 'Design estratégico', desc: 'que guia decisões' },
@@ -16,7 +16,6 @@ const CAPABILITIES = [
 export function AboutWhatIDo() {
   const prefersReducedMotion = useReducedMotion();
 
-  // Split title lines and highlight keywords
   const renderTitle = () => {
     return (
       <div className="text-center pt-4 md:pt-8 mb-7 md:mb-10 space-y-2 max-w-[860px] mx-auto z-10 relative">
@@ -33,11 +32,14 @@ export function AboutWhatIDo() {
 
   return (
     <section
-      className="bg-ghost-surface-deep py-14 sm:py-16 md:py-20 relative overflow-hidden"
+      className="bg-ghost-surface-deep pt-14 sm:pt-16 md:pt-20 pb-0 relative overflow-hidden flex flex-col"
       aria-label="O que eu faço"
     >
-      <div className="container mx-auto px-6 max-w-[1400px] relative z-10">
-        {/* Title */}
+      {/* CORREÇÃO PRINCIPAL AQUI:
+         1. z-30: O letreiro tem z-20. Colocamos z-30 aqui para os cards ficarem POR CIMA se houver sobreposição.
+         2. pb-32 md:pb-64: Aumentei o padding bottom. Como o letreiro agora é gigante, precisamos de muito espaço vazio no final da lista para os cards não ficarem tapados.
+      */}
+      <div className="container mx-auto px-6 max-w-[1400px] relative z-30 pb-32 md:pb-64">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -47,7 +49,6 @@ export function AboutWhatIDo() {
           {renderTitle()}
         </motion.div>
 
-        {/* 7 Cards Grid - Mobile: 1 coluna | Desktop: 7 colunas */}
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-3 md:gap-4 auto-rows-fr">
           {CAPABILITIES.map((item, index) => {
             return (
@@ -88,6 +89,9 @@ export function AboutWhatIDo() {
           })}
         </div>
       </div>
+
+      {/* O Marquee continua aqui, no fundo, z-20 */}
+      <Section03Marquee />
     </section>
   );
 }

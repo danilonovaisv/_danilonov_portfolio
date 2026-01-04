@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import { CTAButton } from '@/components/ui/CTAButton';

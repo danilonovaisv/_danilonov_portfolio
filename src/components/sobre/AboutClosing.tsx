@@ -44,8 +44,8 @@ export function AboutClosing() {
 
         <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
           {/* Parágrafos de Contexto */}
-          <div className="space-y-5 max-w-[560px] mx-auto lg:mx-0 text-center lg:text-left">
-            <p className="text-[18px] md:text-[18px] lg:text-[19px] font-normal leading-relaxed text-[#fcffff] opacity-90">
+          <div className="space-y-5 max-w-[560px] mx-auto text-center">
+            <p className="text-[18px] md:text-[18px] lg:text-[19px] font-normal leading-relaxed text-text-light opacity-90">
               Já liderei marcas, agências, eventos
               <br className="hidden md:block" />e{' '}
               <span className="text-primary font-medium">
@@ -53,7 +53,7 @@ export function AboutClosing() {
               </span>{' '}
               para todos os canais.
             </p>
-            <p className="text-[18px] md:text-[18px] lg:text-[19px] font-normal leading-relaxed text-[#fcffff] opacity-90">
+            <p className="text-[18px] md:text-[18px] lg:text-[19px] font-normal leading-relaxed text-text-light opacity-90">
               Agora, quero criar algo que permaneça
               <br className="hidden md:block" />—{' '}
               <span className="text-primary font-medium">com você</span>.
@@ -61,7 +61,7 @@ export function AboutClosing() {
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-row lg:flex-col items-center justify-center lg:justify-start lg:items-end gap-4 md:gap-5 lg:justify-self-end">
+          <div className="flex flex-row lg:flex-col items-center justify-center gap-4 md:gap-5 justify-self-center">
             <Link
               href="/contato"
               className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-5 md:pr-3 md:py-2.5 text-[14px] md:text-sm font-medium shadow-[0_12px_24px_rgba(0,87,255,0.25)] transition-transform duration-300 lowercase"

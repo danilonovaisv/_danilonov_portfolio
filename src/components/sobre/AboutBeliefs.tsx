@@ -73,7 +73,7 @@ export function AboutBeliefs() {
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="text-center lg:text-left max-w-[420px] mx-auto lg:mx-0"
+            className="text-center max-w-[420px] mx-auto"
           >
             <div className="space-y-1 text-[16px] md:text-[16px] text-white/90 leading-relaxed">
               <p>
@@ -109,13 +109,13 @@ export function AboutBeliefs() {
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="flex items-center justify-center lg:justify-end"
+            className="flex items-center justify-center"
           >
             <div className="flex items-center gap-6">
               <div className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 relative">
                 <GhostEyes interactive={!prefersReducedMotion} />
               </div>
-              <div className="text-left">
+              <div className="text-center lg:text-left">
                 <p className="text-[28px] md:text-[36px] lg:text-[44px] font-semibold leading-[1.05] tracking-tight">
                   <span className="text-white block">ISSO É</span>
                   <span className="text-primary block">GHOST</span>
