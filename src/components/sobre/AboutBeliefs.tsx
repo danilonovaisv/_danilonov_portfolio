@@ -57,7 +57,7 @@ export function AboutBeliefs() {
         <motion.div
           className="text-center mb-12 md:mb-16"
           // Ensure title is visible immediately when in view
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: GHOST_EASE }}
         >
@@ -77,9 +77,9 @@ export function AboutBeliefs() {
             {step === 0 && (
               <motion.div
                 key="phrase-1"
-                initial={{ opacity: 0, rotateX: 20, y: 30 }}
-                animate={{ opacity: 1, rotateX: 0, y: 0 }}
-                exit={{ opacity: 0, rotateX: -20, y: -30 }} // Exit upwards
+                initial={{ opacity: 0, filter: 'blur(8px)', y: 18 }}
+                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                exit={{ opacity: 0, filter: 'blur(8px)', y: -18 }}
                 transition={{ duration: 0.8, ease: GHOST_EASE }}
                 className="absolute text-center max-w-[480px]"
               >
@@ -99,9 +99,9 @@ export function AboutBeliefs() {
             {step === 1 && (
               <motion.div
                 key="phrase-2"
-                initial={{ opacity: 0, rotateX: 20, y: 30 }}
-                animate={{ opacity: 1, rotateX: 0, y: 0 }}
-                exit={{ opacity: 0, rotateX: -20, y: -30 }}
+                initial={{ opacity: 0, filter: 'blur(8px)', y: 18 }}
+                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                exit={{ opacity: 0, filter: 'blur(8px)', y: -18 }}
                 transition={{ duration: 0.8, ease: GHOST_EASE }}
                 className="absolute text-center max-w-[480px]"
               >
@@ -118,8 +118,8 @@ export function AboutBeliefs() {
             {step >= 2 && (
               <motion.div
                 key="ghost-reveal"
-                initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                initial={{ opacity: 0, filter: 'blur(10px)', y: 12 }}
+                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
                 transition={{ duration: 1.2, ease: GHOST_EASE }}
                 className="flex flex-col md:flex-row items-center justify-center gap-6"
               >

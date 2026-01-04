@@ -119,7 +119,7 @@ export default function AboutMethod() {
                     <span className="text-primary text-sm md:text-base font-semibold tracking-tight shrink-0">
                       0{i + 1}
                     </span>
-                    <p className="text-[14px] md:text-[14px] text-white/90 font-normal">
+                    <p className="text-[15px] sm:text-[15px] md:text-[15px] lg:text-[14px] text-white/90 font-normal">
                       {step}
                     </p>
                   </motion.div>

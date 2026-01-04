@@ -19,7 +19,7 @@ export function AboutWhatIDo() {
   const renderTitle = () => {
     return (
       <div className="text-center pt-4 md:pt-8 mb-7 md:mb-10 space-y-2 max-w-[860px] mx-auto z-10 relative">
-        <h2 className="text-[26px] sm:text-[28px] md:text-[26px] lg:text-[28px] font-semibold tracking-tight leading-[1.2] text-white">
+        <h2 className="text-[28px] sm:text-[30px] md:text-[30px] lg:text-[32px] font-semibold tracking-tight leading-[1.2] text-white">
           Do <span className="text-primary">insight</span> ao{' '}
           <span className="text-primary">impacto</span>.
           <span className="text-white font-semibold block mt-2">
@@ -41,7 +41,7 @@ export function AboutWhatIDo() {
       */}
       <div className="container mx-auto px-6 max-w-[1400px] relative z-30 pb-32 md:pb-64">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -55,7 +55,7 @@ export function AboutWhatIDo() {
               <motion.div
                 key={index}
                 initial={
-                  prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }
+                  prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 18 }
                 }
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
@@ -78,7 +78,7 @@ export function AboutWhatIDo() {
                 <span className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-semibold text-white shadow-[0_6px_12px_rgba(0,87,255,0.35)]">
                   ↗
                 </span>
-                <p className="text-[14px] md:text-[13px] lg:text-[12.5px] xl:text-[13px] font-normal text-white/90 leading-snug">
+                <p className="text-[15px] sm:text-[15px] md:text-[15px] lg:text-[14px] xl:text-[15px] font-normal text-white/90 leading-snug">
                   <span className="text-primary font-semibold">
                     {item.title}
                   </span>{' '}

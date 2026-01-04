@@ -223,7 +223,7 @@ function OriginPair({
           {showInlineRule && (
             <div className="h-px w-[65%] sm:w-[60%] lg:w-full bg-[#4fe6ff]/60" />
           )}
-          <p className="text-[18px] sm:text-[20px] md:text-[18px] lg:text-[20px] xl:text-[22px] font-light leading-[1.55] text-text-light tracking-[-0.01em]">
+          <p className="text-[18px] sm:text-[19px] md:text-[20px] lg:text-[20px] xl:text-[22px] font-light leading-[1.55] text-text-light tracking-[-0.01em]">
             <HighlightText
               text={textBlock.text}
               highlight={textBlock.highlight}
@@ -304,7 +304,7 @@ export default function AboutOrigin() {
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             whileInView="visible"
             viewport={{ once: true, margin: '-10%' }}
-            className="col-span-6 col-start-7 text-left text-[11px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] font-bold"
+            className="col-span-6 col-start-7 text-left text-[12px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] font-bold"
           >
             {ABOUT_CONTENT.origin.sectionLabel}
           </motion.h2>
@@ -315,7 +315,7 @@ export default function AboutOrigin() {
             initial={prefersReducedMotion ? 'visible' : 'hidden'}
             whileInView="visible"
             viewport={{ once: true, margin: '-10%' }}
-            className="text-[11px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] font-bold text-center"
+            className="text-[12px] sm:text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-[#4fe6ff] font-bold text-center"
           >
             {ABOUT_CONTENT.origin.sectionLabel}
           </motion.h2>

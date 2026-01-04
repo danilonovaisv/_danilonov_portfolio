@@ -64,7 +64,7 @@ export function AboutClosing() {
           <div className="flex flex-row lg:flex-col items-center justify-center gap-4 md:gap-5 justify-self-center">
             <Link
               href="/contato"
-              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-5 md:pr-3 md:py-2.5 text-[14px] md:text-sm font-medium shadow-[0_12px_24px_rgba(0,87,255,0.25)] transition-transform duration-300 lowercase"
+              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-5 md:pr-3 md:py-2.5 text-[15px] md:text-sm font-medium shadow-[0_12px_24px_rgba(0,87,255,0.25)] transition-transform duration-300 lowercase"
             >
               Fale comigo
               <span className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
@@ -76,7 +76,7 @@ export function AboutClosing() {
               href="/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-5 md:pr-3 md:py-2.5 text-[14px] md:text-sm font-medium shadow-[0_12px_24px_rgba(0,87,255,0.25)] transition-transform duration-300 lowercase"
+              className="group inline-flex items-center gap-2 rounded-full bg-primary text-white pl-4 pr-2 py-2 md:pl-5 md:pr-3 md:py-2.5 text-[15px] md:text-sm font-medium shadow-[0_12px_24px_rgba(0,87,255,0.25)] transition-transform duration-300 lowercase"
             >
               Baixar curriculum
               <span className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-[#0b1a6b] text-white text-sm transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
