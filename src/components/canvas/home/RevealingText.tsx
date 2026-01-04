@@ -117,7 +117,9 @@ export default function RevealingText({
   }, [notifyReady]);
 
   // URL DA FONTE 3D (Centralizada)
-  const fontUrl = BRAND.fonts3d.bold ?? BRAND.fonts.bold;
+  // URL DA FONTE 3D (Hardcoded temporariamente para fix de build - ideal mover para constants ou restaurar config)
+  const fontUrl =
+    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/fonts/TTNormsPro/TTNormsPro-Bold.otf';
 
   return (
     <group position={[0, 0, -1.5]}>

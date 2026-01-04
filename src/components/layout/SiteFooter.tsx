@@ -3,10 +3,11 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Instagram, Linkedin, Twitter, Facebook } from 'lucide-react';
-import { FOOTER, SOCIALS } from '@/config/navigation';
+import { NAVIGATION, SOCIALS } from '@/config/navigation';
 import Link from 'next/link';
 
-const footerLinks = FOOTER.links;
+const footerLinks = NAVIGATION.footer.links;
+const footerCopyright = NAVIGATION.footer.copyright;
 
 const social = [
   {
@@ -58,7 +59,7 @@ export default function SiteFooter() {
       >
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 flex items-center justify-between text-white">
           {/* Copyright */}
-          <p className="text-sm opacity-90">{FOOTER.copyright}</p>
+          <p className="text-sm opacity-90">{footerCopyright}</p>
 
           {/* Navigation Links */}
           <nav aria-label="Links do footer" className="flex items-center gap-8">
@@ -122,7 +123,7 @@ export default function SiteFooter() {
       >
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col gap-8">
           {/* Copyright */}
-          <p className="text-center text-xs opacity-80">{FOOTER.copyright}</p>
+          <p className="text-center text-xs opacity-80">{footerCopyright}</p>
 
           {/* Navigation Links */}
           <nav

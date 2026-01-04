@@ -14,11 +14,11 @@ export default function PortfolioHero() {
   return (
     <section
       id="portfolio-hero"
-      className="w-full bg-neutral-light text-text-inverse pt-[96px] overflow-hidden"
+      className="w-full bg-ghost-bg text-text-light pt-[96px] overflow-hidden"
     >
       <div className="relative mb-2">
         <motion.div
-          className="w-full bg-white shadow-inner"
+          className="w-full bg-ghost-bg-accent shadow-inner border-b border-white/5"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -73,9 +73,9 @@ export default function PortfolioHero() {
       </div>
 
       <div className="mx-auto w-full px-[clamp(1.5rem,5vw,6rem)] max-w-[1680px] flex flex-col items-center justify-between gap-6 pb-10 pt-6 text-center sm:flex-row sm:items-center sm:gap-8 sm:text-left">
-        <h1 className="text-3xl font-bold lowercase tracking-tight text-text-dark">
+        <h1 className="text-3xl font-bold lowercase tracking-tight text-text-light">
           <span className="text-primary">portfólio</span>{' '}
-          <span className="text-text-dark">showcase</span>
+          <span className="text-text-light">showcase</span>
         </h1>
 
         <a

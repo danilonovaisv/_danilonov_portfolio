@@ -14,18 +14,24 @@ export const HOME_CONTENT = {
       {
         id: 'brand-campaigns',
         label: 'Brand & Campaigns',
+        labelMobile: 'Branding',
+        align: 'start',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
       {
         id: 'videos-motions',
         label: 'Videos & Motions',
+        labelMobile: 'Motion',
+        align: 'center',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       },
       {
         id: 'websites-webcampaigns-tech',
         label: 'Web Campaigns, Websites & Tech',
+        labelMobile: 'Web & Tech',
+        align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
       },
@@ -34,36 +40,64 @@ export const HOME_CONTENT = {
 
   featuredProjects: [
     {
+      id: 1,
       slug: 'magic-radio-branding',
       title: 'Magic — devolvendo a magia ao rádio',
       category: 'branding & campanha',
+      tags: ['Branding', 'Strategy', 'Visual Identity'],
       client: 'Magic',
       year: 2023,
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      layout: {
+        h: 'h-[400px] md:h-[640px]',
+        cols: 'md:col-span-8',
+        sizes: '(max-width: 768px) 100vw, 66vw',
+      },
     },
     {
+      id: 2,
       slug: 'branding-project-01',
       title: 'Uma marca ousada e consistente',
       category: 'branding',
+      tags: ['Design System', 'Logo Design'],
       client: 'Cliente confidencial',
       year: 2022,
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+      layout: {
+        h: 'h-[400px] md:h-[640px]',
+        cols: 'md:col-span-4',
+        sizes: '(max-width: 768px) 100vw, 33vw',
+      },
     },
     {
+      id: 3,
       slug: 'key-visual-campaign',
       title: 'Key visual para campanha sazonal',
       category: 'campanha',
+      tags: ['Art Direction', 'Advertising', 'Retouching'],
       client: 'Cliente confidencial',
       year: 2021,
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      layout: {
+        h: 'h-[400px] md:h-[520px]',
+        cols: 'md:col-span-5',
+        sizes: '(max-width: 768px) 100vw, 42vw',
+      },
     },
     {
+      id: 4,
       slug: 'webdesigner-motion',
       title: 'Experiência web em movimento',
       category: 'web & motion',
+      tags: ['Web Design', 'UI/UX', 'Animation'],
       client: 'Cliente confidencial',
       year: 2023,
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+      layout: {
+        h: 'h-[400px] md:h-[520px]',
+        cols: 'md:col-span-7',
+        sizes: '(max-width: 768px) 100vw, 58vw',
+      },
     },
   ],
 
