@@ -8,7 +8,7 @@ import {
   useInView,
 } from 'framer-motion';
 import GhostEyes from './GhostEyes';
-import { motionTokens, GHOST_EASE } from './motion';
+import { motionTokens } from './motion';
 
 export function AboutBeliefs() {
   const prefersReducedMotion = useReducedMotion();
@@ -74,10 +74,10 @@ export function AboutBeliefs() {
             {step === 0 && (
               <motion.div
                 key="phrase-1"
-                initial={{ opacity: 0, filter: 'blur(8px)', y: 18 }}
-                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-                exit={{ opacity: 0, filter: 'blur(8px)', y: -18 }}
-                transition={{ duration: 0.8, ease: GHOST_EASE }}
+                variants={motionTokens.timeBased}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 className="absolute text-center max-w-[480px]"
               >
                 <p className="text-[20px] md:text-[24px] text-white/90 leading-relaxed font-light">
