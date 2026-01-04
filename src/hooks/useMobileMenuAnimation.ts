@@ -10,7 +10,6 @@ export function useMobileMenuAnimation(
   const panelRef = useRef<HTMLElement>(null);
   const preLayersRef = useRef<HTMLDivElement>(null);
   const preLayerElsRef = useRef<HTMLElement[]>([]);
-  const itemsRef = useRef<HTMLElement[]>([]);
   const socialsRef = useRef<HTMLDivElement>(null);
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -125,7 +124,7 @@ export function useMobileMenuAnimation(
     openTlRef.current?.kill();
     closeTweenRef.current?.kill();
 
-    const itemEls = itemsRef.current;
+    const itemEls = panel.querySelectorAll('.sm-panel-item');
     const socialsEl = socialsRef.current;
     const socialLinks = socialsEl
       ? Array.from(socialsEl.querySelectorAll('.sm-social-link'))
@@ -238,7 +237,7 @@ export function useMobileMenuAnimation(
       ease: 'power3.in',
       overwrite: 'auto',
       onComplete: () => {
-        const itemEls = itemsRef.current;
+        const itemEls = panel.querySelectorAll('.sm-panel-item');
         if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
 
         const socialsEl = socialsRef.current;
@@ -296,7 +295,6 @@ export function useMobileMenuAnimation(
     refs: {
       panelRef,
       preLayersRef,
-      itemsRef,
       socialsRef,
       toggleBtnRef,
       plusHRef,

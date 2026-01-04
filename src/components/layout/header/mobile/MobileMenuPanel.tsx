@@ -15,17 +15,14 @@ interface MobileMenuPanelProps {
   navItems: NavItem[];
   accentColor: string;
   open: boolean;
-  itemsRef: RefObject<HTMLElement[]>;
+  open: boolean;
   socialsRef: RefObject<HTMLDivElement | null>;
   onNavigate: (_href: string) => void;
   onClose: () => void;
 }
 
 const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
-  (
-    { navItems, accentColor, open, itemsRef, socialsRef, onNavigate, onClose },
-    ref
-  ) => {
+  ({ navItems, accentColor, open, socialsRef, onNavigate, onClose }, ref) => {
     return (
       <nav
         ref={ref}
@@ -43,9 +40,6 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
           {navItems.map((item, idx) => (
             <li key={item.href} className="overflow-hidden leading-none">
               <button
-                ref={(el) => {
-                  if (el && itemsRef.current) itemsRef.current[idx] = el;
-                }}
                 onClick={() => onNavigate(item.href)}
                 className="sm-panel-item text-4xl xs:text-5xl font-bold tracking-tight text-white hover:text-primary transition-colors text-left leading-none uppercase will-change-transform origin-bottom"
               >

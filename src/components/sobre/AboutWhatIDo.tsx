@@ -49,7 +49,7 @@ export function AboutWhatIDo() {
           {renderTitle()}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-7 gap-3 md:gap-4 auto-rows-fr">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 auto-rows-fr">
           {CAPABILITIES.map((item, index) => {
             return (
               <motion.div

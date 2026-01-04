@@ -15,7 +15,10 @@ export const CONTACT_FORM = {
 
 export const NAVIGATION = {
   header: [
-    // Defina se houver menu no header, seguindo a ordem da home
+    { label: 'Home', href: '/#hero' },
+    { label: 'Sobre', href: '/sobre' },
+    { label: 'Portfólio', href: '/portfolio' },
+    { label: 'Contato', href: '#contact' },
   ],
   footer: {
     copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',

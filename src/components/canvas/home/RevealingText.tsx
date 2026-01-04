@@ -6,7 +6,7 @@ import { useFrame, extend, useThree } from '@react-three/fiber';
 // Retirando ThreeElements pois não está sendo usado explicitamente
 // se precisar estender props nativas: React.ComponentProps<'group'> ou JSX.IntrinsicElements['group']
 import * as THREE from 'three';
-import { BRAND } from '@/config/brand';
+// import { BRAND } from '@/config/brand'; // Unused
 
 // Shader de Revelação Corrigido
 const RevealMaterial = shaderMaterial(

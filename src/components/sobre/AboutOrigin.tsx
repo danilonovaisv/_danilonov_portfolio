@@ -189,16 +189,21 @@ function OriginPair({
       : [(preset.media[0] ?? 0) + baseNudge, (preset.media[1] ?? 0) + baseNudge]
   );
 
+  // Desktop Column Logic (Grid 12 cols):
+  // Even: Text (2-6), Media (8-12) -> Gap at 7
+  // Odd: Media (2-6), Text (8-12) -> Gap at 7
+  // On Mobile: Source order is always Text -> Media, which satisfies "text before image" requirement.
+
   return (
     <div
       ref={blockRef}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 sm:gap-y-10 lg:gap-y-0 gap-x-10 lg:gap-x-16 items-start"
+      className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 sm:gap-y-10 lg:gap-y-0 lg:gap-x-0 items-start"
     >
       {/* TEXT BLOCK */}
       <motion.div
         style={{ y: textY }}
         className={`col-span-1 lg:col-span-5
-          ${isEven ? 'lg:col-start-2 lg:order-1' : 'lg:col-start-7 lg:order-2'}
+          ${isEven ? 'lg:col-start-2' : 'lg:col-start-8'}
         `}
       >
         <motion.div
@@ -230,9 +235,20 @@ function OriginPair({
       {/* MEDIA BLOCK */}
       <motion.div
         style={{ y: mediaY, marginTop: mediaLift }}
-        className={`col-span-1 lg:col-span-6 lg:col-start-auto relative ${
-          isEven ? 'lg:order-2' : 'lg:order-1'
-        }`}
+        className={`col-span-1 lg:col-span-5 relative
+          ${isEven ? 'lg:col-start-8' : 'lg:col-start-2 lg:row-start-1 lg:self-start'}
+        `}
+        // Note: lg:row-start-1 on Odd ensures Media stays on the same row as Text (which is implicitly row 1 or auto).
+        // Since we removed 'order', source order dictates. Text is first.
+        // Even: Text (row1), Media (row1). OK.
+        // Odd: Text (row1, col-8), Media (row1, col-2).
+        // Grid Auto Placement might put Media strictly after Text if we don't force row.
+        // But since we specify col-start, it should place them correctly in the implicit row.
+        // However, if Text is at col-8, and Media (next child) is at col-2, it might wraparound to next row.
+        // To be safe, we can add 'row-start-1' to both or rely on 'order' just for row stability?
+        // Actually, for Odd layout: Text (Source: 1st) -> Col 8. Media (Source: 2nd) -> Col 2.
+        // In Grid, if item 1 takes col 8, item 2 taking col 2 CAN go to next row.
+        // So we MUST use row-start-1 for the Media block in Odd case to pull it up.
       >
         <motion.div
           variants={mediaReveal(isEven ? 'right' : 'left')}

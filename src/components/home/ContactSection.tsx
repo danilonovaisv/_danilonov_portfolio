@@ -110,7 +110,7 @@ export default function ContactSection() {
               duration: reducedMotion ? 0 : 0.55,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="space-y-6"
+            className="space-y-6 flex flex-col items-center md:items-start w-full"
           >
             {contactLinks.map((link) => (
               <motion.a

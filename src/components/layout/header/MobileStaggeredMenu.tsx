@@ -42,7 +42,8 @@ export default function MobileStaggeredMenu({
     refs: {
       panelRef,
       preLayersRef,
-      itemsRef,
+      panelRef,
+      preLayersRef,
       socialsRef,
       toggleBtnRef,
       plusHRef,
@@ -138,7 +139,6 @@ export default function MobileStaggeredMenu({
         navItems={navItems}
         accentColor={accentColor}
         open={open}
-        itemsRef={itemsRef}
         socialsRef={socialsRef}
         onNavigate={onNavigate}
         onClose={onClose}

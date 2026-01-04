@@ -9,13 +9,14 @@ export const HOME_CONTENT = {
 
   showcase: {
     title: 'portfólio showcase',
-    cta: { label: 'VEJA MAIS →', href: '/portfolio' },
+    floatingLabel: '[what we love working on]',
+    cta: { label: "let's build something great →", href: '/#contact' },
     categories: [
       {
         id: 'brand-campaigns',
         label: 'Brand & Campaigns',
         labelMobile: 'Branding',
-        align: 'start',
+        align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
@@ -31,7 +32,7 @@ export const HOME_CONTENT = {
         id: 'websites-webcampaigns-tech',
         label: 'Web Campaigns, Websites & Tech',
         labelMobile: 'Web & Tech',
-        align: 'end',
+        align: 'start',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
       },
@@ -50,7 +51,7 @@ export const HOME_CONTENT = {
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
       layout: {
         h: 'h-[400px] md:h-[640px]',
-        cols: 'md:col-span-8',
+        cols: 'md:col-span-5',
         sizes: '(max-width: 768px) 100vw, 66vw',
       },
     },
@@ -65,7 +66,7 @@ export const HOME_CONTENT = {
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       layout: {
         h: 'h-[400px] md:h-[640px]',
-        cols: 'md:col-span-4',
+        cols: 'md:col-span-7',
         sizes: '(max-width: 768px) 100vw, 33vw',
       },
     },
@@ -80,7 +81,7 @@ export const HOME_CONTENT = {
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
       layout: {
         h: 'h-[400px] md:h-[520px]',
-        cols: 'md:col-span-5',
+        cols: 'md:col-span-12',
         sizes: '(max-width: 768px) 100vw, 42vw',
       },
     },
@@ -95,7 +96,7 @@ export const HOME_CONTENT = {
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       layout: {
         h: 'h-[400px] md:h-[520px]',
-        cols: 'md:col-span-7',
+        cols: 'md:col-span-8',
         sizes: '(max-width: 768px) 100vw, 58vw',
       },
     },

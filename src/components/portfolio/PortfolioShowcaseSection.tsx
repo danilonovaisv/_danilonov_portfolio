@@ -28,8 +28,8 @@ export default function PortfolioShowcaseSection() {
       <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
         <div className="relative">
           {/* Floating Label - LightBlue (#4fe6ff) - Posicionado ao lado do primeiro item */}
-          <div className="pointer-events-none absolute left-0 top-[-40px] md:top-[24px] z-20 hidden md:block">
-            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#4fe6ff]">
+          <div className="pointer-events-none absolute left-0 lg:top-[-24px] z-20 hidden lg:block">
+            <span className="font-mono text-[14px] uppercase tracking-[0.4em] text-[#4fe6ff]">
               [{HOME_CONTENT.showcase.title}]
             </span>
           </div>
