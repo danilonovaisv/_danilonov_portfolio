@@ -49,18 +49,19 @@ export default function HomeHero() {
   // LÓGICA DE ATIVAÇÃO DO 3D (Tentativa)
   const shouldRender3D = useMemo(() => {
     if (!mounted) return false;
-    return !isMobile && !prefersReducedMotion;
-  }, [mounted, isMobile, prefersReducedMotion]);
+    // Enable 3D on mobile as requested, but respect reduced motion preferences
+    return !prefersReducedMotion;
+  }, [mounted, prefersReducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  const videoScale = useTransform(scrollYProgress, [0.3, 0.6], [1, 3.5], {
+  const videoScale = useTransform(scrollYProgress, [0.2, 0.8], [1, 3.5], {
     ease: CONFIG.easing,
   });
-  const borderRadius = useTransform(scrollYProgress, [0.3, 0.55], [16, 0]);
+  const borderRadius = useTransform(scrollYProgress, [0.2, 0.75], [16, 0]);
   const copyOpacity = useTransform(scrollYProgress, [0.2, 0.4], [1, 0]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {

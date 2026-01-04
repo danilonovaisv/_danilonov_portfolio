@@ -37,7 +37,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       >
         {/* Menu items */}
         <ul className="flex flex-col gap-4" role="list">
-          {navItems.map((item, idx) => (
+          {navItems.map((item) => (
             <li key={item.href} className="overflow-hidden leading-none">
               <button
                 onClick={() => onNavigate(item.href)}

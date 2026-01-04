@@ -27,8 +27,8 @@ const ANIMATION = {
   initial: { opacity: 0, scale: 0.95, y: 20 },
   animate: { opacity: 1, scale: 1, y: 0 },
   transition: {
-    duration: 0.6,
-    ease: [0.22, 1, 0.36, 1], // easeOutExpo
+    duration: 1.2,
+    ease: [0.22, 1, 0.36, 1], // Ghost Ease
   },
 } as const;
 
@@ -75,7 +75,7 @@ export function ManifestoSection() {
       initial={prefersReducedMotion ? {} : ANIMATION.initial}
       animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
       transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-ghost-bg aspect-video relative overflow-hidden"
+      className="lg:hidden w-full bg-[#020204] aspect-video relative overflow-hidden mt-[-1px]"
     >
       {/* Video */}
       <video
