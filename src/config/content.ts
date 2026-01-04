@@ -1,10 +1,10 @@
 export const HOME_CONTENT = {
   hero: {
     tag: '[BRAND AWARENESS]',
-    title: ['Design, não é', 'só estética.'],
-    subtitle: '[É intenção, é estratégia, é experiência.]',
-    cta: 'get to know me better →',
-    scrollHint: '#manifesto',
+    title: ['Você não vê o design.'],
+    subtitle: '[Mas ele vê você.]',
+    cta: 'step inside →',
+    scrollHint: '#sobre',
   },
 
   showcase: {
@@ -14,22 +14,18 @@ export const HOME_CONTENT = {
       {
         id: 'brand-campaigns',
         label: 'Brand & Campaigns',
-        align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
       {
         id: 'videos-motions',
         label: 'Videos & Motions',
-        align: 'center',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       },
       {
         id: 'websites-webcampaigns-tech',
         label: 'Web Campaigns, Websites & Tech',
-        labelMobile: 'Websites & Tech',
-        align: 'start',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
       },
@@ -38,64 +34,36 @@ export const HOME_CONTENT = {
 
   featuredProjects: [
     {
-      id: 1,
       slug: 'magic-radio-branding',
       title: 'Magic — devolvendo a magia ao rádio',
       category: 'branding & campanha',
       client: 'Magic',
       year: 2023,
-      tags: ['Branding', 'Strategy', 'Campaign'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-      layout: {
-        cols: 'md:col-span-5',
-        h: 'h-[340px] md:h-[500px]',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 44vw, 36vw',
-      },
     },
     {
-      id: 2,
       slug: 'branding-project-01',
       title: 'Uma marca ousada e consistente',
       category: 'branding',
       client: 'Cliente confidencial',
       year: 2022,
-      tags: ['Branding', 'Identity'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-      layout: {
-        cols: 'md:col-span-7',
-        h: 'h-[340px] md:h-[500px]',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 56vw, 58vw',
-      },
     },
     {
-      id: 3,
       slug: 'key-visual-campaign',
       title: 'Key visual para campanha sazonal',
       category: 'campanha',
       client: 'Cliente confidencial',
       year: 2021,
-      tags: ['Campaign', 'Print', 'Art Direction'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-      layout: {
-        cols: 'md:col-span-12',
-        h: 'h-[340px] md:h-[600px]',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 94vw, 100vw',
-      },
     },
     {
-      id: 4,
       slug: 'webdesigner-motion',
       title: 'Experiência web em movimento',
       category: 'web & motion',
       client: 'Cliente confidencial',
       year: 2023,
-      tags: ['Web', 'Motion', 'UX'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      layout: {
-        cols: 'md:col-span-8',
-        h: 'h-[280px] md:h-[400px]',
-        sizes: '(max-width: 768px) 100vw, (max-width: 1280px) 68vw, 64vw',
-      },
     },
   ],
 
@@ -112,6 +80,37 @@ export const HOME_CONTENT = {
   contact: {
     title: 'contato',
     subtitle: 'Tem uma pergunta ou quer trabalhar junto?',
+  },
+};
+
+export const PORTFOLIO_CONTENT = {
+  hero: {
+    items: [
+      {
+        id: 'brand-identity',
+        label: 'Brand Identity',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      },
+      {
+        id: 'key-visual',
+        label: 'Key Visual',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      },
+      {
+        id: 'web-design',
+        label: 'Web Design',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+      },
+      {
+        id: 'motion-design',
+        label: 'Motion Design',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/videos-motions-thumb.webp',
+      },
+    ],
   },
 };
 

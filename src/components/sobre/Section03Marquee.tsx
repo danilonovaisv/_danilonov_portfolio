@@ -59,7 +59,7 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
             // text-5xl a text-7xl para impacto visual
             // tracking-tighter para juntar as letras horizontalmente
             className={
-              'block mr-6 text-accent-purple text-4xl md:text-7xl font-bold uppercase tracking-tighter'
+              'block mr-6 text-purple-details text-4xl md:text-7xl font-bold uppercase tracking-tighter'
             }
           >
             {children}

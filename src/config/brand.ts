@@ -2,7 +2,7 @@ export const BRAND = {
   name: 'Danilo Novais',
   domain: 'portfoliodanilo.com',
 
-  // Design Tokens (Tailwind v4 mapped)
+  // Design Tokens
   colors: {
     primary: '#0048ff', // Primary brand color, interactive elements, CTAs
     accent: '#4fe6ff', // Secondary highlights, Ghost atmosphere glow
@@ -13,6 +13,8 @@ export const BRAND = {
     textSecondary: '#a1a3a3', // Secondary information, metadata
     neutral: '#0b0d3a', // Gradient transitions, subtle backgrounds
     neutralLight: '#F5F5F5', // Secondary section backgrounds
+    pupleDetails: '#8705f2', // para pequenos detalhes
+    pinkDetails: '#f501d3', // para pequenos detalhes
   },
 
   typography: {
@@ -38,15 +40,5 @@ export const BRAND = {
     // Usado na Hero e Manifesto (mesma URL para cache)
     manifesto:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
-  },
-
-  fonts: {
-    bold: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2',
-    regular:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Regular.woff2',
-  },
-  fonts3d: {
-    bold: '/fonts/TT%20Norms%20Pro%20Bold.ttf',
-    regular: '/fonts/TT%20Norms%20Pro%20Regular.ttf',
   },
 };

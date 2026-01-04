@@ -4,33 +4,9 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import styles from './PortfolioHeroGallery.module.css';
+import { PORTFOLIO_CONTENT } from '@/config/content';
 
-const heroItems = [
-  {
-    id: 'brand-identity',
-    label: 'Brand Identity',
-    image:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-  },
-  {
-    id: 'key-visual',
-    label: 'Key Visual',
-    image:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-  },
-  {
-    id: 'web-design',
-    label: 'Web Design',
-    image:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-  },
-  {
-    id: 'motion-design',
-    label: 'Motion Design',
-    image:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/videos-motions-thumb.webp',
-  },
-];
+const heroItems = PORTFOLIO_CONTENT.hero.items;
 
 export default function PortfolioHero() {
   const reduceMotion = useReducedMotion();
@@ -38,7 +14,7 @@ export default function PortfolioHero() {
   return (
     <section
       id="portfolio-hero"
-      className="w-full bg-[#f5f5f5] text-[#0f172a] pt-[96px] overflow-hidden"
+      className="w-full bg-neutral-light text-text-inverse pt-[96px] overflow-hidden"
     >
       <div className="relative mb-2">
         <motion.div
@@ -98,13 +74,13 @@ export default function PortfolioHero() {
 
       <div className="mx-auto w-full px-[clamp(1.5rem,5vw,6rem)] max-w-[1680px] flex flex-col items-center justify-between gap-6 pb-10 pt-6 text-center sm:flex-row sm:items-center sm:gap-8 sm:text-left">
         <h1 className="text-3xl font-bold lowercase tracking-tight text-text-dark">
-          <span className="text-focus-ring">portfólio</span>{' '}
+          <span className="text-primary">portfólio</span>{' '}
           <span className="text-text-dark">showcase</span>
         </h1>
 
         <a
           href="#contact"
-          className="group inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-focus-ring px-8 py-4 text-lg font-semibold tracking-wide text-white shadow-[0_18px_30px_-15px_rgba(0,87,255,0.8)] transition duration-200 hover:bg-[#0046CC] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-focus-ring/50 sm:w-auto sm:max-w-none"
+          className="group inline-flex w-full max-w-xs items-center justify-center gap-3 rounded-full bg-primary px-8 py-4 text-lg font-semibold tracking-wide text-white shadow-[0_18px_30px_-15px_rgba(0,87,255,0.8)] transition duration-200 hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/50 sm:w-auto sm:max-w-none"
         >
           vamos trabalhar juntos
           <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white transition duration-200 group-hover:bg-white/30">

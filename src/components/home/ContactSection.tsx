@@ -15,31 +15,33 @@ import { SOCIALS } from '@/config/navigation';
 import { HOME_CONTENT } from '@/config/content';
 import ContactForm from './contact/ContactForm';
 
+import { BRAND } from '@/config/brand';
+
 export default function ContactSection() {
   const reducedMotion = useReducedMotion();
 
   const contactLinks = [
     {
       label: '+55 11 98396 6838',
-      href: `tel:${SOCIALS.phone}`,
+      href: SOCIALS.phone,
       icon: <Phone className="h-5 w-5" aria-hidden="true" />,
       ariaLabel: 'Ligar para Danilo Novais',
     },
     {
       label: 'dannovaisv@gmail.com',
-      href: `mailto:${SOCIALS.emailPrimary}`,
+      href: SOCIALS.emailSecondary,
       icon: <Mail className="h-5 w-5" aria-hidden="true" />,
       ariaLabel: 'Enviar email para dannovaisv@gmail.com',
     },
     {
       label: 'danilo@portfoliodanilo.com',
-      href: `mailto:${SOCIALS.emailSecondary}`,
+      href: SOCIALS.emailPrimary,
       icon: <Mail className="h-5 w-5" aria-hidden="true" />,
       ariaLabel: 'Enviar email para danilo@portfoliodanilo.com',
     },
     {
-      label: 'portfoliodanilo.com',
-      href: 'https://portfoliodanilo.com',
+      label: BRAND.domain,
+      href: `https://${BRAND.domain}`,
       icon: <Globe className="h-5 w-5" aria-hidden="true" />,
       ariaLabel: 'Visitar portfólio',
     },
