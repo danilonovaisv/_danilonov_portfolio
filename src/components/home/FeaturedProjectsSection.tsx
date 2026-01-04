@@ -9,7 +9,7 @@ import FeaturedProjectCard, {
 import CTAProjectCard from './featured-projects/CTAProjectCard';
 
 type FeaturedProjectsSectionProps = {
-  onProjectOpen?: (_project: FeaturedProject) => void;
+  onProjectOpen?: (project: FeaturedProject) => void;
 };
 
 export default function FeaturedProjectsSection({
