@@ -158,8 +158,8 @@ export default function PortfolioModalNew({
                 {/* Header glow */}
                 <div className="absolute top-0 inset-x-0 h-40 pointer-events-none">
                   <div 
-                    className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_center_top,var(--glow-color),transparent_70%)]"
-                    style={{ '--glow-color': project.accentColor ? `${project.accentColor}40` : 'rgba(0,87,255,0.3)' } as React.CSSProperties}
+                    className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_center_top,var(--glow-color,rgba(0,87,255,0.3)),transparent_70%)]"
+                    {...(project.accentColor && { style: { '--glow-color': `${project.accentColor}40` } as React.CSSProperties })}
                   />
                 </div>
 

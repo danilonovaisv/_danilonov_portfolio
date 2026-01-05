@@ -1,5 +1,5 @@
 ---
-description:
+description: # Workflow: Auditoria e Limpeza Estrutural
 ---
 
 # Workflow: Auditoria e Limpeza Estrutural
@@ -18,15 +18,19 @@ O agente deve primeiro listar e categorizar a estrutura atual sem fazer alteraç
 
 ### Checklist de Verificação:
 
-1.  **Validação do `src/`:**
-    - Todo código-fonte (componentes, libs, hooks, utils) está dentro de `src/`?
-    - Existem arquivos de configuração (exceto `next.config.mjs`, `tailwind.config.ts`, etc.) perdidos na raiz?
-2.  **Detecção de Lixo (Debris):**
-    - Identificar pastas de cache commitadas indevidamente (`.next/`, `.firebase/`, `node_modules/`, `dist/`).
-    - Verificar se há arquivos `.zip`, `.log` ou `.DS_Store` rastreados.
-3.  **Pasta `docs/`:**
-    - A pasta `docs/` deve conter apenas documentação Markdown e assets de referência.
-    - Se houver código morto ou backups antigos (ex: `docs/AJUSTE HERO/...`), sinalizar para exclusão ou arquivamento.
+1. **Validação do `src/`:**
+
+- Todo código-fonte (componentes, libs, hooks, utils) está dentro de `src/`?
+
+2. **Análise da Raiz (Root):**
+
+- Identificar arquivos soltos na raiz que **não** sejam arquivos de configuração padrão (ex: `Home.tsx` perdido, `styles.css` fora de lugar).
+- **Proteção de Documentação:** Confirmar a existência da pasta `/docs` (ou `DOCS-JULES`) e marcá-la como **INTOCÁVEL** nesta varredura.
+
+3. **Detecção de Lixo (Debris):**
+
+- Identificar pastas de cache commitadas indevidamente (`.next/`, `.firebase/`, `node_modules/`, `dist/`).
+- Verificar se há arquivos `.zip`, `.log` ou `.DS_Store` rastreados.
 
 ---
 
@@ -38,16 +42,17 @@ O agente deve propor movimentações baseadas nestas regras estritas:
 
 Adotar estrutura por **Funcionalidade (Feature-based)** para seções grandes e **Tipo** para genéricos.
 
-- **`src/components/ui/`**: Componentes primitivos reutilizáveis (Buttons, Inputs, Cards). Sem lógica de negócio.
-- **`src/components/home/`**: Componentes exclusivos da Home Page (Hero, Manifesto, Grid).
-- **`src/components/layout/`**: Header, Footer, Wrappers de Grid.
-- **`src/components/canvas/`**: Cenas WebGL/R3F isoladas (ex: `GhostScene.tsx`, `Torus.tsx`). _Não misturar DOM com Canvas._
+- **`src/components/ui/`**: Primitivos (Buttons, Inputs).
+- **`src/components/home/`**: Exclusivos da Home Page.
+- **`src/components/layout/`**: Header, Footer.
+- **`src/components/canvas/`**: Cenas WebGL/R3F.
 
-### B. Utilitários e Hooks
+### B. Raiz do Projeto (Root)
 
-- **`src/hooks/`**: Apenas Custom Hooks (ex: `useScrollProgress`).
-- **`src/lib/`**: Configurações de terceiros (Supabase, Three.js helpers, Utils puros).
-- **`src/styles/`**: Se houver CSS Modules ou globals além do Tailwind.
+A raiz deve conter **APENAS** arquivos de configuração e pastas de documentação.
+
+- **Permitidos:** `package.json`, `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`, `.eslintrc`, `.gitignore`, `.env*`.
+- **Proibidos:** Componentes `.tsx`, Estilos `.css` (exceto se config), Utils `.ts`.
 
 ---
 
@@ -55,30 +60,30 @@ Adotar estrutura por **Funcionalidade (Feature-based)** para seções grandes e 
 
 Se aprovado pelo usuário, executar sequencialmente:
 
-1.  **Limpeza do `.gitignore`:**
-    - Garantir que as seguintes entradas existam:
-      ```gitignore
-      .next/
-      node_modules/
-      .firebase/
-      out/
-      build/
-      .DS_Store
-      *.zip
-      .env
-      .env.local
-      ```
+1. **Limpeza do `.gitignore`:**
 
-2.  **Saneamento de Referências (Docs):**
-    - Mover arquivos pesados ou de referência (PDFs, Zips de exemplo) para fora do repositório ou adicionar ao `.gitignore` se forem apenas para dev.
-    - **Ação Crítica:** Verificar se a pasta `docs/AJUSTE HERO/DIAMANTE.zip` e seu conteúdo extraído estão sendo usados. Se for código antigo, sugerir remoção.
+- Garantir entradas padrão (`.next/`, `node_modules/`, `.ds_store`, etc.).
 
-3.  **Padronização de Imports:**
-    - Substituir imports relativos longos (`../../../components`) por Alias Imports (`@/components`).
-    - O agente deve rodar um script ou regex para corrigir isso em massa.
+2. **Limpeza da Raiz (Root Sweep):**
 
-4.  **Remoção de Código Morto:**
-    - Verificar componentes que não são importados em nenhum lugar (Dead Code Elimination).
+- **Ação:** Mover qualquer arquivo de código solto na raiz (`.tsx`, `.ts`, `.js`, `.css`) para a pasta apropriada dentro de `src/` (ex: `src/app/` ou `src/components/`).
+- **Proteção Crítica (/docs):**
+- O agente **NÃO DEVE** alterar, mover, renomear ou excluir nada dentro da pasta `/docs` (ou `DOCS-JULES`).
+- Esta pasta serve como "Fonte da Verdade" e deve ser preservada exatamente como está.
+
+- **Arquivos de Config:** Manter intactos arquivos vitais (`next.config`, `tailwind.config`, etc.).
+
+3. **Saneamento de Referências:**
+
+- Verificar se há arquivos pesados (.zip, .pdf) fora de `/docs` e sugerir remoção ou `.gitignore`.
+
+4. **Padronização de Imports:**
+
+- Substituir imports relativos longos (`../../../components`) por Alias Imports (`@/components`).
+
+5. **Remoção de Código Morto:**
+
+- Verificar componentes sem importação (Dead Code Elimination).
 
 ---
 
@@ -86,5 +91,5 @@ Se aprovado pelo usuário, executar sequencialmente:
 
 Após a reorganização:
 
-1.  Rodar `npm run build` para garantir que nenhum import foi quebrado.
-2.  Verificar se o tamanho do repositório diminuiu (remoção de assets pesados indevidos).
+1. Rodar `npm run build` para garantir que a movimentação de arquivos da raiz para `src/` não quebrou caminhos.
+2. Verificar visualmente se a raiz está limpa (apenas configs e `/docs`).

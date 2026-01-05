@@ -69,7 +69,7 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
         {/* Accent color overlay on bottom */}
         {project.accentColor && (
           <div 
-            className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-(--accent-color) to-transparent"
+            className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-(--accent-color,transparent) to-transparent"
             style={{ '--accent-color': `${project.accentColor}40` } as React.CSSProperties}
           />
         )}

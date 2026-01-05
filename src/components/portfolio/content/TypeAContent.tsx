@@ -102,15 +102,16 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
 
           {/* Highlights */}
           {project.detail?.highlights && (
-            <motion.ul variants={fadeInUp} className="flex flex-col gap-3">
+            <motion.ul variants={fadeInUp} className="flex flex-col gap-3 list-none">
               {project.detail.highlights.map((highlight, i) => (
-                <li 
+                <motion.li 
                   key={i}
                   className="flex items-center gap-3 text-sm text-white/80"
+                  variants={fadeInUp}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-ghost-accent" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-ghost-accent" aria-hidden="true" />
                   {highlight}
-                </li>
+                </motion.li>
               ))}
             </motion.ul>
           )}
