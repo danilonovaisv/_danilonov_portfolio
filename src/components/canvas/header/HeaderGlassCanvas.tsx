@@ -74,12 +74,26 @@ function GlassPlane({ accentColor }: { accentColor: string }) {
   }, [accentColor]);
 
   useFrame((state) => {
+    if (!meshRef.current) return;
+
+    // Update time
     material.uniforms.uTime.value = state.clock.elapsedTime;
+
+    // "Spring" physics (Lerp) for X-axis follow
+    // Mouse x is -1 to 1. We want a small movement, e.g. 0.05
+    const targetX = state.pointer.x * 0.15;
+
+    meshRef.current.position.x = THREE.MathUtils.lerp(
+      meshRef.current.position.x,
+      targetX,
+      0.08 // Damping factor (lower = heavier/smoother)
+    );
   });
 
   return (
     <mesh ref={meshRef}>
-      <planeGeometry args={[2, 2, 1, 1]} />
+      {/* Width increased to 2.4 to cover movement gaps */}
+      <planeGeometry args={[2.4, 2, 1, 1]} />
       <primitive object={material} attach="material" />
     </mesh>
   );

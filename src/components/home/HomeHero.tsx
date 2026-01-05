@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback, useMemo } from 'react';
+import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion, cubicBezier } from 'framer-motion';
 import * as THREE from 'three';
 import { Preloader } from '@/components/ui/Preloader';
@@ -9,6 +9,7 @@ import { GhostStage } from './GhostStage';
 import { ManifestoThumb, type ManifestoThumbHandle } from './ManifestoThumb';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useHeroAnimation } from './hero/useHeroAnimation';
+import { useWebGLSupport } from '@/hooks/useWebGLSupport';
 
 const CONFIG = {
   preloadMs: 2000,
@@ -28,11 +29,30 @@ export default function HomeHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [canvasReady, setCanvasReady] = useState(false);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useMediaQuery(
     '(prefers-reduced-motion: reduce)'
   );
+  const hasWebGL = useWebGLSupport();
+
+  useEffect(() => {
+    // Minimum visual duration
+    const t = setTimeout(() => setMinTimeElapsed(true), CONFIG.preloadMs);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    // Safety fallback
+    const t = setTimeout(() => setCanvasReady(true), 6000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const handleCanvasCreated = useCallback(() => {
+    setCanvasReady(true);
+  }, []);
 
   const {
     mounted,
@@ -54,10 +74,23 @@ export default function HomeHero() {
   const shouldRender3D = useMemo(() => {
     if (!mounted) return false;
     if (isMobile) return false;
+    if (!hasWebGL) return false;
     return !prefersReducedMotion;
-  }, [mounted, isMobile, prefersReducedMotion]);
+  }, [mounted, isMobile, hasWebGL, prefersReducedMotion]);
 
-  const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
+  // Se não tem WebGL, marcamos como pronto imediatamente para não travar
+  useEffect(() => {
+    if (!shouldRender3D && mounted) {
+      setCanvasReady(true);
+    }
+  }, [shouldRender3D, mounted]);
+
+  const isReady = minTimeElapsed && canvasReady;
+
+  useEffect(() => {
+    if (isReady) setIsLoading(false);
+  }, [isReady]);
+
   const ghostRef = useRef<THREE.Group | null>(null);
 
   const handleThumbClick = useCallback(() => {
@@ -79,13 +112,7 @@ export default function HomeHero() {
     >
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
         <AnimatePresence>
-          {isLoading && (
-            <Preloader
-              durationMs={CONFIG.preloadMs}
-              onComplete={handlePreloaderDone}
-              label="Summoning spirits"
-            />
-          )}
+          {isLoading && <Preloader ready={isReady} label="Summoning spirits" />}
         </AnimatePresence>
 
         {/* CAMADA WEBGL */}
@@ -102,6 +129,7 @@ export default function HomeHero() {
             reducedMotion={!shouldRender3D}
             active={!isLoading && shouldRender3D}
             ghostRef={ghostRef}
+            onCanvasCreated={handleCanvasCreated}
           />
         </motion.div>
 

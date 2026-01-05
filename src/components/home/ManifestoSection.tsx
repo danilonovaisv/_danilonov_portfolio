@@ -74,7 +74,7 @@ export function ManifestoSection() {
       initial={prefersReducedMotion ? {} : ANIMATION.initial}
       animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
       transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-[#050511] relative"
+      className="lg:hidden w-full bg-[#050511] relative mt-8 md:mt-0"
     >
       {/* Video */}
       <video
