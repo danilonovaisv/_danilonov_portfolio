@@ -10,320 +10,196 @@
 
 ✅ Nenhum ponto deve ser ignorado.
 
- # Visual Fidelity Analysis Report: portfoliodanilo.com
-
-## 1️⃣ Global Overview
+ 
+# 📑 RELATÓRIO DE AUDITORIA DE INTERFACE & UX
 
-The implementation shows strong adherence to the reference images in basic structure and color scheme, but contains critical deviations in layout structure, typography hierarchy, and responsive behavior. Most significant issues are found in the Portfolio Showcase, Featured Projects, and About page sections where the implementation diverges from the reference images in fundamental structural aspects. The mobile responsiveness appears particularly problematic as several sections fail to maintain proportional typography and correct layout patterns as specified in the reference images.
-
-## 2️⃣ Section-by-Section Analysis
+## 📂 PÁGINA: HOME (`/`)
 
-## 🎯 Section: Header
+### 1. Diagnóstico Geral
 
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✓
-- Typography fidelity (section-level): ✓
-- Proportional responsiveness: ✓
-- Positioning logic (mobile): ✓
+A Home é a página de maior complexidade técnica devido à mistura de **WebGL** (Ghost), **Video Physics** (Thumbnail to Fullscreen) e **Layout Editorial**. A referência visual (`HOME-PORTFOLIO-BLACK---GHOST.jpg`) exige um controle de contraste rigoroso, especialmente na transição para o rodapé branco, que é um ponto crítico de falha para o Header "Glass".
 
-### ❌ Detected Deviations
-- None detected. The header implementation matches reference images and specifications.
-
-## 🎯 Section: Hero
-
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✗
-- Typography fidelity (section-level): ✓
-- Proportional responsiveness: ✓
-- Positioning logic (mobile): ✓
-
-### ❌ Detected Deviations
-- **Missing Manifesto Video Thumbnail**: The technical specification states "Manifesto Video Thumbnail(floating, bottom-right)" but the implementation shows the video as a full-width background rather than a floating thumbnail that expands on scroll.
-- **WebGL Atmosphere Missing**: The specification details a "Ghost Atmosphere(WebGL Canvas)" with "Ethereal, organic 3D atmosphere" but the implementation uses a static ghost icon without the dynamic elements described.
-
-### 🔧 Required Adjustments
-- Implement the floating video thumbnail as specified in the technical documentation (section 4.2)
-- Add the WebGL canvas for the ghost atmosphere with the specified properties (section 4.2)
-- Ensure the video thumbnail follows the scroll behavior: "The video stays fixed to viewport during scroll" and "Scales up toward fullscreen as user scrolls"
+### 2. Análise de Seções e Espaçamentos
 
-### ✅ Expected Result
-The hero section should display a floating video thumbnail in the bottom-right corner that expands to fullscreen as the user scrolls, with the WebGL ghost atmosphere visible as a background layer. The video should remain muted during the transition and only unmute when fully expanded.
+| Seção | Status Layout (Ref vs Spec) | Status Espaçamento | Status Motion | Risco Técnico |
+| --- | --- | --- | --- | --- |
+| **Hero + Ghost** | ✅ Fiel | ⚠️ Crítico | ✅ Alta complexidade | O texto "Você não vê o design" precisa de z-index perfeito sobre o WebGL. |
+| **Manifesto Video** | ⚠️ Atenção | ❌ Risco de quebra | ✅ Definido (Lerp) | A transição de Thumbnail (canto inf. dir.) para Fullscreen exige `layout-shared-element`. |
+| **Showcase (Stripes)** | ✅ Fiel | ✅ Definido | 🟡 Performance | O hover nas listras deve empurrar o layout sem *layout shift* brusco. |
+| **Featured (Bento)** | ❌ Divergência | ⚠️ Crítico | ✅ Stagger | A imagem mostra um grid assimétrico específico; a spec fala em Bento genérico. Seguir imagem. |
+| **Contact (White)** | ✅ Fiel | ✅ Definido | ❌ Contraste Header | O Header precisa inverter a cor do texto para preto ao entrar nesta seção branca. |
 
-## 🎯 Section: Portfolio Showcase
+### 3. Problemas Detectados (Detalhe)
 
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✗
-- Typography fidelity (section-level): ✗
-- Proportional responsiveness: ✗
-- Positioning logic (mobile): ✗
-
-### ❌ Detected Deviations
-- **Missing Floating Label**: The reference images show "[what we love working on]" as a floating label, but this is absent in the implementation.
-- **Incorrect Category Alignment**: The specification states "three interactive stripes(accordion-style rows), each with alternating alignment" (right, center, left), but the implementation shows all categories aligned left.
-- **Missing Thumbnail Reveal**: The specification describes "thumbnail(hidden by default, reveals on hover)" but this behavior is not implemented.
-- **Mobile Layout Inconsistency**: The mobile reference shows full-width cards stacked vertically, but the implementation doesn't properly adapt the layout.
+**❌ [PROBLEMA #01] - Conflito de Referência no Grid de Projetos**
 
-### 🔧 Required Adjustments
-- Add the floating label "[what we love working on]" positioned absolute as specified
-- Implement the alternating alignment pattern (right, center, left) for category stripes
-- Add the thumbnail reveal animation on hover as described in the specification
-- Ensure mobile layout properly stacks categories as full-width cards with center alignment
-
-### ✅ Expected Result
-The Portfolio Showcase section should display a floating label above the categories, with each category stripe having alternating alignment (right, center, left). On hover, each stripe should reveal a thumbnail with the specified animation. On mobile, categories should appear as full-width cards stacked vertically with center alignment.
-
-## 🎯 Section: Featured Projects
+* **Referência Visual:** `HOME-PORTFOLIO-BLACK---GHOST.jpg` mostra projetos como "Magic" e "Designing Trust" ocupando larguras específicas, com títulos sobrepostos ou abaixo.
+* **Especificação Técnica:** `HOME - PROTOTIPO INTERATIVO.md` descreve um "Bento Grid" genérico.
+* **Determinação:** O código deve forçar as classes do Tailwind (`col-span-X`) para replicar **exatamente** o mosaico da imagem JPG, ignorando a sugestão genérica da spec se houver conflito.
 
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✗
-- Typography fidelity (section-level): ✗
-- Proportional responsiveness: ✗
-- Positioning logic (mobile): ✗
-
-### ❌ Detected Deviations
-- **Incorrect Grid Layout**: The specification describes an irregular Bento Grid pattern with specific column spans, but the implementation uses a more regular grid structure.
-- **Missing Tags/Pills**: The specification states "Pills(tags) positioned absolute, top-right" but these are absent in the implementation.
-- **CTA Card Placement**: The CTA card should be in the bottom-right position (md:col-span-4), but the implementation places it differently.
-- **Mobile Layout Issues**: The mobile reference shows a vertical stack of cards, but the implementation doesn't properly adapt the layout.
-
-### 🔧 Required Adjustments
-- Implement the exact Bento Grid structure as specified: Row 1 (5/7 columns), Row 2 (12 columns), Row 3 (8/4 columns)
-- Add the tags/pills to each project card as specified
-- Position the CTA card in the correct location (bottom-right)
-- Ensure mobile layout properly stacks cards vertically with appropriate spacing
-
-### ✅ Expected Result
-The Featured Projects section should display an irregular grid matching the reference image, with tags/pills visible on each card. The CTA card should appear in the bottom-right position. On mobile, all cards should stack vertically with consistent spacing.
-
-## 🎯 Section: Client Logos
-
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✗
-- Typography fidelity (section-level): ✓
-- Proportional responsiveness: ✗
-- Positioning logic (mobile): ✗
+**❌ [PROBLEMA #02] - Header Contrast Bug (Seção Contato)**
 
-### ❌ Detected Deviations
-- **Inconsistent Logo Spacing**: The reference images show consistent spacing between logos, but the implementation has uneven spacing.
-- **Missing Logo Inversion**: The specification states "Logos: White (apply filter: brightness(0) invert)" but some logos appear to have different styling.
-- **Mobile Layout Issues**: The mobile reference shows a 2-3 column grid, but the implementation doesn't properly adapt.
-
-### 🔧 Required Adjustments
-- Standardize logo spacing to match the reference images
-- Apply consistent styling with `filter: brightness(0) invert` to all logos
-- Implement the correct responsive grid behavior (3-4 columns on mobile, 6+ on desktop)
-
-### ✅ Expected Result
-The Client Logos section should display a consistent grid with even spacing between logos. All logos should have the same white styling with proper inversion. The grid should adapt correctly across breakpoints.
-
-## 🎯 Section: About Page
-
-- Reference images: Desktop / Mobile
-- Layout fidelity: ✗
-- Typography fidelity (section-level): ✗
-- Proportional responsiveness: ✗
-- Positioning logic (mobile): ✗
-
-### ❌ Detected Deviations
-- **ORIGEM Section Layout**: The specification states "alternating text ↔ mídia" but the implementation shows a different layout structure.
-- **Capability Cards Layout**: The "Do insight ao impacto" section should have 7 cards in a grid (2-3 columns), but the implementation shows a vertical list.
-- **Process Steps Formatting**: The "Criatividade com método" section should have numbered steps with specific layout, but the implementation shows a different format.
-- **Missing Rotating Phrases**: The "Acredito no design que muda o dia" section should have rotating phrases, but the implementation shows static text.
-- **Mobile Layout Issues**: The mobile reference shows a single column with text before images, but the implementation doesn't follow this pattern.
-
-### 🔧 Required Adjustments
-- Implement the alternating text/image layout for the ORIGEM section as specified
-- Create the 7 capability cards in a proper grid layout (2-3 columns desktop)
-- Format the process steps with correct numbering and layout
-- Add the rotating phrases animation for the "Acredito no design" section
-- Ensure mobile layout follows the "text always comes before image" pattern
-
-### ✅ Expected Result
-The About page should display the ORIGEM section with alternating text and media blocks, capability cards in a proper grid, numbered process steps, and rotating phrases in the designated section. On mobile, all content should stack in a single column with text preceding images.
-
-## 3️⃣ Atomic Execution Prompts
-
-### 🛠️ Prompt #01 — Portfolio Showcase Floating Label
-
-**Objective**
-Add the floating label "[what we love working on]" to the Portfolio Showcase section.
-
-**Files / Components**
-- `components/home/PortfolioShowcase.tsx`
-
-**Actions**
-1. Add a new div element with the text "[what we love working on]"
-2. Position it absolute with top: -24px and left: 0
-3. Style it with color: #4fe6ff, font-size: 14px, and appropriate tracking
-4. Ensure it's visible only on desktop (lg+ breakpoints)
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Floating label appears above the category stripes
-- [ ] Label is positioned absolute as shown in reference images
-- [ ] Label uses correct color (#4fe6ff) and styling
-
-### 🛠️ Prompt #02 — Portfolio Showcase Alternating Alignment
-
-**Objective**
-Implement alternating text alignment for category stripes (right, center, left).
-
-**Files / Components**
-- `components/home/PortfolioShowcase.tsx`
-
-**Actions**
-1. Add conditional classes to each category stripe:
-   - First stripe: text-right (for "Brand & Campaigns")
-   - Second stripe: text-center (for "Videos & Motions")
-   - Third stripe: text-left (for "Web Campaigns, Websites & Tech")
-2. Ensure proper spacing and positioning for each alignment
-3. Add responsive adjustments for mobile (all center-aligned)
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Category stripes display with correct alternating alignment
-- [ ] Mobile layout shows all categories center-aligned
-- [ ] Spacing remains consistent across alignments
-
-### 🛠️ Prompt #03 — Featured Projects Bento Grid
-
-**Objective**
-Implement the exact Bento Grid structure for featured projects.
-
-**Files / Components**
-- `components/home/FeaturedProjects.tsx`
-
-**Actions**
-1. Restructure the grid using Tailwind column spans:
-   - Row 1: Two cards (md:col-span-5 and md:col-span-7)
-   - Row 2: One full-width card (md:col-span-12)
-   - Row 3: One card (md:col-span-8) and CTA card (md:col-span-4)
-2. Add the tags/pills to each project card
-3. Position the CTA card in the bottom-right position
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Grid matches the reference image's irregular pattern
-- [ ] Tags/pills appear in top-right of each project card
-- [ ] CTA card is positioned correctly in bottom-right
-
-### 🛠️ Prompt #04 — About Page ORIGEM Section Layout
-
-**Objective**
-Implement the alternating text/image layout for the ORIGEM section.
-
-**Files / Components**
-- `components/sobre/OrigemSection.tsx`
-
-**Actions**
-1. Restructure the ORIGEM section to use alternating layout:
-   - Block A: Text (cols 2-6), Video (cols 8-12)
-   - Block B: Video (cols 2-6), Text (cols 8-12)
-   - Block C: Text (cols 2-6), Image (cols 8-12)
-   - Block D: Video (cols 2-6), Text (cols 8-12)
-2. Add proper spacing between blocks (24-32px vertical)
-3. Implement mobile layout as single column with text before image
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Desktop layout shows alternating text/image blocks
-- [ ] Mobile layout shows single column with text before image
-- [ ] Spacing matches reference images
-
-### 🛠️ Prompt #05 — About Page Capability Cards Grid
-
-**Objective**
-Implement the 7 capability cards in a proper grid layout.
-
-**Files / Components**
-- `components/sobre/CapabilitiesSection.tsx`
-
-**Actions**
-1. Create a grid container with:
-   - lg(≥1024px): 2 columns
-   - xl(≥1280px): 3 columns
-2. Add 7 cards with consistent styling
-3. Implement the animated marquee footer as specified
-4. Ensure proper spacing between cards (20-24px)
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Cards display in 2-3 column grid on desktop
-- [ ] Mobile layout shows single column
-- [ ] Animated marquee appears below the grid
-- [ ] Spacing matches reference images
-
-### 🛠️ Prompt #06 — About Page Rotating Phrases
-
-**Objective**
-Implement the rotating phrases animation for the "Acredito no design" section.
-
-**Files / Components**
-- `components/sobre/PhilosophySection.tsx`
-
-**Actions**
-1. Create a container for rotating phrases with min-height: 40vh
-2. Implement the sequence:
-   - Title fixed at top (visible throughout)
-   - Phrases rotating one at a time
-   - Ghost+manifesto reveal after all phrases
-3. Add proper animation timing (4.2s per phrase)
-4. Implement mobile-specific layout (single column)
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Phrases rotate with correct timing
-- [ ] Title remains fixed during rotation
-- [ ] Ghost and manifesto appear after all phrases
-- [ ] Mobile layout follows reference images
-
-### 🛠️ Prompt #07 — Client Logos Grid Consistency
-
-**Objective**
-Standardize logo spacing and styling across all breakpoints.
-
-**Files / Components**
-- `components/home/ClientsSection.tsx`
-
-**Actions**
-1. Apply consistent grid spacing (24px) between all logos
-2. Ensure all logos use the same styling: `filter: brightness(0) invert`
-3. Implement responsive grid:
-   - Mobile: 2-3 columns
-   - Desktop: 6+ columns
-4. Add proper vertical spacing between logo rows
-
-**Rules**
-- Images are the final truth
-- Do not alter copy
-- Section-based typography only
-
-**Acceptance Criteria**
-- [ ] Logos have consistent spacing across all breakpoints
-- [ ] All logos use the same white styling with proper inversion
-- [ ] Grid adapts correctly to different screen sizes
-- [ ] Mobile layout matches reference images
+* **Referência Visual:** A seção de contato final tem fundo branco/cinza claro (`#f0f0f0` na spec). O Header é fixo.
+* **Risco Técnico:** Se o header mantiver texto branco (`#fcffff`) sobre o fundo claro, a navegação desaparece.
+* **Ação:** Implementar observer para trocar a variável CSS do header `--header-text` para `#0e0e0e` ao cruzar a `div` de contato.
+
+**❌ [PROBLEMA #03] - Mobile Manifesto Video**
+
+* **Referência:** `HOME-PORTFOLIO-LAYOUYT-MOBILE---GHOST.jpg`.
+* **Análise:** No mobile, não existe "floating thumbnail". O vídeo é um bloco de largura total.
+* **Correção de Código:** Garantir `display: none` no componente FloatingThumbnail em breakpoints `< lg` e renderizar um componente `VideoBlock` estático no fluxo.
+
+---
+
+## 📂 PÁGINA: SOBRE (`/sobre`)
+
+### 1. Diagnóstico Geral
+
+Esta página é puramente editorial. O sucesso depende de **Tipografia** (TT Norms Pro) e **Ritmo Vertical**. A referência visual (`SOBRE-PORTFOLIO-BLACK---GHOST.jpg`) mostra um uso agressivo de espaço negativo e alinhamentos à direita que são difíceis de manter responsivos sem um grid CSS robusto.
+
+### 2. Análise de Seções e Espaçamentos
+
+| Seção | Status Layout | Status Espaçamento | Status Motion | Risco Técnico |
+| --- | --- | --- | --- | --- |
+| **Hero (Manifesto)** | ✅ Fiel | ✅ 100vh | ✅ Texto a Texto | O alinhamento à direita do texto no desktop é crucial. |
+| **Origem (Timeline)** | ⚠️ Atenção | ❌ Risco de aperto | ✅ Scroll Trigger | A imagem mostra MUITO respiro entre os blocos. O código tende a "apertar". |
+| **Skills (Cards)** | ✅ Fiel | ✅ Definido | 🟡 Opacidade | Os cards na imagem têm bordas sutis e transparência. |
+| **Mobile Flow** | ✅ Fiel | ✅ Ajustado | N/A | A imagem `SOBRE-MOBILE...` confirma: Texto em cima, imagem em baixo. |
+
+### 3. Problemas Detectados (Detalhe)
+
+**❌ [PROBLEMA #04] - Espaçamento da Seção "Origem"**
+
+* **Referência:** `SOBRE-PORTFOLIO-BLACK---GHOST.jpg` (Seção "Desde cedo...").
+* **Análise:** Existe um alinhamento visual onde o texto está em uma coluna (esq) e a imagem na outra (dir), mas verticalmente desencontrados (staggered).
+* **Risco:** O dev comum colocaria `flex-row items-center`. Isso está **errado**.
+* **Correção:** Usar Grid ou `mt-16` / `pt-32` na coluna da imagem para criar o desnível visual da referência.
+
+**❌ [PROBLEMA #05] - Legibilidade Texto sobre Vídeo (Hero)**
+
+* **Referência:** Texto branco sobre fundo escuro com rosto (vídeo).
+* **Risco:** Se o vídeo for claro, o texto some.
+* **Obrigatoriedade:** Implementar o overlay descrito na spec (`bg-gradient-to-b from-black/60...`) com rigor, ou o design quebra em telas de alto brilho.
+
+---
+
+## 📂 PÁGINA: PORTFOLIO SHOWCASE (`/portfolio`)
+
+### 1. Diagnóstico Geral
+
+Focada em imersão. A imagem `PORTFOLIO-PAGE-LAYOUYT.jpg` mostra um layout vibrante no topo (Hero Colorido) e um grid denso abaixo. A Spec fala de "Parallax Lerp", que não é visível na imagem estática, mas é fundamental para a sensação "Ghost".
+
+### 2. Análise de Seções e Espaçamentos
+
+| Seção | Status Layout | Status Espaçamento | Status Motion | Risco Técnico |
+| --- | --- | --- | --- | --- |
+| **Hero Loop** | ✅ Fiel | ✅ Fullscreen | N/A | Vídeo deve ter `object-fit: cover` absoluto. |
+| **Gallery Grid** | ❌ Divergência | ✅ Tight Gap | ⚠️ Performance | A imagem mostra 3 colunas "full bleed" (sem margem lateral?). Spec diz padding `0.25rem`. |
+| **Modal (Project)** | N/A (Sem img) | N/A | ✅ Timeline Spec | Seguir estritamente a timeline de animação da spec (0-1500ms). |
+
+### 3. Problemas Detectados (Detalhe)
+
+**❌ [PROBLEMA #06] - Grid Gap e Margens**
+
+* **Referência:** `PORTFOLIO-PAGE-LAYOUYT.jpg` mostra as imagens dos projetos (Garoto, etc.) quase coladas umas nas outras.
+* **Spec:** Pede `gap-1` (`0.25rem`).
+* **Ação:** Garantir que o container da galeria não tenha `max-width` restritivo (como `container mx-auto`), mas sim ocupe a largura total ou quase total conforme a referência visual "widescreen".
+
+---
+
+## 🛠️ FASE 2: PROMPTS TÉCNICOS DE EXECUÇÃO
+
+Aqui estão os prompts atômicos para corrigir/implementar o código com precisão cirúrgica, baseados na auditoria acima.
+
+### 🔧 Prompt #01 — Implementação do Bento Grid (Home)
+
+**Objetivo:** Criar a seção "Featured Projects" da Home respeitando a assimetria da imagem de referência, ignorando grids genéricos.
+
+**Contexto:**
+Você deve implementar a seção de Projetos em Destaque.
+**Referência Visual:** `HOME-PORTFOLIO-BLACK---GHOST.jpg` (Grid irregular, estilo revista).
+**Tech Stack:** React, Tailwind CSS.
+
+**Instruções Técnicas:**
+
+1. Crie um componente `FeaturedProjects.tsx`.
+2. Utilize CSS Grid (`grid-cols-1 md:grid-cols-12`).
+3. **Layout Rígido (Desktop):**
+* **Card 1 (Magic):** `col-span-5` (Esquerda).
+* **Card 2 (Designing Trust - FFF):** `col-span-7` (Direita, mais largo).
+* **Card 3 (Epic Look - Full):** `col-span-12` (Largura total, destaque central).
+* **Card 4 (Building - Vertical):** `col-span-8`.
+* **CTA Card (Like what you see?):** `col-span-4` (Canto inferior direito, fundo escuro sólido).
+
+
+4. **Espaçamento:** Use `gap-6` ou `gap-8`.
+5. **Mobile:** Tudo vira `col-span-12` (pilha vertical).
+6. Ajuste as alturas (`h-[500px]`, `h-[600px]`) para bater visualmente com a proporção das imagens.
+
+---
+
+### 🔧 Prompt #02 — Correção do Header com Contraste Dinâmico
+
+**Objetivo:** Garantir que o menu seja legível tanto no fundo escuro (Hero) quanto no fundo branco (Contato).
+
+**Contexto:**
+O Header é fixo (`sticky`). A seção final "Contato" é branca (`bg-[#F5F5F5]`). O texto do header é branco por padrão.
+
+**Instruções Técnicas:**
+
+1. No componente `Header.tsx`, adicione um estado `isDarkSection`.
+2. Implemente um `useEffect` que detecta a posição de scroll ou usa `IntersectionObserver` visando a seção de ID `#contact`.
+3. **Lógica:**
+* Se `#contact` estiver visível no viewport (top intersection): `setIsDarkSection(true)`.
+* Caso contrário: `setIsDarkSection(false)`.
+
+
+4. **Estilização Tailwind:**
+* Container: `transition-colors duration-300`.
+* Texto dos links: `${isDarkSection ? 'text-black hover:text-blue-600' : 'text-white hover:text-blue-400'}`.
+* Logo: Altere o `src` ou o `fill` do SVG dependendo do estado.
+
+
+
+---
+
+### 🔧 Prompt #03 — Ajuste de Ritmo Vertical (Página Sobre)
+
+**Objetivo:** Recriar o espaçamento "Editorial" e o desalinhamento visual entre texto e imagem na seção "Origem".
+
+**Contexto:**
+Referência `SOBRE-PORTFOLIO-BLACK---GHOST.jpg`. O layout não é simétrico.
+
+**Instruções Técnicas:**
+
+1. No componente `OriginSection.tsx`, use um Grid de 12 colunas.
+2. **Bloco 1:**
+* Texto: `col-start-2 col-span-5`. Centralizado verticalmente? **Não.** Adicione `mt-0`.
+* Mídia (Vídeo/Foto): `col-start-8 col-span-5`. Adicione `mt-32` (margin-top forçado) para criar o efeito "staggered" (desencontrado) visto na imagem.
+
+
+3. **Bloco 2 (Invertido):**
+* Mídia: `col-start-2 col-span-5`. Margin normal.
+* Texto: `col-start-8 col-span-4`. Adicione `mt-24`.
+
+
+4. **Tipografia:** Garanta que os títulos tenham `leading-tight` e as descrições tenham `leading-relaxed` com cor `#a1a3a3` (cinza médio), não branco puro.
+
+---
+
+### 🔧 Prompt #04 — Portfolio Parallax Engine (Performance)
+
+**Objetivo:** Implementar o grid da galeria com Scroll Lerp sem travar o navegador.
+
+**Contexto:**
+Spec `PORTFOLIO - PROTÓTIPO INTERATIVO.md`. Requer `requestAnimationFrame`.
+
+**Instruções Técnicas:**
+
+1. Crie o hook `useParallax.ts`.
+2. Não anime `top` ou `margin`. Use **apenas** `transform: translate3d(0, Ypx, 0)`.
+3. **Lógica Lerp:** `current = current + (target - current) * 0.05`.
+4. **Gallery Track:** O container da galeria deve ser `fixed` na tela, enquanto o `body` tem a altura total simulada (`document.body.style.height = trackHeight + 'px'`).
+5. **Mobile Guard:** Desative completamente o cálculo de Lerp em telas `< 1024px` (`window.matchMedia`). No mobile, use scroll nativo para melhor UX.
+
+

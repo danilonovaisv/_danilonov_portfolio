@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import Ghost from './Ghost';
 import Particles from './Particles';
 import Fireflies from './Fireflies';
+import GhostEyes from './GhostEyes';
 import AtmosphereVeil from './AtmosphereVeil';
 import AnalogDecayPass from './postprocessing/AnalogDecayPass';
 import {
@@ -63,7 +64,9 @@ export default function GhostCanvas({
           scale={0.22}
           position={[0, -0.2, 0]}
           active={active}
-        />
+        >
+          <GhostEyes />
+        </Ghost>
 
         <Particles count={40} />
         <Fireflies />

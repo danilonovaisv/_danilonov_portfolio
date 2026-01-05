@@ -21,14 +21,14 @@ export function AboutClosing() {
       >
         {/* Título Principal + Linhas */}
         <div className="flex flex-col items-center text-center">
-          <div className="h-px w-full max-w-[980px] bg-[#4fe6ff]/60 mb-8 md:mb-10" />
+          <div className="h-px w-full max-w-[980px] bg-accent/60 mb-8 md:mb-10" />
           <h2 className="text-[32px] sm:text-[36px] md:text-[36px] lg:text-[42px] font-semibold leading-tight text-white max-w-[900px]">
             Hoje sou <span className="text-primary">Diretor de Criação</span>,
             <br />
             com mais de <span className="text-primary">10 anos de estrada</span>
             .
           </h2>
-          <div className="h-px w-full max-w-[980px] bg-[#4fe6ff]/60 mt-8 md:mt-10" />
+          <div className="h-px w-full max-w-[980px] bg-accent/60 mt-8 md:mt-10" />
         </div>
 
         <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">

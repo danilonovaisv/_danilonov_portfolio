@@ -69,10 +69,8 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
         {/* Accent color overlay on bottom */}
         {project.accentColor && (
           <div 
-            className="absolute inset-x-0 bottom-0 h-1/3"
-            style={{
-              background: `linear-gradient(to top, ${project.accentColor}40, transparent)`,
-            }}
+            className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-(--accent-color,transparent) to-transparent"
+            style={{ '--accent-color': `${project.accentColor}40` } as React.CSSProperties}
           />
         )}
 
@@ -149,17 +147,19 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
 
         {/* Highlights list */}
         {project.detail?.highlights && (
-          <motion.ul variants={fadeInUp} className="flex flex-col gap-2 mt-2">
-            {project.detail.highlights.map((highlight, i) => (
-              <li 
-                key={i}
-                className="flex items-start gap-3 text-sm text-white/70"
-              >
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-ghost-accent shrink-0" />
-                {highlight}
-              </li>
-            ))}
-          </motion.ul>
+          <ul className="flex flex-col gap-2 mt-2">
+            <motion.div variants={fadeInUp} className="contents">
+              {project.detail.highlights.map((highlight, i) => (
+                <li 
+                  key={i}
+                  className="flex items-start gap-3 text-sm text-white/70"
+                >
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-ghost-accent shrink-0" />
+                  {highlight}
+                </li>
+              ))}
+            </motion.div>
+          </ul>
         )}
 
         {/* Tags cloud */}

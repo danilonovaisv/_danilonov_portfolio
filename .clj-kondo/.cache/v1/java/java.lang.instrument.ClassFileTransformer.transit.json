@@ -1,0 +1,12 @@
+[
+  "^ ",
+  "~:members",
+  [
+    "^ ",
+    "transform",
+    [
+      "~#set",
+      [["^ ", "~:flags", ["^2", ["~:method", "~:default", "~:public"]]]]
+    ]
+  ]
+]

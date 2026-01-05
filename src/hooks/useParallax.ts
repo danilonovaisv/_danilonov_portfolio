@@ -55,6 +55,23 @@ export function useParallax(
     enabled = true,
   } = options;
 
+  // Mobile Guard: desativa parallax em telas < 1024px para melhor UX
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Verifica no client-side
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
+    setIsMobile(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // Desativa se for mobile OU se enabled for false
+  const isActive = enabled && !isMobile;
+
   const galleryRef = useRef<HTMLElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const animationFrameId = useRef<number>(0);
@@ -74,7 +91,7 @@ export function useParallax(
    * Atualiza a posição target baseado no scroll real
    */
   const handleScroll = useCallback(() => {
-    if (!galleryRef.current || !enabled) return;
+    if (!galleryRef.current || !isActive) return;
 
     const gallery = galleryRef.current;
     const rect = gallery.getBoundingClientRect();
@@ -96,14 +113,14 @@ export function useParallax(
     scrollTimeoutRef.current = setTimeout(() => {
       setIsScrolling(false);
     }, 150);
-  }, [enabled, offset]);
+  }, [isActive, offset]);
 
   /**
    * Loop de animação com requestAnimationFrame
    * Aplica a interpolação linear para suavizar o movimento
    */
   const updateScroll = useCallback(() => {
-    if (!enabled) {
+    if (!isActive) {
       animationFrameId.current = requestAnimationFrame(updateScroll);
       return;
     }
@@ -138,13 +155,13 @@ export function useParallax(
 
     // Continua o loop
     animationFrameId.current = requestAnimationFrame(updateScroll);
-  }, [direction, enabled, smoothness]);
+  }, [direction, isActive, smoothness]);
 
   /**
    * Inicializa os event listeners e o loop de animação
    */
   useEffect(() => {
-    if (!enabled) return;
+    if (!isActive) return;
 
     // Inicia o loop de animação
     animationFrameId.current = requestAnimationFrame(updateScroll);
@@ -169,7 +186,7 @@ export function useParallax(
         clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, [enabled, handleScroll, updateScroll]);
+  }, [isActive, handleScroll, updateScroll]);
 
   return {
     galleryRef,

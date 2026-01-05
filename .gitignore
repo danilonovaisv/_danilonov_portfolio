@@ -45,8 +45,7 @@ pnpm-debug.log*
 
 # Tooling
 qodana.sarif.json
-.cursor/
-.antigravity/
+
 
 # Firebase
 .firebase/

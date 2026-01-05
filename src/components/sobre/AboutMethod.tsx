@@ -84,7 +84,7 @@ export default function AboutMethod() {
               </motion.div>
 
               {/* Steps List */}
-              <div className="max-w-[560px] mx-auto lg:mx-0 border-t border-[#4fe6ff]/60">
+              <div className="max-w-[560px] mx-auto lg:mx-0 border-t border-accent/60">
                 {ABOUT_CONTENT.method.steps.map((step, i) => (
                   <motion.div
                     key={i}
@@ -93,7 +93,7 @@ export default function AboutMethod() {
                     whileInView="visible"
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ delay: i * 0.08 }}
-                    className="flex items-center gap-4 py-3 border-b border-[#4fe6ff]/60"
+                    className="flex items-center gap-4 py-3 border-b border-accent/60"
                   >
                     <span className="text-primary text-sm md:text-base font-semibold tracking-tight shrink-0">
                       0{i + 1}

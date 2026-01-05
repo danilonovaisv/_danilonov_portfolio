@@ -1,31 +1,26 @@
 'use client';
 
 import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
-import {
-  AnimatePresence,
-  motion,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  cubicBezier,
-} from 'framer-motion';
+import { AnimatePresence, motion, cubicBezier } from 'framer-motion';
 import * as THREE from 'three';
 import { Preloader } from '@/components/ui/Preloader';
 import { HeroCopy } from './HeroCopy';
 import { GhostStage } from './GhostStage';
 import { ManifestoThumb, type ManifestoThumbHandle } from './ManifestoThumb';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useHeroAnimation } from './hero/useHeroAnimation';
+import { useWebGLSupport } from '@/hooks/useWebGLSupport';
 
 const CONFIG = {
   preloadMs: 2000,
   easing: cubicBezier(0.22, 1, 0.36, 1),
   entrance: {
-    initial: { opacity: 0, scale: 0.92, y: 60, filter: 'blur(10px)' },
-    animate: { opacity: 1, scale: [1.02, 1], y: 0, filter: 'blur(0px)' },
+    initial: { opacity: 0, y: 40 },
+    animate: { opacity: 1, y: 0 },
     transition: {
-      duration: 1.2,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-      delay: 0.5,
+      duration: 1.0,
+      ease: [0.22, 1, 0.36, 1] as const,
+      delay: 0.8,
     },
   },
 };
@@ -34,75 +29,95 @@ export default function HomeHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  const [canvasReady, setCanvasReady] = useState(false);
 
-  // NOTE: isMobile logic is also used for enable3D
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useMediaQuery(
     '(prefers-reduced-motion: reduce)'
   );
+  const hasWebGL = useWebGLSupport();
 
   useEffect(() => {
-    setMounted(true);
+    // Minimum visual duration
+    const t = setTimeout(() => setMinTimeElapsed(true), CONFIG.preloadMs);
+    return () => clearTimeout(t);
   }, []);
 
-  // LÓGICA DE ATIVAÇÃO DO 3D
+  useEffect(() => {
+    // Safety fallback
+    const t = setTimeout(() => setCanvasReady(true), 6000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const handleCanvasCreated = useCallback(() => {
+    setCanvasReady(true);
+  }, []);
+
+  const {
+    mounted,
+    dimensions,
+    width,
+    height,
+    top,
+    left,
+    borderRadius,
+    copyOpacity,
+    lenis,
+  } = useHeroAnimation(
+    sectionRef,
+    manifestoRef,
+    isMobile,
+    prefersReducedMotion
+  );
+
   const shouldRender3D = useMemo(() => {
     if (!mounted) return false;
-    // Otimização: Desativar WebGL pesado no Mobile para garantir performance (Rules Inegociáveis)
     if (isMobile) return false;
+    if (!hasWebGL) return false;
     return !prefersReducedMotion;
-  }, [mounted, isMobile, prefersReducedMotion]);
+  }, [mounted, isMobile, hasWebGL, prefersReducedMotion]);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // Se não tem WebGL, marcamos como pronto imediatamente para não travar
+  useEffect(() => {
+    if (!shouldRender3D && mounted) {
+      setCanvasReady(true);
+    }
+  }, [shouldRender3D, mounted]);
 
-  const videoScale = useTransform(scrollYProgress, [0.2, 0.8], [1, 3.5], {
-    ease: CONFIG.easing,
-  });
-  const borderRadius = useTransform(scrollYProgress, [0.2, 0.75], [16, 0]);
-  const copyOpacity = useTransform(scrollYProgress, [0.2, 0.4], [1, 0]);
+  const isReady = minTimeElapsed && canvasReady;
 
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (prefersReducedMotion || isMobile) return;
-    const inHoldPhase = latest > 0.6 && latest < 0.95;
-    manifestoRef.current?.setMuted(!inHoldPhase);
-  });
+  useEffect(() => {
+    if (isReady) setIsLoading(false);
+  }, [isReady]);
 
-  const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
   const ghostRef = useRef<THREE.Group | null>(null);
 
   const handleThumbClick = useCallback(() => {
-    if (sectionRef.current) {
-      const sectionHeight = sectionRef.current.offsetHeight;
-      const targetScroll = sectionRef.current.offsetTop + sectionHeight * 0.65;
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    }
-  }, []);
+    const target = sectionRef.current;
+    if (!lenis || !target) return;
+
+    lenis.scrollTo(target, {
+      offset: target.offsetHeight * 0.88,
+      duration: 1.5,
+    });
+  }, [lenis]);
 
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-dvh md:h-[300vh] bg-[#020204] overflow-hidden"
+      className="relative h-dvh md:h-[400vh] bg-[#020204] overflow-hidden"
       aria-label="Home hero section"
     >
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
         <AnimatePresence>
-          {isLoading && (
-            <Preloader
-              durationMs={CONFIG.preloadMs}
-              onComplete={handlePreloaderDone}
-              label="Summoning spirits"
-            />
-          )}
+          {isLoading && <Preloader ready={isReady} label="Summoning spirits" />}
         </AnimatePresence>
 
-        {/* CAMADA WEBGL - Fundo */}
+        {/* CAMADA WEBGL */}
         <motion.div
-          className="absolute inset-0 z-20"
+          className="absolute inset-0 z-20 pointer-events-none"
           initial={{ filter: 'blur(20px)', opacity: 0 }}
           animate={{
             filter: isLoading ? 'blur(20px)' : 'blur(0px)',
@@ -114,16 +129,16 @@ export default function HomeHero() {
             reducedMotion={!shouldRender3D}
             active={!isLoading && shouldRender3D}
             ghostRef={ghostRef}
+            onCanvasCreated={handleCanvasCreated}
           />
         </motion.div>
 
-        {/* CAMADA DE TEXTO - Frente */}
+        {/* CAMADA DE TEXTO */}
         <motion.div
           style={{ opacity: copyOpacity }}
           className="absolute inset-0 z-25 pointer-events-none"
         >
           <div className="w-full h-full pointer-events-auto">
-            {/* Passamos o ghostRef para sincronizar o efeito de revelação 2D */}
             <HeroCopy
               startEntrance={!isLoading}
               enable3D={shouldRender3D}
@@ -135,18 +150,24 @@ export default function HomeHero() {
         {/* Floating Video - Desktop Only */}
         {!prefersReducedMotion && !isMobile && (
           <motion.div
-            className="absolute bottom-8 right-8 md:right-12 z-30 pointer-events-auto origin-bottom-right"
+            className="fixed bottom-5 right-5 z-50 pointer-events-auto overflow-hidden shadow-2xl"
             style={{
-              scale: videoScale,
-              borderRadius: borderRadius,
-              width: '30vw',
-              maxWidth: '600px',
-              minWidth: '320px',
-              aspectRatio: '16/9',
+              width: mounted && dimensions.w > 0 ? width : '28vw',
+              height: mounted && dimensions.h > 0 ? height : '15.75vw',
+              top: mounted && dimensions.w > 0 ? top : undefined,
+              left: mounted && dimensions.w > 0 ? left : undefined,
+              bottom: mounted && dimensions.w > 0 ? undefined : 20,
+              right: mounted && dimensions.w > 0 ? undefined : 20,
+              borderRadius,
+              opacity: mounted ? 1 : 0,
             }}
-            initial={CONFIG.entrance.initial}
-            animate={CONFIG.entrance.animate}
-            transition={CONFIG.entrance.transition}
+            initial={{ opacity: 0, scale: 0.3 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 1.5,
+            }}
           >
             <ManifestoThumb ref={manifestoRef} onClick={handleThumbClick} />
           </motion.div>

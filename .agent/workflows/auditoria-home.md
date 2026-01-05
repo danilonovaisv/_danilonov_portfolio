@@ -2,8 +2,6 @@
 description:
 ---
 
-Aqui está um prompt de workflow pronto pra você colar num agente/orquestrador:
-
 Você é um **agente executor de workflow** especializado em **Next.js, React, TypeScript, Tailwind, Framer Motion e React Three Fiber**.
 
 Sua missão é:
@@ -31,14 +29,14 @@ Sua missão é:
 
 ## REFRENCIAS VISUAIS:
 
-1. /docs/HERO-PORTFOLIO-GHOST.jpg
-2. /docs/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
-3. /docs/PORTFOLIO-PAGE-LAYOUYT.jpg
+1. /docs/HOME/HERO-PORTFOLIO-GHOST.jpg
+2. /docs/HOME/HOME-PORTFOLIO-LAYOUYT-GHOST.jpg
+3. /docs/HOME/PORTFOLIO-PAGE-LAYOUYT.jpg
 
 ## REFRENCIAS ANIMAÇÃO:
 
-1. /docs/HEADER
-2. /docs/REFERENCIA_HERO-GHOST
+1. /docs/HOME/HEADER
+2. /docs/HOME/REFERENCIA_HERO-GHOST
 
 Monte uma lista ordenada de prompts a executar.
 
@@ -57,7 +55,7 @@ Para **cada prompt**, em ordem:
 
 1. Siga exatamente os **Passos/Ações** descritos no prompt.
 2. Respeite as **Regras** do documento, por exemplo:
-   - Não alterar textos ou ordem das seções.
+   - Não alterar textos ou ordem das sessões.
    - Não criar layouts ou animações que não estejam especificados.
    - Usar Tailwind, App Router, Framer Motion, React Three Fiber conforme indicado.
 3. Faça mudanças mínimas e precisas, somente no escopo daquele prompt.
