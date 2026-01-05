@@ -59,12 +59,13 @@ Accessibility: WCAG AA compliance, keyboard navigation coverage
 ### 2.1 Color Palette
 | Token | Value | Usage |
 | --- | --- | --- |
-| primary | #0048ff | Primary brand color, interactive elements, CTAs |
-| accent | #4fe6ff | Secondary highlights, Ghost atmosphere glow |
+| bluePrimary | #0048ff | Primary brand color, interactive elements, CTAs |
+| blueAccent | #4fe6ff | Secondary highlights, Ghost atmosphere glow |
 | background | #040013 | Main dark background |
 | backgroundLight | #f0f0f0 | Light sections (forms, alternating backgrounds) |
 | text | #fcffff | Primary text on dark backgrounds |
 | textInverse | #0e0e0e | Text on light backgrounds |
+| textHilght | #4fe6ff | pequenas introduções em destaque |
 | textSecondary | #a1a3a3 | Secondary information, metadata |
 | neutral | #0b0d3a | Gradient transitions, subtle backgrounds |
 | neutralLight | #F5F5F5 | Secondary section backgrounds |

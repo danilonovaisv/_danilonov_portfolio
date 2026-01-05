@@ -9,7 +9,7 @@ import FeaturedProjectCard, {
 import CTAProjectCard from './featured-projects/CTAProjectCard';
 
 type FeaturedProjectsSectionProps = {
-  onProjectOpen?: (project: FeaturedProject) => void;
+  onProjectOpen?: (_project: FeaturedProject) => void;
 };
 
 export default function FeaturedProjectsSection({
@@ -65,10 +65,7 @@ export default function FeaturedProjectsSection({
                 // Mobile: full-width | Desktop: bento-style spans
                 className={`w-full ${project.layout.cols}`}
               >
-                <FeaturedProjectCard
-                  project={project}
-                  onOpen={onProjectOpen}
-                />
+                <FeaturedProjectCard project={project} onOpen={onProjectOpen} />
               </motion.div>
             );
           })}
