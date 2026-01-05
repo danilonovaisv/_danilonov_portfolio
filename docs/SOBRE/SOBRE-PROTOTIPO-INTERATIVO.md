@@ -3,7 +3,6 @@
 ### Conceito-mãe: Ghost Design — presença que guia sem aparecer
 
 ---
-
 # **2. DESIGN SYSTEM**
 
 ### 2.1 Color Palette
@@ -36,7 +35,7 @@ Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos
 
 | Token     | Mobile (~<640px) | Desktop (~≥1024px) | Peso   | Uso                                                                 |
 | --------- | ---------------- | ------------------ | ------ | ------------------------------------------------------------------- |
-| display   | 2.5rem (40px)    | 4.5rem (72px)      | Black   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
+| display   | 2.5rem (40px)    | 4.5rem (72px)      | Bold   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
 | h1        | 2rem (32px)      | 3.5rem (56px)      | Bold   | Hero headlines, títulos principais                                  |
 | h2        | 1.5rem (24px)    | 2.5rem (40px)      | Bold   | Títulos de seção                                                    |
 | h3        | 1.25rem (20px)   | 1.75rem (28px)     | Medium | Títulos de cards, subtítulos                                       |
@@ -46,7 +45,7 @@ Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos
 
 #### Tokens em CSS com `clamp()`
 
-["css
+['css
 :root {
   --font-display: clamp(2.5rem, 5vw, 4.5rem);
   --font-h1:      clamp(2rem, 4vw, 3.5rem);
@@ -64,7 +63,7 @@ body {
 
 .display-text {
   font-size: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.1;
 }
 
@@ -100,16 +99,181 @@ body {
   font-size: var(--font-micro);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
     monospace;
-}"]
+}
 
-### 2.5 Global Assets
+Versão conceitual em Tailwind
+
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"TT Norms Pro"', "ui-sans-serif", "system-ui"],
+      },
+      fontSize: {
+        display: [
+          "clamp(2.5rem, 5vw, 4.5rem)",
+          { lineHeight: "1.1", fontWeight: "700" },
+        ],
+        h1: [
+          "clamp(2rem, 4vw, 3.5rem)",
+          { lineHeight: "1.1", fontWeight: "700" },
+        ],
+        h2: [
+          "clamp(1.5rem, 3vw, 2.5rem)",
+          { lineHeight: "1.15", fontWeight: "700" },
+        ],
+        h3: [
+          "clamp(1.25rem, 2vw, 1.75rem)",
+          { lineHeight: "1.2", fontWeight: "500" },
+        ],
+        body: [
+          "clamp(1rem, 1.2vw, 1.125rem)",
+          { lineHeight: "1.5", fontWeight: "400" },
+        ],
+        small: ["0.875rem", { lineHeight: "1.4" }],
+        micro: ["0.75rem", { lineHeight: "1.4" }],
+      },
+    },
+  },
+};']
+
+
+
+## 2.3 Spacing & Grid
+
+Container
+    •    max-width: 1680px
+    •    Padding horizontal: clamp(24px, 5vw, 96px)
+
+Ritmo Vertical
+    •    Seções: py-16 md:py-24
+    •    Componentes: gap-8 md:gap-12
+    •    Elementos internos: gap-4 md:gap-6
+
+Grid (Tailwind)
+    •    Mobile (até md):
+    •    Layout: 1 coluna (grid-cols-1 ou flex flex-col)
+    •    w-full
+    •    Alinhamento:
+    •    text-center para todos os textos
+    •    items-center e justify-center para stacks verticais (flex-col)
+    •    Tablet (md:):
+    •    Cards em md:grid-cols-2
+    •    Hero / destaques podem continuar 1 coluna
+    •    Textos podem voltar a text-left se fizer sentido
+    •    Desktop (lg:+):
+    •    Distribuição customizada por seção
+    •    Textos geralmente alinhados à esquerda para leitura longa
+
+Regra de alinhamento para mobile (base do sistema):
+
+Breakpoint padrão: < 768px
+Regra:
+    •    Todos os títulos (display, h1, h2, h3), parágrafos e CTAs usam text-align: center.
+    •    Componentes em coluna usam align-items: center.
+    •    Imagens e ícones principais centralizados (margin-inline: auto).
+
+Exemplo padrão de seção:
+
+<section className="flex flex-col items-center text-center md:items-start md:text-left">
+  {/* conteúdo */}
+</section>
+
+
+⸻
+
+## 2.4 Animation Principles
+
+Filosofia: animações orgânicas e intencionais, nunca gratuitas.
+
+Core Library: Framer Motion
+
+Diretrizes:
+    •    Animar apenas transform e opacity (performance)
+    •    Easing: cubic-bezier(0.22, 1, 0.36, 1) (easeOutExpo)
+    •    Duração: 300–700ms na maioria das transições
+    •    Stagger: 60–120ms entre elementos sequenciais
+    •    Respeitar prefers-reduced-motion: desabilitar animações não essenciais
+
+Padrões comuns:
+
+// Scroll reveal
+<motion.div
+  initial={{ opacity: 0, y: 24 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+/>
+
+// Hover (botões, cards)
+<motion.button
+  whileHover={{ scale: 1.02, y: -2 }}
+  transition={{ duration: 0.3 }}
+/>
+
+// Staggered children
+const variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+Em mobile, como tudo é centralizado e o fluxo é vertical, as entradas preferenciais vêm de baixo (y: 24 → 0) acompanhando o scroll.
+
+⸻
+
+## 2.5 Display Text / Big Phrases (Frases em destaque)
+
+Frases grandes no meio da página, com grande destaque visual, mas sem função de título semântico.
+
+Token: display
+
+Diretrizes de uso:
+    •    Quando usar:
+    •    Frases de impacto, statements da marca, quotes, promessas fortes de seção.
+    •    Semântica:
+    •    Usar como <p> ou <span> com classe específica:
+    •    className="display-text" ou className="text-display"
+    •    Exemplo:
+
+<p className="text-display">
+  Construímos experiências digitais que parecem magia, mas são guiadas por dados.
+</p>
+
+
+    •    Alinhamento:
+    •    Mobile: sempre centralizado, com largura limitada:
+    •    Ex.: className="text-display max-w-2xl mx-auto text-center"
+    •    Desktop: pode ser centralizado ou seguir a grid da seção (recomendado manter centralizado em blocos de destaque).
+    •    Espaçamento:
+    •    Mais respiro que títulos normais:
+    •    Ex.: mt-16 mb-12 (ajustar conforme a seção).
+    •    Cores:
+    •    Base: text (#fcffff)
+    •    Palavras-chave com textEmphasis e textHighlight.
+
+Exemplo em JSX/Tailwind:
+
+<section className="py-16 flex flex-col items-center text-center">
+  <p className="text-display max-w-2xl mx-auto">
+    Criamos produtos que parecem
+    <span className="text-textHighlight"> magia</span>, mas são construídos com
+    <span className="textEmphasis"> engenharia séria</span>.
+  </p>
+</section>
+
+
+
+## 2.6 Global Assets
 Logos:
 - Favicon: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
 - Favicon Light: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
 - Logo Light (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
 - Logo Dark (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 
-### 2.6 Fonts:
+## 2.7 Fonts:
  -  font-family: 'TT Norms Pro';
   src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Thin.woff2') format('woff2');
   font-weight: 100;
@@ -168,9 +332,6 @@ Videos:
 Client Logos:
 - 12 monochromatic SVG logos: `client1.svg` through `client12.svg`
 - Base URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/`
-
-
-
 
 
 ## **Ordem das Seções (Sobre):**
