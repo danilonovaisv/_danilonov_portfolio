@@ -99,7 +99,6 @@ export default function HomeHero() {
   const startLeft = dimensions.w - startWidth - MARGIN_PX;
 
   // Transforms
-  // Transforms
   const width = useTransform(
     scrollYProgress,
     [T_START, T_END],
@@ -113,7 +112,6 @@ export default function HomeHero() {
   const top = useTransform(scrollYProgress, [T_START, T_END], [startTop, 0]);
   const left = useTransform(scrollYProgress, [T_START, T_END], [startLeft, 0]);
   const borderRadius = useTransform(scrollYProgress, [T_START, T_END], [16, 0]);
-
   // Copy Fades out as video grows (faster)
   const copyOpacity = useTransform(scrollYProgress, [0.0, 0.3], [1, 0]);
 
@@ -167,9 +165,12 @@ export default function HomeHero() {
   const ghostRef = useRef<THREE.Group | null>(null);
 
   const handleThumbClick = useCallback(() => {
+    const target = sectionRef.current;
+    if (!lenis || !target) return;
+
     // Scroll automatically to the trigger point
-    lenis?.scrollTo(sectionRef.current, {
-      offset: (sectionRef.current?.offsetHeight || 0) * 0.88, // Just before the trigger
+    lenis.scrollTo(target, {
+      offset: target.offsetHeight * 0.88, // Just before the trigger
       duration: 1.5,
     });
   }, [lenis]);
@@ -178,7 +179,10 @@ export default function HomeHero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-[250vh] md:h-[400vh] bg-[#020204] overflow-hidden"
+      // HEIGHT ADJUSTMENT:
+      // Mobile: h-dvh (one screen exactly). No scroll extension needed because the video is in the next section.
+      // Desktop: h-[400vh] (to allow for scroll-driven animation).
+      className="relative h-dvh md:h-[400vh] bg-[#020204] overflow-hidden"
       aria-label="Home hero section"
     >
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
@@ -226,27 +230,25 @@ export default function HomeHero() {
         {/* Floating Video - Desktop Only */}
         {!prefersReducedMotion && !isMobile && (
           <motion.div
-            className="absolute z-50 pointer-events-auto overflow-hidden shadow-2xl"
+            className="fixed bottom-5 right-5 z-50 pointer-events-auto overflow-hidden shadow-2xl"
             style={{
-              // If we are mounted and have dimensions, use the logical transforms.
-              // Otherwise, use fixed fallbacks to avoid layout shift/transparency issues.
+              // Apply transforms for scale, position, and size
               width: mounted && dimensions.w > 0 ? width : '28vw',
               height: mounted && dimensions.h > 0 ? height : '15.75vw',
-
-              // Only apply top/left if we have dimensions calculated.
-              // Otherwise fallback to CSS positioning (bottom-10 right-10).
               top: mounted && dimensions.w > 0 ? top : undefined,
               left: mounted && dimensions.w > 0 ? left : undefined,
-
-              right: mounted && dimensions.w > 0 ? undefined : 40,
-              bottom: mounted && dimensions.w > 0 ? undefined : 40,
-
+              bottom: mounted && dimensions.w > 0 ? undefined : 20,
+              right: mounted && dimensions.w > 0 ? undefined : 20,
               borderRadius,
               opacity: mounted ? 1 : 0, // Prevent FOUC
             }}
-            initial={CONFIG.entrance.initial}
-            animate={CONFIG.entrance.animate}
-            transition={CONFIG.entrance.transition}
+            initial={{ opacity: 0, scale: 0.3 }} // Initial state per requirements
+            animate={{ opacity: 1, scale: 1 }} // Animate to full size
+            transition={{
+              duration: 0.6,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 1.5, // Delay after preloader
+            }}
           >
             <ManifestoThumb ref={manifestoRef} onClick={handleThumbClick} />
           </motion.div>

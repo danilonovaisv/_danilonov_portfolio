@@ -23,11 +23,11 @@ const VIDEO_SRC =
 
 // Animation config
 const ANIMATION = {
-  initial: { opacity: 0, scale: 0.95, y: 20 },
+  initial: { opacity: 0, scale: 0.98, y: 10 },
   animate: { opacity: 1, scale: 1, y: 0 },
   transition: {
-    duration: 0.6,
-    ease: [0.22, 1, 0.36, 1], // easeOutExpo
+    duration: 0.4,
+    ease: 'easeOut',
   },
 } as const;
 
@@ -74,7 +74,7 @@ export function ManifestoSection() {
       initial={prefersReducedMotion ? {} : ANIMATION.initial}
       animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
       transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-[#050511] aspect-video relative overflow-hidden"
+      className="lg:hidden w-full bg-[#050511] relative"
     >
       {/* Video */}
       <video
@@ -84,7 +84,7 @@ export function ManifestoSection() {
         loop
         muted={isMuted}
         playsInline
-        className="w-full h-full object-cover"
+        className="w-full h-auto block"
         aria-label="Portfolio showreel video"
       />
 
