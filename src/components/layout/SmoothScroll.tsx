@@ -1,7 +1,8 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Lenis from 'lenis';
+import { ScrollContext } from '@/contexts/ScrollContext';
 
 import { useAntigravityStore } from '@/store/antigravity.store';
 
@@ -12,6 +13,8 @@ interface SmoothScrollProps {
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const { flags } = useAntigravityStore();
 
+  const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
+
   useEffect(() => {
     // ♿ SE REDUCED MOTION → SEM LENIS
     if (flags.reducedMotion) return;
@@ -20,9 +23,9 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       lerp: 0.08,
       wheelMultiplier: 1,
       touchMultiplier: 1.2,
-      // smoothTouch is deprecated or not available in standard types depending on version,
-      // but 'smooth' definitely doesn't exist. Keeping others for now.
     });
+
+    setLenisInstance(lenis);
 
     function raf(time: number) {
       lenis.raf(time);
@@ -33,8 +36,13 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
 
     return () => {
       lenis.destroy();
+      setLenisInstance(null);
     };
   }, [flags.reducedMotion]);
 
-  return <>{children}</>;
+  return (
+    <ScrollContext.Provider value={{ lenis: lenisInstance }}>
+      {children}
+    </ScrollContext.Provider>
+  );
 }
