@@ -105,7 +105,7 @@ export default function AboutMethod() {
                   <motion.div
                     key={i}
                     variants={motionTokens.riseSoft}
-                    className="flex items-center gap-4 py-3 border-b border-accent/60"
+                    className="flex items-center gap-4 py-3 pl-4 border-b border-accent/60 border-l-[3px] border-l-primary bg-white/3 hover:bg-white/6 transition-colors duration-300"
                   >
                     <span className="text-primary text-sm md:text-base font-semibold tracking-tight shrink-0">
                       0{i + 1}

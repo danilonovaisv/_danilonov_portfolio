@@ -50,7 +50,7 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
   return (
     // leading-[0.8] aperta muito as linhas (estilo poster)
     // py-3 dá uma margem segura para as letras não cortarem
-    <div className="overflow-hidden m-0 whitespace-nowrap flex flex-nowrap leading-[0.5] py-1 bg-[#0048ff]">
+    <div className="overflow-hidden m-0 whitespace-nowrap flex flex-nowrap leading-[0.5] py-1 bg-primary">
       <motion.div className="flex whitespace-nowrap flex-nowrap" style={{ x }}>
         {[...Array(3)].map((_, i) => (
           <span
