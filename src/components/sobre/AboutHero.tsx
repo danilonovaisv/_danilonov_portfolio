@@ -92,7 +92,10 @@ export function AboutHero() {
             className="space-y-6 md:space-y-7"
           >
             {/* MOBILE: Título + Manifesto consolidado em 2 linhas */}
-            <motion.div variants={motionTokens.fadeGhost} className="lg:hidden space-y-0">
+            <motion.div
+              variants={motionTokens.fadeGhost}
+              className="lg:hidden space-y-0"
+            >
               <h1 className="text-[32px] sm:text-[36px] md:text-[38px] font-semibold tracking-tight text-text-light leading-[1.15]">
                 Sou <span className="text-primary">Danilo Novais.</span>{' '}
                 <span className="text-primary">Você</span> não vê tudo o
