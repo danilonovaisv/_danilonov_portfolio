@@ -112,7 +112,7 @@ export default function PortfolioModalNew({
               ease: 'easeOut'
             }}
             onClick={handleBackdropClick}
-            className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 z-100 bg-black/85 backdrop-blur-md"
             aria-hidden="true"
           />
 
@@ -131,7 +131,7 @@ export default function PortfolioModalNew({
               duration: prefersReducedMotion ? 0.15 : TIMING.container.duration,
               ease: easing,
             }}
-            className="fixed inset-0 z-[101] overflow-y-auto"
+            className="fixed inset-0 z-101 overflow-y-auto"
           >
             <div className="min-h-full flex items-start justify-center p-4 md:p-8 lg:p-12">
               {/* Content Panel */}
@@ -178,7 +178,7 @@ export default function PortfolioModalNew({
                 </div>
 
                 {/* Footer gradient */}
-                <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-ghost-bg to-transparent pointer-events-none" />
+                <div className="absolute bottom-0 inset-x-0 h-24 bg-linear-to-t from-ghost-bg to-transparent pointer-events-none" />
               </motion.div>
             </div>
           </motion.div>

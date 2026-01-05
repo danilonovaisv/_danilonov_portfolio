@@ -49,7 +49,7 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
       {/* Hero Image */}
       <motion.div
         variants={fadeInUp}
-        className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-2xl overflow-hidden bg-white/5"
+        className="relative w-full aspect-video md:aspect-21/9 rounded-2xl overflow-hidden bg-white/5"
       >
         <Image
           src={project.image}
@@ -61,7 +61,7 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
         />
         
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
         
         {/* Category badge */}
         <div className="absolute top-6 left-6">

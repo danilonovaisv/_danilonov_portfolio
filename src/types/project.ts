@@ -108,7 +108,7 @@ export interface ProjectCardProps {
   project: PortfolioProject;
   index: number;
   className?: string;
-  onOpen?: (project: PortfolioProject) => void;
+  onOpen?: (_project: PortfolioProject) => void;
   isAnimating?: boolean;
 }
 

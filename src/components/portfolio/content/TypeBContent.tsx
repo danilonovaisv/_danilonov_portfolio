@@ -55,7 +55,7 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
       {/* Left: Image */}
       <motion.div
         variants={fadeInLeft}
-        className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden bg-white/5"
+        className="relative aspect-square md:aspect-4/5 rounded-2xl overflow-hidden bg-white/5"
       >
         <Image
           src={project.image}

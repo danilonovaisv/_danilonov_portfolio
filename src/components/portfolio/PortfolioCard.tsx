@@ -14,7 +14,7 @@ import type { PortfolioProject } from '@/types/project';
 interface PortfolioCardProps {
   project: PortfolioProject;
   index: number;
-  onOpen?: (project: PortfolioProject) => void;
+  onOpen?: (_project: PortfolioProject) => void;
   className?: string;
 }
 
@@ -101,7 +101,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
         )}
 
         {/* Gradient overlay base */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+        <div className="absolute inset-0 z-20 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
 
         {/* Category tag */}
         <div className="absolute top-4 right-4 z-30">

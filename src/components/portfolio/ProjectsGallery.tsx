@@ -13,7 +13,7 @@ import CategoryFilter from './CategoryFilter';
 import PortfolioCard from './PortfolioCard';
 
 interface ProjectsGalleryProps {
-  onProjectOpen?: (project: PortfolioProject) => void;
+  onProjectOpen?: (_project: PortfolioProject) => void;
   showFilter?: boolean;
   maxProjects?: number;
   className?: string;

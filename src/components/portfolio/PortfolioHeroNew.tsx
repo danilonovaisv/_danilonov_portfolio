@@ -33,7 +33,7 @@ export default function PortfolioHeroNew() {
       </div>
 
       {/* Gradient Overlay - From black/60 para legibilidade */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 via-black/40 to-ghost-bg" />
+      <div className="absolute inset-0 z-10 bg-linear-to-b from-black/60 via-black/40 to-ghost-bg" />
 
       {/* Ghost radial gradients */}
       <div className="absolute inset-0 z-10 pointer-events-none">
@@ -90,7 +90,7 @@ export default function PortfolioHeroNew() {
             duration: 1.5, 
             ease: 'easeInOut',
           }}
-          className="w-px h-8 bg-gradient-to-b from-white/60 to-transparent"
+          className="w-px h-8 bg-linear-to-b from-white/60 to-transparent"
         />
       </motion.div>
     </section>

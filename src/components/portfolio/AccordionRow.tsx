@@ -81,8 +81,17 @@ export default function AccordionRow({
                     <div className="flex items-center gap-4 md:gap-6">
                         {/* Category Title */}
                         <h3 className="text-3xl font-medium leading-none tracking-tighter text-white transition-colors duration-500 group-hover:text-[#4fe6ff] md:text-[clamp(2.5rem,5.5vw,6rem)] text-center md:text-left">
-                            <span className="hidden whitespace-pre md:inline">
-                                {category.titleDesktop}
+                            <span className="hidden md:inline">
+                                {category.id === 'websites-webcampaigns-tech' ? (
+                                    <>
+                                        {/* Force split into two lines for this specific category */}
+                                        Web Campaigns,
+                                        <br />
+                                        Websites & Tech
+                                    </>
+                                ) : (
+                                    category.titleDesktop
+                                )}
                             </span>
                             <span className="md:hidden">{category.titleMobile}</span>
                         </h3>

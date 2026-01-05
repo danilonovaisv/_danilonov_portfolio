@@ -163,7 +163,7 @@ export default function ProjectModal({
               <div className="flex flex-col gap-4">
                 <motion.div
                   variants={mediaVariants}
-                  className="relative aspect-video w-full overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10"
+                  className="relative aspect-video w-full overflow-hidden rounded-2xl bg-linear-to-br from-white/5 to-white/0 border border-white/10"
                 >
                   <Image
                     src={project.img}

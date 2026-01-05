@@ -102,7 +102,7 @@ export default function HomeHero() {
 
         {/* CAMADA WEBGL - Fundo */}
         <motion.div
-          className="absolute inset-0 z-[20]"
+          className="absolute inset-0 z-20"
           initial={{ filter: 'blur(20px)', opacity: 0 }}
           animate={{
             filter: isLoading ? 'blur(20px)' : 'blur(0px)',
@@ -120,7 +120,7 @@ export default function HomeHero() {
         {/* CAMADA DE TEXTO - Frente */}
         <motion.div
           style={{ opacity: copyOpacity }}
-          className="absolute inset-0 z-[25] pointer-events-none"
+          className="absolute inset-0 z-25 pointer-events-none"
         >
           <div className="w-full h-full pointer-events-auto">
             {/* Passamos o ghostRef para sincronizar o efeito de revelação 2D */}

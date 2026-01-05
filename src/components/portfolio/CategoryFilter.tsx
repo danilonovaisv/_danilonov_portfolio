@@ -12,7 +12,7 @@ import { PROJECT_CATEGORIES } from '@/data/projects';
 
 interface CategoryFilterProps {
   activeCategory: ProjectCategory;
-  onChange: (category: ProjectCategory) => void;
+  onChange: (_category: ProjectCategory) => void;
   className?: string;
 }
 
@@ -26,7 +26,7 @@ const CategoryFilter: FC<CategoryFilterProps> = ({
   return (
     <div 
       className={`flex flex-wrap items-center gap-2 md:gap-3 ${className}`}
-      role="tablist"
+      role="group"
       aria-label="Filtrar projetos por categoria"
     >
       {PROJECT_CATEGORIES.map((category, index) => {
@@ -43,9 +43,7 @@ const CategoryFilter: FC<CategoryFilterProps> = ({
               delay: index * 0.05 
             }}
             onClick={() => onChange(category.id)}
-            role="tab"
-            aria-selected={isActive}
-            aria-controls={`projects-${category.id}`}
+            aria-pressed={isActive}
             className={`
               relative px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-medium
               transition-colors duration-300 whitespace-nowrap
