@@ -6,14 +6,20 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import type { FeaturedProject } from '@/components/home/featured-projects/FeaturedProjectCard';
+import {
+  getBackdropVariants,
+  getContainerVariants,
+  getMediaVariants,
+  getTitleVariants,
+  getMetaVariants,
+  getContentVariants,
+} from './modal/variants';
 
 type ProjectModalProps = {
   project: FeaturedProject | null;
   open: boolean;
   onClose: () => void;
 };
-
-const easing: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export default function ProjectModal({
   project,
@@ -44,93 +50,14 @@ export default function ProjectModal({
     return () => document.removeEventListener('keydown', handleKey);
   }, [open, onClose]);
 
+  const backdropVariants = useMemo(() => getBackdropVariants(shouldReduceMotion), [shouldReduceMotion]);
+  const containerVariants = useMemo(() => getContainerVariants(shouldReduceMotion), [shouldReduceMotion]);
+  const mediaVariants = useMemo(() => getMediaVariants(shouldReduceMotion), [shouldReduceMotion]);
+  const titleVariants = useMemo(() => getTitleVariants(shouldReduceMotion), [shouldReduceMotion]);
+  const metaVariants = useMemo(() => getMetaVariants(shouldReduceMotion), [shouldReduceMotion]);
+  const contentVariants = useMemo(() => getContentVariants(shouldReduceMotion), [shouldReduceMotion]);
+
   if (!mounted) return null;
-
-  const backdropVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.18,
-        ease: 'linear' as const,
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: { duration: shouldReduceMotion ? 0 : 0.15, ease: 'linear' as const },
-    },
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0, scale: 0.98, y: 12 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.26,
-        ease: easing,
-        delay: shouldReduceMotion ? 0 : 0.12,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.98,
-      y: 8,
-      transition: { duration: shouldReduceMotion ? 0 : 0.18, ease: easing },
-    },
-  };
-
-  const mediaVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.24,
-        delay: shouldReduceMotion ? 0 : 0.52,
-      },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: 6 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.2,
-        delay: shouldReduceMotion ? 0 : 0.76,
-        ease: easing,
-      },
-    },
-  };
-
-  const metaVariants = {
-    hidden: { opacity: 0, y: 4 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.16,
-        delay: shouldReduceMotion ? 0 : 0.96,
-        ease: easing,
-      },
-    },
-  };
-
-  const contentVariants = {
-    hidden: { opacity: 0, y: 8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0 : 0.24,
-        delay: shouldReduceMotion ? 0 : 1.12,
-        ease: easing,
-        staggerChildren: shouldReduceMotion ? 0 : 0.08,
-      },
-    },
-  };
 
   return createPortal(
     <AnimatePresence>
@@ -241,7 +168,7 @@ export default function ProjectModal({
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-[#4fe6ff]"
+                      className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent"
                     >
                       {tag}
                     </span>

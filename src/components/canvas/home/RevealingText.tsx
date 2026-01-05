@@ -3,10 +3,7 @@
 import { useRef, useMemo, useCallback } from 'react';
 import { Text, shaderMaterial } from '@react-three/drei';
 import { useFrame, extend, useThree } from '@react-three/fiber';
-// Retirando ThreeElements pois não está sendo usado explicitamente
-// se precisar estender props nativas: React.ComponentProps<'group'> ou JSX.IntrinsicElements['group']
 import * as THREE from 'three';
-// import { BRAND } from '@/config/brand'; // Unused
 
 // Shader de Revelação Corrigido
 const RevealMaterial = shaderMaterial(
@@ -54,6 +51,7 @@ type RevealMaterialType = THREE.ShaderMaterial & {
   uOpacity: number;
 };
 
+// Extend R3F types to include our custom shader material
 // Extend R3F types to include our custom shader material
 declare module '@react-three/fiber' {
   // eslint-disable-next-line no-unused-vars
