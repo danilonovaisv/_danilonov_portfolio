@@ -52,12 +52,12 @@ export default function ProjectModal({
       opacity: 1,
       transition: {
         duration: shouldReduceMotion ? 0 : 0.18,
-        ease: 'linear',
+        ease: 'linear' as const,
       },
     },
     exit: {
       opacity: 0,
-      transition: { duration: shouldReduceMotion ? 0 : 0.15, ease: 'linear' },
+      transition: { duration: shouldReduceMotion ? 0 : 0.15, ease: 'linear' as const },
     },
   };
 

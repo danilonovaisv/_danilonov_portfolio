@@ -46,12 +46,13 @@ export default function HomeHero() {
     setMounted(true);
   }, []);
 
-  // LÓGICA DE ATIVAÇÃO DO 3D (Tentativa)
+  // LÓGICA DE ATIVAÇÃO DO 3D
   const shouldRender3D = useMemo(() => {
     if (!mounted) return false;
-    // Enable 3D on mobile as requested, but respect reduced motion preferences
+    // Otimização: Desativar WebGL pesado no Mobile para garantir performance (Rules Inegociáveis)
+    if (isMobile) return false;
     return !prefersReducedMotion;
-  }, [mounted, prefersReducedMotion]);
+  }, [mounted, isMobile, prefersReducedMotion]);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -85,7 +86,7 @@ export default function HomeHero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-dvh md:h-[250vh] bg-[#020204] overflow-hidden"
+      className="relative h-dvh md:h-[300vh] bg-[#020204] overflow-hidden"
       aria-label="Home hero section"
     >
       <div className="sticky top-0 h-dvh w-full overflow-hidden">
@@ -101,7 +102,7 @@ export default function HomeHero() {
 
         {/* CAMADA WEBGL - Fundo */}
         <motion.div
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-[20]"
           initial={{ filter: 'blur(20px)', opacity: 0 }}
           animate={{
             filter: isLoading ? 'blur(20px)' : 'blur(0px)',
@@ -119,7 +120,7 @@ export default function HomeHero() {
         {/* CAMADA DE TEXTO - Frente */}
         <motion.div
           style={{ opacity: copyOpacity }}
-          className="absolute inset-0 z-10 pointer-events-none"
+          className="absolute inset-0 z-[25] pointer-events-none"
         >
           <div className="w-full h-full pointer-events-auto">
             {/* Passamos o ghostRef para sincronizar o efeito de revelação 2D */}

@@ -28,7 +28,14 @@ export function GhostStage({
   ghostRef,
 }: GhostStageProps) {
   if (reducedMotion) {
-    return <div className={styles.fallbackBackground} />;
+    return (
+      <div className={`${styles.stageContainer} ${styles.fallbackContainer}`}>
+        <div className={`absolute inset-0 ${styles.fallbackBase}`} />
+        <div className={`absolute inset-0 ${styles.fallbackGlow}`} />
+        <div className={`absolute inset-0 ${styles.fallbackFlare}`} />
+        <div className={`absolute inset-0 ${styles.fallbackVignette}`} />
+      </div>
+    );
   }
 
   return (

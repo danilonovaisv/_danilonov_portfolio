@@ -15,7 +15,6 @@ interface MobileMenuPanelProps {
   navItems: NavItem[];
   accentColor: string;
   open: boolean;
-  open: boolean;
   socialsRef: RefObject<HTMLDivElement | null>;
   onNavigate: (_href: string) => void;
   onClose: () => void;

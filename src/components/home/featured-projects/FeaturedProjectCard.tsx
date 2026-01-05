@@ -36,23 +36,8 @@ export default function FeaturedProjectCard({
     }
   };
 
-  const Wrapper = isModalMode ? 'button' : Link;
-  const wrapperProps = isModalMode
-    ? {
-        type: 'button' as const,
-        onClick: handleClick,
-        'aria-label': `Ver detalhes do projeto ${project.title}`,
-      }
-    : {
-        href: `/portfolio/${project.slug}`,
-        'aria-label': `Ver projeto: ${project.title}`,
-      };
-
-  return (
-    <Wrapper
-      {...wrapperProps}
-      className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md text-left"
-    >
+  const CardContent = () => (
+    <>
       <div
         className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-section-manifesto border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
           reducedMotion
@@ -118,6 +103,32 @@ export default function FeaturedProjectCard({
           <ArrowIcon className="w-5 h-5 md:w-6 md:h-6 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />
         </div>
       </div>
-    </Wrapper>
+    </>
+  );
+
+  const commonClasses =
+    'group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md text-left';
+
+  if (isModalMode) {
+    return (
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-label={`Ver detalhes do projeto ${project.title}`}
+        className={commonClasses}
+      >
+        <CardContent />
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      href={`/portfolio/${project.slug}`}
+      aria-label={`Ver projeto: ${project.title}`}
+      className={commonClasses}
+    >
+      <CardContent />
+    </Link>
   );
 }
