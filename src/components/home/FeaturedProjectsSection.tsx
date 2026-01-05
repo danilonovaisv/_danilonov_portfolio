@@ -65,10 +65,7 @@ export default function FeaturedProjectsSection({
                 // Mobile: full-width | Desktop: bento-style spans
                 className={`w-full ${project.layout.cols}`}
               >
-                <FeaturedProjectCard
-                  project={project}
-                  onOpen={onProjectOpen}
-                />
+                <FeaturedProjectCard project={project} onOpen={onProjectOpen} />
               </motion.div>
             );
           })}
