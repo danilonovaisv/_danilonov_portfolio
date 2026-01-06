@@ -9,13 +9,22 @@ import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 // CONFIGURAÇÃO DO GHOST
 // ============================================================================
 const GHOST_CONFIG = {
-  bodyColor: '#0f2027', // Dark body
-  glowColor: '#0080ff', // Blue glow
-  emissiveIntensity: 5.8, // High intensity
-  ghostOpacity: 0.88,
-  floatSpeed: 1.6,
+  bodyColor: '#4d59ff', // Dark body
+  glowColor: '#00c8ff', // Blue glow
+  emissiveIntensity: 5.8,
+  pulseSpeed: 1.6,
+  pulseIntensity: 0.6,
+  ghostOpacity: 0.79,
+  floatSpeed: 3.6,
   followSpeed: 0.05,
   wobbleAmount: 0.35,
+  rimLightIntensity: 1.8,
+
+  // Behavior - updated to match screenshot
+  followSpeed: 0.05,
+  wobbleAmount: 0.35,
+  floatSpeed: 1.6,
+  movementThreshold: 0.07,
 };
 
 const Ghost = forwardRef<

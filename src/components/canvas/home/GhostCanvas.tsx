@@ -44,12 +44,14 @@ export default function GhostCanvas({
       dpr={dpr}
       gl={{
         antialias: false,
-        alpha: false,
+        alpha: true,
+        premultipliedAlpha: false,
         powerPreference: 'high-performance',
         stencil: false,
         depth: true,
+        preserveDrawingBuffer: false,
       }}
-      camera={{ position: [0, 0, 7], fov: 35 }}
+      camera={{ position: [1, 0, 7], fov: 35 }}
       style={{ pointerEvents: 'none' }}
       onCreated={() => onCreated?.()}
     >
@@ -68,13 +70,13 @@ export default function GhostCanvas({
           <GhostEyes />
         </Ghost>
 
-        <Particles count={40} />
+        <Particles count={50} />
         <Fireflies />
 
-        <EffectComposer multisampling={0} enableNormalPass={false}>
+        <EffectComposer multisampling={1} enableNormalPass={false}>
           <AnalogDecayPass />
           <Bloom
-            luminanceThreshold={0.1}
+            luminanceThreshold={0.4}
             mipmapBlur
             intensity={2.8}
             radius={0.4}
@@ -85,13 +87,13 @@ export default function GhostCanvas({
             modulationOffset={0.7}
             blendFunction={BlendFunction.SCREEN}
           />
-          <Scanline density={1.5} opacity={0.04} />
+          <Scanline density={2.5} opacity={0.02} />
           <Noise
             opacity={0.08}
             premultiply
             blendFunction={BlendFunction.OVERLAY}
           />
-          <Vignette eskil={false} offset={0.2} darkness={0.8} />
+          <Vignette eskil={false} offset={0.3} darkness={0.9} />
         </EffectComposer>
       </Suspense>
     </Canvas>

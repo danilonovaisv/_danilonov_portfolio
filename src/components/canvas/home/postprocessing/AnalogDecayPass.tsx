@@ -95,11 +95,11 @@ class AnalogDecayEffectImpl extends Effect {
   constructor() {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
-        ['uTime', new Uniform(0.0)],
+        ['uTime', new Uniform(0.1)],
         ['uAnalogGrain', new Uniform(0.8)],
         ['uAnalogBleeding', new Uniform(1.2)],
         ['uAnalogVSync', new Uniform(0.5)],
-        ['uAnalogScanlines', new Uniform(0.3)],
+        ['uAnalogScanlines', new Uniform(0.6)],
         ['uAnalogVignette', new Uniform(2.0)],
         ['uAnalogJitter', new Uniform(0.1)],
         ['uAnalogIntensity', new Uniform(1.0)],

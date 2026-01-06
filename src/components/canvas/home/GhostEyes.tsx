@@ -8,8 +8,8 @@ import * as THREE from 'three';
 const EYE_PARAMS = {
   socketColor: '#000000',
   eyeGlowColor: '#8a2be2', // Violet (CodePen standard)
-  eyeGlowDecay: 0.95,
-  eyeGlowResponse: 0.31,
+  eyeGlowDecay: 0.85,
+  eyeGlowResponse: 0.81,
 };
 
 export default function GhostEyes() {
@@ -55,7 +55,7 @@ export default function GhostEyes() {
 
     // Lerp opacity
     const glowChangeSpeed =
-      speed > 0.05
+      speed > 0.03
         ? EYE_PARAMS.eyeGlowResponse * 2
         : EYE_PARAMS.eyeGlowResponse;
 
@@ -65,8 +65,8 @@ export default function GhostEyes() {
     // Aplicar opacidade aos materiais (precisa ser MeshBasicMaterial)
     if (leftEye.current.material instanceof THREE.MeshBasicMaterial) {
       // Base glow + dynamic glow
-      const baseOpacity = 0.8; // Increased for visibility
-      const finalOpacity = baseOpacity + currentEyeOpacity.current * 0.4;
+      const baseOpacity = 0.9; // Increased for visibility
+      const finalOpacity = baseOpacity + currentEyeOpacity.current * 0.6;
 
       leftEye.current.material.opacity = finalOpacity;
       (rightEye.current.material as THREE.MeshBasicMaterial).opacity =
@@ -81,7 +81,7 @@ export default function GhostEyes() {
     }
 
     // 2. Movimento dos olhos (Look At)
-    const eyeMovementRange = 0.12;
+    const eyeMovementRange = 0.32;
     const targetX = mouse.x * eyeMovementRange;
     const targetY = mouse.y * eyeMovementRange;
 

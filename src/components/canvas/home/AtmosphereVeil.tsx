@@ -83,7 +83,7 @@ export default function AtmosphereVeil({ ghostRef }: AtmosphereVeilProps) {
         fragmentShader={fragmentShader}
         uniforms={uniforms}
         transparent
-        depthWrite={false}
+        depthWrite={true}
       />
     </mesh>
   );

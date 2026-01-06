@@ -29,7 +29,7 @@ export default function ClientLayout({
       <main id="main-content" className="relative grow lg:pb-[88px]">
         {children}
       </main>
-      <AntigravityDebugger />
+      {process.env.NODE_ENV === 'development' && <AntigravityDebugger />}
     </SmoothScroll>
   );
 }
