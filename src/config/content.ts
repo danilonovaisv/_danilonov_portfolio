@@ -120,6 +120,12 @@ export const HOME_CONTENT = {
 
 export const PORTFOLIO_CONTENT = {
   hero: {
+    video: {
+      desktop:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/video-heroPort.mp4',
+      mobile:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/video-heroPort-mobile.mp4',
+    },
     items: [
       {
         id: 'brand-identity',

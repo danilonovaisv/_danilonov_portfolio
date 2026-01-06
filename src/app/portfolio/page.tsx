@@ -11,8 +11,6 @@ import type { PortfolioProject } from '@/types/project';
 import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
 import ProjectsGallery from '@/components/portfolio/ProjectsGallery';
 import PortfolioModalNew from '@/components/portfolio/PortfolioModalNew';
-import ClientsBrandsSection from '@/components/home/ClientsBrandsSection';
-import ContactSection from '@/components/home/ContactSection';
 import SiteFooter from '@/components/layout/SiteFooter';
 
 export default function PortfolioPage() {
@@ -39,14 +37,6 @@ export default function PortfolioPage() {
 
       {/* Galeria de projetos com filtros */}
       <ProjectsGallery onProjectOpen={handleOpenProject} />
-
-      {/* Clients & Brands */}
-      <ClientsBrandsSection />
-
-      {/* Contact Section */}
-      <div id="contact-section">
-        <ContactSection />
-      </div>
 
       {/* Footer */}
       <SiteFooter />
