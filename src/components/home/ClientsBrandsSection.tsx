@@ -47,10 +47,10 @@ export default function ClientsBrandsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={ghostTransition(0, duration.normal)}
-          className="mb-10 md:mb-12"
+          className="mb-12 md:mb-16"
         >
-          <h2 className="text-white text-[20px] md:text-[22px] lg:text-[22px] font-semibold text-center tracking-tight">
-            {HOME_CONTENT.clients.title}.
+          <h2 className="text-white text-[24px] md:text-[28px] lg:text-[32px] font-bold text-center tracking-tight leading-tight">
+            {HOME_CONTENT.clients.title}
           </h2>
         </motion.div>
 
@@ -58,7 +58,7 @@ export default function ClientsBrandsSection() {
           <motion.div
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={{
               hidden: {},
               show: {
@@ -67,24 +67,25 @@ export default function ClientsBrandsSection() {
                 },
               },
             }}
-            className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 items-center justify-items-center"
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-16 items-center justify-items-center"
           >
             {logos.map((l) => (
               <motion.div
                 key={l.src}
                 variants={logoVariants}
-                // Ghost Era: subtle brightness change instead of scale
-                className="group relative w-full h-10 md:h-12 flex items-center justify-center outline-none transition-all duration-300 hover:brightness-110"
+                className="group relative w-full h-12 md:h-14 flex items-center justify-center outline-none transition-all duration-300 hover:brightness-110"
                 tabIndex={0}
                 aria-label={l.alt}
               >
-                <Image
-                  src={l.src}
-                  alt={l.alt}
-                  fill
-                  unoptimized
-                  className="object-contain filter brightness-0 invert opacity-[0.9] transition-all duration-500 group-hover:opacity-100 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
-                />
+                <div className="relative w-full h-full max-w-[120px] md:max-w-[140px]">
+                  <Image
+                    src={l.src}
+                    alt={l.alt}
+                    fill
+                    unoptimized
+                    className="object-contain filter brightness-0 invert opacity-[0.9] transition-all duration-500 group-hover:opacity-100 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                  />
+                </div>
               </motion.div>
             ))}
           </motion.div>

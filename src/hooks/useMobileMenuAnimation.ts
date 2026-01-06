@@ -72,14 +72,14 @@ export function useMobileMenuAnimation(
     if (opening) {
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
       spinTweenRef.current = gsap
-        .timeline({ defaults: { ease: 'power4.out' } })
-        .to(h, { rotate: 45, duration: 0.5 }, 0)
-        .to(v, { rotate: -45, duration: 0.5 }, 0);
+        .timeline({ defaults: { ease: 'sine.out' } })
+        .to(h, { rotate: 45, duration: 0.6 }, 0)
+        .to(v, { rotate: -45, duration: 0.6 }, 0);
     } else {
       spinTweenRef.current = gsap
-        .timeline({ defaults: { ease: 'power3.inOut' } })
-        .to(h, { rotate: 0, duration: 0.35 }, 0)
-        .to(v, { rotate: 90, duration: 0.35 }, 0)
+        .timeline({ defaults: { ease: 'sine.inOut' } })
+        .to(h, { rotate: 0, duration: 0.45 }, 0)
+        .to(v, { rotate: 90, duration: 0.45 }, 0)
         .to(icon, { rotate: 0, duration: 0.001 }, 0);
     }
   }, []);
@@ -111,8 +111,8 @@ export function useMobileMenuAnimation(
 
     textCycleAnimRef.current = gsap.to(inner, {
       yPercent: -finalShift,
-      duration: 0.5 + lineCount * 0.07,
-      ease: 'power4.out',
+      duration: 0.6 + lineCount * 0.08,
+      ease: 'sine.out',
     });
   }, []);
 
@@ -147,31 +147,31 @@ export function useMobileMenuAnimation(
       tl.fromTo(
         ls.el,
         { xPercent: ls.start },
-        { xPercent: 0, duration: 0.5, ease: 'power4.out' },
-        i * 0.07
+        { xPercent: 0, duration: 0.65, ease: 'sine.out' },
+        i * 0.06
       );
     });
 
-    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.07 : 0;
-    const panelInsertTime = lastTime + (layerStates.length ? 0.08 : 0);
-    const panelDuration = 0.65;
+    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.06 : 0;
+    const panelInsertTime = lastTime + (layerStates.length ? 0.05 : 0);
+    const panelDuration = 0.8;
 
     tl.fromTo(
       panel,
       { xPercent: panelStart },
-      { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
+      { xPercent: 0, duration: panelDuration, ease: 'sine.out' },
       panelInsertTime
     );
 
     if (itemEls.length) {
-      const itemsStart = panelInsertTime + panelDuration * 0.15;
+      const itemsStart = panelInsertTime + panelDuration * 0.2;
       tl.to(
         itemEls,
         {
           yPercent: 0,
           rotate: 0,
-          duration: 1,
-          ease: 'power4.out',
+          duration: 1.2,
+          ease: 'sine.out',
           stagger: { each: 0.1, from: 'start' },
         },
         itemsStart
@@ -183,7 +183,7 @@ export function useMobileMenuAnimation(
       if (socialTitle) {
         tl.to(
           socialTitle,
-          { opacity: 1, duration: 0.5, ease: 'power2.out' },
+          { opacity: 1, duration: 0.7, ease: 'sine.out' },
           socialsStart
         );
       }
@@ -193,11 +193,11 @@ export function useMobileMenuAnimation(
           {
             y: 0,
             opacity: 1,
-            duration: 0.55,
-            ease: 'power3.out',
+            duration: 0.8,
+            ease: 'sine.out',
             stagger: { each: 0.08, from: 'start' },
           },
-          socialsStart + 0.04
+          socialsStart + 0.1
         );
       }
     }
@@ -233,8 +233,8 @@ export function useMobileMenuAnimation(
 
     closeTweenRef.current = gsap.to(all, {
       xPercent: 100,
-      duration: 0.32,
-      ease: 'power3.in',
+      duration: 0.5,
+      ease: 'sine.in',
       overwrite: 'auto',
       onComplete: () => {
         const itemEls = panel.querySelectorAll('.sm-panel-item');

@@ -15,7 +15,7 @@ export const CONTACT_FORM = {
 
 export const NAVIGATION = {
   header: [
-    { label: 'Home', href: '/#hero' },
+    { label: 'HOME', href: '/#hero' },
     { label: 'Sobre', href: '/sobre' },
     { label: 'Portfólio', href: '/portfolio' },
     { label: 'Contato', href: '#contact' },
@@ -23,9 +23,9 @@ export const NAVIGATION = {
   footer: {
     copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',
     links: [
-      { label: 'home', href: '#hero' },
-      { label: 'portfólio showcase', href: '#portfolio-showcase' },
-      { label: 'sobre', href: '/sobre' }, // Sugestão: página dedicada ou #about se for one-page
+      { label: 'home', href: '/#hero' },
+      { label: 'sobre', href: '/sobre' },
+      { label: 'portfolio showcase', href: '/portfolio' },
       { label: 'contato', href: '#contact' },
     ],
   },

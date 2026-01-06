@@ -18,10 +18,22 @@ interface MobileMenuPanelProps {
   socialsRef: RefObject<HTMLDivElement | null>;
   onNavigate: (_href: string) => void;
   onClose: () => void;
+  activeHref?: string;
 }
 
 const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
-  ({ navItems, accentColor, open, socialsRef, onNavigate, onClose }, ref) => {
+  (
+    {
+      navItems,
+      accentColor,
+      open,
+      socialsRef,
+      onNavigate,
+      onClose,
+      activeHref,
+    },
+    ref
+  ) => {
     return (
       <nav
         ref={ref}
@@ -36,16 +48,25 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       >
         {/* Menu items */}
         <ul className="flex flex-col gap-4" role="list">
-          {navItems.map((item) => (
-            <li key={item.href} className="overflow-hidden leading-none">
-              <button
-                onClick={() => onNavigate(item.href)}
-                className="sm-panel-item text-4xl xs:text-5xl font-bold tracking-tight text-white hover:text-primary transition-colors text-left leading-none uppercase will-change-transform origin-bottom"
-              >
-                {item.label}
-              </button>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const hash = item.href.startsWith('/#')
+              ? item.href.substring(1)
+              : item.href;
+            const isActive = activeHref === hash;
+
+            return (
+              <li key={item.href} className="overflow-hidden leading-none">
+                <button
+                  onClick={() => onNavigate(item.href)}
+                  className={`sm-panel-item text-4xl xs:text-5xl font-bold tracking-tight transition-colors text-left leading-none uppercase will-change-transform origin-bottom ${
+                    isActive ? 'text-primary' : 'text-white hover:text-primary'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Social links */}
@@ -84,7 +105,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="sm-social-link flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-primary hover:border-primary hover:scale-110"
+                className="sm-social-link flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-primary hover:border-primary hover:scale-105 active:scale-95"
               >
                 {s.icon}
               </a>

@@ -61,14 +61,14 @@ export default function CategoryStripe({
         <div
           className="flex flex-col md:flex-row items-center gap-6 md:gap-7 transition-all duration-300 group-hover:md:gap-10"
         >
-          {/* Thumbnail Revealer - Desktop Only */}
-          <div className="relative hidden md:block h-32 w-0 overflow-hidden rounded-md bg-white/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-72">
+          {/* Thumbnail - Visible on Mobile and Desktop */}
+          <div className="relative h-48 md:h-32 w-full md:w-0 overflow-hidden rounded-md bg-white/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:md:w-72">
             <Image
               src={category.thumb}
               alt=""
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="288px"
+              sizes="(max-width: 768px) 100vw, 288px"
             />
           </div>
 

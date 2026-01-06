@@ -6,9 +6,7 @@ import { AboutWhatIDo } from '@/components/sobre/AboutWhatIDo';
 import AboutMethod from '@/components/sobre/AboutMethod';
 import { AboutBeliefs } from '@/components/sobre/AboutBeliefs';
 import { AboutClosing } from '@/components/sobre/AboutClosing';
-import ClientsBrandsSection from '@/components/home/ClientsBrandsSection';
-import ContactSection from '@/components/home/ContactSection';
-import SiteFooter from '@/components/layout/SiteFooter';
+import { SiteClosure } from '@/components/layout/SiteClosure';
 
 export const metadata: Metadata = {
   title: 'Sobre',
@@ -31,12 +29,7 @@ export default function AboutPage() {
       <AboutBeliefs />
       {/* Seção 06 — Fechamento/Confirmação */}
       <AboutClosing />
-      {/* Seção 07 — Clientes/Marcas */}
-      <ClientsBrandsSection />
-      {/* Seção 08 — Contato */}
-      <ContactSection />
-      {/* Footer */}
-      <SiteFooter />
+      <SiteClosure />
     </div>
   );
 }

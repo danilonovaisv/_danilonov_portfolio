@@ -26,6 +26,7 @@ export interface MobileStaggeredMenuProps {
   onOpen: () => void;
   onClose: () => void;
   onNavigate: (_href: string) => void;
+  activeHref?: string;
 }
 
 export default function MobileStaggeredMenu({
@@ -37,6 +38,7 @@ export default function MobileStaggeredMenu({
   onOpen,
   onClose,
   onNavigate,
+  activeHref,
 }: MobileStaggeredMenuProps) {
   const {
     refs: {
@@ -141,6 +143,7 @@ export default function MobileStaggeredMenu({
         socialsRef={socialsRef}
         onNavigate={onNavigate}
         onClose={onClose}
+        activeHref={activeHref}
       />
     </div>
   );

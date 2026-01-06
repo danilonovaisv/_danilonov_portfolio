@@ -5,11 +5,17 @@ import type { NavItem, SiteHeaderProps } from './types';
 import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useActiveSection } from './useActiveSection';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { BRAND } from '@/config/brand';
 
 function isHashHref(href: string) {
-  return href.startsWith('#');
+  return href.startsWith('#') || href.startsWith('/#');
+}
+
+function getHashFromHref(href: string) {
+  if (href.startsWith('/#')) return href.substring(1);
+  if (href.startsWith('#')) return href;
+  return '';
 }
 
 function scrollToHash(hashHref: string) {
@@ -43,18 +49,33 @@ export default function SiteHeader({
     () =>
       navItems
         .filter((n) => isHashHref(n.href))
-        .map((n) => n.href.replace('#', '')),
+        .map((n) => getHashFromHref(n.href).replace('#', '')),
     [navItems]
   );
 
-  const activeHref = useActiveSection(sectionIds);
+  const activeSection = useActiveSection(sectionIds);
+  const pathname = usePathname();
+
+  const activeHref = useMemo(() => {
+    if (pathname === '/') return activeSection;
+    return pathname;
+  }, [pathname, activeSection]);
 
   const onNavigate = useCallback(
     (href: string) => {
-      if (isHashHref(href)) {
-        scrollToHash(href);
-        setIsOpen(false);
-        return;
+      const hash = getHashFromHref(href);
+
+      if (hash) {
+        // Se já estiver na Home ou se o href for relativo à página atual
+        const isHomePage = window.location.pathname === '/';
+        const isTargetingCurrentPageHash =
+          href.startsWith('#') || (href.startsWith('/#') && isHomePage);
+
+        if (isTargetingCurrentPageHash) {
+          scrollToHash(hash);
+          setIsOpen(false);
+          return;
+        }
       }
 
       if (isExternalHref(href)) {
@@ -117,6 +138,7 @@ export default function SiteHeader({
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
         onNavigate={onNavigate}
+        activeHref={activeHref}
       />
     </>
   );

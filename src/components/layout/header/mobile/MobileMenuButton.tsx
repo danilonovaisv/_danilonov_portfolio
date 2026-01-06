@@ -34,7 +34,7 @@ const MobileMenuButton = forwardRef<HTMLButtonElement, MobileMenuButtonProps>(
         onClick={onToggle}
         aria-label={open ? 'Fechar menu' : 'Abrir menu'}
         aria-expanded={open}
-        className={`relative inline-flex items-center gap-2 bg-transparent border-0 cursor-pointer font-medium leading-none overflow-visible z-110 ${
+        className={`relative inline-flex items-center gap-2 bg-transparent border-0 cursor-pointer font-medium leading-none overflow-visible z-110 py-2 px-1 ${
           isLight ? 'text-section-clients' : 'text-white'
         }`}
       >
@@ -58,16 +58,16 @@ const MobileMenuButton = forwardRef<HTMLButtonElement, MobileMenuButtonProps>(
         {/* Animated plus/X icon */}
         <span
           ref={iconRef}
-          className="relative w-[14px] h-[14px] shrink-0 inline-flex items-center justify-center will-change-transform"
+          className="relative w-[18px] h-[18px] shrink-0 inline-flex items-center justify-center will-change-transform"
           aria-hidden="true"
         >
           <span
             ref={plusHRef}
-            className="absolute left-1/2 top-1/2 w-full h-[2px] bg-current rounded-sm -translate-x-1/2 -translate-y-1/2 will-change-transform"
+            className="absolute left-1/2 top-1/2 w-full h-[1.5px] bg-current rounded-sm -translate-x-1/2 -translate-y-1/2 will-change-transform"
           />
           <span
             ref={plusVRef}
-            className="absolute left-1/2 top-1/2 w-full h-[2px] bg-current rounded-sm -translate-x-1/2 -translate-y-1/2 will-change-transform"
+            className="absolute left-1/2 top-1/2 w-full h-[1.5px] bg-current rounded-sm -translate-x-1/2 -translate-y-1/2 will-change-transform"
           />
         </span>
       </button>

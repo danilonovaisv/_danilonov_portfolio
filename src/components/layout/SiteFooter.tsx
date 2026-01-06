@@ -6,7 +6,7 @@ import { Instagram, Linkedin, Twitter, Facebook } from 'lucide-react';
 import { NAVIGATION, SOCIALS } from '@/config/navigation';
 import Link from 'next/link';
 
-const footerLinks = NAVIGATION.header;
+const footerLinks = NAVIGATION.footer.links;
 const footerCopyright = NAVIGATION.footer.copyright;
 
 const social = [
@@ -121,27 +121,29 @@ export default function SiteFooter() {
 
       {/* Mobile Footer */}
       <footer
-        className="lg:hidden bg-section-footer text-white py-8 relative z-10"
+        className="lg:hidden bg-section-footer text-white py-12 relative z-10"
         aria-label="Footer"
       >
-        <div className="max-w-[1200px] mx-auto px-6 flex flex-col gap-8">
-          {/* Copyright */}
-          <p className="text-center text-xs opacity-80">{footerCopyright}</p>
-
+        <div className="max-w-[1200px] mx-auto px-6 flex flex-col items-center gap-10">
           {/* Navigation Links */}
           <nav
             aria-label="Links do footer"
-            className="flex flex-wrap justify-center gap-6"
+            className="flex flex-wrap justify-center items-center gap-x-6 gap-y-4"
           >
             {footerLinks.map((l) => {
+              const isSobre = l.label.toLowerCase() === 'sobre';
+              const content = (
+                <span
+                  className={`text-[15px] font-medium tracking-tight transition-opacity hover:opacity-70 ${isSobre ? 'underline underline-offset-4 decoration-2' : ''}`}
+                >
+                  {l.label}
+                </span>
+              );
+
               if (l.href.startsWith('/')) {
                 return (
-                  <Link
-                    key={l.href}
-                    href={l.href}
-                    className="text-white text-sm hover:opacity-80 transition-opacity"
-                  >
-                    {l.label}
+                  <Link key={l.href} href={l.href}>
+                    {content}
                   </Link>
                 );
               }
@@ -154,29 +156,35 @@ export default function SiteFooter() {
                     if (isHashHref(l.href)) scrollToHash(l.href);
                     else window.location.href = l.href;
                   }}
-                  className="text-white text-sm hover:opacity-80 transition-opacity"
                 >
-                  {l.label}
+                  {content}
                 </button>
               );
             })}
           </nav>
 
-          {/* Social Icons */}
-          <div className="flex justify-center gap-6">
+          {/* Social Icons - White Circles */}
+          <div className="flex justify-center gap-4">
             {social.map((s) => (
               <a
                 key={s.href}
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-section-footer shadow-sm hover:opacity-80 transition-opacity"
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-all hover:scale-105 active:scale-95"
                 aria-label={`Abrir ${s.label}`}
               >
-                {s.icon}
+                {React.cloneElement(s.icon as React.ReactElement, {
+                  className: 'w-5 h-5',
+                })}
               </a>
             ))}
           </div>
+
+          {/* Copyright */}
+          <p className="text-center text-[11px] font-medium opacity-80 leading-relaxed uppercase tracking-wider">
+            {footerCopyright}
+          </p>
         </div>
       </footer>
     </>

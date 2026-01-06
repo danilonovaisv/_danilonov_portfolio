@@ -90,7 +90,10 @@ export default function DesktopFluidHeader({
                 className="flex items-center gap-7"
               >
                 {nav.map((item) => {
-                  const isActive = activeHref === item.href;
+                  const hash = item.href.startsWith('/#')
+                    ? item.href.substring(1)
+                    : item.href;
+                  const isActive = activeHref === hash;
 
                   const common =
                     'transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md';
