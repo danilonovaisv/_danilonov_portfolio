@@ -56,12 +56,15 @@ export function Preloader({
       {show && (
         <motion.div
           className={
-            'fixed inset-0 z-100 grid place-items-center bg-[#050505] ' +
+            'fixed inset-0 z-100 grid place-items-center bg-ghost-bg ' +
             (className ?? '')
           }
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduced ? 0.3 : 0.8, ease: 'easeInOut' }}
+          initial={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
+          exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.05 }}
+          transition={{
+            duration: reduced ? 0.3 : 1.2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
           role="status"
           aria-live="polite"
         >

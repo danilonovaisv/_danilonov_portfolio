@@ -27,9 +27,9 @@ export default function PortfolioShowcase() {
     >
       <div className="mx-auto max-w-[1680px] px-[clamp(24px,5vw,96px)]">
         {/* Headline Section */}
-        <div className="flex justify-center mb-12 md:mb-16">
-          <h2 className="type-display text-white text-center">
-            portfólio <span className="text-primary">showcase</span>
+        <div className="flex flex-col md:flex-row justify-center items-center mb-12 md:mb-16">
+          <h2 className="type-display text-white text-center uppercase tracking-tighter">
+            portfólio <span className="text-primary italic">showcase</span>
           </h2>
         </div>
 

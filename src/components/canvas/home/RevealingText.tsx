@@ -5,20 +5,20 @@ import { Text, shaderMaterial } from '@react-three/drei';
 import { useFrame, extend, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// Shader de Revelação Corrigido
+// Shader de Revelação Corrigido - agora com distância 3D e suavização melhorada
 const RevealMaterial = shaderMaterial(
   {
     uGhostPos: new THREE.Vector3(0, 0, 0),
     uRevealRadius: 4.0,
     uBaseColor: new THREE.Color('#ffffff'),
-    uRevealColor: new THREE.Color('#00ffff'), // Cor de revelação (azul ciano)
+    uRevealColor: new THREE.Color('#00ffff'), // Azul ciano
     uOpacity: 1.0,
   },
   `
-    varying vec3 vPos;
+    varying vec3 vWorldPosition;
     void main() {
-      vPos = (modelMatrix * vec4(position, 1.0)).xyz;
-      gl_Position = projectionMatrix * viewMatrix * vec4(vPos, 1.0);
+      vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+      gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
     }
   `,
   `
@@ -27,14 +27,14 @@ const RevealMaterial = shaderMaterial(
     uniform vec3 uBaseColor;
     uniform vec3 uRevealColor;
     uniform float uOpacity;
-    varying vec3 vPos;
+    varying vec3 vWorldPosition;
 
     void main() {
-      float dist = distance(vPos.xy, uGhostPos.xy);
+      float dist = distance(vWorldPosition, uGhostPos);
       float alpha = 1.0 - smoothstep(uRevealRadius * 0.3, uRevealRadius, dist);
       alpha = max(alpha, 0.0);
-      
-      // Mistura a cor base com a cor de revelação com base na distância
+
+      // Mistura suave entre base e revelação
       vec3 finalColor = mix(uBaseColor, uRevealColor, alpha);
       gl_FragColor = vec4(finalColor, alpha * uOpacity);
     }
@@ -51,10 +51,7 @@ type RevealMaterialType = THREE.ShaderMaterial & {
   uOpacity: number;
 };
 
-// Extend R3F types to include our custom shader material
-// Extend R3F types to include our custom shader material
 declare module '@react-three/fiber' {
-  // eslint-disable-next-line no-unused-vars
   interface ThreeElements {
     revealMaterial: any;
   }
@@ -97,9 +94,8 @@ export default function RevealingText({
   });
 
   const notifyReady = useCallback(() => {
-    if (readyNotified.current || !titleReady.current || !subReady.current) {
+    if (readyNotified.current || !titleReady.current || !subReady.current)
       return;
-    }
     readyNotified.current = true;
     onReady?.();
   }, [onReady]);
@@ -114,8 +110,7 @@ export default function RevealingText({
     notifyReady();
   }, [notifyReady]);
 
-  // URL DA FONTE 3D (Centralizada)
-  // URL DA FONTE 3D (Hardcoded temporariamente para fix de build - ideal mover para constants ou restaurar config)
+  // 🔧 CORRIGIDO: URL sem espaço no final
   const fontUrl =
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/fonts/TTNormsPro/TTNormsPro-Bold.otf';
 
@@ -138,9 +133,9 @@ export default function RevealingText({
           ref={titleMat}
           transparent
           uBaseColor={new THREE.Color('#ffffff')}
-          uRevealColor={new THREE.Color('#00ffff')} // Azul ciano como no vídeo
+          uRevealColor={new THREE.Color('#00ffff')} // Azul ciano
           uRevealRadius={config.radius}
-          uOpacity={1.0}
+          uOpacity={0.8} // Mais suave, como na imagem
         />
       </Text>
 
@@ -160,9 +155,9 @@ export default function RevealingText({
           ref={subMat}
           transparent
           uBaseColor={new THREE.Color('#cccccc')}
-          uRevealColor={new THREE.Color('#00ffff')} // Azul ciano como no vídeo
+          uRevealColor={new THREE.Color('#00ffff')} // Azul ciano
           uRevealRadius={config.radius}
-          uOpacity={0.9}
+          uOpacity={0.6} // Mais translúcido
         />
       </Text>
     </group>

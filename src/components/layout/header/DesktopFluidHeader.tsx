@@ -54,10 +54,13 @@ export default function DesktopFluidHeader({
         isLight ? 'header--light' : ''
       }`}
     >
-      <div className={BRAND.layout.container + ' pt-4 flex justify-center'}>
-        <div ref={wrapRef} className="pointer-events-auto w-full relative">
+      <div className={BRAND.layout.container + ' pt-6 flex justify-center'}>
+        <div
+          ref={wrapRef}
+          className="pointer-events-auto w-fit relative mx-auto"
+        >
           <div
-            className={`${styles.headerContainer} h-16 rounded-full backdrop-blur-md border border-white/5 bg-linear-to-b from-white/5 to-transparent`}
+            className={`${styles.headerContainer} h-16 min-w-[700px] rounded-full backdrop-blur-md border border-white/5 bg-linear-to-b from-white/5 to-transparent`}
           >
             {/* glass background */}
             <div className="absolute inset-0 rounded-full overflow-hidden">

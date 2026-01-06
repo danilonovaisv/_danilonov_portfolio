@@ -22,15 +22,15 @@ interface CategoryStripeProps {
 }
 
 const alignmentClasses: Record<Alignment, string> = {
-  start: 'items-center md:items-start',
-  center: 'items-center md:items-center',
-  end: 'items-center md:items-end',
+  start: 'items-start md:items-start',
+  center: 'items-start md:items-center',
+  end: 'items-start md:items-end',
 };
 
 const contentAlignmentClasses: Record<Alignment, string> = {
-  start: 'text-center md:text-left',
-  center: 'text-center md:text-center',
-  end: 'text-center md:text-right',
+  start: 'text-left md:text-left',
+  center: 'text-left md:text-center',
+  end: 'text-left md:text-right',
 };
 
 export default function CategoryStripe({
@@ -59,16 +59,16 @@ export default function CategoryStripe({
         aria-label={`Ver projetos de ${category.titleDesktop.replace(/\n/g, ' ')}`}
       >
         <div
-          className="flex flex-col md:flex-row items-center gap-6 md:gap-7 transition-all duration-300 group-hover:md:gap-10"
+          className={`flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-7 transition-all duration-300 group-hover:md:gap-10 ${alignmentClasses[category.align]}`}
         >
-          {/* Thumbnail - Visible on Mobile and Desktop */}
-          <div className="relative h-48 md:h-32 w-full md:w-0 overflow-hidden rounded-md bg-white/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:md:w-72">
+          {/* Thumbnail - Only visible on Desktop (Workflow Rule) */}
+          <div className="relative hidden md:block h-32 w-0 overflow-hidden rounded-md bg-white/5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:md:w-72">
             <Image
               src={category.thumb}
               alt=""
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 288px"
+              sizes="288px"
             />
           </div>
 
@@ -80,7 +80,7 @@ export default function CategoryStripe({
             </h3>
 
             {/* Arrow Icon in Circle */}
-            <div className="flex h-12 w-12 md:h-16 md:w-16 shrink-0 items-center justify-center rounded-full bg-primary text-white transition-all duration-500 group-hover:bg-accent group-hover:text-black">
+            <div className="flex h-12 w-12 md:h-16 md:w-16 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-all duration-500 group-hover:bg-primary group-hover:border-primary group-hover:text-white group-hover:shadow-[0_0_20px_rgba(0,72,255,0.4)]">
               <ArrowIcon className="h-5 w-5 md:h-8 md:w-8 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />
             </div>
           </div>

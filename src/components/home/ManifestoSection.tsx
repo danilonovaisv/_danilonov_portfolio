@@ -77,16 +77,27 @@ export function ManifestoSection() {
       className="lg:hidden w-full bg-ghost-bg relative mt-8 md:mt-0"
     >
       {/* Video */}
-      <video
-        ref={videoRef}
-        src={VIDEO_SRC}
-        autoPlay
-        loop
-        muted={isMuted}
-        playsInline
-        className="w-full h-auto block"
-        aria-label="Portfolio showreel video"
-      />
+      <div className="relative group cursor-pointer" onClick={toggleSound}>
+        <video
+          ref={videoRef}
+          src={VIDEO_SRC}
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          className="w-full h-auto block"
+          aria-label="Portfolio showreel video"
+        />
+
+        {/* Mobile Tap Overlay */}
+        {isMuted && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="bg-black/40 backdrop-blur-md px-4 py-2 rounded-full text-white text-[10px] uppercase tracking-[0.3em] opacity-0 group-active:opacity-100 transition-opacity">
+              Tap for sound
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* Sound Toggle Button */}
       <button
@@ -100,7 +111,7 @@ export function ManifestoSection() {
                    focus-visible:ring-[#4fe6ff] focus-visible:ring-offset-2
                    focus-visible:ring-offset-black/50"
         aria-label={isMuted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'}
-        aria-pressed={isMuted ? 'false' : 'true'}
+        aria-pressed={!isMuted ? 'true' : 'false'}
       >
         {isMuted ? (
           <VolumeX className="w-5 h-5" aria-hidden="true" />

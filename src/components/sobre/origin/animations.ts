@@ -23,10 +23,10 @@ export const mediaReveal = (direction: 'left' | 'right'): Variants => ({
     filter: 'blur(12px)',
   },
   visible: (delay = 0) => ({
-    opacity: 0.9, // Imagens/vídeos nunca chegam a 100%
+    opacity: 0.85, // Imagens/vídeos nunca chegam a 100%
     y: 0,
     x: 0,
-    filter: 'blur(0.6px)',
+    filter: 'blur(1px)',
     transition: { duration: 1.1, ease: GHOST_EASE, delay: 0.12 + delay },
   }),
 });

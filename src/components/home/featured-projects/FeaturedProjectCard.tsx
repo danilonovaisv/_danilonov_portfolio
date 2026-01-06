@@ -48,12 +48,12 @@ export default function FeaturedProjectCard({
         {/* Subtle Noise Overlay */}
         <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-        {/* Tags - Always visible on top */}
-        <div className="absolute top-4 left-4 right-4 z-20 flex gap-1.5 flex-wrap justify-start md:justify-end">
+        {/* Tags - Workflow Spec: Top Right, #E6EFEF 70% opacity */}
+        <div className="absolute top-4 right-4 z-20 flex gap-1.5 flex-wrap justify-end">
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-black/60 backdrop-blur-md border border-white/5 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest text-ghost-green"
+              className="bg-[#E6EFEF]/70 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-mono font-medium uppercase tracking-widest text-[#0e0e0e]"
             >
               {tag}
             </span>
@@ -62,11 +62,11 @@ export default function FeaturedProjectCard({
 
         <Image
           src={project.img}
-          alt={`Projeto ${project.title} - ${project.category} para ${project.client}`}
+          alt={`Logo da marca ${project.client} para ${project.category} - ${project.title}`}
           fill
           sizes={project.layout.sizes}
           className={`object-cover transition-transform duration-700 opacity-90 group-hover:opacity-100 ${
-            reducedMotion ? '' : 'group-hover:-translate-y-2'
+            reducedMotion ? '' : 'group-hover:scale-103'
           }`}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -97,12 +97,12 @@ export default function FeaturedProjectCard({
           </h3>
         </div>
 
-        {/* Arrow Icon Circle */}
+        {/* Arrow Icon Circle - Workflow Spec: translateY(-1) shadow-xl blue shadow-blue-500/10 */}
         <div
-          className={`bg-white/5 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white shrink-0 border border-white/10 transition-all duration-500 ${
+          className={`bg-white/5 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white shrink-0 border border-white/10 transition-all duration-700 ${
             reducedMotion
               ? ''
-              : 'group-hover:translate-x-0 md:group-hover:translate-x-5 group-hover:bg-primary group-hover:border-primary group-hover:shadow-[0_0_20px_var(--color-primary-faint)]'
+              : 'group-hover:translate-x-5 group-hover:bg-primary group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(0,72,255,0.4)]'
           }`}
         >
           <ArrowIcon className="w-5 h-5 md:w-6 md:h-6 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />

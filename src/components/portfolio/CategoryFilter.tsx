@@ -45,7 +45,7 @@ const CategoryFilter: FC<CategoryFilterProps> = ({
             onClick={() => onChange(category.id)}
             aria-pressed={isActive}
             className={`
-              relative px-4 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-medium
+              relative px-4 py-3 md:px-5 md:py-2.5 min-h-[48px] md:min-h-0 flex items-center justify-center rounded-full text-xs md:text-sm font-medium
               transition-colors duration-300 whitespace-nowrap
               ${isActive 
                 ? 'text-white' 

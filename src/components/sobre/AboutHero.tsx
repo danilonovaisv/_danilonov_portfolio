@@ -20,6 +20,15 @@ export function AboutHero() {
     offset: ['start end', 'end start'],
   });
 
+  // REDUCE PLAYBACK SPEED FOR SUBTLE LOOK
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.playbackRate = 0.4;
+    if (mobileVideoRef.current) mobileVideoRef.current.playbackRate = 0.4;
+  }, []);
+
   const smoothProgress = useSpring(scrollYProgress, motionSprings.ghost);
 
   const mediaY = useTransform(
@@ -41,6 +50,7 @@ export function AboutHero() {
     >
       {/* Background Video - Desktop */}
       <motion.video
+        ref={videoRef}
         src={ABOUT_CONTENT.hero.videos.desktop}
         autoPlay
         muted
@@ -54,6 +64,7 @@ export function AboutHero() {
 
       {/* Background Video - Mobile */}
       <motion.video
+        ref={mobileVideoRef}
         src={ABOUT_CONTENT.hero.videos.mobile}
         autoPlay
         muted

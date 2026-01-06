@@ -51,14 +51,14 @@ export function AboutWhatIDo() {
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.06,
+                staggerChildren: 0.1,
               },
             },
           }}
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
-          className="flex flex-col gap-3 md:grid md:grid-cols-7 md:gap-4"
+          className="flex flex-col gap-8 md:gap-12 max-w-4xl mx-auto"
         >
           {CAPABILITIES.map((item, index) => {
             return (
@@ -67,49 +67,28 @@ export function AboutWhatIDo() {
                 variants={motionTokens.riseSoft}
                 className={`
                   group relative
-                  bg-[#0d0d1f]/95
-                  rounded-xl
-                  overflow-hidden
-                  
-                  /* Mobile: layout horizontal */
-                  flex flex-row items-center gap-3
-                  px-4 py-3.5
-                  
-                  /* Desktop: layout vertical centrado */
-                  md:flex-col md:items-center md:text-center
-                  md:px-3 md:py-5
-                  md:min-h-[140px]
-                  
-                  /* Borda com gradiente sutil */
-                  border border-[#1a1a3a]/80
-                  shadow-[0_4px_24px_rgba(6,7,31,0.5)]
-                  
-                  /* Hover sutil */
+                  flex flex-row items-baseline gap-6
                   transition-all duration-300
-                  hover:border-primary/30
-                  hover:shadow-[0_8px_32px_rgba(0,87,255,0.15)]
                 `}
               >
-                {/* Ícone circular azul */}
+                {/* Ícone circular azul - Minimalista */}
                 <span
                   className="
-                    flex h-7 w-7 shrink-0 items-center justify-center 
-                    rounded-full bg-primary 
-                    text-[11px] font-bold text-white 
-                    shadow-[0_4px_12px_rgba(0,87,255,0.4)]
-                    md:mb-3
+                    flex h-2.5 w-2.5 shrink-0 items-center justify-center 
+                    rounded-full bg-primary mt-3
+                    shadow-[0_0_10px_rgba(0,87,255,0.8)]
                   "
-                >
-                  ↗
-                </span>
+                />
 
-                {/* Texto */}
-                <p className="text-[14px] md:text-[13px] lg:text-[14px] font-normal text-white/85 leading-snug">
-                  <span className="text-primary font-semibold">
+                {/* Texto Editorial */}
+                <div className="flex flex-col md:flex-row md:items-baseline md:gap-4">
+                  <h3 className="text-[20px] md:text-[24px] font-semibold text-white tracking-tight">
                     {item.title}
-                  </span>{' '}
-                  <span className="text-white/70">{item.desc}</span>
-                </p>
+                  </h3>
+                  <p className="text-[16px] md:text-[18px] font-light text-white/50 italic leading-snug">
+                    {item.desc}
+                  </p>
+                </div>
               </motion.div>
             );
           })}

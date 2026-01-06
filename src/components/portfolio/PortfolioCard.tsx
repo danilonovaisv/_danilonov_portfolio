@@ -116,10 +116,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
       <div className="absolute top-4 right-4 z-30">
         <motion.span
           className="inline-flex items-center rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 text-[10px] md:text-xs font-medium uppercase tracking-wide text-white"
-          animate={{ 
-            y: (isHovered || !isHovered) ? 0 : -4, // Always 0 on mobile, hover effect on desktop if needed
-            opacity: 1
-          }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
           {project.displayCategory}
@@ -144,10 +141,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
           <motion.div
             className="flex h-11 w-11 md:h-12 md:w-12 shrink-0 items-center justify-center rounded-full bg-white text-black"
             initial={{ opacity: 0, y: 10 }}
-            animate={{ 
-              opacity: (isHovered || !isHovered) ? 1 : 0, // Visible on mobile
-              y: (isHovered || !isHovered) ? 0 : 10 
-            }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', ...spring.snappy }}
           >
             <ArrowUpRight className="w-5 h-5" />

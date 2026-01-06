@@ -37,13 +37,14 @@ export function AboutBeliefs() {
         {/* Static Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           {/* Left Column: Manifesto Texts */}
-          <motion.div
-            variants={motionTokens.fadeGhost}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            className="flex flex-col gap-8 md:gap-10 text-center lg:text-right items-center lg:items-end order-1 lg:order-1"
-          >
-            <div className="max-w-[480px]">
+          <div className="flex flex-col gap-8 md:gap-10 text-center lg:text-right items-center lg:items-end order-1 lg:order-1">
+            <motion.div
+              variants={motionTokens.fadeGhost}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 0.8 }}
+              className="max-w-[480px]"
+            >
               <p className="text-[20px] md:text-[24px] text-white/90 leading-relaxed font-light">
                 Um vídeo que{' '}
                 <span className="text-primary font-semibold">respira</span>.
@@ -54,9 +55,15 @@ export function AboutBeliefs() {
                 Um detalhe que{' '}
                 <span className="text-primary font-semibold">fica</span>.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="max-w-[480px]">
+            <motion.div
+              variants={motionTokens.fadeGhost}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 1.6 }}
+              className="max-w-[480px]"
+            >
               <p className="text-[20px] md:text-[24px] text-white/90 leading-relaxed font-light">
                 <span className="text-primary font-semibold">Crio</span> para
                 gerar presença.
@@ -68,15 +75,15 @@ export function AboutBeliefs() {
                   Mesmo quando ninguém percebe o esforço.
                 </span>
               </p>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
           {/* Right Column: Ghost Identity */}
           <motion.div
             variants={motionTokens.fadeGhost}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 2.4 }}
             className="flex flex-row items-center justify-center lg:justify-start gap-6 md:gap-8 order-2 lg:order-2"
           >
             {/* Ghost Icon */}

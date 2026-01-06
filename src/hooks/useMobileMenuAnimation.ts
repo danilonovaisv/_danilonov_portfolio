@@ -52,7 +52,12 @@ export function useMobileMenuAnimation(
       }
       preLayerElsRef.current = preLayers;
 
-      gsap.set([panel, ...preLayers], { xPercent: 100 });
+      gsap.set([panel, ...preLayers], {
+        opacity: 0,
+        y: 30,
+        filter: 'blur(10px)',
+        pointerEvents: 'none',
+      });
       gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
       gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
       gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
@@ -131,59 +136,62 @@ export function useMobileMenuAnimation(
       : [];
     const socialTitle = socialsEl?.querySelector('.sm-social-title');
 
-    const layerStates = layers.map((el) => ({
-      el,
-      start: Number(gsap.getProperty(el, 'xPercent')),
-    }));
-    const panelStart = Number(gsap.getProperty(panel, 'xPercent'));
-
-    if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
-    if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
-    if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
+    if (itemEls.length)
+      gsap.set(itemEls, { y: 24, opacity: 0, filter: 'blur(8px)' });
+    if (socialTitle) gsap.set(socialTitle, { opacity: 0, filter: 'blur(4px)' });
+    if (socialLinks.length) gsap.set(socialLinks, { y: 15, opacity: 0 });
 
     const tl = gsap.timeline({ paused: true });
 
-    layerStates.forEach((ls, i) => {
-      tl.fromTo(
-        ls.el,
-        { xPercent: ls.start },
-        { xPercent: 0, duration: 0.65, ease: 'sine.out' },
-        i * 0.06
-      );
-    });
+    // Ghost Pre-layers: Fade in + Blur out
+    if (layers.length) {
+      tl.to(layers, {
+        opacity: 0.8,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.6,
+        ease: 'sine.out',
+        stagger: 0.05,
+      });
+    }
 
-    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.06 : 0;
-    const panelInsertTime = lastTime + (layerStates.length ? 0.05 : 0);
-    const panelDuration = 0.8;
-
-    tl.fromTo(
+    // Panel Reveal: Ghost Fade + Rise
+    tl.to(
       panel,
-      { xPercent: panelStart },
-      { xPercent: 0, duration: panelDuration, ease: 'sine.out' },
-      panelInsertTime
+      {
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        duration: 0.8,
+        ease: 'sine.out',
+        pointerEvents: 'auto',
+      },
+      layers.length ? '-=0.4' : 0
     );
 
+    // Staggered Nav Items
     if (itemEls.length) {
-      const itemsStart = panelInsertTime + panelDuration * 0.2;
       tl.to(
         itemEls,
         {
-          yPercent: 0,
-          rotate: 0,
-          duration: 1.2,
+          y: 0,
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 1.0,
           ease: 'sine.out',
-          stagger: { each: 0.1, from: 'start' },
+          stagger: 0.08,
         },
-        itemsStart
+        '-=0.5'
       );
     }
 
+    // Socials Stagger
     if (socialTitle || socialLinks.length) {
-      const socialsStart = panelInsertTime + panelDuration * 0.4;
+      const socialsStart = '-=0.4';
       if (socialTitle) {
         tl.to(
           socialTitle,
-          { opacity: 1, duration: 0.7, ease: 'sine.out' },
+          { opacity: 1, filter: 'blur(0px)', duration: 0.6 },
           socialsStart
         );
       }
@@ -195,9 +203,9 @@ export function useMobileMenuAnimation(
             opacity: 1,
             duration: 0.8,
             ease: 'sine.out',
-            stagger: { each: 0.08, from: 'start' },
+            stagger: 0.06,
           },
-          socialsStart + 0.1
+          socialsStart + '+=0.1'
         );
       }
     }
@@ -232,13 +240,17 @@ export function useMobileMenuAnimation(
     closeTweenRef.current?.kill();
 
     closeTweenRef.current = gsap.to(all, {
-      xPercent: 100,
+      opacity: 0,
+      y: 20,
+      filter: 'blur(10px)',
       duration: 0.5,
       ease: 'sine.in',
+      pointerEvents: 'none',
       overwrite: 'auto',
       onComplete: () => {
         const itemEls = panel.querySelectorAll('.sm-panel-item');
-        if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 });
+        if (itemEls.length)
+          gsap.set(itemEls, { y: 24, opacity: 0, filter: 'blur(8px)' });
 
         const socialsEl = socialsRef.current;
         if (socialsEl) {
@@ -247,7 +259,7 @@ export function useMobileMenuAnimation(
             socialsEl.querySelectorAll('.sm-social-link')
           );
           if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
-          if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 });
+          if (socialLinks.length) gsap.set(socialLinks, { y: 15, opacity: 0 });
         }
 
         busyRef.current = false;

@@ -27,26 +27,30 @@ const ai = genkit({
     // passing in a config object; if you don't, the provider uses the value
     // from the GOOGLE_GENAI_API_KEY environment variable, which is the
     // recommended practice.
-    googleAI(),
+    googleAI({ 
+      apiKey: process.env.GOOGLE_GENAI_API_KEY,
+      project: 'portfolio-danilo-novais-fdc', // Replace with your actual Google Cloud project ID
+    }),
   ],
 });
 
-// Define a simple flow that prompts an LLM to generate menu suggestions.
-const menuSuggestionFlow = ai.defineFlow(
+// Define a simple flow that prompts an LLM to generate portfolio-related suggestions.
+const portfolioSuggestionFlow = ai.defineFlow(
   {
-    name: 'menuSuggestionFlow',
-    inputSchema: z.string().describe('A restaurant theme').default('seafood'),
+    name: 'portfolioSuggestionFlow',
+    inputSchema: z.string().describe('A portfolio project theme').default('creative web development'),
     outputSchema: z.string(),
     streamSchema: z.string(),
   },
   async (subject, { sendChunk }) => {
     // Construct a request and send it to the model API.
-    const prompt = `Suggest an item for the menu of a ${subject} themed restaurant`;
+    const prompt = `Suggest an innovative approach for a portfolio project in the area of ${subject}. Include key technologies and creative elements that would make it stand out.`;
     const { response, stream } = ai.generateStream({
-      model: googleAI.model('gemini-2.5-flash'),
+      model: googleAI.model('gemini-2.0-flash'), // Updated to use a more current model
       prompt: prompt,
       config: {
-        temperature: 1,
+        temperature: 0.7,
+        maxOutputTokens: 1024,
       },
     });
 
@@ -62,7 +66,7 @@ const menuSuggestionFlow = ai.defineFlow(
   }
 );
 
-export const menuSuggestion = onCallGenkit(
+export const portfolioSuggestion = onCallGenkit(
   {
     // Uncomment to enable AppCheck. This can reduce costs by ensuring only your Verified
     // app users can use your API. Read more at https://firebase.google.com/docs/app-check/cloud-functions
@@ -76,5 +80,5 @@ export const menuSuggestion = onCallGenkit(
     // Grant access to the API key to this function:
     secrets: [apiKey],
   },
-  menuSuggestionFlow
+  portfolioSuggestionFlow
 );

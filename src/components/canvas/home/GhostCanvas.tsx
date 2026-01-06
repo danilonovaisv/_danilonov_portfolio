@@ -19,7 +19,7 @@ import {
 } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
 
-const BACKGROUND_COLOR = '#020204';
+const BACKGROUND_COLOR = '#040013';
 
 export default function GhostCanvas({
   active = true,
@@ -74,10 +74,10 @@ export default function GhostCanvas({
         <EffectComposer multisampling={0} enableNormalPass={false}>
           <AnalogDecayPass />
           <Bloom
-            luminanceThreshold={0.15}
+            luminanceThreshold={0.1}
             mipmapBlur
-            intensity={1.8}
-            radius={0.5}
+            intensity={2.8}
+            radius={0.4}
           />
           <ChromaticAberration
             offset={[0.0015, 0.0015]}
