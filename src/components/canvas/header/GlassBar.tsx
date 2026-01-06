@@ -15,16 +15,6 @@ useGLTF.preload('/assets/3d/bar.glb');
 
 type ModeProps = Record<string, unknown>;
 
-type ModeWrapperProps = ThreeElements['mesh'] & {
-  children?: ReactNode;
-  glb: string;
-  geometryKey: string;
-  lockToBottom?: boolean;
-  followPointer?: boolean;
-  modeProps?: ModeProps;
-  clearColor: THREE.Color;
-};
-
 export interface FluidGlassMaterialProps {
   scale?: number | [number, number, number];
   ior?: number;
@@ -36,7 +26,23 @@ export interface FluidGlassMaterialProps {
   [key: string]: any;
 }
 
-export type BarProps = Omit<ModeWrapperProps, 'glb' | 'geometryKey'>;
+type ModeWrapperProps = ThreeElements['mesh'] & {
+  children?: ReactNode;
+  glb: string;
+  geometryKey: string;
+  lockToBottom?: boolean;
+  followPointer?: boolean;
+  modeProps?: ModeProps;
+  clearColor?: THREE.Color; // Made optional
+  customPointer?: { x: number; y: number };
+  parallax?: number;
+};
+
+export type BarProps = Omit<ModeWrapperProps, 'glb' | 'geometryKey'> & {
+  materialProps?: FluidGlassMaterialProps;
+  pointer?: { x: number; y: number };
+  reducedMotion?: boolean;
+};
 
 const ModeWrapper = memo(function ModeWrapper({
   children,
@@ -46,6 +52,7 @@ const ModeWrapper = memo(function ModeWrapper({
   followPointer = true,
   modeProps = {},
   clearColor,
+  customPointer,
   ...props
 }: ModeWrapperProps) {
   const ref = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.Material>>(null!);
@@ -73,12 +80,18 @@ const ModeWrapper = memo(function ModeWrapper({
     const { gl, viewport, pointer, camera } = state;
     const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
 
-    const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
+    const pX = customPointer ? customPointer.x * 2 - 1 : pointer.x;
+    const pY = customPointer ? -(customPointer.y * 2 - 1) : pointer.y;
+
+    const destX = followPointer ? (pX * v.width) / 2 : 0;
     const destY = lockToBottom
       ? -v.height / 2 + 0.2
       : followPointer
-        ? (pointer.y * v.height) / 2
+        ? (pY * v.height) / 2
         : 0;
+
+    // Parallax influence?
+    // Usually parallax is applied to group, but let's leave it as is for now unless broken.
 
     easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
 
@@ -91,7 +104,9 @@ const ModeWrapper = memo(function ModeWrapper({
     gl.setRenderTarget(buffer);
     gl.render(scene, camera);
     gl.setRenderTarget(null);
-    gl.setClearColor(clearColor, 1);
+    if (clearColor) {
+      gl.setClearColor(clearColor, 1);
+    }
   });
 
   const {
@@ -102,13 +117,15 @@ const ModeWrapper = memo(function ModeWrapper({
     chromaticAberration,
     ...extraMat
   } = modeProps as {
-    scale?: number;
+    scale?: number | [number, number, number];
     ior?: number;
     thickness?: number;
     anisotropy?: number;
     chromaticAberration?: number;
     [key: string]: unknown;
   };
+
+  const finalScale = Array.isArray(scale) ? scale : (scale ?? 0.15);
 
   return (
     <>
@@ -123,7 +140,7 @@ const ModeWrapper = memo(function ModeWrapper({
       </mesh>
       <mesh
         ref={ref}
-        scale={scale ?? 0.15}
+        scale={finalScale}
         rotation-x={Math.PI / 2}
         geometry={
           (nodes[geometryKey] as THREE.Mesh<THREE.BufferGeometry>)?.geometry
@@ -147,8 +164,10 @@ const ModeWrapper = memo(function ModeWrapper({
 
 export function GlassBar({
   modeProps = {},
+  materialProps,
   clearColor,
   children,
+  pointer,
   ...props
 }: BarProps) {
   const defaultMat = {
@@ -161,13 +180,21 @@ export function GlassBar({
     attenuationDistance: 0.25,
   };
 
+  // Merge materialProps into modeProps if provided
+  const finalModeProps = {
+    ...defaultMat,
+    ...modeProps,
+    ...(materialProps || {}),
+  };
+
   return (
     <ModeWrapper
       glb="/assets/3d/bar.glb"
       geometryKey="Cube"
       lockToBottom
-      followPointer={false}
-      modeProps={{ ...defaultMat, ...modeProps }}
+      followPointer={!pointer} // If pointer provided, don't follow mouse auto? Or handle via customPointer
+      customPointer={pointer}
+      modeProps={finalModeProps}
       clearColor={clearColor}
       {...props}
     >

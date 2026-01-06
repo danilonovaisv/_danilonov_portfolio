@@ -10,6 +10,10 @@ import {
   Text,
   useScroll,
 } from '@react-three/drei';
+import { useMemo, useRef, useState, useEffect } from 'react';
+import type { NavItem as HeaderNavItem } from '@/components/layout/header/types';
+import { NavItems } from './NavItems';
+import { GlassBar } from './GlassBar';
 
 const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
   { label: 'HOME', href: '/#hero' },

@@ -28,7 +28,7 @@ export function HeroCopy({
       <div
         className={
           BRAND.layout.container +
-          ' h-full flex flex-col items-start justify-between'
+          ' h-full flex flex-col items-center justify-between'
         }
       >
         {/* TOPO: TAG [BRAND AWARENESS] */}
@@ -44,9 +44,9 @@ export function HeroCopy({
         </motion.span>
 
         {/* MEIO: TEXTO + BOTÃO */}
-        <div className="flex flex-col items-start justify-center flex-1 w-full relative">
+        <div className="flex flex-col items-center justify-center flex-1 w-full relative">
           {/* Container do texto com efeito de revelação */}
-          <div className="relative flex flex-col items-start justify-center text-left z-20">
+          <div className="relative flex flex-col items-center justify-center text-center z-20">
             {/* Overlay de revelação */}
             {enable3D && (
               <div
@@ -57,12 +57,12 @@ export function HeroCopy({
             )}
 
             {/* H1: Texto principal com gradiente de revelação */}
-            <h1 className="text-display-hero text-white mb-6 relative hero-text text-left wrap-break-word hyphens-auto">
+            <h1 className="text-display-hero text-white mb-6 relative hero-text text-center wrap-break-word hyphens-auto">
               Você não vê <br className="hidden md:block" /> o design.
             </h1>
 
             {/* H2: Subtítulo */}
-            <h2 className="text-display-sub text-white/90 relative hero-text mb-8 md:mb-0 text-left wrap-break-word hyphens-auto">
+            <h2 className="text-display-sub text-white/90 relative hero-text mb-8 md:mb-0 text-center wrap-break-word hyphens-auto">
               Mas ele vê você.
             </h2>
           </div>

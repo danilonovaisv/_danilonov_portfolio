@@ -1,197 +1,127 @@
 'use client';
 
-import React, { useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
+import React, { useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
 import * as THREE from 'three';
-import { useFrame, useThree } from '@react-three/fiber';
-import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
+import { useFrame } from '@react-three/fiber';
 
-// ============================================================================
-// CONFIGURAÇÃO DO GHOST
-// ============================================================================
-const GHOST_CONFIG = {
-  bodyColor: '#4d59ff', // Dark body
-  glowColor: '#00c8ff', // Blue glow
-  emissiveIntensity: 5.8,
-  pulseSpeed: 1.6,
-  pulseIntensity: 0.6,
-  ghostOpacity: 0.79,
-  floatSpeed: 3.6,
-  followSpeed: 0.05,
-  wobbleAmount: 0.35,
-  rimLightIntensity: 1.8,
-
-  // Behavior - updated to match screenshot
-  followSpeed: 0.05,
-  wobbleAmount: 0.35,
-  floatSpeed: 1.6,
-  movementThreshold: 0.07,
+// Usamos forwardRef para permitir que o Canvas acesse a posição do grupo
+type GhostProps = {
+  children?: React.ReactNode;
 };
 
-const Ghost = forwardRef<
-  Group,
-  React.JSX.IntrinsicElements['group'] & { active?: boolean }
->(({ active = true, children, ...props }, ref) => {
-  const group = useRef<Group>(null);
-  const bodyMesh = useRef<Mesh>(null);
-  const bodyMaterial = useRef<MeshStandardMaterial>(null);
+const Ghost = forwardRef<THREE.Group, GhostProps>((props, ref) => {
+  const localRef = useRef<THREE.Group>(null);
+  const bodyMeshRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  useImperativeHandle(ref, () => group.current as Group);
+  // Expõe a ref interna para o componente pai
+  useImperativeHandle(ref, () => localRef.current!);
 
-  const { viewport } = useThree();
-  const targetPosition = useRef(new Vector3(0, 0, 0));
-  const startTime = useRef<number | null>(null);
+  // Parâmetros de física (ajuste conforme gosto)
+  const params = {
+    followSpeed: 0.05, // Menor = mais "pesado/atrasado"
+    wobbleAmount: 0.35,
+    floatSpeed: 1.6,
+    rotationDamping: 0.95, // Suavidade da rotação
+    maxRotation: 0.5, // Máximo que ele inclina
+  };
 
-  // Geometria orgânica
-  const ghostGeometry = useMemo(() => {
-    const geometry = new THREE.SphereGeometry(2, 64, 64);
-    const positionAttribute = geometry.getAttribute('position');
-    const positions = positionAttribute.array;
-
+  // Geometria Procedural (Mesma da anterior, mantém a saia ondulada)
+  const geometry = useMemo(() => {
+    const geo = new THREE.SphereGeometry(2, 64, 64);
+    const posAttribute = geo.getAttribute('position');
+    const positions = posAttribute.array;
     for (let i = 0; i < positions.length; i += 3) {
-      const x = positions[i];
-      const y = positions[i + 1];
-      const z = positions[i + 2];
-      // Deformar a "cauda" do fantasma
-      if (y < -0.2) {
-        const noise1 = Math.sin(x * 5) * 0.35;
-        const noise2 = Math.cos(z * 4) * 0.25;
-        const noise3 = Math.sin((x + z) * 3) * 0.15;
-        const combinedNoise = noise1 + noise2 + noise3;
-        positions[i + 1] = -2.0 + combinedNoise;
+      if (positions[i + 1] < -0.2) {
+        const x = positions[i];
+        const z = positions[i + 2];
+        const noise =
+          Math.sin(x * 5) * 0.35 +
+          Math.cos(z * 4) * 0.25 +
+          Math.sin((x + z) * 3) * 0.15;
+        positions[i + 1] = -2.0 + noise;
       }
     }
-    geometry.computeVertexNormals();
-    return geometry;
+    geo.computeVertexNormals();
+    return geo;
   }, []);
 
   useFrame((state) => {
-    if (!group.current || !bodyMesh.current) return;
+    if (!localRef.current || !bodyMeshRef.current) return;
 
-    // Se inativo, esconde/reseta
-    if (!active) {
-      if (bodyMaterial.current) {
-        bodyMaterial.current.opacity = 0;
-        bodyMaterial.current.emissiveIntensity = 0;
-      }
-      bodyMesh.current.scale.setScalar(0.98);
-      startTime.current = null;
-      return;
+    const time = state.clock.getElapsedTime();
+    const { pointer, viewport } = state;
+
+    // 1. Calcular Posição Alvo (Mouse convertidado para coordenadas do mundo)
+    // Multiplicadores ajustam a área de movimento (11 e 7 vêm da referência)
+    const targetX = pointer.x * (viewport.width / 2);
+    const targetY = pointer.y * (viewport.height / 2);
+
+    // 2. Movimento com "Lag" (Inércia)
+    // Aproxima a posição atual do alvo lentamente
+    localRef.current.position.x +=
+      (targetX - localRef.current.position.x) * params.followSpeed;
+    localRef.current.position.y +=
+      (targetY - localRef.current.position.y) * params.followSpeed;
+
+    // 3. Levitação (Float) - Adiciona offset no Y
+    const floatOffset =
+      Math.sin(time * params.floatSpeed * 1.5) * 0.03 +
+      Math.cos(time * params.floatSpeed * 0.7) * 0.018;
+    localRef.current.position.y += floatOffset;
+
+    // 4. Calcular Inclinação (Tilt) baseada na direção do movimento
+    const dx = targetX - localRef.current.position.x;
+    const dy = targetY - localRef.current.position.y;
+
+    // Normaliza direção
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const dirX = dist > 0 ? dx / dist : 0;
+    const dirY = dist > 0 ? dy / dist : 0;
+
+    // Aplica rotação no corpo (mesh interna) e não no grupo
+    // Rotation Z: inclina para os lados (baseado em X)
+    // Rotation X: inclina para frente/trás (baseado em Y)
+    const tiltStrength = 0.15 * params.wobbleAmount;
+
+    // Física de rotação: valor atual * amortecimento + nova força
+    bodyMeshRef.current.rotation.z =
+      bodyMeshRef.current.rotation.z * params.rotationDamping +
+      -dirX * tiltStrength * (1 - params.rotationDamping) * dist; // Multiplica por dist para inclinar mais se mover rápido
+
+    bodyMeshRef.current.rotation.x =
+      bodyMeshRef.current.rotation.x * params.rotationDamping +
+      dirY * tiltStrength * (1 - params.rotationDamping) * dist;
+
+    // Wobble extra idle
+    bodyMeshRef.current.rotation.y =
+      Math.sin(time * 1.4) * 0.05 * params.wobbleAmount;
+
+    // 5. Pulso de Luz
+    if (materialRef.current) {
+      materialRef.current.emissiveIntensity =
+        3.5 + Math.sin(time * 1.6) * 0.6 + Math.sin(time * 0.6) * 0.12;
     }
-
-    if (startTime.current === null) {
-      startTime.current = state.clock.getElapsedTime();
-    }
-
-    const t = state.clock.getElapsedTime() - startTime.current;
-
-    // Timeline de Animação (Entrance)
-    let currentOpacity = 0;
-    let currentScale = 0.98;
-    let currentEmissive = 0;
-
-    // DEBUG: Force visible
-    // currentOpacity = 1.0;
-    // currentScale = 1.0;
-    // currentEmissive = GHOST_CONFIG.emissiveIntensity; // 5.8
-
-    if (t < 0.8) {
-      currentOpacity = 0;
-    } else if (t < 2.0) {
-      const progress = (t - 0.8) / 1.2;
-      currentOpacity = THREE.MathUtils.lerp(0, 0.35, progress);
-      currentScale = THREE.MathUtils.lerp(0.98, 1.0, progress);
-      currentEmissive = THREE.MathUtils.lerp(
-        0,
-        GHOST_CONFIG.emissiveIntensity * 0.4,
-        progress
-      );
-    } else if (t < 3.4) {
-      const progress = (t - 2.0) / 1.4;
-      currentOpacity = THREE.MathUtils.lerp(
-        0.35,
-        GHOST_CONFIG.ghostOpacity * 0.85,
-        progress
-      );
-      currentScale = 1.0;
-      currentEmissive = THREE.MathUtils.lerp(
-        GHOST_CONFIG.emissiveIntensity * 0.4,
-        GHOST_CONFIG.emissiveIntensity * 0.7,
-        progress
-      );
-    } else {
-      // Estado final estável
-      currentOpacity = GHOST_CONFIG.ghostOpacity;
-      currentScale = 1.0;
-
-      // Pulso de respiração (Breathe)
-      const pulse = Math.sin(t * 1.6) * 0.6;
-      const breathe = Math.sin(t * 0.6) * 0.12;
-      currentEmissive = GHOST_CONFIG.emissiveIntensity + pulse + breathe;
-    }
-
-    if (bodyMaterial.current) {
-      bodyMaterial.current.opacity = currentOpacity;
-      bodyMaterial.current.emissiveIntensity = currentEmissive;
-      bodyMaterial.current.color.set(GHOST_CONFIG.bodyColor);
-      bodyMaterial.current.emissive.set(GHOST_CONFIG.glowColor);
-    }
-
-    bodyMesh.current.scale.setScalar(currentScale);
-
-    // Movimento
-    const movementInfluence = THREE.MathUtils.clamp((t - 2.0) / 2.0, 0, 1);
-    const pointer = state.pointer;
-
-    // Interativo no desktop
-    const xTarget = pointer.x * (viewport.width / 3);
-    const yTarget = pointer.y * (viewport.height / 3);
-
-    targetPosition.current.set(xTarget, yTarget, 0);
-    group.current.position.lerp(
-      targetPosition.current,
-      GHOST_CONFIG.followSpeed * movementInfluence
-    );
-
-    // Float e Wobble
-    const floatY =
-      Math.sin(t * GHOST_CONFIG.floatSpeed) * 0.2 * movementInfluence;
-    bodyMesh.current.position.y = floatY;
-
-    const moveX = targetPosition.current.x - group.current.position.x;
-    const tiltStrength = 0.1 * GHOST_CONFIG.wobbleAmount;
-
-    bodyMesh.current.rotation.z = -moveX * tiltStrength * movementInfluence;
-    bodyMesh.current.rotation.y =
-      Math.sin(t * 1.4) * 0.05 * GHOST_CONFIG.wobbleAmount * movementInfluence;
   });
 
   return (
-    <group ref={group} {...props}>
-      {/* Rim Lights */}
-      <directionalLight
-        position={[-8, 6, -4]}
-        intensity={1.8}
-        color="#4d8dff"
-      />
-      <directionalLight
-        position={[8, -4, -6]}
-        intensity={1.26}
-        color="#6e00ff"
-      />
-
-      <mesh ref={bodyMesh} geometry={ghostGeometry}>
+    <group ref={localRef}>
+      {/* Passamos o bodyMeshRef para inclinar apenas o corpo, mantendo o grupo alinhado para os olhos */}
+      <mesh ref={bodyMeshRef} geometry={geometry}>
         <meshStandardMaterial
-          ref={bodyMaterial}
-          transparent
-          roughness={0.02}
+          ref={materialRef}
+          color="#0f2027"
+          emissive="#0048ff"
+          emissiveIntensity={3.8}
+          roughness={0.1}
           metalness={0.0}
+          transparent
+          opacity={0.9}
           side={THREE.DoubleSide}
-          toneMapped={false}
         />
       </mesh>
-
-      {/* Eyes and other children follow the group position but not the body wobble */}
-      {children}
+      {/* Olhos devem ser filhos deste grupo para seguir o fantasma */}
+      {props.children}
     </group>
   );
 });

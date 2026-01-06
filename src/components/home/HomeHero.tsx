@@ -1,7 +1,8 @@
+// src/components/home/HomeHero.tsx
 'use client';
 
-import { useRef, useState, useCallback, useMemo, useEffect } from 'react';
-import { AnimatePresence, motion, cubicBezier } from 'framer-motion';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import { motion, cubicBezier } from 'framer-motion';
 import * as THREE from 'three';
 import { Preloader } from '@/components/ui/Preloader';
 import { HeroCopy } from './HeroCopy';
@@ -14,143 +15,85 @@ import { useWebGLSupport } from '@/hooks/useWebGLSupport';
 const CONFIG = {
   preloadMs: 2000,
   easing: cubicBezier(0.22, 1, 0.36, 1),
-  entrance: {
-    initial: { opacity: 0, y: 40 },
-    animate: { opacity: 1, y: 0 },
-    transition: {
-      duration: 1.0,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: 0.8,
-    },
-  },
+  // Removemos a entrada por framer-motion aqui para controlar via classe/opacity manual
+  // para garantir que o DOM existe para os refs.
 };
 
 export default function HomeHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const manifestoRef = useRef<ManifestoThumbHandle | null>(null);
+  const ghostRef = useRef<THREE.Group>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
-  const [canvasReady, setCanvasReady] = useState(false);
 
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useMediaQuery(
     '(prefers-reduced-motion: reduce)'
   );
-  const hasWebGL = useWebGLSupport();
+  const isWebGLAvailable = useWebGLSupport();
+
+  // Os hooks correm sempre, então o DOM precisa de existir (mesmo que invisível)
+  const { dimensions, width, height, top, left, borderRadius } =
+    useHeroAnimation(sectionRef, manifestoRef, isMobile, prefersReducedMotion);
 
   useEffect(() => {
-    // Minimum visual duration
-    const t = setTimeout(() => setMinTimeElapsed(true), CONFIG.preloadMs);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, CONFIG.preloadMs);
+    return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    // Safety fallback
-    const t = setTimeout(() => setCanvasReady(true), 6000);
-    return () => clearTimeout(t);
-  }, []);
-
-  const handleCanvasCreated = useCallback(() => {
-    setCanvasReady(true);
-  }, []);
-
-  const {
-    mounted,
-    dimensions,
-    width,
-    height,
-    top,
-    left,
-    borderRadius,
-    copyOpacity,
-    lenis,
-  } = useHeroAnimation(
-    sectionRef,
-    manifestoRef,
-    isMobile,
-    prefersReducedMotion
-  );
-
-  const shouldRender3D = useMemo(() => {
-    if (!mounted) return false;
-    if (isMobile) return false;
-    if (!hasWebGL) return false;
-    return !prefersReducedMotion;
-  }, [mounted, isMobile, hasWebGL, prefersReducedMotion]);
-
-  // Se não tem WebGL, marcamos como pronto imediatamente para não travar
-  useEffect(() => {
-    if (!shouldRender3D && mounted) {
-      setCanvasReady(true);
+  const handlePreloaderComplete = useCallback(() => {
+    if (minTimeElapsed) {
+      setIsLoading(false);
     }
-  }, [shouldRender3D, mounted]);
+  }, [minTimeElapsed]);
 
-  const isReady = minTimeElapsed && canvasReady;
-
-  useEffect(() => {
-    if (isReady) setIsLoading(false);
-  }, [isReady]);
-
-  const ghostRef = useRef<THREE.Group | null>(null);
-
-  const handleThumbClick = useCallback(() => {
-    const target = sectionRef.current;
-    if (!lenis || !target) return;
-
-    lenis.scrollTo(target, {
-      offset: target.offsetHeight * 0.88,
-      duration: 1.5,
-    });
-  }, [lenis]);
+  const shouldRender3D = isWebGLAvailable && !prefersReducedMotion && !isMobile;
+  // Lógica para mostrar o Manifesto apenas em Desktop/Sem movimento reduzido
+  const showManifesto = !prefersReducedMotion && !isMobile;
 
   return (
     <section
-      id="hero"
       ref={sectionRef}
-      className="relative h-dvh md:h-[400vh] bg-[#020204] overflow-hidden"
-      aria-label="Home hero section"
+      className="relative w-full h-[300vh] bg-black"
+      data-section="home"
     >
-      <div className="sticky top-0 h-dvh w-full overflow-hidden">
-        <AnimatePresence>
-          {isLoading && <Preloader ready={isReady} label="Summoning spirits" />}
-        </AnimatePresence>
+      <Preloader
+        onComplete={handlePreloaderComplete}
+        durationMs={CONFIG.preloadMs}
+      />
 
-        {/* CAMADA WEBGL */}
-        <motion.div
-          className="absolute inset-0 z-20 pointer-events-none"
-          initial={{ filter: 'blur(20px)', opacity: 0 }}
-          animate={{
-            filter: isLoading ? 'blur(20px)' : 'blur(0px)',
-            opacity: 1,
-          }}
-          transition={{ duration: 2.0, ease: 'linear' }}
+      {/* Sticky Container for Animation Sequence */}
+      <div className="sticky top-0 w-full h-screen overflow-hidden">
+        {/* Layer 0: Loading State Wrapper */}
+        <div
+          className={`relative w-full h-full transition-opacity duration-1000 ease-out ${
+            isLoading ? 'opacity-0 invisible' : 'opacity-100 visible'
+          }`}
         >
-          <GhostStage
-            reducedMotion={!shouldRender3D}
-            active={!isLoading && shouldRender3D}
-            ghostRef={ghostRef}
-            onCanvasCreated={handleCanvasCreated}
-          />
-        </motion.div>
-
-        {/* CAMADA DE TEXTO */}
-        <motion.div
-          style={{ opacity: copyOpacity }}
-          className="absolute inset-0 z-25 pointer-events-none"
-        >
-          <div className="w-full h-full pointer-events-auto">
-            <HeroCopy
-              startEntrance={!isLoading}
-              enable3D={shouldRender3D}
-              ghostRef={ghostRef}
-            />
+          {/* Layer 1: Ghost WebGL (Atmosphere) - Z-20 */}
+          {/* Render only if supported and NOT mobile */}
+          <div className="absolute inset-0 z-20 w-full h-full pointer-events-none">
+            {shouldRender3D && <GhostStage ghostRef={ghostRef} />}
           </div>
-        </motion.div>
 
-        {/* Floating Video - Desktop Only */}
-        {!prefersReducedMotion && !isMobile && (
+          {/* Layer 2: Editorial Text (Hero Copy) - Z-25 */}
+          <div className="absolute inset-0 z-25 flex items-center justify-center pointer-events-none">
+            <div className="w-full h-full">
+              <HeroCopy
+                startEntrance={!isLoading}
+                enable3D={shouldRender3D}
+                ghostRef={ghostRef}
+              />
+            </div>
+          </div>
+
+          {/* Layer 3: Manifesto Video (Expands to Fullscreen) - Z-30 */}
+          {/* Changed from fixed to absolute to scroll away with the section */}
           <motion.div
-            className="fixed bottom-5 right-5 z-50 pointer-events-auto overflow-hidden shadow-2xl"
+            className="absolute z-30 pointer-events-auto overflow-hidden shadow-2xl"
             style={{
               width: mounted && dimensions.w > 0 ? width : '28vw',
               height: mounted && dimensions.h > 0 ? height : '15.75vw',
@@ -160,6 +103,7 @@ export default function HomeHero() {
               right: mounted && dimensions.w > 0 ? undefined : 20,
               borderRadius,
               opacity: mounted ? 1 : 0,
+              display: showManifesto ? 'block' : 'none',
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -169,12 +113,12 @@ export default function HomeHero() {
               delay: 1.5,
             }}
           >
-            <ManifestoThumb ref={manifestoRef} onClick={handleThumbClick} />
+            <ManifestoThumb ref={manifestoRef} />
           </motion.div>
-        )}
+        </div>
       </div>
-
-      <div className="hidden md:block h-screen w-full pointer-events-none" />
     </section>
   );
 }
+
+const mounted = typeof window !== 'undefined';

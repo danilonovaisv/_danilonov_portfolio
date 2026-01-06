@@ -1,99 +1,78 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useRef } from 'react';
-import * as THREE from 'three';
-import Ghost from './Ghost';
-import Particles from './Particles';
-import Fireflies from './Fireflies';
-import GhostEyes from './GhostEyes';
-import AtmosphereVeil from './AtmosphereVeil';
-import AnalogDecayPass from './postprocessing/AnalogDecayPass';
+import React, { Suspense, useRef } from 'react';
 import {
   EffectComposer,
   Bloom,
   Noise,
   Vignette,
-  Scanline,
-  ChromaticAberration,
 } from '@react-three/postprocessing';
-import { BlendFunction } from 'postprocessing';
+import * as THREE from 'three';
 
-const BACKGROUND_COLOR = '#040013';
+import Ghost from './Ghost';
+import GhostEyes from './GhostEyes';
+import AtmosphereVeil from './AtmosphereVeil';
+import AnalogDecay from './postprocessing/AnalogDecayPass';
 
-export default function GhostCanvas({
-  active = true,
-  onCreated,
-  ghostRef: externalGhostRef,
-}: {
+interface GhostCanvasProps {
   active?: boolean;
   onCreated?: () => void;
   ghostRef?: React.RefObject<THREE.Group | null>;
-}) {
-  // Use external ref if provided, otherwise create internal ref
-  const internalGhostRef = useRef<THREE.Group>(null);
-  const ghostRef = externalGhostRef || internalGhostRef;
+}
 
-  const dpr: [number, number] =
-    typeof window !== 'undefined' && window.devicePixelRatio > 2
-      ? [1, 1.5]
-      : [1, 2];
+export default function GhostCanvas({
+  ghostRef: propGhostRef,
+}: GhostCanvasProps) {
+  const localRef = useRef<THREE.Group>(null);
+  // Use the passed ref if available, otherwise use local
+  const ghostRef = (propGhostRef as React.RefObject<THREE.Group>) || localRef;
 
   return (
     <Canvas
-      dpr={dpr}
+      dpr={[1, 1.5]} // Performance
+      camera={{ position: [0, 0, 20], fov: 40 }} // Câmera mais longe para ver mais área
       gl={{
-        antialias: false,
         alpha: true,
-        premultipliedAlpha: false,
+        antialias: false,
         powerPreference: 'high-performance',
-        stencil: false,
-        depth: true,
-        preserveDrawingBuffer: false,
+        toneMapping: THREE.ACESFilmicToneMapping,
       }}
-      camera={{ position: [1, 0, 7], fov: 35 }}
-      style={{ pointerEvents: 'none' }}
-      onCreated={() => onCreated?.()}
+      className="absolute top-0 left-0 w-full h-full" // Removed pointer-events-none to allow mouse interaction
+      style={{ zIndex: 10 }} // O Canvas fica NA FRENTE do texto
     >
-      <color attach="background" args={[BACKGROUND_COLOR]} />
-
       <Suspense fallback={null}>
-        <AtmosphereVeil />
+        <ambientLight intensity={0.1} color="#0a0a2e" />
+        <directionalLight
+          position={[-8, 6, -4]}
+          intensity={2.0}
+          color="#66e3ff"
+        />
+        <directionalLight
+          position={[8, -4, -6]}
+          intensity={1.5}
+          color="#50e3c2"
+        />
 
-        {/* Ghost principal - sua posição será sincronizada com o overlay 2D */}
-        <Ghost
-          ref={ghostRef}
-          scale={0.22}
-          position={[0, -0.2, 0]}
-          active={active}
-        >
-          <GhostEyes />
+        {/* Componente que escurece o fundo e revela com base na posição do ghostRef */}
+        <AtmosphereVeil ghostRef={ghostRef} />
+
+        {/* Grupo do Fantasma */}
+        <Ghost ref={ghostRef}>
+          <GhostEyes /> {/* Olhos dentro do fantasma para moverem junto */}
         </Ghost>
 
-        <Particles count={50} />
-        <Fireflies />
-
-        <EffectComposer multisampling={1} enableNormalPass={false}>
-          <AnalogDecayPass />
+        {/* Efeitos */}
+        <EffectComposer>
           <Bloom
-            luminanceThreshold={0.4}
+            luminanceThreshold={1.5}
             mipmapBlur
-            intensity={2.8}
-            radius={0.4}
+            intensity={1.8}
+            radius={0.8}
           />
-          <ChromaticAberration
-            offset={[0.0015, 0.0015]}
-            radialModulation={true}
-            modulationOffset={0.7}
-            blendFunction={BlendFunction.SCREEN}
-          />
-          <Scanline density={2.5} opacity={0.02} />
-          <Noise
-            opacity={0.08}
-            premultiply
-            blendFunction={BlendFunction.OVERLAY}
-          />
-          <Vignette eskil={false} offset={0.3} darkness={0.9} />
+          <Noise opacity={0.15} />
+          <Vignette eskil={false} offset={0.1} darkness={1.1} />
+          <AnalogDecay intensity={0.5} jitter={0.2} scanlines={0.3} />
         </EffectComposer>
       </Suspense>
     </Canvas>
