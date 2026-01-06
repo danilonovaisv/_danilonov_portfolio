@@ -11,195 +11,185 @@
 ✅ Nenhum ponto deve ser ignorado.
 
  
-# 📑 RELATÓRIO DE AUDITORIA DE INTERFACE & UX
+## 🛡️ GHOST QA ENGINE — RELATÓRIO FINAL DE INTEGRIDADE (FULL SCOPE)
 
-## 📂 PÁGINA: HOME (`/`)
+**Status da Auditoria:** 🟠 **APROVADO COM RESSALVAS (ACTION REQUIRED)**
+**Data:** 06/01/2026
+**Escopo:** HOME / PORTFOLIO / SOBRE (Codebase completa `src`)
 
-### 1. Diagnóstico Geral
+---
 
-A Home é a página de maior complexidade técnica devido à mistura de **WebGL** (Ghost), **Video Physics** (Thumbnail to Fullscreen) e **Layout Editorial**. A referência visual (`HOME-PORTFOLIO-BLACK---GHOST.jpg`) exige um controle de contraste rigoroso, especialmente na transição para o rodapé branco, que é um ponto crítico de falha para o Header "Glass".
+### 1️⃣ VISÃO GERAL TÉCNICA
 
-### 2. Análise de Seções e Espaçamentos
+A arquitetura base (Next.js 14 App Router + Tailwind) está sólida. A integração com WebGL (`src/components/canvas`) está bem isolada. No entanto, a **fidelidade visual ("The Ghost Look")** está comprometida por inconsistências de grid (margens não alinham perfeitamente entre Header e Conteúdo) e violações das regras de Motion (uso de `scale` e easings padrão).
 
-| Seção | Status Layout (Ref vs Spec) | Status Espaçamento | Status Motion | Risco Técnico |
+O sistema de fontes (`TT Norms Pro`) parece estar configurado via CSS, mas precisa garantir carregamento sem *layout shift* (CLS).
+
+---
+
+### 2️⃣ DIAGNÓSTICO POR SEÇÃO (O JUIZ)
+
+#### 🏠 HOME PAGE (Hero + Manifesto)
+
+* **Fidelidade Visual:** [✗] Alinhamento vertical do texto do Hero não bate pixel-perfect com o Logo no Header.
+* **Motion:** [✗] `ManifestoThumb` usa `scale` (Violação Crítica).
+* **Mobile:** [✓] Altura `dvh` correta.
+* **WebGL:** [⚠] `GhostStage` sem fallback visual robusto (tela preta/branca antes de carregar).
+
+#### 📂 PORTFOLIO (Listagem)
+
+* **Fidelidade Visual:** [✓] Grid Mosaic está correto.
+* **Responsividade:** [✗] Títulos `text-[12vw]` quebram o layout horizontal em celulares pequenos (< 370px).
+* **UX:** [⚠] Transição de entrada dos cards está um pouco rápida, fugindo do `GHOST_EASE`.
+
+#### 👤 SOBRE (Origin + Method)
+
+* **Fidelidade Visual:** [⚠] A seção `AboutOrigin` tem espaçamento lateral inconsistente em relação à `Home`.
+* **Motion:** [✗] `GhostEyes` (WebGL) pode causar re-render desnecessário se não memoizado.
+
+---
+
+### 3️⃣ TABELA DE SEVERIDADE DE ERROS
+
+| ID | Seção | Erro Encontrado | Severidade | Ação |
 | --- | --- | --- | --- | --- |
-| **Hero + Ghost** | ✅ Fiel | ⚠️ Crítico | ✅ Alta complexidade | O texto "Você não vê o design" precisa de z-index perfeito sobre o WebGL. |
-| **Manifesto Video** | ⚠️ Atenção | ❌ Risco de quebra | ✅ Definido (Lerp) | A transição de Thumbnail (canto inf. dir.) para Fullscreen exige `layout-shared-element`. |
-| **Showcase (Stripes)** | ✅ Fiel | ✅ Definido | 🟡 Performance | O hover nas listras deve empurrar o layout sem *layout shift* brusco. |
-| **Featured (Bento)** | ❌ Divergência | ⚠️ Crítico | ✅ Stagger | A imagem mostra um grid assimétrico específico; a spec fala em Bento genérico. Seguir imagem. |
-| **Contact (White)** | ✅ Fiel | ✅ Definido | ❌ Contraste Header | O Header precisa inverter a cor do texto para preto ao entrar nesta seção branca. |
-
-### 3. Problemas Detectados (Detalhe)
-
-**❌ [PROBLEMA #01] - Conflito de Referência no Grid de Projetos**
-
-* **Referência Visual:** `HOME-PORTFOLIO-BLACK---GHOST.jpg` mostra projetos como "Magic" e "Designing Trust" ocupando larguras específicas, com títulos sobrepostos ou abaixo.
-* **Especificação Técnica:** `HOME - PROTOTIPO INTERATIVO.md` descreve um "Bento Grid" genérico.
-* **Determinação:** O código deve forçar as classes do Tailwind (`col-span-X`) para replicar **exatamente** o mosaico da imagem JPG, ignorando a sugestão genérica da spec se houver conflito.
-
-**❌ [PROBLEMA #02] - Header Contrast Bug (Seção Contato)**
-
-* **Referência Visual:** A seção de contato final tem fundo branco/cinza claro (`#f0f0f0` na spec). O Header é fixo.
-* **Risco Técnico:** Se o header mantiver texto branco (`#fcffff`) sobre o fundo claro, a navegação desaparece.
-* **Ação:** Implementar observer para trocar a variável CSS do header `--header-text` para `#0e0e0e` ao cruzar a `div` de contato.
-
-**❌ [PROBLEMA #03] - Mobile Manifesto Video**
-
-* **Referência:** `HOME-PORTFOLIO-LAYOUYT-MOBILE---GHOST.jpg`.
-* **Análise:** No mobile, não existe "floating thumbnail". O vídeo é um bloco de largura total.
-* **Correção de Código:** Garantir `display: none` no componente FloatingThumbnail em breakpoints `< lg` e renderizar um componente `VideoBlock` estático no fluxo.
+| **01** | **Global/Motion** | Uso de `scale` e easings padrão (não `GHOST_EASE`). | 🟣 **MOTION** | Refatorar `framer-motion`. |
+| **02** | **Home/Header** | Desalinhamento de `padding-x` entre Header e Hero. | 🟡 **VISUAL** | Padronizar Container. |
+| **03** | **Home/WebGL** | `Suspense fallback={null}` no Ghost. | 🔴 **CRÍTICO** | Adicionar Loader CSS. |
+| **04** | **Portfolio** | Typography Overflow em viewport pequeno. | 🔴 **CRÍTICO** | Add `break-words` / clamp. |
+| **05** | **Sobre** | Margens laterais diferentes da Home. | 🟡 **VISUAL** | Unificar classes de Layout. |
 
 ---
 
-## 📂 PÁGINA: SOBRE (`/sobre`)
+### 4️⃣ PROMPTS TÉCNICOS DE CORREÇÃO (A MÃO)
 
-### 1. Diagnóstico Geral
-
-Esta página é puramente editorial. O sucesso depende de **Tipografia** (TT Norms Pro) e **Ritmo Vertical**. A referência visual (`SOBRE-PORTFOLIO-BLACK---GHOST.jpg`) mostra um uso agressivo de espaço negativo e alinhamentos à direita que são difíceis de manter responsivos sem um grid CSS robusto.
-
-### 2. Análise de Seções e Espaçamentos
-
-| Seção | Status Layout | Status Espaçamento | Status Motion | Risco Técnico |
-| --- | --- | --- | --- | --- |
-| **Hero (Manifesto)** | ✅ Fiel | ✅ 100vh | ✅ Texto a Texto | O alinhamento à direita do texto no desktop é crucial. |
-| **Origem (Timeline)** | ⚠️ Atenção | ❌ Risco de aperto | ✅ Scroll Trigger | A imagem mostra MUITO respiro entre os blocos. O código tende a "apertar". |
-| **Skills (Cards)** | ✅ Fiel | ✅ Definido | 🟡 Opacidade | Os cards na imagem têm bordas sutis e transparência. |
-| **Mobile Flow** | ✅ Fiel | ✅ Ajustado | N/A | A imagem `SOBRE-MOBILE...` confirma: Texto em cima, imagem em baixo. |
-
-### 3. Problemas Detectados (Detalhe)
-
-**❌ [PROBLEMA #04] - Espaçamento da Seção "Origem"**
-
-* **Referência:** `SOBRE-PORTFOLIO-BLACK---GHOST.jpg` (Seção "Desde cedo...").
-* **Análise:** Existe um alinhamento visual onde o texto está em uma coluna (esq) e a imagem na outra (dir), mas verticalmente desencontrados (staggered).
-* **Risco:** O dev comum colocaria `flex-row items-center`. Isso está **errado**.
-* **Correção:** Usar Grid ou `mt-16` / `pt-32` na coluna da imagem para criar o desnível visual da referência.
-
-**❌ [PROBLEMA #05] - Legibilidade Texto sobre Vídeo (Hero)**
-
-* **Referência:** Texto branco sobre fundo escuro com rosto (vídeo).
-* **Risco:** Se o vídeo for claro, o texto some.
-* **Obrigatoriedade:** Implementar o overlay descrito na spec (`bg-gradient-to-b from-black/60...`) com rigor, ou o design quebra em telas de alto brilho.
+Aqui estão os 5 prompts atômicos para corrigir **todo o site**. Execute-os sequencialmente com seu Agente de Código (Cursor/Copilot).
 
 ---
 
-## 📂 PÁGINA: PORTFOLIO SHOWCASE (`/portfolio`)
+#### 🛠️ Prompt #01 — Padronização Crítica de Grid (Header vs Hero)
 
-### 1. Diagnóstico Geral
+**Objetivo:** Garantir que o texto do Hero e o Logo do Header tenham exatamente o mesmo alinhamento vertical à esquerda (Edge Alignment).
 
-Focada em imersão. A imagem `PORTFOLIO-PAGE-LAYOUYT.jpg` mostra um layout vibrante no topo (Hero Colorido) e um grid denso abaixo. A Spec fala de "Parallax Lerp", que não é visível na imagem estática, mas é fundamental para a sensação "Ghost".
+**Arquivos Alvo:**
 
-### 2. Análise de Seções e Espaçamentos
+* `src/components/layout/header/DesktopFluidHeader.tsx`
+* `src/components/home/HeroCopy.tsx` (ou arquivo que contém o texto principal)
 
-| Seção | Status Layout | Status Espaçamento | Status Motion | Risco Técnico |
-| --- | --- | --- | --- | --- |
-| **Hero Loop** | ✅ Fiel | ✅ Fullscreen | N/A | Vídeo deve ter `object-fit: cover` absoluto. |
-| **Gallery Grid** | ❌ Divergência | ✅ Tight Gap | ⚠️ Performance | A imagem mostra 3 colunas "full bleed" (sem margem lateral?). Spec diz padding `0.25rem`. |
-| **Modal (Project)** | N/A (Sem img) | N/A | ✅ Timeline Spec | Seguir estritamente a timeline de animação da spec (0-1500ms). |
+**Instruções de Refatoração:**
 
-### 3. Problemas Detectados (Detalhe)
+1. Defina uma variável de classe CSS constante para o container horizontal. Ex: `const CONTAINER_X = "px-6 md:px-12 lg:px-16"`.
+2. Aplique essa **mesma classe exata** no wrapper do `DesktopFluidHeader` e no wrapper de conteúdo do `HomeHero`/`HeroCopy`.
+3. Remova paddings arbitrários como `pl-4` ou `pl-8` que estejam desalinhados.
 
-**❌ [PROBLEMA #06] - Grid Gap e Margens**
+**Snippet de Referência:**
 
-* **Referência:** `PORTFOLIO-PAGE-LAYOUYT.jpg` mostra as imagens dos projetos (Garoto, etc.) quase coladas umas nas outras.
-* **Spec:** Pede `gap-1` (`0.25rem`).
-* **Ação:** Garantir que o container da galeria não tenha `max-width` restritivo (como `container mx-auto`), mas sim ocupe a largura total ou quase total conforme a referência visual "widescreen".
+```tsx
+// Em ambos os arquivos (Header e Hero Content)
+const GHOST_CONTAINER = "w-full max-w-[1920px] mx-auto px-5 md:px-10 lg:px-16";
 
----
+return (
+  <div className={GHOST_CONTAINER}>
+    {/* Conteúdo */}
+  </div>
+);
 
-## 🛠️ FASE 2: PROMPTS TÉCNICOS DE EXECUÇÃO
-
-Aqui estão os prompts atômicos para corrigir/implementar o código com precisão cirúrgica, baseados na auditoria acima.
-
-### 🔧 Prompt #01 — Implementação do Bento Grid (Home)
-
-**Objetivo:** Criar a seção "Featured Projects" da Home respeitando a assimetria da imagem de referência, ignorando grids genéricos.
-
-**Contexto:**
-Você deve implementar a seção de Projetos em Destaque.
-**Referência Visual:** `HOME-PORTFOLIO-BLACK---GHOST.jpg` (Grid irregular, estilo revista).
-**Tech Stack:** React, Tailwind CSS.
-
-**Instruções Técnicas:**
-
-1. Crie um componente `FeaturedProjects.tsx`.
-2. Utilize CSS Grid (`grid-cols-1 md:grid-cols-12`).
-3. **Layout Rígido (Desktop):**
-* **Card 1 (Magic):** `col-span-5` (Esquerda).
-* **Card 2 (Designing Trust - FFF):** `col-span-7` (Direita, mais largo).
-* **Card 3 (Epic Look - Full):** `col-span-12` (Largura total, destaque central).
-* **Card 4 (Building - Vertical):** `col-span-8`.
-* **CTA Card (Like what you see?):** `col-span-4` (Canto inferior direito, fundo escuro sólido).
-
-
-4. **Espaçamento:** Use `gap-6` ou `gap-8`.
-5. **Mobile:** Tudo vira `col-span-12` (pilha vertical).
-6. Ajuste as alturas (`h-[500px]`, `h-[600px]`) para bater visualmente com a proporção das imagens.
+```
 
 ---
 
-### 🔧 Prompt #02 — Correção do Header com Contraste Dinâmico
+#### 🛠️ Prompt #02 — Correção Motion Manifesto (Remove Scale)
 
-**Objetivo:** Garantir que o menu seja legível tanto no fundo escuro (Hero) quanto no fundo branco (Contato).
+**Objetivo:** Remover animação de escala proibida e substituir por Reveal/ClipPath conforme "Ghost Design System".
 
-**Contexto:**
-O Header é fixo (`sticky`). A seção final "Contato" é branca (`bg-[#F5F5F5]`). O texto do header é branco por padrão.
+**Arquivo Alvo:** `src/components/home/ManifestoThumb.tsx`
 
-**Instruções Técnicas:**
+**Instruções de Refatoração:**
 
-1. No componente `Header.tsx`, adicione um estado `isDarkSection`.
-2. Implemente um `useEffect` que detecta a posição de scroll ou usa `IntersectionObserver` visando a seção de ID `#contact`.
-3. **Lógica:**
-* Se `#contact` estiver visível no viewport (top intersection): `setIsDarkSection(true)`.
-* Caso contrário: `setIsDarkSection(false)`.
+1. Localize `useTransform` ou `motion.div` que afeta `scale`.
+2. **Apague** a propriedade `scale`.
+3. Substitua por um efeito de `clipPath` ou `opacity` + `y` translate suave.
+4. Certifique-se de usar `ease: [0.22, 1, 0.36, 1]` (GHOST_EASE).
 
+**Snippet de Referência:**
 
-4. **Estilização Tailwind:**
-* Container: `transition-colors duration-300`.
-* Texto dos links: `${isDarkSection ? 'text-black hover:text-blue-600' : 'text-white hover:text-blue-400'}`.
-* Logo: Altere o `src` ou o `fill` do SVG dependendo do estado.
+```tsx
+// Substituir Scale por ClipPath Reveal
+<motion.div
+  style={{
+    clipPath: scrollYProgress.get() > 0 ? "inset(0% 0% 0% 0%)" : "inset(5% 10% 5% 10%)",
+    transition: { ease: [0.22, 1, 0.36, 1], duration: 1.2 }
+  }}
+  className="w-full h-full relative overflow-hidden"
+>
+  <Image ... className="object-cover scale-100" /> {/* Imagem estática ou parallax suave */}
+</motion.div>
 
-
-
----
-
-### 🔧 Prompt #03 — Ajuste de Ritmo Vertical (Página Sobre)
-
-**Objetivo:** Recriar o espaçamento "Editorial" e o desalinhamento visual entre texto e imagem na seção "Origem".
-
-**Contexto:**
-Referência `SOBRE-PORTFOLIO-BLACK---GHOST.jpg`. O layout não é simétrico.
-
-**Instruções Técnicas:**
-
-1. No componente `OriginSection.tsx`, use um Grid de 12 colunas.
-2. **Bloco 1:**
-* Texto: `col-start-2 col-span-5`. Centralizado verticalmente? **Não.** Adicione `mt-0`.
-* Mídia (Vídeo/Foto): `col-start-8 col-span-5`. Adicione `mt-32` (margin-top forçado) para criar o efeito "staggered" (desencontrado) visto na imagem.
-
-
-3. **Bloco 2 (Invertido):**
-* Mídia: `col-start-2 col-span-5`. Margin normal.
-* Texto: `col-start-8 col-span-4`. Adicione `mt-24`.
-
-
-4. **Tipografia:** Garanta que os títulos tenham `leading-tight` e as descrições tenham `leading-relaxed` com cor `#a1a3a3` (cinza médio), não branco puro.
+```
 
 ---
 
-### 🔧 Prompt #04 — Portfolio Parallax Engine (Performance)
+#### 🛠️ Prompt #03 — Robustez WebGL (Ghost Fallback)
 
-**Objetivo:** Implementar o grid da galeria com Scroll Lerp sem travar o navegador.
+**Objetivo:** Eliminar o "flash" branco ou vazio antes do Ghost carregar.
 
-**Contexto:**
-Spec `PORTFOLIO - PROTÓTIPO INTERATIVO.md`. Requer `requestAnimationFrame`.
+**Arquivo Alvo:** `src/components/home/GhostStage.tsx`
 
-**Instruções Técnicas:**
+**Instruções de Refatoração:**
 
-1. Crie o hook `useParallax.ts`.
-2. Não anime `top` ou `margin`. Use **apenas** `transform: translate3d(0, Ypx, 0)`.
-3. **Lógica Lerp:** `current = current + (target - current) * 0.05`.
-4. **Gallery Track:** O container da galeria deve ser `fixed` na tela, enquanto o `body` tem a altura total simulada (`document.body.style.height = trackHeight + 'px'`).
-5. **Mobile Guard:** Desative completamente o cálculo de Lerp em telas `< 1024px` (`window.matchMedia`). No mobile, use scroll nativo para melhor UX.
+1. Crie um componente `<GhostFallback />` que seja apenas uma `div` com a cor de fundo exata do site (`bg-[#0A0A0A]` ou similar).
+2. Adicione uma opacidade pulsante sutil (`animate-pulse` do Tailwind com duração longa).
+3. Insira no `Suspense fallback`.
 
+**Snippet de Referência:**
 
+```tsx
+const GhostFallback = () => (
+  <div className="absolute inset-0 z-0 bg-brand-black opacity-100 pointer-events-none transition-opacity duration-700" />
+);
+
+// No render:
+<Suspense fallback={<GhostFallback />}>
+  <GhostCanvas />
+</Suspense>
+
+```
+
+---
+
+#### 🛠️ Prompt #04 — Segurança de Tipografia (Portfolio)
+
+**Objetivo:** Impedir que "Web Design" ou nomes de projetos quebrem o layout em iPhone SE/Android pequenos.
+
+**Arquivo Alvo:** `src/components/portfolio/PortfolioHeroNew.tsx` (e Cards).
+
+**Instruções de Refatoração:**
+
+1. No texto principal (`text-[12vw]`), adicione a classe `break-words` e `hyphens-auto`.
+2. (Opcional) Use `clamp` no estilo inline para limitar o tamanho mínimo: `fontSize: 'clamp(32px, 12vw, 160px)'`.
+3. Garanta que o pai tenha `w-full overflow-hidden`.
+
+**Snippet de Referência:**
+
+```tsx
+<h1 className="text-[12vw] leading-[0.8] tracking-tighter font-light break-words hyphens-auto w-full overflow-hidden">
+  {title}
+</h1>
+
+```
+
+---
+
+#### 🛠️ Prompt #05 — Alinhamento Sobre (About)
+
+**Objetivo:** Garantir consistência visual entre a página Sobre e a Home.
+
+**Arquivos Alvo:** `src/components/sobre/AboutHero.tsx`, `src/components/sobre/AboutOrigin.tsx`
+
+**Instruções de Refatoração:**
+
+1. Importe ou reutilize a constante `GHOST_CONTAINER` definida no Prompt #01.
+2. Verifique se o texto de "Origin" está alinhado à esquerda com o título.
+3. Remova margens negativas se existirem.
+
+---

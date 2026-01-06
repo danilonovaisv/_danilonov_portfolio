@@ -89,7 +89,12 @@ export const ManifestoThumb = forwardRef<
       </div>
 
       {/* Container do Vídeo com Overflow Hidden para Bordas */}
-      <div className="relative w-full h-full overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1">
+      <motion.div
+        initial={{ clipPath: 'inset(10% 10% 10% 10%)' }}
+        animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 1.6 }}
+        className="relative w-full h-full overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1"
+      >
         <video
           ref={videoRef}
           src={videoSrc}
@@ -98,7 +103,7 @@ export const ManifestoThumb = forwardRef<
           loop
           playsInline
           onError={handleVideoError}
-          className="w-full h-full object-cover transform scale-105" // Scale ligeiro para evitar bordas brancas
+          className="w-full h-full object-cover" // Removed scale-105 to be safe, though it was static
           aria-label="Portfolio showreel video"
         />
 
@@ -107,7 +112,7 @@ export const ManifestoThumb = forwardRef<
           className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"
           aria-hidden="true"
         />
-      </div>
+      </motion.div>
     </div>
   );
 });

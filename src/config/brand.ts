@@ -43,4 +43,7 @@ export const BRAND = {
     manifesto:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   },
+  layout: {
+    container: 'w-full max-w-[1920px] mx-auto px-5 md:px-10 lg:px-16',
+  },
 };

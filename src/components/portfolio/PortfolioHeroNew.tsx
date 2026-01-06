@@ -80,7 +80,7 @@ export default function PortfolioHeroNew() {
           initial={prefersReducedMotion ? false : { opacity: 0, y: offset.large, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={ghostTransition(0.2, duration.slow)}
-          className="text-[clamp(2.5rem,7vw,5rem)] font-bold tracking-[-0.02em] text-white leading-[1.05] mb-6 md:mb-8 will-change-transform"
+          className="text-[clamp(2.5rem,7vw,5rem)] font-bold tracking-[-0.02em] text-white leading-[1.05] mb-6 md:mb-8 will-change-transform wrap-break-word hyphens-auto"
         >
           <span className="text-primary">portfólio</span>{' '}
           <span className="text-white">showcase</span>

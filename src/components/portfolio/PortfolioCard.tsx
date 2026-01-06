@@ -131,7 +131,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-1.5 local-reset">
              <motion.h3
-               className="text-xl md:text-2xl lg:text-3xl font-bold text-white leading-[1.1] tracking-tight"
+               className="text-xl md:text-2xl lg:text-3xl font-bold text-white leading-[1.1] tracking-tight wrap-break-word hyphens-auto"
              >
                {project.title}
              </motion.h3>

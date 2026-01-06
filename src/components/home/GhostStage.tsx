@@ -1,16 +1,22 @@
 'use client';
 
+import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 import styles from './GhostStage.module.css';
+
+// Componente de fallback para evitar flashes
+const GhostFallback = () => (
+  <div className="absolute inset-0 z-0 bg-[#050505] opacity-100 pointer-events-none transition-opacity duration-700 animate-pulse" />
+);
 
 // Carregamento dinâmico do Canvas para evitar erros de SSR (window is not defined)
 const GhostCanvas = dynamic(
   () => import('@/components/canvas/home/GhostCanvas'),
   {
     ssr: false,
-    loading: () => <div className={styles.placeholder} />,
+    loading: () => <GhostFallback />,
   }
 );
 
@@ -47,11 +53,13 @@ export function GhostStage({
         transition={{ duration: 1.5 }}
         className="absolute inset-0 w-full h-full"
       >
-        <GhostCanvas
-          active={active}
-          onCreated={onCanvasCreated}
-          ghostRef={ghostRef}
-        />
+        <Suspense fallback={<GhostFallback />}>
+          <GhostCanvas
+            active={active}
+            onCreated={onCanvasCreated}
+            ghostRef={ghostRef}
+          />
+        </Suspense>
       </motion.div>
 
       {/* Gradiente de vinheta para ajudar na leitura do texto */}

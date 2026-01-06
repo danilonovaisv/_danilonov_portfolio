@@ -13,24 +13,24 @@ export const HOME_CONTENT = {
     cta: { label: "let's build something great →", href: '/#contact' },
     categories: [
       {
-        id: 'brand-campaigns',
-        label: 'Brand & Campaigns',
+        id: 'branding-campaigns',
+        label: 'Brand Identity & Campaigns',
         labelMobile: 'Branding',
         align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
       {
-        id: 'videos-motions',
-        label: 'Videos & Motions',
+        id: 'motion-design-film',
+        label: 'Motion Design & Film',
         labelMobile: 'Motion',
         align: 'center',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       },
       {
-        id: 'websites-webcampaigns-tech',
-        label: 'Web Campaigns, Websites & Tech',
+        id: 'web-design-technology',
+        label: 'Web Design & Technology',
         labelMobile: 'Web & Tech',
         align: 'start',
         thumb:

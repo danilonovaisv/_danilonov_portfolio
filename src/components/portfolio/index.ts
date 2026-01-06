@@ -14,9 +14,9 @@ export { default as PortfolioModalNew } from './PortfolioModalNew';
 export { default as TypeAContent } from './content/TypeAContent';
 export { default as TypeBContent } from './content/TypeBContent';
 
-// Legacy (para compatibilidade)
-export { default as PortfolioShowcaseSection } from './PortfolioShowcaseSection';
-export { default as ProjectModal } from './ProjectModal';
-export { default as AccordionRow } from './AccordionRow';
-export { default as MosaicCard } from './MosaicCard';
-export { default as PortfolioMosaicGrid } from './PortfolioMosaicGrid';
+// Legacy (para compatibilidade - comentados por estarem ausentes no diretório)
+// export { default as PortfolioShowcaseSection } from './PortfolioShowcaseSection';
+// export { default as ProjectModal } from './ProjectModal';
+// export { default as AccordionRow } from './AccordionRow';
+// export { default as MosaicCard } from './MosaicCard';
+// export { default as PortfolioMosaicGrid } from './PortfolioMosaicGrid';

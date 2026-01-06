@@ -1,6 +1,6 @@
 import HomeHero from '@/components/home/HomeHero';
 import ManifestoSection from '@/components/home/ManifestoSection';
-import PortfolioShowcaseSection from '@/components/portfolio/PortfolioShowcaseSection';
+import PortfolioShowcase from '@/components/portfolio/PortfolioShowcase';
 import FeaturedProjectsSection from '@/components/home/FeaturedProjectsSection';
 
 export default function HomePage() {
@@ -8,7 +8,7 @@ export default function HomePage() {
     <>
       <HomeHero />
       <ManifestoSection />
-      <PortfolioShowcaseSection />
+      <PortfolioShowcase />
       <FeaturedProjectsSection />
     </>
   );
