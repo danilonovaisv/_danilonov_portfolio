@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, MotionStyle } from 'framer-motion';
 
 interface ManifestoThumbProps {

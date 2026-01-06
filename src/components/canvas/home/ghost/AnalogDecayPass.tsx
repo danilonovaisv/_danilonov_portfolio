@@ -1,5 +1,5 @@
-// AnalogDecayPass.tsx
 'use client';
+
 import React, { forwardRef, useMemo } from 'react';
 import { Effect } from 'postprocessing';
 import { Uniform } from 'three';
