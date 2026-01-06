@@ -45,6 +45,10 @@ Sua missão é escanear o ambiente, identificar a stack tecnológica, a arquitet
     - Referências visuais (imagens `.jpg`, `.png` na mesma pasta).
 4.  Verifique se a pasta `.context/` contém as imagens de referência citadas nos docs.
 
+5.  Verifique a pasta `.agent/` e leia e atualise sua base de conhecimento do projeto com toda documentação. rules e workflows existentes.
+
+6.  Adicione na memoria toda fonte de conhecimento para que utilize como fonte de instrução para os agents.
+
 ---
 
 ## SAÍDA ESPERADA (Resumo de Alinhamento)

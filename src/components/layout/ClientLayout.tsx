@@ -31,9 +31,6 @@ export default function ClientLayout({
       <Header />
       <main id="main-content" className="relative grow lg:pb-[88px]">
         {children}
-        <ClientsBrandsSection />
-        <ContactSection />
-        <Footer />
       </main>
       <AntigravityDebugger />
     </SmoothScroll>
