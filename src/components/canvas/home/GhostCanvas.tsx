@@ -94,13 +94,13 @@ export default function GhostCanvas({
           <GhostEyes />
         </Ghost>
 
-        <Particles count={35} />
+        <Particles count={60} />
 
         <EffectComposer enableNormalPass={false}>
           <Bloom
             luminanceThreshold={0.3}
             mipmapBlur
-            intensity={1.25}
+            intensity={1.5}
             radius={0.0}
           />
           <Noise opacity={0.15} />

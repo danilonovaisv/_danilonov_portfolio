@@ -37,7 +37,7 @@ const Ghost = forwardRef<THREE.Group, GhostProps>((props, ref) => {
 
   // Geometry Procedural (Exact Match from CodePen)
   const geometry = useMemo(() => {
-    const geo = new THREE.SphereGeometry(2, 40, 40); // Reference uses 40 segments
+    const geo = new THREE.IcosahedronGeometry(2, 20); // Reference uses 40 segments
     const posAttribute = geo.getAttribute('position');
     const positions = posAttribute.array;
 

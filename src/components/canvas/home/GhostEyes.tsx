@@ -8,37 +8,27 @@ export default function GhostEyes() {
   const leftEye = useRef<THREE.Mesh>(null);
   const rightEye = useRef<THREE.Mesh>(null);
   const { mouse } = useThree();
-
-  // Estado para piscar
   const [blink, setBlink] = useState(false);
 
-  // Lógica de piscar aleatório
   useEffect(() => {
     const timeout = () => {
       setBlink(true);
-      setTimeout(() => setBlink(false), 150); // Olhos fechados por 150ms
-
-      // Próximo piscar entre 2s e 6s
+      setTimeout(() => setBlink(false), 150);
       const nextBlink = Math.random() * 4000 + 2000;
       setTimeout(timeout, nextBlink);
     };
-
     const timer = setTimeout(timeout, 3000);
     return () => clearTimeout(timer);
   }, []);
 
-  useFrame((_) => {
+  useFrame(() => {
     if (!leftEye.current || !rightEye.current) return;
 
-    // Calcular posição alvo baseada no mouse (com limite de rotação)
-    // O fantasma está em 0,0,0. Os olhos devem olhar para o mouse.
-    // Mouse x/y vai de -1 a 1.
-
-    const eyeMovementRange = 0.08; // O quanto os olhos se movem dentro da "orbita"
+    const eyeMovementRange = 0.15;
     const targetX = mouse.x * eyeMovementRange;
     const targetY = mouse.y * eyeMovementRange;
 
-    // Interpolação suave (Lerp)
+    // Lerp para suavidade
     leftEye.current.position.x = THREE.MathUtils.lerp(
       leftEye.current.position.x,
       -0.3 + targetX,
@@ -61,7 +51,6 @@ export default function GhostEyes() {
       0.1
     );
 
-    // Escala para piscar (scale Y vai a 0.1)
     const targetScaleY = blink ? 0.1 : 1;
     leftEye.current.scale.y = THREE.MathUtils.lerp(
       leftEye.current.scale.y,
@@ -75,24 +64,17 @@ export default function GhostEyes() {
     );
   });
 
-  // Olhos como recortes escuros para lembrar o ícone de referência
-  const eyeMaterial = new THREE.MeshBasicMaterial({ color: '#0b1c30' });
-
+  // Material básico para reagir fortemente ao Bloom
   return (
-    <group position={[0.05, 0.05, 1.05]}>
-      {/* Posicionado na frente do fantasma */}
-      <mesh
-        ref={leftEye}
-        position={[-0.55, 0.15, 0]}
-        geometry={new THREE.SphereGeometry(0.32, 20, 20)}
-        material={eyeMaterial}
-      />
-      <mesh
-        ref={rightEye}
-        position={[0.55, 0.15, 0]}
-        geometry={new THREE.SphereGeometry(0.32, 20, 20)}
-        material={eyeMaterial}
-      />
+    <group position={[0, 0, 0.8]}>
+      <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh ref={rightEye} position={[0.3, 0.1, 0]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
     </group>
   );
 }

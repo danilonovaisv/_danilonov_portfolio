@@ -1,9 +1,14 @@
 // src/components/home/HomeHero.tsx
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+} from 'framer-motion';
 
 import HeroCopy from './hero/HeroCopy';
 
@@ -46,6 +51,16 @@ export default function HomeHero() {
   // Text Overlay on Video (Manifesto Title)
   const textOpacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1]);
   const textY = useTransform(scrollYProgress, [0.7, 0.9], [50, 0]);
+
+  // Audio Control
+  const [isMuted, setIsMuted] = useState(true);
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    // Unmute when video is fully expanded (latest > 0.8)
+    // Browsers might block this auto-unmute if no interaction occurred,
+    // but we implement the logic as requested.
+    setIsMuted(latest < 0.85);
+  });
 
   return (
     <section
@@ -113,7 +128,7 @@ export default function HomeHero() {
               src={MANIFESTO_VIDEO_URL}
               autoPlay
               loop
-              muted
+              muted={isMuted}
               playsInline
               className="w-full h-full object-cover"
             />
