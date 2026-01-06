@@ -56,7 +56,7 @@ export function Preloader({
       {show && (
         <motion.div
           className={
-            'fixed inset-0 z-100 grid place-items-center bg-ghost-bg ' +
+            'fixed inset-0 z-[50] grid place-items-center bg-[linear-gradient(180deg,#0a0a0a_0%,#1a1a1a_100%)] ' +
             (className ?? '')
           }
           initial={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}

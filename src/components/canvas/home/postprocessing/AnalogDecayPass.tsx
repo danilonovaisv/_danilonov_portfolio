@@ -1,125 +1,85 @@
-// src/components/canvas/home/postprocessing/AnalogDecayPass.tsx
 'use client';
 
 import React, { forwardRef, useMemo } from 'react';
-import * as THREE from 'three';
-
+import { Uniform, WebGLRenderer, WebGLRenderTarget } from 'three';
 import { Effect } from 'postprocessing';
 
-// Shader Fragment exato da referência (CodePen)
+// GLSL Fragment Shader: A mágica do visual "VHS/Analógico"
 const fragmentShader = `
-uniform float uTime;
-uniform float uAnalogGrain;
-uniform float uAnalogBleeding;
-uniform float uAnalogVSync;
-uniform float uAnalogScanlines;
-uniform float uAnalogVignette;
-uniform float uAnalogJitter;
-uniform float uAnalogIntensity;
-uniform float uLimboMode;
+  uniform float uTime;
+  uniform float uIntensity;
+  uniform float uSpeed;
 
-float random(vec2 st) {
-  return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-}
-
-float gaussian(float z, float u, float o) {
-  return (1.0 / (o * sqrt(2.0 * 3.1415))) * exp(-(((z - u) * (z - u)) / (2.0 * (o * o))));
-}
-
-vec3 grain(vec2 uv, float time, float intensity) {
-  float seed = dot(uv, vec2(12.9898, 78.233));
-  float noise = fract(sin(seed) * 43758.5453 + time * 2.0);
-  noise = gaussian(noise, 0.0, 0.5 * 0.5);
-  return vec3(noise) * intensity;
-}
-
-void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-  float time = uTime * 1.8;
-  vec2 vUv = uv;
-  
-  // Analog Jitter - Instabilidade temporal
-  vec2 jitteredUV = vUv;
-  if (uAnalogJitter > 0.01) {
-    float jitterAmount = (random(vec2(floor(time * 60.0))) - 0.5) * 0.003 * uAnalogJitter * uAnalogIntensity;
-    jitteredUV.x += jitterAmount;
-    jitteredUV.y += (random(vec2(floor(time * 30.0) + 1.0)) - 0.5) * 0.001 * uAnalogJitter * uAnalogIntensity;
+  // Função simples de ruído pseudo-aleatório
+  float noise(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
   }
 
-  // VHS VSync Roll
-  if (uAnalogVSync > 0.01) {
-    float vsyncRoll = sin(time * 2.0 + vUv.y * 100.0) * 0.02 * uAnalogVSync * uAnalogIntensity;
-    float vsyncChance = step(0.95, random(vec2(floor(time * 4.0))));
-    jitteredUV.y += vsyncRoll * vsyncChance;
-  }
-
-  vec4 color = texture2D(inputBuffer, jitteredUV);
-
-  // Color Bleeding (Separação de canais RGB)
-  if (uAnalogBleeding > 0.01) {
-    float bleedAmount = 0.012 * uAnalogBleeding * uAnalogIntensity;
-    float offsetPhase = time * 1.5 + vUv.y * 20.0;
-    vec2 redOffset = vec2(sin(offsetPhase) * bleedAmount, 0.0);
-    vec2 blueOffset = vec2(-sin(offsetPhase * 1.1) * bleedAmount * 0.8, 0.0);
+  void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+    // Distorção leve nas coordenadas UV baseada no tempo (efeito de onda de calor/scanline)
+    vec2 distortedUV = uv;
+    float n = noise(vec2(uv.y * 100.0, uTime * uSpeed));
     
-    float r = texture2D(inputBuffer, jitteredUV + redOffset).r;
-    float g = texture2D(inputBuffer, jitteredUV).g;
-    float b = texture2D(inputBuffer, jitteredUV + blueOffset).b;
-    color = vec4(r, g, b, color.a);
-  }
+    // Deslocamento horizontal aleatório (glitch sutil)
+    if (n > 0.98) {
+      distortedUV.x += (n - 0.98) * uIntensity * 2.0;
+    }
 
-  // Scanlines
-  if (uAnalogScanlines > 0.01) {
-    float scanlineFreq = 600.0 + uAnalogScanlines * 400.0;
-    float scanlinePattern = sin(vUv.y * scanlineFreq) * 0.5 + 0.5;
-    float scanlineIntensity = 0.1 * uAnalogScanlines * uAnalogIntensity;
-    color.rgb *= (1.0 - scanlinePattern * scanlineIntensity);
-  }
+    // Aberração Cromática: Separar canais RGB levemente
+    float r = texture2D(inputBuffer, distortedUV + vec2(0.002 * uIntensity, 0.0)).r;
+    float g = texture2D(inputBuffer, distortedUV).g;
+    float b = texture2D(inputBuffer, distortedUV - vec2(0.002 * uIntensity, 0.0)).b;
 
-  // Vignette
-  if (uAnalogVignette > 0.01) {
-    vec2 vignetteUV = (vUv - 0.5) * 2.0;
-    float vignette = 1.0 - dot(vignetteUV, vignetteUV) * 0.3 * uAnalogVignette * uAnalogIntensity;
-    color.rgb *= vignette;
-  }
+    // Scanlines suaves
+    float scanline = sin(uv.y * 800.0) * 0.04 * uIntensity;
+    
+    vec3 color = vec3(r, g, b) - scanline;
 
-  // Limbo Mode (Black and White)
-  if (uLimboMode > 0.5) {
-    float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-    color.rgb = vec3(gray);
+    outputColor = vec4(color, inputColor.a);
   }
-
-  outputColor = color;
-}
 `;
 
-// Implementação do Effect para o PostProcessing
+// Classe de Efeito do Postprocessing
 class AnalogDecayEffect extends Effect {
-  constructor(props: any = {}) {
+  constructor({ intensity = 0.5, speed = 1.0 }) {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
-        ['uTime', new THREE.Uniform(1)],
-        ['uAnalogGrain', new THREE.Uniform(props.grain ?? 3.4)],
-        ['uAnalogBleeding', new THREE.Uniform(props.bleeding ?? 3.0)],
-        ['uAnalogVSync', new THREE.Uniform(props.vsync ?? 3.0)],
-        ['uAnalogScanlines', new THREE.Uniform(props.scanlines ?? 1.0)],
-        ['uAnalogVignette', new THREE.Uniform(props.vignette ?? 3.0)],
-        ['uAnalogJitter', new THREE.Uniform(props.jitter ?? 0.4)],
-        ['uAnalogIntensity', new THREE.Uniform(props.intensity ?? 0.6)],
-        ['uLimboMode', new THREE.Uniform(0.0)],
+        ['uTime', new Uniform(0)],
+        ['uIntensity', new Uniform(intensity)],
+        ['uSpeed', new Uniform(speed)],
       ]),
     });
   }
 
-  update(_: any, _2: any, deltaTime: number) {
-    const time = this.uniforms.get('uTime');
-    if (time) time.value += deltaTime;
+  update(
+    renderer: WebGLRenderer,
+    inputBuffer: WebGLRenderTarget,
+    deltaTime: number
+  ) {
+    const uTime = this.uniforms.get('uTime');
+    if (uTime) uTime.value += deltaTime;
   }
 }
 
-// Wrapper para usar dentro do EffectComposer
-export const AnalogDecay = forwardRef((props: any, ref) => {
-  const effect = useMemo(() => new AnalogDecayEffect(props), [props]);
+// Wrapper React para o R3F
+export const AnalogDecay = forwardRef<
+  any,
+  { intensity?: number; speed?: number }
+>(({ intensity = 0.5, speed = 1.0 }, ref) => {
+  const effect = useMemo(
+    () => new AnalogDecayEffect({ intensity, speed }),
+    [intensity, speed]
+  );
+
+  // Atualiza uniforms se as props mudarem via Leva
+  useMemo(() => {
+    const uIntensity = effect.uniforms.get('uIntensity');
+    const uSpeed = effect.uniforms.get('uSpeed');
+    if (uIntensity) uIntensity.value = intensity;
+    if (uSpeed) uSpeed.value = speed;
+  }, [intensity, speed, effect]);
+
   return <primitive ref={ref} object={effect} dispose={null} />;
 });
 
-export default AnalogDecay;
+AnalogDecay.displayName = 'AnalogDecay';

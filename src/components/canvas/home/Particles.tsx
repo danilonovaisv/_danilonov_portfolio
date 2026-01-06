@@ -6,6 +6,7 @@ import * as THREE from 'three';
 
 export default function Particles({ count = 60 }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
+  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   // Dados iniciais das partículas (não são recriados a cada render)
@@ -27,7 +28,8 @@ export default function Particles({ count = 60 }) {
   }, [count]);
 
   useFrame((state) => {
-    if (!mesh.current) return;
+    const currentMesh = mesh.current;
+    if (!currentMesh) return;
     const time = state.clock.getElapsedTime();
 
     particles.forEach((particle, i) => {
@@ -53,10 +55,15 @@ export default function Particles({ count = 60 }) {
       dummy.updateMatrix();
 
       // Atualiza a matriz na instância específica
-      mesh.current.setMatrixAt(i, dummy.matrix);
+      currentMesh.setMatrixAt(i, dummy.matrix);
     });
 
-    mesh.current.instanceMatrix.needsUpdate = true;
+    currentMesh.instanceMatrix.needsUpdate = true;
+
+    if (materialRef.current) {
+      materialRef.current.opacity =
+        0.35 + Math.sin(time * 0.9) * 0.08 + Math.sin(time * 1.4) * 0.05;
+    }
   });
 
   return (
@@ -64,10 +71,12 @@ export default function Particles({ count = 60 }) {
       <dodecahedronGeometry args={[0.2, 0]} />
       {/* Blending Additive é crucial para o efeito "luz sobre luz" */}
       <meshBasicMaterial
-        color="#4d8dff"
+        ref={materialRef}
+        color="#7ec5ff"
         transparent
-        opacity={0.6}
+        opacity={0.35}
         blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </instancedMesh>
   );

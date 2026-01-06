@@ -1,15 +1,35 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function GhostEyes() {
+// Define a prop de cor
+export default function GhostEyes({ color = '#0b1c30' }: { color?: string }) {
   const leftEye = useRef<THREE.Mesh>(null);
   const rightEye = useRef<THREE.Mesh>(null);
-  const { mouse } = useThree();
+  const glowLeft = useRef<THREE.Mesh>(null);
+  const glowRight = useRef<THREE.Mesh>(null);
+
+  const pointerRef = useRef(new THREE.Vector2(0, 0));
+  const speedRef = useRef(0);
   const [blink, setBlink] = useState(false);
 
+  // Materiais (Memoizados para não recriar a cada render se a cor não mudar)
+  const materials = useMemo(() => {
+    return {
+      eye: new THREE.MeshBasicMaterial({ color: color }), // Usa a cor da prop
+      glow: new THREE.MeshBasicMaterial({
+        color: '#4fa8ff', // Glow mantém-se azulado ou pode ser prop também
+        transparent: true,
+        opacity: 0.15,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      }),
+    };
+  }, [color]);
+
+  // Piscar aleatório
   useEffect(() => {
     const timeout = () => {
       setBlink(true);
@@ -21,14 +41,38 @@ export default function GhostEyes() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Mouse tracking
+  useEffect(() => {
+    const handlePointer = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      // Lógica de velocidade para brilho
+      const prevX = pointerRef.current.x;
+      const prevY = pointerRef.current.y;
+      const dx = x - prevX;
+      const dy = y - prevY;
+      const delta = Math.sqrt(dx * dx + dy * dy);
+      speedRef.current = THREE.MathUtils.lerp(
+        speedRef.current,
+        delta * 14,
+        0.25
+      );
+
+      pointerRef.current.set(x, y);
+    };
+    window.addEventListener('mousemove', handlePointer);
+    return () => window.removeEventListener('mousemove', handlePointer);
+  }, []);
+
   useFrame(() => {
     if (!leftEye.current || !rightEye.current) return;
 
-    const eyeMovementRange = 0.15;
-    const targetX = mouse.x * eyeMovementRange;
-    const targetY = mouse.y * eyeMovementRange;
+    const eyeMovementRange = 0.08;
+    const targetX = pointerRef.current.x * eyeMovementRange;
+    const targetY = pointerRef.current.y * eyeMovementRange;
 
-    // Lerp para suavidade
+    // Interpolação de posição
     leftEye.current.position.x = THREE.MathUtils.lerp(
       leftEye.current.position.x,
       -0.3 + targetX,
@@ -51,6 +95,7 @@ export default function GhostEyes() {
       0.1
     );
 
+    // Piscar
     const targetScaleY = blink ? 0.1 : 1;
     leftEye.current.scale.y = THREE.MathUtils.lerp(
       leftEye.current.scale.y,
@@ -62,19 +107,48 @@ export default function GhostEyes() {
       targetScaleY,
       0.4
     );
+
+    // Glow reativo
+    const glowStrength = THREE.MathUtils.clamp(speedRef.current, 0, 1);
+    const scale = 1 + glowStrength * 0.6;
+    const opacity = 0.15 + glowStrength * 0.35;
+
+    if (glowLeft.current && glowRight.current) {
+      glowLeft.current.scale.set(scale, scale, scale);
+      glowRight.current.scale.set(scale, scale, scale);
+
+      // Acessa material diretamente para performance
+      (glowLeft.current.material as THREE.MeshBasicMaterial).opacity = opacity;
+      (glowRight.current.material as THREE.MeshBasicMaterial).opacity = opacity;
+    }
   });
 
-  // Material básico para reagir fortemente ao Bloom
   return (
-    <group position={[0, 0, 0.8]}>
-      <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
-      <mesh ref={rightEye} position={[0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
+    <group position={[0.05, 0.05, 1.05]}>
+      <mesh
+        ref={leftEye}
+        position={[-0.55, 0.15, 0]}
+        geometry={new THREE.SphereGeometry(0.32, 20, 20)}
+        material={materials.eye}
+      />
+      <mesh
+        ref={rightEye}
+        position={[0.55, 0.15, 0]}
+        geometry={new THREE.SphereGeometry(0.32, 20, 20)}
+        material={materials.eye}
+      />
+      <mesh
+        ref={glowLeft}
+        position={[-0.55, 0.15, -0.08]}
+        geometry={new THREE.SphereGeometry(0.52, 14, 14)}
+        material={materials.glow}
+      />
+      <mesh
+        ref={glowRight}
+        position={[0.55, 0.15, -0.08]}
+        geometry={new THREE.SphereGeometry(0.52, 14, 14)}
+        material={materials.glow}
+      />
     </group>
   );
 }

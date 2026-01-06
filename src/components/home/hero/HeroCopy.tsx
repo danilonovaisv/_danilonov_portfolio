@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function HeroCopy() {
   return (
-    <div className="absolute inset-0 z-[30] flex flex-col justify-center items-center pointer-events-none">
+    <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none">
       <div className="w-[90%] max-w-[1100px] pointer-events-auto text-center flex flex-col items-center gap-4">
         {/* Tag */}
         <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#9cb3ff] opacity-80 mb-[0.5vh]">
@@ -51,7 +51,12 @@ export default function HeroCopy() {
 
       {/* Bottom CTA (Duplicate simply for layout matching original, but maybe redundant if we have center CTA) */}
       <div className="absolute bottom-10 w-full text-center pointer-events-none">
-        {/* Kept empty or just for spacing if needed */}
+        <Link
+          href="/sobre"
+          className="inline-flex items-center gap-3 px-8 py-3 bg-[#0c5bff] text-white text-base font-semibold lowercase rounded-full pointer-events-auto shadow-[0_0_30px_rgba(12,91,255,0.55)] ring-1 ring-white/10 hover:bg-[#0a46d4] hover:shadow-[0_0_40px_rgba(12,91,255,0.65)] transition-all duration-300"
+        >
+          step inside →
+        </Link>
       </div>
     </div>
   );

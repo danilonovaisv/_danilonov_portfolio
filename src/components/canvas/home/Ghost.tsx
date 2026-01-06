@@ -1,146 +1,172 @@
-// src/components/canvas/home/Ghost.tsx
 'use client';
 
-import React, {
-  useRef,
-  useMemo,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-} from 'react';
+import React, { useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
-type GhostProps = {
-  children?: React.ReactNode;
+// 1. Definição das Props que o componente aceita (vindas do GhostCanvas/Leva)
+export type GhostProps = {
+  children?: React.ReactNode; // Para os olhos
+  color?: string; // Cor base do corpo
+  emissive?: string; // Cor do brilho
+  emissiveIntensity?: number; // Força do brilho (afeta o Bloom)
+  followSpeed?: number; // Velocidade de perseguição ao mouse
+  wobbleSpeed?: number; // Velocidade da ondulação da "saia"
+  wobbleAmount?: number; // Intensidade da ondulação
+  breathSpeed?: number; // Velocidade da respiração/pulsação
 };
 
-const Ghost = forwardRef<THREE.Group, GhostProps>((props, ref) => {
-  const localRef = useRef<THREE.Group>(null);
-  const bodyMeshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+const Ghost = forwardRef<THREE.Group, GhostProps>(
+  (
+    {
+      children,
+      // Valores padrão (caso não sejam passados pelo pai)
+      color = '#e9f0ff',
+      emissive = '#0057ff',
+      emissiveIntensity = 12,
+      followSpeed = 2.5,
+      wobbleSpeed = 2.0,
+      wobbleAmount = 0.2,
+      breathSpeed = 1.5,
+    },
+    ref
+  ) => {
+    const groupRef = useRef<THREE.Group>(null);
+    const bodyMeshRef = useRef<THREE.Mesh>(null);
+    const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
-  useImperativeHandle(ref, () => localRef.current!);
-  useEffect(() => {
-    if (localRef.current) {
-      localRef.current.position.set(-2.5, 0, 0);
-    }
-  }, []);
+    // Permite que o componente pai acesse o grupo do fantasma
+    useImperativeHandle(ref, () => groupRef.current!);
 
-  // Parameters from reference
-  const params = {
-    followSpeed: 0.06,
-    wobbleAmount: 0.32,
-    floatSpeed: 0.065,
-    rotationDamping: 0.08,
-  };
+    // 2. Geometria Procedural (Memoizada para performance)
+    // Cria a forma de "lençol" deformando a metade inferior de uma esfera
+    const geometry = useMemo(() => {
+      const geo = new THREE.SphereGeometry(1.3, 64, 64); // Alta contagem de polígonos para suavidade
+      const posAttribute = geo.getAttribute('position');
+      const vertex = new THREE.Vector3();
 
-  // Geometry Procedural (Exact Match from CodePen)
-  const geometry = useMemo(() => {
-    const geo = new THREE.IcosahedronGeometry(2, 20); // Reference uses 40 segments
-    const posAttribute = geo.getAttribute('position');
-    const positions = posAttribute.array;
+      for (let i = 1; i < posAttribute.count; i++) {
+        vertex.fromBufferAttribute(posAttribute, i);
 
-    for (let i = 0; i < positions.length; i += 3) {
-      if (positions[i + 1] < -0.2) {
-        const x = positions[i];
-        const z = positions[i + 2];
-        const noise1 = Math.sin(x * 5) * 0.35;
-        const noise2 = Math.cos(z * 4) * 0.25;
-        const noise3 = Math.sin((x + z) * 3) * 0.15;
-        // Combined noise exactly as in reference
-        const combinedNoise = noise1 + noise2 + noise3;
-        positions[i + 1] = -2.0 + combinedNoise;
+        // Aplica deformação apenas na parte de baixo (a "saia")
+        if (vertex.y < -0.2) {
+          // Combinação de ondas senoidais para um look orgânico
+          const wave1 = Math.sin(vertex.x * 5) * 0.35;
+          const wave2 = Math.cos(vertex.z * 4) * 0.25;
+          const wave3 = Math.sin((vertex.x + vertex.z) * 3) * 0.15;
+
+          // Aplica a onda na altura (Y)
+          vertex.y += (wave1 + wave2 + wave3) * 0.5;
+
+          posAttribute.setXYZ(i, vertex.x, vertex.y, vertex.z);
+        }
       }
-    }
-    geo.computeVertexNormals();
-    return geo;
-  }, []);
+      // Crucial: Recalcular normais para a iluminação funcionar nas novas curvas
+      geo.computeVertexNormals();
+      return geo;
+    }, []);
 
-  useFrame((state) => {
-    if (!localRef.current || !bodyMeshRef.current) return;
+    // 3. Loop de Animação Principal
+    useFrame((state, delta) => {
+      if (!groupRef.current || !bodyMeshRef.current || !materialRef.current)
+        return;
 
-    const time = state.clock.getElapsedTime();
-    const { pointer } = state;
+      const time = state.clock.getElapsedTime();
 
-    // 1. Mouse Tracking (softened range + slight left bias to mirror layout)
-    const targetX = pointer.x * 6 - 2.5;
-    const targetY = pointer.y * 4;
+      // --- A. Input do Mouse & Posição Alvo ---
+      // state.pointer dá coordenadas normalizadas (-1 a 1)
+      const mouseX = state.pointer.x;
+      const mouseY = state.pointer.y;
 
-    // 2. Movement Layout
-    localRef.current.position.x +=
-      (targetX - localRef.current.position.x) * params.followSpeed;
-    localRef.current.position.y +=
-      (targetY - localRef.current.position.y) * params.followSpeed;
+      // Define o alvo com um offset para posicionar o fantasma mais à esquerda na tela
+      const targetX = mouseX * 5 - 1.5;
+      const targetY = mouseY * 3;
 
-    // 3. Floating (Exact sine/cos mix from Ref)
-    const float1 = Math.sin(time * params.floatSpeed * 1.5) * 0.03;
-    const float2 = Math.cos(time * params.floatSpeed * 0.7) * 0.018;
-    const float3 = Math.sin(time * params.floatSpeed * 2.3) * 0.008;
-    localRef.current.position.y += float1 + float2 + float3;
+      // --- B. Movimento Suave (Lerp com Delta Time) ---
+      // Fator de suavização independente da taxa de quadros (FPS)
+      // Ajuste o '0.05' se quiser mais ou menos inércia
+      const smoothFactor = 1 - Math.pow(0.05, delta);
+      const currentFollowSpeed = smoothFactor * followSpeed;
 
-    // 4. Tilt Physics
-    const dx = targetX - localRef.current.position.x;
-    const dy = targetY - localRef.current.position.y;
+      groupRef.current.position.x = THREE.MathUtils.lerp(
+        groupRef.current.position.x,
+        targetX,
+        currentFollowSpeed
+      );
+      groupRef.current.position.y = THREE.MathUtils.lerp(
+        groupRef.current.position.y,
+        targetY,
+        currentFollowSpeed
+      );
 
-    // Normalize direction roughly
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const dirX = dist > 0 ? dx / dist : 0;
-    const dirY = dist > 0 ? dy / dist : 0; // Fixed: was using dist to 0
+      // Adiciona uma flutuação vertical constante (hover)
+      const hoverY = Math.sin(time * 1.5) * 0.1 + Math.cos(time * 0.8) * 0.05;
+      groupRef.current.position.y += hoverY * 0.1;
 
-    const tiltStrength = 0.1 * params.wobbleAmount;
+      // --- C. Física de Inclinação (Tilt) ---
+      // Calcula a diferença entre onde ele está e onde quer ir
+      const diffX = targetX - groupRef.current.position.x;
+      const diffY = targetY - groupRef.current.position.y;
+      const tiltStrength = 0.5;
 
-    // Tilt Decay logic from reference
-    bodyMeshRef.current.rotation.z =
-      bodyMeshRef.current.rotation.z * params.rotationDamping +
-      -dirX * tiltStrength * (1 - params.rotationDamping) * dist;
-    bodyMeshRef.current.rotation.x =
-      bodyMeshRef.current.rotation.x * params.rotationDamping +
-      dirY * tiltStrength * (1 - params.rotationDamping) * dist;
+      // Inclina o corpo na direção do movimento usando amortecimento (damp)
+      bodyMeshRef.current.rotation.z = THREE.MathUtils.damp(
+        bodyMeshRef.current.rotation.z,
+        -diffX * tiltStrength,
+        4,
+        delta
+      );
+      bodyMeshRef.current.rotation.x = THREE.MathUtils.damp(
+        bodyMeshRef.current.rotation.x,
+        diffY * tiltStrength,
+        4,
+        delta
+      );
 
-    // Base Wobble
-    bodyMeshRef.current.rotation.y =
-      Math.sin(time * 1.4) * 0.05 * params.wobbleAmount;
+      // --- D. Animações Dinâmicas (Wobble & Respiração) ---
+      // Usa as props dinâmicas para controlar a velocidade e intensidade
+      bodyMeshRef.current.rotation.y =
+        Math.sin(time * wobbleSpeed) * wobbleAmount;
 
-    // 5. Pulsing & Breathing
-    const pulse1 = Math.sin(time * 0.8) * 0.7;
-    const breathe = Math.sin(time * 0.5) * 0.18;
+      const breath = Math.sin(time * breathSpeed);
 
-    // Scale Variations (Breathing)
-    // Scale varies with wobble and pulse
-    const scaleVariation =
-      1 + Math.sin(time * 2.1) * 0.025 * params.wobbleAmount + pulse1 * 0.015;
-    const scaleBreath = 1 + Math.sin(time * 0.8) * 0.012;
-    const finalScale = scaleVariation * scaleBreath;
+      // Pulsação de escala (respiração física)
+      const scalePulse = 1 + breath * 0.02;
+      bodyMeshRef.current.scale.set(scalePulse, scalePulse, scalePulse);
 
-    bodyMeshRef.current.scale.set(finalScale, finalScale, finalScale);
+      // --- E. Atualização do Material em Tempo Real ---
+      // Atualiza cores baseadas nas props do Leva
+      materialRef.current.color.set(color);
+      materialRef.current.emissive.set(emissive);
 
-    // Update Material Pulse
-    if (materialRef.current) {
-      materialRef.current.emissiveIntensity = 12 + pulse1 * 1.1 + breathe * 0.8;
-    }
-  });
+      // Pulsação de luz (respiração energética)
+      // Usa a 'emissiveIntensity' base e adiciona uma oscilação forte para o Bloom
+      materialRef.current.emissiveIntensity =
+        emissiveIntensity + (breath * 0.5 + 0.5) * 4;
+    });
 
-  return (
-    <group ref={localRef}>
-      <mesh ref={bodyMeshRef} geometry={geometry}>
-        <meshStandardMaterial
-          ref={materialRef}
-          color="#0f2027"
-          emissive="#0080ff"
-          emissiveIntensity={8.5}
-          roughness={0.02}
-          metalness={0.0}
-          transparent
-          opacity={0.88}
-          side={THREE.DoubleSide}
-          alphaTest={0.1}
-        />
-      </mesh>
-      {props.children}
-    </group>
-  );
-});
+    return (
+      <group ref={groupRef} position={[-2.5, 0, 0]}>
+        <mesh ref={bodyMeshRef} geometry={geometry}>
+          <meshStandardMaterial
+            ref={materialRef}
+            // As cores iniciais são definidas aqui, mas o useFrame as atualiza
+            color={color}
+            emissive={emissive}
+            emissiveIntensity={emissiveIntensity}
+            roughness={0.1}
+            metalness={0.1}
+            transparent
+            opacity={0.9}
+            side={THREE.DoubleSide} // Renderiza o interior da "saia"
+          />
+          {/* Renderiza os olhos como filhos, para que se movam junto com o corpo */}
+          {children}
+        </mesh>
+      </group>
+    );
+  }
+);
 
 Ghost.displayName = 'Ghost';
 export default Ghost;
