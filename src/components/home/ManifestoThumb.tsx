@@ -7,10 +7,11 @@ import {
 } from 'react';
 import { motion } from 'framer-motion';
 
-// Video sources
+// Video sources - Remote is primary since local file doesn't exist
 const VIDEO_SOURCES = {
-  local: '/assets/thumb-hero.mp4',
-  remote:
+  primary:
+    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
+  fallback:
     'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
 } as const;
 
@@ -50,7 +51,7 @@ export const ManifestoThumb = forwardRef<
     }
   }, [videoError]);
 
-  const videoSrc = videoError ? VIDEO_SOURCES.remote : VIDEO_SOURCES.local;
+  const videoSrc = videoError ? VIDEO_SOURCES.fallback : VIDEO_SOURCES.primary;
 
   return (
     <div

@@ -13,7 +13,7 @@ import FeaturedProjectCard, {
 } from './featured-projects/FeaturedProjectCard';
 import CTAProjectCard from './featured-projects/CTAProjectCard';
 
-const { duration, stagger, offset } = MOTION_TOKENS;
+const { duration, offset } = MOTION_TOKENS;
 
 type FeaturedProjectsSectionProps = {
   onProjectOpen?: (_project: FeaturedProject) => void;
@@ -30,7 +30,7 @@ export default function FeaturedProjectsSection({
     hidden: reducedMotion
       ? {}
       : { opacity: 0, y: offset.large, filter: 'blur(4px)' },
-    show: reducedMotion
+    visible: reducedMotion
       ? { opacity: 1 }
       : {
           opacity: 1,
@@ -48,12 +48,12 @@ export default function FeaturedProjectsSection({
     >
       <div className="max-w-[1680px] mx-auto px-[clamp(24px,5vw,96px)]">
         <motion.div
-          initial={reducedMotion ? 'show' : 'hidden'}
-          whileInView="show"
+          initial={reducedMotion ? 'visible' : 'hidden'}
+          whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer(stagger.normal)}
+          variants={staggerContainer(0.08)}
           // Mobile: single column stack | Desktop: 12-col grid
-          className="flex flex-col gap-8 md:grid md:grid-cols-12 md:gap-y-16 md:gap-x-6"
+          className="flex flex-col gap-6 md:grid md:grid-cols-12 md:gap-y-12 md:gap-x-6"
         >
           {featuredProjects.map((project) => {
             if (!project?.layout) return null;
