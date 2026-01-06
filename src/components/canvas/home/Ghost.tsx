@@ -9,10 +9,10 @@ import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 // CONFIGURAÇÃO DO GHOST
 // ============================================================================
 const GHOST_CONFIG = {
-  bodyColor: '#e0f7fa',
-  glowColor: '#00ffff',
-  eyeColor: '#ffffff',
-  emissiveIntensity: 3.5,
+  bodyColor: '#192c55',
+  glowColor: '#0059ff',
+  eyeColor: '#610ab8',
+  emissiveIntensity: 5.5,
   floatSpeed: 1.8,
   followSpeed: 0.08,
 };
@@ -57,12 +57,14 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
       return geometry;
     }, []);
 
+    const isMobile = size.width < 768; // Definição no escopo do componente
+
     useFrame((state) => {
       if (!group.current || !bodyMesh.current) return;
 
       const t = state.clock.getElapsedTime();
       const pointer = state.pointer;
-      const isMobile = size.width < 768;
+      // const isMobile ja está definido fora
 
       let xTarget: number;
       let yTarget: number;
@@ -137,14 +139,18 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
         />
 
         {/* Corpo do Ghost */}
-        <mesh ref={bodyMesh} geometry={ghostGeometry}>
+        <mesh
+          ref={bodyMesh}
+          geometry={ghostGeometry}
+          scale={isMobile ? 0.35 : 0.45}
+        >
           <meshStandardMaterial
             ref={bodyMaterial}
             color={GHOST_CONFIG.bodyColor}
             emissive={GHOST_CONFIG.glowColor}
             emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
             transparent
-            opacity={0.92}
+            opacity={0.88}
             roughness={0.0}
             metalness={0.1}
             side={THREE.DoubleSide}

@@ -1,5 +1,4 @@
-import { useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
-import { useRef } from 'react';
+import { useScroll, useTransform, useSpring } from 'framer-motion';
 
 export function useHeroAnimation(
   containerRef: React.RefObject<HTMLElement | null>

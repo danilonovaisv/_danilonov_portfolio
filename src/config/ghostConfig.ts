@@ -6,17 +6,17 @@ export const GHOST_CONFIG = {
     fill: '#6e00ff', // Roxo de preenchimento
     body: '#e9f0ff', // Base branca do fantasma
     glow: '#00ffff', // Ciano Fluorescente (A cor da referência)
-    eyes: '#ffffff', // Olhos brancos
+    eyes: '#c600ff', // Olhos brancos
   },
   physics: {
-    hoverSpeed: 1.6,
+    hoverSpeed: 0.6,
     wobbleSpeed: 2.0,
     wobbleAmount: 0.35,
     pulseSpeed: 1.5,
     followDelay: 0.05,
   },
   intensity: {
-    bloom: 2.0, // Bloom mais forte
+    bloom: 3.0, // Bloom mais forte
     emissive: 4.5, // Brilho intenso
     eyeGlow: 5.0,
   },

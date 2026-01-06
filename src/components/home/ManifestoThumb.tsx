@@ -1,93 +1,78 @@
-import {
-  useState,
-  useRef,
-  useCallback,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
+'use client';
+import { useEffect, useRef } from 'react';
 
-// Video sources - prioritize local, fallback to Supabase
-const VIDEO_SOURCES = {
-  local: '/assets/thumb-hero.mp4',
-  remote:
-    'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
-} as const;
+export default function ManifestoThumb() {
+  const thumbRef = useRef<HTMLDivElement>(null);
 
-export interface ManifestoThumbHandle {
-  setMuted: (_muted: boolean) => void;
-}
+  useEffect(() => {
+    let maxScale = 5; // Default fallback
 
-interface ManifestoThumbProps {
-  onClick?: () => void;
-}
+    const updateDimensions = () => {
+      // Calculate scale needed to cover the viewport based on anchoring at bottom-right
+      const scaleX = window.innerWidth / 280;
+      const scaleY = window.innerHeight / (280 * (9 / 16));
+      // Use the larger scale to ensure cover, plus safety margin
+      maxScale = Math.max(scaleX, scaleY) * 1.1;
+    };
 
-export const ManifestoThumb = forwardRef<
-  ManifestoThumbHandle,
-  ManifestoThumbProps
->(({ onClick }, ref) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [videoError, setVideoError] = useState(false);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
 
-  useImperativeHandle(ref, () => ({
-    setMuted: (muted: boolean) => {
-      if (videoRef.current) {
-        videoRef.current.muted = muted;
-        setIsMuted(muted);
-        if (!muted) {
-          videoRef.current.play().catch(() => {
-            // Handle potential autoplay block if unmuted manually
-          });
-        }
-      }
-    },
-  }));
+    const handleScroll = () => {
+      if (!thumbRef.current) return;
 
-  const handleVideoError = useCallback(() => {
-    if (!videoError) {
-      setVideoError(true);
-    }
-  }, [videoError]);
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const progress = Math.min(1, scrollY / viewportHeight);
 
-  const videoSrc = videoError ? VIDEO_SOURCES.remote : VIDEO_SOURCES.local;
+      const scale = 1 + progress * (maxScale - 1);
+      const radius = Math.max(0, 16 - progress * 16);
+
+      thumbRef.current.style.transform = `scale(${scale})`;
+      thumbRef.current.style.borderRadius = `${radius}px`;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
 
   return (
     <div
-      className="relative w-full h-full overflow-hidden cursor-pointer group"
-      aria-label="Assistir manifesto em fullscreen"
+      ref={thumbRef}
+      className="hidden lg:block fixed bottom-8 right-8 z-30 w-[280px] aspect-video overflow-hidden shadow-2xl origin-bottom-right cursor-pointer transition-shadow duration-300 hover:scale-105 hover:shadow-cyan-500/20"
       role="button"
-      onMouseEnter={() => {}}
-      onMouseLeave={() => {}}
-      onClick={onClick}
+      aria-label="Assistir manifesto em fullscreen"
+      onClick={() => {
+        // Lógica de Click: Scrollar para o ponto onde ele fica Fullscreen
+        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+      }}
     >
-      {/* Video element */}
       <video
-        ref={videoRef}
-        src={videoSrc}
+        src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
         autoPlay
-        muted={isMuted}
+        muted
         loop
         playsInline
-        onError={handleVideoError}
         className="w-full h-full object-cover"
-        aria-label="Portfolio showreel video"
       />
-
-      {/* Hover visual enhancement (subtle darken) */}
-      <div
-        className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500"
-        aria-hidden="true"
-      />
-
-      {/* Subtle gradient overlay for depth */}
-      <div
-        className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/30 via-transparent to-transparent opacity-60"
-        aria-hidden="true"
-      />
+      {/* Icone de seta ou indicador visual opcional */}
+      <div className="absolute bottom-3 right-3 text-white/50 bg-black/20 p-1 rounded-full backdrop-blur-sm">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </div>
     </div>
   );
-});
-
-ManifestoThumb.displayName = 'ManifestoThumb';
-
-export default ManifestoThumb;
+}

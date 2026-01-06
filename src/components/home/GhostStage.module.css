@@ -1,12 +1,12 @@
 .fallbackContainer {
-  background-color: #050511;
+  background-color: transparent;
 }
 
 .fallbackBase {
   background: radial-gradient(
     ellipse 80% 60% at 50% 45%,
-    #0b0d3a 0%,
-    #050511 70%
+    rgba(11, 13, 58, 0.55) 0%,
+    rgba(5, 5, 17, 0) 70%
   );
 }
 
@@ -30,7 +30,7 @@
   background: radial-gradient(
     ellipse 100% 100% at 50% 50%,
     transparent 40%,
-    rgba(5, 5, 17, 0.8) 100%
+    rgba(5, 5, 17, 0.55) 100%
   );
 }
 
