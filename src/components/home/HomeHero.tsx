@@ -5,7 +5,11 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Preloader } from '@/components/ui/Preloader';
 
-import { GhostStage } from './GhostStage';
+import { GhostStage } from './hero/GhostStage';
+import HeroCopy from './hero/HeroCopy';
+import { useHeroAnimation } from './hero/useHeroAnimation';
+import ManifestoThumb from './hero/ManifestoThumb';
+
 const CONFIG = {
   preloadMs: 2000,
   bgColor: '#050511',
@@ -37,6 +41,10 @@ export default function HomeHero() {
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
+  // Hook de animação do Hero (Controla o ManifestoThumb)
+  const { videoWidth, videoHeight, videoRadius, copyOpacity } =
+    useHeroAnimation(sectionRef);
+
   const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
 
   return (
@@ -66,11 +74,29 @@ export default function HomeHero() {
         </AnimatePresence>
 
         {/* WebGL Atmosphere */}
-        <div className="absolute inset-0 z-20">
+        <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage reducedMotion={prefersReducedMotion} />
         </div>
 
         {/* Hero Copy (Editorial) */}
+        <motion.div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{ opacity: copyOpacity }}
+        >
+          <HeroCopy />
+        </motion.div>
+
+        {/* Manifesto Thumb (Desktop Transition) */}
+        {/* Renderiza apenas se não estiver carregando, para evitar glitches visuais */}
+        {!isLoading && (
+          <ManifestoThumb
+            style={{
+              width: videoWidth,
+              height: videoHeight,
+              borderRadius: videoRadius,
+            }}
+          />
+        )}
 
         {/* Scroll Helper */}
         <motion.div

@@ -15,6 +15,8 @@ const GHOST_CONFIG = {
   emissiveIntensity: 5.5,
   floatSpeed: 1.8,
   followSpeed: 0.08,
+  ghostOpacity: 0.88,
+  ghostScale: 1.4,
 };
 
 // ============================================================================
@@ -142,7 +144,7 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
         <mesh
           ref={bodyMesh}
           geometry={ghostGeometry}
-          scale={isMobile ? 0.35 : 0.45}
+          scale={isMobile ? 0.25 : 0.32}
         >
           <meshStandardMaterial
             ref={bodyMaterial}

@@ -16,7 +16,6 @@ import Ghost from '../Ghost';
 import { AnalogDecay } from './AnalogDecayPass';
 import GhostEyes from './GhostEyes';
 import Particles from './Particles';
-import RevealingText from './RevealingText';
 
 interface GhostCanvasProps {
   ghostRef?: RefObject<THREE.Group | null>;
@@ -28,7 +27,9 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
   return (
     <div className="absolute inset-0 z-0 h-full w-full">
       <Canvas
-        dpr={[1, 1.5]}
+        eventSource={document.body}
+        eventPrefix="client"
+        dpr={[1, 1.2]}
         gl={{
           antialias: false,
           alpha: true,
@@ -38,7 +39,7 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
         camera={{ position: [0, 0, 7], fov: 35 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.1} />
+          <ambientLight intensity={0.2} />
           <pointLight
             position={[2, 3, 4]}
             intensity={2}
@@ -46,7 +47,7 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
             distance={0.9}
           />
 
-          <RevealingText ghostRef={ghostRef} />
+          {/* RevealingText removed in favor of HTML HeroCopy */}
 
           <group position={[0, -0.2, 0]}>
             <Ghost ref={ghostRef}>
@@ -63,9 +64,9 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
               intensity={2.5}
               radius={0.5}
             />
-            <AnalogDecay intensity={0.8} scanlines={0.2} grain={0.1} />
-            <Noise opacity={0.04} />
-            <Vignette eskil={false} offset={0.6} darkness={0.8} />
+            <AnalogDecay intensity={0.8} scanlines={0.1} grain={0.3} />
+            <Noise opacity={0.01} />
+            <Vignette eskil={false} offset={0.8} darkness={0.8} />
           </EffectComposer>
         </Suspense>
       </Canvas>

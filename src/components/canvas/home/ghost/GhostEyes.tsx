@@ -1,76 +1,78 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 export default function GhostEyes({ color = '#ffffff' }: { color?: string }) {
   const leftEye = useRef<THREE.Mesh>(null);
   const rightEye = useRef<THREE.Mesh>(null);
+  const { mouse } = useThree();
   const [blink, setBlink] = useState(false);
 
-  // Piscar aleatório
   useEffect(() => {
     const timeout = () => {
       setBlink(true);
       setTimeout(() => setBlink(false), 150);
-      setTimeout(timeout, Math.random() * 3000 + 2000);
+      const nextBlink = Math.random() * 4000 + 2000;
+      setTimeout(timeout, nextBlink);
     };
-    const timer = setTimeout(timeout, 2000);
+    const timer = setTimeout(timeout, 3000);
     return () => clearTimeout(timer);
   }, []);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!leftEye.current || !rightEye.current) return;
 
-    // Olhar segue o mouse
-    const x = state.pointer.x * 0.1;
-    const y = state.pointer.y * 0.1;
+    const eyeMovementRange = 0.15;
+    const targetX = mouse.x * eyeMovementRange;
+    const targetY = mouse.y * eyeMovementRange;
 
+    // Lerp para suavidade
     leftEye.current.position.x = THREE.MathUtils.lerp(
       leftEye.current.position.x,
-      -0.15 + x,
+      -0.3 + targetX,
       0.1
     );
     leftEye.current.position.y = THREE.MathUtils.lerp(
       leftEye.current.position.y,
-      0.05 + y,
+      0.1 + targetY,
       0.1
     );
 
     rightEye.current.position.x = THREE.MathUtils.lerp(
       rightEye.current.position.x,
-      0.15 + x,
+      0.3 + targetX,
       0.1
     );
     rightEye.current.position.y = THREE.MathUtils.lerp(
       rightEye.current.position.y,
-      0.05 + y,
+      0.1 + targetY,
       0.1
     );
 
-    const scaleY = blink ? 0.05 : 1;
+    const targetScaleY = blink ? 0.1 : 1;
     leftEye.current.scale.y = THREE.MathUtils.lerp(
       leftEye.current.scale.y,
-      scaleY,
-      0.3
+      targetScaleY,
+      0.4
     );
     rightEye.current.scale.y = THREE.MathUtils.lerp(
       rightEye.current.scale.y,
-      scaleY,
-      0.3
+      targetScaleY,
+      0.4
     );
   });
 
+  // Material básico para reagir fortemente ao Bloom
   return (
-    // Z = 0.9 coloca os olhos na superfície do fantasma de Raio 1
-    <group position={[0, 0.1, 0.9]}>
-      <mesh ref={leftEye} position={[-0.15, 0.05, 0]}>
-        <sphereGeometry args={[0.04, 16, 16]} /> {/* Olhos menores */}
+    <group position={[0, 0, 0.8]}>
+      <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
         <meshBasicMaterial color={color} />
       </mesh>
-      <mesh ref={rightEye} position={[0.15, 0.05, 0]}>
-        <sphereGeometry args={[0.04, 16, 16]} />
+      <mesh ref={rightEye} position={[0.3, 0.1, 0]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
         <meshBasicMaterial color={color} />
       </mesh>
     </group>

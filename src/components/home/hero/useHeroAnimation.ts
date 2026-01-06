@@ -18,20 +18,20 @@ export function useHeroAnimation(
 
   // Mapeamento dos valores baseados no scroll (0% -> 100%)
 
-  // 1. Largura: Começa pequena (300px) e vai para 100% da tela
-  // Nota: Usamos strings com '%' e 'px' para flexibilidade
-  const videoWidth = useTransform(smoothScroll, [0, 0.7], ['280px', '100%']);
+  // 1. Largura: Começa pequena (~15vw, conforme spec) e vai para 100% da tela
+  const videoWidth = useTransform(smoothScroll, [0, 0.7], ['15vw', '100%']);
 
-  // 2. Altura: Começa pequena (160px) e vai para 100% da altura da tela
-  const videoHeight = useTransform(smoothScroll, [0, 0.7], ['160px', '100%']);
+  // 2. Altura: Mantém proporção 16:9 inicial
+  const videoHeight = useTransform(
+    smoothScroll,
+    [0, 0.7],
+    ['calc(15vw * 9/16)', '100%']
+  );
 
   // 3. Posição X: Começa na direita (calc(100% - 320px)) e vai para 0
   // Assumindo container relativo, vamos posicionar via 'right' e 'bottom' ou translação.
   // Vamos usar 'right' e 'bottom' fixos no CSS e animar width/height é mais performático se usarmos layoutId,
   // mas aqui vamos transformar a escala e posição.
-
-  // Abordagem Otimizada: O vídeo começa "Fixed" no canto e escala.
-  const videoScale = useTransform(smoothScroll, [0, 0.6], [0.25, 1]); // Escala de 25% para 100%
 
   // Transparência do Texto Editorial (some rápido ao scrollar)
   const copyOpacity = useTransform(smoothScroll, [0, 0.2], [1, 0]);
@@ -43,7 +43,6 @@ export function useHeroAnimation(
     scrollYProgress,
     videoWidth,
     videoHeight,
-    videoScale,
     copyOpacity,
     videoRadius,
   };
