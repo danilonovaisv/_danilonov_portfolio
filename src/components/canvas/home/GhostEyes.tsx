@@ -78,17 +78,18 @@ export default function GhostEyes() {
     // Smooth transition for opacity
     if (leftEyeRef.current) {
       // Lerp opacity
-      const currentOp = leftEyeRef.current.material.opacity;
+      const currentOp = (leftEyeRef.current.material as THREE.Material).opacity;
       const newOp = THREE.MathUtils.lerp(currentOp, targetOpacity, 0.1);
 
-      leftEyeRef.current.material.opacity = newOp;
-      if (rightEyeRef.current) rightEyeRef.current.material.opacity = newOp;
+      (leftEyeRef.current.material as THREE.Material).opacity = newOp;
+      if (rightEyeRef.current)
+        (rightEyeRef.current.material as THREE.Material).opacity = newOp;
 
       // Outer glow is softer (30% of core)
       if (leftGlowRef.current)
-        leftGlowRef.current.material.opacity = newOp * 0.3;
+        (leftGlowRef.current.material as THREE.Material).opacity = newOp * 0.3;
       if (rightGlowRef.current)
-        rightGlowRef.current.material.opacity = newOp * 0.3;
+        (rightGlowRef.current.material as THREE.Material).opacity = newOp * 0.3;
     }
   });
 
