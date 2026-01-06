@@ -50,6 +50,10 @@ PortfolioShowcase
     └── AnimatePresence
 ```
 
+----
+
+
+
 # **2. DESIGN SYSTEM**
 
 ### 2.1 Color Palette
@@ -82,7 +86,7 @@ Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos
 
 | Token     | Mobile (~<640px) | Desktop (~≥1024px) | Peso   | Uso                                                                 |
 | --------- | ---------------- | ------------------ | ------ | ------------------------------------------------------------------- |
-| display   | 2.5rem (40px)    | 4.5rem (72px)      | Bold   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
+| display   | 2.5rem (40px)    | 4.5rem (72px)      | Black  | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
 | h1        | 2rem (32px)      | 3.5rem (56px)      | Bold   | Hero headlines, títulos principais                                  |
 | h2        | 1.5rem (24px)    | 2.5rem (40px)      | Bold   | Títulos de seção                                                    |
 | h3        | 1.25rem (20px)   | 1.75rem (28px)     | Medium | Títulos de cards, subtítulos                                       |
@@ -378,10 +382,10 @@ Videos:
 
 Client Logos:
 - 12 monochromatic SVG logos: `client1.svg` through `client12.svg`
-- Base URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/`
+- Base URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/o
 
 
-
+----
 
 # **🎥 HERO SECTION — VÍDEO LOOPING
 

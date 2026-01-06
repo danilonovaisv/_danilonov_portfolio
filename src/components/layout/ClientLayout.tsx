@@ -3,9 +3,6 @@
 import React from 'react';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/SiteFooter';
-import ClientsBrandsSection from '@/components/home/ClientsBrandsSection';
-import ContactSection from '@/components/home/ContactSection';
 
 import { useExperience } from '@/hooks/useExperience';
 

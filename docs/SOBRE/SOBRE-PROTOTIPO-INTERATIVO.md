@@ -1,8 +1,17 @@
-# 🧠 SOBRE — PROTÓTIPO INTERATIVO + DESIGN SYSTEM
-## portifoliodanilo.com
-### Conceito-mãe: Ghost Design — presença que guia sem aparecer
+
+# 🧠 PROTÓTIPO INTERATIVO — PÁGINA “SOBRE”
+
+Domínio: **portifoliodanilo.com**  
+Conceito-mãe: **Ghost Design — presença que guia sem aparecer**
 
 ---
+
+## 🎯 OBJETIVO DA PÁGINA
+
+Criar conexão silenciosa, profundidade e confiança.  
+Nada grita. Nada explica demais.  
+O design age no subconsciente.
+
 # **2. DESIGN SYSTEM**
 
 ### 2.1 Color Palette
@@ -35,7 +44,7 @@ Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos
 
 | Token     | Mobile (~<640px) | Desktop (~≥1024px) | Peso   | Uso                                                                 |
 | --------- | ---------------- | ------------------ | ------ | ------------------------------------------------------------------- |
-| display   | 2.5rem (40px)    | 4.5rem (72px)      | Bold   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
+| display   | 2.5rem (40px)    | 4.5rem (72px)      | Black   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
 | h1        | 2rem (32px)      | 3.5rem (56px)      | Bold   | Hero headlines, títulos principais                                  |
 | h2        | 1.5rem (24px)    | 2.5rem (40px)      | Bold   | Títulos de seção                                                    |
 | h3        | 1.25rem (20px)   | 1.75rem (28px)     | Medium | Títulos de cards, subtítulos                                       |
@@ -393,39 +402,9 @@ A página **/sobre** é pensada como **mobile-first**, com expansão progressiva
 
 ---
 
-# PARTE 1 — PROTÓTIPO INTERATIVO (EXPERIÊNCIA)
-
-# 🧠 PROTÓTIPO INTERATIVO — PÁGINA “SOBRE”
-
-Domínio: **portifoliodanilo.com**  
-Conceito-mãe: **Ghost Design — presença que guia sem aparecer**
 
 ---
 
-## 🎯 OBJETIVO DA PÁGINA
-
-Criar conexão silenciosa, profundidade e confiança.  
-Nada grita. Nada explica demais.  
-O design age no subconsciente.
-
----
-
-## 🎨 SISTEMA VISUAL — COLOR PALETTE
-
-| Token           | Valor     | Uso                               |
-|----------------|-----------|------------------------------------|
-| primary        | #0048ff   | Marca, destaques, CTAs            |
-| accent         | #4fe6ff   | Glow, atmosferas Ghost            |
-| ghostPurple    | #8705f2   | Detalhes, ghost, pupilas          |
-| background     | #000022   | Fundo geral                       |
-| backgroundDark | #040013   | Fundo principal das seções        |
-| backgroundLight| #f0f0f0   | Formulários e respiros            |
-| text           | #fcffff   | Texto principal                   |
-| textSecondary  | #a1a3a3   | Metadados                         |
-| neutral        | #0b0d3a   | Gradientes, cards, listas         |
-| neutralLight   | #F5F5F5   | Seções claras (contato/footer)    |
-
----
 
 ## HEADER — MESMO DA HOME
 
@@ -1108,7 +1087,7 @@ Momento mais íntimo, quase carta aberta com narrativa sequencial.
 > Não pelo choque, **mas pela conexão.**
 
 **Estilo:**
-- Font-size: 44–52px
+- Font-size: Display Black
 - Line-height: 1.2
 - Font-weight: 700
 - Palavras em `primary`: "design que muda o dia" e "mas pela conexão"

@@ -174,9 +174,7 @@ export default function SiteFooter() {
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary shadow-sm transition-all hover:scale-105 active:scale-95"
                 aria-label={`Abrir ${s.label}`}
               >
-                {React.cloneElement(s.icon as React.ReactElement, {
-                  className: 'w-5 h-5',
-                })}
+                {s.icon}
               </a>
             ))}
           </div>
