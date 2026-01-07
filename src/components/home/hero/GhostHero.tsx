@@ -5,29 +5,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-
-interface GhostParams {
-  bodyColor: number;
-  glowColor: string;
-  eyeGlowColor: string;
-  ghostOpacity: number;
-  ghostScale: number;
-  emissiveIntensity: number;
-  pulseSpeed: number;
-  pulseIntensity: number;
-  eyeGlowIntensity: number;
-  eyeGlowDecay: number;
-  eyeGlowResponse: number;
-  rimLightIntensity: number;
-  followSpeed: number;
-  wobbleAmount: number;
-  floatSpeed: number;
-  movementThreshold: number;
-  revealRadius: number;
-  fadeStrength: number;
-  baseOpacity: number;
-  revealOpacity: number;
-}
+import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 interface MousePosition {
   x: number;
@@ -42,29 +20,6 @@ interface Eyes {
   eyeMaterial: THREE.MeshBasicMaterial;
   glowMaterial: THREE.MeshBasicMaterial;
 }
-
-const GHOST_PARAMS: GhostParams = {
-  bodyColor: 0x0f2027,
-  glowColor: 'blue',
-  eyeGlowColor: 'blue',
-  ghostOpacity: 0.88,
-  ghostScale: 2.4,
-  emissiveIntensity: 8.5,
-  pulseSpeed: 1.6,
-  pulseIntensity: 0.6,
-  eyeGlowIntensity: 6.5,
-  eyeGlowDecay: 0.95,
-  eyeGlowResponse: 0.31,
-  rimLightIntensity: 1.8,
-  followSpeed: 0.03,
-  wobbleAmount: 0.25,
-  floatSpeed: 0.8,
-  movementThreshold: 0.07,
-  revealRadius: 15,
-  fadeStrength: 2.5,
-  baseOpacity: 0.3,
-  revealOpacity: 0.01,
-};
 
 function GhostHero() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -91,7 +46,7 @@ function GhostHero() {
     perspective: string;
   } | null>(null);
 
-  const params = useMemo(() => GHOST_PARAMS, []);
+  const params = useMemo(() => GHOST_CONFIG, []);
 
   const createEyes = (group: THREE.Group): Eyes => {
     const eyeGroup = new THREE.Group();
@@ -214,7 +169,7 @@ function GhostHero() {
         ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
         revealRadius: { value: params.revealRadius },
         fadeStrength: { value: params.fadeStrength },
-        baseOpacity: { value: params.baseOpacity },
+        baseOpacity: { value: params.atmosphereBackgroundOpacity }, // Mapped from config
         revealOpacity: { value: params.revealOpacity },
         time: { value: 0 },
       },
@@ -494,13 +449,7 @@ function GhostHero() {
     };
   }, [params]);
 
-  return (
-    <div
-      ref={mountRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ zIndex: 0 }} // Ensure interaction doesn't block if not intended, though HomeHero controls z-index of the container
-    />
-  );
+  return <div ref={mountRef} className="absolute inset-0 w-full h-full z-0" />;
 }
 
 export default GhostHero;

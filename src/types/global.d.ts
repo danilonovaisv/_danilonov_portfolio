@@ -50,6 +50,10 @@ declare module '@react-three/fiber' {
       uOpacity?: number;
       transparent?: boolean;
     };
+    atmosphereShaderMaterial: ReactThreeFiber.Object3DNode<
+      ShaderMaterial,
+      typeof ShaderMaterial
+    >;
   }
 }
 

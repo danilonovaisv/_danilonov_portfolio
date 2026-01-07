@@ -1,19 +1,19 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import { MathUtils, type Mesh } from 'three';
-
 import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 export default function GhostEyes({
   color = GHOST_CONFIG.eyeGlowColor,
+  opacity = 0.6,
 }: {
   color?: string;
+  opacity?: number;
 }) {
   const leftEye = useRef<Mesh>(null);
   const rightEye = useRef<Mesh>(null);
-  const { mouse } = useThree();
   const [blink, setBlink] = useState(false);
 
   useEffect(() => {
@@ -33,57 +33,68 @@ export default function GhostEyes({
   useFrame(() => {
     if (!leftEye.current || !rightEye.current) return;
 
-    const eyeMovementRange = 0.15;
-    const targetX = mouse.x * eyeMovementRange;
-    const targetY = mouse.y * eyeMovementRange;
-
-    // Lerp para suavidade
-    leftEye.current.position.x = MathUtils.lerp(
-      leftEye.current.position.x,
-      -0.3 + targetX,
-      0.1
-    );
-    leftEye.current.position.y = MathUtils.lerp(
-      leftEye.current.position.y,
-      0.1 + targetY,
-      0.1
-    );
-
-    rightEye.current.position.x = MathUtils.lerp(
-      rightEye.current.position.x,
-      0.3 + targetX,
-      0.1
-    );
-    rightEye.current.position.y = MathUtils.lerp(
-      rightEye.current.position.y,
-      0.1 + targetY,
-      0.1
-    );
-
+    // Blink animation only - Position is static relative to head
     const targetScaleY = blink ? 0.1 : 1;
+    const lerpSpeed = 0.4;
+
     leftEye.current.scale.y = MathUtils.lerp(
       leftEye.current.scale.y,
       targetScaleY,
-      0.4
+      lerpSpeed
     );
     rightEye.current.scale.y = MathUtils.lerp(
       rightEye.current.scale.y,
       targetScaleY,
-      0.4
+      lerpSpeed
     );
   });
 
-  // Material básico para reagir fortemente ao Bloom
+  // Positions matching GhostHero.tsx (Reference)
+  // sphere radius 2.0
+  // Left: -0.7, 0.6, 2.0
+  // Right: 0.7, 0.6, 2.0
+
   return (
-    <group position={[0, 0, 0.8]}>
-      <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color={color} />
-      </mesh>
-      <mesh ref={rightEye} position={[0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshBasicMaterial color={color} />
-      </mesh>
+    <group>
+      {/* LEFT EYE */}
+      <group position={[-0.7, 0.6, 2.0]}>
+        {/* Pupil */}
+        <mesh ref={leftEye}>
+          <sphereGeometry args={[0.3, 12, 12]} />
+          <meshBasicMaterial color={color} transparent opacity={opacity} />
+          {/* Opacity fixed for now, can be dynamic later */}
+        </mesh>
+        {/* Glow */}
+        <mesh position={[0, 0, -0.05]}>
+          <sphereGeometry args={[0.525, 12, 12]} />
+          <meshBasicMaterial
+            color={color}
+            transparent
+            opacity={opacity * 0.5}
+            side={2}
+          />
+          {/* Side 2 = DoubleSide or BackSide? Ref uses BackSide (1) or Double? Ref uses BackSide. THREE.BackSide = 1 */}
+        </mesh>
+      </group>
+
+      {/* RIGHT EYE */}
+      <group position={[0.7, 0.6, 2.0]}>
+        {/* Pupil */}
+        <mesh ref={rightEye}>
+          <sphereGeometry args={[0.3, 12, 12]} />
+          <meshBasicMaterial color={color} transparent opacity={opacity} />
+        </mesh>
+        {/* Glow */}
+        <mesh position={[0, 0, -0.05]}>
+          <sphereGeometry args={[0.525, 12, 12]} />
+          <meshBasicMaterial
+            color={color}
+            transparent
+            opacity={opacity * 0.5}
+            side={2}
+          />
+        </mesh>
+      </group>
     </group>
   );
 }

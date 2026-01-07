@@ -127,7 +127,7 @@ export default function ManifestoSection() {
 
       {/* Subtle gradient overlay */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[#06071f]/40 via-transparent to-transparent pointer-events-none"
+        className="absolute inset-0 bg-linear-to-t from-ghost-bg-accent/40 via-transparent to-transparent pointer-events-none"
         aria-hidden="true"
       />
     </motion.section>

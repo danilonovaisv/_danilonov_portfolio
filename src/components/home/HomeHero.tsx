@@ -79,7 +79,7 @@ export default function HomeHero() {
 
         {/* Hero Copy (Editorial - Fica "atrás/dentro" da fumaça) */}
         <motion.div
-          className="absolute inset-0 z-10 pointer-events-none"
+          className="absolute inset-0 z-30 pointer-events-none"
           style={{ opacity: copyOpacity }}
         >
           <HeroCopy />

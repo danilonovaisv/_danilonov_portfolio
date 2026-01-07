@@ -89,13 +89,13 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 class AnalogDecayEffectImpl extends Effect {
   constructor({
-    grain = 0.9,
+    grain = 1.9,
     bleeding = 0.5,
     scanlines = 1.5,
     vignette = 3.2,
     intensity = 3.0,
     jitter = 0.5,
-    vsync = 0.0,
+    vsync: vsync = 1.7,
   }) {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([

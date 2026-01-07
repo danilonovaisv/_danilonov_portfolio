@@ -27,7 +27,7 @@ export default function HeroCopy() {
         </motion.div>
 
         {/* Main Quote (H1) */}
-        <h1 className="font-sans font-black tracking-tighter text-[#fcffff] mix-blend-screen max-w-full drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(3.5rem,10vw,9.5rem)] pointer-events-auto">
+        <h1 className="font-sans font-black tracking-tighter text-text-light mix-blend-screen max-w-full drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(3.5rem,10vw,9.5rem)] pointer-events-auto">
           {hero.title.map((line, index) => (
             <motion.span
               key={index}
