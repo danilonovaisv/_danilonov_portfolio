@@ -42,7 +42,7 @@ export default function HomeHero() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   // Hook de animação do Hero (Controla Copy Opacity agora)
-  const { copyOpacity } = useHeroAnimation(sectionRef);
+  const { copyOpacity, scrollProgress } = useHeroAnimation(sectionRef);
 
   const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
 
@@ -87,7 +87,7 @@ export default function HomeHero() {
 
         {/* Manifesto Thumb (Desktop Transition) */}
         {/* Agora independente com scroll listener próprio */}
-        <ManifestoThumb />
+        <ManifestoThumb scrollProgress={scrollProgress} />
       </div>
 
       {/* Scroll Space */}

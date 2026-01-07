@@ -15,12 +15,48 @@ export const FLUORESCENT_COLORS = {
   violet: '#8a2be2',
 };
 
+// Mapeamento de nomes de cores para valores numéricos para Three.js
+const THREE_COLOR_MAP: Record<string, number> = {
+  cyan: 0x00ffff,
+  lime: 0x00ff00,
+  magenta: 0xff00ff,
+  yellow: 0xffff00,
+  orange: 0xff4500,
+  pink: 0xff1493,
+  purple: 0x9400d3,
+  blue: 0x0080ff,
+  green: 0x00ff80,
+  red: 0xff0040,
+  teal: 0x00ffaa,
+  violet: 0x8a2be2,
+};
+
+// Função auxiliar para resolver a cor
+const resolveColor = (
+  colorName: string,
+  defaultHex: string = '#ffffff'
+): string => {
+  return (
+    FLUORESCENT_COLORS[colorName as keyof typeof FLUORESCENT_COLORS] ||
+    defaultHex
+  );
+};
+
+const resolveThreeColorNumber = (
+  colorName: string,
+  defaultNum: number = 0xffffff
+): number => {
+  return (
+    THREE_COLOR_MAP[colorName as keyof typeof THREE_COLOR_MAP] || defaultNum
+  );
+};
+
 // Configuração centralizada do Ghost
 export const GHOST_CONFIG = {
   // Ghost appearance
-  bodyColor: 'cyan',
-  glowColor: 'blue', // Azul ciano para maior brilho
-  eyeGlowColor: 'violet',
+  bodyColor: resolveColor('cyan'), // Usa a função para pegar o valor hex
+  glowColor: resolveColor('blue'),
+  eyeGlowColor: resolveColor('violet'),
   ghostOpacity: 0.78,
   ghostScale: 0.2,
 
@@ -34,7 +70,7 @@ export const GHOST_CONFIG = {
   eyeGlowDecay: 0.95,
   eyeGlowResponse: 0.31,
 
-  // Enhanced lighting
+  // Enhanced lighting (usado em Three.js numbers)
   rimLightIntensity: 6.8,
 
   // Behavior
@@ -46,14 +82,14 @@ export const GHOST_CONFIG = {
   // Particles
   particleCount: 550,
   particleDecayRate: 0.015,
-  particleColor: 'pink',
+  particleColor: resolveThreeColorNumber('pink'), // Usa o número para Three.js
   createParticlesOnlyWhenMoving: true,
   particleCreationRate: 45,
 
-  // Background reveal
+  // Background reveal (valores ajustados para simular a "lanterna")
   revealRadius: 37,
   fadeStrength: 12.7,
-  baseOpacity: 1.9,
+  baseOpacity: 1.9, // Ajuste cuidadoso, pode ser >= 1 para escurecer mais o fundo
   revealOpacity: 0.05,
 
   // Fireflies

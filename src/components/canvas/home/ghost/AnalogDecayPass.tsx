@@ -125,6 +125,7 @@ interface AnalogDecayProps {
   intensity?: number;
   jitter?: number;
   vsync?: number;
+  limboMode?: boolean;
 }
 
 export const AnalogDecay = forwardRef<AnalogDecayEffectImpl, AnalogDecayProps>(
@@ -137,9 +138,11 @@ export const AnalogDecay = forwardRef<AnalogDecayEffectImpl, AnalogDecayProps>(
       intensity = 1.0,
       jitter = 0.0,
       vsync = 0.0,
+      limboMode: _limboMode = false,
     },
     ref
   ) => {
+    void _limboMode;
     const effect = useMemo(
       () =>
         new AnalogDecayEffectImpl({
