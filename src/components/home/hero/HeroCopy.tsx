@@ -1,36 +1,93 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
 
 export default function HeroCopy() {
   const { hero } = HOME_CONTENT;
 
+  // Motion value for mask animation (0 = hidden, 1 = fully revealed)
+  const maskProgress = useMotionValue(0);
+
+  // Transform mask progress to mask position
+  const maskPosition = useTransform(maskProgress, [0, 1], ['200% 0', '0% 0']);
+
+  // Animate mask on mount
+  useEffect(() => {
+    const controls = animate(maskProgress, 1, {
+      duration: 1.5,
+      ease: [0.22, 1, 0.36, 1], // Ghost easeOutExpo
+      delay: 0.4,
+    });
+    return () => controls.stop();
+  }, [maskProgress]);
+
   return (
     <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none pb-[5vh]">
       <div className="w-full max-w-[min(92%,1400px)] md:max-w-[80vw] lg:max-w-[55vw] pointer-events-auto text-center flex flex-col items-center px-4 sm:px-8 transition-all duration-500">
         {/* Tag */}
-        <div className="font-mono text-[12px] md:text-[14px] uppercase tracking-[0.2em] text-[#9cb3ff] opacity-80 mb-6 md:mb-10 font-normal">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 0.8, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="font-mono text-[12px] md:text-[14px] uppercase tracking-[0.2em] text-[#9cb3ff] mb-6 md:mb-10 font-normal"
+        >
           {hero.tag}
-        </div>
+        </motion.div>
 
-        {/* Main Quote (H1) - Mobile 3.5rem -> Desktop ~11rem (3x factor) */}
-        <h1 className="font-sans font-black tracking-tighter text-[#d9ddec] mix-blend-screen max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(3.5rem,12vw,11rem)]">
+        {/* Main Quote (H1) - Animated with SVG Mask Reveal Effect */}
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 1.5,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.4,
+          }}
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%)',
+            WebkitMaskSize: '300% 100%',
+            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskPosition: maskPosition,
+          }}
+          className="font-sans font-black tracking-tighter text-[#d9ddec] mix-blend-screen max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(3.5rem,12vw,11rem)]"
+        >
           {hero.title.map((line, index) => (
             <span key={index} className="block">
               {line}
             </span>
           ))}
-        </h1>
+        </motion.h1>
 
         {/* Sub Quote (H2) */}
-        <h2 className="font-sans font-bold tracking-tight mt-6 mb-12 text-[#9ca5c3] mix-blend-screen max-w-[800px] drop-shadow-[0_0_18px_rgba(71,128,255,0.25)] leading-[1.1] text-[clamp(1.2rem,4vw,2.5rem)]">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 1,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 0.8,
+          }}
+          className="font-sans font-bold tracking-tight mt-6 mb-12 text-[#9ca5c3] mix-blend-screen max-w-[800px] drop-shadow-[0_0_18px_rgba(71,128,255,0.25)] leading-[1.1] text-[clamp(1.2rem,4vw,2.5rem)]"
+        >
           {hero.subtitle}
-        </h2>
+        </motion.h2>
 
         {/* CTA Button (Center) */}
-        <CtaButton href="/sobre" label={hero.cta} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+            delay: 1.2,
+          }}
+        >
+          <CtaButton href="/sobre" label={hero.cta} />
+        </motion.div>
       </div>
     </div>
   );

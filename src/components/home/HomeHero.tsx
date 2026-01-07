@@ -9,6 +9,7 @@ import { GhostStage } from './hero/GhostStage';
 import HeroCopy from './hero/HeroCopy';
 import { useHeroAnimation } from './hero/useHeroAnimation';
 import ManifestoThumb from './hero/ManifestoThumb';
+import GhostAura from './hero/GhostAura';
 
 const CONFIG = {
   preloadMs: 2000,
@@ -60,6 +61,9 @@ export default function HomeHero() {
           className="absolute inset-0 z-0 bg-[linear-gradient(180deg,#040013_0%,#0b0d3a_100%)]"
           aria-hidden
         />
+
+        {/* Ghost Aura - Camada de atmosfera etérea */}
+        <GhostAura />
 
         {/* Preloader Ghost */}
         <AnimatePresence>
