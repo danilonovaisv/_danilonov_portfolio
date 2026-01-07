@@ -88,24 +88,6 @@ export default function HomeHero() {
         {/* Manifesto Thumb (Desktop Transition) */}
         {/* Agora independente com scroll listener próprio */}
         <ManifestoThumb />
-
-        {/* Scroll Helper */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoading ? 0 : 0.6 }}
-          className="absolute bottom-10 left-10 z-40 hidden md:flex flex-col items-start gap-4"
-        >
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] uppercase tracking-[0.4em] text-cyan-400 font-mono">
-              Scroll to step inside
-            </span>
-            <motion.div
-              animate={{ scaleX: [0, 1, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="h-px w-24 bg-linear-to-r from-cyan-400 to-transparent origin-left"
-            />
-          </div>
-        </motion.div>
       </div>
 
       {/* Scroll Space */}

@@ -52,8 +52,8 @@ export const GHOST_CONFIG = {
 
   // Background reveal
   revealRadius: 37,
-  fadeStrength: 1.7,
-  baseOpacity: 0.9,
+  fadeStrength: 12.7,
+  baseOpacity: 1.9,
   revealOpacity: 0.05,
 
   // Fireflies
@@ -66,7 +66,7 @@ export const GHOST_CONFIG = {
   analogBleeding: 0.0,
   analogVSync: 0.7,
   analogScanlines: 0.0,
-  analogVignette: 9.4,
+  analogVignette: 3.4,
   analogJitter: 0.5,
   limboMode: false,
 };

@@ -9,14 +9,14 @@ export default function HeroCopy() {
 
   return (
     <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none pb-[5vh]">
-      <div className="w-full max-w-[min(92%,1400px)] md:max-w-[50vw] pointer-events-auto text-center flex flex-col items-center px-4 sm:px-8">
+      <div className="w-full max-w-[min(92%,1400px)] md:max-w-[80vw] lg:max-w-[55vw] pointer-events-auto text-center flex flex-col items-center px-4 sm:px-8 transition-all duration-500">
         {/* Tag */}
-        <div className="font-mono text-[14px] uppercase tracking-[0.16em] text-[#9cb3ff] opacity-80 mb-6 md:mb-8 font-normal">
+        <div className="font-mono text-[12px] md:text-[14px] uppercase tracking-[0.2em] text-[#9cb3ff] opacity-80 mb-6 md:mb-10 font-normal">
           {hero.tag}
         </div>
 
-        {/* Main Quote (H1) */}
-        <h1 className="font-sans font-black tracking-tight text-[#d9ddec] mix-blend-screen max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[1.05] sm:leading-[0.95] text-[clamp(2.4rem,6vw,6.5rem)] sm:text-[clamp(3.2rem,5vw,8rem)] lg:text-[clamp(3.8rem,4vw,9rem)]">
+        {/* Main Quote (H1) - Mobile 3.5rem -> Desktop ~11rem (3x factor) */}
+        <h1 className="font-sans font-black tracking-tighter text-[#d9ddec] mix-blend-screen max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(3.5rem,12vw,11rem)]">
           {hero.title.map((line, index) => (
             <span key={index} className="block">
               {line}
@@ -25,16 +25,11 @@ export default function HeroCopy() {
         </h1>
 
         {/* Sub Quote (H2) */}
-        <h2 className="font-sans font-black tracking-tight mt-3 mb-12 text-[#9ca5c3] mix-blend-screen max-w-[1100px] drop-shadow-[0_0_18px_rgba(71,128,255,0.25)] leading-[1.1] sm:leading-[0.95] text-[clamp(1.6rem,4.5vw,3.8rem)] sm:text-[clamp(2rem,3.6vw,4.8rem)] lg:text-[clamp(2.4rem,3.2vw,5.5rem)]">
+        <h2 className="font-sans font-bold tracking-tight mt-6 mb-12 text-[#9ca5c3] mix-blend-screen max-w-[800px] drop-shadow-[0_0_18px_rgba(71,128,255,0.25)] leading-[1.1] text-[clamp(1.2rem,4vw,2.5rem)]">
           {hero.subtitle}
         </h2>
 
         {/* CTA Button (Center) */}
-        <CtaButton href="/sobre" label={hero.cta} />
-      </div>
-
-      {/* CTA Button (Bottom) */}
-      <div className="absolute bottom-12 pointer-events-auto">
         <CtaButton href="/sobre" label={hero.cta} />
       </div>
     </div>
