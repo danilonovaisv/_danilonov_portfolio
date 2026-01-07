@@ -1,8 +1,8 @@
+// AnalogDecayPass.tsx
 'use client';
-
 import React, { forwardRef, useMemo } from 'react';
 import { Effect } from 'postprocessing';
-import { Uniform } from 'three';
+import { Uniform, WebGLRenderer, WebGLRenderTarget } from 'three';
 
 const fragmentShader = `
 uniform float uTime;
@@ -107,7 +107,11 @@ class AnalogDecayEffectImpl extends Effect {
     });
   }
 
-  update(renderer, inputBuffer, deltaTime) {
+  update(
+    _renderer: WebGLRenderer,
+    _inputBuffer: WebGLRenderTarget,
+    deltaTime: number
+  ) {
     const uTime = this.uniforms.get('uTime');
     if (uTime) uTime.value += deltaTime;
   }

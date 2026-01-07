@@ -1,5 +1,5 @@
+// AtmosphereVeil.tsx
 'use client';
-
 import * as THREE from 'three';
 
 export default function AtmosphereVeil() {

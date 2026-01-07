@@ -79,14 +79,12 @@ export default function HomeHero() {
         </div>
 
         {/* Hero Copy (Editorial) */}
-        {!isLoading && (
-          <motion.div
-            className="absolute inset-0 z-10 pointer-events-none"
-            style={{ opacity: copyOpacity }}
-          >
-            <HeroCopy />
-          </motion.div>
-        )}
+        <motion.div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{ opacity: copyOpacity }}
+        >
+          <HeroCopy />
+        </motion.div>
 
         {/* Manifesto Thumb (Desktop Transition) */}
         {/* Renderiza apenas se não estiver carregando, para evitar glitches visuais */}
@@ -113,7 +111,7 @@ export default function HomeHero() {
             <motion.div
               animate={{ scaleX: [0, 1, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="h-px w-24 bg-gradient-to-r from-cyan-400 to-transparent origin-left"
+              className="h-px w-24 bg-linear-to-r from-cyan-400 to-transparent origin-left"
             />
           </div>
         </motion.div>
