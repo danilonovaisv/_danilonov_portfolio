@@ -4,11 +4,9 @@ import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-import { GHOST_CONFIG } from '@/config/ghostConfig';
-
 export default function Particles({
-  count = GHOST_CONFIG.particleCount,
-  color = GHOST_CONFIG.particleColor,
+  count = 60,
+  color = '#4d8dff',
 }: {
   count?: number;
   color?: string;

@@ -12,9 +12,9 @@ interface GhostStageProps {
 }
 
 // Import dinâmico evita SSR do canvas
-// Import dinâmico evita SSR do canvas
 const GhostCanvas = dynamic(
-  () => import('@/components/home/hero/GhostHero').then((m) => m.default),
+  () =>
+    import('@/components/canvas/home/ghost/GhostCanvas').then((m) => m.default),
   { ssr: false }
 );
 

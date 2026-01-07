@@ -42,7 +42,7 @@ export default function HomeHero() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   // Hook de animação do Hero (Controla Copy Opacity agora)
-  const { copyOpacity, scrollProgress } = useHeroAnimation(sectionRef);
+  const { copyOpacity } = useHeroAnimation(sectionRef);
 
   const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
 
@@ -72,14 +72,14 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* WebGL Atmosphere (Agora por cima do texto para dar imersão "Ghost") */}
+        {/* WebGL Atmosphere */}
         <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostStage reducedMotion={prefersReducedMotion} />
         </div>
 
-        {/* Hero Copy (Editorial - Fica "atrás/dentro" da fumaça) */}
+        {/* Hero Copy (Editorial) */}
         <motion.div
-          className="absolute inset-0 z-30 pointer-events-none"
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{ opacity: copyOpacity }}
         >
           <HeroCopy />
@@ -87,7 +87,7 @@ export default function HomeHero() {
 
         {/* Manifesto Thumb (Desktop Transition) */}
         {/* Agora independente com scroll listener próprio */}
-        <ManifestoThumb scrollProgress={scrollProgress} />
+        <ManifestoThumb />
       </div>
 
       {/* Scroll Space */}

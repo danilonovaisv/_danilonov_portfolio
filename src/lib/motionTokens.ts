@@ -1,19 +1,9 @@
 import { Variants, Transition } from 'framer-motion';
 
 // Configurações base
-export const GHOST_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1]; // Curva Bezier "Editorial"
-
-export const DURATION_FAST = 0.4;
-export const DURATION_MEDIUM = 0.8;
-export const DURATION_SLOW = 1.2;
-
+export const GHOST_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 export const GHOST_DURATION = 0.9;
 export const GHOST_DURATION_LONG = 1.4;
-
-export const GHOST_TRANSITION = {
-  duration: 0.8,
-  ease: GHOST_EASE,
-};
 
 // Transition Helpers
 export const ghostTransition = (
@@ -25,33 +15,11 @@ export const ghostTransition = (
   ease: GHOST_EASE,
 });
 
-export const MOTION_VARIANTS = {
-  container: {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  },
-  item: {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: GHOST_EASE,
-      },
-    },
-  },
-};
-
-// Tokens de Motion Legacy/Específicos
+// Tokens de Motion
 
 // ghostIn: Opacity + Blur (sem translate/scale)
+// Uso: Texto principal, títulos
+// Entrada longa e etérea
 export const ghostIn: Variants = {
   hidden: {
     opacity: 0,
@@ -65,6 +33,7 @@ export const ghostIn: Variants = {
 };
 
 // fadeGhost: Variante mais leve de opacity + blur
+// Uso: Blocos de texto secundários
 export const fadeGhost: Variants = {
   hidden: {
     opacity: 0,
@@ -78,6 +47,7 @@ export const fadeGhost: Variants = {
 };
 
 // riseSoft: Leve Y (~18px) + Opacity + Blur (sem bounce)
+// Uso: Listas, cards
 export const riseSoft: Variants = {
   hidden: {
     opacity: 0,
@@ -93,6 +63,7 @@ export const riseSoft: Variants = {
 };
 
 // floatMemory: Pequeno deslocamento lateral/vertical
+// Uso: Imagens flutuantes na seção Origem
 export const floatMemory: Variants = {
   hidden: {
     opacity: 0,
@@ -112,6 +83,8 @@ export const floatMemory: Variants = {
 };
 
 // imageFloat: Entrada suave para imagens intercaladas
+// Uso: Imagens da seção Origem (sem blur, opacity controlada)
+// NOTA: Sem scale/bounce/rotate conforme Ghost Design System
 export const imageFloat: Variants = {
   hidden: {
     opacity: 0,

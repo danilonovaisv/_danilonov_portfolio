@@ -74,7 +74,7 @@ export default function ManifestoSection() {
       initial={prefersReducedMotion ? {} : ANIMATION.initial}
       animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
       transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-[#040013] aspect-video relative overflow-hidden"
+      className="lg:hidden w-full bg-[#050511] aspect-video relative overflow-hidden"
     >
       {/* Video */}
       <video
@@ -127,7 +127,7 @@ export default function ManifestoSection() {
 
       {/* Subtle gradient overlay */}
       <div
-        className="absolute inset-0 bg-linear-to-t from-ghost-bg-accent/40 via-transparent to-transparent pointer-events-none"
+        className="absolute inset-0 bg-linear-to-t from-[#06071f]/40 via-transparent to-transparent pointer-events-none"
         aria-hidden="true"
       />
     </motion.section>

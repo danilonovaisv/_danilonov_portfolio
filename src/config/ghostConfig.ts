@@ -18,76 +18,55 @@ export const FLUORESCENT_COLORS = {
 // Configuração centralizada do Ghost
 export const GHOST_CONFIG = {
   // Ghost appearance
-  bodyColor: 'Cyan',
+  bodyColor: 'cyan',
   glowColor: 'blue', // Azul ciano para maior brilho
   eyeGlowColor: 'violet',
-  ghostOpacity: 0.88,
-  ghostScale: 0.3,
+  ghostOpacity: 0.78,
+  ghostScale: 0.2,
 
   // Glow effects
-  emissiveIntensity: 2.8, // Intensidade alta para criar o brilho de lanterna
-  pulseSpeed: 1.7,
-  pulseIntensity: 0.7,
+  emissiveIntensity: 3.8, // Intensidade alta para criar o brilho de lanterna
+  pulseSpeed: 1.6,
+  pulseIntensity: 1.6,
 
   // Eyes
-  eyeGlowIntensity: 2.5,
+  eyeGlowIntensity: 9.5,
   eyeGlowDecay: 0.95,
   eyeGlowResponse: 0.31,
 
   // Enhanced lighting
-  rimLightIntensity: 3.8,
+  rimLightIntensity: 6.8,
 
   // Behavior
   followSpeed: 0.05,
   wobbleAmount: 0.35,
-  floatSpeed: 0.6,
+  floatSpeed: 1.6,
   movementThreshold: 0.07,
 
   // Particles
-  particleCount: 50,
+  particleCount: 550,
   particleDecayRate: 0.015,
   particleColor: 'pink',
   createParticlesOnlyWhenMoving: true,
   particleCreationRate: 45,
 
   // Background reveal
-  revealRadius: 2.7,
-  fadeStrength: 0.7,
+  revealRadius: 37,
+  fadeStrength: 1.7,
   baseOpacity: 0.9,
-  baseDarkness: 0.90,
   revealOpacity: 0.05,
 
   // Fireflies
   fireflyGlowIntensity: 4.3,
   fireflySpeed: 0.09,
-  fireflyCount: 200,
-  fireflyColor: 'purple',
-  fireflyScaleMin: 0.03,
-  fireflyScaleMax: 0.07,
-
-  // Atmosphere veil
-  atmosphereGlowColor: '#5d00ff',
-  atmosphereGlowOpacity: 0.72,
-  atmosphereGlowScale: [1, 1, 1] as [number, number, number],
-  atmosphereBackgroundColor: '#03041c',
-  atmosphereBackgroundOpacity: 0.029,
-  atmosphereBackgroundScale: [15, 10] as [number, number],
-
-  // Canvas and camera
-  canvasBackground: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
-  cameraPosition: [0, 0, 20] as [number, number, number],
-  cameraFov: 35,
-
-  // Mouse influence
-  mouseInfluence: { x: 11, y: 7 },
 
   // Analog Decay settings
-  analogIntensity: 4.9,
-  analogGrain: 0.4,
-  analogBleeding: 1.0,
+  analogIntensity: 0.9,
+  analogGrain: 0.2,
+  analogBleeding: 0.0,
   analogVSync: 0.7,
-  analogScanlines: 3.0,
-  analogVignette: 2.4,
+  analogScanlines: 0.0,
+  analogVignette: 9.4,
   analogJitter: 0.5,
   limboMode: false,
 };

@@ -1,112 +1,75 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
-import * as THREE from 'three';
-import { motion } from 'framer-motion';
-import { EffectComposer } from '@react-three/postprocessing';
-
-import Fireflies from './Fireflies';
-import AtmosphereVeil from '../AtmosphereVeil';
-import GhostMesh from './GhostMesh'; // The integrated R3F mesh + eyes
-import { AnalogDecay } from './AnalogDecayPass';
+import { Canvas } from '@react-three/fiber';
+import {
+  EffectComposer,
+  Bloom,
+  Noise,
+  Vignette,
+} from '@react-three/postprocessing';
+import { Suspense } from 'react';
+import type { RefObject } from 'react';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
+import type { Group } from 'three';
 
-type MousePosition = [number, number];
+import Ghost from '../Ghost';
+import { AnalogDecay } from './AnalogDecayPass';
+import GhostEyes from './GhostEyes';
+import Particles from './Particles';
 
-const Scene = ({ mousePosition }: { mousePosition: MousePosition }) => {
-  const timeRef = useRef(0);
-  const movementRef = useRef(0);
-  // Shared vector for tracking position (Atmosphere reads this)
-  const lastGhostPosRef = useRef(new THREE.Vector3(0, 0, 0));
-
-  useFrame((_, delta) => {
-    timeRef.current += delta;
-  });
-
-  return (
-    <>
-      <ambientLight color={0x0a0a2e} intensity={0.08} />
-      <directionalLight
-        position={[-8, 6, -4]}
-        color={0x4a90e2}
-        intensity={GHOST_CONFIG.rimLightIntensity}
-      />
-      <directionalLight
-        position={[8, -4, -6]}
-        color={0x50e3c2}
-        intensity={GHOST_CONFIG.rimLightIntensity * 0.7}
-      />
-
-      <GhostMesh
-        timeRef={timeRef}
-        mouseX={mousePosition[0]}
-        mouseY={mousePosition[1]}
-        movementRef={movementRef}
-        lastGhostPosRef={lastGhostPosRef}
-      />
-
-      <Environment preset="apartment" />
-      <Fireflies />
-
-      {/* Pass the Vector3 object itself from the ref */}
-      <AtmosphereVeil ghostPosition={lastGhostPosRef.current} />
-    </>
-  );
+type GhostCanvasProps = {
+  ghostRef?: RefObject<Group>;
 };
 
-const GhostCanvas = () => {
-  const [mousePosition, setMousePosition] = useState<[number, number]>([0, 0]);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 2 - 1;
-      const y = -(e.clientY / window.innerHeight) * 2 + 1;
-      setMousePosition([x, y]);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
+  const cfg = GHOST_CONFIG;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.5, ease: 'easeOut' }}
-      className="absolute inset-0 z-0"
-    >
+    <div className="absolute inset-0 z-0 h-full w-full">
       <Canvas
+        eventSource={document.body}
+        eventPrefix="client"
+        dpr={[1, 1.2]}
         gl={{
-          antialias: true,
+          antialias: false,
           alpha: true,
           powerPreference: 'high-performance',
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 0.9,
         }}
-        camera={{
-          position: GHOST_CONFIG.cameraPosition,
-          fov: GHOST_CONFIG.cameraFov,
-        }}
-        dpr={[1, 2]}
+        // CAMERA AJUSTADA: Z=7 afasta, FOV=45 dá estilo de cinema sem exagerar no zoom
+        camera={{ position: [0, 0, 7], fov: 35 }}
       >
-        <Scene mousePosition={mousePosition} />
-        <EffectComposer enableNormalPass={false}>
-          <AnalogDecay
-            grain={GHOST_CONFIG.analogGrain}
-            bleeding={GHOST_CONFIG.analogBleeding}
-            vsync={GHOST_CONFIG.analogVSync}
-            scanlines={GHOST_CONFIG.analogScanlines}
-            vignette={GHOST_CONFIG.analogVignette}
-            intensity={GHOST_CONFIG.analogIntensity}
-            jitter={GHOST_CONFIG.analogJitter}
-            limboMode={GHOST_CONFIG.limboMode}
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.2} />
+          <pointLight
+            position={[2, 3, 4]}
+            intensity={2}
+            color={cfg.glowColor}
+            distance={0.9}
           />
-        </EffectComposer>
-      </Canvas>
-    </motion.div>
-  );
-};
 
-export default GhostCanvas;
+          {/* RevealingText removed in favor of HTML HeroCopy */}
+
+          <group position={[0, -0.2, 0]}>
+            <Ghost ref={ghostRef}>
+              <GhostEyes color={cfg.eyeGlowColor} />
+            </Ghost>
+          </group>
+
+          <Particles count={90} color={cfg.glowColor} />
+
+          <EffectComposer enableNormalPass={false}>
+            <Bloom
+              luminanceThreshold={0.2}
+              mipmapBlur
+              intensity={2.5}
+              radius={0.5}
+            />
+            <AnalogDecay intensity={0.8} scanlines={0.1} grain={0.3} />
+            <Noise opacity={0.01} />
+            <Vignette eskil={false} offset={0.8} darkness={0.8} />
+          </EffectComposer>
+        </Suspense>
+      </Canvas>
+    </div>
+  );
+}

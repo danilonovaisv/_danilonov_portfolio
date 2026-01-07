@@ -1,9 +1,5 @@
 'use client';
 
-import { GHOST_CONFIG } from '@/config/ghostConfig';
-
-// ... (existing code)
-
 import React, { forwardRef, useMemo } from 'react';
 import { Effect } from 'postprocessing';
 import { Uniform, WebGLRenderer, WebGLRenderTarget } from 'three';
@@ -89,13 +85,13 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 class AnalogDecayEffectImpl extends Effect {
   constructor({
-    grain = 1.9,
+    grain = 0.9,
     bleeding = 0.5,
     scanlines = 1.5,
     vignette = 3.2,
     intensity = 3.0,
     jitter = 0.5,
-    vsync: vsync = 1.7,
+    vsync = 0.0,
   }) {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
@@ -129,24 +125,21 @@ interface AnalogDecayProps {
   intensity?: number;
   jitter?: number;
   vsync?: number;
-  limboMode?: boolean;
 }
 
 export const AnalogDecay = forwardRef<AnalogDecayEffectImpl, AnalogDecayProps>(
   (
     {
-      grain = GHOST_CONFIG.analogGrain,
-      bleeding = GHOST_CONFIG.analogBleeding,
-      scanlines = GHOST_CONFIG.analogScanlines,
-      vignette = GHOST_CONFIG.analogVignette,
-      intensity = GHOST_CONFIG.analogIntensity,
-      jitter = GHOST_CONFIG.analogJitter,
-      vsync = GHOST_CONFIG.analogVSync,
-      limboMode: _limboMode = GHOST_CONFIG.limboMode,
+      grain = 1.5,
+      bleeding = 0.5,
+      scanlines = 0.5,
+      vignette = 3.2,
+      intensity = 1.0,
+      jitter = 0.0,
+      vsync = 0.0,
     },
     ref
   ) => {
-    void _limboMode;
     const effect = useMemo(
       () =>
         new AnalogDecayEffectImpl({

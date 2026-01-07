@@ -21,7 +21,6 @@ export function useHeroAnimation(
 
   return {
     scrollYProgress,
-    scrollProgress: smoothScroll,
     copyOpacity,
   };
 }

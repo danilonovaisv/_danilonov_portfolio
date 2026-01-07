@@ -3,31 +3,24 @@
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { FLUORESCENT_COLORS, GHOST_CONFIG } from '@/config/ghostConfig';
+import { GHOST_CONFIG } from '@/config/ghostConfig';
+
+const FIREFLY_COUNT = 200; // Reduzido para evitar poluição visual
 
 export default function Fireflies() {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  const fireflyCount = GHOST_CONFIG.fireflyCount;
-  const fireflyColor =
-    FLUORESCENT_COLORS[
-      GHOST_CONFIG.fireflyColor as keyof typeof FLUORESCENT_COLORS
-    ] || GHOST_CONFIG.fireflyColor;
-  const fireflyOpacity = Math.min(1, GHOST_CONFIG.fireflyGlowIntensity / 5);
   const particles = useMemo(() => {
-    return Array.from({ length: fireflyCount }, () => ({
+    return Array.from({ length: FIREFLY_COUNT }, () => ({
       t: Math.random() * 1000,
       factor: 20 + Math.random() * 100,
       speed: (0.2 + Math.random() * 0.5) * GHOST_CONFIG.fireflySpeed,
       xFactor: -4 + Math.random() * 8,
       yFactor: -2 + Math.random() * 4,
       zFactor: -4 + Math.random() * 8,
-      scaleBase:
-        GHOST_CONFIG.fireflyScaleMin +
-        Math.random() *
-          (GHOST_CONFIG.fireflyScaleMax - GHOST_CONFIG.fireflyScaleMin),
+      scaleBase: 0.03 + Math.random() * 0.04,
     }));
-  }, [fireflyCount]);
+  }, []);
 
   useFrame((state) => {
     const mesh = meshRef.current;
@@ -62,12 +55,12 @@ export default function Fireflies() {
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, fireflyCount]}>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, FIREFLY_COUNT]}>
       <sphereGeometry args={[1, 8, 8]} />
       <meshBasicMaterial
-        color={fireflyColor}
+        color="#00ffff" // Ciano Neon
         transparent
-        opacity={fireflyOpacity}
+        opacity={0.8}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
         toneMapped={false}
