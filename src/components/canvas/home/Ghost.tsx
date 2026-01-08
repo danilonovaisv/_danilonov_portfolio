@@ -4,9 +4,8 @@ import React, { useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
-import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
-
-const resolveColor = (color: string) => FLUORESCENT_COLORS[color] ?? color;
+import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
+import GhostEyes from '@/components/canvas/home/ghost/GhostEyes';
 
 // ============================================================================
 // Ghost Component (forwardRef para expor posição ao RevealingText)
@@ -16,14 +15,11 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
     const group = useRef<Group>(null);
     const bodyMesh = useRef<Mesh>(null);
     const bodyMaterial = useRef<MeshStandardMaterial>(null);
-    const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
-    const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
 
     // Expor o group.current via ref
     useImperativeHandle(ref, () => group.current as Group);
 
     const { viewport, size } = useThree();
-    const prevPosition = useRef(new Vector3(0, 0, 0));
     const targetPosition = useRef(new Vector3(0, 0, 0));
 
     // Geometria do Ghost (modificada para ficar orgânica na base)
@@ -85,20 +81,6 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
         GHOST_CONFIG.followSpeed
       );
 
-      // Detecção de movimento para efeito dos olhos
-      const currentDist = group.current.position.distanceTo(
-        prevPosition.current
-      );
-      prevPosition.current.copy(group.current.position);
-      const isMoving = currentDist > (isMobile ? 0.0 : 0.005);
-      const targetEyeOpacity = isMoving ? 1 : 0.3;
-
-      if (leftEyeMat.current && rightEyeMat.current) {
-        leftEyeMat.current.opacity +=
-          (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
-        rightEyeMat.current.opacity = leftEyeMat.current.opacity;
-      }
-
       // Pulsação do corpo
       if (bodyMaterial.current) {
         const pulse =
@@ -118,9 +100,11 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
     });
 
     // Resolve color names to actual hex values
-    const resolvedBodyColor = resolveColor(GHOST_CONFIG.bodyColor);
-    const resolvedGlowColor = resolveColor(GHOST_CONFIG.glowColor);
-    const resolvedEyeGlowColor = resolveColor(GHOST_CONFIG.eyeGlowColor);
+    const resolvedBodyColor = resolveFluorescentColor(GHOST_CONFIG.bodyColor);
+    const resolvedGlowColor = resolveFluorescentColor(GHOST_CONFIG.glowColor);
+    const resolvedEyeGlowColor = resolveFluorescentColor(
+      GHOST_CONFIG.eyeGlowColor
+    );
 
     return (
       <group ref={group} scale={GHOST_CONFIG.ghostScale} {...props}>
@@ -150,50 +134,9 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
             side={THREE.DoubleSide}
             toneMapped={false}
           />
-
-          {/* Olhos do Ghost */}
-          <group position={[0, 0, 0]}>
-            {/* Olho esquerdo */}
-            <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
-              {/* Socket (fundo preto) */}
-              <mesh position={[0, 0, -0.1]}>
-                <sphereGeometry args={[0.45, 16, 16]} />
-                <meshBasicMaterial color="black" />
-              </mesh>
-              {/* Brilho do olho */}
-              <mesh position={[0, 0, 0.1]}>
-                <sphereGeometry args={[0.2, 16, 16]} />
-                <meshBasicMaterial
-                  ref={leftEyeMat}
-                  color={resolvedEyeGlowColor}
-                  transparent
-                  opacity={0.3}
-                  toneMapped={false}
-                />
-              </mesh>
-            </group>
-
-            {/* Olho direito */}
-            <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
-              {/* Socket (fundo preto) */}
-              <mesh position={[0, 0, -0.1]}>
-                <sphereGeometry args={[0.45, 16, 16]} />
-                <meshBasicMaterial color="black" />
-              </mesh>
-              {/* Brilho do olho */}
-              <mesh position={[0, 0, 0.1]}>
-                <sphereGeometry args={[0.2, 16, 16]} />
-                <meshBasicMaterial
-                  ref={rightEyeMat}
-                  color={resolvedEyeGlowColor}
-                  transparent
-                  opacity={0.3}
-                  toneMapped={false}
-                />
-              </mesh>
-            </group>
-          </group>
         </mesh>
+
+        <GhostEyes color={resolvedEyeGlowColor} position={[0, 0.6, 1.8]} />
       </group>
     );
   }

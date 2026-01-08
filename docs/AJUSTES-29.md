@@ -1895,7 +1895,7 @@ INSTRUÇÕES (cole como checklist do projeto)
    - @react-three/drei
    - three
    - @react-three/postprocessing
-3) Confirme imports em `src/app/page.tsx` e rode `npm run dev`.
+3) Confirme imports em `src/app/page.tsx` e rode `pnpm run dev`.
 
 Antes de finalizar, deseja revisar ou ajustar algo?
 ====================================================================== */

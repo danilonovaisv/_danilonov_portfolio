@@ -3,22 +3,17 @@
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
-
-const FIREFLY_COUNT = GHOST_CONFIG.fireflyCount ?? 200;
+import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
 
 export default function Fireflies() {
   const spritesRef = useRef<(THREE.Sprite | null)[]>([]);
-  const resolvedColor =
-    FLUORESCENT_COLORS[
-      GHOST_CONFIG.particleColor as keyof typeof FLUORESCENT_COLORS
-    ] || GHOST_CONFIG.particleColor;
+  const resolvedColor = resolveFluorescentColor(GHOST_CONFIG.particleColor);
 
   const spriteMaterial = useMemo(
     () =>
       new THREE.SpriteMaterial({
         color: resolvedColor,
-        opacity: 0.3,
+        opacity: GHOST_CONFIG.fireflyOpacity,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         toneMapped: false,
@@ -27,19 +22,26 @@ export default function Fireflies() {
     [resolvedColor]
   );
 
-  const fireflies = useMemo(() => {
-    return Array.from({ length: FIREFLY_COUNT }, (_, index) => {
-      const phase = index * 0.6;
-      return {
-        basePhase: phase,
-        radius: 3.2 + Math.sin(index * 0.4) * 0.8,
-        xFactor: Math.sin(index * 0.37) * 3,
-        yFactor: Math.cos(index * 0.22) * 1.8,
-        zFactor: Math.sin(index * 0.56) * 3,
-        scaleBase: 0.02 + Math.abs(Math.sin(index * 0.21)) * 0.04,
-      };
-    });
-  }, []);
+  const fireflies = useMemo(
+    () =>
+      Array.from({ length: GHOST_CONFIG.fireflyCount }, (_, index) => {
+        const phase = index * 0.6;
+        return {
+          basePhase: phase,
+          radius:
+            GHOST_CONFIG.fireflyBaseRadius +
+            Math.sin(index * 0.4) * GHOST_CONFIG.fireflyRadiusVariance,
+          xFactor: Math.sin(index * 0.37) * 3,
+          yFactor: Math.cos(index * 0.22) * 1.8,
+          zFactor: Math.sin(index * 0.56) * 3,
+          scaleBase:
+            GHOST_CONFIG.fireflyScaleBase +
+            Math.abs(Math.sin(index * 0.21)) *
+              GHOST_CONFIG.fireflyScaleVariance,
+        };
+      }),
+    []
+  );
 
   useFrame((state) => {
     const elapsed = state.clock.getElapsedTime();
@@ -47,9 +49,13 @@ export default function Fireflies() {
       const sprite = spritesRef.current[index];
       if (!sprite) return;
 
-      const floatSpeed = Math.sin(elapsed * 0.5 + index) * 0.005;
+      const floatSpeed =
+        Math.sin(elapsed * GHOST_CONFIG.fireflyFloatFrequency + index) *
+        GHOST_CONFIG.fireflyFloatAmplitude;
       const orbitTime = elapsed * GHOST_CONFIG.fireflySpeed + firefly.basePhase;
-      const wobble = Math.sin(orbitTime * 1.3) * 0.2;
+      const wobble =
+        Math.sin(orbitTime * GHOST_CONFIG.fireflyWobbleFrequency) *
+        GHOST_CONFIG.fireflyWobbleIntensity;
 
       sprite.position.set(
         firefly.xFactor +
@@ -61,7 +67,10 @@ export default function Fireflies() {
         firefly.zFactor + Math.cos(orbitTime * 0.4) * firefly.radius * 0.6
       );
 
-      const pulse = 0.6 + Math.sin(orbitTime * 2.2) * 0.35;
+      const pulse =
+        GHOST_CONFIG.fireflyPulseBase +
+        Math.sin(orbitTime * GHOST_CONFIG.fireflyPulseFrequency) *
+          GHOST_CONFIG.fireflyPulseVariance;
       const scale = firefly.scaleBase * pulse;
       sprite.scale.setScalar(scale);
     });
@@ -69,7 +78,7 @@ export default function Fireflies() {
 
   return (
     <group>
-      {fireflies.map((firefly, index) => (
+      {fireflies.map((_, index) => (
         <sprite
           key={index}
           ref={(el) => {

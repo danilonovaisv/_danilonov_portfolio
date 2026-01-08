@@ -79,10 +79,20 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     }
 
     // Ajuste de Intensidade Global
-    color = mix(inputColor.rgb, color, uAnalogIntensity);
-    outputColor = vec4(color, inputColor.a);
+color = mix(inputColor.rgb, color, uAnalogIntensity);
+outputColor = vec4(color, inputColor.a);
 }
 `;
+
+interface AnalogDecayProps {
+  grain?: number;
+  bleeding?: number;
+  scanlines?: number;
+  vignette?: number;
+  intensity?: number;
+  jitter?: number;
+  vsync?: number;
+}
 
 class AnalogDecayEffectImpl extends Effect {
   constructor({
@@ -93,7 +103,7 @@ class AnalogDecayEffectImpl extends Effect {
     intensity = GHOST_CONFIG.analogIntensity,
     jitter = GHOST_CONFIG.analogJitter,
     vsync = GHOST_CONFIG.analogVSync,
-  }) {
+  }: AnalogDecayProps = {}) {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
         ['uTime', new Uniform(0)],
@@ -116,16 +126,6 @@ class AnalogDecayEffectImpl extends Effect {
     const uTime = this.uniforms.get('uTime');
     if (uTime) uTime.value += deltaTime;
   }
-}
-
-interface AnalogDecayProps {
-  grain?: number;
-  bleeding?: number;
-  scanlines?: number;
-  vignette?: number;
-  intensity?: number;
-  jitter?: number;
-  vsync?: number;
 }
 
 export const AnalogDecay = forwardRef<AnalogDecayEffectImpl, AnalogDecayProps>(

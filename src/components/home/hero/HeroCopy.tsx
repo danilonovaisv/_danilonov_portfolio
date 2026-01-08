@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function HeroCopy() {
   return (
     <div className="absolute inset-0 z-0 flex flex-col justify-center items-center pointer-events-none pb-[5vh]">
-      <div 
+      <div
         className="w-[90%] max-w-[1100px] pointer-events-auto text-center flex flex-col items-center gap-4"
         style={{
           maxHeight: '80vh',
@@ -62,7 +62,7 @@ export default function HeroCopy() {
         {/* CTA Button */}
         <Link
           href="/sobre"
-        className="group inline-flex items-center gap-4 px-10 py-4 mt-2 bg-[#0c5bff] text-white no-underline text-[17px] font-semibold lowercase rounded-full transition-all duration-300 shadow-[0_0_40px_rgba(12,91,255,0.55)] ring-1 ring-white/12 hover:bg-[#0a46d4] hover:shadow-[0_0_55px_rgba(12,91,255,0.75)]"
+          className="group inline-flex items-center gap-4 px-10 py-4 mt-2 bg-[#0c5bff] text-white no-underline text-[17px] font-semibold lowercase rounded-full transition-all duration-300 shadow-[0_0_40px_rgba(12,91,255,0.55)] ring-1 ring-white/12 hover:bg-[#0a46d4] hover:shadow-[0_0_55px_rgba(12,91,255,0.75)]"
           style={{
             fontSize: 'clamp(14px, 3vw, 17px)',
             padding: 'clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px)',

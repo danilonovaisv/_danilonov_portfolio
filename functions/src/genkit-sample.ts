@@ -29,7 +29,6 @@ const ai = genkit({
     // recommended practice.
     googleAI({
       apiKey: process.env.GOOGLE_GENAI_API_KEY,
-      project: 'portfolio-danilo-novais-fdc', // Replace with your actual Google Cloud project ID
     }),
   ],
 });

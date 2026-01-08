@@ -3,9 +3,17 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { MathUtils, type Mesh, MeshBasicMaterial, Vector2 } from 'three';
-import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
+import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
 
-export default function GhostEyes({ color = '#ffffff' }: { color?: string }) {
+type GhostEyesProps = {
+  color?: string;
+  position?: [number, number, number];
+};
+
+export default function GhostEyes({
+  color = '#ffffff',
+  position = [0, 0, 0.8],
+}: GhostEyesProps) {
   const leftEye = useRef<Mesh>(null);
   const rightEye = useRef<Mesh>(null);
   const leftMat = useRef<MeshBasicMaterial>(null);
@@ -103,12 +111,11 @@ export default function GhostEyes({ color = '#ffffff' }: { color?: string }) {
   });
 
   // Resolve color name to actual hex value if needed
-  const resolvedColor =
-    FLUORESCENT_COLORS[color as keyof typeof FLUORESCENT_COLORS] || color;
+  const resolvedColor = resolveFluorescentColor(color);
 
   // Material básico para reagir fortemente ao Bloom
   return (
-    <group position={[0, 0, 0.8]}>
+    <group position={position}>
       <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
         <sphereGeometry args={[0.06, 16, 16]} />
         <meshBasicMaterial

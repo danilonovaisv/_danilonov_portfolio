@@ -3,9 +3,15 @@
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
+import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
 
 export default function AtmosphereVeil() {
   const veilRef = useRef<THREE.Mesh>(null);
+  const veilColor = resolveFluorescentColor(GHOST_CONFIG.veilColor);
+  const veilEmissive = resolveFluorescentColor(GHOST_CONFIG.veilEmissive);
+  const veilBackground = resolveFluorescentColor(
+    GHOST_CONFIG.veilBackgroundColor
+  );
 
   useFrame((state) => {
     if (!veilRef.current) return;
@@ -14,7 +20,10 @@ export default function AtmosphereVeil() {
       opacity?: number;
     };
     if (material.opacity !== undefined) {
-      material.opacity = 0.32 + pulse * 0.8;
+      material.opacity = Math.min(
+        1,
+        GHOST_CONFIG.veilOpacity + pulse * GHOST_CONFIG.veilPulseAmount
+      );
     }
   });
 
@@ -29,11 +38,11 @@ export default function AtmosphereVeil() {
       >
         <sphereGeometry args={[5.5, 64, 64]} />
         <meshStandardMaterial
-          color="#040013"
-          emissive="#13052e"
-          emissiveIntensity={1.6}
+          color={veilColor}
+          emissive={veilEmissive}
+          emissiveIntensity={GHOST_CONFIG.veilEmissiveIntensity}
           transparent
-          opacity={0.6}
+          opacity={GHOST_CONFIG.veilOpacity}
           depthWrite={false}
           side={THREE.BackSide}
           toneMapped={false}
@@ -44,9 +53,9 @@ export default function AtmosphereVeil() {
       <mesh position={[0, -2.5, -4]} rotation={[-0.1, 0, 0]} renderOrder={1}>
         <planeGeometry args={[18, 12]} />
         <meshStandardMaterial
-          color="#0d031c"
+          color={veilBackground}
           transparent
-          opacity={0.88}
+          opacity={GHOST_CONFIG.veilBackgroundOpacity}
           depthWrite={false}
           toneMapped={false}
         />

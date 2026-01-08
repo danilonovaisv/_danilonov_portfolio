@@ -49,11 +49,15 @@ beforeAll(() => {
 describe('ManifestoThumb Component', () => {
   it('deve renderizar a seção do manifesto corretamente', () => {
     const mockRef = { current: document.createElement('section') };
-    render(<ManifestoThumb sectionRef={mockRef} />);
+    const { container } = render(<ManifestoThumb sectionRef={mockRef} />);
 
-    // Verifica se o container principal existe pelo label acessível
-    const container = screen.getByLabelText('Preview em vídeo');
-    expect(container).toBeInTheDocument();
+    // Verifica se o container motion.div existe (sem aria-label conforme spec "zero UI")
+    const motionDiv = container.querySelector('.fixed.z-30');
+    expect(motionDiv).toBeInTheDocument();
+
+    // Verifica se o vídeo está presente
+    const video = container.querySelector('video');
+    expect(video).toBeInTheDocument();
   });
 
   it('deve renderizar o vídeo com os atributos corretos', () => {

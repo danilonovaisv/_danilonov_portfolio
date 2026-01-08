@@ -52,8 +52,8 @@ Todos os 5 prompts de correção identificados foram executados sequencialmente.
   - `src/components/canvas/home/AtmosphereVeil.tsx` (Correção de tipagem `RefObject<Group | null>`)
   - `src/components/canvas/home/Particles.tsx` (Correção de referência nula em loop `forEach`)
 - **Resultados Técnicos:**
-  - `npm run lint`: Aprovado.
-  - `npm run build`: Aprovado (Compilado em ~6s).
+  - `pnpm run lint`: Aprovado.
+  - `pnpm run build`: Aprovado (Compilado em ~6s).
 
 ## Conclusão
 O componente Ghost Hero está agora totalmente alinhado com o protocolo "Workflow Antigravity", utilizando R3F de forma declarativa e performática, com shaders e materiais fiéis à referência visual.
