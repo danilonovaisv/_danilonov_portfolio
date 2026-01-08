@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { motionValue } from 'framer-motion';
 import ManifestoThumb from '@/components/home/hero/ManifestoThumb';
 
 jest.mock('framer-motion', () => ({
@@ -40,20 +39,17 @@ beforeAll(() => {
 });
 
 describe('ManifestoThumb Component', () => {
-  const mockScrollProgress = motionValue(0);
-
   it('deve renderizar a seção do manifesto corretamente', () => {
-    render(<ManifestoThumb scrollProgress={mockScrollProgress} />);
+    render(<ManifestoThumb />);
 
     // Verifica se o container principal existe pelo label acessível
-    const container = screen.getByLabelText('Assistir manifesto em fullscreen');
+    // Note: The aria-label in the component is "Preview em vídeo"
+    const container = screen.getByLabelText('Preview em vídeo');
     expect(container).toBeInTheDocument();
   });
 
   it('deve renderizar o vídeo com os atributos corretos', () => {
-    const { container } = render(
-      <ManifestoThumb scrollProgress={mockScrollProgress} />
-    );
+    const { container } = render(<ManifestoThumb />);
 
     // Procura o vídeo dentro do componente
     const video = container.querySelector('video');
@@ -67,9 +63,7 @@ describe('ManifestoThumb Component', () => {
   });
 
   it('não deve exibir controles', () => {
-    const { container } = render(
-      <ManifestoThumb scrollProgress={mockScrollProgress} />
-    );
+    const { container } = render(<ManifestoThumb />);
     const video = container.querySelector('video');
     expect(video).not.toHaveAttribute('controls');
   });

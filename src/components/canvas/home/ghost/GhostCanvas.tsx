@@ -1,12 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import {
-  EffectComposer,
-  Bloom,
-  Noise,
-  Vignette,
-} from '@react-three/postprocessing';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import { Suspense } from 'react';
 import type { RefObject } from 'react';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
@@ -85,9 +80,13 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
               intensity={3.5}
               radius={0.7}
             />
-            <AnalogDecay intensity={0.7} scanlines={0.08} grain={0.25} />
-            <Noise opacity={0.015} />
-            <Vignette eskil={false} offset={0.6} darkness={0.7} />
+            {/* Optimized: Combined Noise and Vignette into AnalogDecay to reduce shader passes */}
+            <AnalogDecay
+              intensity={0.7}
+              scanlines={0.08}
+              grain={0.3}
+              vignette={4.0}
+            />
           </EffectComposer>
         </Suspense>
       </Canvas>
