@@ -432,6 +432,9 @@ The homepage follows a narrative arc:
 
 # **4. COMPONENT SPECIFICATIONS
 
+
+
+
 # **4.1 Header**
 
 **Purpose:** Provide persistent, accessible navigation using a clean, static interface.
@@ -512,264 +515,173 @@ The homepage follows a narrative arc:
 
 # **4.2 Hero + Manifesto
 
-**Purpose:** Create immediate visual and emotional impact, communicate brand positioning, introduce the manifesto video as a sensory layer.
+## ✨ Objetivo
+Criar uma experiência hero imersiva e responsiva, com atmosfera 3D, manifesto em vídeo e animação de entrada impactante. Inspirado em:
 
-#### Structure (Desktop)
-
-**Z-Index Stack:**
-1. **Z-50:** Preloader (Ghost Loader SVG animation)
-2. **Z-30:** Manifesto Video Thumbnail (floating, bottom-right)
-3. **Z-20:** Ghost Atmosphere (WebGL Canvas)
-4. **Z-10:** Editorial Text Block (static, centered)
-5. **Z-0:** Gradient Background (`#040013` to `#0b0d3a`)
-
-#### Preloader
-
-**Visual:**
-- SVG ghost icon (white, floating animation)
-- Text: "Summoning spirits" (uppercase, mono font, tracking-wide)
-- Progress bar: Gradient fill (`#0057FF` to `#5227FF`), 2s duration
-- Background: Dark gradient (`#0a0a0a` to `#1a1a1a`)
-
-**Behavior:**
-- Displays immediately on page load
-- Fades out after 1.5–2s (`opacity: 1 → 0`, 1s duration)
-
-#### Ghost Atmosphere (WebGL Canvas)
-
-**Visual Description:**
-Ethereal, organic 3D atmosphere inspired by the "Ghost Blue" aesthetic. Main elements:
-- **Ghost Mesh:** Emissive spherical form (`#0057FF`), harmonic pulsing, floating vertically
-- **Reactive Eyes:** Glow intensity increases with mouse movement
-- **Particles:** Organic floating particles orbiting the ghost
-- **Fireflies:** Small light points adding depth
-
-**Post-Processing:**
-- **Bloom Pass:** HDR glow effect (intensity: 2.8)
-- **Analog Decay Pass:** Film grain, scanlines, subtle jitter, vignette
-
-**Interaction:**
-- Ghost follows cursor slowly (`lerp: 0.05`)
-- Sinusoidal organic movement (`sin(time * 0.8)` vertical, `sin(time * 0.3)` horizontal)
-
-**Performance:**
-- DPR: Max 2
-- Antialias: False
-- Disabled entirely on `prefers-reduced-motion`
-
-**Fallback:**
-- Static radial gradient background (`#040013` to `#06071f`)
-- No 3D elements
-
-**Reference:** Inspired by https://codepen.io/danilonovaisv/pen/azZbdQo
-
-#### Editorial Text Block
-
-**Content:**
-- Tag: `[BRAND AWARENESS]` (14px, uppercase, mono) TT Norms Pro Normal
-- H1: "Você não vê (-> linha 01) o design.(-> linha 02)" (6–9rem, TT Norms Pro Black, tracking-tight)
-- H2: "Mas ele vê você." (5–8rem, TT Norms Pro Black, tracking-tight)
-- CTA: "step inside →" (link to `/sobre`, hover effect: color change + arrow translation)
-- Same CTA button at bottom
-**Primary Font:** TT Norms Pro (self-hosted, fallback: `ui-sans-serif, system-ui`)
-
-## **Comportamento Responsivo**
-Viewport :
-Desktop     - H1: "Você não vê (-> linha 01) o design.(-> linha 02)" (6–9rem, TT Norms Pro Black, tracking-tight)
-Tablet    - H1: "Você não vê (-> linha 01) o design.(-> linha 02)" (6–9rem, TT Norms Pro Black, tracking-tight)
-Mobile    - H1: "Você não (-> linha 01)  vê o (-> linha 02) design.(-> linha 03)” (6–9rem, TT Norms Pro Black, tracking-tight)
-
-**Behavior:**
-- 100% static (no scroll-triggered animations or fades)
-- Centered vertically and horizontally
-- Color: `#d9dade` on `#06071f` background
-Here’s your updated and clarified description with all the new desktop behaviors (full-page for 2s, scroll hold, fixed position on the side, and sound logic) integrated and cleaned up 👇
-
-
-
-
-#### Manifesto Video Thumbnail (Desktop)
-
-**Initial State:**
-- Position: `bottom-right`, with gutter spacing
-- Size: ~30vw width, 16:9 aspect ratio
-- Style: Rounded corners (`border-radius: 12–16px`), subtle shadow
-- Video: Autoplay, **muted**, loop, `playsInline`
-- URL: (Manifesto video from assets)
-
-**Scroll Behavior & Positioning (Desktop):**
-- While the Hero section is in view and the video is transitioning from thumbnail → fullscreen:
-  - The video stays **fixed** to the viewport (anchored to `bottom-right`) and does **not** scroll with the page content.
-  - As the user scrolls, the video:
-    - Scales up toward fullscreen
-    - Moves from `bottom-right` toward the center
-    - Gradually loses its rounded corners
-  - Only after the animation completes and the video reaches the **fullscreen state** does it stop being a small “floating” thumbnail.
-
-**Scroll Animation (Desktop):**
-The video grows and centers as the user scrolls:
-
-javascript
-// Pseudo-code (Framer Motion / GSAP style idea)
-scaleVideo: [0.3, 1]              // from 30% to 100% viewport
-posXVideo: ["100%", "50%"]        // from bottom-right → center (example)
-posYVideo: ["100%", "50%"]        // from bottom-right → center (example)
-borderRadius: ["16px", "0px"]     // from rounded to square
-opacityText: [1, 0]               // editorial text fades out
-position: ["fixed", "fixed"]      // stays pinned to viewport during scroll
-
-Trigger:
-    •    Driven by scroll progress through the Hero section:
-scrollYProgress: [0, 1]
-
-⸻
-
-Fullscreen Hold & Sound Logic (Desktop)
-When the video reaches its fullscreen state (covers the entire viewport, scaleVideo = 1, borderRadius = 0):
-    1.    Fullscreen Hold (2 seconds):
-    •    The video remains in full-page fullscreen for 2 seconds.
-    •    During these 2 seconds:
-    •    The scroll is effectively held/locked on the Hero section (the page does not immediately move to the next section).
-    •    The video stays centered and covers the full viewport.
-    2.    Sound Behavior (Desktop):
-    •    Before fullscreen:
-    •    Video plays muted (thumbnail and transition states are always muted).
-    •    When fullscreen state is reached:
-    •    After reaching fullscreen, the video unmutes and audio plays while in this full-page state.
-    •    After leaving fullscreen / going to the next section:
-    •    When the user scrolls beyond the Hero section into the next section, the video is muted again.
-    •    If the user scrolls back up into the Hero and hits fullscreen again, the same logic repeats:
-    •    Muted during transition, unmute only in fullscreen, mute again when exiting.
-
-Implementation Hint (State Machine):
-    •    state = "thumbnail" | "transition" | "fullscreenHold" | "released"
-    •    On scrollYProgress reaching 1.0:
-    •    Enter fullscreenHold:
-    •    Unmute video
-    •    Start a 2-second timer before allowing scroll to continue normally.
-    •    On scroll beyond Hero (next section in view):
-    •    Mute video again and move to released.
-
-⸻
-
-Entrance Animation (on page load):
-
-initial: { 
-  opacity: 0, 
-  scale: 0.92, 
-  translateY: 60, 
-  filter: "blur(10px)" 
-}
-animate: { 
-  opacity: 1, 
-  scale: [1.02, 1],         // settle with a slight overshoot
-  translateY: 0,
-  filter: "blur(0px)"
-}
-duration: 1.2s
-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94)
-
-Hover (Desktop):
-    •    Scale: 1 → 1.05
-    •    Duration: 500ms
-
-Click (Desktop):
-    •    Clicking the thumbnail:
-    •    Jumps directly to the fullscreen state (skips the gradual scroll animation).
-    •    Triggers the same 2-second fullscreen hold and sound logic:
-    •    Video unmutes while fullscreen,
-    •    Video mutes again once the user scrolls to the next section.
-
-Click (Mobile):
-    •    Toggles sound (mute/unmute) on the mobile fullscreen video section (see below).
-
-⸻
-
-Manifesto Section (Mobile)
-On mobile, the manifesto video appears as a separate fullscreen section immediately below the Hero (no floating thumbnail).
-
-Layout:
-    •    Full viewport width, aspect-video height
-    •    Background: #040013 (matches Hero for visual continuity)
-    •    Video:
-    •    Autoplay, loop, muted by default, playsInline
-    •    Sound can be enabled by user interaction (tap)
-    •    When the user scrolls away from this section, the video should revert to muted state
-
-Animation (scroll reveal):
-
-initial: { opacity: 0, scale: 0.95, y: 20 }
-animate (when in view): { opacity: 1, scale: 1, y: 0 }
-duration: 0.6s
-easing: cubic-bezier(0.22, 1, 0.36, 1)
-
-Accessibility:
-    •    Video has no audio by default (muted until user explicitly enables sound).
-    •    Provide a clear control (icon/button) to toggle sound on/off.
-    •    Show a visible focus indicator if the video or sound toggle is focusable/tappable.
-
-
-**Desktop (≥1024px)**
-- Z-Index Stack:
-  - Z-50: Preloader (Ghost Loader SVG animation)
-  - Z-30: Manifesto Video Thumbnail (floating, bottom-right)
-  - Z-20: Ghost Atmosphere (WebGL Canvas)
-  - Z-10: Editorial Text Block (static, centered)
-  - Z-0: Gradient Background (`#040013` to `#0b0d3a`)
-- Preloader:
-  - Visual: SVG ghost icon (white, floating animation), Text: "Summoning spirits", Progress bar
-  - Behavior: Fades out after 1.5–2s
-- Ghost Atmosphere (WebGL Canvas):
-  - Visual Description: Ethereal 3D atmosphere with ghost mesh, reactive eyes, particles, fireflies
-  - Performance: DPR max 2, antialias disabled
-  - Fallback: Static radial gradient background
-- Editorial Text Block:
-  - Content: Tag, H1, H2, CTA
-  - Position: Centered vertically and horizontally
-  - Color: `#d9dade` on `#06071f` background
-- Manifesto Video Thumbnail:
-  - Initial State: Position: `bottom-right`, size: ~30vw width
-  - Scroll Behavior & Positioning:
-    - Video stays fixed to viewport during scroll
-    - Scales up toward fullscreen as user scrolls
-    - Gradually loses rounded corners
-  - Fullscreen Hold & Sound Logic:
-    - 2-second hold at fullscreen
-    - Video muted during transition, unmuted at fullscreen
-    - Muted again when scrolling to next section
-  - Entrance Animation: Initial opacity 0, scale 0.92, translateY 60
-  - Hover: Scale 1 → 1.05 over 500ms
-  - Click: Jumps directly to fullscreen state
-
-**Mobile & Tablet (≤1023px)**
-- Manifesto Section:
-  - Layout: Full viewport width, aspect-video height
-  - Background: `#040013` (matches Hero)
-  - Video: Autoplay, loop, muted by default, playsInline
-  - Behavior: 
-    - The manifesto video appears as a separate fullscreen section immediately below the Hero
-    - No floating thumbnail behavior
-    - Video starts playing automatically when section comes into view
-    - Sound can be enabled by user interaction (tap)
-    - Video reverts to muted state when scrolled away
-  - Animation: 
-    - Scroll reveal: `initial: { opacity: 0, scale: 0.95, y: 20 }`, `animate: { opacity: 1, scale: 1, y: 0 }`
-    - Duration: 0.6s, easing: cubic-bezier(0.22, 1, 0.36, 1)
-  - Accessibility:
-    - Clear sound toggle button visible
-    - Focus indicator on interactive elements
-    - No audio by default (muted until user explicitly enables sound)
-- Hero Section:
-  - The editorial text is centered and occupies the full width of the screen
-  - The ghost atmosphere is simplified due to performance constraints
-  - The "step inside" CTA button is centered with appropriate spacing
-  - No video thumbnail in the hero section (it appears as a separate section below)
+- CodePen: https://codepen.io/danilonovaisv/pen/YPWyrdW
+- Site: https://loandbehold.studio/
 
 ---
 
-Perfeito — abaixo está o conteúdo final em formato Markdown (.md), pronto para você copiar e salvar como portfolio-showcase.md ou integrar direto na sua documentação.
+## 🧱 Estrutura (Desktop - Z-Index Stack)
 
-⸻
+1. **Z-50** Preloader (SVG ghost + texto)
+2. **Z-30** Manifesto Video Thumbnail (flutuante, bottom-right)
+3. **Z-20** Ghost Atmosphere (WebGL Canvas)
+4. **Z-10** Editorial Text Block (centralizado)
+5. **Z-0** Fundo Gradient: `#040013 → #0b0d3a`
+
+---
+
+## 🌀 Preloader
+
+**Visual**:
+- Ícone ghost SVG branco flutuante
+- Texto: `SUMMONING SPIRITS` (mono, uppercase)
+- Progress bar: gradiente `#0057FF → #5227FF`
+
+**Comportamento**:
+- Exibe imediatamente ao carregar
+- Fade out: `opacity 1 → 0` em 1s após 1.5–2s
+
+---
+
+## 👻 Ghost Atmosphere (WebGL Canvas)
+
+**Elementos**:
+- Ghost Mesh: esfera emissiva azul pulsante
+- Eyes: brilham conforme o movimento do mouse
+- Partículas + Fireflies orbitando
+- Movimento orgânico: `sin(time * freq)`
+
+**Pós-processamento**:
+- Bloom (intensity: 2.8)
+- Grain, scanlines, jitter sutil, vignette
+
+**Interação**:
+- Ghost segue o cursor com `lerp: 0.05`
+- Canvas desabilitado em `prefers-reduced-motion`
+
+**Fallback**:
+- Gradiente radial estático
+
+---
+
+## 🧾 Editorial Text Block
+
+**Fontes**: TT Norms Pro, fallback: `ui-sans-serif`
+
+**Conteúdo**:
+- Tag: `[BRAND AWARENESS]` (mono, 14px)
+- H1: “Você não vê / o design.” (2 linhas)
+- H2: “Mas ele vê você.” (destacado)
+- CTA: “step inside →” (link: `/sobre`, hover animado)
+
+**Estilo**:
+- Centralizado verticalmente
+- Cor: `#d9dade` sobre `#06071f`
+
+**Responsivo**:
+- Mobile: Quebra o H1 em 3 linhas
+
+---
+
+## 📹 Manifesto Video Thumbnail (Desktop)
+
+**Estado Inicial**:
+- Posição: `bottom-right`, `30vw` largura
+- Estilo: `rounded`, `shadow`, `aspect-video`
+- Props: autoplay, loop, muted, `playsInline`
+
+**Scroll Behavior**:
+- Vídeo fixo no viewport (não rola com página)
+- Animação:
+  - scale: `[0.3, 1]`
+  - posX/posY: `["100%", "50%"]`
+  - borderRadius: `["16px", "0px"]`
+  - editorial opacity: `[1, 0]`
+
+**Lógica Scroll**:
+- Quando atinge fullscreen:
+  - `hold 2s` com scroll travado
+  - vídeo se **desmuta**
+- Ao sair do Hero: volta a ser **muted**
+
+**Click Behavior**:
+- Clica → vai direto ao fullscreen
+- Triggera mesma lógica de áudio/scroll
+
+**Hover**:
+- Scale `1 → 1.05`, `500ms`
+
+---
+
+## 📱 Manifesto (Mobile)
+
+**Layout**:
+- Seção fullscreen logo após a Hero
+- `aspect-video`, fundo `#040013`
+
+**Vídeo**:
+- autoplay, loop, muted, `playsInline`
+- botão visível para som (tap = unmute)
+- Ao sair da seção → mutar de novo
+
+**Animação**:
+```js
+initial: { opacity: 0, scale: 0.95, y: 20 }
+animate: { opacity: 1, scale: 1, y: 0 }
+transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+```
+
+**Acessibilidade**:
+- Controles claros
+- Modo focável visível
+- Sem som automático
+
+---
+
+## 🎬 Entrada (Page Load)
+
+```js
+initial: {
+  opacity: 0,
+  scale: 0.92,
+  translateY: 60,
+  filter: "blur(10px)"
+},
+animate: {
+  opacity: 1,
+  scale: [1.02, 1],
+  translateY: 0,
+  filter: "blur(0px)"
+},
+duration: 1.2s,
+easing: [0.25, 0.46, 0.45, 0.94]
+```
+
+---
+
+## 📊 Performance
+
+- DPR máx: 2
+- Antialias: false
+- `prefers-reduced-motion`: desativa canvas e efeitos pesados
+
+---
+
+## ✅ Resumo de Implementação
+
+- Hero 100% responsiva
+- Ghost com movimento realista e camadas visuais
+- Texto editorial centralizado com quebra de linha adaptativa
+- Manifesto em vídeo com transição scroll e lógica de som
+- Acessível e performático
+
+---
+
+---
+
 
 
 
@@ -889,20 +801,27 @@ duration: 500ms
 
 ---
 
-## Categorias & Assets
+#### Categories & Assets
 
-| Categoria | Slug | Thumbnail |
-|---------|------|-----------|
-| Brand & Campaigns | brand-campaigns | Branding-Project.webp |
-| Videos & Motions | videos-motions | webdesigner-2.gif |
-| Web Campaigns, Websites & Tech | websites-webcampaigns-tech | WelcomeAd_800x500px.webp |
+1. **Brand & Campaigns**
+   - Slug: `brand-campaigns`
+   - Thumbnail: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp`
 
----
+2. **Videos & Motions**
+   - Slug: `videos-motions`
+   - Thumbnail: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif`
 
-## CTA Final
-- Texto: “let’s build something great →”
-- Destino: `/#contact`
-- Hover: background `#4fe6ff`, seta move 4px
+3. **Web Campaigns, Websites & Tech**
+   - Slug: `websites-webcampaigns-tech`
+   - Thumbnail: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp`
+
+#### CTA Button
+
+**Text:** "let's build something great →"  
+**Destination:** `/#contact`  
+**Hover:** Background changes to `#4fe6ff`, arrow translates right (`translateX: 4px`)  
+**Optional:** Subtle looping animation on arrow in idle state (`translateX: 0 → 4px → 0`)
+
 
 ---
 
