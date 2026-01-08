@@ -1,5 +1,6 @@
 ignoredBuiltDependencies:
   - '@firebase/util'
+  - esbuild
   - msw
   - protobufjs
   - re2

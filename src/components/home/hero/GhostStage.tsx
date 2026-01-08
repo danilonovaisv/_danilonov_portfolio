@@ -56,7 +56,7 @@ export function GhostStage({ reducedMotion, ghostRef }: GhostStageProps) {
   return (
     <ErrorBoundary fallback={<StaticGhostFallback />}>
       <Suspense fallback={<StaticGhostFallback />}>
-        <GhostCanvas _ghostRef={ghostRef} />
+        <GhostCanvas />
       </Suspense>
     </ErrorBoundary>
   );

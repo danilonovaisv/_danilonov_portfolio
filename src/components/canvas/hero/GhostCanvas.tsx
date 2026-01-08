@@ -2,23 +2,26 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { EffectComposer } from '@react-three/postprocessing';
 
-import Fireflies from '@/components/canvas/hero/Fireflies';
-import AtmosphereVeil from '@/components/canvas/hero/AtmosphereVeil'; // Importe o novo componente
-import { AnalogDecay } from '@/components/canvas/hero/AnalogDecayPass';
+import Fireflies from './Fireflies';
+import AtmosphereVeil from './AtmosphereVeil'; // Importe o novo componente
+import { AnalogDecay } from './AnalogDecayPass';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
-import Ghost from '@/components/canvas/Ghost';
+import Ghost from '../Ghost';
 
-interface GhostCanvasProps {
-  _ghostRef?: React.RefObject<any>;
-}
-
+// --- COMPONENTE DA CENA ---
 const Scene = ({ mousePosition }: { mousePosition: [number, number] }) => {
+  const [time, setTime] = useState(0);
+
+  useFrame((state, delta) => {
+    setTime((t) => t + delta);
+  });
+
   return (
     <>
       {/* Luzes diretamente no JSX */}
@@ -36,16 +39,18 @@ const Scene = ({ mousePosition }: { mousePosition: [number, number] }) => {
         color={0x50e3c2}
         intensity={GHOST_CONFIG.rimLightIntensity * 0.7}
       />
-      <Ghost mousePosition={mousePosition} />
+
+      <Ghost mousePosition={mousePosition} time={time} />
       <Environment preset="apartment" />
       <Fireflies />
+      {/* Adiciona o véu atmosférico (efeito de lanterna) */}
       <AtmosphereVeil ghostPosition={mousePosition} />
     </>
   );
 };
 
 // --- COMPONENTE PRINCIPAL ---
-const GhostCanvas = ({ _ghostRef }: GhostCanvasProps) => {
+const GhostCanvas = () => {
   const [mousePosition, setMousePosition] = useState<[number, number]>([0, 0]);
 
   // Detecta movimento do mouse para o ghost seguir
@@ -65,7 +70,10 @@ const GhostCanvas = ({ _ghostRef }: GhostCanvasProps) => {
       initial={{ opacity: 1 }} // Inicia com opacidade 1, sem preloader
       animate={{ opacity: 1 }}
       transition={{ duration: 1.5, ease: 'easeOut' }}
-      className="absolute inset-0 z-20 pointer-events-none" // Z-index 20 para ficar acima do conteúdo da Hero e pointer-events-none para permitir interação com o texto abaixo
+      className="absolute inset-0 z-0" // Z-index 0 para ficar atrás do conteúdo da Hero
+      style={{
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
+      }}
     >
       <Canvas
         gl={{
@@ -95,7 +103,6 @@ const GhostCanvas = ({ _ghostRef }: GhostCanvasProps) => {
             vignette={GHOST_CONFIG.analogVignette}
             intensity={GHOST_CONFIG.analogIntensity}
             jitter={GHOST_CONFIG.analogJitter}
-            limboMode={false} // GHOST_CONFIG.limboMode se for booleano
           />
         </EffectComposer>
       </Canvas>

@@ -1,4 +1,3 @@
-// src/components/canvas/Ghost.tsx
 'use client';
 
 import React, { useRef, useMemo } from 'react';
@@ -6,10 +5,13 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
 
-// Configurações de escala do mouse (CodePen multipliers)
-export const GHOST_SCREEN_MULTIPLIER = { x: 11, y: 7 };
-
-const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
+const Ghost = ({
+  mousePosition,
+  time,
+}: {
+  mousePosition: [number, number];
+  time: number;
+}) => {
   const group = useRef<THREE.Group>(null!);
   const ghostBody = useRef<THREE.Mesh>(null!);
   const leftEye = useRef<THREE.Mesh>(null!);
@@ -43,8 +45,7 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
     []
   );
 
-  useFrame((state) => {
-    const time = state.clock.elapsedTime;
+  useFrame(() => {
     if (
       !group.current ||
       !ghostBody.current ||
@@ -54,8 +55,8 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
       return;
 
     const [mouseX, mouseY] = mousePosition;
-    const targetX = mouseX * GHOST_SCREEN_MULTIPLIER.x;
-    const targetY = mouseY * GHOST_SCREEN_MULTIPLIER.y;
+    const targetX = mouseX * 11; // Fator de multiplicação do CodePen
+    const targetY = mouseY * 7; // Fator de multiplicação do CodePen
 
     // Movimento suave do grupo
     group.current.position.x +=
@@ -71,11 +72,10 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
 
     // Pulsos e respiração no brilho (baseado no CodePen)
     const pulse1 = Math.sin(time * params.pulseSpeed) * params.pulseIntensity;
-    const pulse2 =
-      Math.cos(time * params.pulseSpeed * 1.4) * params.pulseIntensity * 0.6; // Adicionado segundo pulso
+    // const pulse2 = Math.cos(time * params.pulseSpeed * 1.4) * params.pulseIntensity * 0.6; // Unused
     const breathe = Math.sin(time * 0.6) * 0.12;
     const currentEmissiveIntensity =
-      params.emissiveIntensity + pulse1 + pulse2 + breathe;
+      params.emissiveIntensity + pulse1 + breathe;
     (
       ghostBody.current.material as THREE.MeshStandardMaterial
     ).emissiveIntensity = currentEmissiveIntensity;
@@ -109,11 +109,11 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
     // Simulando a lógica de `currentMovement` e `isMouseMoving` simplificadamente
     const normalizedMouseSpeed =
       Math.sqrt((mouseX * 10) ** 2 + (mouseY * 10) ** 2) * 0.1; // Aproximação
-    const isMoving = normalizedMouseSpeed > params.movementThreshold;
+    const isMoving = normalizedMouseSpeed > GHOST_CONFIG.movementThreshold; // Usando o valor do config
     const targetGlow = isMoving ? 1.0 : 0.0;
     const glowChangeSpeed = isMoving
-      ? params.eyeGlowResponse * 2 // Usando o valor do config
-      : params.eyeGlowResponse; // Usando o valor do config
+      ? GHOST_CONFIG.eyeGlowResponse * 2 // Usando o valor do config
+      : GHOST_CONFIG.eyeGlowResponse; // Usando o valor do config
 
     if (leftEye.current.material && rightEye.current.material) {
       const leftMat = leftEye.current.material as THREE.MeshBasicMaterial;
@@ -127,8 +127,8 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
         leftMat.opacity + (targetGlow - leftMat.opacity) * glowChangeSpeed;
       leftMat.opacity = newOpacity;
       rightMat.opacity = newOpacity; // Igual ao esquerdo
-      leftGlowMat.opacity = newOpacity * 0.3;
-      rightGlowMat.opacity = newOpacity * 0.3;
+      leftGlowMat.opacity = newOpacity * 0.3; // Valor fixo do CodePen
+      rightGlowMat.opacity = newOpacity * 0.3; // Valor fixo do CodePen
     }
   });
 
@@ -173,7 +173,7 @@ const Ghost = ({ mousePosition }: { mousePosition: [number, number] }) => {
       {/* Aplica a escala global do config */}
       {/* Corpo do Ghost */}
       <mesh ref={ghostBody} geometry={ghostGeometry} material={ghostMaterial} />
-      {/* Grupo dos Olhos */}
+      {/* Grupo dos Olhos (baseado no CodePen) */}
       <group>
         {/* Olhos - Sockets pretos */}
         <mesh position={[-0.7, 0.6, 1.9]} scale={[1.1, 1.0, 0.6]}>

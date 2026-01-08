@@ -1,15 +1,7 @@
 // src/config/ghostConfig.ts
 
-// Paleta de cores fluorescentes
+// Paleta de cores fluorescentes (mantendo os nomes originais)
 export const FLUORESCENT_COLORS = {
-  electricBlue: '#0080ff',
-  neonCyan: '#50e3c2',
-  violetGlow: '#8a2be2',
-  midnightBlue: '#040013',
-  deepSpace: '#0f2027',
-  voidSky: '#020112',
-  aurora: '#4fe6ff',
-  cosmicPink: '#f501d3',
   cyan: '#00ffff',
   lime: '#00ff00',
   magenta: '#ff00ff',
@@ -21,6 +13,7 @@ export const FLUORESCENT_COLORS = {
   green: '#00ff80',
   red: '#ff0040',
   teal: '#00ffaa',
+  violet: '#8a2be2',
 } as const;
 
 // Função para resolver nomes de cores para valores hex
@@ -30,33 +23,50 @@ export function resolveFluorescentColor(color: string) {
 
 // Interface para a configuração do Ghost
 export interface GhostConfig {
+  // Fundo e névoa
   backgroundColor: string;
   fogColor: string;
   fogNear: number;
   fogFar: number;
+
+  // Câmera e renderização
   cameraDistance: number;
   cameraFov: number;
   rendererDPR: [number, number];
+
+  // Aparência do Ghost
   ghostScale: number;
-  followSpeed: number;
+  bodyColor: string; // Nome da cor
+  glowColor: string; // Nome da cor
+  eyeGlowColor: string; // Nome da cor
+  ghostOpacity: number;
+  emissiveIntensity: number;
   pulseSpeed: number;
   pulseIntensity: number;
-  emissiveIntensity: number;
   floatSpeed: number;
-  ghostOpacity: number;
-  bodyColor: string;
-  glowColor: string;
-  eyeGlowColor: string;
+
+  wobbleAmount: number;
+  movementThreshold: number;
+  eyeGlowDecay: number;
+
+  // Comportamento do Ghost
+  followSpeed: number;
+
+  // Iluminação
   rimLightIntensity: number;
-  ambientLightColor: string;
+  ambientLightColor: string; // Nome da cor
   ambientLightIntensity: number;
-  veilColor: string;
-  veilEmissive: string;
+
+  // Véu Atmosférico (Revelação)
+  veilColor: string; // Cor do véu
+  veilEmissive: string; // Cor do brilho do véu
   veilEmissiveIntensity: number;
   veilOpacity: number;
   veilPulseAmount: number;
-  veilBackgroundColor: string;
+  veilBackgroundColor: string; // Cor de fundo do véu
   veilBackgroundOpacity: number;
+
+  // Fireflies
   fireflyCount: number;
   fireflySpeed: number;
   fireflyBaseRadius: number;
@@ -71,20 +81,22 @@ export interface GhostConfig {
   fireflyPulseVariance: number;
   fireflyPulseFrequency: number;
   fireflyOpacity: number;
-  fireflyGlowIntensity: number; // Added to resolve TS2551
+
+  // Partículas
   particleCount: number;
-  particleColor: string;
+  particleColor: string; // Nome da cor
   particleSpeedFactor: number;
   particleRadius: number;
   particleGlowOffset: number;
   particleGlowSpeed: number;
   particleGlowStrength: number;
   particleOpacity: number;
+
+  // Olhos
   eyeGlowIntensity: number;
   eyeGlowResponse: number;
-  eyeGlowDecay: number;
-  wobbleAmount: number;
-  movementThreshold: number;
+
+  // Efeitos de Pós-Processamento (Analog Decay)
   analogGrain: number;
   analogBleeding: number;
   analogScanlines: number;
@@ -92,46 +104,58 @@ export interface GhostConfig {
   analogIntensity: number;
   analogJitter: number;
   analogVSync: number;
-  bloomIntensity: number;
-  bloomThreshold: number;
-  bloomSmoothing: number;
-  bloomKernel: number;
+
+  // Parâmetros do Véu Atmosférico (novos)
+  revealRadius: number;
+  fadeStrength: number;
+  baseOpacity: number;
+  revealOpacity: number;
 }
 
-// Configuração centralizada do Ghost
+// Configuração centralizada do Ghost (valores alinhados com o CodePen)
 export const GHOST_CONFIG: GhostConfig = {
   backgroundColor: '#01010f',
-  fogColor: '#0080ff',
+  fogColor: '#051f51',
   fogNear: 6,
   fogFar: 28,
+
   cameraDistance: 20,
   cameraFov: 75,
-  rendererDPR: [1, 1.5],
-  ghostScale: 1.9,
-  followSpeed: 0.05,
+  rendererDPR: [1, 2],
+
+  ghostScale: 2.4,
+  bodyColor: 'deepSpace', // Agora é uma string (nome da cor)
+  glowColor: 'neonCyan', // Agora é uma string (nome da cor)
+  eyeGlowColor: 'violetGlow', // Agora é uma string (nome da cor)
+  ghostOpacity: 0.88,
+  emissiveIntensity: 5.8,
   pulseSpeed: 1.6,
   pulseIntensity: 0.6,
-  emissiveIntensity: 1.8,
   floatSpeed: 1.6,
-  ghostOpacity: 0.88,
-  bodyColor: 'electricBlue',
-  glowColor: 'cyan',
-  eyeGlowColor: 'pink',
-  rimLightIntensity: 5.8,
-  ambientLightColor: 'blue',
-  ambientLightIntensity: 4.8,
-  veilColor: '#50e3c2',
-  veilEmissive: '#c600ff',
-  veilEmissiveIntensity: 5.6,
-  veilOpacity: 0.06,
+
+  wobbleAmount: 1.0,
+  movementThreshold: 0.1,
+  eyeGlowDecay: 0.95,
+
+  followSpeed: 0.05,
+
+  rimLightIntensity: 1.8,
+  ambientLightColor: 'midnightBlue', // Agora é uma string (nome da cor)
+  ambientLightIntensity: 0.08,
+
+  veilColor: 'electricBlue',
+  veilEmissive: 'voidSky',
+  veilEmissiveIntensity: 3.6,
+  veilOpacity: 0.6,
   veilPulseAmount: 0.4,
-  veilBackgroundColor: '#0d031c',
-  veilBackgroundOpacity: 0.98,
-  fireflyCount: 220,
-  fireflySpeed: 0.08,
+  veilBackgroundColor: 'voidSky',
+  veilBackgroundOpacity: 0.88,
+
+  fireflyCount: 20,
+  fireflySpeed: 0.09,
   fireflyBaseRadius: 3.2,
   fireflyRadiusVariance: 0.8,
-  fireflyScaleBase: 0.002,
+  fireflyScaleBase: 0.02,
   fireflyScaleVariance: 0.04,
   fireflyFloatFrequency: 0.5,
   fireflyFloatAmplitude: 0.005,
@@ -140,30 +164,31 @@ export const GHOST_CONFIG: GhostConfig = {
   fireflyPulseBase: 0.6,
   fireflyPulseVariance: 0.35,
   fireflyPulseFrequency: 2.2,
-  fireflyOpacity: 0.3,
-  fireflyGlowIntensity: 1.0, // Added to resolve TS2551
-  particleCount: 1360,
-  particleColor: 'purple',
+  fireflyOpacity: 0.8,
+
+  particleCount: 160,
+  particleColor: 'violetGlow',
   particleSpeedFactor: 0.015,
   particleRadius: 4,
   particleGlowOffset: 1.4,
-  particleGlowSpeed: 1.2,
+  particleGlowSpeed: 0.2,
   particleGlowStrength: 0.028,
   particleOpacity: 0.6,
-  eyeGlowIntensity: 1.8,
-  eyeGlowResponse: 1.38,
-  eyeGlowDecay: 0.35,
-  wobbleAmount: 0.4,
-  movementThreshold: 0.05,
+
+  eyeGlowIntensity: 4.5,
+  eyeGlowResponse: 0.31,
+
   analogGrain: 0.4,
-  analogBleeding: 0.4,
-  analogScanlines: 0.3,
-  analogVignette: 1.4,
-  analogIntensity: 0.65,
-  analogJitter: 0.3,
-  analogVSync: 0.3,
-  bloomIntensity: 0.35,
-  bloomThreshold: 0.15,
-  bloomSmoothing: 0.9,
-  bloomKernel: 2,
+  analogBleeding: 0.9,
+  analogScanlines: 1.0,
+  analogVignette: 2.4,
+  analogIntensity: 0.9,
+  analogJitter: 0.5,
+  analogVSync: 1.7,
+
+  // Parâmetros do Véu Atmosférico (novos)
+  revealRadius: 37,
+  fadeStrength: 1.7,
+  baseOpacity: 0.9,
+  revealOpacity: 0.05,
 };

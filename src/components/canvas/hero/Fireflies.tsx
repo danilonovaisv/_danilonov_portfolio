@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
 
-const FIREFLY_COUNT = GHOST_CONFIG.fireflyCount; // Use o valor do config
+const FIREFLY_COUNT = GHOST_CONFIG.fireflyCount; // Quantidade balanceada
 
 export default function Fireflies() {
   const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -13,37 +13,39 @@ export default function Fireflies() {
   // Gere dados iniciais para cada firefly
   const particles = useMemo(() => {
     return Array.from({ length: FIREFLY_COUNT }, () => ({
-      t: Math.random() * 1000, // Offset de tempo
-      speed: GHOST_CONFIG.fireflySpeed * (0.5 + Math.random() * 1.5), // Variação de velocidade
-      xFactor: (Math.random() - 0.5) * 40, // Posição inicial X
-      yFactor: (Math.random() - 0.5) * 30, // Posição inicial Y
-      zFactor: (Math.random() - 0.5) * 20, // Posição inicial Z
-      phase: Math.random() * Math.PI * 2, // Fase para pulsação
-      pulseSpeed: 2 + Math.random() * 3, // Velocidade de pulsação
+      t: Math.random() * 1000,
+      speed: (0.2 + Math.random() * 0.5) * GHOST_CONFIG.fireflySpeed,
+      xFactor: -4 + Math.random() * 8, // Área mais larga
+      yFactor: -2 + Math.random() * 4,
+      zFactor: -4 + Math.random() * 8,
+      scaleBase: 0.03 + Math.random() * 0.04,
     }));
   }, []);
 
   useFrame((state) => {
     const mesh = meshRef.current;
     if (!mesh) return;
-
     const t = state.clock.getElapsedTime();
     particles.forEach((particle, i) => {
-      const { speed, xFactor, yFactor, zFactor, phase, pulseSpeed } = particle;
-
-      // Movimento baseado no tempo e velocidade
-      const time = t * speed + particle.t;
+      // Movimento orgânico usando soma de senos
+      const {
+        t: offset,
+        speed,
+        xFactor,
+        yFactor,
+        zFactor,
+        scaleBase,
+      } = particle;
+      const time = t * speed + offset; // Use speed directly which is already scaled
       dummy.position.set(
-        xFactor + Math.sin(time) * 10, // Movimento mais amplo
-        yFactor + Math.cos(time * 0.8) * 5,
-        zFactor + Math.sin(time * 0.6) * 5
+        xFactor + Math.cos(time) + Math.sin(time * 0.5) * 0.5,
+        yFactor + Math.sin(time * 0.8) + Math.cos(time * 0.3) * 0.5,
+        zFactor + Math.cos(time * 0.6) + Math.sin(time * 0.2) * 0.5
       );
-
-      // Pulsar escala
-      const pulse = Math.sin(t * pulseSpeed + phase) * 0.4 + 0.6;
-      const scale = 0.02 * pulse; // Escala base pequena com pulsação
+      // Piscar suave
+      const blink = (Math.sin(t * 3 + offset) + 1) * 0.5;
+      const scale = scaleBase * (0.6 + blink * 0.6);
       dummy.scale.setScalar(scale);
-
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
     });
@@ -54,9 +56,9 @@ export default function Fireflies() {
     <instancedMesh ref={meshRef} args={[undefined, undefined, FIREFLY_COUNT]}>
       <sphereGeometry args={[1, 8, 8]} />
       <meshBasicMaterial
-        color="#ffff44" // Cor base do CodePen
+        color="#00ffff" // Ciano Neon
         transparent
-        opacity={GHOST_CONFIG.fireflyOpacity * 0.9} // Use o valor do config
+        opacity={0.8}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
         toneMapped={false}

@@ -1,10 +1,10 @@
 // src/components/canvas/AtmosphereVeil.tsx
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { GHOST_SCREEN_MULTIPLIER } from '@/components/canvas/Ghost';
+import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 // Shader para o véu atmosférico (efeito de lanterna)
 const atmosphereVertexShader = `
@@ -53,52 +53,50 @@ export default function AtmosphereVeil({
 }: {
   ghostPosition: [number, number];
 }) {
+  const meshRef = useRef<THREE.Mesh>(null!);
   const materialRef = useRef<THREE.ShaderMaterial>(null!);
 
-  // Cria o material com o shader (uma única vez ou quando necessário)
-  const material = useMemo(() => {
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
-        revealRadius: { value: 37 },
-        fadeStrength: { value: 1.7 },
-        baseOpacity: { value: 0.9 },
-        revealOpacity: { value: 0.05 },
-        time: { value: 0 },
-      },
-      vertexShader: atmosphereVertexShader,
-      fragmentShader: atmosphereFragmentShader,
-      transparent: true,
-      depthWrite: false,
-      side: THREE.DoubleSide,
-    });
-  }, []);
+  useEffect(() => {
+    if (!meshRef.current || !materialRef.current) return;
 
-  // Cria a geometria (uma única vez)
-  const geometry = useMemo(() => new THREE.PlaneGeometry(300, 300), []);
+    // Atualiza as uniforms do shader
+    const uniforms = materialRef.current.uniforms;
+    uniforms.ghostPosition.value.set(ghostPosition[0], ghostPosition[1], 0); // Z=0 por enquanto
+    uniforms.time.value = 0; // Inicializa o tempo
+  }, [ghostPosition]);
 
   useFrame((state) => {
-    if (!materialRef.current) return;
-
-    const time = state.clock.elapsedTime;
-    materialRef.current.uniforms.time.value = time;
-
-    // Atualiza a posição do ghost com a mesma escala do componente Ghost.tsx
-    materialRef.current.uniforms.ghostPosition.value.set(
-      ghostPosition[0] * GHOST_SCREEN_MULTIPLIER.x,
-      ghostPosition[1] * GHOST_SCREEN_MULTIPLIER.y,
-      0
-    );
+    if (materialRef.current) {
+      materialRef.current.uniforms.time.value = state.clock.getElapsedTime();
+    }
   });
+
+  // Cria o material com o shader
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
+      revealRadius: { value: GHOST_CONFIG.revealRadius },
+      fadeStrength: { value: GHOST_CONFIG.fadeStrength },
+      baseOpacity: { value: GHOST_CONFIG.baseOpacity },
+      revealOpacity: { value: GHOST_CONFIG.revealOpacity },
+      time: { value: 0 },
+    },
+    vertexShader: atmosphereVertexShader,
+    fragmentShader: atmosphereFragmentShader,
+    transparent: true,
+    depthWrite: false,
+  });
+
+  // Cria a geometria (plano grande)
+  const geometry = new THREE.PlaneGeometry(300, 300);
 
   return (
     <mesh
+      ref={meshRef}
       position={[0, 0, -50]} // Posiciona atrás do ghost
       renderOrder={-100} // Garante que fique atrás dos outros elementos
       material={material}
       geometry={geometry}
-    >
-      <primitive object={material} ref={materialRef} attach="material" />
-    </mesh>
+    />
   );
 }
