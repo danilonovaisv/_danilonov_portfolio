@@ -1,152 +1,77 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
-import { HOME_CONTENT } from '@/config/content';
 
-/**
- * HeroCopy - Editorial text block for Hero section
- * Features:
- * - Mask reveal animation on title
- * - Glitch/flicker effect simulating "ghost presence"
- * - Full mobile responsiveness with centered layout
- */
 export default function HeroCopy() {
-  const { hero } = HOME_CONTENT;
-
-  // Motion value for mask animation (0 = hidden, 1 = fully revealed)
-  const maskProgress = useMotionValue(0);
-
-  // Transform mask progress to mask position
-  const maskPosition = useTransform(maskProgress, [0, 1], ['200% 0', '0% 0']);
-
-  // Animate mask on mount
-  useEffect(() => {
-    const controls = animate(maskProgress, 1, {
-      duration: 1.5,
-      ease: [0.22, 1, 0.36, 1], // Ghost easeOutExpo
-      delay: 0.4,
-    });
-    return () => controls.stop();
-  }, [maskProgress]);
-
   return (
-    <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4 pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-0 md:pb-[5vh]">
-      {/* Container de texto: 70% no mobile, 80% tablet, 55% desktop */}
-      <div className="w-[70vw] sm:w-[75vw] md:w-[80vw] lg:w-[55vw] max-w-[1400px] pointer-events-auto text-center flex flex-col items-center transition-all duration-500">
+    <div className="absolute inset-0 z-0 flex flex-col justify-center items-center pointer-events-none pb-[5vh]">
+      <div 
+        className="w-[90%] max-w-[1100px] pointer-events-auto text-center flex flex-col items-center gap-4"
+        style={{
+          maxHeight: '80vh',
+          overflow: 'hidden',
+          maxWidth: 'min(90%, 1100px)',
+        }}
+      >
         {/* Tag */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 0.8, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="font-mono text-[14px] uppercase tracking-[0.25em] text-[#d9dade] mb-4 sm:mb-6 md:mb-10 font-normal"
-        >
-          {hero.tag}
-        </motion.div>
-
-        {/* Main Quote (H1) - Responsive Line Breaks */}
-        {/* Desktop/Tablet: 2 linhas | Mobile: 3 linhas */}
-        <motion.h1
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1.1,
-            ease: [0.22, 1, 0.36, 1],
-            delay: 0.35,
-          }}
+        <div
+          className="text-[14px] uppercase tracking-[0.18em] text-[#9cb3ff] opacity-80 mb-[0.5vh]"
           style={{
-            WebkitMaskImage:
-              'linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%)',
-            WebkitMaskSize: '300% 100%',
-            WebkitMaskRepeat: 'no-repeat',
-            WebkitMaskPosition: maskPosition,
+            fontFamily: "'TT Norms Pro', 'PPSupplyMono', monospace",
+            letterSpacing: '0.18em',
           }}
-          className="font-sans font-black tracking-tight text-[#d9dade] max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.25)] flex flex-col items-center leading-none py-4 text-[clamp(6rem,16vw,9rem)] sm:text-[clamp(6rem,14vw,9rem)] md:text-[clamp(6rem,9vw,9rem)] lg:text-[clamp(7rem,8vw,9rem)]"
         >
-          {/* Mobile Version: 3 linhas - Visível apenas abaixo de md */}
-          <span className="md:hidden flex flex-col items-center">
-            {hero.titleMobile.map((line, index) => (
-              <span key={`mobile-${index}`} className="block">
-                {line}
-              </span>
-            ))}
-          </span>
+          [BRAND AWARENESS]
+        </div>
 
-          {/* Desktop/Tablet Version: 2 linhas - Visível apenas em md+ */}
+        {/* Main Quote - Texto principal com efeito de revelação por trás do fantasma */}
+        <h1
+          className="font-black tracking-tight leading-[1.05] mb-[1vh] text-[#d9ddec] mix-blend-screen text-[clamp(6rem,6vw,9rem)] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] text-center"
+          style={{
+            fontFamily: "'TT Norms Pro', 'ui-sans-serif', sans-serif",
+            lineHeight: '1.05',
+            maxWidth: '90%',
+            wordWrap: 'break-word',
+          }}
+        >
           <span className="hidden md:flex flex-col items-center">
-            {hero.title.map((line, index) => (
-              <span key={`desktop-${index}`} className="block">
-                {line}
-              </span>
-            ))}
+            <span>Você não vê</span>
+            <span>o design.</span>
           </span>
-        </motion.h1>
+          <span className="flex md:hidden flex-col items-center">
+            <span>Você não</span>
+            <span>vê o</span>
+            <span>design.</span>
+          </span>
+        </h1>
 
-        {/* Sub Quote (H2) - with subtle flicker */}
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.9,
-            ease: [0.22, 1, 0.36, 1],
-            delay: 0.5,
+        {/* Sub Quote - Texto secundário */}
+        <h2
+          className="font-normal tracking-tight leading-[1.1] mb-[4vh] text-[#d9dade] mix-blend-screen text-[clamp(1.5rem,3vw,3rem)] drop-shadow-[0_0_18px_rgba(71,128,255,0.25)] text-center"
+          style={{
+            fontFamily: "'TT Norms Pro', 'ui-sans-serif', sans-serif",
+            lineHeight: '1.1',
+            maxWidth: '80%',
+            wordWrap: 'break-word',
           }}
-          className="font-sans font-semibold tracking-tight mt-4 sm:mt-6 mb-8 sm:mb-12 text-[#ffffff] max-w-[800px] drop-shadow-[0_0_16px_rgba(79,230,255,0.25)] leading-[1.1] text-[clamp(1.2rem,4vw,2.2rem)]"
         >
-          {hero.subtitle}
-        </motion.h2>
+          Mas ele vê você.
+        </h2>
 
-        {/* CTA Button (Center) - Full width on mobile */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.8,
-            ease: [0.22, 1, 0.36, 1],
-            delay: 1.2,
+        {/* CTA Button */}
+        <Link
+          href="/sobre"
+        className="group inline-flex items-center gap-4 px-10 py-4 mt-2 bg-[#0c5bff] text-white no-underline text-[17px] font-semibold lowercase rounded-full transition-all duration-300 shadow-[0_0_40px_rgba(12,91,255,0.55)] ring-1 ring-white/12 hover:bg-[#0a46d4] hover:shadow-[0_0_55px_rgba(12,91,255,0.75)]"
+          style={{
+            fontSize: 'clamp(14px, 3vw, 17px)',
+            padding: 'clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px)',
+            borderRadius: 'clamp(20px, 5vw, 32px)',
           }}
-          className="w-full sm:w-auto"
         >
-          <CtaButton href="/sobre" label={hero.cta} />
-        </motion.div>
+          <span>step inside →</span>
+        </Link>
       </div>
     </div>
-  );
-}
-
-function CtaButton({ href, label }: { href: string; label: string }) {
-  const cleanLabel = label.replace('→', '').trim();
-
-  return (
-    <Link
-      href={href}
-      className="group relative inline-flex flex-row items-center justify-center h-[64px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-px"
-      aria-label={cleanLabel}
-    >
-      {/* NÓ 1: CÁPSULA DE TEXTO (Esquerda) */}
-      <div className="flex items-center justify-center h-full pl-8 pr-4 bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-l-full transition-colors duration-300">
-        <span className="text-lg font-medium uppercase text-[0.9rem] tracking-[0.25em] whitespace-nowrap">
-          {cleanLabel}
-        </span>
-      </div>
-
-      {/* NÓ 2: ESFERA DO ÍCONE (Direita) */}
-      <div className="flex items-center justify-center h-full aspect-square bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-r-full transition-colors duration-300">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="transition-transform duration-300 group-hover:rotate-45"
-        >
-          <path d="M7 17L17 7M17 7H7M17 7V17" />
-        </svg>
-      </div>
-    </Link>
   );
 }

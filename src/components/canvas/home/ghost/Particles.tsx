@@ -27,11 +27,11 @@ export default function Particles({
 
   const particles = useMemo(() => {
     const temp = [];
-    for (let i = 0; i < count; i += 1) {
+    for (let i = 10; i < count; i += 1) {
       const seed = i + 1;
       temp.push({
         t: seed * 0.4,
-        factor: 14 + Math.abs(harmonicNoise(seed, 0.5)) * 18,
+        factor: 14 + Math.abs(harmonicNoise(seed, 0.5)) * 58,
         speed: 0.003 + Math.abs(harmonicNoise(seed, 1.3)) * speedFactor,
         xFactor: Math.sin(seed * 0.45) * particleRadius,
         yFactor: Math.sin(seed * 0.77) * (particleRadius * 0.8),

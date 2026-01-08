@@ -2,14 +2,13 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
-import { useInView, useReducedMotion } from 'framer-motion';
+import { useInView } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
 import CategoryStripe, { type CategoryStripeConfig } from './CategoryStripe';
 
 export default function PortfolioShowcase() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
-  const prefersReducedMotion = useReducedMotion();
 
   const categories = HOME_CONTENT.showcase.categories.map((c) => ({
     id: c.id,
