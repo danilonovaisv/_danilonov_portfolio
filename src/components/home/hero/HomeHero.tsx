@@ -1,13 +1,20 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import * as React from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Preloader } from '@/components/ui/Preloader';
 
 import { GhostStage } from './hero/GhostStage';
 import HeroCopy from './hero/HeroCopy';
 import { useHeroAnimation } from './hero/useHeroAnimation';
 import ManifestoThumb from './hero/ManifestoThumb';
 import GhostAura from './hero/GhostAura';
+
+const CONFIG = {
+  preloadMs: 2000,
+  bgColor: '#050511',
+} as const;
 
 function usePrefersReducedMotion() {
   const [pref, setPref] = useState(false);
@@ -30,18 +37,21 @@ function usePrefersReducedMotion() {
 
 export default function HomeHero() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const ghostRef = useRef<any>(null); // Referência para a posição do ghost 3D
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
   // Hook de animação do Hero (Controla Copy Opacity agora)
   const { copyOpacity } = useHeroAnimation(sectionRef);
 
+  const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
+
   return (
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen h-[120vh] md:h-[250vh] bg-[#040013] overflow-hidden"
+      className="relative min-h-screen h-[120vh] md:h-[250vh] bg-[#050511] overflow-hidden"
       aria-label="Home hero section"
     >
       {/* Sticky Context */}
@@ -53,27 +63,34 @@ export default function HomeHero() {
         />
 
         {/* Ghost Aura - Camada de atmosfera etérea */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
-          <GhostAura />
+        <GhostAura />
+
+        {/* Preloader Ghost */}
+        <AnimatePresence>
+          {isLoading && (
+            <Preloader
+              durationMs={CONFIG.preloadMs}
+              onComplete={handlePreloaderDone}
+              label="Summoning spirits"
+            />
+          )}
+        </AnimatePresence>
+
+        {/* WebGL Atmosphere */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          <GhostStage reducedMotion={prefersReducedMotion} />
         </div>
 
-        {/* Hero Copy (Editorial) - MIDDLE LAYER */}
+        {/* Hero Copy (Editorial) */}
         <motion.div
-          className="absolute inset-0 z-20 pointer-events-none"
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{ opacity: copyOpacity }}
         >
-          <HeroCopy ghostRef={ghostRef} />
+          <HeroCopy />
         </motion.div>
 
-        {/* WebGL Atmosphere - TOP LAYER (Acting as a flashlight) */}
-        <div className="absolute inset-0 z-30 pointer-events-none">
-          <GhostStage
-            reducedMotion={prefersReducedMotion}
-            ghostRef={ghostRef}
-          />
-        </div>
-
         {/* Manifesto Thumb (Desktop Transition) */}
+        {/* Agora independente com scroll listener próprio */}
         <ManifestoThumb />
       </div>
 

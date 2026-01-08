@@ -1,0 +1,8 @@
+.videoOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: black;
+  transition: opacity 300ms ease;
+  background-size: cover;
+  background-position: center;
+}

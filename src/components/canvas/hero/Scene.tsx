@@ -1,9 +1,9 @@
 'use client';
 
-import AtmosphereVeil from '@/components/canvas/home/AtmosphereVeil';
-import Fireflies from '@/components/canvas/home/ghost/Fireflies';
-import Ghost from '@/components/canvas/home/Ghost';
-import Particles from '@/components/canvas/home/ghost/Particles';
+import AtmosphereVeil from '@/components/canvas/hero/AtmosphereVeil';
+import Fireflies from '@/components/canvas/hero/Fireflies';
+import Ghost from '@/components/canvas/hero/Ghost';
+import Particles from '@/components/canvas/hero/Particles';
 import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
 
 export default function Scene() {
@@ -22,7 +22,7 @@ export default function Scene() {
       <AtmosphereVeil />
       <Fireflies />
       <Particles />
-      <Ghost />
+      <Ghost mousePosition={[0, 0]} />
       <ambientLight
         color={ambientCol}
         intensity={GHOST_CONFIG.ambientLightIntensity}

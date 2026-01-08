@@ -2,22 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-const VIDEO_SOURCES = [
-  {
-    type: 'video/webm',
-    src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm',
-  },
-  {
-    type: 'video/mp4',
-    src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
-  },
-];
+import styles from './ManifestoThumb.module.css';
 
 const POSTER_IMAGE =
   'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80';
 
-export default function ManifestoThumb() {
+export default function ManifestoThumb({
+  sectionRef,
+}: {
+  sectionRef?: React.RefObject<HTMLElement | null>;
+}) {
   const [posterVisible, setPosterVisible] = useState(true);
   const hasFadedRef = useRef(false);
 
@@ -42,10 +36,8 @@ export default function ManifestoThumb() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, translateY: 18, scale: 0.96 }}
-      animate={{ opacity: 1, translateY: 0, scale: 1 }}
-      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      className="fixed bottom-[5vh] right-[5vw] z-40 w-[min(280px,calc(35vw))] max-w-[320px] shadow-[0_25px_55px_rgba(3,7,17,0.45)] rounded-[18px] overflow-hidden bg-black/80 pointer-events-auto hover:scale-[1.02] transition-transform duration-300 ease-out"
+      ref={sectionRef as any}
+      className="hidden lg:block fixed bottom-[5vh] right-[5vw] z-30 w-[min(280px,calc(35vw))] max-w-[320px] shadow-[0_25px_55px_rgba(3,7,17,0.45)] rounded-[18px] overflow-hidden bg-black/80 pointer-events-auto transition-transform duration-300 ease-out"
       aria-label="Preview em vídeo"
     >
       <div className="relative w-full h-full">
@@ -59,20 +51,18 @@ export default function ManifestoThumb() {
           onLoadedData={handleVideoReady}
           className="w-full h-full object-cover"
         >
-          {VIDEO_SOURCES.map((source) => (
-            <source key={source.src} src={source.src} type={source.type} />
-          ))}
+          <source
+            src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+            type="video/mp4"
+          />
         </video>
 
         <div
           aria-hidden
-          className="absolute inset-0 bg-black"
+          className={styles.videoOverlay}
           style={{
-            transition: 'opacity 300ms ease',
             opacity: posterVisible ? 1 : 0,
             backgroundImage: `linear-gradient(180deg,rgba(4,12,28,0.98) 0,rgba(2,4,12,0.2) 70%),url(${POSTER_IMAGE})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
           }}
         />
 

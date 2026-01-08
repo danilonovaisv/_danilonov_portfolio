@@ -15,7 +15,7 @@ import {
 import { BRAND } from '@/config/brand';
 import { HOME_CONTENT } from '@/config/content';
 import { SOCIALS } from '@/config/navigation';
-import ContactForm from './contact/ContactForm';
+import ContactForm from './ContactForm';
 
 export default function ContactSection() {
   const reducedMotion = useReducedMotion();

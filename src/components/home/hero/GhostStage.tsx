@@ -13,8 +13,7 @@ interface GhostStageProps {
 
 // Import dinâmico evita SSR do canvas
 const GhostCanvas = dynamic(
-  () =>
-    import('@/components/canvas/home/ghost/GhostCanvas').then((m) => m.default),
+  () => import('@/components/canvas/hero/GhostCanvas').then((m) => m.default),
   { ssr: false }
 );
 
@@ -57,7 +56,7 @@ export function GhostStage({ reducedMotion, ghostRef }: GhostStageProps) {
   return (
     <ErrorBoundary fallback={<StaticGhostFallback />}>
       <Suspense fallback={<StaticGhostFallback />}>
-        <GhostCanvas ghostRef={ghostRef} />
+        <GhostCanvas _ghostRef={ghostRef} />
       </Suspense>
     </ErrorBoundary>
   );

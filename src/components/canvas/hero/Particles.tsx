@@ -25,7 +25,7 @@ export default function Particles({
     const temp = [];
     for (let i = 0; i < count; i++) {
       temp.push({
-        t: Math.random() * 100,
+        t: Math.random() * 500,
         factor: 20 + Math.random() * 100,
         speed: 0.01 + Math.random() / 200,
         xFactor: -5 + Math.random() * 10,

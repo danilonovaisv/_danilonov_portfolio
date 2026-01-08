@@ -16,7 +16,7 @@ export default function AtmosphereVeil() {
         <meshBasicMaterial
           color={glowCol}
           transparent
-          opacity={0.3}
+          opacity={0.03}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.BackSide}
@@ -25,11 +25,11 @@ export default function AtmosphereVeil() {
 
       {/* Véu de fundo para integrar com o CSS */}
       <mesh position={[0, -2, -4]}>
-        <planeGeometry args={[15, 10]} />
+        <planeGeometry args={[15, 16]} />
         <meshBasicMaterial
           color={bgCol}
           transparent
-          opacity={0.8}
+          opacity={0.4}
           depthWrite={false}
         />
       </mesh>

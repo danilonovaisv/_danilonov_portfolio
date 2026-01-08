@@ -1,54 +1,39 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
 
-export default function HeroCopy({
-  ghostRef,
-}: {
-  ghostRef?: React.RefObject<any>;
-}) {
+/**
+ * HeroCopy - Editorial text block for Hero section
+ * Features:
+ * - Mask reveal animation on title
+ * - Glitch/flicker effect simulating "ghost presence"
+ * - Full mobile responsiveness with centered layout
+ */
+export default function HeroCopy() {
   const { hero } = HOME_CONTENT;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const h1Ref = useRef<HTMLHeadingElement>(null);
 
-  // Hook para sincronizar a posição do Ghost 3D com a máscara 2D
+  // Motion value for mask animation (0 = hidden, 1 = fully revealed)
+  const maskProgress = useMotionValue(0);
+
+  // Transform mask progress to mask position
+  const maskPosition = useTransform(maskProgress, [0, 1], ['200% 0', '0% 0']);
+
+  // Animate mask on mount
   useEffect(() => {
-    if (!ghostRef?.current || !containerRef.current) return;
-
-    let rafId: number;
-    const update = () => {
-      if (ghostRef.current && containerRef.current && h1Ref.current) {
-        const ghostPos = ghostRef.current.position;
-
-        // Conversão aproximada de mundo 3D para % da viewport
-        const x = ((ghostPos.x + 8) / 16) * 100;
-        const y = (1 - (ghostPos.y + 5) / 10) * 100;
-
-        // Atualiza variáveis CSS diretamente no DOM (Performance + sem lint error)
-        containerRef.current.style.setProperty('--mask-x', `${x}%`);
-        containerRef.current.style.setProperty('--mask-y', `${y}%`);
-
-        // Aplica a máscara radial diretamente
-        const mask = `radial-gradient(circle 200px at ${x}% ${y}%, black 0%, rgba(0,0,0,0.4) 40%, transparent 70%)`;
-        h1Ref.current.style.webkitMaskImage = mask;
-        h1Ref.current.style.maskImage = mask;
-      }
-      rafId = requestAnimationFrame(update);
-    };
-
-    rafId = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(rafId);
-  }, [ghostRef]);
+    const controls = animate(maskProgress, 1, {
+      duration: 1.5,
+      ease: [0.22, 1, 0.36, 1], // Ghost easeOutExpo
+      delay: 0.4,
+    });
+    return () => controls.stop();
+  }, [maskProgress]);
 
   return (
-    <div
-      ref={containerRef}
-      className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4 pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-0 md:pb-[5vh]"
-    >
-      {/* Container de texto */}
+    <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4 pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-0 md:pb-[5vh]">
+      {/* Container de texto: 70% no mobile, 80% tablet, 55% desktop */}
       <div className="w-[70vw] sm:w-[75vw] md:w-[80vw] lg:w-[55vw] max-w-[1400px] pointer-events-auto text-center flex flex-col items-center transition-all duration-500">
         {/* Tag */}
         <motion.div
@@ -60,12 +45,27 @@ export default function HeroCopy({
           {hero.tag}
         </motion.div>
 
-        {/* Main Quote (H1) - LANTERNA EFFECT */}
+        {/* Main Quote (H1) - Responsive Line Breaks */}
+        {/* Desktop/Tablet: 2 linhas | Mobile: 3 linhas */}
         <motion.h1
-          ref={h1Ref}
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="font-sans font-black tracking-tighter text-text-light mix-blend-lighten max-w-[1200px] drop-shadow-[0_0_35px_rgba(79,230,255,0.4)] flex flex-col items-center leading-[0.9] text-[clamp(2.5rem,10vw,9rem)] sm:text-[clamp(3rem,11vw,9rem)] md:text-[clamp(3.5rem,9vw,9rem)]"
+          animate={{
+            opacity: [0.85, 1, 0.92, 1, 0.88, 1], // Glitch/flicker effect
+          }}
+          transition={{
+            duration: 4,
+            ease: 'easeInOut',
+            repeat: Infinity,
+            repeatDelay: 2,
+          }}
+          style={{
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%)',
+            WebkitMaskSize: '300% 100%',
+            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskPosition: maskPosition,
+          }}
+          className="font-sans font-black tracking-tighter text-[#d9ddec] mix-blend-screen max-w-[1200px] drop-shadow-[0_0_24px_rgba(71,128,255,0.35)] flex flex-col items-center leading-[0.9] text-[clamp(2.5rem,10vw,9rem)] sm:text-[clamp(3rem,11vw,9rem)] md:text-[clamp(3.5rem,9vw,9rem)]"
         >
           {/* Mobile Version: 3 linhas - Visível apenas abaixo de md */}
           <span className="md:hidden flex flex-col items-center">
