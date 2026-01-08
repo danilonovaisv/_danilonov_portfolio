@@ -1,8 +1,8 @@
 ---
-description: # Workflow Antigravity: CTA "Levitation Blue"
+description: ### ⚡ Workflow Antigravity: "Compound Fusion"
 ---
 
-# Workflow Antigravity: CTA "Levitation Blue"
+### ⚡ Workflow Antigravity: "Compound Fusion"
 
 ### 1. 📐 Blueprint (Arquitetura)
 
@@ -34,60 +34,69 @@ Configuração da "sensação" do botão baseada nos tempos e curvas de bézier 
 
 ### 3. 🛠️ Implementação (Código)
 
-Aqui está o componente refatorado para **Next.js + Tailwind CSS**, utilizando as especificações exatas do seu relatório.
+Esta versão divide o elemento interno em dois nós visuais que compartilham a mesma cor e estado de hover, criando a silhueta complexa da imagem.
 
 ```tsx
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react'; // Exemplo de ícone
+import { ArrowUpRight } from 'lucide-react';
 
 const AntigravityCTA = () => {
   return (
-    /* Elemento Pai (uid=2556) 
-       - Flex container
-       - Dimensões fixas
-       - Gatilho da animação de levitação (group)
+    /* CONTAINER MESTRE (Driver da Animação)
+      - group: permite que os filhos reajam ao hover do pai.
+      - gap-[-1px]: hack visual para garantir fusão perfeita sem linhas brancas.
     */
     <button
       className="
         group
         relative
-        flex items-stretch
-        w-[369px] h-[64px]
+        flex flex-row items-center justify-center
+        h-[64px]
         cursor-pointer
         transition-transform duration-200 ease-out
         hover:-translate-y-px
       "
       aria-label="Let's build something great"
     >
-      {/* Elemento Filho Principal (uid=2557) 
-          - Núcleo visual azul
-          - Centralização flex
-          - Transição de cor independente
+      {/* NÓ 1: CÁPSULA DE TEXTO (Esquerda)
+        - rounded-l-full: Arredonda apenas a esquerda.
+        - pr-2: Menos padding na direita para aproximar do ícone.
       */}
       <div
         className="
-          flex flex-1 justify-center items-center
+          flex items-center justify-center
+          h-full
+          pl-8 pr-4
           bg-[rgb(0,87,255)]
-          hover:bg-[rgb(50,120,255)] 
+          group-hover:bg-[rgb(50,120,255)]
           text-white
-          rounded-full
-          px-8 py-5
-          gap-[0.25rem]
-          overflow-hidden
-          whitespace-nowrap
-          z-10
+          rounded-l-full
           transition-colors duration-300
         "
       >
-        <span className="text-lg font-medium tracking-wide">
+        <span className="text-lg font-medium tracking-wide whitespace-nowrap">
           let's build something great
         </span>
+      </div>
 
-        {/* Ícone separado visualmente na imagem, mas 
-            integrado no fluxo flex conforme descrição */}
-        <div className="ml-2 flex items-center justify-center">
-          <ArrowUpRight size={20} />
-        </div>
+      {/* NÓ 2: ESFERA DO ÍCONE (Direita)
+        - Aspect Ratio 1:1 (Quadrado perfeito virando círculo).
+        - rounded-r-full: Arredonda a direita (ou full para garantir círculo).
+        - border-l: opcional, se quiser uma linha divisória sutil, mas a imagem sugere fusão.
+      */}
+      <div
+        className="
+          flex items-center justify-center
+          h-full aspect-square
+          bg-[rgb(0,87,255)]
+          group-hover:bg-[rgb(50,120,255)]
+          text-white
+          rounded-r-full
+          transition-colors duration-300
+        "
+      >
+        {/* O ícone também pode ter uma animação própria no hover, ex: group-hover:rotate-45 */}
+        <ArrowUpRight size={24} strokeWidth={2} />
       </div>
     </button>
   );
@@ -95,6 +104,16 @@ const AntigravityCTA = () => {
 
 export default AntigravityCTA;
 ```
+
+### 🔍 Anatomia das Alterações
+
+1. **Geometria Dividida:** Ao invés de um `div` gigante, usamos dois `divs` irmãos.
+
+- **Texto:** Usa `rounded-l-full` (arredonda esquerda) e reto na direita.
+- **Ícone:** Usa `rounded-r-full` (arredonda direita) e reto na esquerda (ou levemente sobreposto).
+
+2. **Sincronia de Cores (`group-hover`):** Ambos os filhos usam `group-hover:bg-...`. Isso garante que, mesmo passando o mouse apenas na ponta do ícone, o texto também muda de cor instantaneamente, mantendo a ilusão de ser uma peça única.
+3. **Área de Clique:** O `<button>` pai envolve ambos, garantindo que o clique funcione em qualquer pixel da estrutura composta.
 
 ### 4. 🧪 Auditoria de Qualidade
 

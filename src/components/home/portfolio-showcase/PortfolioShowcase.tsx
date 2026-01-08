@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { useInView, useReducedMotion } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
 import CategoryStripe, { type CategoryStripeConfig } from './CategoryStripe';
 
@@ -18,18 +18,6 @@ export default function PortfolioShowcase() {
     align: c.align as 'start' | 'center' | 'end',
     thumb: c.thumb,
   })) satisfies CategoryStripeConfig[];
-
-  const arrowLoopProps = prefersReducedMotion
-    ? {}
-    : {
-        animate: { x: [0, 2, 0] },
-        transition: {
-          duration: 2.1,
-          repeat: Infinity,
-          repeatType: 'reverse' as const,
-          ease: [0.42, 0, 0.58, 1] as const,
-        },
-      };
 
   return (
     <section
@@ -67,15 +55,31 @@ export default function PortfolioShowcase() {
         <div className="flex justify-center mt-12 md:mt-20">
           <Link
             href={HOME_CONTENT.showcase.cta.href}
-            className="group relative flex items-center overflow-hidden rounded-full bg-primary pl-10 pr-4 py-3 text-[0.8rem] font-bold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(0,72,255,0.3)] hover:shadow-[0_8px_30px_rgba(0,72,255,0.45)]"
+            className="group relative inline-flex flex-row items-center justify-center h-[64px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-px"
+            aria-label={HOME_CONTENT.showcase.cta.label.replace(' →', '')}
           >
-            <span className="z-10">
-              {HOME_CONTENT.showcase.cta.label.replace(' →', '')}
-            </span>
-            <div className="ml-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-transform duration-500 group-hover:bg-white/20">
-              <motion.span {...arrowLoopProps} className="text-xl font-light">
-                →
-              </motion.span>
+            {/* NÓ 1: CÁPSULA DE TEXTO (Esquerda) */}
+            <div className="flex items-center justify-center h-full pl-8 pr-4 bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-l-full transition-colors duration-300">
+              <span className="text-lg font-medium uppercase text-[0.9rem] tracking-[0.25em] whitespace-nowrap">
+                {HOME_CONTENT.showcase.cta.label.replace(' →', '')}
+              </span>
+            </div>
+
+            {/* NÓ 2: ESFERA DO ÍCONE (Direita) */}
+            <div className="flex items-center justify-center h-full aspect-square bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-r-full transition-colors duration-300">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-300 group-hover:rotate-45"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
             </div>
           </Link>
         </div>

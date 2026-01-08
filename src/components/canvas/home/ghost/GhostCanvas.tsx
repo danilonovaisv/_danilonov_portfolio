@@ -48,7 +48,7 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
         camera={{ position: [0, 0, 7], fov: 35 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.2} />
+          <ambientLight intensity={0.1} />
 
           {/* Primary Ghost Light - Glow intenso */}
           <pointLight
@@ -91,7 +91,7 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
           <EffectComposer enableNormalPass={false}>
             {/* Bloom ajustado para glow fantasmagórico (spec: 2.8) */}
             <Bloom
-              luminanceThreshold={0.15}
+              luminanceThreshold={0.25}
               mipmapBlur
               intensity={2.8}
               radius={0.7}
@@ -105,7 +105,7 @@ export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
               jitter={cfg.analogJitter}
               vsync={cfg.analogVSync}
             />
-            <Noise opacity={0.015} />
+            <Noise opacity={0.15} />
             <Vignette eskil={false} offset={0.6} darkness={0.7} />
           </EffectComposer>
         </Suspense>

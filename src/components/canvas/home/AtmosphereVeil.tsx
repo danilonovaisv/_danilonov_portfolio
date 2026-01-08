@@ -14,7 +14,7 @@ export default function AtmosphereVeil() {
       opacity?: number;
     };
     if (material.opacity !== undefined) {
-      material.opacity = 0.32 + pulse * 0.08;
+      material.opacity = 0.32 + pulse * 0.8;
     }
   });
 
@@ -29,11 +29,11 @@ export default function AtmosphereVeil() {
       >
         <sphereGeometry args={[5.5, 64, 64]} />
         <meshStandardMaterial
-          color="#0b0d3a"
-          emissive="#0f0f4a"
-          emissiveIntensity={0.6}
+          color="#040013"
+          emissive="#13052e"
+          emissiveIntensity={1.6}
           transparent
-          opacity={0.4}
+          opacity={0.6}
           depthWrite={false}
           side={THREE.BackSide}
           toneMapped={false}
@@ -44,9 +44,9 @@ export default function AtmosphereVeil() {
       <mesh position={[0, -2.5, -4]} rotation={[-0.1, 0, 0]} renderOrder={1}>
         <planeGeometry args={[18, 12]} />
         <meshStandardMaterial
-          color="#03041c"
+          color="#0d031c"
           transparent
-          opacity={0.38}
+          opacity={0.88}
           depthWrite={false}
           toneMapped={false}
         />

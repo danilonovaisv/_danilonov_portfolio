@@ -19,34 +19,34 @@ export const FLUORESCENT_COLORS: Record<string, string> = {
 export const GHOST_CONFIG = {
   // Ghost appearance
   bodyColor: 'blue',
-  glowColor: 'blue', // Azul ciano para maior brilho
-  eyeGlowColor: 'violet',
+  glowColor: 'cyan', // Azul ciano para maior brilho
+  eyeGlowColor: 'orange',
   ghostOpacity: 0.88,
   ghostScale: 0.2,
 
   // Glow effects
-  emissiveIntensity: 4.8, // Intensidade alta para criar o brilho de lanterna
+  emissiveIntensity: 1.8, // Intensidade alta para criar o brilho de lanterna
   pulseSpeed: 1.6,
   pulseIntensity: 1.6,
 
   // Eyes
   eyeGlowIntensity: 3.5,
   eyeGlowDecay: 0.95,
-  eyeGlowResponse: 0.31,
+  eyeGlowResponse: 1.31,
 
   // Enhanced lighting
   rimLightIntensity: 5.8,
 
   // Behavior
-  followSpeed: 0.05,
+  followSpeed: 0.050,
   wobbleAmount: 0.35,
-  floatSpeed: 1.6,
+  floatSpeed: 2.6,
   movementThreshold: 0.07,
 
   // Particles
-  particleCount: 1200,
+  particleCount: 250,
   particleDecayRate: 0.0015,
-  particleColor: 'purple',
+  particleColor: 'violet',
   createParticlesOnlyWhenMoving: true,
   particleCreationRate: 0.5,
   particleRadius: 4,
@@ -54,22 +54,22 @@ export const GHOST_CONFIG = {
 
   // Background reveal
   revealRadius: 27,
-  fadeStrength: 3.7,
-  baseOpacity: 0.9,
+  fadeStrength: 1.7,
+  baseOpacity: 0.90,
   revealOpacity: 0.05,
 
   // Fireflies
   fireflyGlowIntensity: 4.3,
-  fireflySpeed: 1.39,
+  fireflySpeed: 0.090,
   fireflyCount: 30,
 
   // Analog Decay settings
-  analogIntensity: 0.9,
-  analogGrain: 0.5,
-  analogBleeding: 1.0,
+  analogIntensity: 0.7,
+  analogGrain: 0.04,
+  analogBleeding: 0.9,
   analogVSync: 1.7,
-  analogScanlines: 0.04,
-  analogVignette: 9.4,
-  analogJitter: 0.5,
+  analogScanlines: 1.04,
+  analogVignette: 0.4,
+  analogJitter: 0.6,
   limboMode: false,
 };

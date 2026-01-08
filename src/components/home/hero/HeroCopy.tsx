@@ -121,15 +121,32 @@ function CtaButton({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="group inline-flex items-center justify-center gap-3 text-[#d9dade] uppercase tracking-[0.25em] text-[0.9rem] font-medium transition-all duration-300 hover:text-white"
+      className="group relative inline-flex flex-row items-center justify-center h-[64px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-px"
+      aria-label={cleanLabel}
     >
-      <span className="relative">
-        {cleanLabel}
-        <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-300 group-hover:scale-x-100" />
-      </span>
-      <span className="flex items-center justify-center transition-transform duration-300 group-hover:translate-x-2">
-        →
-      </span>
+      {/* NÓ 1: CÁPSULA DE TEXTO (Esquerda) */}
+      <div className="flex items-center justify-center h-full pl-8 pr-4 bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-l-full transition-colors duration-300">
+        <span className="text-lg font-medium uppercase text-[0.9rem] tracking-[0.25em] whitespace-nowrap">
+          {cleanLabel}
+        </span>
+      </div>
+
+      {/* NÓ 2: ESFERA DO ÍCONE (Direita) */}
+      <div className="flex items-center justify-center h-full aspect-square bg-primary group-hover:bg-[rgb(50,120,255)] text-white rounded-r-full transition-colors duration-300">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="transition-transform duration-300 group-hover:rotate-45"
+        >
+          <path d="M7 17L17 7M17 7H7M17 7V17" />
+        </svg>
+      </div>
     </Link>
   );
 }
