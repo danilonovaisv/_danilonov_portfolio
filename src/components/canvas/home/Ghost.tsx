@@ -4,8 +4,7 @@ import React, { useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Group, Mesh, MeshStandardMaterial, Vector3 } from 'three';
-import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
-import GhostEyes from '@/components/canvas/home/ghost/GhostEyes';
+import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
 
 // ============================================================================
 // Ghost Component (forwardRef para expor posição ao RevealingText)
@@ -15,11 +14,24 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
     const group = useRef<Group>(null);
     const bodyMesh = useRef<Mesh>(null);
     const bodyMaterial = useRef<MeshStandardMaterial>(null);
+    const leftEyeMat = useRef<THREE.MeshBasicMaterial>(null);
+    const rightEyeMat = useRef<THREE.MeshBasicMaterial>(null);
+
+    // Mapeamento de cores para resolver nomes ou strings
+    const colors = useMemo(() => {
+      const getHex = (c: string) => (FLUORESCENT_COLORS as any)[c] || c;
+      return {
+        body: getHex(GHOST_CONFIG.bodyColor),
+        glow: getHex(GHOST_CONFIG.glowColor),
+        eye: getHex(GHOST_CONFIG.eyeGlowColor),
+      };
+    }, []);
 
     // Expor o group.current via ref
     useImperativeHandle(ref, () => group.current as Group);
 
     const { viewport, size } = useThree();
+    const prevPosition = useRef(new Vector3(0, 0, 0));
     const targetPosition = useRef(new Vector3(0, 0, 0));
 
     // Geometria do Ghost (modificada para ficar orgânica na base)
@@ -47,39 +59,55 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
     useFrame((state) => {
       if (!group.current || !bodyMesh.current) return;
 
-      const { clock, pointer } = state;
-      const t = clock.getElapsedTime();
+      const t = state.clock.getElapsedTime();
+      const pointer = state.pointer;
       const isMobile = size.width < 768;
 
-      // ============================================================
-      // MOVIMENTO MOBILE AUTOMÁTICO (Lissajous Pattern)
-      // O Ghost faz um movimento orgânico que explora toda a Hero,
-      // criando uma experiência imersiva mesmo sem interação.
-      // Frequências diferentes criam um padrão fluido e não repetitivo.
-      // ============================================================
-      const mobileTargets = {
-        x:
-          Math.sin(t * 0.4) * (viewport.width * 0.35) +
-          Math.sin(t * 0.15) * (viewport.width * 0.35 * 0.3),
-        y:
-          Math.cos(t * 0.3) * (viewport.height * 0.25) +
-          Math.sin(t * 0.2) * (viewport.height * 0.25 * 0.4),
-      };
+      let xTarget: number;
+      let yTarget: number;
 
-      const desktopTargets = {
-        x: pointer.x * (viewport.width / 3.5),
-        y: pointer.y * (viewport.height / 3.5),
-      };
+      if (isMobile) {
+        // ============================================================
+        // MOVIMENTO MOBILE AUTOMÁTICO (Lissajous Pattern)
+        // O Ghost faz um movimento orgânico que explora toda a Hero,
+        // criando uma experiência imersiva mesmo sem interação.
+        // ============================================================
+        const xAmplitude = viewport.width * 0.35; // 35% da largura
+        const yAmplitude = viewport.height * 0.25; // 25% da altura
 
-      const { x: xTarget, y: yTarget } = isMobile
-        ? mobileTargets
-        : desktopTargets;
+        // Padrão Lissajous para movimento orgânico e fluido
+        // Frequências diferentes criam padrão não-repetitivo
+        xTarget =
+          Math.sin(t * 0.4) * xAmplitude +
+          Math.sin(t * 0.15) * (xAmplitude * 0.3);
+        yTarget =
+          Math.cos(t * 0.3) * yAmplitude +
+          Math.sin(t * 0.2) * (yAmplitude * 0.4);
+      } else {
+        // Desktop: segue o mouse
+        xTarget = pointer.x * (viewport.width / 3.5);
+        yTarget = pointer.y * (viewport.height / 3.5);
+      }
 
       targetPosition.current.set(xTarget, yTarget, 0);
       group.current.position.lerp(
         targetPosition.current,
         GHOST_CONFIG.followSpeed
       );
+
+      // Detecção de movimento para efeito dos olhos
+      const currentDist = group.current.position.distanceTo(
+        prevPosition.current
+      );
+      prevPosition.current.copy(group.current.position);
+      const isMoving = currentDist > (isMobile ? 0.0 : 0.005);
+      const targetEyeOpacity = isMoving ? 1 : 0.3;
+
+      if (leftEyeMat.current && rightEyeMat.current) {
+        leftEyeMat.current.opacity +=
+          (targetEyeOpacity - leftEyeMat.current.opacity) * 0.1;
+        rightEyeMat.current.opacity = leftEyeMat.current.opacity;
+      }
 
       // Pulsação do corpo
       if (bodyMaterial.current) {
@@ -99,33 +127,26 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
       bodyMesh.current.rotation.y = Math.sin(t * 0.5) * 0.1;
     });
 
-    // Resolve color names to actual hex values
-    const resolvedBodyColor = resolveFluorescentColor(GHOST_CONFIG.bodyColor);
-    const resolvedGlowColor = resolveFluorescentColor(GHOST_CONFIG.glowColor);
-    const resolvedEyeGlowColor = resolveFluorescentColor(
-      GHOST_CONFIG.eyeGlowColor
-    );
-
     return (
       <group ref={group} scale={GHOST_CONFIG.ghostScale} {...props}>
         {/* Iluminação direcional que acompanha o Ghost */}
         <directionalLight
           position={[-8, 6, -4]}
           intensity={GHOST_CONFIG.rimLightIntensity}
-          color={resolvedGlowColor}
+          color={colors.glow}
         />
         <directionalLight
           position={[8, -4, -6]}
           intensity={GHOST_CONFIG.rimLightIntensity}
-          color={resolvedEyeGlowColor}
+          color={colors.eye}
         />
 
         {/* Corpo do Ghost */}
         <mesh ref={bodyMesh} geometry={ghostGeometry}>
           <meshStandardMaterial
             ref={bodyMaterial}
-            color={resolvedBodyColor}
-            emissive={resolvedGlowColor}
+            color={colors.body}
+            emissive={colors.glow}
             emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
             transparent
             opacity={GHOST_CONFIG.ghostOpacity}
@@ -134,9 +155,50 @@ const Ghost = forwardRef<Group, React.JSX.IntrinsicElements['group']>(
             side={THREE.DoubleSide}
             toneMapped={false}
           />
-        </mesh>
 
-        <GhostEyes color={resolvedEyeGlowColor} position={[0, 0.6, 1.8]} />
+          {/* Olhos do Ghost */}
+          <group position={[0, 0, 0]}>
+            {/* Olho esquerdo */}
+            <group position={[-0.7, 0.6, 1.8]} rotation={[0, -0.2, 0]}>
+              {/* Socket (fundo preto) */}
+              <mesh position={[0, 0, -0.1]}>
+                <sphereGeometry args={[0.45, 16, 16]} />
+                <meshBasicMaterial color="black" />
+              </mesh>
+              {/* Brilho do olho */}
+              <mesh position={[0, 0, 0.1]}>
+                <sphereGeometry args={[0.2, 16, 16]} />
+                <meshBasicMaterial
+                  ref={leftEyeMat}
+                  color={colors.eye}
+                  transparent
+                  opacity={0.3}
+                  toneMapped={false}
+                />
+              </mesh>
+            </group>
+
+            {/* Olho direito */}
+            <group position={[0.7, 0.6, 1.8]} rotation={[0, 0.2, 0]}>
+              {/* Socket (fundo preto) */}
+              <mesh position={[0, 0, -0.1]}>
+                <sphereGeometry args={[0.45, 16, 16]} />
+                <meshBasicMaterial color="black" />
+              </mesh>
+              {/* Brilho do olho */}
+              <mesh position={[0, 0, 0.1]}>
+                <sphereGeometry args={[0.2, 16, 16]} />
+                <meshBasicMaterial
+                  ref={rightEyeMat}
+                  color={colors.eye}
+                  transparent
+                  opacity={0.3}
+                  toneMapped={false}
+                />
+              </mesh>
+            </group>
+          </group>
+        </mesh>
       </group>
     );
   }

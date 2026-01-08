@@ -1,63 +1,36 @@
 'use client';
 
-import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
 import * as THREE from 'three';
-import { GHOST_CONFIG, resolveFluorescentColor } from '@/config/ghostConfig';
+import { GHOST_CONFIG, FLUORESCENT_COLORS } from '@/config/ghostConfig';
 
 export default function AtmosphereVeil() {
-  const veilRef = useRef<THREE.Mesh>(null);
-  const veilColor = resolveFluorescentColor(GHOST_CONFIG.veilColor);
-  const veilEmissive = resolveFluorescentColor(GHOST_CONFIG.veilEmissive);
-  const veilBackground = resolveFluorescentColor(
-    GHOST_CONFIG.veilBackgroundColor
-  );
-
-  useFrame((state) => {
-    if (!veilRef.current) return;
-    const pulse = (Math.sin(state.clock.getElapsedTime() * 0.3) + 1) / 2;
-    const material = veilRef.current.material as THREE.Material & {
-      opacity?: number;
-    };
-    if (material.opacity !== undefined) {
-      material.opacity = Math.min(
-        1,
-        GHOST_CONFIG.veilOpacity + pulse * GHOST_CONFIG.veilPulseAmount
-      );
-    }
-  });
+  const cfg = GHOST_CONFIG;
+  const glowCol = (FLUORESCENT_COLORS as any)[cfg.glowColor] || cfg.glowColor;
+  const bgCol = (FLUORESCENT_COLORS as any)[cfg.fogColor] || cfg.fogColor;
 
   return (
     <group>
-      {/* Glow volumétrico atrás do fantasma */}
-      <mesh
-        ref={veilRef}
-        position={[1, 1, -3]}
-        scale={[1.2, 1.1, 1.1]}
-        renderOrder={2}
-      >
-        <sphereGeometry args={[5.5, 64, 64]} />
-        <meshStandardMaterial
-          color={veilColor}
-          emissive={veilEmissive}
-          emissiveIntensity={GHOST_CONFIG.veilEmissiveIntensity}
+      {/* Glow Volumétrico atrás do fantasma */}
+      <mesh position={[1, 1, -3]} scale={[1, 1, 1]}>
+        <sphereGeometry args={[5.5, 32, 32]} />
+        <meshBasicMaterial
+          color={glowCol}
           transparent
-          opacity={GHOST_CONFIG.veilOpacity}
+          opacity={0.3}
+          blending={THREE.AdditiveBlending}
           depthWrite={false}
           side={THREE.BackSide}
-          toneMapped={false}
         />
       </mesh>
 
       {/* Véu de fundo para integrar com o CSS */}
-      <mesh position={[0, -2.5, -4]} rotation={[-0.1, 0, 0]} renderOrder={1}>
-        <planeGeometry args={[18, 12]} />
-        <meshStandardMaterial
-          color={veilBackground}
+      <mesh position={[0, -2, -4]}>
+        <planeGeometry args={[15, 10]} />
+        <meshBasicMaterial
+          color={bgCol}
           transparent
-          opacity={GHOST_CONFIG.veilBackgroundOpacity}
+          opacity={0.8}
           depthWrite={false}
-          toneMapped={false}
         />
       </mesh>
     </group>

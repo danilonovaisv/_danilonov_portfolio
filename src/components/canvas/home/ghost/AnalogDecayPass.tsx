@@ -3,7 +3,6 @@
 import React, { forwardRef, useMemo } from 'react';
 import { Effect } from 'postprocessing';
 import { Uniform, WebGLRenderer, WebGLRenderTarget } from 'three';
-import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 const fragmentShader = `
 uniform float uTime;
@@ -79,31 +78,21 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
     }
 
     // Ajuste de Intensidade Global
-color = mix(inputColor.rgb, color, uAnalogIntensity);
-outputColor = vec4(color, inputColor.a);
+    color = mix(inputColor.rgb, color, uAnalogIntensity);
+    outputColor = vec4(color, inputColor.a);
 }
 `;
 
-interface AnalogDecayProps {
-  grain?: number;
-  bleeding?: number;
-  scanlines?: number;
-  vignette?: number;
-  intensity?: number;
-  jitter?: number;
-  vsync?: number;
-}
-
 class AnalogDecayEffectImpl extends Effect {
   constructor({
-    grain = GHOST_CONFIG.analogGrain,
-    bleeding = GHOST_CONFIG.analogBleeding,
-    scanlines = GHOST_CONFIG.analogScanlines,
-    vignette = GHOST_CONFIG.analogVignette,
-    intensity = GHOST_CONFIG.analogIntensity,
-    jitter = GHOST_CONFIG.analogJitter,
-    vsync = GHOST_CONFIG.analogVSync,
-  }: AnalogDecayProps = {}) {
+    grain = 0.9,
+    bleeding = 0.5,
+    scanlines = 1.5,
+    vignette = 3.2,
+    intensity = 3.0,
+    jitter = 0.5,
+    vsync = 0.0,
+  }) {
     super('AnalogDecayEffect', fragmentShader, {
       uniforms: new Map([
         ['uTime', new Uniform(0)],
@@ -128,16 +117,26 @@ class AnalogDecayEffectImpl extends Effect {
   }
 }
 
+interface AnalogDecayProps {
+  grain?: number;
+  bleeding?: number;
+  scanlines?: number;
+  vignette?: number;
+  intensity?: number;
+  jitter?: number;
+  vsync?: number;
+}
+
 export const AnalogDecay = forwardRef<AnalogDecayEffectImpl, AnalogDecayProps>(
   (
     {
-      grain = GHOST_CONFIG.analogGrain,
-      bleeding = GHOST_CONFIG.analogBleeding,
-      scanlines = GHOST_CONFIG.analogScanlines,
-      vignette = GHOST_CONFIG.analogVignette,
-      intensity = GHOST_CONFIG.analogIntensity,
-      jitter = GHOST_CONFIG.analogJitter,
-      vsync = GHOST_CONFIG.analogVSync,
+      grain = 1.5,
+      bleeding = 0.5,
+      scanlines = 0.5,
+      vignette = 3.2,
+      intensity = 1.0,
+      jitter = 0.0,
+      vsync = 0.0,
     },
     ref
   ) => {
