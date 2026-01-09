@@ -26,12 +26,12 @@ export const GHOST_CONFIG = {
   ghostScale: 1.5, // AUMENTADO: Ghost maior e mais visível
 
   // Glow effects - Intensificado para efeito lanterna
-  emissiveIntensity: 8.0, // AUMENTADO para maior visibilidade
+  emissiveIntensity: 9.0, // AUMENTADO para maior visibilidade
   pulseSpeed: 1.4,
   pulseIntensity: 2.0,
 
   // Eyes - Valores ajustados
-  eyeGlowIntensity: 2.0,
+  eyeGlowIntensity: 5.0,
   eyeGlowDecay: 2.0,
   eyeGlowResponse: 1.2,
 

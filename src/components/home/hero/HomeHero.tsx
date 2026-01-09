@@ -60,12 +60,12 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* WebGL Atmosphere */}
+        {/* WebGL Atmosphere - z-20 (Above text, creating depth/veil) */}
         <div className="absolute inset-0 z-20 pointer-events-none">
           <GhostScene />
         </div>
 
-        {/* Hero Copy (Editorial) */}
+        {/* Hero Copy (Editorial) - z-10 (Behind Ghost/Atmosphere) */}
         <motion.div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{ opacity: copyOpacity }}
@@ -73,7 +73,7 @@ export default function HomeHero() {
           <HeroCopy />
         </motion.div>
 
-        {/* Manifesto Thumb (Desktop Transition) */}
+        {/* Manifesto Thumb - z-30 (Top Interactive Layer) */}
         <ManifestoThumb heroRef={sectionRef} />
       </div>
 

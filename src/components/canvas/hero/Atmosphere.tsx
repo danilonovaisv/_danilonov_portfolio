@@ -7,7 +7,7 @@ const atmosphereShader = {
     ghostPosition: { value: new THREE.Vector3() },
     revealRadius: { value: 20 },
     fadeStrength: { value: 1.7 },
-    baseOpacity: { value: 0.9 },
+    baseOpacity: { value: 0.3 },
     revealOpacity: { value: 0.05 },
     time: { value: 0 },
   },

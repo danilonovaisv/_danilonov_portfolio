@@ -69,9 +69,11 @@ export default function ManifestoThumb({
   }, []);
 
   // Scroll progress (desktop only)
+  // Scroll progress (desktop only)
+  // Use 'end end' to allow full scroll range for the animation
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ['start start', 'end start'],
+    offset: ['start start', 'end end'],
   });
 
   // Smooth spring
@@ -81,20 +83,22 @@ export default function ManifestoThumb({
     restDelta: 0.001,
   });
 
-  // Transformações
-  const width = useTransform(smoothProgress, [0, 1], ['219px', '100%']);
-  const height = useTransform(smoothProgress, [0, 1], ['131px', '100%']);
-  const right = useTransform(smoothProgress, [0, 1], ['32px', '0px']);
-  const bottom = useTransform(smoothProgress, [0, 1], ['32px', '0px']);
-  const borderRadius = useTransform(smoothProgress, [0, 1], ['5px', '0px']);
-  const overlayOpacity = useTransform(smoothProgress, [0.74, 0.75], [0, 1]);
+  // Loandbehold replication:
+  // Starts Small. Expands mid-scroll.
+  const width = useTransform(smoothProgress, [0, 0.6], ['219px', '100%']);
+  const height = useTransform(smoothProgress, [0, 0.6], ['131px', '100%']);
+  const right = useTransform(smoothProgress, [0, 0.6], ['32px', '0px']);
+  const bottom = useTransform(smoothProgress, [0, 0.6], ['32px', '0px']);
+  const borderRadius = useTransform(smoothProgress, [0, 0.6], ['12px', '0px']);
+  const overlayOpacity = useTransform(smoothProgress, [0.5, 0.6], [1, 0]);
 
   // Controlar mute por threshold (desktop)
   useEffect(() => {
     if (!isDesktop) return;
 
     const unsubscribe = smoothProgress.on('change', (latest) => {
-      if (latest >= 0.75) {
+      // Unmute earlier (0.5) to prepare for full reveal
+      if (latest >= 0.5) {
         setMuted(false);
       } else {
         setMuted(true);
@@ -115,14 +119,14 @@ export default function ManifestoThumb({
     if (!heroRef.current) return;
 
     if (isDesktop) {
-      // Desktop: scroll para revelar
+      // Automatic scroll to reveal point (0.6 of height)
       const rect = heroRef.current.getBoundingClientRect();
-      const scrollTarget =
-        window.scrollY +
-        rect.top +
-        heroRef.current.offsetHeight -
-        window.innerHeight +
-        1;
+      const scrollHeight = heroRef.current.offsetHeight;
+
+      // Calculate position where progress is ~0.6
+      // Progress = (WindowScroll - UnstickStart) / (UnstickEnd - UnstickStart)
+      // Simpler: Just scroll down a screenful
+      const scrollTarget = window.scrollY + window.innerHeight * 0.8;
 
       window.scrollTo({
         top: scrollTarget,
@@ -140,10 +144,15 @@ export default function ManifestoThumb({
 
   const posterSrc = src.replace('.mp4', '-poster.jpg');
 
+  // Prevent duplicate video on mobile (Mobile has its own video in ManifestoSection)
+  if (!isDesktop) return null;
+
   return (
     <motion.div
       ref={wrapperRef}
-      className="video-wrapper group cursor-pointer overflow-hidden relative w-full aspect-9/14 z-10 md:absolute md:z-30 md:aspect-auto md:w-[219px] md:h-[131px] md:right-8 md:bottom-8"
+      // Force initial styles via CSS as baseline, Motion overrides on hydration
+      // Using fixed positioning for stability during scroll
+      className="video-wrapper group cursor-pointer overflow-hidden fixed z-50 right-8 bottom-8 w-[219px] h-[131px]"
       style={
         isDesktop
           ? {
@@ -266,7 +275,7 @@ export default function ManifestoThumb({
                 setMuted((m) => !m);
               }}
               aria-label={muted ? 'Ativar som' : 'Desativar som'}
-              aria-pressed={!muted ? 'true' : 'false'}
+              aria-pressed={!muted}
             >
               {muted ? '🔇' : '🔊'}
             </button>
