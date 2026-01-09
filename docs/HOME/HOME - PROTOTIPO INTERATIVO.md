@@ -324,10 +324,10 @@ Exemplo em JSX/Tailwind:
 
 ## 2.6 Global Assets
 Logos:
-- Favicon: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
-- Favicon Light: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
-- Logo Light (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
-- Logo Dark (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
+- Favicon  - Usar no browser: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
+- Favicon Light - Usar no browser: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
+- Logo Light (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
+- Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 
 ## 2.7 Fonts:
  -  font-family: 'TT Norms Pro';
@@ -642,7 +642,7 @@ transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
 ---
 
 
-## 📱📐 Comportamento Responsivo
+## 📱📐 Comportamento Responsivo - TEXTO
 
 **Viewport:**
 

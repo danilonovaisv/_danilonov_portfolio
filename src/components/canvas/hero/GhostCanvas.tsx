@@ -7,90 +7,129 @@ import {
   Noise,
   Vignette,
 } from '@react-three/postprocessing';
-import { Suspense } from 'react';
+import { Suspense, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import type { RefObject } from 'react';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
 import type { Group } from 'three';
 
-import Ghost from '../../Ghost';
+import Ghost from './Ghost';
 import { AnalogDecay } from './AnalogDecayPass';
 import GhostEyes from './GhostEyes';
 import Particles from './Particles';
+import AtmosphereVeil from './AtmosphereVeil';
+import Fireflies from './Fireflies';
+import { Vector3 } from 'three';
 
 type GhostCanvasProps = {
-  ghostRef?: RefObject<Group>;
+  ghostRef?: RefObject<Group | null>;
 };
 
-export default function GhostCanvas({ ghostRef }: GhostCanvasProps) {
+export default function GhostCanvas({
+  ghostRef: externalRef,
+}: GhostCanvasProps) {
   const cfg = GHOST_CONFIG;
+  const internalRef = useRef<Group>(null);
+  const ghostRef = externalRef || internalRef;
 
   return (
     <div className="absolute inset-0 z-0 h-full w-full">
       <Canvas
-        eventSource={document.body}
+        eventSource={
+          typeof document !== 'undefined' ? document.body : undefined
+        }
         eventPrefix="client"
-        dpr={[1, 1.2]}
+        dpr={[1, 1.5]}
         gl={{
-          antialias: false,
+          antialias: true,
           alpha: true,
           powerPreference: 'high-performance',
         }}
-        // CAMERA AJUSTADA: Z=7 afasta, FOV=45 dá estilo de cinema sem exagerar no zoom
-        camera={{ position: [0, 0, 7], fov: 35 }}
+        // CAMERA: Posição e FOV ajustados para Ghost visível e proeminente
+        camera={{ position: [0, 0, 12], fov: 50 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.2} />
+          <ambientLight intensity={0.15} color="#0a1030" />
 
-          {/* Primary Ghost Light - Glow intenso */}
+          {/* Primary Ghost Light - Glow azul intenso central */}
           <pointLight
-            position={[2, 3, 4]}
-            intensity={2}
-            color={cfg.glowColor}
-            distance={0.9}
+            position={[0, 0, 5]}
+            intensity={15}
+            color="#0080ff"
+            distance={20}
+            decay={2}
           />
 
-          {/* Extra Glow Light - Cyan atmosférico (inspirado no CodePen) */}
+          {/* Secondary Glow - Cyan atmosférico */}
           <pointLight
-            position={[0, 0, 3]}
-            intensity={8}
-            color="#00f0ff"
+            position={[0, 1, 8]}
+            intensity={10}
+            color="#00d4ff"
+            distance={25}
+            decay={2}
+          />
+
+          {/* Rim Light - Contorno cyan lateral */}
+          <pointLight
+            position={[-5, 0, 3]}
+            intensity={6}
+            color="#4fe6ff"
+            distance={15}
+            decay={2}
+          />
+
+          {/* Fill Light - Preenchimento sutil */}
+          <pointLight
+            position={[4, -2, 4]}
+            intensity={4}
+            color="#0048ff"
             distance={12}
             decay={2}
           />
 
-          {/* Rim Light - Contorno cyan sutil */}
-          <pointLight
-            position={[-3, -2, 2]}
-            intensity={4}
-            color="#4fe6ff"
-            distance={8}
-            decay={2}
-          />
+          <AtmosphereSync ghostRef={ghostRef} />
 
-          {/* RevealingText removed in favor of HTML HeroCopy */}
-
-          <group position={[0, -0.2, 0]}>
+          {/* Ghost centralizado */}
+          <group position={[0, 0, 0]}>
             <Ghost ref={ghostRef}>
               <GhostEyes color={cfg.eyeGlowColor} />
             </Ghost>
           </group>
 
-          <Particles count={90} color={cfg.glowColor} />
+          <Particles count={80} color={cfg.particleColor} />
+
+          <Fireflies />
 
           <EffectComposer enableNormalPass={false}>
-            {/* Bloom mais intenso para glow fantasmagórico */}
+            {/* Bloom intensificado para glow fantasmagórico forte */}
             <Bloom
-              luminanceThreshold={0.15}
+              luminanceThreshold={0.1}
               mipmapBlur
-              intensity={3.5}
-              radius={0.7}
+              intensity={4.5}
+              radius={0.85}
             />
-            <AnalogDecay intensity={0.7} scanlines={0.08} grain={0.25} />
-            <Noise opacity={0.015} />
-            <Vignette eskil={false} offset={0.6} darkness={0.7} />
+            <AnalogDecay intensity={0.5} scanlines={0.05} grain={0.15} />
+            <Noise opacity={0.01} />
+            <Vignette eskil={false} offset={0.5} darkness={0.6} />
           </EffectComposer>
         </Suspense>
       </Canvas>
     </div>
   );
+}
+
+/**
+ * Componente auxiliar para sincronizar a posição do Ghost com o AtmosphereVeil
+ * sem causar re-renders no GhostCanvas principal.
+ */
+function AtmosphereSync({ ghostRef }: { ghostRef: RefObject<Group | null> }) {
+  const ghostPos = useRef(new Vector3(0, 0, 0));
+
+  useFrame(() => {
+    if (ghostRef.current) {
+      ghostPos.current.copy(ghostRef.current.position);
+    }
+  });
+
+  return <AtmosphereVeil ghostPosition={ghostPos.current} />;
 }

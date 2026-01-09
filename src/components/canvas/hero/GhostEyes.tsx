@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { MathUtils, type Mesh } from 'three';
 
-export default function GhostEyes({ color = '#ffffff' }: { color?: string }) {
+export default function GhostEyes({ color = '#020319' }: { color?: string }) {
   const leftEye = useRef<Mesh>(null);
   const rightEye = useRef<Mesh>(null);
   const { mouse } = useThree();
@@ -67,15 +67,18 @@ export default function GhostEyes({ color = '#ffffff' }: { color?: string }) {
     );
   });
 
-  // Material básico para reagir fortemente ao Bloom
+  // Material básico para olhos escuros visíveis
+  // Referência HERO.png: olhos escuros/roxos claramente visíveis
   return (
-    <group position={[0, 0, 0.8]}>
-      <mesh ref={leftEye} position={[-0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
+    <group position={[0, 0.3, 1.8]}>
+      {/* Olho Esquerdo */}
+      <mesh ref={leftEye} position={[-0.5, 0.2, 0]}>
+        <sphereGeometry args={[0.25, 24, 24]} />
         <meshBasicMaterial color={color} />
       </mesh>
-      <mesh ref={rightEye} position={[0.3, 0.1, 0]}>
-        <sphereGeometry args={[0.06, 16, 16]} />
+      {/* Olho Direito */}
+      <mesh ref={rightEye} position={[0.5, 0.2, 0]}>
+        <sphereGeometry args={[0.25, 24, 24]} />
         <meshBasicMaterial color={color} />
       </mesh>
     </group>

@@ -42,8 +42,10 @@ export default function ManifestoThumb() {
       initial={{ opacity: 0, translateY: 18, scale: 0.96 }}
       animate={{ opacity: 1, translateY: 0, scale: 1 }}
       transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-      className="fixed bottom-[5vh] right-[5vw] z-40 w-[min(280px,calc(35vw))] max-w-[320px] shadow-[0_25px_55px_rgba(3,7,17,0.45)] rounded-[18px] overflow-hidden bg-black/80 pointer-events-auto hover:scale-[1.02] transition-transform duration-300 ease-out"
-      aria-label="Preview em vídeo"
+      className="hidden lg:block fixed bottom-[5vh] right-[5vw] z-30 w-[min(280px,calc(30vw))] max-w-[300px] shadow-[0_25px_55px_rgba(3,7,17,0.55)] rounded-[12px] overflow-hidden bg-black/70 pointer-events-auto hover:scale-[1.03] transition-transform duration-300 ease-out group cursor-pointer"
+      aria-label="Preview em vídeo - clique para expandir"
+      role="button"
+      tabIndex={0}
     >
       <div className="relative w-full h-full">
         <video

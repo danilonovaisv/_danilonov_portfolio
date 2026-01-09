@@ -53,7 +53,7 @@ export default function CategoryStripe({
         ease: [0.22, 1, 0.36, 1],
         delay,
       }}
-      className="w-full border-b border-[#8705f2]/40"
+      className="w-full border-b border-purpleDetails/40"
     >
       <Link
         href={`/portfolio?category=${category.id}`}

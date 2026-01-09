@@ -56,8 +56,8 @@ describe('ManifestoThumb Component', () => {
   it('deve renderizar a seção do manifesto corretamente', () => {
     const { container } = render(<ManifestoThumb />);
 
-    // Verifica se o container motion.div existe (sem aria-label conforme spec "zero UI")
-    const motionDiv = container.querySelector('.fixed.z-40');
+    // Verifica se o container motion.div existe (desktop-only: hidden lg:block z-30)
+    const motionDiv = container.querySelector('.hidden.lg\\:block.fixed.z-30');
     expect(motionDiv).toBeInTheDocument();
 
     // Verifica se o vídeo está presente

@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Preloader } from '@/components/ui/Preloader';
-import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 import { GhostStage } from './GhostStage';
 import HeroCopy from './HeroCopy';
@@ -59,7 +58,7 @@ export default function HomeHero() {
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Background Gradient */}
         <div
-          className="absolute inset-0 z-0 bg-[linear-gradient(180deg,#040013_0%,#0b0d3a_100%)]"
+          className="absolute inset-0 z-0 bg-linear-to-b from-ghost-bg to-neutral"
           aria-hidden
         />
 
