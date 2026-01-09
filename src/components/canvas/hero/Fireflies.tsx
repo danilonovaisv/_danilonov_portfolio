@@ -9,18 +9,18 @@ interface FirefliesProps {
   count?: number;
 }
 
-export default function Fireflies({ count = 40 }: FirefliesProps) {
+export default function Fireflies({ count = 2000 }: FirefliesProps) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const particles = useMemo(() => {
     return Array.from({ length: count }, () => ({
-      t: Math.random() * 1000,
-      factor: 20 + Math.random() * 100,
-      speed: (0.2 + Math.random() * 0.5) * GHOST_CONFIG.fireflySpeed,
-      xFactor: -4 + Math.random() * 8,
-      yFactor: -2 + Math.random() * 4,
-      zFactor: -4 + Math.random() * 8,
+      t: Math.random() * 2000,
+      factor: 10 + Math.random() * 100,
+      speed: (0.02 + Math.random() * 0.5) * GHOST_CONFIG.fireflySpeed,
+      xFactor: -5 + Math.random() * 8,
+      yFactor: -5 + Math.random() * 8,
+      zFactor: -4 + Math.random() * 0.8,
       scaleBase: 0.03 + Math.random() * 0.04,
     }));
   }, [count]);
@@ -59,14 +59,14 @@ export default function Fireflies({ count = 40 }: FirefliesProps) {
 
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 8, 8]} />
+      <sphereGeometry args={[1, 3, 9]} />
       <meshBasicMaterial
-        color="cyan" // Ciano Neon
+        color="purple" // Ciano Neon
         transparent
         opacity={0.8}
         blending={THREE.AdditiveBlending}
-        depthWrite={false}
-        toneMapped={false}
+        depthWrite={true}
+        toneMapped={true}
       />
     </instancedMesh>
   );

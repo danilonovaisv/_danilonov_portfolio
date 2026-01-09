@@ -43,11 +43,8 @@ export default function HomeHero() {
     >
       {/* Sticky Context */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background Gradient */}
-        <div
-          className="absolute inset-0 z-0 bg-linear-to-b from-ghost-bg to-neutral"
-          aria-hidden
-        />
+        {/* Background - Dark Void (Fixed) */}
+        <div className="absolute inset-0 z-0 bg-[#040013]" aria-hidden />
 
         {/* Preloader Ghost */}
         <AnimatePresence>
@@ -60,18 +57,18 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* WebGL Atmosphere - z-20 (Above text, creating depth/veil) */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <GhostScene />
-        </div>
-
-        {/* Hero Copy (Editorial) - z-25 (Above Ghost for readability, per Blueprint) */}
+        {/* Hero Copy (Editorial) - z-20 (Behind Ghost for reveal effect) */}
         <motion.div
-          className="absolute inset-0 z-25 pointer-events-none"
+          className="absolute inset-0 z-20 pointer-events-none"
           style={{ opacity: copyOpacity }}
         >
           <HeroCopy />
         </motion.div>
+
+        {/* WebGL Atmosphere/Ghost - z-25 (Above text to act as flashlight/reveal) */}
+        <div className="absolute inset-0 z-25 pointer-events-none mix-blend-screen">
+          <GhostScene />
+        </div>
 
         {/* Manifesto Thumb - z-30 (Top Interactive Layer) */}
         <ManifestoThumb heroRef={sectionRef} />

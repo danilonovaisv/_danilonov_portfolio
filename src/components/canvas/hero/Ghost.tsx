@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { usePerformanceAdaptive } from '@/hooks/usePerformanceAdaptive';
@@ -9,6 +9,7 @@ import { GHOST_CONFIG } from '@/config/ghostConfig';
 export function Ghost() {
   const groupRef = useRef<THREE.Group>(null!);
   const bodyRef = useRef<THREE.Mesh>(null!);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null!);
   const { viewport, mouse } = useThree();
   const { quality } = usePerformanceAdaptive();
 
@@ -16,36 +17,28 @@ export function Ghost() {
     return quality === 'low' ? 32 : quality === 'medium' ? 64 : 128;
   }, [quality]);
 
-  // Criar geometria deformada (saia ondulada)
-  useEffect(() => {
-    if (!bodyRef.current) return;
-
-    // Garantir que a geometria é acessível
-    const geo = bodyRef.current.geometry as THREE.SphereGeometry;
-    if (!geo) return;
-
-    const pos = geo.attributes.position;
-    const array = pos.array as Float32Array;
-
-    // Deformar vértices inferiores
-    for (let i = 0; i < array.length; i += 3) {
-      const y = array[i + 1];
-
-      if (y < -0.2) {
-        const x = array[i];
-        const z = array[i + 2];
-
-        const noise1 = Math.sin(x * 5) * 0.35;
-        const noise2 = Math.cos(z * 4) * 0.25;
-        const noise3 = Math.sin((x + z) * 3) * 0.15;
-
-        array[i + 1] = -2.0 + noise1 + noise2 + noise3;
+  // Shader customization via onBeforeCompile
+  const onBeforeCompile = useMemo(
+    () => (shader: any) => {
+      shader.vertexShader = shader.vertexShader.replace(
+        '#include <begin_vertex>',
+        `
+      #include <begin_vertex>
+      
+      // Ghost Skirt Deformation
+      if (position.y < -0.2) {
+        float noise1 = sin(position.x * 5.0) * 0.35;
+        float noise2 = cos(position.z * 4.0) * 0.25;
+        float noise3 = sin((position.x + position.z) * 3.0) * 0.15;
+        float combinedNoise = noise1 + noise2 + noise3;
+        
+        transformed.y = -2.0 + combinedNoise;
       }
-    }
-
-    pos.needsUpdate = true;
-    geo.computeVertexNormals();
-  }, []);
+      `
+      );
+    },
+    []
+  );
 
   // Animação de seguir mouse + flutuação
   useFrame(({ clock }) => {
@@ -70,13 +63,34 @@ export function Ghost() {
     groupRef.current.position.y +=
       (targetY - groupRef.current.position.y) * GHOST_CONFIG.followSpeed;
 
+    // --- Physics: Organic Tilt (Agente 6) ---
+    if (bodyRef.current) {
+      const mouseX = (mouse.x ?? 0) * viewport.width * 0.4;
+      const mouseY = (mouse.y ?? 0) * viewport.height * 0.35;
+
+      const dx = mouseX - groupRef.current.position.x;
+      const dy = mouseY - groupRef.current.position.y;
+
+      // Calculate tilt based on "drag" (velocity)
+      const tiltStrength = 0.05; // Ajuste fino
+      const targetRotationZ = -dx * tiltStrength;
+      const targetRotationX = dy * tiltStrength;
+
+      // Lerp rotation for smoothness
+      bodyRef.current.rotation.z +=
+        (targetRotationZ - bodyRef.current.rotation.z) * 0.1;
+      bodyRef.current.rotation.x +=
+        (targetRotationX - bodyRef.current.rotation.x) * 0.1;
+    }
+    // ----------------------------------------
+
     // Pulsar emissive
     const pulse =
       Math.sin(t * GHOST_CONFIG.pulseSpeed) * GHOST_CONFIG.pulseIntensity +
       Math.sin(t * 0.6) * 0.12;
 
-    if (bodyRef.current.material instanceof THREE.MeshStandardMaterial) {
-      bodyRef.current.material.emissiveIntensity =
+    if (materialRef.current) {
+      materialRef.current.emissiveIntensity =
         GHOST_CONFIG.emissiveIntensity + pulse;
     }
   });
@@ -87,34 +101,65 @@ export function Ghost() {
       <mesh ref={bodyRef}>
         <sphereGeometry args={[2, segments, segments]} />
         <meshStandardMaterial
+          ref={materialRef}
           color={GHOST_CONFIG.bodyColor}
-          roughness={0.02}
+          roughness={0.02} // Adjusted to match reference (0.02)
           metalness={0}
           transparent
           opacity={GHOST_CONFIG.ghostOpacity}
           emissive={GHOST_CONFIG.glowColor}
           emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
+          onBeforeCompile={onBeforeCompile}
         />
       </mesh>
 
-      {/* Olhos (opcionais - podem ter animação de blink) */}
+      {/* Olhos (Core + Glow) */}
       <group>
-        <mesh position={[-0.7, 0.6, 2.0]}>
-          <sphereGeometry args={[0.3, 12, 12]} />
-          <meshBasicMaterial
-            color={GHOST_CONFIG.eyeGlowColor}
-            transparent
-            opacity={0.77}
-          />
-        </mesh>
-        <mesh position={[0.7, 0.6, 2.0]}>
-          <sphereGeometry args={[0.3, 12, 12]} />
-          <meshBasicMaterial
-            color={GHOST_CONFIG.eyeGlowColor}
-            transparent
-            opacity={0.77}
-          />
-        </mesh>
+        {/* Olho Esquerdo */}
+        <group position={[-0.7, 0.6, 2.0]}>
+          <mesh>
+            <sphereGeometry args={[0.3, 12, 12]} />
+            <meshBasicMaterial
+              color={GHOST_CONFIG.eyeGlowColor}
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+          {/* Glow Esquerdo */}
+          <mesh>
+            <sphereGeometry args={[0.525, 12, 12]} />
+            <meshBasicMaterial
+              color={GHOST_CONFIG.eyeGlowColor}
+              transparent
+              opacity={0.3}
+              side={THREE.BackSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </group>
+
+        {/* Olho Direito */}
+        <group position={[0.7, 0.6, 2.0]}>
+          <mesh>
+            <sphereGeometry args={[0.3, 12, 12]} />
+            <meshBasicMaterial
+              color={GHOST_CONFIG.eyeGlowColor}
+              transparent
+              opacity={0.9}
+            />
+          </mesh>
+          {/* Glow Direito */}
+          <mesh>
+            <sphereGeometry args={[0.525, 12, 12]} />
+            <meshBasicMaterial
+              color={GHOST_CONFIG.eyeGlowColor}
+              transparent
+              opacity={0.3}
+              side={THREE.BackSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </group>
       </group>
     </group>
   );

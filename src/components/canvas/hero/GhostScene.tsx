@@ -7,6 +7,16 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import Ghost from './Ghost';
 import Fireflies from './Fireflies';
 import { Atmosphere } from './Atmosphere';
+import {
+  EffectComposer,
+  Bloom,
+  Noise,
+  Vignette,
+  ChromaticAberration,
+  Scanline,
+} from '@react-three/postprocessing';
+import { BlendFunction } from 'postprocessing';
+import * as THREE from 'three';
 
 function GhostSVGStatic() {
   return (
@@ -58,15 +68,11 @@ export default function GhostScene() {
         <ambientLight color="blue" intensity={3.08} />
 
         {/* Rim lights direcionais */}
-        <directionalLight
-          position={[-8, 6, -4]}
-          color="blue"
-          intensity={5.8}
-        />
+        <directionalLight position={[-8, 6, -4]} color="blue" intensity={5.8} />
         <directionalLight
           position={[8, -4, -6]}
           color="cyan"
-          intensity={1.26}
+          intensity={2.26}
         />
 
         <Suspense fallback={null}>
@@ -78,6 +84,27 @@ export default function GhostScene() {
 
           {/* Vagalumes (quantidade adaptativa) */}
           <Fireflies count={fireflyCount} />
+
+          {/* Post-Processing Pipeline (Agent 5) */}
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0}
+              mipmapBlur
+              intensity={1.25}
+              radius={0.4}
+            />
+            <ChromaticAberration
+              offset={new THREE.Vector2(0.002, 0.002)}
+              radialModulation={true}
+              modulationOffset={0}
+            />
+            <Scanline
+              density={1.25}
+              opacity={0.05} // Subtle scanlines (Ghost Monitor)
+            />
+            <Noise opacity={0.15} blendFunction={BlendFunction.OVERLAY} />
+            <Vignette eskil={false} offset={0.1} darkness={0.9} />
+          </EffectComposer>
         </Suspense>
       </Canvas>
 

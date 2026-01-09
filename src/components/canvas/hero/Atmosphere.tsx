@@ -36,15 +36,22 @@ const atmosphereShader = {
     
     void main() {
       float dist = distance(vWorldPosition.xy, ghostPosition.xy);
-      float dynamicRadius = revealRadius + sin(time * 2.0) * 5.0;
       
-      float reveal = smoothstep(dynamicRadius * 0.2, dynamicRadius, dist);
-      reveal = pow(reveal, fadeStrength);
+      // Dynamic pulsing radius
+      float dynamicRadius = revealRadius + sin(time * 2.5) * 2.0;
       
-      float opacity = mix(revealOpacity, baseOpacity, reveal);
+      // Flashlight Logic: 1.0 at center, 0.0 at edge
+      // smoothstep(edge, center, dist) would be inverted
+      float glow = 1.0 - smoothstep(0.0, dynamicRadius, dist);
       
-      // Cor da atmosfera (Dark Ghost)
-      gl_FragColor = vec4(0.001, 0.001, 0.002, opacity);
+      // Pow for falloff curve (soft edge)
+      glow = pow(glow, fadeStrength);
+      
+      float finalOpacity = mix(0.0, baseOpacity, glow);
+      
+      // Cor da atmosfera (Electric Blue Glow)
+      // mix-blend-screen handle blending with text
+      gl_FragColor = vec4(0.0, 0.4, 1.0, finalOpacity);
     }
   `,
   transparent: true,

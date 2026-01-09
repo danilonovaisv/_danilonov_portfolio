@@ -16,33 +16,33 @@ export const FLUORESCENT_COLORS = {
 };
 
 // Configuração centralizada do Ghost
-// Valores calibrados para corresponder à referência HERO.png
+// Valores calibrados via Audit Report (Reference: code-ref.tsx)
 export const GHOST_CONFIG = {
-  // Ghost appearance - Cores hex para garantir consistência
-  bodyColor: '#00ffff', // Corpo azul mais claro para visibilidade
-  glowColor: '#0048ff', // Blue glow mais brilhante
-  eyeGlowColor: '#8a2be2', // Olhos escuros/roxo profundo
-  ghostOpacity: 0.85,
-  ghostScale: 1.1, // AUMENTADO: Ghost maior e mais visível
+  // Ghost appearance
+  bodyColor: '#0f2027', // Reference: Dark Cyan/Blue
+  glowColor: '#0080ff', // Reference: Electric Blue
+  eyeGlowColor: '#0080ff', // Reference: Blue
+  ghostOpacity: 0.88, // Reference: 0.88
+  ghostScale: 2.4, // Reference: 2.4
 
-  // Glow effects - Intensificado para efeito lanterna
-  emissiveIntensity: 2.0, // AUMENTADO para maior visibilidade
-  pulseSpeed: 1.4,
-  pulseIntensity: 1.0,
+  // Glow effects
+  emissiveIntensity: 5.5, // Aumentado (Reference sugere 8.5, ajustando p/ R3F bloom)
+  pulseSpeed: 1.6,
+  pulseIntensity: 0.6,
 
-  // Eyes - Valores ajustados
-  eyeGlowIntensity: 6.0,
-  eyeGlowDecay: 1.2,
-  eyeGlowResponse: 1.2,
+  // Eyes
+  eyeGlowIntensity: 6.5,
+  eyeGlowDecay: 0.95,
+  eyeGlowResponse: 0.31,
 
-  // Enhanced lighting - Mais intenso
-  rimLightIntensity: 6.0,
+  // Enhanced lighting
+  rimLightIntensity: 2.0,
 
-  // Behavior - Movimento suave
-  followSpeed: 0.035,
-  wobbleAmount: 1.5,
-  floatSpeed: 1.2,
-  movementThreshold: 0.8,
+  // Behavior
+  followSpeed: 0.05, // Adjusted for R3F frame loop
+  wobbleAmount: 0.25,
+  floatSpeed: 0.8,
+  movementThreshold: 0.07,
 
   // Particles - Reduzido para performance
   particleCount: 1205,
