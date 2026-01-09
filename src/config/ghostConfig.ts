@@ -19,16 +19,16 @@ export const FLUORESCENT_COLORS = {
 // Valores calibrados para corresponder à referência HERO.png
 export const GHOST_CONFIG = {
   // Ghost appearance - Cores hex para garantir consistência
-  bodyColor: '#0a1628', // Corpo escuro azulado
-  glowColor: '#0080ff', // Blue glow intenso (referência visual)
-  eyeGlowColor: '#020319', // Olhos escuros/roxo profundo
-  ghostOpacity: 0.92,
-  ghostScale: 1.3, // AUMENTADO: Ghost visível e proeminente
+  bodyColor: '#1a3050', // Corpo azul mais claro para visibilidade
+  glowColor: '#00aaff', // Blue glow mais brilhante
+  eyeGlowColor: '#101025', // Olhos escuros/roxo profundo
+  ghostOpacity: 0.95,
+  ghostScale: 1.5, // AUMENTADO: Ghost maior e mais visível
 
   // Glow effects - Intensificado para efeito lanterna
-  emissiveIntensity: 6.5,
+  emissiveIntensity: 8.0, // AUMENTADO para maior visibilidade
   pulseSpeed: 1.4,
-  pulseIntensity: 1.8,
+  pulseIntensity: 2.0,
 
   // Eyes - Valores ajustados
   eyeGlowIntensity: 2.0,

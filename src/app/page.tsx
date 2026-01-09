@@ -6,12 +6,12 @@ import { SiteClosure } from '@/components/layout/SiteClosure';
 
 export default function HomePage() {
   return (
-    <>
+    <main className="relative">
       <HomeHero />
       <ManifestoSection />
       <PortfolioShowcase />
       <FeaturedProjectsSection />
       <SiteClosure />
-    </>
+    </main>
   );
 }

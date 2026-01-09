@@ -49,42 +49,43 @@ export default function GhostCanvas({
         camera={{ position: [0, 0, 12], fov: 50 }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.15} color="#0a1030" />
+          {/* Luz ambiente mais forte para visibilidade base */}
+          <ambientLight intensity={0.4} color="#1a2040" />
 
           {/* Primary Ghost Light - Glow azul intenso central */}
           <pointLight
-            position={[0, 0, 5]}
-            intensity={15}
-            color="#0080ff"
-            distance={20}
-            decay={2}
+            position={[0, 0, 6]}
+            intensity={25}
+            color="#00aaff"
+            distance={30}
+            decay={1.5}
           />
 
           {/* Secondary Glow - Cyan atmosférico */}
           <pointLight
-            position={[0, 1, 8]}
-            intensity={10}
+            position={[0, 2, 10]}
+            intensity={20}
             color="#00d4ff"
-            distance={25}
-            decay={2}
+            distance={35}
+            decay={1.5}
           />
 
           {/* Rim Light - Contorno cyan lateral */}
           <pointLight
-            position={[-5, 0, 3]}
-            intensity={6}
+            position={[-6, 0, 4]}
+            intensity={12}
             color="#4fe6ff"
-            distance={15}
-            decay={2}
+            distance={20}
+            decay={1.5}
           />
 
           {/* Fill Light - Preenchimento sutil */}
           <pointLight
-            position={[4, -2, 4]}
-            intensity={4}
-            color="#0048ff"
-            distance={12}
-            decay={2}
+            position={[5, -2, 5]}
+            intensity={8}
+            color="#0080ff"
+            distance={18}
+            decay={1.5}
           />
 
           <AtmosphereSync ghostRef={ghostRef} />
