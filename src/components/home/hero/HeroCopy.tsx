@@ -63,7 +63,7 @@ export default function HeroCopy() {
       {/* Tag decorativa - Mono, 19px, uppercase */}
       <motion.span
         variants={itemAnimation}
-        className="font-mono text-[19px] uppercase tracking-[0.2em] text-[#d9dade] opacity-60 mb-8"
+        className="font-mono text-[19px] uppercase tracking-[0.2em] text-[#d9dade] opacity-50 mb-8"
       >
         [BRAND AWARENESS]
       </motion.span>
@@ -71,7 +71,7 @@ export default function HeroCopy() {
       {/* Headline principal - Display: 6-9rem, Black weight */}
       <motion.h1
         variants={itemAnimation}
-        className="font-black tracking-tight leading-[0.95] mb-6 text-text-light"
+        className="font-black tracking-tight leading-[0.95] mb-6 text-text-light opacity-10"
         style={{
           fontSize: 'clamp(3.5rem, 10vw + 1rem, 9rem)',
         }}

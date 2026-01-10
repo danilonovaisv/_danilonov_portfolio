@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { BRAND } from '@/config/brand';
 import { Preloader } from '@/components/ui/Preloader';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -25,7 +24,7 @@ const CONFIG = {
   preloadMs: 2000,
 } as const;
 
-const heroGradient = `radial-gradient(circle at center, ${BRAND.colors.neutral}, ${BRAND.colors.background})`;
+// heroGradient removed
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -47,8 +46,7 @@ export default function HomeHero() {
       <section
         id="hero"
         ref={heroRef}
-        className="relative w-full min-h-screen"
-        style={{ backgroundImage: heroGradient }}
+        className="relative w-full min-h-screen bg-[radial-gradient(circle_at_center,#0b0d3a,#040013)]"
         aria-label="Portfolio Hero Section"
       >
         {/* Preloader */}

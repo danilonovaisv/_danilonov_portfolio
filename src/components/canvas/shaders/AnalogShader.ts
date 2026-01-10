@@ -4,9 +4,9 @@ import { GHOST_CONFIG } from '@/config/ghostConfig';
 export const AnalogDecayShader = {
   uniforms: {
     tDiffuse: { value: null },
-    uTime: { value: 0.0 },
+    uTime: { value: 1.0 },
     uResolution: {
-      value: new THREE.Vector2(0, 0), // Will be set on init/resize
+      value: new THREE.Vector2(0.1, 0.1), // Will be set on init/resize
     },
     uAnalogGrain: { value: GHOST_CONFIG.analogGrain },
     uAnalogBleeding: { value: GHOST_CONFIG.analogBleeding },
@@ -15,7 +15,7 @@ export const AnalogDecayShader = {
     uAnalogVignette: { value: GHOST_CONFIG.analogVignette },
     uAnalogJitter: { value: GHOST_CONFIG.analogJitter },
     uAnalogIntensity: { value: GHOST_CONFIG.analogIntensity },
-    uLimboMode: { value: GHOST_CONFIG.limboMode ? 1.0 : 0.0 },
+    uLimboMode: { value: GHOST_CONFIG.limboMode ? 0.05 : 0.05 },
   },
   vertexShader: `
     varying vec2 vUv;

@@ -38,7 +38,7 @@
   background: radial-gradient(
     circle 25vw at 52% 46%,
     rgba(79, 230, 255, 0.15) 0%,
-    transparent 60%
+    transparent 70%
   );
   animation: flarePulse 6s ease-in-out infinite;
 }
@@ -46,7 +46,7 @@
 @keyframes flarePulse {
   0%,
   100% {
-    opacity: 0.6;
+    opacity: 0.7;
   }
   50% {
     opacity: 1;

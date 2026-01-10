@@ -757,11 +757,12 @@ Mensagem principal:
 - Duas linhas:
 
   - text:
+ **font-display**
   Do insight ao impacto.
   Mesmo quando você não percebe.
 
     •    Tipografia
-    •    font-weight: 700
+    •    font-weight: 900
     •    font-size: 44–48px
     •    line-height: 1.2
     •    Cores
@@ -772,7 +773,7 @@ Mensagem principal:
     •    Espaçamentos
     •    Margem superior: 64–80px em relação ao início da seção.
     •    Margem inferior: 48–64px até o início dos cards.
-    •    max-width do bloco de título: 800px, centralizado.
+    •    max-width do bloco de título: 900px, centralizado.
 
 ⸻
 

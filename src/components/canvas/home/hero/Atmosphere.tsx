@@ -8,7 +8,7 @@ import { GHOST_CONFIG } from '@/config/ghostConfig';
 const atmosphereShader = {
   uniforms: {
     ghostPosition: { value: new THREE.Vector3() },
-    time: { value: 0 },
+    time: { value: 1 },
     revealRadius: { value: GHOST_CONFIG.revealRadius },
     fadeStrength: { value: GHOST_CONFIG.fadeStrength },
     baseOpacity: { value: GHOST_CONFIG.baseOpacity },
@@ -33,14 +33,14 @@ const atmosphereShader = {
     
     void main() {
       float dist = distance(vWorldPosition.xy, ghostPosition.xy);
-      float dynamicRadius = revealRadius + sin(time * 2.0) * 3.0;
-      float reveal = smoothstep(dynamicRadius * 0.3, dynamicRadius, dist);
+      float dynamicRadius = revealRadius + sin(time * 2.0) * 5.0;
+      float reveal = smoothstep(dynamicRadius * 0.2, dynamicRadius, dist); // Updated 0.3 -> 0.2 to match CodePen
       reveal = pow(reveal, fadeStrength);
       
       float finalOpacity = mix(revealOpacity, baseOpacity, reveal);
       
-      // Deep blue fog color (#06071f -> rgb(0.024, 0.027, 0.122))
-      gl_FragColor = vec4(0.024, 0.027, 0.122, finalOpacity);
+      // EXTREMELY low RGB values to avoid bloom (Matched to CodePen)
+      gl_FragColor = vec4(0.001, 0.001, 0.002, finalOpacity);
     }
   `,
   transparent: true,

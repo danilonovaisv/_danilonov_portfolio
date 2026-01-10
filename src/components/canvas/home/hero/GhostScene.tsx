@@ -6,8 +6,6 @@ import { usePerformanceAdaptive } from '@/hooks/usePerformanceAdaptive';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
 import { Ghost } from './Ghost';
-import Fireflies from './Fireflies';
-import { Atmosphere } from './Atmosphere';
 
 function GhostSVGStatic() {
   return (
@@ -24,7 +22,7 @@ function GhostSVGStatic() {
 
 export default function GhostScene() {
   const prefersReducedMotion = useReducedMotion();
-  const { fireflyCount, pixelRatio } = usePerformanceAdaptive();
+  const { pixelRatio } = usePerformanceAdaptive();
 
   // Fallback for prefers-reduced-motion
   if (prefersReducedMotion) {
@@ -64,14 +62,12 @@ export default function GhostScene() {
         />
         <directionalLight
           position={[10, -5, 5]}
-          color={getConfigColorHex('neonCyan')}
+          color={getConfigColorHex('blue')}
           intensity={GHOST_CONFIG.rimLightIntensity * 0.7}
         />
 
         <Suspense fallback={null}>
-          <Atmosphere />
           <Ghost />
-          <Fireflies count={fireflyCount} />
         </Suspense>
       </Canvas>
 

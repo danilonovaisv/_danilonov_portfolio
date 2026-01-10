@@ -83,7 +83,10 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       id="projects-gallery"
       aria-label="Galeria de Projetos"
       className={`relative z-10 bg-ghost-bg transition-[height] duration-300 ease-out h-[var(--gallery-height)] ${className}`}
-      style={{ '--gallery-height': galleryHeight } as React.CSSProperties}
+      style={{
+        // @ts-ignore - Dynamic variable specifically for this section
+        '--gallery-height': galleryHeight 
+      } as React.CSSProperties}
     >
       {/* Gallery Track (Fixed or Static) */}
       <div 
