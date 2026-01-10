@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { Preloader } from '@/components/ui/Preloader';
 // import { useMediaQuery } from '@/hooks/useMediaQuery';
 // import { useReducedMotion } from '@/hooks/useReducedMotion';
+import type { Group } from 'three';
 
 import HeroCopy from './HeroCopy';
 // ManifestoThumb removed
@@ -28,7 +29,7 @@ const CONFIG = {
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
-  const ghostRef = useRef<THREE.Group>(null);
+  const ghostRef = useRef<Group>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

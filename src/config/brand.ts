@@ -43,4 +43,8 @@ export const BRAND = {
       mono: 'PPSupplyMono',
     },
   },
+  video: {
+    manifesto:
+      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
+  },
 };

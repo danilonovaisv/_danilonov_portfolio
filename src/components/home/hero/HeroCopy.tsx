@@ -46,12 +46,13 @@ const itemAnimation: Variants = {
 
 import { useRef } from 'react';
 import { useGhostReveal } from '@/hooks/useGhostReveal';
+import type { Group } from 'three';
 
 export default function HeroCopy({
   ghostRef,
   isLoaded = true,
 }: {
-  ghostRef?: React.RefObject<THREE.Group | null>;
+  ghostRef?: React.RefObject<Group | null>;
   isLoaded?: boolean;
 }) {
   const revealRef = useRef<HTMLDivElement>(null);

@@ -8,6 +8,7 @@ import { usePerformanceAdaptive } from '@/hooks/usePerformanceAdaptive';
 import { Ghost } from './Ghost';
 import { Atmosphere } from './Atmosphere';
 import { Preload } from '@react-three/drei';
+import type { Group } from 'three';
 
 // function GhostSVGStatic() {
 //   return (
@@ -25,7 +26,7 @@ import { Preload } from '@react-three/drei';
 export default function GhostScene({
   ghostRef,
 }: {
-  ghostRef?: React.RefObject<THREE.Group | null>;
+  ghostRef?: React.RefObject<Group | null>;
 }) {
   // const prefersReducedMotion = useReducedMotion();
   const { pixelRatio, particleCount } = usePerformanceAdaptive();

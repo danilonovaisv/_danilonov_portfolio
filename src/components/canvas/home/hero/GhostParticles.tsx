@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
 
 interface GhostParticlesProps {
-  ghostGroup: React.RefObject<THREE.Group>;
+  ghostGroup: React.RefObject<THREE.Group | null>;
   movementRef: React.MutableRefObject<number>;
   count: number;
 }
