@@ -6,6 +6,7 @@ import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
 interface GhostParticlesProps {
   ghostGroup: React.RefObject<THREE.Group>;
   movementRef: React.MutableRefObject<number>;
+  count: number;
 }
 
 // Particle data structure stored in userData
@@ -20,6 +21,7 @@ interface ParticleData {
 export function GhostParticles({
   ghostGroup,
   movementRef,
+  count,
 }: GhostParticlesProps) {
   const groupRef = useRef<THREE.Group>(null!);
   const lastSpawnTime = useRef(0);
@@ -33,14 +35,14 @@ export function GhostParticles({
       new THREE.OctahedronGeometry(0.045, 0),
     ];
 
-    return Array.from({ length: GHOST_CONFIG.particleCount }).map((_, i) => {
+    return Array.from({ length: count }).map((_, i) => {
       const geom = geoms[Math.floor(Math.random() * geoms.length)];
       return {
         key: i,
         geometry: geom,
       };
     });
-  }, []);
+  }, [count]);
 
   useFrame(({ clock }) => {
     if (!groupRef.current || !ghostGroup.current) return;

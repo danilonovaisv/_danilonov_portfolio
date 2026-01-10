@@ -730,26 +730,25 @@ const scaleX = useSpring(scrollYProgress, {
 
 
 
-# 🟣 SEÇÃO 03 — O QUE EU FAÇO  
-## Protótipo Interativo + Rodapé Animado (Ghost Design)
-
----
+# 🟣 SEÇÃO 03 — O QUE EU FAÇO + Rodapé Animado (Ghost Design)
 
 ## 🎯 Função da seção
-
 Transformar **serviços/capabilities** em uma lista de entregas claras, com visual calmo e confiável.  
-A seção termina com um **rodapé animado** (marquee) que funciona como assinatura rítmica do conteúdo.
+A seção utiliza **animação guiada pelo scroll**, onde os conteúdos entram **da direita para a esquerda**, reforçando progressão e controle.  
+Finaliza com um **rodapé animado (marquee)** que atua como assinatura rítmica.
 
 Mensagem principal:
 
+**Título (Display):**  
 > Do **insight** ao **impacto**.  
 > Mesmo quando você não percebe.
+
+Texto centralizado.
 
 ---
 
 ## 📐 Layout Geral
-
-- Altura de referência: ~100vh (não obrigatório, mas a seção deve “respirar” sozinha).
+- Altura de referência: ~100vh (não obrigatório).
 - Fundo: `#040013` (`backgroundDark`).
 - Container central:
   - `max-width`: 1120–1200px
@@ -758,214 +757,178 @@ Mensagem principal:
 
 ---
 
-## 🖥 Layout — Desktop (≈ ≥ 1024px)
+## 🧠 Motion Principle (conceito)
+- Movimento **horizontal (X)** da **direita → esquerda**
+- Animação **silenciosa e progressiva**
+- Nenhum elemento “salta” ou aparece abruptamente
+- Desktop: movimento **sincronizado ao scroll**
+- Mobile: movimento **por entrada no viewport**
+- Sempre respeitar `prefers-reduced-motion`
+
+---
+
+## 🖥 Layout — Desktop (≥ 1024px)
 
 ### 1. Título
+- Centralizado no topo da seção.
+- Duas linhas.
+- Tipografia:
+  - font-weight: 900
+  - font-size: 44–48px
+  - line-height: 1.2
+- Cores:
+  - “Do” / “ao impacto.” → branco
+  - “insight” / “impacto” → azul primário
+  - Linha 2 → branco
+- Margens:
+  - Topo: 64–80px
+  - Base: 48–64px
+- max-width: 900px
 
-- Posicionado no topo da seção, centralizado.
-- Duas linhas:
+---
 
-  - text:
- **font-display**
-  Do insight ao impacto.
-  Mesmo quando você não percebe.
+## 2. Lista Interativa de Cards — Desktop
 
-    •    Tipografia
-    •    font-weight: 900
-    •    font-size: 44–48px
-    •    line-height: 1.2
-    •    Cores
-    •    Linha 1:
-    •    “Do” / “ao impacto.” → branco (#FFFFFF)
-    •    “insight” / “impacto” → azul primário (primary)
-    •    Linha 2 → branco (#FFFFFF)
-    •    Espaçamentos
-    •    Margem superior: 64–80px em relação ao início da seção.
-    •    Margem inferior: 48–64px até o início dos cards.
-    •    max-width do bloco de título: 900px, centralizado.
+### Visual
+- Faixa horizontal única com **7 cards**
+- display: flex
+- flex-direction: row
+- gap: 16–20px
+- Sem wrap
+- Centralizada em telas ≥ 1440px
 
-⸻
+### Estrutura de cada card
+- Altura mínima: 120–140px
+- Padding: 20–24px
+- border-radius: 12–16px
+- Fundo: rgba(255,255,255,0.04)
+- Opacidade base: 0.92
+- Layout interno:
+  - Ícone circular azul (32–36px)
+  - Texto à direita (16–18px)
 
-## **2. Lista Interativa de Cards — Desktop
+---
 
-Visual geral: 7 cards alinhados um ao lado do outro em uma faixa horizontal única, cada um com a mesma largura.
-    •    Disposição
-    •    display: flex
-    •    flex-direction: row
-    •    justify-content: space-between
-    •    7 cards na mesma linha (sem wrap) em telas largas.
-    •    gap: 16–20px entre cards.
-    •    Responsivo dentro do desktop
-    •    Em telas muito largas (≥ 1440px): manter faixa centralizada; não aumentar demais a largura dos cards.
-    •    Em telas entre 1024px e 1280px: cards podem reduzir um pouco o padding horizontal para caberem.
+## 🎬 Animação — Cards Desktop (Scroll-driven)
 
-## **Estrutura de cada card**
-    •    Container
-    •    Altura mínima: ~120–140px.
-    •    padding: 20–24px (mais generoso na horizontal).
-    •    border-radius: 12–16px (formato de “pílula retangular”).
-    •    Fundo: roxo bem escuro (ex.: rgba(255,255,255,0.04) sobre o fundo principal).
-    •    Sem borda visível; apenas contraste pelo fundo.
-    •    Opacidade base: ~0.92.
-    •    Conteúdo interno
-    •    Layout: display: flex; align-items: center; gap: 16px;
-    1.    Ícone circular à esquerda
-    •    Círculo azul (primary), ~32–36px de diâmetro.
-    •    Ícone seta ↗ branca centralizada (símbolo de ação).
-    •    Não é um botão clicável por si; funciona como marca visual.
-    2.    Bloco de texto à direita
-    •    Tipografia:
-    •    font-size: 16–18px
-    •    line-height: 1.4–1.5
-    •    font-weight: 400–500
-    •    Cor: branco (#FFFFFF) com leve variação:
-    •    Palavra-chave em azul primário.
-    •    Continuação da frase em branco.
+- Disparo: quando a seção entra no viewport
+- Controle: progresso do scroll
+- Todos os cards se movem no eixo X:
+  - Origem: +120px
+  - Destino: 0px
+- Opacidade: 0 → 1
+- Blur opcional: 6px → 0
+- Stagger progressivo:
+  - Delay incremental: ~0.06s por card
+- Sensação: organização gradual do caos
 
-## **Interações — Desktop
+---
 
-    •    Hover
-    •    Leve elevação (transform: translateY(-2px)).
-    •    Aumento sutil de brilho do fundo (ex.: background: rgba(255,255,255,0.06)).
-    •    Cursor padrão (default) se não forem links; se forem clicáveis, cursor: pointer + role="button".
-    •    Focus (tab)
-    •    Outline visível (ex.: contorno azul claro em volta do card).
-    •    Transições
-    •    transition: transform 0.18s ease-out, background 0.18s ease-out, opacity 0.18s ease-out;
+## 📱 Layout — Mobile (≤ 768px)
 
-⸻
+### 1. Título
+- Centralizado
+- font-size: 28–32px
+- line-height: 1.25
+- font-weight: 700
+- Margem inferior: 32–40px
 
-## **📱 Layout — Mobile (≈ ≤ 768px)
+### 2. Cards (Barras)
+- Coluna vertical
+- display: flex
+- flex-direction: column
+- gap: 10–14px
+- Largura: 100%
+- Padding: 18–20px
 
-No mobile, a seção vira uma coluna única, reforçando a leitura linear.
+---
 
-## 1. Título — Mobile
-    •    Centralizado, com quebra natural de linha:
+## 🎬 Animação — Barras Mobile (Viewport-based)
 
-Do insight ao impacto.
-Mesmo quando
-você não percebe.
+- Cada barra anima individualmente
+- Movimento lateral:
+  - Origem: +80px
+  - Destino: 0px
+- Opacidade: 0 → 1
+- Duração: ~0.4s
+- Delay baseado no índice
+- Disparo ao entrar no viewport
+- viewport margin: -80px
 
+---
 
-    •    Tipografia:
-    •    font-size: 28–32px
-    •    line-height: 1.25
-    •    font-weight: 700
-    •    padding-inline: 24px
-    •    Margem inferior: 32–40px até os cards.
+## 🧾 Conteúdo dos Cards
+1. Direção criativa que organiza o caos  
+2. Design estratégico que guia decisões  
+3. Identidades que permanecem na memória  
+4. Campanhas multicanais com lógica e emoção  
+5. Branding que não grita — mas marca  
+6. Inteligência artificial aplicada à criação e automação  
+7. Liderança criativa com visão e método  
 
-## 2. Cards — Mobile
+Regras:
+- Palavra-chave inicial em azul
+- Complemento em branco
+- Frases curtas e afirmativas
 
-    •    Disposição:  7  barras alinhados um abaixo do outro em uma coluna vertical única, cada um com a mesma largura e altura. Cards em empilhandos uma abaixo do outro, 
-    •    display: flex
-    •    flex-direction: column
-    •    gap: 10–14px
-    •    Cada card ocupa 100% da largura útil do container (efeito de faixa/pílula grande).
-    •    Cards
-    •    Mesmo visual de desktop (fundo roxo escuro, ícone à esquerda, texto à direita).
-    •    padding: 18–20px.
-    •    Textos podem quebrar em 2–3 linhas, mantendo conforto de leitura.
+---
 
-⸻
+## 🌀 Rodapé Animado — Marquee (Ghost Design)
 
-## **🧾 Conteúdo Textual dos Cards
+### Layout
+- Margem superior: 48–64px
+- padding-block: 16–24px
+- BG: #0048ff
+- Texto: #8705f2
+- Duas linhas horizontais
 
-Ordem sugerida (desktop: esquerda → direita; mobile: de cima → baixo):
-    1.    Direção criativa que organiza o caos
-    2.    Design estratégico que guia decisões
-    3.    Identidades que permanecem na memória
-    4.    Campanhas multicanais com lógica e emoção
-    5.    Branding que não grita — mas marca
-    6.    Inteligência artificial aplicada à criação e automação
-    7.    Liderança criativa com visão e método
-
-Regras de copy:
-    •    Sempre usar frases curtas e afirmativas.
-    •    Palavra-chave inicial em destaque (azul), complementos em branco.
-    •    Hífen/em dash “—” em: que não grita — mas marca.
-
-⸻
-
-## **🌀 Rodapé Animado — Marquee (Ghost Design)
-
-Posicionado logo abaixo da lista de cards, dentro da mesma seção.
-
-### 1. Layout
-    •    Container:
-    •    Margem superior: 48–64px a partir do grid de cards.
-    •    padding-block: 16–24px.
-    •    BG faixa cor (#0048ff).
-    •    Texto font Black cor (#8705f2).
-    •    Internamente:
-    •    display: flex
-    •    flex-direction: column
-    •    gap: 16px
-
-### 2. Conteúdo das linhas
-
-Duas faixas horizontais com textos contínuos:
-    •    Linha 1 (sentido A → B)
+### Conteúdo
+Linha 1 (A → B):  
 DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・BRANDING・INTELIGÊNCIA ARTIFICIAL・LIDERANÇA CRIATIVA・
-    •    Linha 2 (sentido B → A)
+
+Linha 2 (B → A):  
 BRANDING・INTELIGÊNCIA ARTIFICIAL・LIDERANÇA CRIATIVA・DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・
-    •    Tipografia:
-    •    font-size: 18–20px (16–18px no mobile).
-    •    font-weight: 500.
-    •    letter-spacing: levemente aumentado.
-    •    Cor: branco com opacity: 0.75.
-    •    Container de cada linha:
-    •    overflow: hidden
-    •    white-space: nowrap
 
-## **3. Motion (Framer Motion)
+---
 
-    •    Duas instâncias de marquee com direções opostas.
-    •    Velocidade base configurável via baseVelocity (ex.: -10 e 10).
-    •    Velocidade modulada pela velocidade de scroll (scroll up/down acelera ou desacelera).
-    •    Loop infinito.
-    •    Movimento linear, sem bounce, sem scale.
+## 🎬 Motion — Marquee
+- Duas instâncias com direções opostas
+- baseVelocity: ±10
+- Velocidade modulada pelo scroll
+- Loop infinito
+- Movimento linear
+- Em mobile: velocidade reduzida
+- prefers-reduced-motion:
+  - animação pausada
+  - textos centralizados e estáticos
 
-Preferências de movimento:
-    •    Respeitar prefers-reduced-motion:
-    •    Se ativado, a animação é pausada e os textos ficam centralizados, estáticos.
-    •    Em mobile:
-    •    Velocidade ligeiramente reduzida para evitar distração excessiva.
+---
 
-⸻
+## ♿ Acessibilidade
+- Título como h2
+- Cards informativos: article/div com aria-label
+- Cards clicáveis: button ou a
+- Marquee com aria-hidden="true"
+- Contraste AA/AAA
+- Foco visível em teclado
 
-## ** ♿ Acessibilidade
+---
 
-    •    Título com role="heading" e nível coerente com a hierarquia (ex.: h2 para a seção).
-    •    Cards:
-    •    Se forem meramente informativos → article ou div com aria-label descritivo.
-    •    Se forem clicáveis → usar <button> ou <a> semanticamente corretos, com aria-label claro.
-    •    Marquee:
-    •    aria-hidden="true" nas linhas animadas (texto repetitivo, puramente decorativo).
-    •    Contraste:
-    •    Texto branco/azul sobre roxo bem escuro mantido dentro de AA/AAA.
-    •    Teclado:
-    •    Foco visível em todos elementos interativos.
-    •    Nenhuma animação depende exclusivamente de hover (tudo deve funcionar via tab/focus).
+## 🧩 Notas de Implementação
+- Desktop: flex-row | Mobile: flex-col
+- Alturas consistentes
+- Animações via transform: translateX
+- will-change: transform
+- Intersection Observer para disparo inicial
+- Evitar box-shadows pesados
 
-⸻
+---
 
-## ** 🧩 Notas de Implementação
+**Ghost Design não explica.  
+Ele permanece.**
 
-    •    Grid de cards
-    •    Desktop: display: flex horizontal com 7 itens; mobile: flex-col.
-    •    Garantir altura mínima consistente das caixas (visualmente alinhadas).
-    •    Noise/texture
-    •    Opcional, via pseudo-elemento no container da seção, com opacidade baixa.
-    •    Intersection Observer
-    •    Pode ser usado para iniciar animações (entrada suave dos cards + marquee) apenas quando a seção entra em viewport.
-    •    Performance
-    •    Evitar sombras pesadas; priorizar contrastes de cor para dar profundidade.
-    •    Usar o marquee baseado em transform: translateX com will-change: transform.
 
-⸻
 
-Ghost Design não explica.
-Ele permanece.
 
 
 

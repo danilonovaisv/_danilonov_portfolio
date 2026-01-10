@@ -50,13 +50,10 @@ export const BRAND = {
   // Assets Globais (2.6 Global Assets)
   assets: {
     logos: {
-      favicon:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg',
-      faviconLight:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg',
-      light:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg', // Header
-      dark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg', // Header (bg claro)
+   Favicon  - Aba do navegador (tab): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Faivcon.svg`
+Favicon Light - Aba do navegador (tab): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaivconLight.svg`
+Logo Light (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
+Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
     },
     video: {
       manifesto:

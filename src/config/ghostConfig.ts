@@ -43,6 +43,11 @@ export function resolveFluorescentColor(color: FluorescentColorName): string {
 
 // Função para resolver cores do config (suporta nomes personalizados)
 export function resolveConfigColor(colorName: string): string {
+  if (!colorName || typeof colorName !== 'string') {
+    console.warn('resolveConfigColor received invalid color:', colorName);
+    return '#00ffff'; // Safe fallback
+  }
+
   // Tenta a paleta extendida primeiro
   const extendedColor =
     EXTENDED_FLUORESCENT_COLORS[colorName as ExtendedColorName];

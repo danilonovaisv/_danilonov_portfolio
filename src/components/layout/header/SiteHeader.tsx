@@ -61,6 +61,8 @@ export default function SiteHeader({
     return pathname ?? undefined;
   }, [pathname, activeSection]);
 
+  const isSobrePage = pathname?.startsWith('/sobre');
+
   const onNavigate = useCallback(
     (href: string) => {
       const hash = getHashFromHref(href);
@@ -122,6 +124,7 @@ export default function SiteHeader({
         navItems={normalizedNavItems}
         logoUrl={logoDesktop}
         isLight={isOnLightSection}
+        isPageActive={isSobrePage}
         accentColor={accentColor}
         disableWebGL={disableWebGL}
         onNavigate={onNavigate}
@@ -139,6 +142,7 @@ export default function SiteHeader({
         onClose={() => setIsOpen(false)}
         onNavigate={onNavigate}
         activeHref={activeHref}
+        isPageActive={isSobrePage}
       />
     </>
   );

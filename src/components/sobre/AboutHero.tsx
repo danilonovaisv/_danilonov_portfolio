@@ -177,7 +177,7 @@ export function AboutHero() {
             style={{ y: mediaY }}
             aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/85 to-background/95" />
+          <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10" />
         </div>
         <div className="relative z-10 px-6 pt-10 pb-12 text-center">
           <motion.div

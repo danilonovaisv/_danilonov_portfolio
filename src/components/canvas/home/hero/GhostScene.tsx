@@ -6,6 +6,7 @@ import { usePerformanceAdaptive } from '@/hooks/usePerformanceAdaptive';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
 import { Ghost } from './Ghost';
+import { Preload } from '@react-three/drei';
 
 function GhostSVGStatic() {
   return (
@@ -22,17 +23,17 @@ function GhostSVGStatic() {
 
 export default function GhostScene() {
   const prefersReducedMotion = useReducedMotion();
-  const { pixelRatio } = usePerformanceAdaptive();
+  const { pixelRatio, particleCount } = usePerformanceAdaptive();
 
   // Fallback for prefers-reduced-motion
-  if (prefersReducedMotion) {
-    return (
-      <div className="absolute inset-0 bg-linear-to-br from-neutral-950 to-neutral-900 flex items-center justify-center opacity-30">
-        <GhostSVGStatic />
-        <span className="sr-only">Decoração: Fantasma estático no fundo</span>
-      </div>
-    );
-  }
+  // if (prefersReducedMotion) {
+  //   return (
+  //     <div className="absolute inset-0 bg-linear-to-br from-neutral-950 to-neutral-900 flex items-center justify-center opacity-30">
+  //       <GhostSVGStatic />
+  //       <span className="sr-only">Decoração: Fantasma estático no fundo</span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -46,28 +47,16 @@ export default function GhostScene() {
         }}
         camera={{ position: [0, 0, 15], fov: 75 }}
         role="presentation"
-        aria-hidden="true"
       >
-        {/* Ambient lighting - deep blue */}
-        <ambientLight
-          color={getConfigColorHex(GHOST_CONFIG.ambientLightColor)}
-          intensity={GHOST_CONFIG.ambientLightIntensity}
-        />
-
-        {/* Rim lights for spectral effect */}
-        <directionalLight
-          position={[-10, 10, 5]}
-          color={getConfigColorHex(GHOST_CONFIG.glowColor)}
-          intensity={GHOST_CONFIG.rimLightIntensity}
-        />
-        <directionalLight
-          position={[10, -5, 5]}
-          color={getConfigColorHex('blue')}
-          intensity={GHOST_CONFIG.rimLightIntensity * 0.7}
-        />
-
+        <ambientLight intensity={1} />
+        <directionalLight position={[0, 0, 5]} intensity={2} />
+        <mesh position={[-2, 0, 0]} name="DEBUG_SUPER_CUBE">
+          <boxGeometry args={[2, 2, 2]} />
+          <meshBasicMaterial color="lime" wireframe />
+        </mesh>
         <Suspense fallback={null}>
-          <Ghost />
+          <Ghost particleCount={particleCount} />
+          <Preload all />
         </Suspense>
       </Canvas>
 

@@ -62,7 +62,7 @@ export default function HomeHero() {
 
         {/* Background WebGL Layer (z-20) - Desktop Only */}
         <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
-          {!isMobile && !prefersReducedMotion && <GhostScene />}
+          <GhostScene />
         </div>
 
         {/* Hero Content Layer (z-10) */}

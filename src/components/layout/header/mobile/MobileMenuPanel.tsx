@@ -19,6 +19,7 @@ interface MobileMenuPanelProps {
   onNavigate: (_href: string) => void;
   onClose: () => void;
   activeHref?: string;
+  isPageActive?: boolean;
 }
 
 const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
@@ -31,6 +32,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       onNavigate,
       onClose,
       activeHref,
+      isPageActive,
     },
     ref
   ) => {
@@ -53,15 +55,19 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
               ? item.href.substring(1)
               : item.href;
             const isActive = activeHref === hash;
+            const pageHighlight = isPageActive
+              ? 'text-primary font-semibold'
+              : '';
 
             return (
               <li key={item.href} className="overflow-hidden leading-none">
                 <button
                   onClick={() => onNavigate(item.href)}
                   className={`sm-panel-item text-4xl font-light tracking-wide transition-colors text-left leading-none uppercase will-change-transform origin-bottom ${
-                    isActive
+                    pageHighlight ||
+                    (isActive
                       ? 'text-primary font-medium'
-                      : 'text-white/80 hover:text-white'
+                      : 'text-white/80 hover:text-white')
                   }`}
                 >
                   {item.label}

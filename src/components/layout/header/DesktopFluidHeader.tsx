@@ -24,6 +24,7 @@ export interface DesktopFluidHeaderProps {
   onNavigate: (_href: string) => void;
   activeHref?: string;
   isLight?: boolean;
+  isPageActive?: boolean;
 }
 
 function isExternalHref(href: string) {
@@ -42,15 +43,17 @@ export default function DesktopFluidHeader({
   onNavigate,
   activeHref,
   isLight,
+  isPageActive,
 }: DesktopFluidHeaderProps) {
   const reducedMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const nav = useMemo(() => navItems, [navItems]);
+  const shouldHighlightPage = Boolean(isPageActive);
 
   return (
     <header
-      className={`hidden lg:block fixed top-0 left-0 right-0 z-100 w-full pointer-events-none ${
+      className={`hidden lg:block fixed top-0 left-0 right-0 z-50 w-full pointer-events-none ${
         isLight ? 'header--light' : ''
       }`}
     >
@@ -114,6 +117,9 @@ export default function DesktopFluidHeader({
                   const textColor = isActive
                     ? `${activeText} font-semibold`
                     : `${baseText} ${hoverText} font-medium`;
+                  const pageOverride = shouldHighlightPage
+                    ? 'text-bluePrimary font-semibold'
+                    : '';
                   const underline = isActive
                     ? 'after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[1px] after:bg-current'
                     : 'after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:bg-current group-hover:after:w-full after:transition-all after:duration-300';
@@ -125,7 +131,7 @@ export default function DesktopFluidHeader({
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`group ${common} ${textColor} relative flex items-center`}
+                        className={`group ${common} ${textColor} ${pageOverride} relative flex items-center`}
                       >
                         <span className="tracking-tight">{item.label}</span>
                         <span className={underline} />
@@ -138,7 +144,7 @@ export default function DesktopFluidHeader({
                       key={item.href}
                       type="button"
                       onClick={() => onNavigate(item.href)}
-                      className={`group ${common} ${textColor} relative flex items-center`}
+                      className={`group ${common} ${textColor} ${pageOverride} relative flex items-center`}
                     >
                       <span className="tracking-tight">{item.label}</span>
                       <span className={underline} />

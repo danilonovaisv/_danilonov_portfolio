@@ -323,9 +323,9 @@ Exemplo em JSX/Tailwind:
 
 
 ## 2.6 Global Assets
-Logos:
-- Favicon  - Usar no browser: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
-- Favicon Light - Usar no browser: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
+### **Logos:**
+- Favicon  - Aba do navegador (tab): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Faivcon.svg`
+- Favicon Light - Aba do navegador (tab): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaivconLight.svg`
 - Logo Light (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
 - Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 
@@ -440,6 +440,14 @@ The homepage follows a narrative arc:
 
 **Purpose:** Provide persistent, accessible navigation using a clean, static interface.
 
+
+### 4.1.1 Navigation Structure
+Primary Navigation (Header):
+- Home → `/` or `#hero`
+- Sobre (About) → `/sobre`
+- Portfólio → `/portfolio`
+- Contato (Contact) → `#contact` (always anchors to contact section)
+
 #### Desktop (≥1024px): Static Glass Header
 
 **Layout:**
@@ -450,7 +458,7 @@ The homepage follows a narrative arc:
 - **Behavior:** COMPLETELY STATIC. No movement tracking, no physics.
 
 **Content:**
-- Left: Logo (SVG) - https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg
+- Left: Logo (SVG) - - Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 - Right: Navigation Links (Home, Sobre, Portfólio, Contato)
 
 **Interaction - Contrast Adaptation (Scroll):**
@@ -470,7 +478,7 @@ The homepage follows a narrative arc:
   - Height: `56–72px`
   - Style: Pill-shaped with rounded corners, translucent glass effect (blur + subtle gradient)
 - Content:
-  - Left: Logo (Favicon Light) https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg
+- Left: - Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
   - Right: Horizontal navigation list (Home, Sobre, Portfólio, Contato)
 - Interaction - Fluid Glass Effect:
   - The header responds to cursor movement along the X-axis:
@@ -480,6 +488,7 @@ The homepage follows a narrative arc:
     - Visual: Refraction distortion, chromatic aberration on edges, backdrop blur
 - Fallback (no WebGL / reduced motion):
   - Same layout and typography
+  - Muda a cor para azul quando tem interação com mouse e ou esta na pagina
   - Static positioning with standard backdrop-filter blur or solid/gradient background
   - No cursor-following behavior
 
@@ -488,6 +497,7 @@ The homepage follows a narrative arc:
   - Position: Fixed bar at top, full-width
   - Height: `48–64px`
   - Content: Logo (left), Hamburger icon (right)
+  - Left: - Logo Dark (full - Usar no header): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 - Menu Overlay (when open):
   - Fullscreen or near-fullscreen overlay
   - Gradient background (primary to neutral)

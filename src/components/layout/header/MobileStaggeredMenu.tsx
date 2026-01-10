@@ -27,6 +27,7 @@ export interface MobileStaggeredMenuProps {
   onClose: () => void;
   onNavigate: (_href: string) => void;
   activeHref?: string;
+  isPageActive?: boolean;
 }
 
 export default function MobileStaggeredMenu({
@@ -39,6 +40,7 @@ export default function MobileStaggeredMenu({
   onClose,
   onNavigate,
   activeHref,
+  isPageActive,
 }: MobileStaggeredMenuProps) {
   const {
     refs: {
@@ -144,6 +146,7 @@ export default function MobileStaggeredMenu({
         onNavigate={onNavigate}
         onClose={onClose}
         activeHref={activeHref}
+        isPageActive={isPageActive}
       />
     </div>
   );

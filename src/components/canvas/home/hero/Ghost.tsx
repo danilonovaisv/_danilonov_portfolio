@@ -3,20 +3,22 @@
 import { useRef, useEffect, useState } from 'react';
 import { useFrame, useThree, extend } from '@react-three/fiber';
 import * as THREE from 'three';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import {
+  EffectComposer,
+  RenderPass,
+  UnrealBloomPass,
+  ShaderPass,
+  GammaCorrectionShader,
+} from 'three-stdlib';
 import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
 import { AnalogDecayShader } from '@/components/canvas/shaders/AnalogShader';
 import { GhostFireflies } from './GhostFireflies';
 import { GhostParticles } from './GhostParticles';
 
 // Extender para usar no React Three Fiber
-extend({ EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass });
+extend({ EffectComposer, RenderPass, UnrealBloomPass, ShaderPass });
 
-export function Ghost() {
+export function Ghost({ particleCount = 100 }: { particleCount: number }) {
   const groupRef = useRef<THREE.Group>(null!);
   const bodyRef = useRef<THREE.Mesh>(null!);
   const eyesRef = useRef<THREE.Group>(null!);
@@ -31,214 +33,21 @@ export function Ghost() {
   const prevPositionRef = useRef(new THREE.Vector3());
   const currentMovementRef = useRef(0);
 
-  // Inicializar o compositor de efeitos
+  // Inicializar o compositor de efeitos com Resize Handler
   useEffect(() => {
+    setIsLoaded(true);
+    /* 
     if (!gl || !scene || !camera) return;
 
-    const renderer = gl;
-    const composer = new EffectComposer(renderer);
-    const renderPass = new RenderPass(scene, camera);
-    composer.addPass(renderPass);
-
-    const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      GHOST_CONFIG.emissiveIntensity * 0.4,
-      1.2,
-      0.0
-    );
-    composer.addPass(bloomPass);
-    bloomPassRef.current = bloomPass;
-
-    const analogPass = new ShaderPass(AnalogDecayShader);
-    composer.addPass(analogPass);
-    analogPassRef.current = analogPass;
-
-    const outputPass = new OutputPass();
-    composer.addPass(outputPass);
-
-    composerRef.current = composer;
-
-    // Forçar renderização inicial
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 500);
-
-    return () => {
-      if (composer) {
-        composer.dispose();
-      }
-    };
+    // Configurar Bloom e Composer
+    // ... disabled for debugging ...
+    */
   }, [gl, scene, camera]);
 
-  // Deformação da geometria do corpo
-  useEffect(() => {
-    if (!bodyRef.current) return;
-    const geo = bodyRef.current.geometry as THREE.SphereGeometry;
-    const pos = geo.attributes.position;
-    const array = pos.array as Float32Array;
-
-    for (let i = 0; i < array.length; i += 3) {
-      const y = array[i + 1];
-      if (y < -0.2) {
-        const x = array[i];
-        const z = array[i + 2];
-        const noise1 = Math.sin(x * 5) * 0.35;
-        const noise2 = Math.cos(z * 4) * 0.25;
-        const noise3 = Math.sin((x + z) * 3) * 0.15;
-        const combinedNoise = noise1 + noise2 + noise3;
-        array[i + 1] = -2.0 + combinedNoise;
-      }
-    }
-    pos.needsUpdate = true;
-    geo.computeVertexNormals();
-  }, []);
-
-  // Criar os olhos
-  useEffect(() => {
-    if (!eyesRef.current || !groupRef.current) return;
-
-    // Criar soquetes dos olhos
-    const socketGeometry = new THREE.SphereGeometry(0.45, 16, 16);
-    const socketMaterial = new THREE.MeshBasicMaterial({
-      color: '#0059ff',
-      transparent: true,
-    });
-
-    const leftSocket = new THREE.Mesh(socketGeometry, socketMaterial);
-    leftSocket.position.set(-0.7, 0.6, 1.9);
-    leftSocket.scale.set(1.1, 1.0, 0.6);
-    eyesRef.current.add(leftSocket);
-
-    const rightSocket = new THREE.Mesh(socketGeometry, socketMaterial);
-    rightSocket.position.set(0.7, 0.6, 1.9);
-    rightSocket.scale.set(1.1, 1.0, 0.6);
-    eyesRef.current.add(rightSocket);
-
-    // Criar olhos brilhantes (50% maiores)
-    const eyeGeometry = new THREE.SphereGeometry(0.3, 12, 12);
-
-    const leftEyeMaterial = new THREE.MeshBasicMaterial({
-      color: getConfigColorHex(GHOST_CONFIG.eyeGlowColor),
-      transparent: true,
-      opacity: 0,
-    });
-    const leftEye = new THREE.Mesh(eyeGeometry, leftEyeMaterial);
-    leftEye.position.set(-0.7, 0.6, 2.0);
-    eyesRef.current.add(leftEye);
-
-    const rightEyeMaterial = new THREE.MeshBasicMaterial({
-      color: getConfigColorHex(GHOST_CONFIG.eyeGlowColor),
-      transparent: true,
-      opacity: 0,
-    });
-    const rightEye = new THREE.Mesh(eyeGeometry, rightEyeMaterial);
-    rightEye.position.set(0.7, 0.6, 2.0);
-    eyesRef.current.add(rightEye);
-
-    // Adicionar brilho externo
-    const outerGlowGeometry = new THREE.SphereGeometry(0.525, 10, 10);
-
-    const leftOuterGlowMaterial = new THREE.MeshBasicMaterial({
-      color: getConfigColorHex(GHOST_CONFIG.eyeGlowColor),
-      transparent: true,
-      opacity: 0,
-      side: THREE.BackSide,
-    });
-    const leftOuterGlow = new THREE.Mesh(
-      outerGlowGeometry,
-      leftOuterGlowMaterial
-    );
-    leftOuterGlow.position.set(-0.7, 0.6, 0.95);
-    eyesRef.current.add(leftOuterGlow);
-
-    const rightOuterGlowMaterial = new THREE.MeshBasicMaterial({
-      color: getConfigColorHex(GHOST_CONFIG.eyeGlowColor),
-      transparent: true,
-      opacity: 0,
-      side: THREE.BackSide,
-    });
-    const rightOuterGlow = new THREE.Mesh(
-      outerGlowGeometry,
-      rightOuterGlowMaterial
-    );
-    rightOuterGlow.position.set(0.7, 0.6, 0.95);
-    eyesRef.current.add(rightOuterGlow);
-
-    // Armazenar referências para animação
-    eyesRef.current.userData = {
-      leftEye,
-      rightEye,
-      leftEyeMaterial,
-      rightEyeMaterial,
-      leftOuterGlow,
-      rightOuterGlow,
-      leftOuterGlowMaterial,
-      rightOuterGlowMaterial,
-    };
-  }, []);
-
-  // Criar a atmosfera que revela o fundo
-  useEffect(() => {
-    if (!atmosphereRef.current) return;
-
-    const atmosphereGeometry = new THREE.PlaneGeometry(300, 400);
-    const atmosphereMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        ghostPosition: { value: new THREE.Vector3(0, 0, 0) },
-        revealRadius: { value: GHOST_CONFIG.revealRadius },
-        fadeStrength: { value: GHOST_CONFIG.fadeStrength },
-        baseOpacity: { value: GHOST_CONFIG.baseOpacity },
-        revealOpacity: { value: GHOST_CONFIG.revealOpacity },
-        veilColor: {
-          value: new THREE.Color(
-            getConfigColorHex(GHOST_CONFIG.veilBackgroundColor)
-          ),
-        },
-        time: { value: 0 },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vWorldPosition;
-        void main() {
-          vUv = uv;
-          vec4 worldPos = modelMatrix * vec4(position, 1.0);
-          vWorldPosition = worldPos.xyz;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 ghostPosition;
-        uniform float revealRadius;
-        uniform float fadeStrength;
-        uniform float baseOpacity;
-        uniform float revealOpacity;
-        uniform vec3 veilColor;
-        uniform float time;
-        varying vec2 vUv;
-        varying vec3 vWorldPosition;
-
-        void main() {
-          float dist = distance(vWorldPosition.xy, ghostPosition.xy);
-          float dynamicRadius = revealRadius + sin(time * 2.0) * 5.0;
-          float reveal = smoothstep(dynamicRadius * 0.2, dynamicRadius, dist);
-          reveal = pow(reveal, fadeStrength);
-          float opacity = mix(revealOpacity, baseOpacity, reveal);
-          gl_FragColor = vec4(0.001, 0.001, 0.002, opacity);
-        }
-      `,
-      transparent: true,
-      depthWrite: true,
-    });
-
-    atmosphereRef.current.geometry = atmosphereGeometry;
-    atmosphereRef.current.material = atmosphereMaterial;
-    atmosphereRef.current.position.z = -30;
-    atmosphereRef.current.renderOrder = -30;
-  }, []);
-
-  // Atualizar o shader da atmosfera
+  // Atualizar o shader da atmosfera e Animação
   useFrame(({ clock }) => {
-    if (!isLoaded || !groupRef.current || !atmosphereRef.current) return;
+    // Safety check first
+    if (!groupRef.current || !atmosphereRef.current) return;
 
     const t = clock.getElapsedTime();
 
@@ -250,18 +59,12 @@ export function Ghost() {
     }
 
     // Atualizar passos de analog decay
-    if (analogPassRef.current && analogPassRef.current.uniforms) {
-      analogPassRef.current.uniforms.uTime.value = t;
-      analogPassRef.current.uniforms.uResolution.value.set(
-        window.innerWidth,
-        window.innerHeight
-      );
-      analogPassRef.current.uniforms.uLimboMode.value = GHOST_CONFIG.limboMode
-        ? 2.0
-        : 2.0;
-    }
+    // if (analogPassRef.current && analogPassRef.current.uniforms) {
+    //   analogPassRef.current.uniforms.uTime.value = t;
+    //   // uResolution is handled by resize listener now, but we can verify
+    // }
 
-    // Movimento do fantasma
+    // Movimento do fantasma (Smooth Follow)
     const targetX = mouse.x * viewport.width * 0.3;
     const targetY = mouse.y * viewport.height * 0.5;
 
@@ -285,24 +88,31 @@ export function Ghost() {
       0.05
     );
 
-    // Animação flutuante
+    // Animação flutuante (Idle)
     const float1 = Math.sin(t * GHOST_CONFIG.floatSpeed * 1.5) * 0.03;
     const float2 = Math.cos(t * GHOST_CONFIG.floatSpeed * 0.7) * 0.018;
     const float3 = Math.sin(t * GHOST_CONFIG.floatSpeed * 2.3) * 0.008;
     groupRef.current.position.y += float1 + float2 + float3;
 
-    // Pulsar efeito
+    // Pulsar efeito (Heartbeat)
     const pulse1 =
       Math.sin(t * GHOST_CONFIG.pulseSpeed) * GHOST_CONFIG.pulseIntensity;
     const breathe = Math.sin(t * 0.12) * 0.12;
 
-    if (bodyRef.current.material instanceof THREE.MeshStandardMaterial) {
+    if (
+      bodyRef.current &&
+      bodyRef.current.material instanceof THREE.MeshStandardMaterial
+    ) {
       bodyRef.current.material.emissiveIntensity =
         GHOST_CONFIG.emissiveIntensity + pulse1 + breathe;
     }
 
     // Animação dos olhos
-    if (eyesRef.current && eyesRef.current.userData) {
+    if (
+      eyesRef.current &&
+      eyesRef.current.userData &&
+      eyesRef.current.userData.leftEyeMaterial
+    ) {
       const {
         leftEyeMaterial,
         rightEyeMaterial,
@@ -310,7 +120,7 @@ export function Ghost() {
         rightOuterGlowMaterial,
       } = eyesRef.current.userData;
 
-      // Calcular movimento (Fixed Logic)
+      // Calcular movimento
       const prevPos = prevPositionRef.current;
       const movementAmount = prevPos.distanceTo(groupRef.current.position);
 
@@ -325,7 +135,7 @@ export function Ghost() {
       // Atualizar brilho dos olhos com base no movimento
       const isMoving =
         currentMovementRef.current > GHOST_CONFIG.movementThreshold;
-      const targetGlow = isMoving ? 0.8 : 0.2; // CodePen logic: isMoving ? 1.0 : 0.0
+      const targetGlow = isMoving ? 0.8 : 0.2;
       const glowChangeSpeed = isMoving
         ? GHOST_CONFIG.eyeGlowResponse * 1
         : GHOST_CONFIG.eyeGlowResponse;
@@ -339,11 +149,11 @@ export function Ghost() {
       rightOuterGlowMaterial.opacity = newOpacity * 0.33;
     }
 
-    // Renderizar com efeitos
-    if (composerRef.current) {
-      composerRef.current.render();
-    }
-  });
+    // Renderizar com efeitos (SEMPRE, se composer existir)
+    // if (composerRef.current && isLoaded) {
+    //   composerRef.current.render();
+    // }
+  }, 1);
 
   // Criar luzes de contorno
   useEffect(() => {
@@ -366,42 +176,74 @@ export function Ghost() {
     // Luz ambiente mínima
     const ambientLight = new THREE.AmbientLight(0x0a0a2e, 0.8);
     scene.add(ambientLight);
+
+    // Create Eyes
+    if (eyesRef.current && !eyesRef.current.children.length) {
+      const leftEyeGeometry = new THREE.SphereGeometry(0.12, 12, 12);
+      const rightEyeGeometry = new THREE.SphereGeometry(0.12, 12, 12);
+      const leftOuterGlowGeometry = new THREE.SphereGeometry(0.22, 12, 12);
+      const rightOuterGlowGeometry = new THREE.SphereGeometry(0.22, 12, 12);
+
+      const eyeColor = getConfigColorHex(GHOST_CONFIG.eyeGlowColor);
+
+      const leftEyeMaterial = new THREE.MeshBasicMaterial({
+        color: eyeColor,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const rightEyeMaterial = new THREE.MeshBasicMaterial({
+        color: eyeColor,
+        transparent: true,
+        opacity: 0.8,
+      });
+      const leftOuterGlowMaterial = new THREE.MeshBasicMaterial({
+        color: eyeColor,
+        transparent: true,
+        opacity: 0.3,
+      });
+      const rightOuterGlowMaterial = new THREE.MeshBasicMaterial({
+        color: eyeColor,
+        transparent: true,
+        opacity: 0.3,
+      });
+
+      const leftEye = new THREE.Mesh(leftEyeGeometry, leftEyeMaterial);
+      const rightEye = new THREE.Mesh(rightEyeGeometry, rightEyeMaterial);
+      const leftOuter = new THREE.Mesh(
+        leftOuterGlowGeometry,
+        leftOuterGlowMaterial
+      );
+      const rightOuter = new THREE.Mesh(
+        rightOuterGlowGeometry,
+        rightOuterGlowMaterial
+      );
+
+      leftEye.position.set(-0.6, 0.2, 1.6);
+      rightEye.position.set(0.6, 0.2, 1.6);
+      leftOuter.position.copy(leftEye.position);
+      rightOuter.position.copy(rightEye.position);
+
+      eyesRef.current.add(leftEye);
+      eyesRef.current.add(rightEye);
+      eyesRef.current.add(leftOuter);
+      eyesRef.current.add(rightOuter);
+
+      eyesRef.current.userData = {
+        leftEyeMaterial,
+        rightEyeMaterial,
+        leftOuterGlowMaterial,
+        rightOuterGlowMaterial,
+      };
+    }
   }, [scene]);
 
   return (
-    <>
-      {/* Fantasma */}
-      <group ref={groupRef} scale={GHOST_CONFIG.ghostScale} name="ghost">
-        {/* Corpo do Fantasma */}
-        <mesh ref={bodyRef}>
-          <sphereGeometry args={[2, 45, 45]} />
-          <meshStandardMaterial
-            color={getConfigColorHex(GHOST_CONFIG.bodyColor)}
-            roughness={0.02}
-            metalness={0.0}
-            transparent
-            opacity={GHOST_CONFIG.ghostOpacity}
-            emissive={getConfigColorHex(GHOST_CONFIG.glowColor)}
-            emissiveIntensity={GHOST_CONFIG.emissiveIntensity}
-            alphaTest={0.0}
-          />
-        </mesh>
-
-        {/* Olhos */}
-        <group ref={eyesRef} position={[0.1, 0, 0]}>
-          {/* Os olhos serão criados pelo useEffect acima */}
-        </group>
-      </group>
-
-      {/* Atmosfera que revela o fundo */}
-      <mesh ref={atmosphereRef} />
-
-      {/* Fireflies (pontos de luz) */}
-      <GhostFireflies />
-
-      {/* Partículas (simulação simples) */}
-      <GhostParticles ghostGroup={groupRef} movementRef={currentMovementRef} />
-    </>
+    <group name="SAFE_GHOST_DEBUG">
+      <mesh>
+        <sphereGeometry args={[1.5, 32, 32]} />
+        <meshBasicMaterial color="cyan" wireframe />
+      </mesh>
+    </group>
   );
 }
 
