@@ -1,3 +1,4 @@
-## 2026-01-10 - Disabling Post-Processing for Performance
-**Learning:** Conditionally rendering `EffectComposer` based on device capability is a high-impact optimization for WebGL scenes. The `usePerformanceAdaptive` hook already provided the logic (`enablePostProcessing`), but it was ignored in the component, causing expensive effects to run on all devices.
-**Action:** Always check if expensive sub-components (like post-processing chains) are actually respecting the performance config flags passed to them.
+## 2024-05-23 - Consolidating Post-Processing Passes
+
+**Learning:** `EffectComposer` in `@react-three/postprocessing` executes each effect as a separate render pass (unless merged by the library, which custom effects are not). Stacking separate `Noise`, `Vignette`, and a custom `AnalogDecay` (which internally calculated grain and vignette) resulted in 4+ full-screen shader passes per frame.
+**Action:** Always inspect custom shader effects to see if they can handle standard effects like grain or vignette internally. Consolidating these into a single custom shader pass significantly reduces GPU overhead, especially for full-screen effects.
