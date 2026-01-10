@@ -26,11 +26,13 @@ export const Button = ({
     'inline-flex items-center justify-center font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none group';
 
   const variants = {
-    primary: 'bg-[#0057FF] text-white hover:bg-[#0046CC]',
-    secondary: 'bg-white text-black hover:bg-gray-100',
-    outline: 'border border-white/20 text-white hover:bg-white/10',
-    ghost: 'text-white hover:bg-white/10',
-    link: 'text-[#0057FF] hover:underline p-0 h-auto',
+    primary:
+      'bg-bluePrimary text-text hover:bg-primary focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-blueAccent',
+    secondary:
+      'bg-backgroundLight text-textInverse hover:bg-backgroundLight/80 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-background',
+    outline: 'border border-text/20 text-text hover:bg-background/40',
+    ghost: 'text-text hover:bg-background/30',
+    link: 'text-bluePrimary hover:text-blueAccent hover:underline p-0 h-auto',
   };
 
   const sizes = {

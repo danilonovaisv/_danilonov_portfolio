@@ -107,12 +107,12 @@ export const HOME_CONTENT = {
 
   clients: {
     title: 'marcas com as quais já trabalhei',
-    // Gerar URLs programaticamente de 1 a 12
-    logos: Array.from(
-      { length: 12 },
-      (_, i) =>
-        `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`
-    ),
+    // Gerador de URLs e metadados para os 12 SVGs monocromáticos
+    logos: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      src: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`,
+      alt: `Client Logo ${i + 1}`,
+    })),
   },
 
   contact: {

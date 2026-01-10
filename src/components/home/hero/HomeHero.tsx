@@ -4,25 +4,27 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { BRAND } from '@/config/brand';
 import { Preloader } from '@/components/ui/Preloader';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 import HeroCopy from './HeroCopy';
 import ManifestoThumb from './ManifestoThumb';
-import ManifestoSection from './ManifestoSection';
 
 // Dynamic import for WebGL Scene
 const GhostScene = dynamic(
   () => import('@/components/canvas/home/hero/GhostScene'),
   {
     ssr: false,
-    loading: () => <div className="absolute inset-0 bg-[#040013]" />,
+    loading: () => <div className="absolute inset-0 bg-background" />,
   }
 );
 
 const CONFIG = {
   preloadMs: 2000,
-  bgColor: '#040013',
 } as const;
+
+const heroGradient = `radial-gradient(circle at center, ${BRAND.colors.neutral}, ${BRAND.colors.background})`;
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -33,6 +35,9 @@ export default function HomeHero() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Performance: Desativa WebGL em mobile para garantir LCP < 2.5s (Lei da Performance Mobile)
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   const handlePreloaderDone = useCallback(() => setIsLoaded(true), []);
 
   return (
@@ -40,7 +45,8 @@ export default function HomeHero() {
       <section
         id="hero"
         ref={heroRef}
-        className="relative w-full min-h-[200vh] bg-[radial-gradient(circle_at_center,#0b0d3a,#06071f)]"
+        className="relative w-full min-h-dvh md:min-h-[200vh]"
+        style={{ backgroundImage: heroGradient }}
         aria-label="Portfolio Hero Section"
       >
         {/* Preloader */}
@@ -54,9 +60,9 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* Background WebGL Layer (z-20) */}
+        {/* Background WebGL Layer (z-20) - Desktop Only */}
         <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
-          <GhostScene />
+          {!isMobile && <GhostScene />}
         </div>
 
         {/* Hero Content Layer (z-10) */}
@@ -67,10 +73,7 @@ export default function HomeHero() {
         </div>
 
         {/* Manifesto Thumb (Desktop) - Floating interactive component (z-30) */}
-        <ManifestoThumb
-          heroRef={heroRef}
-          src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
-        />
+        <ManifestoThumb heroRef={heroRef} src={BRAND.assets.video.manifesto} />
 
         <div className="sr-only">
           Decorative animation of a floating spectral ghost with glowing
@@ -79,7 +82,6 @@ export default function HomeHero() {
       </section>
 
       {/* Mobile-only Manifesto Section */}
-      <ManifestoSection />
     </>
   );
 }

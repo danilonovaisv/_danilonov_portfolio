@@ -1,19 +1,30 @@
 import { BRAND } from '@/config/brand';
 
 export default function JsonLd() {
-  const schema = {
+  const personSchema = {
     '@type': 'Person',
     name: BRAND.name,
     url: `https://${BRAND.domain}`,
     image: BRAND.logos.light,
     jobTitle: 'Creative Developer & Designer',
     sameAs: [
-      `https://github.com/danilonovaisv`,
-      `https://linkedin.com/in/danilonovaisv`,
-      `https://instagram.com/_novais`,
+      'https://github.com/danilonovaisv',
+      'https://linkedin.com/in/danilonovaisv',
+      'https://instagram.com/_novais',
     ],
     description:
-      'Portfólio de Danilo Novais - Creative Developer especializado em design digital, branding e motion design.',
+      'Creative Developer especializado em WebGL, R3F, Next.js e experiências digitais interativas.',
+    knowsAbout: [
+      'WebGL',
+      'React Three Fiber',
+      'Three.js',
+      'Next.js',
+      'TypeScript',
+      'Motion Design',
+      'Branding',
+      'Creative Development',
+      'Interactive Design',
+    ],
   };
 
   const websiteSchema = {
@@ -21,6 +32,19 @@ export default function JsonLd() {
     name: `${BRAND.name} | Portfolio`,
     url: `https://${BRAND.domain}`,
     description: 'Você não vê o design. Mas ele vê você.',
+    inLanguage: 'pt-BR',
+  };
+
+  const portfolioSchema = {
+    '@type': 'CollectionPage',
+    name: 'Portfolio - Danilo Novais',
+    description:
+      'Seleção curada de projetos de Branding, Motion Design e Creative Development.',
+    url: `https://${BRAND.domain}/portfolio`,
+    isPartOf: {
+      '@type': 'WebSite',
+      url: `https://${BRAND.domain}`,
+    },
   };
 
   return (
@@ -29,7 +53,7 @@ export default function JsonLd() {
       dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           '@context': 'https://schema.org',
-          '@graph': [schema, websiteSchema],
+          '@graph': [personSchema, websiteSchema, portfolioSchema],
         }),
       }}
     />

@@ -80,7 +80,8 @@ body {
   /* Previne scroll horizontal */
   overflow-y: auto;
   /* Permite scroll vertical normal */
-  background-color: #00001a;
+  background-color: #040013;
+  /* BRAND.colors.background - Deep Void */
   letter-spacing: -0.03em;
   color: #fcffff;
   font-family: var(--font-tt-norms);

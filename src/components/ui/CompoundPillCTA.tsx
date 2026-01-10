@@ -1,3 +1,7 @@
+/**
+ * @deprecated Use `AntigravityCTA` instead for consistent CTA styling across the app.
+ * This component is kept for backward compatibility but should not be used for new implementations.
+ */
 'use client';
 
 import React, { useEffect } from 'react';

@@ -139,8 +139,8 @@ export default function ContactSection() {
                 ))}
               </div>
 
-              {/* Social Icons Row */}
-              <div className="flex items-center justify-center lg:justify-start gap-4 pt-4">
+              {/* Social Icons Row (Desktop Only) */}
+              <div className="hidden lg:flex items-center justify-center lg:justify-start gap-4 pt-4">
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.href}
@@ -159,6 +159,22 @@ export default function ContactSection() {
             {/* Right/Bottom: Form Card */}
             <div className="w-full max-w-[540px] mt-8 lg:mt-0">
               <ContactForm />
+            </div>
+
+            {/* Mobile-only Social Icons (To follow order: Info -> Form -> Socials) */}
+            <div className="flex lg:hidden items-center justify-center gap-4 pt-8 w-full">
+              {socialLinks.map((social) => (
+                <motion.a
+                  key={`mobile-${social.href}`}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-text-dark/70 shadow-sm transition-all active:scale-95 active:border-primary active:text-primary"
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
           </div>
         </div>

@@ -8,8 +8,9 @@
 import { FC } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Calendar, Building2, Tag } from 'lucide-react';
+import { Calendar, Building2, Tag } from 'lucide-react';
 import type { PortfolioProject } from '@/types/project';
+import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
 
 interface TypeBContentProps {
   project: PortfolioProject;
@@ -70,6 +71,7 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
         {project.accentColor && (
           <div 
             className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-(--accent-color,transparent) to-transparent"
+
             style={{ '--accent-color': `${project.accentColor}40` } as React.CSSProperties}
           />
         )}
@@ -176,18 +178,17 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
           </motion.div>
         )}
 
-        {/* CTA */}
+        {/* CTA - Using AntigravityCTA component */}
         <motion.div variants={fadeInUp} className="flex gap-3 mt-4">
           {project.detail?.externalUrl && (
-            <a
+            <AntigravityCTA
               href={project.detail.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-focus-ring text-white font-medium text-sm hover:bg-focus-ring/90 transition-colors"
-            >
-              Ver projeto
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
+              label="ver projeto"
+              variant="primary"
+              size="sm"
+              external
+              ariaLabel={`Ver projeto ${project.title}`}
+            />
           )}
         </motion.div>
       </div>

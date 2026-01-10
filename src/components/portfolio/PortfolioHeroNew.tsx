@@ -7,7 +7,6 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 import { PORTFOLIO_CONTENT } from '@/config/content';
 import { 
   MOTION_TOKENS, 
@@ -15,6 +14,7 @@ import {
   ghostTransition
 } from '@/config/motion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
 
 // Motion config - Ghost Era ethereal timing
 const { duration, offset } = MOTION_TOKENS;
@@ -40,7 +40,7 @@ export default function PortfolioHeroNew() {
     <section 
       id="portfolio-hero"
       aria-label="Portfolio Hero"
-      className="relative h-screen min-h-[600px] max-h-[900px] w-full overflow-hidden"
+      className="relative h-dvh min-h-[600px] max-h-[900px] w-full overflow-hidden"
     >
       {/* Video Background - Responsivo Desktop/Mobile */}
       <div className="absolute inset-0 z-0">
@@ -86,19 +86,20 @@ export default function PortfolioHeroNew() {
           <span className="text-white">showcase</span>
         </motion.h1>
 
-        {/* CTA Button - Enhanced glow and ethereal hover */}
-        <motion.button
+        {/* CTA Button - Using AntigravityCTA component */}
+        <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: offset.standard }}
           animate={{ opacity: 1, y: 0 }}
           transition={ghostTransition(0.4, duration.normal)}
-          whileHover={prefersReducedMotion ? {} : { y: -3 }}
-          whileTap={prefersReducedMotion ? {} : { y: 0 }}
-          onClick={handleCTAClick}
-          className="group inline-flex items-center gap-3 bg-primary text-white px-7 md:px-8 py-3.5 md:py-4 rounded-full font-medium text-sm md:text-base transition-all duration-500 w-fit shadow-[0_0_30px_rgba(0,72,255,0.25),0_4px_20px_rgba(0,72,255,0.12)] hover:shadow-[0_0_50px_rgba(0,72,255,0.4),0_8px_30px_rgba(0,72,255,0.25)] will-change-transform"
         >
-          vamos trabalhar juntos
-          <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-500 ease-out group-hover:translate-x-1.5" />
-        </motion.button>
+          <AntigravityCTA
+            onClick={handleCTAClick}
+            label="vamos trabalhar juntos"
+            variant="primary"
+            size="md"
+            ariaLabel="Ir para seção de contato"
+          />
+        </motion.div>
       </div>
 
       {/* Scroll indicator - Ethereal animation */}

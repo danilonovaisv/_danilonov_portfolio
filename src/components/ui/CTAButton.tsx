@@ -1,3 +1,8 @@
+/**
+ * @deprecated Use `AntigravityCTA` instead for consistent CTA styling across the app.
+ * This component is kept for backward compatibility but should not be used for new implementations.
+ * The AntigravityCTA follows the "Compound Fusion" design pattern.
+ */
 'use client';
 
 import { useId } from 'react';

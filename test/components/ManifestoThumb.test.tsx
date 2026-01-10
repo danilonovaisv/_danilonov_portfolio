@@ -6,6 +6,11 @@ import ManifestoThumb from '@/components/home/hero/ManifestoThumb';
 // Mock heroRef para os testes
 const mockHeroRef = createRef<HTMLElement>();
 
+// Mock useMediaQuery to simulate desktop resolution
+jest.mock('@/hooks/useMediaQuery', () => ({
+  useMediaQuery: jest.fn(() => true),
+}));
+
 jest.mock('framer-motion', () => {
   const mockMotionValue = {
     get: () => 0,

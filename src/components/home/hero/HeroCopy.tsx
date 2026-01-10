@@ -1,9 +1,17 @@
 'use client';
 
 import { motion, Variants } from 'framer-motion';
-import Link from 'next/link';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
 
+/**
+ * Animation: Page Load Entry
+ * - Scale: 0.92 → 1.02 → 1
+ * - Blur: 10px → 0
+ * - Y: 60px → 0
+ * - Duration: 1.2s
+ * - Easing: [0.25, 0.46, 0.45, 0.94]
+ */
 const textContainerAnimation: Variants = {
   initial: {
     opacity: 0,
@@ -18,15 +26,22 @@ const textContainerAnimation: Variants = {
     filter: 'blur(0px)',
     transition: {
       duration: 1.2,
-      ease: [0.25, 0.46, 0.45, 0.94], // Custom cubic-bezier
-      staggerChildren: 0.1,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      staggerChildren: 0.15,
     },
   },
 };
 
 const itemAnimation: Variants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 24 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
 };
 
 export default function HeroCopy() {
@@ -43,20 +58,23 @@ export default function HeroCopy() {
   return (
     <motion.div
       {...motionProps}
-      className="hero-content flex flex-col items-center text-center max-w-5xl px-4 pointer-events-auto"
+      className="hero-content flex flex-col items-center justify-center text-center max-w-5xl px-4 pointer-events-auto"
     >
-      {/* Tag decorativa */}
+      {/* Tag decorativa - Mono, 19px, uppercase */}
       <motion.span
         variants={itemAnimation}
-        className="text-caption uppercase tracking-widest opacity-60 mb-6 font-medium"
+        className="font-mono text-[19px] uppercase tracking-[0.2em] text-[#d9dade] opacity-60 mb-8"
       >
         [BRAND AWARENESS]
       </motion.span>
 
-      {/* Headline principal */}
+      {/* Headline principal - Display: 6-9rem, Black weight */}
       <motion.h1
         variants={itemAnimation}
-        className="text-display font-black tracking-tight leading-[1.05] mb-4 text-text-light"
+        className="font-black tracking-tight leading-[0.95] mb-6 text-text-light"
+        style={{
+          fontSize: 'clamp(3.5rem, 10vw + 1rem, 9rem)',
+        }}
       >
         {/* Desktop/Tablet: 2 linhas */}
         <span className="hidden md:block">
@@ -74,81 +92,27 @@ export default function HeroCopy() {
         </span>
       </motion.h1>
 
-      {/* Subheading */}
+      {/* Subheading - H2 size, #d9dade */}
       <motion.h2
         variants={itemAnimation}
-        className="text-h2 font-bold text-[#d9dade] mb-12"
+        className="font-bold text-[#d9dade] mb-14"
+        style={{
+          fontSize: 'clamp(1.5rem, 4vw + 0.5rem, 2.5rem)',
+        }}
       >
         Mas ele vê você.
       </motion.h2>
 
-      {/* CTA */}
+      {/* CTA Button - Using AntigravityCTA component */}
       <motion.div variants={itemAnimation}>
-        <CTAButton href="/sobre">step inside →</CTAButton>
+        <AntigravityCTA
+          href="/sobre"
+          label="step inside"
+          variant="primary"
+          size="md"
+          ariaLabel="Ir para seção sobre"
+        />
       </motion.div>
-    </motion.div>
-  );
-}
-
-interface CTAButtonProps {
-  href: string;
-  children: React.ReactNode;
-}
-
-function CTAButton({ href, children }: CTAButtonProps) {
-  return (
-    <motion.div
-      className="inline-flex items-center gap-0 group cursor-pointer"
-      whileHover={{ y: -1 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2 }}
-    >
-      <Link
-        href={href}
-        className="relative inline-flex items-center focus-visible:outline-2 focus-visible:outline-blue-glow focus-visible:outline-offset-4 rounded-full"
-        aria-label="Ir para seção sobre"
-      >
-        {/* Pílula de texto */}
-        <span
-          className="
-            px-6 py-3
-            bg-[#0048ff] text-white
-            text-sm uppercase tracking-wide font-medium
-            rounded-l-full
-            transition-colors duration-300
-            group-hover:bg-[#0048ff]/90
-          "
-        >
-          {children}
-        </span>
-
-        {/* Círculo da seta */}
-        <span
-          className="
-            w-12 h-12
-            bg-[#0048ff] text-white
-            rounded-r-full
-            flex items-center justify-center
-            transition-all duration-300
-            group-hover:bg-[#0048ff]/90
-          "
-        >
-          <svg
-            className="w-5 h-5 transform transition-transform duration-300 group-hover:translate-x-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17 8l4 4m0 0l-4 4m4-4H3"
-            />
-          </svg>
-        </span>
-      </Link>
     </motion.div>
   );
 }

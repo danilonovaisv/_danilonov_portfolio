@@ -10,78 +10,62 @@ Centralizar toda a configuração visual e textual do projeto (`src/config/`).
 
 **Arquivos Alvo:**
 
-1. `src/config/brand.ts` (Design Tokens: Cores, Tipografia, Assets)
-2. `src/styles/fonts.css` (Definição de `@font-face`)
-3. `src/styles/globals.css` (Variáveis CSS e Clamps)
-4. `src/config/navigation.ts` (Links, Redes Sociais, Contato)
-5. `src/config/content.ts` (Textos da Home e Projetos)
+1. `src/config/brand.ts` (Cores hexadecimais corretas e URLs finais)
+2. `src/styles/fonts.css` (URLs self-hosted corrigidas)
+3. `src/styles/globals.css` (Novos Clamps matemáticos e classes utilitárias)
+4. `src/config/navigation.ts` (Estrutura de links revisada)
+5. `src/config/content.ts` (Adaptação para a nova arquitetura)
 
 ---
 
 ## Passo 1: Configuração de Marca (`src/config/brand.ts`)
 
-Defina a identidade visual, paleta de cores exata e assets estáticos.
+Centralização da Paleta de Cores (Design System 2.1) e Assets (2.6).
 
 ```typescript
 export const BRAND = {
   name: 'Danilo Novais',
   domain: 'portfoliodanilo.com',
 
-  // Design Tokens (Palette 2.1)
+  // Paleta de Cores (Design System 2.1)
   colors: {
-    bluePrimary: '#0048ff', // Cor primária, CTAs, links
-    blueAccent: '#4fe6ff', // Destaques secundários, brilhos Ghost
+    bluePrimary: '#0048ff', // CTAs, links, interativos
+    blueAccent: '#4fe6ff', // Destaques secundários, brilhos
     purpleDetails: '#8705f2', // Pequenos detalhes
     pinkDetails: '#f501d3', // Ênfases pontuais
 
     background: '#040013', // Fundo escuro principal
-    backgroundLight: '#f0f0f0', // Seções claras (forms)
+    backgroundLight: '#f0f0f0', // Seções claras
 
-    text: '#fcffff', // Texto principal (Dark Mode)
+    text: '#fcffff', // Texto principal (dark mode)
     textInverse: '#0e0e0e', // Texto em fundos claros
     textEmphasis: '#2E85F2', // Palavras destacadas
     textHighlight: '#4fe6ff', // Destaques curtos
-    textSecondary: '#a1a3a3', // Metadata
+    textSecondary: '#a1a3a3', // Infos secundárias
 
-    neutral: '#0b0d3a', // Gradientes, fundos sutis
-    neutralLight: '#F5F5F5', // Fundos secundários claros
+    neutral: '#0b0d3a', // Gradientes sutis
+    neutralLight: '#F5F5F5', // Fundos secundários
   },
 
-  typography: {
-    fontFamily: {
+  // Assets Globais (2.6 Global Assets)
+  assets: {
+    logos: {
+      favicon:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg',
+      faviconLight:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg',
+      light:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg', // Header
+      dark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg', // Header (bg claro)
+    },
+    video: {
+      manifesto:
+        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
+    },
+    fonts: {
       primary: 'TT Norms Pro',
       mono: 'PPSupplyMono',
-      fallbacks: ['ui-sans-serif', 'system-ui', 'sans-serif'],
     },
-    // Definições de peso para uso no Tailwind
-    weights: {
-      thin: 100,
-      light: 300,
-      regular: 400,
-      medium: 500,
-      bold: 700,
-      black: 900,
-    },
-  },
-
-  // Assets Globais
-  logos: {
-    // Para fundo claro
-    light:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg',
-    // Para fundo escuro
-    dark: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg',
-
-    favicon:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg',
-    faviconLight:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg',
-  },
-
-  video: {
-    // Usado na Hero e Manifesto (mesma URL para cache)
-    manifesto:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   },
 };
 ```
@@ -90,7 +74,7 @@ export const BRAND = {
 
 ## Passo 1.1: Configuração de Fontes (`src/styles/fonts.css`)
 
-Implemente as fontes self-hosted via Supabase para garantir performance e consistência visual.
+URLs atualizadas conforme documentação 2.7.
 
 ```css
 /* TT Norms Pro - Primary Font */
@@ -158,13 +142,14 @@ Implemente as fontes self-hosted via Supabase para garantir performance e consis
 
 ## Passo 1.2: Variáveis Globais e Clamp (`src/styles/globals.css`)
 
-Defina a tipografia fluida para evitar media queries excessivas.
+Atualizado com os valores exatos de `clamp()` fornecidos na tabela de Tipografia (2.2).
 
 ```css
 @import './fonts.css';
 
 :root {
   /* Tipografia Fluida (Mobile -> Desktop) */
+  /* Valores exatos do Design System 2.2 */
   --font-display: clamp(2.5rem, 5vw, 4.5rem); /* 40px -> 72px */
   --font-h1: clamp(2rem, 4vw, 3.5rem); /* 32px -> 56px */
   --font-h2: clamp(1.5rem, 3vw, 2.5rem); /* 24px -> 40px */
@@ -173,6 +158,9 @@ Defina a tipografia fluida para evitar media queries excessivas.
 
   --font-small: 0.875rem; /* 14px */
   --font-micro: 0.75rem; /* 12px */
+
+  /* Espaçamento Global */
+  --container-padding: clamp(24px, 5vw, 96px);
 }
 
 body {
@@ -182,35 +170,36 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Classes utilitárias para Tipografia */
-.type-display {
+/* Utilitários de Tipografia baseados nos Tokens */
+.text-display {
   font-size: var(--font-display);
-  font-weight: 900;
+  font-weight: 900; /* Black */
   line-height: 1.1;
 }
-.type-h1 {
+.text-h1 {
   font-size: var(--font-h1);
-  font-weight: 700;
+  font-weight: 700; /* Bold */
   line-height: 1.1;
 }
-.type-h2 {
+.text-h2 {
   font-size: var(--font-h2);
-  font-weight: 700;
+  font-weight: 700; /* Bold */
   line-height: 1.15;
 }
-.type-h3 {
+.text-h3 {
   font-size: var(--font-h3);
-  font-weight: 500;
+  font-weight: 500; /* Medium */
   line-height: 1.2;
 }
-.type-body {
+.text-body {
   font-size: var(--font-body);
-  font-weight: 400;
+  font-weight: 400; /* Regular */
   line-height: 1.5;
 }
-.type-micro {
+.text-micro {
   font-family: 'PPSupplyMono', monospace;
   font-size: var(--font-micro);
+  line-height: 1.4;
 }
 ```
 
@@ -218,7 +207,7 @@ body {
 
 ## Passo 2: Configuração de Navegação (`src/config/navigation.ts`)
 
-Centralize links externos, IDs de seção e formulários.
+Estrutura alinhada com "3.1 Information Architecture" e "3.2 Navigation Structure".
 
 ```typescript
 export const SOCIALS = {
@@ -227,28 +216,21 @@ export const SOCIALS = {
   linkedin: 'https://linkedin.com/in/danilonovais',
   twitter: 'https://twitter.com/danilo_novais',
   emailPrimary: 'mailto:danilo@portfoliodanilo.com',
-  emailSecondary: 'mailto:dannovaisv@gmail.com',
-  phone: 'tel:+5511983966838',
-};
-
-export const CONTACT_FORM = {
-  action: 'https://formsubmit.co/danilo@portfoliodanilo.com',
-  buttonLabel: 'Enviar Mensagem',
 };
 
 export const NAVIGATION = {
   header: [
-    { label: 'home', href: '#hero' },
+    { label: 'home', href: '/' }, // ou #hero se estiver na home
     { label: 'sobre', href: '/sobre' },
-    { label: 'portfólio showcase', href: '#portfolio-showcase' }, // ou /portfolio para página dedicada
-    { label: 'contato', href: '#contact' },
+    { label: 'portfólio', href: '/portfolio' },
+    { label: 'contato', href: '#contact' }, // Always anchor
   ],
   footer: {
     copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',
     links: [
-      { label: 'home', href: '#hero' },
-      { label: 'portfólio showcase', href: '#portfolio-showcase' },
+      { label: 'home', href: '/' },
       { label: 'sobre', href: '/sobre' },
+      { label: 'portfólio', href: '/portfolio' },
       { label: 'contato', href: '#contact' },
     ],
   },
@@ -257,92 +239,36 @@ export const NAVIGATION = {
 
 ---
 
-## Passo 3: Conteúdo da Home (`src/config/content.ts`)
+## Passo 3: Conteúdo e Assets Dinâmicos (`src/config/content.ts`)
 
-Estruture os dados que alimentam as seções da Home Page.
+Atualizado para gerar as URLs dos 12 logos de clientes automaticamente e refletir a estrutura "Showcase".
 
 ```typescript
 export const HOME_CONTENT = {
   hero: {
-    tag: '[BRAND AWARENESS]',
     title: ['Você não vê o design.'],
     subtitle: '[Mas ele vê você.]',
     cta: 'step inside →',
-    scrollHint: '#sobre',
   },
 
   showcase: {
     title: 'portfólio showcase',
-    label: '[what we love working on]',
-    cta: { label: "let's build something great →", href: '/portfolio' },
+    cta: { label: 'vamos trabalhar juntos', href: '/portfolio' },
     categories: [
-      {
-        id: 'brand-campaigns',
-        label: 'Brand & Campaigns',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-      },
-      {
-        id: 'videos-motions',
-        label: 'Videos & Motions',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      },
-      {
-        id: 'websites-webcampaigns-tech',
-        label: 'Web Campaigns, Websites & Tech',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
-      },
+      { id: 'brand-campaigns', label: 'Brand & Campaigns' },
+      { id: 'videos-motions', label: 'Videos & Motions' },
+      { id: 'websites-tech', label: 'Web Campaigns, Websites & Tech' },
     ],
   },
 
-  featuredProjects: [
-    {
-      slug: 'magic-radio-branding',
-      title: 'Magic — devolvendo a magia ao rádio',
-      category: 'branding & campanha',
-      client: 'Magic',
-      year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-    },
-    {
-      slug: 'branding-project-01',
-      title: 'Uma marca ousada e consistente',
-      category: 'branding',
-      client: 'Cliente confidencial',
-      year: 2022,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-    },
-    {
-      slug: 'key-visual-campaign',
-      title: 'Key visual para campanha sazonal',
-      category: 'campanha',
-      client: 'Cliente confidencial',
-      year: 2021,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-    },
-    {
-      slug: 'webdesigner-motion',
-      title: 'Experiência web em movimento',
-      category: 'web & motion',
-      client: 'Cliente confidencial',
-      year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-    },
-  ],
-
   clients: {
     title: 'marcas com as quais já trabalhei',
-    // URL Base para referência
-    basePath:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/',
-    // Gerar URLs programaticamente de 1 a 12 na implementação
-    logos: Array.from(
-      { length: 12 },
-      (_, i) =>
-        `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`
-    ),
+    // Gerador de URLs para os 12 SVGs monocromáticos
+    logos: Array.from({ length: 12 }, (_, i) => ({
+      id: i + 1,
+      src: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`,
+      alt: `Client Logo ${i + 1}`,
+    })),
   },
 
   contact: {
@@ -354,49 +280,89 @@ export const HOME_CONTENT = {
 
 ---
 
-## Passo 4: Princípios de Animação e Implementação
+## Passo 4: Atualização da Ordem das Seções
 
-Ao implementar ou refatorar componentes, siga **ESTRITAMENTE** estas regras:
+Conforme solicitado nos dados verdadeiros, certifique-se de que seus componentes de página (`page.tsx`) sigam esta ordem exata:
 
-1. **Tecnologias de Animação:**
+### A. Home Page (`/`)
 
-- **DOM:** Use `Framer Motion`.
-- `whileInView` para reveals.
-- `whileHover`, `whileTap` para micro-interações.
-- `useScroll`, `useTransform` para efeitos de scroll (Parallax).
+1. **Header** (Navegação persistente)
+2. **Hero + Manifesto Video** (Impacto emocional)
+3. **Portfolio Showcase** (3 categorias com ritmo editorial)
+4. **Featured Projects** (4 trabalhos em destaque/bento grid)
+5. **Clients/Brands** (Grid de 12 logos)
+6. **Contact** (Formulário + Info)
+7. **Footer**
 
-- **WebGL:** Use `React Three Fiber` (`useFrame`).
-- **Propriedades:** Anime APENAS `transform` e `opacity` para performance.
+### B. Sobre (`/sobre`)
 
-2. **Acessibilidade (Reduced Motion):**
+1. **Header**
+2. **About Hero** (Video Loop)
+3. **About Origin**
+4. **About What I Do**
+5. **About Method**
+6. **About Beliefs**
+7. **About Closing**
+8. **Clients / Brands**
+9. **Contact**
+10. **Footer**
 
-- Se `prefers-reduced-motion: reduce` for detectado:
-- Desativar rotação 3D contínua.
-- Desativar parallax e efeitos de "follow mouse".
-- Manter estados estáticos e transições de fade simples.
+### C. Página Portfólio (`/portfolio`)
 
-3. **Ordem das Seções (Home):**
-1. Header
-1. Hero (com Ghost WebGL)
-1. Portfolio Showcase
-1. Featured Projects (Bento Grid)
-1. Clients / Brands
-1. Contact
-1. Footer
+Esta página possui uma arquitetura específica focada em imersão visual e navegação fluida ("Parallax Lerp"). O estado do modal deve ser gerenciado globalmente ou via contexto para garantir que o `AnimatePresence` funcione corretamente ao sair.
 
-1. **Ordem das Seções (Sobre):**
-1. Header
-1. About Hero (Video Loop)
-1. About Origin (Grid Alternado)
-1. About What I Do
-1. About Method
-1. About Beliefs (Ghost Manifesto)
-1. About Closing (CTA)
-1. Clients / Brands
-1. Contact
-1. Footer
+**Hierarquia de Componentes:**
 
----
+```mermaid
+graph TD
+    Page[Page: /portfolio] --> Hero[Hero Section]
+    Page --> Gallery[Projects Gallery]
+    Page --> Clients[Clients / Brands]
+    Page --> Contact[Contact]
+    Page --> Footer[Footer]
+    Page --> Modal[Portfolio Modal]
+
+    Hero --> H_Video[Video Loop Background]
+    Hero --> H_Overlay[Overlay Gradient]
+    Hero --> H_Title[Título: 'portfólio showcase']
+    Hero --> H_CTA[CTA: 'vamos trabalhar juntos']
+
+    Gallery --> G_Container[Gallery Container (Fixed)]
+    G_Container --> G_Track[Gallery Track (Animated)]
+    G_Track --> G_Card[ProjectCard[]]
+    G_Card --> G_Wrapper[Card Image Wrapper (Parallax Interno)]
+
+    Modal --> M_Backdrop[Backdrop (Blur/Darken)]
+    Modal --> M_Container[Modal Container]
+    M_Container --> M_Close[Close Button]
+    M_Container --> M_Content[Project Content (Tipo A ou B)]
+    M_Content --> MC_Media[Main Media]
+    M_Content --> MC_Title[Project Title]
+    M_Content --> MC_Meta[Project Meta]
+    M_Content --> MC_Sec[Secondary Content (Galeria/Texto)]
+
+```
+
+**Detalhamento Técnico da Implementação:**
+
+1. **Hero Section:**
+
+- **Background:** Vídeo em _loop_ (mudo, _playsinline_).
+- **Overlay:** Gradiente sutil para garantir legibilidade do título "portfólio showcase".
+
+2. **Projects Gallery (Core Interaction):**
+
+- **Mecanismo:** Scroll horizontal transformado em movimento vertical (ou vice-versa) usando `useScroll` e `useTransform` do Framer Motion.
+- **Parallax Lerp:** A "Gallery Track" se move em uma velocidade diferente do scroll da página, e as imagens dentro dos "ProjectCard" têm um parallax interno adicional para profundidade.
+
+3. **Portfolio Modal (Interatividade):**
+
+- **Trigger:** Clicar em um `ProjectCard` abre o modal sem navegar para outra rota (interceptação de rota ou estado local), mantendo o contexto da galeria ao fundo.
+- **AnimatePresence:** Essencial
+
+## Próximo Passo Sugerido
+
+## ANALISAR E CORRIGIR E/GERAR O arquivo **`tailwind.config.ts`** completo, integrando essas variáveis (cores e clamps) para que você possa usar classes como `bg-background` ou `text-bluePrimary`
 
 ## Passo 5: Execução da Refatoração
 

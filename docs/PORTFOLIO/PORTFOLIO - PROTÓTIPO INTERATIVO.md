@@ -19,7 +19,7 @@ Criar a **página Portfolio Showcase completa** com:
 
 ---
 
-## 📐 ESTRUTURA DA PÁGINA
+## 📐 ESTRUTURA DA PÁGINA PORTFOLIO
 
 ### 🧱 Hierarquia de Componentes
 

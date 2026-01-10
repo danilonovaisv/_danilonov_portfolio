@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { BRAND } from '@/config/brand';
 
 // export const runtime = 'edge'; // Removed to avoid conflict with force-static
 export const dynamic = 'force-static'; // <--- ADICIONA ESTA LINHA
@@ -56,8 +57,8 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#050505',
-    fontFamily: 'sans-serif',
+    backgroundColor: BRAND.colors.background,
+    fontFamily: BRAND.typography.primary,
   },
   logoContainer: {
     display: 'flex',
@@ -71,7 +72,7 @@ const styles = {
   title: {
     fontSize: 64,
     fontWeight: 700,
-    background: 'linear-gradient(to bottom right, #ffffff 0%, #a5a5a5 100%)',
+    background: `linear-gradient(to bottom right, ${BRAND.colors.text} 0%, ${BRAND.colors.textHighlight} 100%)`,
     backgroundClip: 'text',
     color: 'transparent',
     margin: 0,
@@ -81,7 +82,7 @@ const styles = {
   },
   subtitle: {
     fontSize: 32,
-    color: '#888888',
+    color: BRAND.colors.textSecondary,
     margin: 0,
     letterSpacing: '-0.01em',
     textAlign: 'center',

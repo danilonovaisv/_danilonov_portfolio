@@ -12,13 +12,17 @@ const config: Config = {
     extend: {
       colors: {
         ...BRAND.colors,
-        // Map primary/accent to brand for utility convenience if not already covered
+        // Map primary/accent to brand for utility convenience
         primary: BRAND.colors.primary,
         accent: BRAND.colors.accent,
+        // Semantic aliases from Design System 2.1
+        bluePrimary: BRAND.colors.bluePrimary,
+        blueAccent: BRAND.colors.blueAccent,
       },
       fontFamily: {
         sans: [BRAND.typography.primary, ...BRAND.typography.fallbacks],
         mono: [
+          BRAND.typography.mono,
           'ui-monospace',
           'SFMono-Regular',
           'Menlo',
@@ -26,7 +30,7 @@ const config: Config = {
           'Consolas',
           'monospace',
         ],
-        display: [BRAND.typography.primary, ...BRAND.typography.fallbacks], // Often helpful
+        display: [BRAND.typography.primary, ...BRAND.typography.fallbacks],
       },
     },
   },
