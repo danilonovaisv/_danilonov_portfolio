@@ -4,5 +4,5 @@ description: Trigger the Ghost Design System Orchestrator to execute the special
 
 1. Execute the orchestrator script to start the multi-agent workflow:
    ```bash
-   python3 /Users/danilonovais/.gemini/antigravity/playground/gravitic-magnetar/orchestrator.py
+   python3 /Users/danilonovais/_danilonov_portfolio/.agent/orchestrator.py
    ```

@@ -1,5 +1,6 @@
 'use client';
 
+import * as THREE from 'three';
 import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { usePerformanceAdaptive } from '@/hooks/usePerformanceAdaptive';
@@ -29,7 +30,7 @@ export default function GhostScene({
   ghostRef?: React.RefObject<Group | null>;
 }) {
   // const prefersReducedMotion = useReducedMotion();
-  const { pixelRatio, particleCount } = usePerformanceAdaptive();
+  const { particleCount } = usePerformanceAdaptive();
 
   // Fallback for prefers-reduced-motion
   // if (prefersReducedMotion) {
@@ -45,9 +46,11 @@ export default function GhostScene({
     <>
       <Canvas
         className="absolute inset-0"
-        dpr={pixelRatio}
+        dpr={[1, 2]}
         gl={{
-          antialias: false, // Performance non-negotiable
+          antialias: true, // Quality requested in audit ID #04
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 0.9,
           powerPreference: 'high-performance',
           alpha: true,
         }}

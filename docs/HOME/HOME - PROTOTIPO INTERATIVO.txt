@@ -394,7 +394,8 @@ Client Logos:
 ### 3.1 Information Architecture
 Homepage
 ├── Header (persistent navigation)
-├── Hero + Manifesto Video
+├── Hero
+├── Manifesto Video
 ├── Portfolio Showcase (3 categories)
 ├── Featured Projects (4 highlighted works)
 ├── Clients/Brands (logo grid)
@@ -517,11 +518,14 @@ The homepage follows a narrative arc:
 #### Structure (Desktop)
 
 **Z-Index Stack:**
-1. **Z-50:** Preloader (Ghost Loader SVG animation)
-2. **Z-30:** Manifesto Video Thumbnail (floating, bottom-right)
-3. **Z-20:** Ghost Atmosphere (WebGL Canvas)
-4. **Z-10:** Editorial Text Block (static, centered)
-5. **Z-0:** Gradient Background (`#040013` to `#0b0d3a`)
+ - **Atmosfera:** WebGL etéreo, não sólido.
+ - **Hierarquia Z-Index (Estrita):**
+1. - `z-50`: Preloader
+2. - `z-40`: Header
+3. - `z-35`: CTA
+4. - `z-30`: Ghost WebGL
+5. - `z-20`: Editorial Text (Hero Copy)
+6. - `z-0`: Background
 
 #### Preloader
 

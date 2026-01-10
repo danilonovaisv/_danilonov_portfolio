@@ -30,9 +30,14 @@ export function useGhostReveal(
       // Ghost se move aproximadamente de -10 a +10 em X e -7 a +7 em Y
       const x = ((ghostPos.x + 10) / 20) * 100; // Normaliza para 0-100%
       const y = ((ghostPos.y + 7) / 14) * 100; // Normaliza para 0-100%
+      const invertedY = 100 - y;
 
       // Atualiza a posição do overlay usando CSS transform
-      overlay.style.transform = `translate(calc(${x}vw - 50%), calc(${y}vh - 50%))`;
+      overlay.style.transform = `translate(calc(${x}vw - 50%), calc(${invertedY}vh - 50%))`;
+
+      // Seta variáveis no documento/root para uso em classes CSS (ex: mask-image)
+      document.documentElement.style.setProperty('--ghost-x', `${x}vw`);
+      document.documentElement.style.setProperty('--ghost-y', `${invertedY}vh`);
 
       rafId = requestAnimationFrame(updateRevealPosition);
     };

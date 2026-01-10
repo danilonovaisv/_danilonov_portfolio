@@ -163,7 +163,7 @@ export function AntigravityCTA({
           `}
         >
           <ArrowUpRight
-            className={`${sizes.arrow} transition-transform duration-300 group-hover:rotate-45`}
+            className={`${sizes.arrow} transition-transform duration-300 group-hover:rotate-45 group-hover:translate-x-1 group-hover:-translate-y-1`}
             strokeWidth={2}
           />
         </div>

@@ -61,15 +61,15 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* Camada: Texto Editorial (Z-25 conforme Battle Plan) */}
-        <div className="absolute inset-0 z-25">
+        {/* Camada: Texto Editorial (Z-20 conforme Battle Plan) */}
+        <div className="absolute inset-0 z-20">
           <div className="sticky top-0 h-screen w-full flex items-center justify-center px-6 md:px-12">
             <HeroCopy ghostRef={ghostRef} isLoaded={isLoaded} />
           </div>
         </div>
 
-        {/* Camada: Ghost WebGL (Z-20 conforme Battle Plan) */}
-        <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
+        {/* Camada: Ghost WebGL (Z-30 conforme Battle Plan) */}
+        <div className="sticky top-0 h-screen w-full z-30 overflow-hidden pointer-events-none">
           <GhostScene ghostRef={ghostRef} />
         </div>
 

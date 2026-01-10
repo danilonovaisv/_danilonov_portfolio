@@ -24,10 +24,10 @@ export default function MobileHeaderBar({
       }`}
     >
       <div
-        className={`w-full h-[60px] pointer-events-auto ${
+        className={`w-full h-[60px] pointer-events-auto transition-colors duration-300 ${
           isLight
-            ? 'bg-white border-b border-section-clients/15'
-            : 'bg-section-manifesto border-b border-white/5'
+            ? 'bg-white border-b border-black/5'
+            : 'bg-background border-b border-white/5 shadow-lg shadow-black/20'
         }`}
       >
         <div className="flex items-center justify-between h-full px-4">

@@ -52,17 +52,14 @@ export default function DesktopFluidHeader({
 
   return (
     <header
-      className={`hidden lg:block fixed top-0 left-0 right-0 z-50 w-full pointer-events-none ${
+      className={`hidden lg:block absolute top-6 left-0 right-0 z-50 w-full pointer-events-none ${
         isLight ? 'header--light' : ''
       }`}
     >
-      <div className={'std-grid pt-6 flex justify-center'}>
-        <div
-          ref={wrapRef}
-          className="pointer-events-auto w-fit relative mx-auto"
-        >
+      <div className={'std-grid flex justify-center max-w-[1680px] mx-auto'}>
+        <div ref={wrapRef} className="pointer-events-auto w-fit relative">
           <div
-            className={`${styles.headerContainer} h-16 min-w-[700px] rounded-full backdrop-blur-md border border-white/5 bg-linear-to-b from-white/5 to-transparent`}
+            className={`${styles.headerContainer} h-16 min-w-[700px] rounded-full backdrop-blur-md border border-bluePrimary/30 bg-background/40`}
           >
             {/* glass background */}
             <div className="absolute inset-0 rounded-full overflow-hidden">

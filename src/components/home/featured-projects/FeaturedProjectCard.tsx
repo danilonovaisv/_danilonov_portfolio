@@ -39,7 +39,7 @@ export default function FeaturedProjectCard({
   const CardContent = () => (
     <>
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-section-manifesto border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white/5 border border-white/5 shadow-[0_12px_48px_-28px_rgba(0,0,0,0.5)] transition-all duration-500 ${
           reducedMotion
             ? ''
             : 'group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] group-hover:border-primary/20 group-hover:-translate-y-1 active:translate-y-0'

@@ -20,11 +20,19 @@ Este agente é responsável por **analisar, criar e corrigir código** no projet
   - **Hierarquia Z-Index (Estrita):**
     - `z-50`: Preloader
     - `z-40`: Header
-    - `z-30`: Manifesto Video (Expandido)
-    - `z-25`: Editorial Text (Hero Copy)
-    - `z-20`: Ghost WebGL
+    - `z-35`: CTA
+    - `z-30`: Ghost WebGL
+    - `z-20`: Editorial Text (Hero Copy)
     - `z-0`: Background
-  - **Interação:** Vídeo Thumb na Hero que expande para Fullscreen ao rolar (Manifesto).
+
+## 📂 FONTE DA VERDADE
+
+O arquivo mestre da pagina é: `'docs/HOME/HOME - PROTOTIPO INTERATIVO.md'` (ou caminho equivalente fornecido).
+Este arquivo dita O QUE fazer. O código atual dita ONDE fazer.
+
+## 📂 REFERENCIA SITE: `https://codepen.io/danilonovaisv/pen/azZbdQo`
+
+## 📂 CODIGOS REAIS DA REFERENCIA: '/docs/HOME/REFERENCIA_HERO-GHOST/ GHOST-CODE'
 
 ---
 
@@ -33,14 +41,36 @@ Este agente é responsável por **analisar, criar e corrigir código** no projet
 1. **Análise de Código e Arquitetura**
    - Garantir adesão estrita ao arquivo `.agentrules`.
    - Verificar Z-Index layers em cada alteração visual.
+   * Leia o conteúdo atual dos arquivos alvo.
+   * Compare o código atual com o pedido do prompt.
+   * _Raciocínio:_ "O que preciso mudar neste código para atingir o critério de aceite sem quebrar o que já funciona?"
 
 2. **Criação e Edição de Código**
    - Implementar shaders e materiais 3D otimizados (sem updates de state no loop).
    - Gerenciar transições de scroll complexas (Hero -> Manifesto) usando Framer Motion.
 
+#### 3. Aplicação Atômica
+
+- Aplique a mudança mínima necessária.
+- **Regras de Ouro:**
+  - Mantenha a consistência do Tailwind (use classes utilitárias, evite style inline).
+  - Não remova lógica de negócios existente.
+  - Respeite a estrutura do App Router.
+
+#### 4. Verificação Técnica (Self-Correction)
+
+- Após a edição, simule/rode: `pnpm run lint` ou verifique a sintaxe.
+- **Se houver erro:** Tente corrigir o erro **uma vez** baseado na mensagem de log.
+- **Se persistir:** Desfaça a alteração e marque como "FALHA TÉCNICA".
+
+#### 5. Verificação de Layout (Code-Level)
+
+- Verifique se as classes de responsividade (ex: `md:`, `lg:`) foram aplicadas conforme o pedido "Mobile-First".
+- Verifique se não há valores hardcoded que quebrem o layout (ex: `width: 1000px`).
+
 ---
 
-## 3. Workflows de Implementação (Battle Plan)
+## 6. Workflows de Implementação (Battle Plan)
 
 ### Workflow A: Fundação WebGL (O Ghost)
 
@@ -61,7 +91,7 @@ Este agente é responsável por **analisar, criar e corrigir código** no projet
 
 ---
 
-## 4. Stack e Padrões de Código
+## 7. Stack e Padrões de Código
 
 - **Next.js:** App Router, `next/dynamic` para componentes 3D.
 - **R3F:** Use `useFrame` com refs. Nunca use `useState` no loop de renderização.

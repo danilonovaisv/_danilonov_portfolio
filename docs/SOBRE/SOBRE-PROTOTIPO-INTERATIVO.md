@@ -731,203 +731,164 @@ const scaleX = useSpring(scrollYProgress, {
 
 
 # 🟣 SEÇÃO 03 — O QUE EU FAÇO + Rodapé Animado (Ghost Design)
+### AboutWhatIDo.tsx — Desktop & Mobile Scroll Animation
 
-## 🎯 Função da seção
-Transformar **serviços/capabilities** em uma lista de entregas claras, com visual calmo e confiável.  
-A seção utiliza **animação guiada pelo scroll**, onde os conteúdos entram **da direita para a esquerda**, reforçando progressão e controle.  
-Finaliza com um **rodapé animado (marquee)** que atua como assinatura rítmica.
+Este documento descreve o **ajuste técnico, visual e conceitual** da **3ª sessão** da página  
+https://portfoliodanilo.com/sobre
 
-Mensagem principal:
-
-**Título (Display):**  
-> Do **insight** ao **impacto**.  
-> Mesmo quando você não percebe.
-
-Texto centralizado.
+Referência de animação:  
+https://codepen.io/luis-lessrain/pen/dPPOGaZ
 
 ---
 
-## 📐 Layout Geral
-- Altura de referência: ~100vh (não obrigatório).
-- Fundo: `#040013` (`backgroundDark`).
-- Container central:
-  - `max-width`: 1120–1200px
-  - `padding-inline`: 24–32px
-  - Centralizado (`margin-inline: auto`).
+## 🎯 Objetivo da Sessão
+Transformar **serviços/capabilities** em uma sequência visual clara, progressiva e silenciosa,  
+com **animação horizontal guiada pelo scroll**.
+
+- Desktop → **blocos**
+- Mobile → **barras**
+- Movimento: **direita → esquerda**
+- Origem **sempre fora da tela**, partindo da **extremidade lateral direita**
+- Finalização com **rodapé animado (marquee / ghost design)**
 
 ---
 
-## 🧠 Motion Principle (conceito)
-- Movimento **horizontal (X)** da **direita → esquerda**
-- Animação **silenciosa e progressiva**
-- Nenhum elemento “salta” ou aparece abruptamente
-- Desktop: movimento **sincronizado ao scroll**
-- Mobile: movimento **por entrada no viewport**
+## 🎨 Identidade Visual
+| Elemento | Cor |
+|--------|------|
+| Fundo da seção | `#040013` |
+| Blocos / Barras | `#0048ff` |
+| Texto | `#ffffff` |
+| Numeração | `#8705f2` |
+
+---
+
+## 🧠 Princípio de Motion
+- Movimento horizontal progressivo
+- Nenhum fade brusco ou pop-in
+- Sincronizado ao scroll (desktop)
+- Entrada por viewport (mobile)
 - Sempre respeitar `prefers-reduced-motion`
 
 ---
 
-## 🖥 Layout — Desktop (≥ 1024px)
+## 🖥️ Desktop (≥ 1024px)
 
-### 1. Título
-- Centralizado no topo da seção.
-- Duas linhas.
-- Tipografia:
-  - font-weight: 900
-  - font-size: 44–48px
-  - line-height: 1.2
-- Cores:
-  - “Do” / “ao impacto.” → branco
-  - “insight” / “impacto” → azul primário
-  - Linha 2 → branco
-- Margens:
-  - Topo: 64–80px
-  - Base: 48–64px
-- max-width: 900px
+### Layout
+- Altura: ~100vh
+- Container central:
+  - max-width: 1200px
+  - padding-inline: 32px
+- Cards em **linha única (flex-row)**
+- 7 blocos, sem wrap
 
----
-
-## 2. Lista Interativa de Cards — Desktop
-
-### Visual
-- Faixa horizontal única com **7 cards**
+### Cards
+- min-height: 140px
+- padding: 24px
+- border-radius: 16px
+- background: `#0048ff`
 - display: flex
-- flex-direction: row
-- gap: 16–20px
-- Sem wrap
-- Centralizada em telas ≥ 1440px
+- align-items: center
+- gap interno: 16px
 
-### Estrutura de cada card
-- Altura mínima: 120–140px
-- Padding: 20–24px
-- border-radius: 12–16px
-- Fundo: rgba(255,255,255,0.04)
-- Opacidade base: 0.92
-- Layout interno:
-  - Ícone circular azul (32–36px)
-  - Texto à direita (16–18px)
+### Numeração
+- Fonte grande
+- Cor: `#8705f2`
+- Peso: 800
 
----
-
-## 🎬 Animação — Cards Desktop (Scroll-driven)
-
-- Disparo: quando a seção entra no viewport
-- Controle: progresso do scroll
-- Todos os cards se movem no eixo X:
-  - Origem: +120px
-  - Destino: 0px
-- Opacidade: 0 → 1
-- Blur opcional: 6px → 0
-- Stagger progressivo:
-  - Delay incremental: ~0.06s por card
-- Sensação: organização gradual do caos
+### Animação (Scroll Driven)
+- Origem X: `+120vw`
+- Destino X: `0`
+- Opacidade: `0 → 1`
+- Stagger: `0.06s`
+- Trigger: entrada da seção no viewport
+- Técnica recomendada:
+  - `GSAP + ScrollTrigger` **ou**
+  - `Framer Motion + useScroll`
 
 ---
 
-## 📱 Layout — Mobile (≤ 768px)
+## 📱 Mobile (≤ 768px)
 
-### 1. Título
-- Centralizado
-- font-size: 28–32px
-- line-height: 1.25
-- font-weight: 700
-- Margem inferior: 32–40px
-
-### 2. Cards (Barras)
+### Layout
 - Coluna vertical
-- display: flex
-- flex-direction: column
-- gap: 10–14px
-- Largura: 100%
-- Padding: 18–20px
+- Gap: 12px
+- Cards ocupam 100% da largura
 
----
+### Barras
+- Altura menor (70–90px)
+- padding: 18px
+- border-radius: 12px
 
-## 🎬 Animação — Barras Mobile (Viewport-based)
-
-- Cada barra anima individualmente
-- Movimento lateral:
-  - Origem: +80px
-  - Destino: 0px
-- Opacidade: 0 → 1
-- Duração: ~0.4s
-- Delay baseado no índice
-- Disparo ao entrar no viewport
-- viewport margin: -80px
+### Animação (Viewport-based)
+- Origem X: `+80px`
+- Destino X: `0`
+- Duração: `0.4s`
+- Delay progressivo por índice
+- Trigger: Intersection Observer
 
 ---
 
 ## 🧾 Conteúdo dos Cards
-1. Direção criativa que organiza o caos  
-2. Design estratégico que guia decisões  
-3. Identidades que permanecem na memória  
-4. Campanhas multicanais com lógica e emoção  
-5. Branding que não grita — mas marca  
-6. Inteligência artificial aplicada à criação e automação  
-7. Liderança criativa com visão e método  
+1. **Direção** criativa que organiza o caos  
+2. **Design** estratégico que guia decisões  
+3. **Identidades** que permanecem na memória  
+4. **Campanhas** multicanais com lógica e emoção  
+5. **Branding** que não grita — mas marca  
+6. **Inteligência Artificial** aplicada à criação  
+7. **Liderança Criativa** com visão e método  
 
-Regras:
-- Palavra-chave inicial em azul
+Regra:
+- Palavra-chave inicial em azul claro
 - Complemento em branco
-- Frases curtas e afirmativas
 
 ---
 
 ## 🌀 Rodapé Animado — Marquee (Ghost Design)
 
 ### Layout
-- Margem superior: 48–64px
-- padding-block: 16–24px
-- BG: #0048ff
-- Texto: #8705f2
-- Duas linhas horizontais
+- margin-top: 64px
+- padding-block: 20px
+- background: `#0048ff`
+- text-color: `#8705f2`
+- Duas linhas
 
 ### Conteúdo
-Linha 1 (A → B):  
-DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・BRANDING・INTELIGÊNCIA ARTIFICIAL・LIDERANÇA CRIATIVA・
+Linha A → B  
+DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・BRANDING・IA・LIDERANÇA CRIATIVA・
 
-Linha 2 (B → A):  
-BRANDING・INTELIGÊNCIA ARTIFICIAL・LIDERANÇA CRIATIVA・DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・
+Linha B → A  
+BRANDING・IA・LIDERANÇA CRIATIVA・DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO・IDENTIDADES・CAMPANHAS・
 
----
-
-## 🎬 Motion — Marquee
-- Duas instâncias com direções opostas
-- baseVelocity: ±10
-- Velocidade modulada pelo scroll
+### Motion
 - Loop infinito
-- Movimento linear
-- Em mobile: velocidade reduzida
+- Direções opostas
+- Velocidade base: ±10
+- Scroll modula velocidade
+- Mobile: velocidade reduzida
 - prefers-reduced-motion:
-  - animação pausada
-  - textos centralizados e estáticos
+  - animação desativada
+  - texto centralizado
 
 ---
 
 ## ♿ Acessibilidade
-- Título como h2
-- Cards informativos: article/div com aria-label
-- Cards clicáveis: button ou a
-- Marquee com aria-hidden="true"
+- `<h2>` para o título
+- Cards como `<article>` com `aria-label`
+- Marquee com `aria-hidden="true"`
 - Contraste AA/AAA
-- Foco visível em teclado
+- Navegação por teclado
 
 ---
 
-## 🧩 Notas de Implementação
-- Desktop: flex-row | Mobile: flex-col
-- Alturas consistentes
-- Animações via transform: translateX
-- will-change: transform
-- Intersection Observer para disparo inicial
-- Evitar box-shadows pesados
+## 🧩 Notas Técnicas
+- Usar `transform: translateX()`
+- `will-change: transform`
+- Evitar sombras pesadas
+- Animações suaves (ease: linear / easeOut)
+- Código modular (AboutWhatIDo.tsx isolado)
 
 ---
-
-**Ghost Design não explica.  
-Ele permanece.**
-
-
 
 
 

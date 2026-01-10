@@ -2,15 +2,13 @@
 
 import { motion, Variants } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
+import { useRef } from 'react';
+import { useGhostReveal } from '@/hooks/useGhostReveal';
+import type { Group } from 'three';
+import styles from './HeroCopy.module.css';
 
 /**
  * Animation: Page Load Entry
- * - Scale: 0.92 → 1.02 → 1
- * - Blur: 10px → 0
- * - Y: 60px → 0
- * - Duration: 1.2s
- * - Easing: [0.25, 0.46, 0.45, 0.94]
  */
 const textContainerAnimation: Variants = {
   initial: {
@@ -44,10 +42,6 @@ const itemAnimation: Variants = {
   },
 };
 
-import { useRef } from 'react';
-import { useGhostReveal } from '@/hooks/useGhostReveal';
-import type { Group } from 'three';
-
 export default function HeroCopy({
   ghostRef,
   isLoaded = true,
@@ -69,76 +63,85 @@ export default function HeroCopy({
         variants: textContainerAnimation,
       };
 
+  // Estrutura de conteúdo idêntica para ambas as camadas para garantir alinhamento perfeito
+  const renderTextContent = (isMask: boolean) => (
+    <div className={isMask ? styles.maskText : styles.baseText}>
+      <span className={`block font-body mb-4 ${isMask ? '' : styles.tag}`}>
+        [BRAND AWARENESS]
+      </span>
+      <h1
+        className="font-display mb-1 md:mb-6 leading-[0.9] md:leading-tight uppercase"
+        style={{ fontSize: 'clamp(3rem, 6vw + 2rem, 8rem)' }}
+      >
+        A MODERN CREATIVE AGENCY <br className="hidden md:block" />
+        FOCUSED ON{' '}
+        <span className={isMask ? 'text-white' : 'text-blue-primary'}>
+          Ghost
+        </span>{' '}
+        EXPERIENCE.
+      </h1>
+      <p
+        className={`font-body max-w-2xl mx-auto leading-relaxed md:leading-normal ${isMask ? '' : styles.subText}`}
+      >
+        Acompanhamos sua marca na era digital através de interfaces etéreas,
+        design invisível e tecnologia de ponta.
+      </p>
+    </div>
+  );
+
   return (
     <motion.div
       {...motionProps}
-      className="hero-content relative flex flex-col items-center justify-center text-center max-w-5xl px-4 pointer-events-auto"
+      className={`relative flex flex-col items-center justify-center text-center max-w-5xl px-4 pointer-events-auto ${styles.root}`}
     >
-      {/* Ghost Reveal Overlay (Segredo do Sistema Ghost) */}
-      {!prefersReducedMotion && (
-        <div
-          ref={revealRef}
-          className="absolute pointer-events-none z-50 rounded-full bg-radial from-[#00ffff]/80 to-transparent blur-3xl mix-blend-screen transition-opacity duration-1000"
-          style={{
-            width: 'clamp(300px, 40vw, 600px)',
-            height: 'clamp(300px, 40vw, 600px)',
-            willChange: 'transform',
-            opacity: isLoaded ? 1 : 0,
-          }}
-        />
-      )}
-      {/* Tag decorativa - Mono, 19px, uppercase */}
-      <motion.span
-        variants={itemAnimation}
-        className="font-mono text-[19px] uppercase tracking-[0.2em] text-[#d9dade] opacity-50 mb-8"
-      >
-        [BRAND AWARENESS]
-      </motion.span>
-
-      {/* Headline principal - Display: 6-9rem, Black weight */}
-      <motion.h1
-        variants={itemAnimation}
-        className="font-black tracking-tight leading-[0.95] mb-6 text-white/20"
-        style={{
-          fontSize: 'clamp(3.5rem, 10vw + 1rem, 9rem)',
-        }}
-      >
-        {/* Desktop/Tablet: 2 linhas */}
-        <span className="hidden md:block">
-          Você não vê
-          <br />o design.
-        </span>
-
-        {/* Mobile: 3 linhas */}
-        <span className="md:hidden">
-          Você não
-          <br />
-          vê o
-          <br />
-          design.
-        </span>
-      </motion.h1>
-
-      {/* Subheading - H2 size, #d9dade */}
-      <motion.h2
-        variants={itemAnimation}
-        className="font-bold text-[#d9dade]/30 mb-14"
-        style={{
-          fontSize: 'clamp(1.5rem, 4vw + 0.5rem, 2.5rem)',
-        }}
-      >
-        Mas ele vê você.
-      </motion.h2>
-
-      {/* CTA Button - Using AntigravityCTA component */}
+      {/* Camada 1: Texto Base (Low Opacity) */}
       <motion.div variants={itemAnimation}>
-        <AntigravityCTA
-          href="/sobre"
-          label="step inside"
-          variant="primary"
-          size="md"
-          ariaLabel="Ir para seção sobre"
-        />
+        {renderTextContent(false)}
+      </motion.div>
+
+      {/* Camada 2: Texto Revelado (Masked / Bright / Glow) */}
+      {!prefersReducedMotion && (
+        <div className={styles.maskLayer} aria-hidden="true">
+          <div className="max-w-5xl px-4 w-full">
+            <motion.div variants={itemAnimation}>
+              {renderTextContent(true)}
+            </motion.div>
+          </div>
+        </div>
+      )}
+
+      {/* Brilho Global (Aura do Ghost) */}
+      <div
+        ref={revealRef}
+        className="fixed top-0 left-0 w-80 h-80 rounded-full bg-radial from-[#0048ff]/40 to-transparent blur-3xl pointer-events-none mix-blend-screen z-10"
+        style={{ opacity: isLoaded ? 1 : 0 }}
+      />
+
+      {/* CTA Button Layer */}
+      <motion.div
+        variants={itemAnimation}
+        className="mt-8 md:mt-12 relative z-50"
+      >
+        <a href="#contact" className="cta-button group">
+          Começar Projeto
+          <div className="icon-circle group-hover:bg-blue-primary/20 transition-colors">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 13L13 1M13 1H4M13 1V10"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        </a>
       </motion.div>
     </motion.div>
   );

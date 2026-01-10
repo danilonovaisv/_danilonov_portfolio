@@ -26,8 +26,8 @@ export function Ghost({
 }) {
   const internalRef = useRef<THREE.Group>(null!);
   const groupRef = ghostRef || internalRef;
+  const eyesRef = useRef<THREE.Group>(new THREE.Group());
   const bodyRef = useRef<THREE.Mesh>(null!);
-  const eyesRef = useRef<THREE.Group>(null!);
 
   const composerRef = useRef<EffectComposer | null>(null);
   const bloomPassRef = useRef<UnrealBloomPass | null>(null);
@@ -79,8 +79,8 @@ export function Ghost({
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(size.width, size.height),
-      0.85, // strength
-      0.4, // radius
+      0.3, // strength - Audit ID #04
+      1.25, // radius - Audit ID #04
       0.0 // threshold
     );
     composer.addPass(bloomPass);
@@ -162,10 +162,10 @@ export function Ghost({
 
       const isMoving =
         currentMovementRef.current > GHOST_CONFIG.movementThreshold;
-      const targetOpacity = isMoving ? 0.3 : 0.3;
+      const targetOpacity = isMoving ? 1.0 : 0.0;
       const lerpFactor = isMoving
         ? GHOST_CONFIG.eyeGlowResponse
-        : GHOST_CONFIG.eyeGlowResponse * 1.0;
+        : GHOST_CONFIG.eyeGlowResponse * 0.5;
 
       const {
         leftEyeMaterial,
@@ -196,28 +196,33 @@ export function Ghost({
 
     const eyeColorHex = getConfigColorHex(GHOST_CONFIG.eyeGlowColor);
 
-    const eyeGeo = new THREE.SphereGeometry(0.12, 12, 12);
-    const outerGeo = new THREE.SphereGeometry(0.22, 12, 12);
+    // 1. Soquetes (Sockets) pretos para dar profundidade - Conforme Referência
+    const socketGeo = new THREE.SphereGeometry(0.45, 16, 16);
+    const socketMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
-    // Use MeshPhysicalMaterial para melhor controle de brilho e transparência
-    const eyeMat = new THREE.MeshPhysicalMaterial({
+    const leftSocket = new THREE.Mesh(socketGeo, socketMat);
+    leftSocket.position.set(-0.7, 0.6, 1.9);
+    leftSocket.scale.set(1.1, 1.0, 0.6);
+
+    const rightSocket = new THREE.Mesh(socketGeo, socketMat);
+    rightSocket.position.set(0.7, 0.6, 1.9);
+    rightSocket.scale.set(1.1, 1.0, 0.6);
+
+    // 2. Olhos (Glow) - Conforme Referência
+    const eyeGeo = new THREE.SphereGeometry(0.3, 12, 12);
+    const outerGeo = new THREE.SphereGeometry(0.525, 12, 12);
+
+    const eyeMat = new THREE.MeshBasicMaterial({
       color: eyeColorHex,
       transparent: true,
-      opacity: 1.0,
-      emissive: eyeColorHex,
-      emissiveIntensity: 10.0, // Increased for a more piercing look
-      roughness: 0,
-      metalness: 0.1,
+      opacity: 0.0,
     });
 
-    const outerMat = new THREE.MeshPhysicalMaterial({
+    const outerMat = new THREE.MeshBasicMaterial({
       color: eyeColorHex,
       transparent: true,
-      opacity: 0.3,
-      emissive: eyeColorHex,
-      emissiveIntensity: 1,
-      roughness: 0,
-      metalness: 0.5,
+      opacity: 0.0,
+      side: THREE.BackSide,
     });
 
     const leftEye = new THREE.Mesh(eyeGeo, eyeMat.clone());
@@ -225,25 +230,35 @@ export function Ghost({
     const leftOuter = new THREE.Mesh(outerGeo, outerMat.clone());
     const rightOuter = new THREE.Mesh(outerGeo, outerMat.clone());
 
-    leftEye.position.set(-0.6, 0.2, 1.6);
-    rightEye.position.set(0.6, 0.2, 1.6);
-    leftOuter.position.copy(leftEye.position);
-    rightOuter.position.copy(rightEye.position);
+    // Posições alinhadas com a referência
+    leftEye.position.set(-0.7, 0.6, 2.0);
+    rightEye.position.set(0.7, 0.6, 2.0);
+    leftOuter.position.set(-0.7, 0.6, 1.95);
+    rightOuter.position.set(0.7, 0.6, 1.95);
 
-    eyesRef.current.add(leftEye, rightEye, leftOuter, rightOuter);
+    // Limpar olhos anteriores para evitar duplicatas
+    eyesRef.current.clear();
+    eyesRef.current.add(
+      leftSocket,
+      rightSocket,
+      leftEye,
+      rightEye,
+      leftOuter,
+      rightOuter
+    );
 
     eyesRef.current.userData = {
-      leftEyeMaterial: leftEye.material as THREE.MeshPhysicalMaterial,
-      rightEyeMaterial: rightEye.material as THREE.MeshPhysicalMaterial,
-      leftOuterMaterial: leftOuter.material as THREE.MeshPhysicalMaterial,
-      rightOuterMaterial: rightOuter.material as THREE.MeshPhysicalMaterial,
+      leftEyeMaterial: leftEye.material as THREE.MeshBasicMaterial,
+      rightEyeMaterial: rightEye.material as THREE.MeshBasicMaterial,
+      leftOuterMaterial: leftOuter.material as THREE.MeshBasicMaterial,
+      rightOuterMaterial: rightOuter.material as THREE.MeshBasicMaterial,
     };
 
-    // Garantir que os olhos estejam no grupo principal
+    // Adicionar ao grupo principal
     if (groupRef.current) {
       groupRef.current.add(eyesRef.current);
     }
-  }, []);
+  }, [groupRef]);
 
   return (
     <>

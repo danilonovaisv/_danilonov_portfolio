@@ -2,11 +2,8 @@
 
 import Image from 'next/image';
 import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, Variants } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
-import { MOTION_TOKENS, ghostTransition } from '@/config/motion';
-
-const { duration, stagger, offset } = MOTION_TOKENS;
 
 // Use logos directly from content - already includes id, src, alt
 const logos = HOME_CONTENT.clients.logos;
@@ -15,41 +12,42 @@ export default function ClientsBrandsSection() {
   const reducedMotion = useReducedMotion();
   const hasLogos = logos.length > 0;
 
-  // Ghost Era: sem scale, apenas opacity + y movement
-  const logoVariants = reducedMotion
+  // Ghost Era: Spec scroll reveal (opacity 0->1, y 12->0, scale 0.9->1)
+  const logoVariants: Variants = reducedMotion
     ? {
-        hidden: { opacity: 1, y: 0 },
-        show: { opacity: 1, y: 0 },
+        hidden: { opacity: 1, y: 0, scale: 1 },
+        show: { opacity: 1, y: 0, scale: 1 },
       }
     : {
-        hidden: { opacity: 0, y: offset.subtle, filter: 'blur(4px)' },
+        hidden: { opacity: 0, y: 12, scale: 0.9 },
         show: {
           opacity: 1,
           y: 0,
-          filter: 'blur(0px)',
-          transition: ghostTransition(0, duration.normal),
+          scale: 1,
+          transition: {
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          },
         },
       };
 
   return (
     <section
       id="clients"
-      className="bg-section-clients py-12 md:py-16 lg:py-24 relative z-10"
-      aria-label="Clientes e Parcerias"
+      // Spec: Full-width blue bar bg-[#0048ff]
+      className="bg-[#0048ff] py-12 md:py-20 lg:py-24 relative z-10 overflow-hidden"
+      aria-label="marcas com as quais já trabalhei"
     >
-      {/* Container: 16px padding mobile, fluid desktop */}
-      <div className="max-w-[1300px] mx-auto px-4 md:px-[clamp(24px,5vw,72px)]">
+      <div className="max-w-[1680px] mx-auto px-4 md:px-[clamp(24px,5vw,96px)]">
         <motion.div
-          initial={
-            reducedMotion ? { opacity: 1 } : { opacity: 0, y: offset.subtle }
-          }
+          initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={ghostTransition(0, duration.normal)}
-          className="mb-8 md:mb-12 lg:mb-16"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 md:mb-16 lg:mb-20"
         >
-          {/* Título: 1.5rem mobile, 2rem desktop (spec linha 1908) */}
-          <h2 className="text-white text-2xl md:text-[28px] lg:text-[32px] font-bold text-center tracking-tight leading-tight">
+          {/* Título: white, bold, 1.5rem mobile / 2rem desktop (spec) */}
+          <h2 className="text-white text-[1.5rem] md:text-[2rem] font-bold text-center tracking-tight leading-tight lowercase">
             {HOME_CONTENT.clients.title}
           </h2>
         </motion.div>
@@ -63,31 +61,34 @@ export default function ClientsBrandsSection() {
               hidden: {},
               show: {
                 transition: {
-                  staggerChildren: reducedMotion ? 0 : stagger.tight,
+                  staggerChildren: reducedMotion ? 0 : 0.03, // Spec: 0.03
                 },
               },
             }}
-            // Grid: 2 cols small mobile → 3 cols larger mobile → 4 cols md → 6 cols lg (spec linha 1905)
-            // Gap: 16px mobile → 24px larger, aumentando para desktop (spec linhas 1907-1909)
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 md:gap-x-10 md:gap-y-12 lg:gap-x-12 lg:gap-y-16 items-center justify-items-center"
+            // Spec Grid: 2 cols small mob, 3 larger mob, 6+ desktop
+            // Spec Spacing: 24px vertical on mobile
+            // Spec Padding: 16px (px-4 in tailwind)
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-[24px] gap-x-6 sm:gap-8 md:gap-x-12 md:gap-y-16 lg:gap-x-16 lg:gap-y-20 items-center justify-items-center"
           >
             {logos.map((l) => (
               <motion.div
                 key={l.src}
                 variants={logoVariants}
-                // Altura: 70% do desktop no mobile (spec linha 1906)
-                className="group relative w-full h-10 sm:h-11 md:h-12 lg:h-14 flex items-center justify-center outline-none transition-all duration-300 hover:brightness-110"
+                className="group relative w-full h-10 sm:h-12 lg:h-16 flex items-center justify-center outline-none"
                 tabIndex={0}
                 aria-label={l.alt}
               >
-                {/* Max-width: menor no mobile para respeitar proporção 70% */}
-                <div className="relative w-full h-full max-w-[90px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[140px]">
+                {/* 
+                  Spec: Logos scaled 70% of desktop size on mobile.
+                  Desktop max-w target: ~140px. Mobile target: ~100px.
+                */}
+                <div className="relative w-full h-full max-w-[98px] md:max-w-[140px] transition-all duration-300 group-hover:scale-[1.04] group-hover:brightness-[1.1]">
                   <Image
                     src={l.src}
                     alt={l.alt}
                     fill
                     unoptimized
-                    className="object-contain filter brightness-0 invert opacity-[0.9] transition-all duration-500 group-hover:opacity-100 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                    className="object-contain filter brightness-0 invert opacity-90 transition-opacity duration-500 group-hover:opacity-100"
                   />
                 </div>
               </motion.div>

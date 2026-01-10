@@ -4,6 +4,8 @@ export const SOCIALS = {
   linkedin: 'https://linkedin.com/in/danilonovais',
   twitter: 'https://twitter.com/danilo_novais',
   emailPrimary: 'mailto:danilo@portfoliodanilo.com',
+  emailSecondary: 'mailto:dannovaisv@gmail.com',
+  phone: '+55 11 98396-6838',
 };
 
 export const NAVIGATION = {

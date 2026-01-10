@@ -174,7 +174,7 @@ export const GHOST_CONFIG: GhostConfig = {
   ghostScale: 1.2,
   bodyColor: 'ghostBlue', // 0x0f2027
   glowColor: 'blue', // "blue"
-  eyeGlowColor: 'black',
+  eyeGlowColor: 'cyan',
 
   ghostOpacity: 0.8,
   emissiveIntensity: 9.0,
@@ -237,12 +237,12 @@ export const GHOST_CONFIG: GhostConfig = {
   eyeGlowDecay: 0.5,
 
   // Efeitos de Pós-Processamento (Matched to CodePen)
-  analogGrain: 0.8,
-  analogBleeding: 0.5,
-  analogScanlines: 0.5,
-  analogVignette: 1.8,
+  analogGrain: 0.4,
+  analogBleeding: 1.0,
+  analogScanlines: 1.0,
+  analogVignette: 1.0,
   analogIntensity: 1.5,
-  analogJitter: 0.6,
+  analogJitter: 0.4,
   analogVSync: 0.7,
   limboMode: false,
 

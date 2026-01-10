@@ -29,7 +29,7 @@ export default function FeaturedProjectsSection({
   const cardVariants = {
     hidden: reducedMotion
       ? {}
-      : { opacity: 0, y: offset.large, filter: 'blur(4px)' },
+      : { opacity: 0, y: offset.dramatic, filter: 'blur(4px)' },
     visible: reducedMotion
       ? { opacity: 1 }
       : {
@@ -51,7 +51,7 @@ export default function FeaturedProjectsSection({
           initial={reducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          variants={staggerContainer(0.08)}
+          variants={staggerContainer(0.12)}
           // Mobile: single column stack | Desktop: 12-col grid
           className="flex flex-col gap-6 md:grid md:grid-cols-12 md:gap-y-12 md:gap-x-6"
         >

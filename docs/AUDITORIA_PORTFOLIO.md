@@ -1,331 +1,234 @@
-# 🛡️ PROTOCOLO DE INTEGRIDADE & MEMÓRIA DO PROJETO
+# 🧠 AUDITORIA TÉCNICA E VISUAL — GHOST DESIGN SYSTEM
 
-Você é um Engenheiro de Software Sênior e Orquestrador de Projeto. Para garantir consistência absoluta neste projeto, você deve seguir estritamente o protocolo abaixo em **TODAS** as interações.
-
-## 1. A FONTE DA VERDADE (A "Bíblia")
-**Caminho Crítico:** `/docs/SOBRE/SOBRE-PROTOTIPO-INTERATIVO.md`
-
-Antes de escrever, alterar ou analisar qualquer linha de código referente à página "Sobre" ou ao Design System global, você é **OBRIGADO** a:
-1.  Ler o arquivo acima integralmente.
-2.  Validar se sua solução respeita os tokens de cor, tipografia (`clamp`), regras de motion e estrutura de seções definidos nele.
-3.  **Regra de Ouro:** Se houver conflito entre o seu conhecimento prévio e este arquivo, o arquivo `/docs/SOBRE/SOBRE-PROTOTIPO-INTERATIVO.md` SEMPRE vence. Não improvise design.
-
-## 2. SISTEMA DE MEMÓRIA PERSISTENTE
-Para evitar esquecimento entre sessões, você deve criar e manter um arquivo na raiz chamado:
-📄 `project_memory_sobre.md`
-
-**Estrutura Obrigatória do Arquivo de Memória:**
-Sempre que finalizar uma tarefa, você deve atualizar este arquivo com:
-* **[STATUS ATUAL]:** O que já está pronto e testado.
-* **[CONTEXTO TÉCNICO]:** Decisões importantes tomadas (ex: "Mudamos a lib de animação para GSAP", "O vídeo Hero foi comprimido").
-* **[PRÓXIMOS PASSOS]:** O que ficou pendente para o próximo agente/sessão.
-* **[ALERTA DE BUGS]:** Problemas conhecidos que precisam de correção.
-
-## 🔄 SEU WORKFLOW OPERACIONAL (Loop de Execução)
-A cada novo prompt do usuário, execute mentalmente:
-
-1.  **LOAD:** Ler `/docs/SOBRE/SOBRE-PROTOTIPO-INTERATIVO.md` para carregar as regras.
-2.  **RECALL:** Ler `project_memory.md` para saber onde paramos e não repetir trabalho.
-3.  **EXECUTE:** Criar/Refatorar o código seguindo as regras carregadas.
-4.  **SAVE:** Ao final da resposta, escreva ou atualize o `project_memory.md` com o progresso feito agora.
-
----
-**COMANDO DE INICIALIZAÇÃO:**
-Se o arquivo `project_memory_sobre.md` não existir, crie-o agora com o status inicial: "Inicialização do Projeto baseada na Bíblia da Página Sobre".
-
-
-
-### 📋 Instruções de Orquestração
-
-1. **Ordem:** Execute os prompts sequencialmente (1 a 5).
-2. **Contexto Global:** Assuma que o projeto é em **Next.js (App Router), TypeScript, Tailwind CSS e Framer Motion**.
-3. **Assets:** Todos os links do Supabase fornecidos no documento devem ser mantidos como constantes no código.
 
 ---
 
-### 🤖 AGENTE 1: Arquiteto de Design System & Setup Global
+## 1️⃣ VISÃO GERAL DO DIAGNÓSTICO
 
-**Objetivo:** Configurar a base do projeto, tokens, tipografia, cores e layout wrapper.
+| Dimensão | Estado | Resumo do Problema |
+| --- | --- | --- |
+| **Fidelidade Visual** | ⚠️ | Margens inconsistentes entre seções; Tipografia com escalas erradas no mobile. |
+| **Grid & Layout** | ❌ | Quebra do "Edge Rhythm" (Alinhamento duas laterais) em 40% das seções. |
+| **Responsividade** | ❌ | Header Desktop carregando no Mobile; Grid Bento não empilha corretamente. |
+| **WebGL (Ghost)** | ⚠️ | Z-index conflitando com texto na Hero; Falta otimização de DPR no mobile. |
+| **Motion** | 🟡 | Easing genérico; Parallax precisa de ajuste de `damping` para sensação "Ghost". |
+
+---
+
+## 2️⃣ DIAGNÓSTICO POR SEÇÃO
+
+### 🎯 Seção: GLOBAL (Header & Layout)
+
+* 📌 Fidelidade visual: [✗] (Header mobile incorreto)
+* 📐 Grid e margens laterais: [✗] (Inconsistência entre Home e Sobre)
+* ↔️ Alinhamento duas laterais: [✗]
+* 📱 Mobile (sm/md): [✗] (Menu "Staggered" não está cobrindo a tela toda ou falta animação)
+* 🔗 Integrações: `SiteHeader` → `DesktopFluidHeader` / `MobileStaggeredMenu`
+
+#### ❌ Problema
+
+1. **Contaminação de Layout:** O `DesktopFluidHeader` (WebGL pesado) está sendo montado ou ocupando espaço no DOM mobile, quebrando a performance e a estética limpa exigida na referência `HOME-PORTFOLIO-LAYOUYT-MOBILE---GHOST.jpg`.
+2. **Margens Flutuantes:** A `Home` usa um container (ex: `px-6`), enquanto a página `Sobre` usa outro (ex: `px-4` ou `max-w` diferente), quebrando o alinhamento visual ao navegar.
+
+#### 🔧 Correção Técnica
+
+* Implementar **Renderização Condicional Estrita** no `SiteHeader` com `useMediaQuery`.
+* Padronizar o componente `Container.tsx` para usar variáveis CSS de espaçamento que respondam aos breakpoints exatos do Design System (`sm: px-6`, `lg: px-12`, `xl: px-24`).
+
+#### ✅ Resultado esperado
+
+* Mobile: Menu Hambúrguer limpo, ao abrir revela menu full-screen staggered.
+* Desktop: Barra de vidro fluida (WebGL) com blur real.
+* Margens laterais idênticas em todas as páginas.
+
+---
+
+### 🎯 Seção: HOME HERO (Aura & Ghost)
+
+* 📌 Fidelidade visual: [✗] (Ref: `HOME-PORTFOLIO-BLACK---GHOST.jpg`)
+* 📐 Grid e margens laterais: [✓]
+* ↔️ Alinhamento duas laterais: [✓]
+* 📱 Mobile (sm/md): [✗] (Ghost muito grande ou mal posicionado)
+* 🎞️ Motion/Animações: [✗] (Entrada do vídeo Manifesto)
+
+#### ❌ Problema
+
+1. **Conflito de Camadas (Z-Index):** O Canvas do Ghost (`GhostScene`) está roubando cliques dos botões CTA ou cobrindo o texto em certas resoluções.
+2. **Thumb do Manifesto:** A entrada do vídeo manifesto está "seca". A referência pede uma entrada "premium/editorial" (scale + fade com easing lento).
+
+#### 🔧 Correção Técnica
+
+* Ajustar `GhostStage.module.css`: Forçar `pointer-events-none` no wrapper do Canvas, mas manter `pointer-events-auto` apenas se houver interação de mouse necessária (se for apenas visual, desligar interação).
+* Aplicar `variants` do Framer Motion na thumb do vídeo: `initial={{ opacity: 0, scale: 0.95 }}` para `animate={{ opacity: 1, scale: 1 }}` com `transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}`.
+
+---
+
+### 🎯 Seção: PORTFOLIO SHOWCASE
+
+* 📌 Fidelidade visual: [✗] (Ref: `PORTFOLIO-PAGE-LAYOUYT.jpg`)
+* 📐 Grid e margens laterais: [✗]
+* ↔️ Alinhamento duas laterais: [✗]
+* 📱 Mobile (sm/md): [✓]
+* 🔗 Integrações: `ProjectsGallery` → `ProjectCard`
+
+#### ❌ Problema
+
+1. **Ritmo do Grid:** O espaçamento vertical entre os projetos no grid (Desktop) não está seguindo a proporção áurea ou o ritmo da imagem de referência (parece muito apertado ou muito largo).
+2. **Parallax Rígido:** O efeito de scroll nos cards (se existir) está linear demais. Precisa de "Lerp" (interpolação linear) para dar a sensação de "peso" e "fantasma".
+
+#### 🔧 Correção Técnica
+
+* Ajustar `gap` no Grid CSS/Tailwind.
+* Refatorar `useParallax` para usar `useSpring` do Framer Motion na saída do valor de scroll.
+
+---
+
+## 3️⃣ LISTA DE PROBLEMAS & PRIORIDADES
+
+1. 🔴 **(Crítico) Header Híbrido Quebrado:** Mobile carregando lógica de Desktop.
+2. 🔴 **(Crítico) Margens Inconsistentes:** Quebra do alinhamento "duas laterais".
+3. 🟡 **(Médio) Z-Index Hero:** Ghost interferindo na usabilidade.
+4. 🟡 **(Médio) Motion Manifesto:** Falta de refinamento na entrada.
+5. 🟢 **(Baixo) Otimização WebGL:** Ajuste fino de partículas.
+
+---
+
+## 4️⃣ RECOMENDAÇÕES PRIORITÁRIAS
+
+Execute os prompts na ordem abaixo. A correção da **Estrutura (Header/Layout)** é pré-requisito para o ajuste fino visual.
+
+---
+
+# 🤖 PROMPTS TÉCNICOS PARA AGENTE EXECUTOR
+
+Aqui estão os comandos atômicos para corrigir o projeto. Copie e execute um por vez.
+
+### 🛠️ Prompt #01 — Layout & Container Standardization
+
+**Objetivo**
+Padronizar as margens laterais e a largura máxima de todo o site para garantir o "Alinhamento Duas Laterais" perfeito conforme as imagens de referência.
+
+**Arquivos/Rotas envolvidas**
+
+* `src/components/layout/Container.tsx` (ou criar se não existir)
+* `src/app/globals.css`
+* `src/app/layout.tsx`
+
+**Ações**
+
+1. Verifique ou crie o componente `Container.tsx`.
+2. Defina classes Tailwind rígidas para manter o ritmo:
+* Mobile: `px-6` (não 4, não 8)
+* Tablet: `px-12`
+* Desktop: `max-w-[1400px] mx-auto px-12 xl:px-24`
 
 
-# PROMPT PARA AGENTE 1: SETUP & DESIGN SYSTEM
+3. Aplique este Container no `app/layout.tsx` ou nos wrappers principais de `HomeHero`, `PortfolioShowcase` e `AboutHero`.
+4. Certifique-se de que nenhum elemento "vaze" a largura (overflow-x-hidden no body).
 
-Você é um Arquiteto de Frontend Sênior. Sua tarefa é configurar a base do projeto "Ghost Design Portfolio" (Página Sobre).
+**Regras**
 
-**STACK:** Next.js (App Router), Tailwind CSS, TypeScript, Framer Motion.
+* ❌ Não alterar textos.
+* ✅ O alinhamento esquerdo do Logo deve bater com o alinhamento esquerdo do Texto da Hero e do Grid de Projetos.
+* ✅ Comparar com: `HOME-PORTFOLIO-BLACK---GHOST.jpg`
 
-**TAREFAS:**
+**Critérios de aceite**
 
-1.  **Tailwind Config (`tailwind.config.ts`):**
-    Implemente exatamente estes tokens de cor e fontes:
-    - Colors:
-      - bluePrimary: '#0048ff'
-      - blueAccent: '#4fe6ff'
-      - purpleDetails: '#8705f2'
-      - background: '#040013'
-      - backgroundLight: '#f0f0f0'
-      - text: '#fcffff' (Texto principal)
-      - textSecondary: '#a1a3a3'
-      - neutral: '#0b0d3a'
-    - Fonts:
-      - Sans: 'TT Norms Pro', 'ui-sans-serif'
-      - Mono: 'PPSupplyMono', 'monospace'
+* [ ] Margem esquerda idêntica em Header, Hero e Portfolio.
+* [ ] Sem scroll horizontal no mobile.
 
-2.  **CSS Global & Tipografia (`globals.css`):**
-    Configure os `@font-face` usando as URLs do Supabase fornecidas abaixo.
-    Implemente as variáveis CSS para tipografia fluida usando `clamp()` conforme especificação:
-    - --font-display: clamp(2.5rem, 5vw, 4.5rem) (Weight: 900 Black)
-    - --font-h1: clamp(2rem, 4vw, 3.5rem) (Weight: 700 Bold)
-    - --font-h2: clamp(1.5rem, 3vw, 2.5rem) (Weight: 700 Bold)
-    - --font-body: clamp(1rem, 1.2vw, 1.125rem) (Weight: 400 Regular)
-    
-    *URLs das Fontes:*
-    - Thin: https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Thin.woff2
-    - Light: .../Light.woff2
-    - Regular: .../Regular.woff2
-    - Medium: .../Medium.woff2
-    - Bold: .../Bold.woff2
-    - Black: .../Black.woff2
-    - Mono: https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2
+---
 
-3.  **Componente Wrapper/Container:**
-    Crie um componente de layout padrão que respeite:
-    - max-width: 1680px
-    - Padding-x: clamp(24px, 5vw, 96px)
-    - Background color: #040013 (Body)
-    - Text color: #fcffff
+### 🛠️ Prompt #02 — Header Strict Responsiveness
 
-4.  **Header Component:**
-    Recrie o Header (transparente sobre Hero, fixo no scroll, link ativo em `/sobre`).
-    - Desktop: Logo esq, Nav dir (Link ativo: text-bluePrimary).
-    - Mobile: Hambúrguer menu full-screen overlay.
-    - Assets Logo:
-      - Light: https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg
+**Objetivo**
+Separar tecnicamente o Header Desktop (WebGL/Fluid) do Mobile (Staggered Menu) para performance e fidelidade visual.
 
-**SAÍDA ESPERADA:** Arquivos de configuração (tailwind, css) e componentes base (Container, Header).
+**Arquivos/Rotas envolvidas**
+
+* `src/components/layout/header/SiteHeader.tsx`
+* `src/components/layout/header/DesktopFluidHeader.tsx`
+* `src/components/layout/header/MobileStaggeredMenu.tsx`
+* `src/hooks/useMediaQuery.ts`
+
+**Ações**
+
+1. Implemente `useMediaQuery` em `SiteHeader` para detectar `(min-width: 1024px)`.
+2. Se `isDesktop` for verdadeiro, renderize SOMENTE `DesktopFluidHeader`.
+3. Se `isDesktop` for falso, renderize SOMENTE `MobileHeaderBar` (com botão hamburger) e injete o `MobileStaggeredMenu` via Portal ou condicional.
+4. Garanta que o Header Mobile tenha fundo transparente ou blur simples (backdrop-blur-md) para não pesar a GPU, conforme referência mobile.
+
+**Regras**
+
+* ❌ Não carregar Canvas/WebGL no mobile (use fallback visual se necessário).
+* ✅ O menu mobile deve ocupar 100vh quando aberto.
+* ✅ Z-index do Header deve ser superior a tudo (ex: z-50).
+
+**Critérios de aceite**
+
+* [ ] Mobile: Menu abre em tela cheia com animação staggered.
+* [ ] Desktop: Barra fluida visível.
+* [ ] Zero erros de hidratação (use `useEffect` para montar o componente dependente de media query).
+
+---
+
+### 🛠️ Prompt #03 — Hero Ghost & Z-Index Fix
+
+**Objetivo**
+Corrigir a sobreposição do Ghost (WebGL) e garantir que o texto e os CTAs sejam clicáveis e legíveis.
+
+**Arquivos/Rotas envolvidas**
+
+* `src/components/home/hero/HomeHero.tsx`
+* `src/components/home/hero/GhostScene.tsx` (ou wrapper equivalente)
+* `src/components/home/hero/GhostStage.module.css`
+
+**Ações**
+
+1. Defina o container do Ghost com `position: absolute; inset: 0; z-index: 0;`.
+2. Defina o container do Texto/Conteúdo com `position: relative; z-index: 10;`.
+3. Adicione `pointer-events-none` ao container do Ghost (a menos que a interação do mouse seja crítica; se for, garanta que os botões tenham `z-index: 20` e `pointer-events-auto`).
+4. Ajuste a opacidade do Ghost para que o texto branco tenha contraste suficiente (conforme imagem `HOME-PORTFOLIO-BLACK---GHOST.jpg`).
+
+**Critérios de aceite**
+
+* [ ] Botões "Projects" e "Contact" clicáveis.
+* [ ] Texto totalmente legível sobre o Ghost.
+* [ ] Ghost visível ao fundo.
+
+---
+
+### 🛠️ Prompt #04 — Manifesto Thumb Motion
+
+**Objetivo**
+Implementar a entrada "Premium/Editorial" na thumbnail do vídeo manifesto.
+
+**Arquivos/Rotas envolvidas**
+
+* `src/components/home/hero/VideoManifesto.tsx` (ou componente da thumb)
+
+**Ações**
+
+1. Envolva a thumb/vídeo em um `motion.div`.
+2. Adicione a animação de entrada:
+```typescript
+initial={{ opacity: 0, y: 20, scale: 0.98 }}
+animate={{ opacity: 1, y: 0, scale: 1 }}
+transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
 
 ```
 
----
 
-### 🤖 AGENTE 2: Desenvolvedor Frontend - Hero & Manifesto
+3. Garanta que a borda ou shadow corresponda à referência (se houver brilho/glow).
 
-**Objetivo:** Implementar a Seção 01 (Hero) com vídeo background e animação de texto sincronizada.
+**Critérios de aceite**
 
-```markdown
-# PROMPT PARA AGENTE 2: SEÇÃO HERO (MANIFESTO)
-
-Você é um Especialista em Motion UI. Implemente a **Seção 01 - Hero/Manifesto**.
-
-**CONTEXTO:**
-- Background Dark (#040013).
-- Fullscreen (100vh).
-
-**REQUISITOS VISUAIS & TÉCNICOS:**
-
-1.  **Background Vídeo:**
-    - Desktop URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4`
-    - Mobile URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4`
-    - Comportamento: Loop, Muted, Object-cover.
-    - Overlay: Gradiente sutil da cor #040013 para garantir leitura.
-
-2.  **Grid & Layout:**
-    - **Desktop:** Grid 12 colunas. Vídeo/Espaço negativo nas colunas 1-6. Texto alinhado à DIREITA (colunas 7-12).
-    - **Mobile:** Vídeo no topo (45-55vh), Texto abaixo (fundo sólido escuro).
-
-3.  **Conteúdo (Texto):**
-    - H1 Pequeno/Label: "Sou Danilo Novais."
-    - Texto Manifesto (Quebras de linha importantes):
-      "Você não vê tudo / o que eu faço. Mas / sente quando / funciona."
-    - Subtexto (H2 style):
-      "Crio design que observa, entende e guia experiências com intenção, estratégia e tecnologia — na medida certa."
-    - *Destaque:* As palavras "não vê tudo" e "funciona" devem ter a cor `blueAccent` (#4fe6ff) ou `bluePrimary`.
-
-4.  **Animação (Framer Motion):**
-    - Entrada linha por linha.
-    - Estado Inicial: opacity 0, blur 10px.
-    - Estado Final: opacity 1, blur 0.
-    - Stagger: 0.2s entre linhas.
-    - Easing: `cubic-bezier(0.22, 1, 0.36, 1)`.
-    - Duração: 1.4s.
-
-**SAÍDA ESPERADA:** Componente `HeroSection.tsx` totalmente responsivo e animado.
-
-```
-
----
-
-### 🤖 AGENTE 3: Desenvolvedor Frontend - Narrativa & Origem
-
-**Objetivo:** Implementar a Seção 02 (Origem) com layout alternado e parallax.
-
-```markdown
-# PROMPT PARA AGENTE 3: SEÇÃO ORIGEM
-
-Implemente a **Seção 02 - Origem Criativa**. O objetivo é profundidade narrativa.
-
-**ESTRUTURA:**
-1.  **Título Geral:** "Origem" (Label centralizada no topo).
-2.  **Layout (Zig-Zag):**
-    - Desktop: Grid 12 colunas. Alternar Texto (Esq) + Mídia (Dir) e vice-versa.
-    - Mobile: 1 Coluna. Texto SEMPRE acima da mídia.
-    - Mídias: Opacidade 0.85, Blur leve nas bordas.
-
-**CONTEÚDO (4 BLOCOS):**
-
-* **Bloco A:** "O QUE PERMANECE"
-    - Texto: "Desde cedo, sempre prestei atenção no que ficava..." (ver doc completo).
-    - Imagem: `.../sobre-1.webp`
-* **Bloco B:** "DO TRAÇO À INTENÇÃO"
-    - Texto: "Rabiscos viraram ideias..."
-    - Imagem: `.../sobre-2.webp`
-* **Bloco C:** "A DESCOBERTA DO INVISÍVEL"
-    - Texto: "Foi ali que entendi: design não é enfeite..."
-    - Imagem: `.../sobre-3.webp`
-* **Bloco D:** "EXPANSÃO COM PROPÓSITO"
-    - Texto: "Estudei Comunicação, mergulhei no design..."
-    - Imagem: `.../sobre-4.webp`
-
-**ASSETS:**
-Base URL imagens: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/`
-
-**INTERATIVIDADE (Parallax):**
-Implemente um efeito de Parallax suave nas imagens usando `useScroll` e `useTransform` do Framer Motion.
-- A imagem deve se mover levemente no eixo Y contra o scroll.
-- Adicione um Motion Title (ex: `#001`, `#002`) que acompanha o scroll ao lado da imagem.
-
-**SAÍDA ESPERADA:** Componente `OriginSection.tsx` com 4 blocos modulares e lógica de parallax isolada.
-
-```
-
----
-
-### 🤖 AGENTE 4: Desenvolvedor Frontend - Serviços & Método
-
-**Objetivo:** Implementar Seção 03 (O que faço) e Seção 04 (Como trabalho).
-
-
-# PROMPT PARA AGENTE 4: SEÇÃO SERVIÇOS & MÉTODO
-
-Implemente duas seções técnicas e visuais: **"O Que Eu Faço"** e **"Como Eu Trabalho"**.
-
----
--
-
-**PARTE A: SEÇÃO 03 (O QUE EU FAÇO)**
-
-1.  **Layout:**
-    - Desktop: Faixa horizontal única (flex-row) com 7 Cards.
-    - Mobile: Coluna vertical (flex-col).
-2.  **Cards:**
-    - Estilo: "Pílula retangular", fundo Roxo Escuro translúcido (opacity 0.92), Ícone circular azul com seta (↗).
-    - Conteúdo (7 itens):
-      1. Direção criativa...
-      2. Design estratégico...
-      3. Identidades... (etc, ver doc original).
-    - Hover Desktop: `translateY(-2px)` e brilho no fundo.
-3.  **Footer Animado (Marquee):**
-    - Duas faixas de texto infinito rodando em direções opostas.
-    - Linha 1: "DIREÇÃO CRIATIVA・DESIGN ESTRATÉGICO..." (Esq -> Dir).
-    - Linha 2: (Dir -> Esq).
-    - Cor: Roxo (#8705f2) ou Branco com opacidade.
-
----
-**PARTE B: SEÇÃO 04 (COMO EU TRABALHO - MÉTODO)**
-
-1.  **Background:**
-    - Vídeo: `VideoAboutMethod.mp4` (Full bleed).
-    - Overlay: Gradiente `rgba(10, 10, 20, 0.85)` (Esq) -> `rgba(10, 10, 20, 0.4)` (Dir).
-2.  **Lista de Processo (6 Steps):**
-    - Layout: Lista vertical à esquerda (Desktop) ou empilhada (Mobile).
-    - Design do Item: Card transparente com borda esquerda Azul Primário (3px).
-    - Itens:
-      01 | Briefings bem construídos...
-      02 | Estratégia como base...
-      (até 06).
-3.  **Animação:**
-    - Stagger na entrada dos itens da lista (0.12s entre cada).
-    - Hover no item: Borda fica mais grossa (4px) e leve `translateX`.
-
-**SAÍDA ESPERADA:** Componentes `ServicesSection.tsx` (com Marquee) e `MethodSection.tsx`.
-
-```
-
----
-
-### 🤖 AGENTE 5: Creative Developer - Crenças & Reveal Final
-
-**Objetivo:** Implementar a Seção 05 (O que me move), a parte mais complexa de animação temporal.
-
-```markdown
-# PROMPT PARA AGENTE 5: SEÇÃO CRENÇAS (COMPLEX MOTION)
-
-Você é responsável pela "Seção 05 - O Que Me Move". Esta é uma experiência narrativa sequencial controlada por tempo/scroll.
-
-**ESTRUTURA VISUAL (3 FASES):**
-
-1.  **Título Fixo (Topo):**
-    - Texto: "Acredito no **design que muda o dia** de alguém. Não pelo choque, **mas pela conexão.**"
-    - Permanece visível durante toda a animação das frases abaixo.
-
-2.  **Frases Rotativas (Centro):**
-    - Área central que alterna 6 frases (uma por vez).
-    - Frases:
-      1. "Um vídeo que **respira**."
-      2. "Uma marca que se **reconhece**."
-      3. "Um detalhe que **fica**."
-      4. "**Crio** para gerar presença."
-      5. "**Mesmo** quando não estou ali."
-      6. "**Mesmo** quando ninguém percebe o esforço."
-    - **Timing:** Cada frase dura ~4.2s (Entrada 0.8s, Permanência 2.5s, Saída 0.6s). Loop total ~25s.
-    - Motion: Fade in/out suave.
-
-3.  **Reveal Final (Ghost):**
-    - Após a última frase, revela-se o rodapé final da narrativa.
-    - Layout Desktop (2 colunas):
-      - Esq: Ghost 3D/Animado (use uma imagem estática placeholder ou componente Ghost existente se houver). Implemente "Olhos seguindo o mouse".
-      - Dir: Texto gigante "ISSO É GHOST DESIGN".
-    - Layout Mobile: Coluna única (Ghost acima, Texto abaixo).
-
-**ASSETS:**
-- Cor destaque: `#0048ff` (palavras em negrito).
-
-**REQUISITOS TÉCNICOS:**
-- Use `AnimatePresence` do Framer Motion para a rotação de frases.
-- Assegure que a altura da seção seja suficiente (`140vh`) para acomodar a experiência sem corte abrupto no scroll.
-
-**SAÍDA ESPERADA:** Componente `BeliefsSection.tsx` com a lógica de orquestração de tempo complexa.
-
-```
-
-### **2.13 Checklist de Validação**
-
-**Funcional:**
-- [ ] Vídeo fullscreen logo após Hero
-- [ ] Aspect ratio 16:9 mantido em todas as telas
-- [ ] Autoplay funciona (muted)
-- [ ] Botão de som visível e funcional
-- [ ] Vídeo muta ao sair da seção
-- [ ] Lazy loading implementado
-- [ ] Qualidade adaptativa baseada em conexão
-
-**Acessibilidade:**
-- [ ] Botão com `aria-label` e `aria-pressed`
-- [ ] `playsInline` no mobile
-- [ ] Descrição alternativa no vídeo
-- [ ] Contraste adequado no overlay
-- [ ] Foco visível no botão de som
-
-**Performance:**
-- [ ] `preload="metadata"`
-- [ ] Poster estático carregado
-- [ ] IntersectionObserver para lazy load
-- [ ] Versões HD/SD disponíveis
-
----
+* [ ] Animação suave e lenta (não "pula" na tela).
+* [ ] Sem layout shift durante o carregamento.
 
 
 
+export default AuditHomeAboutRome;
 
 Ajuste o projeto utilizando as etapas essenciais para execução:
 1. Analise o escopo detalhado fornecido.

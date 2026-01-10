@@ -282,3 +282,34 @@ if __name__ == "__main__":
     final_output = run_ghost_project_workflow(ghost_specs, request)
     print("\n--- Final Deliverable ---")
     print(final_output)
+# --- INSTRUÇÕES PARA EXECUTAR O WORKFLOW ---
+
+# 1. Carrega o conteúdo dos teus arquivos MD (copia o texto dos arquivos que me enviaste)
+portfolio_spec = """
+/docs/PORTFOLIO/PORTFOLIO - PROTÓTIPO INTERATIVO.md'
+"""
+home_spec = """
+'/docs/HOME/HOME - PROTOTIPO INTERATIVO.md'
+"""
+about_spec = """
+‘/docs/SOBRE/SOBRE-PROTOTIPO-INTERATIVO.md’
+"""
+
+# Concatena tudo num "Contexto Mestre"
+full_project_context = f"""
+PROJECT KNOWLEDGE BASE:
+--- PORTFOLIO PAGE SPEC ---
+{portfolio_spec}
+--- HOME PAGE SPEC ---
+{home_spec}
+--- ABOUT PAGE SPEC ---
+{about_spec}
+"""
+
+# 2. Chama a função de workflow criada pelo Antigravity
+if __name__ == "__main__":
+    # Aqui chamamos o workflow passando o contexto gigante
+    run_ghost_project_workflow(
+        project_specs=full_project_context,
+        user_request="Create the complete code for the Hero Section of the Home page, following the Ghost Design System animations and typography."
+    )

@@ -17,7 +17,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   <div>
     <label
       htmlFor={id}
-      className="block text-[12px] font-semibold text-text-dark/80 mb-1.5"
+      className="block text-[13px] font-bold text-[#111111]/60 mb-2 uppercase tracking-wider"
     >
       {label}
     </label>
@@ -25,13 +25,16 @@ export const InputField: React.FC<InputFieldProps> = ({
       id={id}
       aria-invalid={error ? 'true' : 'false'}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`w-full rounded-xl border border-gray-200 bg-section-bg px-4 py-3.5 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 ${
-        error ? 'border-red-500 ring-2 ring-red-500/20' : ''
+      className={`w-full rounded-lg border border-[#111111]/10 bg-[#f8fafc] px-4 py-4 text-[#111111] placeholder:text-[#111111]/30 transition-all outline-none focus:border-[#0057FF] focus:ring-2 focus:ring-[#0057FF]/20 ${
+        error ? 'border-red-500' : ''
       } ${className}`}
       {...props}
     />
     {error && (
-      <p id={`${id}-error`} className="mt-1.5 text-sm text-red-500 font-medium">
+      <p
+        id={`${id}-error`}
+        className="mt-2 text-xs text-red-500 font-bold uppercase"
+      >
         {error}
       </p>
     )}
@@ -53,7 +56,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
   <div>
     <label
       htmlFor={id}
-      className="block text-[12px] font-semibold text-text-dark/80 mb-1.5"
+      className="block text-[13px] font-bold text-[#111111]/60 mb-2 uppercase tracking-wider"
     >
       {label}
     </label>
@@ -61,13 +64,16 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
       id={id}
       aria-invalid={error ? 'true' : 'false'}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`w-full resize-none rounded-xl border border-gray-200 bg-section-bg px-4 py-3.5 text-text-dark placeholder:text-text-muted/60 transition-all outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 ${
-        error ? 'border-red-500 ring-2 ring-red-500/20' : ''
+      className={`w-full resize-none rounded-lg border border-[#111111]/10 bg-[#f8fafc] px-4 py-4 text-[#111111] placeholder:text-[#111111]/30 transition-all outline-none focus:border-[#0057FF] focus:ring-2 focus:ring-[#0057FF]/20 min-h-[120px] ${
+        error ? 'border-red-500' : ''
       } ${className}`}
       {...props}
     />
     {error && (
-      <p id={`${id}-error`} className="mt-1.5 text-sm text-red-500 font-medium">
+      <p
+        id={`${id}-error`}
+        className="mt-2 text-xs text-red-500 font-bold uppercase"
+      >
         {error}
       </p>
     )}
