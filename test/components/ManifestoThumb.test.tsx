@@ -1,13 +1,26 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ManifestoThumb from '@/components/home/hero/ManifestoThumb';
 
-jest.mock('framer-motion', () => ({
-  ...jest.requireActual('framer-motion'),
-  useTransform: jest.fn(() => 1), // Returns constant for scale/borderRadius
-  useMotionValueEvent: jest.fn(),
-}));
+// Mock heroRef para os testes
+const mockHeroRef = createRef<HTMLElement>();
+
+jest.mock('framer-motion', () => {
+  const mockMotionValue = {
+    get: () => 0,
+    set: jest.fn(),
+    on: jest.fn(() => jest.fn()),
+    onChange: jest.fn(() => jest.fn()),
+  };
+  return {
+    ...jest.requireActual('framer-motion'),
+    useTransform: jest.fn(() => mockMotionValue),
+    useMotionValueEvent: jest.fn(),
+    useScroll: jest.fn(() => ({ scrollYProgress: mockMotionValue })),
+    useSpring: jest.fn(() => mockMotionValue),
+  };
+});
 
 // Mock do IntersectionObserver
 beforeAll(() => {
@@ -40,16 +53,18 @@ beforeAll(() => {
 
 describe('ManifestoThumb Component', () => {
   it('deve renderizar a seção do manifesto corretamente', () => {
-    render(<ManifestoThumb />);
+    render(<ManifestoThumb heroRef={mockHeroRef} />);
 
-    // Verifica se o container principal existe pelo label acessível
-    // Note: The aria-label in the component is "Preview em vídeo"
-    const container = screen.getByLabelText('Preview em vídeo');
-    expect(container).toBeInTheDocument();
+    // Verifica se o vídeo existe pelo label acessível
+    // O componente usa "Vídeo showreel demonstrando projetos de design gráfico" no video
+    const video = screen.getByLabelText(
+      'Vídeo showreel demonstrando projetos de design gráfico'
+    );
+    expect(video).toBeInTheDocument();
   });
 
   it('deve renderizar o vídeo com os atributos corretos', () => {
-    const { container } = render(<ManifestoThumb />);
+    const { container } = render(<ManifestoThumb heroRef={mockHeroRef} />);
 
     // Procura o vídeo dentro do componente
     const video = container.querySelector('video');
@@ -63,7 +78,7 @@ describe('ManifestoThumb Component', () => {
   });
 
   it('não deve exibir controles', () => {
-    const { container } = render(<ManifestoThumb />);
+    const { container } = render(<ManifestoThumb heroRef={mockHeroRef} />);
     const video = container.querySelector('video');
     expect(video).not.toHaveAttribute('controls');
   });

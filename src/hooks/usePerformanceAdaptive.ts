@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type QualityLevel = 'high' | 'medium' | 'low';
+type QualityLevel = 'high' | 'medium' | 'low';
 
 export interface PerformanceConfig {
   quality: QualityLevel;
@@ -14,7 +14,6 @@ export function usePerformanceAdaptive(): PerformanceConfig {
   const [quality, setQuality] = useState<QualityLevel>('high');
 
   useEffect(() => {
-    // 1. Detectar dispositivo
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const isLowEnd =
       navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
@@ -31,7 +30,6 @@ export function usePerformanceAdaptive(): PerformanceConfig {
       return;
     }
 
-    // 2. FPS Monitor
     let frames = 0;
     let lastTime = performance.now();
     let rafId: number;
@@ -42,25 +40,19 @@ export function usePerformanceAdaptive(): PerformanceConfig {
 
       if (now >= lastTime + 1000) {
         const fps = Math.round((frames * 1000) / (now - lastTime));
-
-        // Downgrade se FPS < 30
         if (fps < 30 && quality !== 'low') {
           setQuality((prev) => (prev === 'high' ? 'medium' : 'low'));
         }
-
         frames = 0;
         lastTime = now;
       }
-
       rafId = requestAnimationFrame(checkFPS);
     };
 
     rafId = requestAnimationFrame(checkFPS);
-
     return () => cancelAnimationFrame(rafId);
   }, [quality]);
 
-  // Configurações por nível
   const configs: Record<QualityLevel, PerformanceConfig> = {
     high: {
       quality: 'high',
@@ -71,14 +63,14 @@ export function usePerformanceAdaptive(): PerformanceConfig {
     },
     medium: {
       quality: 'medium',
-      fireflyCount: 10,
+      fireflyCount: 12,
       particleCount: 25,
       enablePostProcessing: false,
-      pixelRatio: 1,
+      pixelRatio: 1.5,
     },
     low: {
       quality: 'low',
-      fireflyCount: 5,
+      fireflyCount: 6,
       particleCount: 10,
       enablePostProcessing: false,
       pixelRatio: 1,

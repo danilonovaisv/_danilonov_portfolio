@@ -1,139 +1,50 @@
 'use client';
 
-// ============================================================================
-// src/components/home/ManifestoSection.tsx
-// Mobile-only fullscreen manifesto section below Hero
-//
-// BEHAVIOR:
-// - Full viewport width, aspect-video height
-// - Background: #06071f (matches Hero)
-// - Video: Autoplay, loop, muted by default, playsInline
-// - Tap toggles sound
-// - When scrolling away, video reverts to muted
-// - Scroll reveal animation with scale and opacity
-// ============================================================================
-
-import { motion, useInView, useReducedMotion } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
-
-// Video source (Supabase)
-const VIDEO_SRC =
-  'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4';
-
-// Animation config
-const ANIMATION = {
-  initial: { opacity: 0, scale: 0.95, y: 20 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  transition: {
-    duration: 0.6,
-    ease: [0.22, 1, 0.36, 1], // easeOutExpo
-  },
-} as const;
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 export default function ManifestoSection() {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  // Track if section is in view
-  const isInView = useInView(sectionRef, {
-    once: false, // Allow re-triggering
-    amount: 0.5, // 50% in view
-  });
-
-  const prefersReducedMotion = useReducedMotion();
-  const [isMuted, setIsMuted] = useState(true);
-
-  // ============================================================================
-  // AUTO-MUTE WHEN LEAVING VIEW
-  // ============================================================================
-  useEffect(() => {
-    if (!isInView && !isMuted) {
-      // User scrolled away, mute the video
-      if (videoRef.current) {
-        videoRef.current.muted = true;
-        setIsMuted(true);
-      }
-    }
-  }, [isInView, isMuted]);
-
-  // ============================================================================
-  // TOGGLE SOUND
-  // ============================================================================
-  const toggleSound = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-10%' });
 
   return (
     <motion.section
       id="manifesto"
-      ref={sectionRef}
-      initial={prefersReducedMotion ? {} : ANIMATION.initial}
-      animate={isInView && !prefersReducedMotion ? ANIMATION.animate : {}}
-      transition={ANIMATION.transition}
-      className="lg:hidden w-full bg-[#050511] aspect-video relative overflow-hidden cursor-pointer"
-      onClick={toggleSound}
+      ref={ref}
+      className="flex md:hidden w-full bg-ghost-bg-accent relative overflow-hidden flex-col items-center"
+      style={{ zIndex: 1 }}
     >
-      {/* Video */}
-      <video
-        ref={videoRef}
-        src={VIDEO_SRC}
-        autoPlay
-        loop
-        muted={isMuted}
-        playsInline
-        className="w-full h-full object-cover"
-        aria-label="Portfolio showreel video"
-      />
-
-      {/* Sound Toggle Button */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleSound();
-        }}
-        className="absolute bottom-4 right-4 z-10 flex items-center justify-center 
-                   w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm text-white 
-                   transition-all duration-300 
-                   hover:bg-black/70 hover:scale-105
-                   focus-visible:outline-none focus-visible:ring-2 
-                   focus-visible:ring-accent focus-visible:ring-offset-2
-                   focus-visible:ring-offset-black/50"
-        aria-label={isMuted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'}
-        aria-pressed={!isMuted}
+      <motion.div
+        className="w-full aspect-video"
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5" aria-hidden="true" />
-        ) : (
-          <Volume2 className="w-5 h-5" aria-hidden="true" />
-        )}
-      </button>
+        <video
+          src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
 
-      {/* Sound indicator */}
-      {!isMuted && (
-        <motion.div
-          className="absolute bottom-4 left-4 flex items-center gap-2 
-                     bg-black/60 backdrop-blur-sm rounded-full px-3 py-1.5"
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -10 }}
-        >
-          <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-          <span className="text-white text-xs font-mono uppercase tracking-wider">
-            Sound On
-          </span>
-        </motion.div>
-      )}
+        {/* Mobile Visual Overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-ghost-bg-accent via-transparent to-transparent pointer-events-none" />
 
-      {/* Subtle gradient overlay */}
-      <div
-        className="absolute inset-0 bg-linear-to-t from-ghost-bg-accent/40 via-transparent to-transparent pointer-events-none"
-        aria-hidden="true"
-      />
+        {/* Sound Hint for Mobile Tap logic */}
+        <div className="absolute top-4 right-4 px-3 py-1 bg-black/40 backdrop-blur-sm rounded-full text-[10px] font-bold text-white/70 uppercase tracking-widest border border-white/10 pointer-events-none">
+          Tap for Audio
+        </div>
+      </motion.div>
+
+      {/* Mobile Editorial Continuity */}
+      <div className="w-full p-8 text-center bg-ghost-bg-accent">
+        <p className="text-white text-h3 font-bold mb-2">Our Manifesto</p>
+        <p className="text-white/50 text-caption max-w-xs mx-auto">
+          Experiencing the strategy behind the motion.
+        </p>
+      </div>
     </motion.section>
   );
 }

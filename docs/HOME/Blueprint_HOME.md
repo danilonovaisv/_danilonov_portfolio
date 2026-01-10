@@ -639,7 +639,7 @@ easing: [0.25, 0.46, 0.45, 0.94]
 ### 1.1 Onde o “thumb video” fica
 O *thumb video* pertence à **Home Hero** (`.home-hero`), dentro de um wrapper identificado por classe **`.video-wrapper`**.
 
-Padrão de layout (deduzido pelo HTML + animações):
+Padrão de layout:
 - **Desktop (≥ 768px)**: `.video-wrapper` fica **absoluto no canto inferior direito** da hero (ex.: `md:absolute md:bottom-… md:right-…`).
 - **Mobile (< 768px)**: `.video-wrapper` é **relative** e entra no fluxo normal do layout (classe começa com `relative`), com **aspect ratio vertical** (`aspect-[9/14]`), sugerindo thumbnail “cartaz”/vertical.
 

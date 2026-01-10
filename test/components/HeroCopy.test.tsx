@@ -3,20 +3,58 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import HeroCopy from '@/components/home/hero/HeroCopy';
 
+// Filter out Framer Motion specific props
+const filterMotionProps = (props: Record<string, unknown>) => {
+  const motionProps = [
+    'whileHover',
+    'whileTap',
+    'whileFocus',
+    'whileDrag',
+    'whileInView',
+    'variants',
+    'initial',
+    'animate',
+    'exit',
+    'transition',
+    'layout',
+    'layoutId',
+  ];
+  const filtered: Record<string, unknown> = {};
+  Object.keys(props).forEach((key) => {
+    if (!motionProps.includes(key)) {
+      filtered[key] = props[key];
+    }
+  });
+  return filtered;
+};
+
 // Mock Framer Motion to render children immediately
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, className }: any) => (
-      <div className={className}>{children}</div>
+    div: ({ children, className, ...props }: any) => (
+      <div className={className} {...filterMotionProps(props)}>
+        {children}
+      </div>
     ),
-    h1: ({ children, className }: any) => (
-      <h1 className={className}>{children}</h1>
+    span: ({ children, className, ...props }: any) => (
+      <span className={className} {...filterMotionProps(props)}>
+        {children}
+      </span>
     ),
-    h2: ({ children, className }: any) => (
-      <h2 className={className}>{children}</h2>
+    h1: ({ children, className, ...props }: any) => (
+      <h1 className={className} {...filterMotionProps(props)}>
+        {children}
+      </h1>
     ),
-    svg: ({ children, className }: any) => (
-      <svg className={className}>{children}</svg>
+    h2: ({ children, className, ...props }: any) => (
+      <h2 className={className} {...filterMotionProps(props)}>
+        {children}
+      </h2>
+    ),
+    svg: ({ children, className, ...props }: any) => (
+      <svg className={className} {...filterMotionProps(props)}>
+        {children}
+      </svg>
     ),
   },
   useMotionValue: jest.fn(),
@@ -39,8 +77,8 @@ describe('HeroCopy Component Responsiveness', () => {
     expect(mobileWrapper).toHaveTextContent('vê o');
     expect(mobileWrapper).toHaveTextContent('design.');
 
-    // Check for Desktop Wrapper (hidden md:flex)
-    const desktopWrapper = h1?.querySelector('.md\\:flex');
+    // Check for Desktop Wrapper (hidden md:block)
+    const desktopWrapper = h1?.querySelector('.md\\:block');
     expect(desktopWrapper).toBeInTheDocument();
     expect(desktopWrapper).toHaveClass('hidden');
     expect(desktopWrapper).toHaveTextContent('Você não vê');

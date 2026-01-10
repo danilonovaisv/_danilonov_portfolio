@@ -1,25 +1,27 @@
 'use client';
 
 import { useEffect, useRef, useState, type RefObject } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  AnimatePresence,
+} from 'framer-motion';
 
 export interface ManifestoThumbProps {
   heroRef: RefObject<HTMLElement | null>;
   src?: string;
 }
 
-const VIDEO_DESCRIPTION_ID = 'manifesto-thumb-video-description';
-
 const ManifestoThumb: React.FC<ManifestoThumbProps> = ({
   heroRef,
   src = 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
 }) => {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [shouldLoad, setShouldLoad] = useState(false);
-  const [audioOn, setAudioOn] = useState(false);
-
-  // Z-Index control state
-  const [zIndexState, setZIndexState] = useState(30);
+  const [isHovered, setIsHovered] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -32,26 +34,11 @@ const ManifestoThumb: React.FC<ManifestoThumbProps> = ({
   }, []);
 
   useEffect(() => {
-    // Always load on mobile, check visibility on desktop
-    if (!isDesktop) {
+    // On desktop, always load immediately since the video is visible in viewport
+    // The IntersectionObserver pattern doesn't work when the element's render depends on shouldLoad
+    if (isDesktop) {
       setShouldLoad(true);
-      return;
     }
-
-    if (!wrapperRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    observer.observe(wrapperRef.current);
-    return () => observer.disconnect();
   }, [isDesktop]);
 
   const { scrollYProgress } = useScroll({
@@ -65,137 +52,147 @@ const ManifestoThumb: React.FC<ManifestoThumbProps> = ({
     restDelta: 0.001,
   });
 
-  // --- DESKTOP TRANSFORMS ---
-  const width = useTransform(
-    smoothProgress,
-    [0, 0.12, 0.46, 0.78],
-    ['300px', '300px', '100vw', '100vw']
-  );
-  // Initial height aspect ratio roughly 16:9 or similar
-  const height = useTransform(
-    smoothProgress,
-    [0, 0.12, 0.46, 0.78],
-    ['170px', '170px', '100vh', '100vh']
-  );
-  const right = useTransform(
-    smoothProgress,
-    [0, 0.12, 0.46],
-    ['24px', '24px', '0px'] // 1.5rem = 24px (bottom-6 right-6)
-  );
-  const bottom = useTransform(
-    smoothProgress,
-    [0, 0.12, 0.46],
-    ['24px', '24px', '0px']
-  );
-  const borderRadius = useTransform(
-    smoothProgress,
-    [0, 0.12, 0.46],
-    ['12px', '12px', '0px']
-  );
+  // Morphing transforms based on scroll spec (linear)
+  const width = useTransform(smoothProgress, [0, 1], ['219px', '100vw']);
+  const height = useTransform(smoothProgress, [0, 1], ['131px', '100vh']);
+  const right = useTransform(smoothProgress, [0, 1], ['32px', '0px']);
+  const bottom = useTransform(smoothProgress, [0, 1], ['32px', '0px']);
+  const borderRadius = useTransform(smoothProgress, [0, 1], ['12px', '0px']);
 
-  const fadeOut = useTransform(smoothProgress, [0.78, 1], [1, 0]);
+  // Overlay visibility
+  const miniOverlayOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+  const finalOverlayOpacity = useTransform(smoothProgress, [0.75, 1], [0, 1]);
 
-  // Handle Logic Updates
+  // Audio threshold logic for desktop
   useEffect(() => {
+    if (!isDesktop) return;
     const unsubscribe = smoothProgress.on('change', (latest) => {
-      // Audio Logic
-      if (latest >= 0.78) {
-        setAudioOn(false);
-      } else if (latest >= 0.46) {
-        setAudioOn(true);
-        setZIndexState(50); // Expanded
+      if (latest >= 0.75) {
+        setMuted(false);
       } else {
-        setAudioOn(false);
-        setZIndexState(30); // Initial
+        setMuted(true);
       }
     });
-
     return () => unsubscribe();
-  }, [smoothProgress]);
+  }, [isDesktop, smoothProgress]);
 
-  useEffect(() => {
-    if (!videoRef.current) return;
-    if (audioOn) {
-      videoRef.current.muted = false;
-      videoRef.current.volume = 1;
+  const handleAction = () => {
+    if (isDesktop && heroRef.current) {
+      // Desktop: Jump to fullscreen instant state (scroll to target)
+      const targetScroll =
+        heroRef.current.offsetTop +
+        heroRef.current.offsetHeight -
+        window.innerHeight;
+      window.scrollTo({
+        top: targetScroll,
+        behavior: 'smooth',
+      });
     } else {
-      videoRef.current.muted = true;
-      videoRef.current.volume = 0;
+      // Mobile: Toggle Sound
+      setMuted((prev) => !prev);
     }
-  }, [audioOn]);
-
-  const handleExpand = () => {
-    // Programmatic scroll to trigger expansion
-    const heroHeight = window.innerHeight * 2.5; // 250vh
-    // We want to reach roughly 0.5 progress to ensure full expansion (0.46 threshold)
-    // Offset is 'start start' to 'end start' => full section height
-    const targetScroll = heroHeight * 0.5;
-    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
   };
 
-  if (!isDesktop) {
-    // --- MOBILE RENDER ---
-    // Positioned absolute at bottom, mimicking "below copy" visually
-    return (
-      <div
-        className="absolute bottom-24 left-6 right-6 z-20 aspect-9/14 rounded-xl overflow-hidden shadow-2xl border border-white/10"
-        aria-label="Manifesto Video Mobile"
-      >
-        {shouldLoad && (
-          <video
-            className="w-full h-full object-cover"
-            src={src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-          />
-        )}
-      </div>
-    );
-  }
+  if (!isDesktop) return null; // ShowreelThumb is desktop-only floating element
 
-  // --- DESKTOP RENDER ---
   return (
-    <motion.div
-      ref={wrapperRef}
-      onClick={handleExpand}
-      className="video-wrapper absolute cursor-pointer pointer-events-auto overflow-hidden bg-black shadow-2xl border border-white/10"
-      style={{
-        width,
-        height,
-        right,
-        bottom,
-        borderRadius,
-        opacity: fadeOut,
-        zIndex: zIndexState,
-        willChange: 'width, height, right, bottom',
-      }}
-    >
-      {shouldLoad ? (
-        <>
-          <video
-            ref={videoRef}
-            className="w-full h-full object-cover"
-            src={src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            aria-label="Vídeo showreel demonstrando projetos de design gráfico"
-            aria-describedby={VIDEO_DESCRIPTION_ID}
-          />
-          <p id={VIDEO_DESCRIPTION_ID} className="sr-only">
-            Vídeo de apresentação dos trabalhos em estratégia, branding e motion
-            design.
-          </p>
-        </>
-      ) : (
-        <div className="w-full h-full bg-neutral-900 animate-pulse" />
+    <AnimatePresence>
+      {shouldLoad && (
+        <motion.div
+          ref={wrapperRef}
+          className="video-wrapper group fixed z-30 overflow-hidden cursor-pointer"
+          style={{
+            width,
+            height,
+            right,
+            bottom,
+            borderRadius,
+          }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={handleAction}
+          role="button"
+          aria-label="Reveal Manifesto Video"
+        >
+          {/* Inner zoom effect */}
+          <motion.div
+            className="w-full h-full relative"
+            animate={{ scale: isHovered ? 1.05 : 1 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              src={src}
+              autoPlay
+              loop
+              muted={muted}
+              playsInline
+              preload="metadata"
+              aria-label="Vídeo showreel demonstrando projetos de design gráfico"
+            />
+
+            {/* Hover UI (Arrow rotation) */}
+            <motion.div
+              className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none"
+              style={{ opacity: miniOverlayOpacity }}
+            >
+              <div className="absolute top-4 right-4 flex items-center gap-2">
+                <span className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase">
+                  Explore
+                </span>
+                <motion.div
+                  animate={{ rotate: isHovered ? 0 : -45 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                >
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Final Fullscreen Overlay */}
+            <motion.div
+              className="absolute inset-0 video-overlay pointer-events-none flex flex-col justify-end p-6 md:p-12"
+              style={{ opacity: finalOverlayOpacity }}
+            >
+              <div className="max-w-4xl">
+                <p className="text-white/60 text-caption mb-2 font-medium">
+                  MANIFESTO VIDEO • 2025
+                </p>
+                <p className="text-white text-display leading-[0.9] font-black tracking-tighter">
+                  WE ARE THE
+                  <br />
+                  INVISIBLE HAND
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Sound Feedback Indicator */}
+            {!muted && (
+              <div className="absolute top-6 left-6 bg-[#0048ff]/80 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest text-white flex items-center gap-2">
+                <div className="w-1 h-1 bg-white rounded-full animate-pulse" />
+                AUDIO ACTIVE
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
       )}
-    </motion.div>
+    </AnimatePresence>
   );
 };
 

@@ -1,18 +1,18 @@
 'use client';
 
 import * as React from 'react';
-import { useRef, useState, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { Preloader } from '@/components/ui/Preloader';
 
 import HeroCopy from './HeroCopy';
-import { useHeroAnimation } from './useHeroAnimation';
 import ManifestoThumb from './ManifestoThumb';
+import ManifestoSection from './ManifestoSection';
 
 // Dynamic import for WebGL Scene
 const GhostScene = dynamic(
-  () => import('@/components/canvas/hero/GhostScene'),
+  () => import('@/components/canvas/home/hero/GhostScene'),
   {
     ssr: false,
     loading: () => <div className="absolute inset-0 bg-[#040013]" />,
@@ -25,57 +25,61 @@ const CONFIG = {
 } as const;
 
 export default function HomeHero() {
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
+    return () => clearTimeout(timer);
+  }, []);
 
-  // Hook de animação do Hero (Controla Copy Opacity agora)
-  const { copyOpacity } = useHeroAnimation(sectionRef);
-
-  const handlePreloaderDone = useCallback(() => setIsLoading(false), []);
+  const handlePreloaderDone = useCallback(() => setIsLoaded(true), []);
 
   return (
-    <section
-      id="hero"
-      ref={sectionRef}
-      className="relative min-h-screen h-[120vh] md:h-[250vh] bg-[radial-gradient(circle,#0b0d3a,#06071f)] overflow-hidden"
-      aria-label="Home hero section"
-    >
-      {/* Sticky Context */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background - Dark Void (Fixed) */}
-        <div className="absolute inset-0 z-0 bg-transparent" aria-hidden />
-
-        {/* Preloader Ghost */}
+    <>
+      <section
+        id="hero"
+        ref={heroRef}
+        className="relative w-full min-h-[200vh] bg-[radial-gradient(circle_at_center,#0b0d3a,#06071f)]"
+        aria-label="Portfolio Hero Section"
+      >
+        {/* Preloader */}
         <AnimatePresence>
-          {isLoading && (
+          {!isLoaded && (
             <Preloader
               durationMs={CONFIG.preloadMs}
               onComplete={handlePreloaderDone}
-              label="Summoning spirits"
+              label="Initializing Experience"
             />
           )}
         </AnimatePresence>
 
-        {/* Hero Copy (Editorial) - z-10 (Middle Layer) */}
-        <motion.div
-          className="absolute inset-0 z-10 pointer-events-none"
-          style={{ opacity: copyOpacity }}
-        >
-          <HeroCopy />
-        </motion.div>
-
-        {/* WebGL Atmosphere/Ghost - z-20 (Ghost Layer - Above Text) */}
-        <div className="absolute inset-0 z-20 pointer-events-none mix-blend-screen">
+        {/* Background WebGL Layer (z-20) */}
+        <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
           <GhostScene />
         </div>
 
-        {/* Manifesto Thumb - z-30 (Interactive Layer, expands to 50) */}
-        <ManifestoThumb heroRef={sectionRef} />
-      </div>
+        {/* Hero Content Layer (z-10) */}
+        <div className="absolute inset-0 z-10">
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center px-6 md:px-12 pointer-events-none">
+            <HeroCopy />
+          </div>
+        </div>
 
-      {/* Scroll Space */}
-      <div className="h-screen w-full pointer-events-none" />
-    </section>
+        {/* Manifesto Thumb (Desktop) - Floating interactive component (z-30) */}
+        <ManifestoThumb
+          heroRef={heroRef}
+          src="https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4"
+        />
+
+        <div className="sr-only">
+          Decorative animation of a floating spectral ghost with glowing
+          particles following your cursor.
+        </div>
+      </section>
+
+      {/* Mobile-only Manifesto Section */}
+      <ManifestoSection />
+    </>
   );
 }

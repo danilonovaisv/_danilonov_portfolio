@@ -45,6 +45,9 @@
     "AJUSTE HERO",
     "docs",
     "REFERENCIA_HERO-GHOST",
-    "functions"
+    "functions",
+    "TROCAR",
+    "src/index.tsx",
+    "src/App.tsx"
   ]
 }
