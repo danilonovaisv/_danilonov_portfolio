@@ -5,7 +5,7 @@ export default function JsonLd() {
     '@type': 'Person',
     name: BRAND.name,
     url: `https://${BRAND.domain}`,
-    image: BRAND.logos.logoLight,
+    image: BRAND.assets.logos.logoLight,
     jobTitle: 'Creative Developer & Designer',
     sameAs: [
       'https://github.com/danilonovaisv',

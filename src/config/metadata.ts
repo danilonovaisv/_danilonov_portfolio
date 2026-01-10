@@ -87,9 +87,9 @@ export const siteMetadata: Metadata = {
   },
 
   icons: {
-    icon: BRAND.logos.favicon,
-    shortcut: BRAND.logos.favicon,
-    apple: BRAND.logos.favicon,
+    icon: BRAND.assets.logos.favicon,
+    shortcut: BRAND.assets.logos.favicon,
+    apple: BRAND.assets.logos.favicon,
   },
 
   manifest: '/manifest.json',

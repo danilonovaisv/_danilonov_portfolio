@@ -27,26 +27,7 @@ interface MarqueeProps {
   baseVelocity: number;
 }
 
-// --- Content Data ---
-const SERVICES = [
-  'Direção criativa que organiza o caos',
-  'Design estratégico que guia decisões',
-  'Identidades que permanecem na memória',
-  'Campanhas multicanais com lógica e emoção',
-  'Branding que não grita — mas marca',
-  'Inteligência artificial aplicada à criação e automação',
-  'Liderança criativa com visão e método',
-];
-
-const MARQUEE_TEXT = [
-  'DIREÇÃO CRIATIVA',
-  'DESIGN ESTRATÉGICO',
-  'IDENTIDADES',
-  'CAMPANHAS',
-  'BRANDING',
-  'INTELIGÊNCIA ARTIFICIAL',
-  'LIDERANÇA CRIATIVA',
-];
+import { ABOUT_CONTENT } from '@/config/content';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -244,11 +225,11 @@ export function AboutWhatIDo() {
               WAIT: Blueprint says "Faixa horizontal única ... Sem wrap". I will implement horizontal scroll for this specific 'strip' feel if it overflows.
           */}
           <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-4 md:gap-5 justify-center lg:justify-start lg:overflow-x-auto lg:pb-8 lg:px-4 no-scrollbar">
-            {SERVICES.map((service, index) => (
+            {ABOUT_CONTENT.whatIDo.cards.map((service, index) => (
               <ServiceCard
-                key={`${service}-${index}`}
+                key={service.id}
                 index={index}
-                text={service}
+                text={service.text}
                 scrollProgress={scrollYProgress}
                 isDesktop={isDesktop}
               />
@@ -263,7 +244,7 @@ export function AboutWhatIDo() {
         <div className="relative bg-bluePrimary py-3 md:py-4 -rotate-1 transform scale-105 origin-left">
           <Marquee baseVelocity={1}>
             <span className="flex items-center gap-8 px-4">
-              {MARQUEE_TEXT.map((item, i) => (
+              {ABOUT_CONTENT.whatIDo.marquee.map((item, i) => (
                 <React.Fragment key={i}>
                   <span className="text-purpleDetails font-black text-2xl md:text-4xl tracking-wider">
                     {item}
@@ -279,7 +260,7 @@ export function AboutWhatIDo() {
         <div className="relative bg-transparent border-t border-b border-bluePrimary/30 py-3 md:py-4 rotate-1 transform scale-105 origin-right">
           <Marquee baseVelocity={-1}>
             <span className="flex items-center gap-8 px-4">
-              {[...MARQUEE_TEXT].reverse().map((item, i) => (
+              {[...ABOUT_CONTENT.whatIDo.marquee].reverse().map((item, i) => (
                 <React.Fragment key={i}>
                   <span className="text-white/80 font-black text-2xl md:text-4xl tracking-wider opacity-60">
                     {item}

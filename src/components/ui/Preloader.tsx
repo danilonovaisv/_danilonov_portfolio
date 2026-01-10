@@ -17,8 +17,8 @@ const hexToRgba = (hex: string, alpha = 1) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-const primaryShadowColor = hexToRgba(BRAND.colors.primary, 0.45);
-const accentShadowColor = hexToRgba(BRAND.colors.accent, 0.6);
+const primaryShadowColor = hexToRgba(BRAND.colors.bluePrimary, 0.45);
+const accentShadowColor = hexToRgba(BRAND.colors.blueAccent, 0.6);
 
 type Props = {
   /** Controlado: some quando `ready === true` */
@@ -74,7 +74,7 @@ export function Preloader({
       {show && (
         <motion.div
           className={
-            'fixed inset-0 z-50 grid place-items-center bg-linear-to-b from-ghost-bg to-neutral ' +
+            'fixed inset-0 z-50 grid place-items-center bg-linear-to-b from-background to-neutral ' +
             (className ?? '')
           }
           initial={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
@@ -86,7 +86,7 @@ export function Preloader({
           role="status"
           aria-live="polite"
         >
-          <div className="text-center text-slate-100 select-none">
+          <div className="text-center text-text select-none">
             {/* Ghost Flutuante */}
             <motion.div
               className="mx-auto mb-10 h-24 w-24"
@@ -126,7 +126,7 @@ export function Preloader({
               <motion.div
                 className="h-full"
                 style={{
-                  background: `linear-gradient(90deg, ${BRAND.colors.bluePrimary} 0%, ${BRAND.colors.accent} 100%)`,
+                  background: `linear-gradient(90deg, ${BRAND.colors.bluePrimary} 0%, ${BRAND.colors.blueAccent} 100%)`,
                   boxShadow: `0 0 12px ${primaryShadowColor}`,
                 }}
                 initial={{ width: '0%' }}

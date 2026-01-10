@@ -22,7 +22,11 @@ import { Preload } from '@react-three/drei';
 //   );
 // }
 
-export default function GhostScene() {
+export default function GhostScene({
+  ghostRef,
+}: {
+  ghostRef?: React.RefObject<THREE.Group | null>;
+}) {
   // const prefersReducedMotion = useReducedMotion();
   const { pixelRatio, particleCount } = usePerformanceAdaptive();
 
@@ -59,7 +63,7 @@ export default function GhostScene() {
         <directionalLight position={[0, 0, 5]} intensity={2} />
         <Suspense fallback={null}>
           <Atmosphere />
-          <Ghost particleCount={particleCount} />
+          <Ghost particleCount={particleCount} ghostRef={ghostRef} />
           <Preload all />
         </Suspense>
       </Canvas>

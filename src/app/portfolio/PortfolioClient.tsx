@@ -25,7 +25,7 @@ export default function PortfolioClient() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-ghost-bg text-text-light">
+    <div className="min-h-screen bg-background text-text">
       {/* Hero com video */}
       <PortfolioHeroNew />
 

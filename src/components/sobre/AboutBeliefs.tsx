@@ -100,12 +100,14 @@ export function AboutBeliefs() {
           className="max-w-[900px]"
         >
           <p className="type-h1 leading-[1.15] tracking-tight">
-            Acredito no{' '}
-            <span className="text-primary">design que muda o dia</span> de
-            alguém.
-            <br />
-            Não pelo choque,{' '}
-            <span className="text-primary">mas pela conexão.</span>
+            {ABOUT_CONTENT.beliefsIntro.map((part, i) => (
+              <span key={i}>
+                <span className={part.highlight ? 'text-primary' : undefined}>
+                  {part.text}
+                </span>
+                {part.newLine && <br />}
+              </span>
+            ))}
           </p>
         </motion.div>
 

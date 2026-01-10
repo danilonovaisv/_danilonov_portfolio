@@ -29,10 +29,10 @@ export default function PortfolioMosaicGrid({
     <section
       id="portfolio-mosaic"
       aria-label="Mural de projetos em mosaico"
-      className="relative bg-transparent text-text-light py-24 md:py-32"
+      className="relative bg-transparent text-text py-24 md:py-32"
     >
       {/* Overlay de fundo (Opcional ou removido se o bg ja for ghost-bg) */}
-      <div className="absolute inset-0 bg-linear-to-b from-ghost-bg via-transparent to-ghost-bg pointer-events-none opacity-50" />
+      <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background pointer-events-none opacity-50" />
 
       <div className="mx-auto w-full px-[clamp(1.5rem,5vw,6rem)] max-w-[1680px] relative z-10">
         {/* Grid Editorial */}

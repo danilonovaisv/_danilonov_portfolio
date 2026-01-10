@@ -113,9 +113,9 @@ export default function SiteHeader({
     return () => observer.disconnect();
   }, []);
 
-  const logoDesktop = isOnLightSection ? BRAND.logos.logoDark : logoUrl;
+  const logoDesktop = isOnLightSection ? BRAND.assets.logos.logoDark : logoUrl;
   const logoMobile = isOnLightSection
-    ? BRAND.logos.logoDark
+    ? BRAND.assets.logos.logoDark
     : logoUrlMobile || logoUrl;
 
   return (

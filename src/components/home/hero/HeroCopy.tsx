@@ -44,8 +44,21 @@ const itemAnimation: Variants = {
   },
 };
 
-export default function HeroCopy() {
+import { useRef } from 'react';
+import { useGhostReveal } from '@/hooks/useGhostReveal';
+
+export default function HeroCopy({
+  ghostRef,
+  isLoaded = true,
+}: {
+  ghostRef?: React.RefObject<THREE.Group | null>;
+  isLoaded?: boolean;
+}) {
+  const revealRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+
+  // Sincroniza a posição do overlay 2D com o Ghost 3D
+  useGhostReveal(ghostRef, revealRef, isLoaded && !prefersReducedMotion);
 
   const motionProps = prefersReducedMotion
     ? {}
@@ -58,8 +71,21 @@ export default function HeroCopy() {
   return (
     <motion.div
       {...motionProps}
-      className="hero-content flex flex-col items-center justify-center text-center max-w-5xl px-4 pointer-events-auto"
+      className="hero-content relative flex flex-col items-center justify-center text-center max-w-5xl px-4 pointer-events-auto"
     >
+      {/* Ghost Reveal Overlay (Segredo do Sistema Ghost) */}
+      {!prefersReducedMotion && (
+        <div
+          ref={revealRef}
+          className="absolute pointer-events-none z-50 rounded-full bg-radial from-[#00ffff]/80 to-transparent blur-3xl mix-blend-screen transition-opacity duration-1000"
+          style={{
+            width: 'clamp(300px, 40vw, 600px)',
+            height: 'clamp(300px, 40vw, 600px)',
+            willChange: 'transform',
+            opacity: isLoaded ? 1 : 0,
+          }}
+        />
+      )}
       {/* Tag decorativa - Mono, 19px, uppercase */}
       <motion.span
         variants={itemAnimation}
@@ -71,7 +97,7 @@ export default function HeroCopy() {
       {/* Headline principal - Display: 6-9rem, Black weight */}
       <motion.h1
         variants={itemAnimation}
-        className="font-black tracking-tight leading-[0.95] mb-6 text-text-light"
+        className="font-black tracking-tight leading-[0.95] mb-6 text-white/20"
         style={{
           fontSize: 'clamp(3.5rem, 10vw + 1rem, 9rem)',
         }}
@@ -95,7 +121,7 @@ export default function HeroCopy() {
       {/* Subheading - H2 size, #d9dade */}
       <motion.h2
         variants={itemAnimation}
-        className="font-bold text-[#d9dade] mb-14"
+        className="font-bold text-[#d9dade]/30 mb-14"
         style={{
           fontSize: 'clamp(1.5rem, 4vw + 0.5rem, 2.5rem)',
         }}

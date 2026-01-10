@@ -101,7 +101,10 @@ export function AboutHero() {
               }}
               className="type-h1 text-text-light tracking-tight leading-[1.1]"
             >
-              Sou <span className="text-[#0048ff]">Danilo Novais.</span>
+              {ABOUT_CONTENT.hero.title.text}
+              <span className="text-[#0048ff]">
+                {ABOUT_CONTENT.hero.title.highlight}
+              </span>
             </motion.h1>
 
             {/* Manifesto Display Text (treated as H1 visual) */}
@@ -119,18 +122,17 @@ export function AboutHero() {
               }}
               className="space-y-1.5 flex flex-col items-end"
             >
-              <p className="type-h1 text-text-light font-bold tracking-tight leading-[1.05]">
-                Você <span className="text-[#0048ff]">não vê tudo</span>
-              </p>
-              <p className="type-h1 text-text-light font-bold tracking-tight leading-[1.05]">
-                o que eu faço. Mas
-              </p>
-              <p className="type-h1 text-text-light font-bold tracking-tight leading-[1.05]">
-                sente quando
-              </p>
-              <p className="type-h1 text-text-light font-bold tracking-tight leading-[1.05]">
-                <span className="text-[#0048ff]">funciona.</span>
-              </p>
+              {ABOUT_CONTENT.hero.manifesto.map((item, index) => (
+                <p
+                  key={index}
+                  className="type-h1 text-text-light font-bold tracking-tight leading-[1.05]"
+                >
+                  {item.text}
+                  {item.highlight && (
+                    <span className="text-[#0048ff]">{item.highlight}</span>
+                  )}
+                </p>
+              ))}
             </motion.div>
 
             {/* Description H3 */}
@@ -148,11 +150,11 @@ export function AboutHero() {
               }}
               className="type-h3 text-white/60 font-medium leading-[1.3] tracking-tight max-w-[620px]"
             >
-              <span className="block">Crio design que observa, entende</span>
-              <span className="block">e guia experiências com intenção,</span>
-              <span className="block">
-                estratégia e tecnologia — na medida certa.
-              </span>
+              {ABOUT_CONTENT.hero.description.map((line, index) => (
+                <span key={index} className="block">
+                  {line}
+                </span>
+              ))}
             </motion.div>
           </motion.div>
         </motion.div>
@@ -160,7 +162,7 @@ export function AboutHero() {
 
       {/* Gradient Bottom Decay */}
       {/* Gradient Bottom Decay - Suaviza transição para próxima sessão */}
-      <div className="absolute bottom-0 left-0 w-full h-[30vh] md:h-[40vh] bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-20" />
+      <div className="absolute bottom-0 left-0 w-full h-[30vh] md:h-[40vh] bg-linear-to-t from-background via-background/80 to-transparent pointer-events-none z-20" />
 
       {/* Mobile Hero Video */}
       <div className="lg:hidden">
@@ -208,20 +210,31 @@ export function AboutHero() {
               className="space-y-4"
             >
               <h1 className="type-display text-text-light leading-[1.1]">
-                Sou <span className="text-bluePrimary">Danilo Novais.</span>{' '}
-                Você <span className="text-bluePrimary">não vê tudo</span> o
-                <br />
-                que eu faço. Mas sente quando{' '}
-                <span className="text-bluePrimary">funciona.</span>
+                {ABOUT_CONTENT.hero.title.text}
+                <span className="text-bluePrimary">
+                  {ABOUT_CONTENT.hero.title.highlight}
+                </span>{' '}
+                {ABOUT_CONTENT.hero.manifesto.map((item, i) => (
+                  <span key={i}>
+                    {item.text}
+                    {item.highlight && (
+                      <span className="text-bluePrimary">{item.highlight}</span>
+                    )}
+                    {i === 1 && <br />}
+                  </span>
+                ))}
               </h1>
             </motion.div>
             <motion.div
               variants={motionTokens.fadeGhost}
               className="type-body text-white/85 leading-[1.6] tracking-tight"
             >
-              Crio design que observa, entende e guia experiências com
-              <br />
-              intenção, estratégia e tecnologia — na medida certa.
+              {ABOUT_CONTENT.hero.description.map((line, index) => (
+                <span key={index}>
+                  {line}
+                  {index < ABOUT_CONTENT.hero.description.length - 1 && <br />}
+                </span>
+              ))}
             </motion.div>
           </motion.div>
         </div>

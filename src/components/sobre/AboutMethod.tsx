@@ -105,9 +105,9 @@ export default function AboutMethod() {
                 viewport={{ once: true, margin: '-10%' }}
                 className="flex flex-col gap-4"
               >
-                {ABOUT_CONTENT.method.steps.map((step, i) => (
+                {ABOUT_CONTENT.method.steps.map((step) => (
                   <motion.div
-                    key={i}
+                    key={step.id}
                     variants={motionTokens.riseSoft}
                     className="
                       group flex items-center gap-6 
@@ -127,10 +127,10 @@ export default function AboutMethod() {
                       group-hover:bg-primary group-hover:text-white transition-colors duration-300
                     "
                     >
-                      0{i + 1}
+                      {step.id}
                     </span>
                     <p className="type-body text-white/80 group-hover:text-white transition-colors font-medium">
-                      {step}
+                      {step.text}
                     </p>
                   </motion.div>
                 ))}

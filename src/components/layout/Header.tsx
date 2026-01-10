@@ -9,10 +9,10 @@ export default function Header() {
   return (
     <SiteHeader
       navItems={NAVIGATION.header || []}
-      logoUrl={BRAND.logos.logoDark} // Desktop: LogoDark
-      logoUrlMobile={BRAND.logos.logoDark} // Mobile: LogoDark
+      logoUrl={BRAND.assets.logos.logoDark} // Desktop: LogoDark
+      logoUrlMobile={BRAND.assets.logos.logoDark} // Mobile: LogoDark
       gradient={['rgba(0,87,255,0.55)', 'rgba(82,39,255,0.45)']}
-      accentColor={BRAND.colors.primary}
+      accentColor={BRAND.colors.bluePrimary}
       disableWebGL
     />
   );

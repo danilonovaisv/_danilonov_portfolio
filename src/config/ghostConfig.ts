@@ -166,39 +166,39 @@ export const GHOST_CONFIG: GhostConfig = {
   fogFar: 8,
 
   // Câmera e renderização
-  cameraDistance: 30,
+  cameraDistance: 20,
   cameraFov: 75,
   rendererDPR: [1, 2],
 
   // Aparência do Ghost (Matched to CodePen)
-  ghostScale: 0.6,
-  bodyColor: 'deepSpace', // 0x0f2027
+  ghostScale: 1.2,
+  bodyColor: 'ghostBlue', // 0x0f2027
   glowColor: 'blue', // "blue"
-  eyeGlowColor: 'blue',
+  eyeGlowColor: 'black',
 
-  ghostOpacity: 0.94,
-  emissiveIntensity: 6.0,
-  pulseSpeed: 0.5,
-  pulseIntensity: 0.8,
-  floatSpeed: 1.6,
+  ghostOpacity: 0.8,
+  emissiveIntensity: 9.0,
+  pulseSpeed: 0.05,
+  pulseIntensity: 0.08,
+  floatSpeed: 0.6,
 
   // Comportamento do Ghost
   followSpeed: 0.05,
-  movementThreshold: 0.7,
+  movementThreshold: 0.07,
 
   // Iluminação
-  rimLightIntensity: 1.0,
-  ambientLightColor: 'blue',
-  ambientLightIntensity: 0.6,
+  rimLightIntensity: 235.0,
+  ambientLightColor: 'voidSky',
+  ambientLightIntensity: 1.6,
 
   // Véu Atmosférico (Revelação)
-  veilColor: 'fogBlue',
-  veilEmissive: 'midnightBlue',
-  veilEmissiveIntensity: 1.6,
-  veilOpacity: 0.6,
+  veilColor: 'deepSpace',
+  veilEmissive: 'deepSpace',
+  veilEmissiveIntensity: 3.6,
+  veilOpacity: 0.9,
   veilPulseAmount: 0.6,
-  veilBackgroundColor: 'midnightBlue',
-  veilBackgroundOpacity: 0.95,
+  veilBackgroundColor: 'voidSky',
+  veilBackgroundOpacity: 1.95,
 
   // Fireflies (Matched to CodePen)
   fireflyCount: 20, // CodePen creates 20 fireflies in createFireflies loop
@@ -215,42 +215,42 @@ export const GHOST_CONFIG: GhostConfig = {
   fireflyPulseVariance: 0.0305,
   fireflyPulseFrequency: 0.02,
   fireflyOpacity: 0.08,
-  fireflyGlowIntensity: 4.3,
+  fireflyGlowIntensity: 2.3,
 
   // Partículas (Matched to CodePen)
-  particleCount: 2500,
-  particleColor: 'blue',
+  particleCount: 250,
+  particleColor: 'pink',
 
   particleSpeedFactor: 0.015,
-  particleRadius: 0.05,
+  particleRadius: 0.5,
   particleGlowOffset: 0.04,
-  particleGlowSpeed: 0.02,
+  particleGlowSpeed: 0.002,
   particleGlowStrength: 0.028,
-  particleOpacity: 0.7,
+  particleOpacity: 0.007,
   particleDecayRate: 0.005,
   createParticlesOnlyWhenMoving: true,
   particleCreationRate: 0.05,
 
   // Olhos (Matched to CodePen)
-  eyeGlowIntensity: 0.5,
+  eyeGlowIntensity: 1.5,
   eyeGlowResponse: 0.31,
-  eyeGlowDecay: 0.95,
+  eyeGlowDecay: 0.5,
 
   // Efeitos de Pós-Processamento (Matched to CodePen)
   analogGrain: 0.8,
-  analogBleeding: 1.5,
-  analogScanlines: 1.5,
-  analogVignette: 2.8,
-  analogIntensity: 1.2,
+  analogBleeding: 0.5,
+  analogScanlines: 0.5,
+  analogVignette: 1.8,
+  analogIntensity: 1.5,
   analogJitter: 0.6,
-  analogVSync: 1.7,
+  analogVSync: 0.7,
   limboMode: false,
 
   // Parâmetros do Véu Atmosférico (Matched to CodePen)
   revealRadius: 37,
-  fadeStrength: 1.3,
+  fadeStrength: 0.3,
   baseOpacity: 0.38,
-  revealOpacity: 0.0,
+  revealOpacity: 2,
 };
 
 // Helper para converter cor do config para formato numérico (Three.js)

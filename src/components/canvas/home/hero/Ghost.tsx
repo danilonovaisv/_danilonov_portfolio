@@ -19,10 +19,13 @@ extend({ EffectComposer, RenderPass, UnrealBloomPass, ShaderPass });
 
 export function Ghost({
   particleCount: _particleCount = 100,
+  ghostRef,
 }: {
   particleCount?: number;
+  ghostRef?: React.RefObject<THREE.Group | null>;
 }) {
-  const groupRef = useRef<THREE.Group>(null!);
+  const internalRef = useRef<THREE.Group>(null!);
+  const groupRef = ghostRef || internalRef;
   const bodyRef = useRef<THREE.Mesh>(null!);
   const eyesRef = useRef<THREE.Group>(null!);
 
@@ -76,7 +79,7 @@ export function Ghost({
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(size.width, size.height),
-      1.25, // strength
+      0.85, // strength
       0.4, // radius
       0.0 // threshold
     );
@@ -118,7 +121,7 @@ export function Ghost({
 
     // 2. Float Animation (Idle)
     const floatY =
-      Math.sin(t * GHOST_CONFIG.floatSpeed * 1.5) * 0.03 +
+      Math.sin(t * GHOST_CONFIG.floatSpeed * 0.5) * 0.03 +
       Math.cos(t * GHOST_CONFIG.floatSpeed * 0.7) * 0.018;
     groupRef.current.position.y += floatY;
 
@@ -142,8 +145,8 @@ export function Ghost({
     );
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
       groupRef.current.rotation.x,
-      velocityY * 0.05,
-      0.05
+      velocityY * 0.02,
+      0.02
     );
 
     // 5. Eye Glow Logic
@@ -159,10 +162,10 @@ export function Ghost({
 
       const isMoving =
         currentMovementRef.current > GHOST_CONFIG.movementThreshold;
-      const targetOpacity = isMoving ? 0.8 : 0.2;
+      const targetOpacity = isMoving ? 0.3 : 0.3;
       const lerpFactor = isMoving
         ? GHOST_CONFIG.eyeGlowResponse
-        : GHOST_CONFIG.eyeGlowResponse * 0.5;
+        : GHOST_CONFIG.eyeGlowResponse * 1.0;
 
       const {
         leftEyeMaterial,
@@ -177,15 +180,15 @@ export function Ghost({
         lerpFactor
       );
       rightEyeMaterial.opacity = leftEyeMaterial.opacity;
-      leftOuterMaterial.opacity = leftEyeMaterial.opacity * 0.33;
-      rightOuterMaterial.opacity = leftEyeMaterial.opacity * 0.33;
+      leftOuterMaterial.opacity = leftEyeMaterial.opacity * 0.63;
+      rightOuterMaterial.opacity = leftEyeMaterial.opacity * 0.63;
     }
 
     // Renderizar com efeitos (SEMPRE, se composer existir)
     if (composerRef.current && isLoaded) {
       composerRef.current.render();
     }
-  }, 1);
+  }, 0.5);
 
   // Setup Eyes (Static Geometry)
   useEffect(() => {
@@ -200,11 +203,11 @@ export function Ghost({
     const eyeMat = new THREE.MeshPhysicalMaterial({
       color: eyeColorHex,
       transparent: true,
-      opacity: 0.8, // Ajuste para garantir visibilidade
+      opacity: 1.0,
       emissive: eyeColorHex,
-      emissiveIntensity: 2,
+      emissiveIntensity: 10.0, // Increased for a more piercing look
       roughness: 0,
-      metalness: 0.5,
+      metalness: 0.1,
     });
 
     const outerMat = new THREE.MeshPhysicalMaterial({
@@ -260,9 +263,9 @@ export function Ghost({
             roughness={0.02}
             metalness={0.0}
             transparent
-            opacity={0.1} // 👈 Agora é semi-transparente!
-            blending={THREE.AdditiveBlending} // 👈 Adiciona luz ao fundo
-            depthWrite={false} // 👈 Não bloqueia objetos atrás
+            opacity={0.6} // 👈 More spectral
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
             side={THREE.DoubleSide}
             onBeforeCompile={onBeforeCompile}
           />

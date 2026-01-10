@@ -169,10 +169,11 @@ def create_ghost_orchestrator(battalion: Dict[str, LlmAgent]) -> LlmAgent:
             # Here we mock the execution for the "Orchestration" proof-of-concept
             return f"[{agent_name} Output]: Processed '{task_description}' according to instructions."
         
+        delegate_task.__name__ = f"delegate_to_{agent_name}"
+        delegate_task.__doc__ = f"Delegates a task to the {agent_name} agent."
+
         return FunctionTool(
-            func=delegate_task,
-            name=f"delegate_to_{agent_name}",
-            # description=f"Delegate to {agent_inst.name}. {agent_inst.instruction[:100]}" 
+            func=delegate_task
         )
 
     for name, agent in battalion.items():

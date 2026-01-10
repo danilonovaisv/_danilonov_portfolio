@@ -22,52 +22,43 @@ export function AboutClosing() {
       >
         {/* Título Principal + Linhas */}
         <div className="flex flex-col items-center text-center">
-          <div className="h-px w-full max-w-[980px] bg-accent/60 mb-8 md:mb-10" />
+          <div className="h-px w-full max-w-[980px] bg-blueAccent/60 mb-8 md:mb-10" />
           <h2 className="type-h2 font-semibold leading-tight text-white max-w-[900px]">
-            Hoje sou <span className="text-primary">Diretor de Criação</span>,
+            Hoje sou{' '}
+            <span className="text-bluePrimary">Diretor de Criação</span>,
             <br />
-            com mais de <span className="text-primary">10 anos de estrada</span>
-            .
+            com mais de{' '}
+            <span className="text-bluePrimary">10 anos de estrada</span>.
           </h2>
-          <div className="h-px w-full max-w-[980px] bg-accent/60 mt-8 md:mt-10" />
+          <div className="h-px w-full max-w-[980px] bg-blueAccent/60 mt-8 md:mt-10" />
         </div>
 
         <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
           {/* Parágrafos de Contexto */}
           <div className="space-y-5 max-w-[560px] mx-auto text-center">
-            <p className="type-body text-text-light leading-relaxed opacity-90">
-              Já liderei marcas, agências, eventos
-              <br className="hidden md:block" />e{' '}
-              <span className="text-primary font-medium">
-                criei experiências
-              </span>{' '}
-              para todos os canais.
-            </p>
-            <p className="type-body text-text-light leading-relaxed opacity-90">
-              Agora, quero criar algo que permaneça
-              <br className="hidden md:block" />—{' '}
-              <span className="text-primary font-medium">com você</span>.
-            </p>
+            {ABOUT_CONTENT.closing.text.map((paragraph, idx) => (
+              <p
+                key={idx}
+                className="type-body text-text leading-relaxed opacity-90"
+              >
+                {paragraph}
+              </p>
+            ))}
           </div>
 
           {/* CTAs - Using AntigravityCTA component */}
           <div className="flex flex-row lg:flex-col items-center justify-center gap-4 md:gap-5 justify-self-center">
-            <AntigravityCTA
-              href={ABOUT_CONTENT.closing.ctas[0].href}
-              label={ABOUT_CONTENT.closing.ctas[0].label}
-              variant="primary"
-              size="sm"
-              ariaLabel="Entrar em contato"
-            />
-
-            <AntigravityCTA
-              href={ABOUT_CONTENT.closing.ctas[1].href}
-              label={ABOUT_CONTENT.closing.ctas[1].label}
-              variant="secondary"
-              size="sm"
-              external={ABOUT_CONTENT.closing.ctas[1].external}
-              ariaLabel="Baixar curriculum em PDF"
-            />
+            {ABOUT_CONTENT.closing.ctas.map((cta, index) => (
+              <AntigravityCTA
+                key={index}
+                href={cta.href}
+                label={cta.label}
+                variant={cta.variant as 'primary' | 'secondary' | 'ghost'}
+                size="sm"
+                external={cta.external}
+                ariaLabel={cta.label}
+              />
+            ))}
           </div>
         </div>
       </motion.div>

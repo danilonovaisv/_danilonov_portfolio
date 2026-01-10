@@ -5,11 +5,11 @@ import { BRAND } from '@/config/brand';
 // ============================================================================
 
 export const headerColors = {
-  primary: BRAND.colors.primary,
+  primary: BRAND.colors.bluePrimary,
   background: BRAND.colors.background,
   text: BRAND.colors.text,
   textInverse: BRAND.colors.textInverse,
-  accent: BRAND.colors.accent,
+  accent: BRAND.colors.blueAccent,
 };
 
 export const headerZ = {

@@ -3,7 +3,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  Phone,
   Mail,
   Instagram,
   Linkedin,
@@ -21,18 +20,6 @@ export default function ContactSection() {
   const reducedMotion = useReducedMotion();
 
   const contactLinks = [
-    {
-      label: '+55 11 98396 6838',
-      href: SOCIALS.phone,
-      icon: <Phone className="h-5 w-5" aria-hidden="true" />,
-      ariaLabel: 'Ligar para Danilo Novais',
-    },
-    {
-      label: 'dannovaisv@gmail.com',
-      href: SOCIALS.emailSecondary,
-      icon: <Mail className="h-5 w-5" aria-hidden="true" />,
-      ariaLabel: 'Enviar email para dannovaisv@gmail.com',
-    },
     {
       label: 'danilo@portfoliodanilo.com',
       href: SOCIALS.emailPrimary,

@@ -28,8 +28,8 @@ const CONFIG = {
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
+  const ghostRef = useRef<THREE.Group>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  // const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
@@ -46,7 +46,7 @@ export default function HomeHero() {
       <section
         id="hero"
         ref={heroRef}
-        className="relative w-full min-h-screen bg-[radial-gradient(circle_at_center,#0b0d3a,#040013)]"
+        className="relative w-full min-h-screen bg-[#040013]"
         aria-label="Portfolio Hero Section"
       >
         {/* Preloader */}
@@ -60,16 +60,16 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* Background WebGL Layer (z-20) - Desktop Only */}
-        <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
-          <GhostScene />
+        {/* Camada: Texto Editorial (Z-25 conforme Battle Plan) */}
+        <div className="absolute inset-0 z-25">
+          <div className="sticky top-0 h-screen w-full flex items-center justify-center px-6 md:px-12">
+            <HeroCopy ghostRef={ghostRef} isLoaded={isLoaded} />
+          </div>
         </div>
 
-        {/* Hero Content Layer (z-10) */}
-        <div className="absolute inset-0 z-10">
-          <div className="sticky top-0 h-screen w-full flex items-center justify-center px-6 md:px-12 pointer-events-none">
-            <HeroCopy />
-          </div>
+        {/* Camada: Ghost WebGL (Z-20 conforme Battle Plan) */}
+        <div className="sticky top-0 h-screen w-full z-20 overflow-hidden pointer-events-none">
+          <GhostScene ghostRef={ghostRef} />
         </div>
 
         <div className="sr-only">

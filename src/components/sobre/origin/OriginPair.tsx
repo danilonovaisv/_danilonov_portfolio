@@ -66,7 +66,7 @@ export function OriginPair({
           className="relative z-10"
         >
           {/* Title (H1 equivalent) */}
-          <h3 className="type-h2 leading-[1.1] tracking-tight mb-4 text-[#0048ff]">
+          <h3 className="type-h2 leading-[1.1] tracking-tight mb-4 text-bluePrimary">
             {block.title}
           </h3>
 
@@ -95,7 +95,7 @@ export function OriginPair({
           initial={prefersReducedMotion ? 'visible' : 'hidden'}
           whileInView="visible"
           viewport={{ once: true, margin: '-20%' }}
-          className="relative w-full aspect-4/5 md:aspect-square lg:aspect-4/5 max-w-[500px] mx-auto overflow-hidden rounded-sm bg-ghost-bg-accent"
+          className="relative w-full aspect-4/5 md:aspect-square lg:aspect-4/5 max-w-[500px] mx-auto overflow-hidden rounded-sm bg-background/40"
         >
           <MediaItem
             src={block.src}

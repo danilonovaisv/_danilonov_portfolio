@@ -4,7 +4,6 @@ import { SOCIALS } from '@/config/navigation';
 import { Button } from '@/components/ui/Button';
 import {
   Mail,
-  Phone,
   MapPin,
   Linkedin,
   Instagram,
@@ -15,15 +14,15 @@ import {
 const ContactDetails: FC = () => {
   const contactInfo = [
     {
-      label: SOCIALS.emailSecondary.replace('mailto:', ''),
-      href: `mailto:${SOCIALS.emailSecondary.replace('mailto:', '')}`,
+      label: SOCIALS.emailPrimary.replace('mailto:', ''),
+      href: SOCIALS.emailPrimary,
       icon: <Mail className="w-5 h-5" />,
     },
-    {
-      label: SOCIALS.phone.replace('tel:', ''),
-      href: `tel:${SOCIALS.phone.replace('tel:', '')}`,
-      icon: <Phone className="w-5 h-5" />,
-    },
+    // {
+    //   label: SOCIALS.phone?.replace('tel:', '') || '',
+    //   href: SOCIALS.phone || '#',
+    //   icon: <Phone className="w-5 h-5" />,
+    // },
     {
       label: 'São Paulo, SP',
       href: '#',
