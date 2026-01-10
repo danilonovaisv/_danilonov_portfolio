@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   motion,
   useScroll,
@@ -10,6 +10,7 @@ import {
   useVelocity,
   useAnimationFrame,
   wrap,
+  MotionValue,
 } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,8 @@ import { cn } from '@/lib/utils';
 interface ServiceCardProps {
   index: number;
   text: string;
+  scrollProgress: MotionValue<number>;
+  isDesktop: boolean;
 }
 
 interface MarqueeProps {
@@ -44,6 +47,15 @@ const MARQUEE_TEXT = [
   'INTELIGÊNCIA ARTIFICIAL',
   'LIDERANÇA CRIATIVA',
 ];
+
+const MOBILE_BREAKPOINT = 768;
+const CARD_STAGGER = 0.06;
+const CARD_ANIMATION_DURATION = 0.45;
+const DESKTOP_OFFSET_X = 120;
+const DESKTOP_MAX_BLUR = 6;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
 
 // --- Sub-components ---
 
@@ -91,11 +103,40 @@ function Marquee({ children, baseVelocity = 100 }: MarqueeProps) {
 }
 
 // 2. Service Card Component
-const ServiceCard = ({ index, text }: ServiceCardProps) => {
+const ServiceCard = ({
+  index,
+  text,
+  scrollProgress,
+  isDesktop,
+}: ServiceCardProps) => {
   // Split text into first keyword (blue) and rest (white)
   const words = text.split(' ');
   const firstWord = words[0];
   const restOfText = words.slice(1).join(' ');
+
+  const cardProgress = useTransform(scrollProgress, (value) => {
+    const start = index * CARD_STAGGER;
+    const end = start + CARD_ANIMATION_DURATION;
+    return clamp((value - start) / (end - start), 0, 1);
+  });
+  const translateX = useTransform(cardProgress, [0, 1], [DESKTOP_OFFSET_X, 0]);
+  const opacity = useTransform(cardProgress, [0, 1], [0, 1]);
+  const blur = useTransform(
+    cardProgress,
+    [0, 1],
+    [`blur(${DESKTOP_MAX_BLUR}px)`, 'blur(0px)']
+  );
+
+  const mobileMotionProps = {
+    initial: { opacity: 0, x: 80, filter: 'blur(6px)' },
+    whileInView: { opacity: 1, x: 0, filter: 'blur(0px)' },
+    viewport: { once: true, margin: '-80px 0px -80px 0px' },
+    transition: {
+      duration: 0.4,
+      delay: index * 0.08,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  };
 
   return (
     <motion.div
@@ -106,14 +147,8 @@ const ServiceCard = ({ index, text }: ServiceCardProps) => {
         'w-full md:w-auto md:min-w-[320px]', // Desktop constraints
         'hover:bg-white/10 hover:border-l-4 hover:border-l-bluePrimary transition-all duration-300'
       )}
-      initial={{ opacity: 0, x: 80, filter: 'blur(6px)' }}
-      whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.08,
-        ease: [0.22, 1, 0.36, 1], // ghostIn easing
-      }}
+      {...(!isDesktop ? mobileMotionProps : {})}
+      style={isDesktop ? { x: translateX, opacity, filter: blur } : undefined}
     >
       {/* Circle Icon */}
       <div className="shrink-0 w-8 h-8 md:w-9 md:h-9 rounded-full bg-bluePrimary/20 flex items-center justify-center">
@@ -131,6 +166,29 @@ const ServiceCard = ({ index, text }: ServiceCardProps) => {
 
 // --- Main Component ---
 export function AboutWhatIDo() {
+  const cardsSectionRef = useRef<HTMLDivElement>(null);
+  const [isMobileViewport, setIsMobileViewport] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= MOBILE_BREAKPOINT;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    const handleResize = () => {
+      setIsMobileViewport(window.innerWidth <= MOBILE_BREAKPOINT);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: cardsSectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const isDesktop = !isMobileViewport;
+
   return (
     <section className="relative w-full bg-background overflow-hidden py-16 md:py-24">
       {/* Container */}
@@ -154,7 +212,7 @@ export function AboutWhatIDo() {
         </header>
 
         {/* 2. Services List */}
-        <div className="w-full">
+        <div className="w-full" ref={cardsSectionRef}>
           {/* Desktop: Horizontal Layout (wrapping if needed, but per blueprint 'sem wrap' on large... lets adapt to usable responsive grid/flex) */}
           {/* Blueprint says: "Faixa horizontal única com 7 cards... Sem wrap". This implies a horizontal scroll or huge width. 
               However, for usability, a flex-wrap or grid is often better unless it's a specific horizontal scroll section.
@@ -168,11 +226,15 @@ export function AboutWhatIDo() {
               Let's try a responsive Grid that looks like a list on mobile and organized chaos on desktop. 
               WAIT: Blueprint says "Faixa horizontal única ... Sem wrap". I will implement horizontal scroll for this specific 'strip' feel if it overflows.
           */}
-          <div
-            className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-4 md:gap-5 justify-center lg:justify-start lg:overflow-x-auto lg:pb-8 lg:px-4 no-scrollbar"
-          >
+          <div className="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap gap-4 md:gap-5 justify-center lg:justify-start lg:overflow-x-auto lg:pb-8 lg:px-4 no-scrollbar">
             {SERVICES.map((service, index) => (
-              <ServiceCard key={index} index={index} text={service} />
+              <ServiceCard
+                key={`${service}-${index}`}
+                index={index}
+                text={service}
+                scrollProgress={scrollYProgress}
+                isDesktop={isDesktop}
+              />
             ))}
           </div>
         </div>

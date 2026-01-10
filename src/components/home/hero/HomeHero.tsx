@@ -5,8 +5,8 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { Preloader } from '@/components/ui/Preloader';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+// import { useMediaQuery } from '@/hooks/useMediaQuery';
+// import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 import HeroCopy from './HeroCopy';
 // ManifestoThumb removed
@@ -29,7 +29,7 @@ const CONFIG = {
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  // const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
@@ -37,7 +37,7 @@ export default function HomeHero() {
   }, []);
 
   // Performance: Desativa WebGL em mobile para garantir LCP < 2.5s (Lei da Performance Mobile)
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  // const isMobile = useMediaQuery('(max-width: 768px)');
 
   const handlePreloaderDone = useCallback(() => setIsLoaded(true), []);
 

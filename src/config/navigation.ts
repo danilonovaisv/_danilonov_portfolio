@@ -4,8 +4,6 @@ export const SOCIALS = {
   linkedin: 'https://linkedin.com/in/danilonovais',
   twitter: 'https://twitter.com/danilo_novais',
   emailPrimary: 'mailto:danilo@portfoliodanilo.com',
-  emailSecondary: 'mailto:dannovaisv@gmail.com',
-  phone: 'tel:+5511983966838',
 };
 
 export const CONTACT_FORM = {
@@ -15,17 +13,17 @@ export const CONTACT_FORM = {
 
 export const NAVIGATION = {
   header: [
-    { label: 'HOME', href: '/#hero' },
-    { label: 'Sobre', href: '/sobre' },
-    { label: 'Portfólio', href: '/portfolio' },
-    { label: 'Contato', href: '#contact' },
+    { label: 'home', href: '/' }, // ou #hero se estiver na home
+    { label: 'sobre', href: '/sobre' },
+    { label: 'portfólio', href: '/portfolio' },
+    { label: 'contato', href: '#contact' }, // Always anchor
   ],
   footer: {
     copyright: '© 2025 Danilo Novais Vilela — todos os direitos reservados.',
     links: [
-      { label: 'home', href: '/#hero' },
+      { label: 'home', href: '/' },
       { label: 'sobre', href: '/sobre' },
-      { label: 'portfolio showcase', href: '/portfolio' },
+      { label: 'portfólio', href: '/portfolio' },
       { label: 'contato', href: '#contact' },
     ],
   },

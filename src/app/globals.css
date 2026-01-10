@@ -1,92 +1,11 @@
-@import '../styles/fonts.css';
 @import 'tailwindcss';
+@import '../styles/globals.css';
 
-/* stylelint-disable-next-line at-rule-no-unknown */
-@theme {
-  /* Colors */
-  --color-ghost-bg: #040013;
-  --color-ghost-bg-accent: #06071f;
-
-  /* Brand Colors */
-  --color-primary: #0048ff;
-  --color-primary-hover: #0036cc;
-  --color-accent: #4fe6ff;
-  --color-accent-purple: #8705f2;
-  --color-purple-details: #8705f2;
-  --color-pink-details: #f501d3;
-  --text-purple: #8705f2;
-
-  /* Component Aliases (Restoring compatibility) */
-  --color-ghost-blue: #0048ff;
-  --color-ghost-green: #4fe6ff;
-  --color-ghost-surface-deep: #040013;
-
-  /* Opacity Variants for Atmospherics */
-  --color-primary-faint: rgba(0, 72, 255, 0.13);
-  --color-accent-faint: rgba(79, 230, 255, 0.09);
-  --color-ghost-vignette: rgba(4, 0, 19, 0.4);
-  --color-text-60: rgba(252, 255, 255, 0.6);
-
-  /* Section Backgrounds */
-  --color-section-contact: #f0f0f0;
-  --color-section-footer: #0048ff;
-  --color-section-clients: #0048ff;
-  --color-section-bg: #f4f5f7;
-  --color-section-bg-hover: #ecedf0;
-
-  /* Text Colors */
-  --color-text-dark: #0e0e0e;
-  --color-text-light: #fcffff;
-  --color-text-muted: #666666;
-  --color-text-emphasis: #2e85f2;
-  --color-text-highlight: #4fe6ff;
-
-  /* Font Family */
-  --font-tt-norms: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'PPSupplyMono', monospace;
-}
-
-/* --- FLUID TYPOGRAPHY VARIABLES --- */
-:root {
-  /* Tipografia Fluida (Mobile → Desktop) */
-  --font-display: clamp(2.5rem, 5vw, 4.5rem);
-  /* 40px → 72px */
-  --font-h1: clamp(2rem, 4vw, 3.5rem);
-  /* 32px → 56px */
-  --font-h2: clamp(1.5rem, 3vw, 2.5rem);
-  /* 24px → 40px */
-  --font-h3: clamp(1.25rem, 2vw, 1.75rem);
-  /* 20px → 28px */
-  --font-body: clamp(1rem, 1.2vw, 1.125rem);
-  /* 16px → 18px */
-  --font-small: 0.875rem;
-  /* 14px */
-  --font-micro: 0.75rem;
-  /* 12px */
-}
-
-/* --- BASE STYLES --- */
 html {
   scroll-behavior: smooth;
   width: 100%;
   height: 100%;
   position: relative;
-}
-
-body {
-  width: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
-  /* Previne scroll horizontal */
-  overflow-y: auto;
-  /* Permite scroll vertical normal */
-  background-color: #040013;
-  /* BRAND.colors.background - Deep Void */
-  letter-spacing: -0.03em;
-  color: #fcffff;
-  font-family: var(--font-tt-norms);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -201,6 +120,7 @@ body {
 
   /* Accessibility: Respect reduced motion */
   @media (prefers-reduced-motion: reduce) {
+
     .gallery-track,
     .project-card-optimized,
     .modal-container,
@@ -302,35 +222,27 @@ canvas {
 
 /* --- Portfolio Hero Atmospheric Gradients --- */
 .portfolio-hero-glow-primary {
-  background: radial-gradient(
-    ellipse 60% 50% at 15% 15%,
-    var(--color-primary-faint),
-    transparent 50%
-  );
+  background: radial-gradient(ellipse 60% 50% at 15% 15%,
+      var(--color-primary-faint),
+      transparent 50%);
 }
 
 .portfolio-hero-glow-accent {
-  background: radial-gradient(
-    ellipse 50% 40% at 85% 10%,
-    var(--color-accent-faint),
-    transparent 45%
-  );
+  background: radial-gradient(ellipse 50% 40% at 85% 10%,
+      var(--color-accent-faint),
+      transparent 45%);
 }
 
 .portfolio-hero-glow-purple {
-  background: radial-gradient(
-    circle at 5% 50%,
-    rgba(135, 5, 242, 0.06),
-    transparent 30%
-  );
+  background: radial-gradient(circle at 5% 50%,
+      rgba(135, 5, 242, 0.06),
+      transparent 30%);
 }
 
 .portfolio-hero-vignette {
-  background: radial-gradient(
-    ellipse 80% 80% at 50% 50%,
-    transparent 30%,
-    var(--color-ghost-vignette) 100%
-  );
+  background: radial-gradient(ellipse 80% 80% at 50% 50%,
+      transparent 30%,
+      var(--color-ghost-vignette) 100%);
 }
 
 .portfolio-hero-scroll-line {
@@ -340,12 +252,10 @@ canvas {
 /* --- Video Manifesto --- */
 /* Overlay de vídeo */
 .video-overlay {
-  background: radial-gradient(
-    120% 120% at 70% 30%,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.55) 70%,
-    rgba(0, 0, 0, 0.75) 100%
-  );
+  background: radial-gradient(120% 120% at 70% 30%,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.55) 70%,
+      rgba(0, 0, 0, 0.75) 100%);
 }
 
 /* Remover espaçamento padrão */

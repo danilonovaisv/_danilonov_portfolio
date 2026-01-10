@@ -12,7 +12,7 @@ import { BRAND } from '@/config/brand';
 export default function AboutOrigin() {
   const prefersReducedMotion = useReducedMotion();
   const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const originBlocks = ABOUT_CONTENT.origin.content as OriginBlock[];
+  const originBlocks = ABOUT_CONTENT.origin.blocks as OriginBlock[];
 
   return (
     <section
@@ -29,7 +29,7 @@ export default function AboutOrigin() {
             viewport={{ once: true, margin: '-80px' }}
             className="col-span-12 text-center font-mono type-caption text-[#0048ff]"
           >
-            {ABOUT_CONTENT.origin.sectionLabel}
+            {ABOUT_CONTENT.origin.title}
           </motion.h2>
         </div>
         <div className="flex flex-col items-center gap-3 sm:gap-4 mb-10 md:mb-12 lg:hidden">
@@ -40,7 +40,7 @@ export default function AboutOrigin() {
             viewport={{ once: true, margin: '-80px' }}
             className="text-center font-mono type-caption text-[#0048ff]"
           >
-            {ABOUT_CONTENT.origin.sectionLabel}
+            {ABOUT_CONTENT.origin.title}
           </motion.h2>
         </div>
 

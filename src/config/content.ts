@@ -1,113 +1,23 @@
 export const HOME_CONTENT = {
   hero: {
-    tag: '[BRAND AWARENESS]',
-    // Desktop/Tablet: 2 linhas
-    title: ['Você não vê', 'o design.'],
-    // Mobile: 3 linhas
-    titleMobile: ['Você não', 'vê o', 'design.'],
-    subtitle: 'Mas ele vê você.',
+    title: ['Você não vê o design.'],
+    subtitle: '[Mas ele vê você.]',
     cta: 'step inside →',
-    scrollHint: '#sobre',
   },
 
   showcase: {
     title: 'portfólio showcase',
-    floatingLabel: '[what we love working on]',
-    cta: { label: "let's build something great →", href: '/#contact' },
+    cta: { label: 'vamos trabalhar juntos', href: '/portfolio' },
     categories: [
-      {
-        id: 'brand-campaigns',
-        label: 'Brand & Campaigns',
-        labelMobile: 'Brand & Campaigns',
-        align: 'end',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-      },
-      {
-        id: 'videos-motions',
-        label: 'Videos & Motions',
-        labelMobile: 'Videos & Motions',
-        align: 'center',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      },
-      {
-        id: 'websites-webcampaigns-tech',
-        label: 'Web Campaigns,\nWebsites & Tech',
-        labelMobile: 'Web Campaigns, Websites & Tech',
-        align: 'start',
-        thumb:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
-      },
+      { id: 'brand-campaigns', label: 'Brand & Campaigns' },
+      { id: 'videos-motions', label: 'Videos & Motions' },
+      { id: 'websites-tech', label: 'Web Campaigns, Websites & Tech' },
     ],
   },
 
-  featuredProjects: [
-    {
-      id: 1,
-      slug: 'magic-radio-branding',
-      title: 'Magic — devolvendo a magia ao rádio',
-      category: 'branding & campanha',
-      tags: ['Branding', 'Strategy', 'Visual Identity'],
-      client: 'Magic',
-      year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-      layout: {
-        h: 'h-[400px] md:h-[640px]',
-        cols: 'md:col-span-5',
-        sizes: '(max-width: 768px) 100vw, 66vw',
-      },
-    },
-    {
-      id: 2,
-      slug: 'branding-project-01',
-      title: 'Uma marca ousada e consistente',
-      category: 'branding',
-      tags: ['Design System', 'Logo Design'],
-      client: 'Cliente confidencial',
-      year: 2022,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
-      layout: {
-        h: 'h-[400px] md:h-[640px]',
-        cols: 'md:col-span-7',
-        sizes: '(max-width: 768px) 100vw, 33vw',
-      },
-    },
-    {
-      id: 3,
-      slug: 'key-visual-campaign',
-      title: 'Key visual para campanha sazonal',
-      category: 'campanha',
-      tags: ['Art Direction', 'Advertising', 'Retouching'],
-      client: 'Cliente confidencial',
-      year: 2021,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-      layout: {
-        h: 'h-[400px] md:h-[520px]',
-        cols: 'md:col-span-12',
-        sizes: '(max-width: 768px) 100vw, 42vw',
-      },
-    },
-    {
-      id: 4,
-      slug: 'webdesigner-motion',
-      title: 'Experiência web em movimento',
-      category: 'web & motion',
-      tags: ['Web Design', 'UI/UX', 'Animation'],
-      client: 'Cliente confidencial',
-      year: 2023,
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      layout: {
-        h: 'h-[400px] md:h-[520px]',
-        cols: 'md:col-span-8',
-        sizes: '(max-width: 768px) 100vw, 58vw',
-      },
-    },
-  ],
-
   clients: {
     title: 'marcas com as quais já trabalhei',
-    // Gerador de URLs e metadados para os 12 SVGs monocromáticos
+    // Gerador de URLs para os 12 SVGs monocromáticos
     logos: Array.from({ length: 12 }, (_, i) => ({
       id: i + 1,
       src: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`,
@@ -121,272 +31,133 @@ export const HOME_CONTENT = {
   },
 };
 
-export const PORTFOLIO_CONTENT = {
-  hero: {
-    video: {
-      desktop:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/video-heroPort.mp4',
-      mobile:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/video-heroPort-mobile.mp4',
-    },
-    items: [
-      {
-        id: 'brand-identity',
-        label: 'Brand Identity',
-        image:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
-      },
-      {
-        id: 'key-visual',
-        label: 'Key Visual',
-        image:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
-      },
-      {
-        id: 'web-design',
-        label: 'Web Design',
-        image:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-      },
-      {
-        id: 'motion-design',
-        label: 'Motion Design',
-        image:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/videos-motions-thumb.webp',
-      },
-    ],
-  },
-};
-
-export const PORTFOLIO_MOSAIC_DATA = [
-  {
-    id: 'row-1',
-    columns: 2 as const,
-    items: [
-      {
-        id: 'magic-brand',
-        imageSrc:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted.webp',
-        gradient: 'linear-gradient(to bottom right, #0057FF, #001f5c)',
-        title: 'Magic Radio',
-        subtitle: 'Branding & Identity',
-        aspectRatio: 1.3,
-      },
-      {
-        id: 'nestle-promo',
-        imageSrc:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(9).webp',
-        gradient: 'linear-gradient(to bottom right, #FF3366, #5c001f)',
-        title: 'Nestlé Promo',
-        subtitle: 'Key Visual & Campaign',
-        aspectRatio: 1.3,
-      },
-    ],
-  },
-  {
-    id: 'row-2',
-    columns: 1 as const,
-    items: [
-      {
-        id: 'tech-web',
-        imageSrc:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(4).webp',
-        gradient: 'linear-gradient(to right, #1a1a1a, #333333)',
-        title: 'Web Experience Motion',
-        subtitle: 'Interactive Design & Development',
-        aspectRatio: 2.4, // ultra wide
-      },
-    ],
-  },
-  {
-    id: 'row-3',
-    columns: 2 as const,
-    items: [
-      {
-        id: 'branding-confidential',
-        imageSrc:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted.webp',
-        gradient: 'linear-gradient(to top right, #333, #000)',
-        title: 'Confidential Client',
-        subtitle: 'Corporate Branding',
-        aspectRatio: 1,
-      },
-      {
-        id: 'campaign-visuals',
-        imageSrc:
-          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(10).webp',
-        gradient: 'linear-gradient(to bottom left, #0057FF, #000)',
-        title: 'Campaign Visuals',
-        subtitle: 'Art Direction',
-        aspectRatio: 1,
-      },
-    ],
-  },
-];
-
 export const ABOUT_CONTENT = {
   hero: {
-    videos: {
-      desktop:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4',
-      mobile:
-        'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4',
-    },
-    title: {
-      line1: 'Sou Danilo Novais.',
-      line2: 'Você não vê tudo o que eu faço.',
-      line3: 'Mas sente quando funciona.',
-    },
-    description: [
-      'Crio design que observa, entende',
-      'e guia experiências com intenção,',
-      'estratégia e tecnologia — na medida certa.',
+    title: 'Sou Danilo Novais.',
+    manifesto: [
+      'Você não vê tudo',
+      'o que eu faço. Mas',
+      'sente quando',
+      'funciona.',
     ],
+    subtitle:
+      'Crio design que observa, entende e guia experiências com intenção, estratégia e tecnologia — na medida certa.',
+    keywords: ['Danilo Novais', 'não vê tudo', 'funciona'],
   },
-  method: {
-    video:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/VideoAboutMethod.mp4',
-    title: {
-      text: 'Criatividade com método.',
-      highlight: 'método.',
-    },
-    intro: [
-      'Antes da estética, existe intenção.',
-      'Antes do layout, existe lógica.',
-      'Antes do impacto, existe silêncio.',
-    ],
-    steps: [
-      'Briefings bem construídos para decisões claras',
-      'Estratégia como base de qualquer criação',
-      'Design com propósito, não só beleza',
-      'Revisões inteligentes, sem ruído desnecessário',
-      'IA e automações para escalar com qualidade',
-      'Métricas criativas: engajamento, retenção e resultado',
-    ],
-  },
-  beliefs: [
-    {
-      text: 'Um vídeo que respira.',
-      highlight: 'respira',
-    },
-    {
-      text: 'Uma marca que se reconhece.',
-      highlight: 'reconhece',
-    },
-    {
-      text: 'Um detalhe que fica.',
-      highlight: 'fica',
-    },
-    {
-      text: 'Crio para gerar presença.',
-      highlight: 'Crio',
-    },
-    {
-      text: 'Mesmo quando não estou ali.',
-      highlight: 'Mesmo',
-    },
-    {
-      text: 'Mesmo quando ninguém percebe o esforço.',
-      highlight: 'Mesmo',
-    },
-  ],
-  closing: {
-    text: [
-      'Hoje sou Diretor de Criação, com mais de 10 anos de estrada.',
-      'Já liderei marcas, agências, eventos e criei experiências para todos os canais.',
-      'Agora, quero criar algo que permaneça — com você.',
-    ],
-    ctas: [
-      { label: 'Fale comigo', href: '/contato' },
-      { label: 'Download Curriculum', href: '/cv.pdf', external: true },
-    ],
-  },
-  bio: [
-    'Sou um Creative Developer brasileiro, obcecado pela intersecção entre Design e Tecnologia.',
-    'Com background em ambas as áreas, eu crio a ponte entre o design estático e a realidade interativa, usando código como minha ferramenta primária de expressão.',
-    'Acredito que a web não deve ser apenas funcional, mas memorável. Cada scroll, click e transição é uma oportunidade de contar uma história.',
-  ],
-  stats: [
-    { label: 'Anos Exp.', value: '5+' },
-    { label: 'Projetos', value: '40+' },
-    { label: 'Prêmios', value: '12' },
-  ],
   origin: {
-    sectionLabel: 'Origem',
-    // Estrutura intercalada: Frase → Imagem → Frase → Imagem
-    // highlight: palavra-chave para destaque ghost-accent (1-2 por frase)
-    content: [
+    title: 'Origem',
+    blocks: [
       {
-        type: 'block' as const,
+        id: 'A',
         title: 'O QUE PERMANECE',
-        text: 'Desde cedo, sempre prestei atenção no que ficava —\nnão só no que aparecia.',
-        description:
-          'Enquanto muitos olhavam para o brilho imediato, eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo. A essência das coisas sempre falou mais alto do que a superfície.',
-        highlight: 'não só no que aparecia.',
-        src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp',
-        alt: 'Memória visual - Danilo Novais',
-        aspectRatio: 'aspect-square',
+        text: 'Desde cedo, sempre prestei atenção no que ficava — não só no que aparecia. Enquanto muitos olhavam para o brilho imediato, eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo. A essência das coisas sempre falou mais alto do que a superfície.',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp',
+        align: 'right',
       },
       {
-        type: 'block' as const,
+        id: 'B',
         title: 'DO TRAÇO À INTENÇÃO',
-        text: 'Rabiscos viraram ideias.\nIdeias viraram projetos.\nE os projetos começaram a deixar rastros.',
-        description:
-          'Meu processo criativo nasceu do improviso, do lápis na margem do caderno. Aos poucos, aquilo que era instinto virou direção. Com cada tentativa, aprendi a dar forma ao invisível — até que os conceitos começaram a falar por si.',
-        highlight: 'começaram a deixar rastros.',
-        src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-2.webp',
-        alt: 'Processo criativo e rabiscos',
-        aspectRatio: 'aspect-square',
+        text: 'Rabiscos viraram ideias. Ideias viraram projetos. E os projetos começaram a deixar rastros. Meu processo criativo nasceu do improviso, do lápis na margem do caderno. Aos poucos, aquilo que era instinto virou direção. Com cada tentativa, aprendi a dar forma ao invisível — até que os conceitos começaram a falar por si.',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-2.webp',
+        align: 'left',
       },
       {
-        type: 'block' as const,
+        id: 'C',
         title: 'A DESCOBERTA DO INVISÍVEL',
-        text: 'Foi ali que entendi:\ndesign não é enfeite.\nÉ ferramenta invisível de transformação.',
-        description:
-          'Por trás de cada escolha visual, existe intenção. Descobri que o design verdadeiro não grita — ele conduz. Ele está presente nos detalhes que ninguém percebe, mas que todos sentem. Transformar sem que se perceba a transformação: isso é potência.',
-        highlight: 'É ferramenta invisível de transformação.',
-        src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-3.webp',
-        alt: 'Design como ferramenta',
-        aspectRatio: 'aspect-square',
+        text: 'Foi ali que entendi: design não é enfeite. É ferramenta invisível de transformação. Por trás de cada escolha visual, existe intenção. Descobri que o design verdadeiro não grita — ele conduz. Ele está presente nos detalhes que ninguém percebe, mas que todos sentem. Transformar sem que se perceba a transformação: isso é potência.',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-3.webp',
+        align: 'right',
       },
       {
-        type: 'block' as const,
+        id: 'D',
         title: 'EXPANSÃO COM PROPÓSITO',
-        text: 'Estudei Comunicação, mergulhei no design, no branding\ne hoje uso inteligência artificial para expandir o alcance\nsem perder a essência humana da criação.',
-        description:
-          'Minha trajetória uniu intuição com método, arte com estratégia. O futuro pede novas ferramentas — e eu as abracei. Mas nunca deixei que a tecnologia apagasse o que me move: a sensibilidade, o olhar atento, a busca pelo significado.',
-        highlight: 'inteligência artificial',
-        src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-4.webp',
-        alt: 'IA e essência humana',
-        aspectRatio: 'aspect-square',
+        text: 'Estudei Comunicação, mergulhei no design, no branding e hoje uso inteligência artificial para expandir o alcance sem perder a essência humana da criação. Minha trajetória uniu intuição com método, arte com estratégia. O futuro pede novas ferramentas — e eu as abracei. Mas nunca deixei que a tecnologia apagasse o que me move: a sensibilidade, o olhar atento, a busca pelo significado.',
+        image:
+          'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-4.webp',
+        align: 'left',
       },
     ],
   },
-  whatIDo: {
+  services: {
     title: {
       line1: 'Do insight ao impacto.',
       line2: 'Mesmo quando você não percebe.',
     },
     items: [
-      { id: 1, title: 'Direção criativa', description: 'que organiza o caos' },
-      { id: 2, title: 'Design estratégico', description: 'que guia decisões' },
-      { id: 3, title: 'Identidades', description: 'que permanecem na memória' },
+      {
+        id: 1,
+        text: 'Direção criativa que organiza o caos',
+        highlight: 'Direção criativa',
+      },
+      {
+        id: 2,
+        text: 'Design estratégico que guia decisões',
+        highlight: 'Design estratégico',
+      },
+      {
+        id: 3,
+        text: 'Identidades que permanecem na memória',
+        highlight: 'Identidades',
+      },
       {
         id: 4,
-        title: 'Campanhas',
-        description: 'multicanais com lógica e emoção',
+        text: 'Campanhas multicanais com lógica e emoção',
+        highlight: 'Campanhas',
       },
-      { id: 5, title: 'Branding', description: 'que não grita — mas marca' },
+      {
+        id: 5,
+        text: 'Branding que não grita — mas marca',
+        highlight: 'Branding',
+      },
       {
         id: 6,
-        title: 'Inteligência artificial',
-        description: 'aplicada à criação e automação',
+        text: 'Inteligência artificial aplicada à criação e automação',
+        highlight: 'Inteligência artificial',
       },
       {
         id: 7,
-        title: 'Liderança criativa',
-        description: 'com visão e método',
+        text: 'Liderança criativa com visão e método',
+        highlight: 'Liderança criativa',
+      },
+    ],
+    marquee: [
+      'DIREÇÃO CRIATIVA',
+      'DESIGN ESTRATÉGICO',
+      'IDENTIDADES',
+      'CAMPANHAS',
+      'BRANDING',
+      'INTELIGÊNCIA ARTIFICIAL',
+      'LIDERANÇA CRIATIVA',
+    ],
+  },
+  method: {
+    title: {
+      line1: 'Criatividade com método.',
+      line2: 'Impacto sem ruído.',
+    },
+    description:
+      'Meu processo combina estrutura e fluidez. Para cada projeto, um caminho claro que transforma problemas complexos em soluções visuais elegantes e funcionais.',
+    steps: [
+      { id: '01', text: 'Briefings bem construídos para decisões claras' },
+      { id: '02', text: 'Estratégia como base de qualquer criação' },
+      { id: '03', text: 'Design com propósito, não só beleza' },
+      { id: '04', text: 'Revisões inteligentes, sem ruído desnecessário' },
+      { id: '05', text: 'IA e automações para escalar com qualidade' },
+      {
+        id: '06',
+        text: 'Métricas criativas: engajamento, retenção e resultado',
       },
     ],
   },
+  beliefs: [
+    { text: 'Um vídeo que respira.', highlight: 'respira.' },
+    { text: 'Uma marca que se reconhece.', highlight: 'reconhece.' },
+    { text: 'Um detalhe que fica.', highlight: 'fica.' },
+    { text: 'Crio para gerar presença.', highlight: 'Crio' },
+    { text: 'Mesmo quando não estou ali.', highlight: 'Mesmo' },
+    { text: 'Mesmo quando ninguém percebe o esforço.', highlight: 'Mesmo' },
+  ],
 };
