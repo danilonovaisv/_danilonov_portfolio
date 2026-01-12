@@ -78,17 +78,20 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
     return () => resizeObserver.disconnect();
   }, [filteredProjects, prefersReducedMotion, activeCategory, trackRef]);
 
+  // Set CSS variable on gallery element
+  useEffect(() => {
+    const galleryEl = galleryRef.current as HTMLElement | null;
+    if (galleryEl) {
+      galleryEl.style.setProperty('--gallery-height', galleryHeight);
+    }
+  }, [galleryHeight, galleryRef]);
+
   return (
     <section
       ref={galleryRef as React.RefObject<HTMLElement>}
       id="projects-gallery"
       aria-label="Galeria de Projetos"
       className={`relative z-10 bg-background transition-[height] duration-300 ease-out h-(--gallery-height) ${className}`}
-      style={
-        {
-          '--gallery-height': galleryHeight,
-        } as React.CSSProperties
-      }
     >
       {/* Gallery Track (Fixed or Static) */}
       <div 
