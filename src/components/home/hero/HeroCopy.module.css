@@ -33,24 +33,18 @@
   justify-content: center;
   pointer-events: none;
   z-index: 12;
-  -webkit-mask-image: radial-gradient(
-    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
-      var(--ghost-y, 50vh),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.85) 25%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgba(0, 0, 0, 0.15) 75%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-image: radial-gradient(
-    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
-      var(--ghost-y, 50vh),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.85) 25%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgba(0, 0, 0, 0.15) 75%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  -webkit-mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh),
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.85) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.15) 75%,
+      rgba(0, 0, 0, 0) 100%);
+  mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh),
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.85) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.15) 75%,
+      rgba(0, 0, 0, 0) 100%);
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
@@ -65,20 +59,26 @@
     0 0 80px rgba(0, 72, 255, 0.4);
 }
 
+
+/* Oversized Typography for Hero (2x standard) */
+.heroTitle {
+  font-size: clamp(4rem, 8vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+}
+
+.heroSubtitle {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
 .ctaSpacer {
   padding-top: 2rem;
   height: 48px;
 }
 
-/* Desktop Headlines */
-.desktopH1 {
-  font-size: clamp(3.5rem, 12vw, 9rem);
-}
 
-/* Mobile Headlines */
-.mobileH1 {
-  font-size: clamp(3.5rem, 15vw, 9rem);
-}
 
 /* Aura do Ghost - Brilho global */
 .ghostAura {

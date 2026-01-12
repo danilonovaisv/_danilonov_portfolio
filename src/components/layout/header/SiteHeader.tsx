@@ -39,7 +39,6 @@ export default function SiteHeader({
   logoUrlMobile,
   gradient,
   accentColor,
-  disableWebGL,
 }: SiteHeaderProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -125,8 +124,6 @@ export default function SiteHeader({
         logoUrl={logoDesktop}
         isLight={isOnLightSection}
         isPageActive={isSobrePage}
-        accentColor={accentColor}
-        disableWebGL={disableWebGL}
         onNavigate={onNavigate}
         activeHref={activeHref}
       />

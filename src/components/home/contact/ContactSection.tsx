@@ -72,6 +72,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
+      data-light-section
       aria-label="Contato"
       className="bg-[#f0f0f0] py-16 md:py-24 lg:py-32 relative z-10"
     >
@@ -90,10 +91,10 @@ export default function ContactSection() {
           >
             {/* Header */}
             <div className="text-left mb-6 lg:mb-10">
-              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#0e0e0e] uppercase tracking-tighter mb-4 leading-[0.9]">
+              <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#0057FF] uppercase tracking-tighter mb-4 leading-[0.9]">
                 {HOME_CONTENT.contact.title}
               </h2>
-              <p className="text-[#0e0e0e]/70 text-lg md:text-xl font-medium max-w-md">
+              <p className="text-[#111111] text-lg md:text-xl font-medium max-w-md">
                 {HOME_CONTENT.contact.subtitle}
               </p>
             </div>
@@ -113,10 +114,10 @@ export default function ContactSection() {
                   aria-label={link.ariaLabel}
                   className="flex items-center gap-4 group w-fit"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent border border-[#0e0e0e]/20 text-[#0e0e0e] transition-all group-hover:bg-[#0048ff] group-hover:border-[#0048ff] group-hover:text-white group-hover:scale-110">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent border border-[#0057FF] text-[#0057FF] transition-all group-hover:bg-[#0057FF] group-hover:text-white group-hover:scale-110">
                     {link.icon}
                   </span>
-                  <span className="text-lg md:text-xl font-semibold text-[#0e0e0e] transition-all duration-300 group-hover:text-[#0048ff]">
+                  <span className="text-lg md:text-xl font-semibold text-[#111111] transition-all duration-300 group-hover:text-[#0057FF] group-hover:underline group-hover:underline-offset-4">
                     {link.label}
                   </span>
                 </a>

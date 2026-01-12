@@ -1737,7 +1737,7 @@ duration: 0.7s ease-out
 **Content:**
 - Headline: "Like what you see?"  - font normal - (on hover, text becomes `#0057FF`)
 - Button: "view projects →" with arrow icon
-- Background: `#040013` (on hover, text becomes `#0057FF`)
+- Background:  `#040013` (on hover, text becomes `#0057FF`)
 
 **Interaction:**
 ```javascript

@@ -15,7 +15,6 @@ export interface SiteHeaderProps {
   logoUrlMobile?: string;
   gradient: [string, string]; // gradiente principal para mobile
   accentColor: string;
-  disableWebGL?: boolean;
   reducedMotion?: boolean;
 }
 

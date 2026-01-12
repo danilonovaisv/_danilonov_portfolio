@@ -43,7 +43,7 @@ export default function SiteFooter() {
 
   return (
     <footer
-      className="w-full bg-[#0048ff] text-white z-50 relative py-10 md:py-0 md:h-[60px]"
+      className="w-full bg-[#0048ff] text-white z-50 relative py-10 md:py-0 md:fixed md:bottom-0 md:left-0 md:h-[60px]"
       aria-label="Rodapé do site"
     >
       <div className="max-w-[1680px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between h-full space-y-8 md:space-y-0 text-center md:text-left">

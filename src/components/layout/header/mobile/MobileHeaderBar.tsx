@@ -19,7 +19,7 @@ export default function MobileHeaderBar({
 }: MobileHeaderBarProps) {
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none ${
+      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300 ease-in-out ${
         isLight ? 'header--light' : ''
       }`}
     >

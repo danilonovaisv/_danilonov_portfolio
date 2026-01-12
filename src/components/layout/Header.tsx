@@ -13,7 +13,6 @@ export default function Header() {
       logoUrlMobile={BRAND.assets.logos.logoDark} // Mobile: LogoDark
       gradient={['rgba(0,87,255,0.55)', 'rgba(82,39,255,0.45)']}
       accentColor={BRAND.colors.bluePrimary}
-      disableWebGL
     />
   );
 }

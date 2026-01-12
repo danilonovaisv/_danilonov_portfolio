@@ -1,25 +1,22 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useMemo, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
 import type { NavItem } from './types';
 import styles from './DesktopFluidHeader.module.css';
 
-const HeaderFluidGlass = dynamic(
-  () => import('@/components/canvas/header/HeaderFluidGlass'),
-  {
-    ssr: false,
-  }
-);
+// Forced static behavior - removing dynamic import for WebGL
+// const HeaderFluidGlass = dynamic(
+//   () => import('@/components/canvas/header/HeaderFluidGlass'),
+//   {
+//     ssr: false,
+//   }
+// );
 
 export interface DesktopFluidHeaderProps {
   navItems: NavItem[];
   logoUrl: string;
-  accentColor: string;
-  disableWebGL?: boolean;
   onNavigate: (_href: string) => void;
   activeHref?: string;
   isLight?: boolean;
@@ -37,14 +34,11 @@ function isExternalHref(href: string) {
 export default function DesktopFluidHeader({
   navItems,
   logoUrl,
-  accentColor,
-  disableWebGL,
   onNavigate,
   activeHref,
   isLight,
   isPageActive,
 }: DesktopFluidHeaderProps) {
-  const reducedMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const nav = useMemo(() => navItems, [navItems]);
@@ -52,23 +46,22 @@ export default function DesktopFluidHeader({
 
   return (
     <header
-      className={`hidden lg:block absolute top-6 left-0 right-0 z-40 w-full pointer-events-none ${
+      className={`hidden lg:block fixed top-6 left-0 right-0 z-40 w-full pointer-events-none transition-all duration-300 ease-in-out ${
         isLight ? 'header--light' : ''
       }`}
     >
       <div className={'std-grid flex justify-center max-w-[1680px] mx-auto'}>
         <div ref={wrapRef} className="pointer-events-auto w-fit relative">
           <div
-            className={`${styles.headerContainer} h-16 min-w-[700px] rounded-full backdrop-blur-md border border-bluePrimary/30 bg-background/40`}
+            className={`${styles.headerContainer} ${
+              isLight ? styles.headerLight : styles.headerDark
+            } h-16 min-w-[700px] rounded-full backdrop-blur-md border border-white/10 bg-black/20 transition-all duration-300`}
           >
-            {/* glass background */}
-            <div className="absolute inset-0 rounded-full overflow-hidden">
-              {!disableWebGL && !reducedMotion ? (
-                <HeaderFluidGlass navItems={nav} accentColor={accentColor} />
-              ) : (
+            {/* glass background - Static only */}
+            {/* <div className="absolute inset-0 rounded-full overflow-hidden">
+               Static fallback always
                 <div className={styles.fallbackBackground} />
-              )}
-            </div>
+            </div> */}
 
             {/* content */}
             <div className="relative z-10 h-full px-8 flex items-center justify-between gap-6">
@@ -78,11 +71,11 @@ export default function DesktopFluidHeader({
                 className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
               >
                 <Image
-                  src={logoUrl}
+                  src={logoUrl} // Parent handles logic, but ensures dark logo usage if isLight
                   alt="Danilo"
                   width={32}
                   height={32}
-                  className="h-8 w-auto transition-colors"
+                  className="h-8 w-auto transition-colors duration-300"
                   style={{ width: 'auto' }}
                   unoptimized
                   loading="eager"

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
 
 // Ghost easing
 const GHOST_EASE = [0.22, 1, 0.36, 1] as const;
@@ -40,52 +41,6 @@ const CATEGORIES = [
     showLabel: false,
   },
 ] as const;
-
-/**
- * Compound Fusion CTA Button
- * Pill + Circle design with hover levitation
- */
-function CompoundCTA({ href }: { href: string }) {
-  const prefersReducedMotion = useReducedMotion();
-
-  return (
-    <Link
-      href={href}
-      className={cn(
-        'group relative flex flex-row items-center justify-center h-[56px] lg:h-[64px]',
-        'cursor-pointer transition-transform duration-200 ease-out',
-        !prefersReducedMotion && 'hover:-translate-y-px'
-      )}
-      aria-label="Let's build something great"
-    >
-      {/* Pill Text (Left) */}
-      <div
-        className={cn(
-          'flex items-center justify-center h-full pl-6 pr-4 lg:pl-8 lg:pr-5',
-          'bg-[#0048ff] group-hover:bg-[#3366ff]',
-          'text-white rounded-l-full',
-          'transition-colors duration-300'
-        )}
-      >
-        <span className="text-sm lg:text-base font-medium tracking-wide whitespace-nowrap">
-          let&apos;s build something great
-        </span>
-      </div>
-
-      {/* Circle Icon (Right) */}
-      <div
-        className={cn(
-          'flex items-center justify-center h-full aspect-square',
-          'bg-[#0048ff] group-hover:bg-[#3366ff]',
-          'text-white rounded-r-full',
-          'transition-colors duration-300'
-        )}
-      >
-        <ArrowUpRight className="w-5 h-5 lg:w-6 lg:h-6" strokeWidth={2} />
-      </div>
-    </Link>
-  );
-}
 
 /**
  * Category Stripe Component (Accordion-style)
@@ -291,7 +246,13 @@ export default function PortfolioShowcase() {
           transition={{ duration: 0.6, ease: GHOST_EASE, delay: 0.4 }}
           className="flex justify-center mt-12 lg:mt-16"
         >
-          <CompoundCTA href="/#contact" />
+          <AntigravityCTA
+            href="/#contact"
+            label="let's build something great"
+            variant="primary"
+            size="lg"
+            animateArrowIdle={false}
+          />
         </motion.div>
       </div>
     </section>

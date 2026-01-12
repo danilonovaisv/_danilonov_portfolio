@@ -8,11 +8,9 @@
 .fallbackBackground {
   height: 100%;
   width: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.08),
-    rgba(255, 255, 255, 0.02)
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.02));
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }
@@ -23,4 +21,14 @@
   border-radius: 9999px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   pointer-events: none;
+}
+
+.headerDark {
+  background-color: rgba(4, 0, 19, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.headerLight {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 72, 255, 0.1);
 }

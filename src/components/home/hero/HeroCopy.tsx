@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { useGhostReveal } from '@/hooks/useGhostReveal';
 import type { Group } from 'three';
 import styles from './HeroCopy.module.css';
+import styles from './HeroCopy.module.css';
 
 /**
  * Animation: Page Load Entry
@@ -73,21 +74,21 @@ export default function HeroCopy({
 
       {/* Headline - Desktop/Tablet (2 linhas) */}
       <h1
-        className={`hidden md:block font-black mb-1 md:mb-6 leading-[0.9] uppercase tracking-tighter ${styles.desktopH1}`}
+        className={`hidden md:block mb-1 md:mb-6 uppercase tracking-tighter ${styles.heroTitle}`}
       >
         Você não vê <br /> o design.
       </h1>
 
       {/* Headline - Mobile (3 linhas) */}
       <h1
-        className={`md:hidden font-black mb-1 md:mb-4 leading-[0.85] uppercase tracking-tighter ${styles.mobileH1}`}
+        className={`md:hidden mb-1 md:mb-4 uppercase tracking-tighter ${styles.heroTitle}`}
       >
         Você não <br /> vê o <br /> design.
       </h1>
 
       {/* Subheading */}
       <h2
-        className={`text-xl md:text-2xl lg:text-3xl font-light tracking-wide mt-4 md:mt-6 ${isMask ? '' : styles.subText}`}
+        className={`font-light tracking-wide mt-4 md:mt-6 ${isMask ? '' : styles.subText} ${styles.heroSubtitle}`}
       >
         Mas ele vê você.
       </h2>
@@ -102,12 +103,13 @@ export default function HeroCopy({
       {/* Camada 1: Texto Base (Low Opacity) */}
       <motion.div variants={itemAnimation}>
         {renderTextContent(false)}
+        <div className={styles.ctaSpacer}></div>
       </motion.div>
 
       {/* Camada 2: Texto Revelado (Masked / Bright / Glow) */}
       {!prefersReducedMotion && (
         <div className={styles.maskLayer} aria-hidden="true">
-          <div className="max-w-[1200px] px-4 w-full">
+          <div className="max-w-5xl px-4 w-full flex flex-col items-center text-center">
             <motion.div variants={itemAnimation}>
               {renderTextContent(true)}
             </motion.div>

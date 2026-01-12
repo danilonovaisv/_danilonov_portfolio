@@ -15,7 +15,7 @@ import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
  */
 export default function CTAProjectCard() {
   return (
-    <div className="group relative flex flex-col items-center justify-center h-full md:min-h-[400px] md:bg-linear-to-br md:from-neutral/80 md:to-background md:p-12 md:overflow-hidden md:rounded-md md:border md:border-white/5 md:transition-all md:duration-500 md:hover:border-bluePrimary/20 md:hover:shadow-[0_0_40px_rgba(0,72,255,0.1)]">
+    <div className="group relative flex flex-col items-center justify-center h-full md:min-h-[400px] bg-[#040013] md:p-12 md:overflow-hidden md:rounded-md border-none shadow-none md:transition-none">
       {/* Ghost Atmosphere Glow - Desktop Only */}
       <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_50%_50%,var(--color-primary-faint),transparent_70%)] hidden md:block" />
 
@@ -32,7 +32,7 @@ export default function CTAProjectCard() {
           href="/portfolio"
           label="view projects"
           variant="primary"
-          size="lg" // Keeping LG for impact
+          size="lg"
           ariaLabel="Ver todos os projetos"
           className="w-full md:w-auto"
         />
