@@ -12,6 +12,8 @@ import HeroCTA from './HeroCTA';
 import HeroCopy from './HeroCopy';
 import MobileManifestoVideo from './MobileManifestoVideo';
 
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+
 // Dynamic import for WebGL Scene
 const GhostScene = dynamic(
   () => import('@/components/canvas/home/hero/GhostScene'),
@@ -28,6 +30,7 @@ const CONFIG = {
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
@@ -44,6 +47,11 @@ export default function HomeHero() {
         className="relative w-full min-h-screen bg-[#040013]"
         aria-label="Portfolio Hero Section"
       >
+        {/* Fallback Mobile Background Gradient (Ghost Atmosphere) */}
+        {!isDesktop && (
+          <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,#0a0029_0%,#040013_70%)]" />
+        )}
+
         {/* Preloader */}
         <AnimatePresence>
           {!isLoaded && (
@@ -58,9 +66,10 @@ export default function HomeHero() {
         {/* Mobile Video Section (Phase 2) */}
         <MobileManifestoVideo />
 
-        {/* Camada: Texto Editorial (Z-0) - Abaixo do Ghost conforme solicitado */}
+        {/* Camada: Texto Editorial (Z-10 Mobile / Z-0 Desktop) */}
         {/* Mobile: Relative flow | Desktop: Absolute Sticky */}
-        <div className="relative z-0 pointer-events-none md:absolute md:inset-0">
+        {/* On mobile, z-10 puts it above the z-0 gradient fallback */}
+        <div className="relative z-10 pointer-events-none md:absolute md:inset-0 md:z-0">
           <div className="flex items-center justify-center w-full min-h-[40vh] md:sticky md:top-0 md:h-screen">
             <Container className="pointer-events-auto">
               <HeroCopy isLoaded={isLoaded} />
@@ -68,13 +77,15 @@ export default function HomeHero() {
           </div>
         </div>
 
-        {/* Camada: Ghost WebGL (Z-10) - Acima do Texto */}
-        {/* Mobile & Desktop: Visible com movimento automático no mobile */}
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          <div className="sticky top-0 h-screen w-full">
-            <GhostScene />
+        {/* Camada: Ghost WebGL (Z-10) - Acima do Texto (Somente Desktop) */}
+        {/* Performance: Hidden on mobile to save GPU */}
+        {isDesktop && (
+          <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+            <div className="sticky top-0 h-screen w-full">
+              <GhostScene />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Camada: CTA (Z-50) */}
         {/* Mobile: Relative flow | Desktop: Absolute Sticky */}

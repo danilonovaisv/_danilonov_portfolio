@@ -260,14 +260,7 @@ const AboutOrigin = () => {
                 className={`content ${section.textAlign === 'right' ? 'text-right' : 'text-left'}`}
               >
                 <h2 className="header">{section.title}</h2>
-                <p className="desc">
-                  {section.text.split('\n').map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < section.text.split('\n').length - 1 && <br />}
-                    </span>
-                  ))}
-                </p>
+                <p className="desc whitespace-normal">{section.text}</p>
               </div>
             </div>
           ))}

@@ -105,7 +105,6 @@ export function AboutBeliefs() {
                 <span className={part.highlight ? 'text-primary' : undefined}>
                   {part.text}
                 </span>
-                {part.newLine && <br />}
               </span>
             ))}
           </p>
@@ -149,9 +148,7 @@ export function AboutBeliefs() {
             <div className="flex flex-col items-center gap-3 lg:items-start">
               <span className="type-caption text-white/60">ISSO É</span>
               <p className="type-display font-black leading-[1.05] text-primary">
-                GHOST
-                <br />
-                DESIGN.
+                GHOST DESIGN.
               </p>
             </div>
           </div>

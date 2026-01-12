@@ -99,9 +99,22 @@
   }
 
   .arch__right .img-wrapper {
-    @apply static transform-none aspect-square w-full mb-[40px] opacity-100 visible;
+    @apply static transform-none opacity-100 visible;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 1 / 1 !important;
+    margin-bottom: 40px !important;
     position: relative !important;
     z-index: 1 !important;
+  }
+
+  .arch__right .img-wrapper img {
+    @apply w-full object-cover;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
   }
 
   .arch__left .arch__info {

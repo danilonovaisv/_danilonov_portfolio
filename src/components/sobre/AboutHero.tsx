@@ -225,19 +225,17 @@ export function AboutHero() {
                     {item.highlight && (
                       <span className="text-bluePrimary">{item.highlight}</span>
                     )}
-                    {i === 1 && <br />}
                   </span>
                 ))}
               </h1>
             </motion.div>
             <motion.div
               variants={motionTokens.fadeGhost}
-              className="type-body text-white/85 leading-[1.6] tracking-tight"
+              className="texto-h3 type-h3 text-white/85 leading-[1.6] tracking-tight"
             >
               {ABOUT_CONTENT.hero.description.map((line, index) => (
-                <span key={index}>
+                <span key={index} className="inline mr-1">
                   {line}
-                  {index < ABOUT_CONTENT.hero.description.length - 1 && <br />}
                 </span>
               ))}
             </motion.div>
