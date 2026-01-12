@@ -11,7 +11,7 @@ export interface NavItem {
 
 export interface SiteHeaderProps {
   navItems: NavItem[];
-  logoUrl: string;
+  logoUrl?: string;
   logoUrlMobile?: string;
   gradient: [string, string]; // gradiente principal para mobile
   accentColor: string;

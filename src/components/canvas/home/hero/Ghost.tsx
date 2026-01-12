@@ -9,8 +9,10 @@ import {
   UnrealBloomPass,
   ShaderPass,
 } from 'three-stdlib';
-import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
+
 import { AnalogDecayShader } from '@/components/canvas/shaders/AnalogShader';
+import { GHOST_CONFIG, getConfigColorHex } from '@/config/ghostConfig';
+
 import { GhostFireflies } from './GhostFireflies';
 import { GhostParticles } from './GhostParticles';
 
@@ -41,7 +43,11 @@ export function Ghost({
   const currentMovementRef = useRef(0);
 
   // Shader customization for "Skirt" deformation
-  const onBeforeCompile = (shader: any) => {
+  const onBeforeCompile = (shader: {
+    uniforms: { [uniform: string]: THREE.IUniform };
+    vertexShader: string;
+    fragmentShader: string;
+  }) => {
     shader.vertexShader = shader.vertexShader.replace(
       '#include <begin_vertex>',
       `

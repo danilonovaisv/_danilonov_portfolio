@@ -1,4 +1,4 @@
-import FloatingCards from '@/components/FloatingCards';
+import FloatingCards from '@/components/ui/FloatingCards';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

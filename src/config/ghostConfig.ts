@@ -175,7 +175,7 @@ export const GHOST_CONFIG: GhostConfig = {
   ghostScale: 1.4, // FIXED: was 1.2
   bodyColor: 'deepSpace', // 0x0f2027
   glowColor: 'blue', // "blue"
-  eyeGlowColor: 'blue', // FIXED: CodePen uses 'blue' (0x0080ff)
+  eyeGlowColor: 'purple', // FIXED: CodePen uses 'blue' (0x0080ff)
 
   ghostOpacity: 0.48,
   emissiveIntensity: 5.5, // FIXED: was 5.8
@@ -219,7 +219,7 @@ export const GHOST_CONFIG: GhostConfig = {
   fireflyGlowIntensity: 4.3,
 
   // Partículas (Matched to CodePen)
-  particleCount: 250,
+  particleCount: 650,
   particleColor: 'violet',
   particleSpeedFactor: 0.012,
   particleRadius: 3.5,
@@ -232,7 +232,7 @@ export const GHOST_CONFIG: GhostConfig = {
   particleCreationRate: 5,
 
   // Olhos (Matched to CodePen)
-  eyeGlowIntensity: 4.5,
+  eyeGlowIntensity: 9.5,
   eyeGlowResponse: 0.31,
   eyeGlowDecay: 0.95,
 

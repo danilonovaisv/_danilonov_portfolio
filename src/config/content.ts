@@ -1,8 +1,9 @@
 export const HOME_CONTENT = {
   hero: {
+    tag: '[BRAND AWARENESS]',
     title: ['Você não vê o design.'],
-    subtitle: '[Mas ele vê você.]',
-    cta: 'step inside →',
+    subtitle: 'Mas ele vê você.',
+    cta: 'step inside',
   },
 
   showcase: {
@@ -62,7 +63,7 @@ export const HOME_CONTENT = {
       client: 'Magic',
       year: 2023,
       tags: ['Branding', 'Campaign'],
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(1).webp',
       layout: {
         h: 'h-[400px] md:h-[500px]',
         cols: 'md:col-span-5',
@@ -92,7 +93,7 @@ export const HOME_CONTENT = {
       client: 'Cliente confidencial',
       year: 2021,
       tags: ['Art Direction'],
-      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+      img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(5).webp',
       layout: {
         h: 'h-[400px] md:h-[600px]',
         cols: 'md:col-span-12',
@@ -215,7 +216,7 @@ export const ABOUT_CONTENT = {
       { id: '2', text: 'Design estratégico que guia decisões' },
       { id: '3', text: 'Identidades que permanecem na memória' },
       { id: '4', text: 'Campanhas multicanais com lógica e emoção' },
-      { id: '5', text: 'Branding que não grita — mas marca' },
+      { id: '5', text: 'Branding que não grita, mas marca' },
       {
         id: '6',
         text: 'Inteligência Artificial aplicada à criação',

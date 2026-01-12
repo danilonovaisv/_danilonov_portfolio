@@ -1,7 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useSpring, useTransform, useScroll } from 'framer-motion';
+import {
+  useSpring,
+  useTransform,
+  useScroll,
+  type MotionValue,
+} from 'framer-motion';
 
 interface UseParallaxOptions {
   /** Configuração do spring para suavidade 'ghost' */
@@ -16,7 +21,7 @@ interface UseParallaxReturn {
   /** Ref para a track interna (que se move) */
   trackRef: React.RefObject<HTMLDivElement | null>;
   /** Estilo de transformação para aplicar na track */
-  style: { y: any };
+  style: { y: MotionValue<number> | number };
   /** Se o scroll está ativo (opcional) */
   isScrolling: boolean;
 }

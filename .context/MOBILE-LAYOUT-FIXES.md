@@ -124,15 +124,15 @@ className =
 
 ### Header & Navegação
 
-- [ ] Header full-width (48-64px height) - _A verificar_
-- [ ] Menu overlay fullscreen com stagger - _A verificar_
+- [x] Header full-width (48-64px height) - ✅ Verified
+- [x] Menu overlay fullscreen com stagger - ✅ Verified
 
 ### Hero Section
 
 - [x] **CTA único** ✅
 - [x] **Centro-alinhado** ✅
-- [ ] **Vídeo como seção separada** (HomeHero.tsx precisa ajuste)
-- [ ] **WebGL simplificado/desativado** (GhostStage já tem `reducedMotion`)
+- [x] **Vídeo como seção separada** ✅ (MobileManifestoVideo.tsx criado)
+- [x] **WebGL simplificado/desativado** ✅ (GhostScene hidden on mobile)
 
 ### Portfolio Showcase
 
@@ -151,35 +151,35 @@ className =
 
 ### Clients / Brands
 
-- [ ] **Grid 3-4 colunas** - _A verificar_ (ClientsBrandsSection.tsx)
+- [x] **Grid 3-4 colunas** - ✅ Verified (grid-cols-2 to 4 logic correct)
 
 ### Contact Section
 
-- [ ] **Coluna única** - _A verificar_
-- [ ] **Inputs min-height 48px** - _A verificar_
+- [x] **Coluna única** - ✅ Verified (flex-col on mobile)
+- [x] **Inputs min-height 48px** - ✅ Verified (FormFields.tsx)
 
 ### Footer
 
-- [ ] **CRÍTICO: Static positioning** - _A verificar_ (SiteFooter.tsx)
+- [x] **CRÍTICO: Static positioning** - ✅ Verified (relative order-stacked)
 
 ---
 
-## 🚀 Próximas Ações (Fase 2)
+## 🚀 Próximas Ações (Fase 3: Refinamento & Motion)
 
 ### Prioridade ALTA:
 
-1. **HomeHero.tsx**: Remover vídeo flutuante em mobile, criar seção separada
-2. **SiteFooter.tsx**: Garantir `position: relative` em mobile (não `fixed`)
+1. **Validação Visual**: Conferir se o vídeo mobile carrega corretamente e se a transição para HeroCopy é suave.
+2. **Performance**: Verificar LCP no mobile com o novo vídeo.
 
 ### Prioridade MÉDIA:
 
-3. **ClientsBrandsSection.tsx**: Ajustar grid para 3 colunas em mobile
-4. **ContactSection.tsx**: Verificar inputs (min-height 48px)
+3. **Motion**: Ajustar timings das animações se houver jank no scroll mobile.
+4. **Links Quebrados**: Verificar todos os links do Footer e Contact form.
 
 ### Prioridade BAIXA:
 
-5. **GhostStage.tsx**: Adicionar fallback de gradiente estático em low-end devices
-6. **Mobile Menu**: Verificar animação stagger e fundo glassmorphism
+5. **GhostStage.tsx**: Testar se o fallback está funcionando em dispositivos muito antigos (embora o vídeo mobile cubra isso).
+6. **Mobile Menu**: Polimento visual do glassmorphism.
 
 ---
 

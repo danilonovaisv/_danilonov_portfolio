@@ -23,9 +23,9 @@ export const InputField: React.FC<InputFieldProps> = ({
     </label>
     <input
       id={id}
-      aria-invalid={error ? 'true' : 'false'}
+      aria-invalid={!!error}
       aria-describedby={error ? `${id}-error` : undefined}
-      className={`w-full rounded-lg border border-[#111111]/10 bg-[#f8fafc] px-4 py-4 text-[#111111] placeholder:text-[#111111]/30 transition-all outline-none focus:border-[#0057FF] focus:ring-2 focus:ring-[#0057FF]/20 ${
+      className={`w-full min-h-[48px] rounded-lg border border-[#111111]/10 bg-[#f8fafc] px-4 py-4 text-[#111111] placeholder:text-[#111111]/30 transition-all outline-none focus:border-[#0057FF] focus:ring-2 focus:ring-[#0057FF]/20 ${
         error ? 'border-red-500' : ''
       } ${className}`}
       {...props}
@@ -62,7 +62,7 @@ export const TextAreaField: React.FC<TextAreaFieldProps> = ({
     </label>
     <textarea
       id={id}
-      aria-invalid={error ? 'true' : 'false'}
+      aria-invalid={!!error}
       aria-describedby={error ? `${id}-error` : undefined}
       className={`w-full resize-none rounded-lg border border-[#111111]/10 bg-[#f8fafc] px-4 py-4 text-[#111111] placeholder:text-[#111111]/30 transition-all outline-none focus:border-[#0057FF] focus:ring-2 focus:ring-[#0057FF]/20 min-h-[120px] ${
         error ? 'border-red-500' : ''

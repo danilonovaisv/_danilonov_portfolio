@@ -1,12 +1,16 @@
 'use client';
 
+import React, { useRef } from 'react';
 import { motion, Variants } from 'framer-motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { useRef } from 'react';
-import { useGhostReveal } from '@/hooks/useGhostReveal';
 import type { Group } from 'three';
+
+import { useGhostReveal } from '@/hooks/useGhostReveal';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { HOME_CONTENT } from '@/config/content';
+
 import styles from './HeroCopy.module.css';
 
+// noinspection JSDeprecatedSymbols
 /**
  * Animation: Page Load Entry
  */
@@ -70,24 +74,27 @@ export default function HeroCopy({
       <span
         className={`block mb-3 lg:mb-4 tracking-[0.25em] uppercase font-bold text-accent text-micro ${isMask ? '' : styles.tag}`}
       >
-        [ CREATIVE DESIGN ERA ]
+        {HOME_CONTENT.hero.tag}
       </span>
 
       {/* Headline - Desktop (2 linhas) */}
-      <h1 className={`hidden lg:block mb-4 font-display ${styles.heroTitle}`}>
-        Você não vê <br /> o design.
+      <h1 className={`hidden lg:block mb-20 font-display ${styles.heroTitle}`}>
+        {HOME_CONTENT.hero.title[0].split(' ').slice(0, 2).join(' ')} <br />
+        {HOME_CONTENT.hero.title[0].split(' ').slice(2).join(' ')}
       </h1>
 
       {/* Headline - Mobile & Tablet (3 linhas) */}
-      <h1 className={`lg:hidden mb-10 font-display ${styles.heroTitle}`}>
-        Você não <br /> vê o <br /> design.
+      <h1 className={`lg:hidden mb-12 font-display ${styles.heroTitle}`}>
+        {HOME_CONTENT.hero.title[0].split(' ').slice(0, 2).join(' ')} <br />
+        {HOME_CONTENT.hero.title[0].split(' ').slice(2, 4).join(' ')} <br />
+        {HOME_CONTENT.hero.title[0].split(' ').slice(4).join(' ')}
       </h1>
 
       {/* Subheading */}
       <h2
-        className={`type-h2 mt-6 lg:mt-8 text-textSecondary ${isMask ? '' : styles.subText} ${styles.heroSubtitle}`}
+        className={`font-h2 type-h2 mt-6 lg:mt-9 text-textSecondary ${isMask ? '' : 'opacity-80'} ${styles.heroSubtitle}`}
       >
-        Mas ele vê você.
+        {HOME_CONTENT.hero.subtitle}
       </h2>
     </div>
   );
@@ -100,7 +107,7 @@ export default function HeroCopy({
       {/* Camada 1: Texto Base (Low Opacity) */}
       <motion.div
         variants={itemAnimation}
-        className="max-w-7xl px-4 w-full flex flex-col items-center"
+        className="px-4 w-full flex flex-col items-center"
       >
         {renderTextContent(false)}
         <div className={styles.ctaSpacer}></div>
@@ -109,7 +116,7 @@ export default function HeroCopy({
       {/* Camada 2: Texto Revelado (Masked / Bright / Glow) */}
       {!prefersReducedMotion && (
         <div className={styles.maskLayer} aria-hidden="true">
-          <div className="max-w-7xl px-4 w-full flex flex-col items-center text-center">
+          <div className="px-4 w-full flex flex-col items-center text-center">
             <motion.div variants={itemAnimation}>
               {renderTextContent(true)}
             </motion.div>

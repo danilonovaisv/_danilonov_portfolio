@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import { Preloader } from '@/components/ui/Preloader';
-// import { useMediaQuery } from '@/hooks/useMediaQuery';
-// import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { AnimatePresence } from 'framer-motion';
 
-import HeroCopy from './HeroCopy';
+import { Container } from '@/components/layout/Container';
+import { Preloader } from '@/components/ui/Preloader';
+
 import HeroCTA from './HeroCTA';
+import HeroCopy from './HeroCopy';
+import MobileManifestoVideo from './MobileManifestoVideo';
 
 // Dynamic import for WebGL Scene
 const GhostScene = dynamic(
@@ -23,10 +24,6 @@ const GhostScene = dynamic(
 const CONFIG = {
   preloadMs: 2000,
 } as const;
-
-// heroGradient removed
-
-import { Container } from '@/components/layout/Container';
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
@@ -61,9 +58,13 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
+        {/* Mobile Video Section (Phase 2) */}
+        <MobileManifestoVideo />
+
         {/* Camada: Texto Editorial (Z-0) - Abaixo do Ghost conforme solicitado */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="sticky top-0 h-screen w-full flex items-center justify-center">
+        {/* Mobile: Relative flow | Desktop: Absolute Sticky */}
+        <div className="relative z-0 pointer-events-none md:absolute md:inset-0">
+          <div className="flex items-center justify-center w-full min-h-[40vh] md:sticky md:top-0 md:h-screen">
             <Container className="pointer-events-auto">
               <HeroCopy isLoaded={isLoaded} />
             </Container>
@@ -71,15 +72,17 @@ export default function HomeHero() {
         </div>
 
         {/* Camada: Ghost WebGL (Z-10) - Acima do Texto */}
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+        {/* Mobile: Hidden | Desktop: Visible */}
+        <div className="hidden md:block absolute inset-0 z-10 pointer-events-none overflow-hidden">
           <div className="sticky top-0 h-screen w-full">
             <GhostScene />
           </div>
         </div>
 
         {/* Camada: CTA (Z-50) */}
-        <div className="absolute inset-0 z-50 pointer-events-none">
-          <div className="sticky top-0 h-screen w-full flex items-end justify-center pb-12 lg:pb-20">
+        {/* Mobile: Relative flow | Desktop: Absolute Sticky */}
+        <div className="relative z-50 pointer-events-none md:absolute md:inset-0">
+          <div className="flex items-end justify-center w-full pb-12 md:sticky md:top-0 md:h-screen lg:pb-20">
             <HeroCTA isLoaded={isLoaded} />
           </div>
         </div>

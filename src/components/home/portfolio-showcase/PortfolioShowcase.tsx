@@ -196,6 +196,7 @@ export default function PortfolioShowcase() {
 
   return (
     <section
+      id="portfolio-showcase"
       ref={sectionRef}
       className="relative w-full bg-[#040013] py-20 lg:py-32"
       aria-labelledby="portfolio-showcase-heading"

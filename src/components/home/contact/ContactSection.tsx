@@ -91,11 +91,11 @@ export default function ContactSection() {
             className="lg:col-span-5 flex flex-col space-y-10 order-1"
           >
             {/* Header */}
-            <div className="text-left mb-6 lg:mb-10">
+            <div className="text-center lg:text-left mb-6 lg:mb-10">
               <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-[#0057FF] uppercase tracking-tighter mb-4 leading-[0.9]">
                 {HOME_CONTENT.contact.title}
               </h2>
-              <p className="text-[#111111] text-lg md:text-xl font-medium max-w-md">
+              <p className="text-[#111111] text-lg md:text-xl font-medium max-w-md mx-auto lg:mx-0">
                 {HOME_CONTENT.contact.subtitle}
               </p>
             </div>

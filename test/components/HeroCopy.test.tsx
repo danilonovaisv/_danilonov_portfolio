@@ -67,15 +67,15 @@ describe('HeroCopy Component Responsiveness', () => {
   it('should render both Desktop and Mobile text blocks with correct visibility classes', () => {
     const { container } = render(<HeroCopy />);
 
-    // Find the Desktop H1 (hidden md:block)
-    const desktopH1 = container.querySelector('h1.md\\:block');
+    // Find the Desktop H1 (hidden lg:block)
+    const desktopH1 = container.querySelector('h1.lg\\:block');
     expect(desktopH1).toBeInTheDocument();
     expect(desktopH1).toHaveClass('hidden');
-    expect(desktopH1).toHaveTextContent('Você não vê');
-    expect(desktopH1).toHaveTextContent('o design.');
+    expect(desktopH1).toHaveTextContent('Você não');
+    expect(desktopH1).toHaveTextContent('vê o design.');
 
-    // Find the Mobile H1 (md:hidden)
-    const mobileH1 = container.querySelector('h1.md\\:hidden');
+    // Find the Mobile H1 (lg:hidden)
+    const mobileH1 = container.querySelector('h1.lg\\:hidden');
     expect(mobileH1).toBeInTheDocument();
     expect(mobileH1).toHaveTextContent('Você não');
     expect(mobileH1).toHaveTextContent('vê o');

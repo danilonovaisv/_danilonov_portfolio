@@ -8,9 +8,11 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion';
-import { ABOUT_CONTENT } from '@/config/content';
-import { motionTokens, motionSprings } from './motion';
+
 import { Container } from '@/components/layout/Container';
+import { ABOUT_CONTENT } from '@/config/content';
+
+import { motionTokens, motionSprings } from './motion';
 
 export function AboutHero() {
   const prefersReducedMotion = useReducedMotion();

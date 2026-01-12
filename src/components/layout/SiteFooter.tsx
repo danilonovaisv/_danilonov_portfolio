@@ -8,7 +8,7 @@ import { NAVIGATION, SOCIALS } from '@/config/navigation';
  *
  * Protocol:
  * - Desktop (>=1024px): Fixed bar at bottom, 48-64px height, bg-[#0057FF].
- * - Mobile (<1024px): Static section, vertical stack (Copyright -> Nav -> Social), space-y-6, py-10.
+ * - Mobile (<1024px): Static section, vertical stack (Copyright → Nav → Social), space-y-8, py-10.
  */
 export default function SiteFooter() {
   const socialLinks = [
@@ -31,19 +31,22 @@ export default function SiteFooter() {
 
   return (
     <footer
-      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-default"
+      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-0"
       aria-label="Rodapé do site"
     >
       <div className="max-w-[1680px] mx-auto px-6 md:px-12 xl:px-24 flex flex-col lg:flex-row items-center justify-between py-10 lg:py-0 lg:h-[64px] gap-8 lg:gap-0">
-        {/* 1. Copyright (Static Order on Mobile, Left on Desktop) */}
+        {/* 1. Copyright (Order 1 on Mobile, Left on Desktop) */}
         <div className="order-1 lg:order-0">
-          <p className="text-[14px] lg:text-[10px] font-medium tracking-[0.05em] uppercase opacity-90 lg:opacity-100 text-center lg:text-left">
+          <p className="text-[0.875rem] lg:text-[10px] font-medium tracking-[0.05em] uppercase opacity-90 lg:opacity-100 text-center lg:text-left">
             {NAVIGATION.footer.copyright}
           </p>
         </div>
 
-        {/* 2. Navigation (Single Row on Mobile, Center/Right-ish on Desktop) */}
-        <nav className="flex flex-row flex-wrap justify-center items-center gap-6 lg:gap-8 order-2 lg:order-0">
+        {/* 2. Navigation (Order 2 on Mobile, Center/Right on Desktop) */}
+        <nav
+          className="flex flex-row flex-wrap justify-center items-center gap-6 lg:gap-8 order-2 lg:order-0"
+          aria-label="Navegação do rodapé"
+        >
           {NAVIGATION.footer.links.map((link) => (
             <Link
               key={link.label}
@@ -57,8 +60,11 @@ export default function SiteFooter() {
           ))}
         </nav>
 
-        {/* 3. Social Media (Single Row on Mobile, Right on Desktop) */}
-        <div className="flex flex-row items-center justify-center gap-4 order-3 lg:order-0">
+        {/* 3. Social Media (Order 3 on Mobile, Right on Desktop) */}
+        <div
+          className="flex flex-row items-center justify-center gap-4 order-3 lg:order-0"
+          aria-label="Redes sociais"
+        >
           {socialLinks.map((social) => (
             <a
               key={social.label}

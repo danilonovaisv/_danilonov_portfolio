@@ -19,8 +19,9 @@ export default function FloatingCards() {
       const cards = gsap.utils.toArray('.card-item');
 
       // 1. Initial Infinite Float Loop
-      cards.forEach((card: any) => {
-        gsap.to(card, {
+      cards.forEach((card) => {
+        const element = card as HTMLElement;
+        gsap.to(element, {
           y: '-=20',
           rotationX: 'random(-5, 5)',
           rotationY: 'random(-5, 5)',

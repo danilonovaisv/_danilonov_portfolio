@@ -26,7 +26,7 @@
   pointer-events: none;
   z-index: 12;
   -webkit-mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh),
-      rgba(0, 0, 0, 1) 0%,
+      rgb(1, 1, 16) 0%,
       rgba(0, 0, 0, 0.85) 25%,
       rgba(0, 0, 0, 0.5) 50%,
       rgba(0, 0, 0, 0.15) 75%,
@@ -53,29 +53,28 @@
 
 /* Oversized Typography for Hero (Matched to HERO.jpg) */
 .heroTitle {
-  font-size: clamp(5.5rem, 15vw, 10rem) !important;
-  /* ULTRA MASSIVA: 88px inicial */
-  font-weight: 900;
-  line-height: 0.9;
-  /* Super compactado */
-  letter-spacing: -0.06em;
-  /* Letras fundidas */
-  text-transform: uppercase;
+  font-size: clamp(5.5rem, 20vw, 10rem) !important;
+  /* ULTRA MASSIVA: 18rem em desktop 4K/Wide */
+  font-weight: 900 !important;
+  line-height: 0.9 !important;
+  letter-spacing: -0.07em !important;
+  text-transform: none !important;
 }
 
 .heroSubtitle {
-  font-size: clamp(1.75rem, 4vw, 2.5rem) !important;
-  /* Subtítulo grande */
-  font-weight: 500;
-  line-height: 1.1;
-  opacity: 0.9;
-  letter-spacing: -0.02em;
+  font-size: clamp(1rem, 10vw, 5rem) !important;
+  /* MUITO DISCRETA: clamp(1rem, 3vw, 2rem) */
+  font-weight: 600 !important;
+  line-height: 1.0 !important;
+  opacity: 0.5 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: none !important;
 }
 
 /* Tag style matching spec 4.2 - blueAccent */
 .tag {
-  color: #4fe6ff;
-  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  color: #ffffff;
+  font-size: clamp(0.9rem, 1.3vw, 2rem);
   letter-spacing: 0.25em;
   text-transform: uppercase;
   font-weight: 600;

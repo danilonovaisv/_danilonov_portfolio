@@ -185,7 +185,7 @@ canvas {
   font-weight: 400;
   letter-spacing: -0.02em;
   margin-bottom: 5vh;
-  text-transform: uppercase;
+  text-transform: none;
   color: #d9ddec;
   mix-blend-mode: screen;
   text-shadow: 0 0 24px rgba(71, 128, 255, 0.35);
@@ -194,7 +194,7 @@ canvas {
 .hero-subtext {
   font-family: 'PPSupplyMono', monospace;
   font-size: 12px;
-  text-transform: uppercase;
+  text-transform: none;
   opacity: 0.7;
   margin-top: 2vh;
   color: #9ca5c3;

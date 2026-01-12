@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+
+import { BRAND } from '@/config/brand';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+
 import type { NavItem, SiteHeaderProps } from './types';
 import DesktopFluidHeader from './DesktopFluidHeader';
 import MobileStaggeredMenu from './MobileStaggeredMenu';
 import { useActiveSection } from './useActiveSection';
-import { useRouter, usePathname } from 'next/navigation';
-import { BRAND } from '@/config/brand';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 function isHashHref(href: string) {
   return href.startsWith('#') || href.startsWith('/#');
@@ -36,8 +38,6 @@ function isExternalHref(href: string) {
 
 export default function SiteHeader({
   navItems,
-  logoUrl,
-  logoUrlMobile,
   gradient,
   accentColor,
 }: SiteHeaderProps) {
@@ -119,10 +119,8 @@ export default function SiteHeader({
     return () => observer.disconnect();
   }, []);
 
-  const logoDesktop = isOnLightSection ? BRAND.assets.logos.logoDark : logoUrl;
-  const logoMobile = isOnLightSection
-    ? BRAND.assets.logos.logoDark
-    : logoUrlMobile || logoUrl;
+  const logoDesktop = BRAND.assets.logos.logoLight;
+  const logoMobile = BRAND.assets.logos.logoLight;
 
   if (!isMounted) return null;
 

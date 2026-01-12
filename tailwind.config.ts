@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss';
-import { BRAND } from './src/config/brand';
+import { BRAND } from './src/config/brand.ts';
 
 const config: Config = {
   content: [
@@ -25,6 +25,8 @@ const config: Config = {
         ],
         mono: [BRAND.assets.fonts.mono, 'monospace'],
         display: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
+        h1: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
+        h2: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
       },
     },
   },

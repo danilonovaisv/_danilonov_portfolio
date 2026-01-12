@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
-import HomeHero from '@/components/home/hero/HomeHero';
-// ManifestoSection import removed
-
-import PortfolioShowcase from '@/components/home/portfolio-showcase/PortfolioShowcase';
-import FeaturedProjectsSection from '@/components/home/featured-projects/FeaturedProjectsSection';
 
 import { SiteClosure } from '@/components/layout/SiteClosure';
+import FeaturedProjectsSection from '@/components/home/featured-projects/FeaturedProjectsSection';
+import HomeHero from '@/components/home/hero/HomeHero';
+import PortfolioShowcase from '@/components/home/portfolio-showcase/PortfolioShowcase';
 import { VideoManifesto } from '@/components/home/hero/VideoManifesto';
 import { BRAND } from '@/config/brand';
 

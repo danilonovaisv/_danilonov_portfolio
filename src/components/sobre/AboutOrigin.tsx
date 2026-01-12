@@ -1,47 +1,21 @@
 'use client';
 import { useRef } from 'react';
 import Image from 'next/image';
+
+import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+
+import { ABOUT_CONTENT } from '@/config/content';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const contentBlocks = [
-  {
-    title: 'O QUE PERMANECE',
-    text: 'Desde cedo, sempre prestei atenção no que ficava —\nnão só no que aparecia.\n\nEnquanto muitos olhavam para o brilho imediato,\neu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo.\nA essência das coisas sempre falou mais alto do que a superfície.',
-    align: 'end',
-    imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp',
-  },
-  {
-    title: 'DO TRAÇO À INTENÇÃO',
-    text: 'Rabiscos viraram ideias.\nIdeias viraram projetos.\nE os projetos começaram a deixar rastros.\n\nMeu processo criativo nasceu do improviso, do lápis na margem do caderno.\nAos poucos, aquilo que era instinto virou direção.\nCom cada tentativa, aprendi a dar forma ao invisível —\naté que os conceitos começaram a falar por si.',
-    align: 'start',
-    imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-2.webp',
-  },
-  {
-    title: 'A DESCOBERTA DO INVISÍVEL',
-    text: 'Foi ali que entendi:\ndesign não é enfeite.\nÉ ferramenta invisível de transformação.\n\nPor trás de cada escolha visual, existe intenção.\nDescobri que o design verdadeiro não grita — ele conduz.\nEle está presente nos detalhes que ninguém percebe,\nmas que todos sentem.\nTransformar sem que se perceba a transformação: isso é potência.',
-    align: 'end',
-    imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-3.webp',
-  },
-  {
-    title: 'EXPANSÃO COM PROPÓSITO',
-    text: 'Estudei Comunicação, mergulhei no design, no branding\ne hoje uso inteligência artificial para expandir o alcance\nsem perder a essência humana da criação.\n\nMinha trajetória uniu intuição com método, arte com estratégia.\nO futuro pede novas ferramentas — e eu as abracei.\nMas nunca deixei que a tecnologia apagasse o que me move:\na sensibilidade, o olhar atento, a busca pelo significado.',
-    align: 'start',
-    imageUrl:
-      'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-4.webp',
-  },
-];
 
 export default function OrigemCriativa() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+
+  const contentBlocks = ABOUT_CONTENT.origin.blocks;
 
   useGSAP(
     () => {
@@ -63,15 +37,9 @@ export default function OrigemCriativa() {
         // Desktop Animation
         gsap.set(imgs, {
           objectPosition: '0px 0%',
-          filter: 'blur(0px)', // Starting first image clear
+          filter: 'blur(0px)',
           opacity: 1,
         });
-
-        // Ensure subsequent images start blurred/faded if we want that transition
-        // But referencing CodePen, it relies on revealing the *next* image which is underneath.
-        // So the image underneath (z-index lower) should probably be visible?
-        // Actually, CodePen wipes the TOP image to reveal the BOTTOM one.
-        // So standard state is enough.
 
         // Main Timeline pinned to the container
         const mainTimeline = gsap.timeline({
@@ -81,30 +49,23 @@ export default function OrigemCriativa() {
             end: 'bottom bottom',
             pin: rightRef.current,
             scrub: true,
-            // markers: true // Debug if needed
           },
         });
 
         imgs.forEach((img, index) => {
-          // If there is a next image (meaning we are not at the last one),
-          // we want to transition from Current -> Next.
-          // In this stack, Current is on TOP (higher z-index).
-          // We hide Current to reveal Next.
-
           const nextImage = imgs[index + 1];
           if (nextImage) {
             const sectionTimeline = gsap.timeline();
 
             sectionTimeline
               .to(img, {
-                clipPath: 'inset(0% 0% 100% 0%)', // Wipe from bottom up (hide)
-                objectPosition: '0px 60%', // Parallax effect during wipe
-                filter: 'blur(4px)', // Fade out effect
+                clipPath: 'inset(0% 0% 100% 0%)',
+                objectPosition: '0px 60%',
+                filter: 'blur(4px)',
                 opacity: 0.85,
                 duration: 1,
                 ease: 'none',
               })
-              // Animate the next image slightly as it is revealed
               .fromTo(
                 nextImage,
                 {
@@ -119,10 +80,8 @@ export default function OrigemCriativa() {
                   duration: 1,
                   ease: 'none',
                 },
-                '<' // Start at same time
+                '<'
               );
-            // Optional: Body background color transition if desired
-            // .to('body', { backgroundColor: bgColors[index], duration: 1 }, 0);
 
             mainTimeline.add(sectionTimeline);
           }
@@ -130,11 +89,6 @@ export default function OrigemCriativa() {
       });
 
       mm.add('(max-width: 768px)', () => {
-        // Mobile Layout & Animation
-        // In mobile, we might want to reset styles set by desktop if window resized
-        // Use CSS order classes for interleaving or just render flow?
-        // CodePen uses JS order. Typescript/React: We use CSS classes.
-
         const imgs = gsap.utils.toArray<HTMLImageElement>('.img-wrapper img');
 
         gsap.set(imgs, {
@@ -144,7 +98,6 @@ export default function OrigemCriativa() {
           opacity: 1,
         });
 
-        // Simple Parallax for mobile images
         imgs.forEach((img) => {
           gsap.fromTo(
             img,
@@ -168,27 +121,21 @@ export default function OrigemCriativa() {
 
   return (
     <section className="origem-criativa relative w-full" ref={containerRef}>
-      <div className="container mx-auto px-4 md:px-8 py-10 md:py-20 max-w-[1440px]">
-        <h1 className="text-center text-5xl md:text-[64px] font-extrabold pb-16 md:pb-24 text-text tracking-tighter">
+      <div className="container mx-auto max-w-[1440px] px-4 py-10 md:px-8 md:py-20 text-[#fcffff]">
+        <h2 className="pb-16 text-center text-5xl font-extrabold tracking-tighter md:text-[64px] md:pb-24">
           Origem
-        </h1>
+        </h2>
 
-        {/* 
-          Main Grid 
-          Desktop: Flex row with gap.
-          Mobile: Flex col with specific order usage handled via classes. 
-          The style block handles display: contents for mobile.
-        */}
         <div
-          className="arch flex flex-col md:flex-row gap-5 md:gap-[60px] justify-between max-w-[1100px] mx-auto relative"
+          className="arch relative mx-auto flex max-w-[1100px] flex-col justify-between gap-5 md:flex-row md:gap-[60px]"
           ref={triggerRef}
         >
           {/* Left Column: Texts */}
-          <div className="arch__left flex flex-col min-w-[300px] w-full md:w-auto md:block">
+          <div className="arch__left w-full min-w-[300px] flex-col contents md:block!">
             {contentBlocks.map((block, index) => (
               <div
-                key={index}
-                className={`arch__info h-auto md:h-screen grid place-items-center w-full px-0 md:px-0 py-10 md:py-0 md:order-0 ${
+                key={block.id}
+                className={`arch__info grid h-auto w-full place-items-center py-10 px-0 md:h-screen md:order-0 md:py-0 ${
                   index === 0
                     ? 'order-0'
                     : index === 1
@@ -199,25 +146,25 @@ export default function OrigemCriativa() {
                 }`}
               >
                 <div
-                  className={`content w-full max-w-[356px] text-${block.align === 'end' ? 'right' : 'left'} md:text-${block.align === 'end' ? 'right' : 'left'}`}
+                  className={`content w-full max-w-[356px] text-${block.align === 'right' ? 'right' : 'left'}`}
                 >
-                  <h2 className="text-primary font-extrabold text-[32px] md:text-[42px] leading-[1.1] mb-6 tracking-tight uppercase">
+                  <h3 className="mb-6 text-[32px] font-extrabold uppercase leading-[1.1] tracking-tight text-primary md:text-[42px]">
                     {block.title}
-                  </h2>
-                  <h3 className="text-text font-normal text-[18px] md:text-[20px] leading-[1.6] whitespace-pre-line opacity-90">
-                    {block.text}
                   </h3>
+                  <p className="whitespace-pre-line text-[18px] font-normal leading-[1.6] opacity-90 md:text-[20px]">
+                    {block.text}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Right Column: Images */}
-          <div className="arch__right relative w-full md:max-w-[540px] md:h-screen flex flex-col md:flex">
+          <div className="arch__right relative w-full flex-col contents md:flex!">
             {contentBlocks.map((block, index) => (
               <div
-                key={`img-${index}`}
-                className={`img-wrapper relative w-full h-[360px] md:h-[400px] rounded-[16px] md:rounded-[24px] overflow-hidden mb-5 md:mb-0 md:absolute md:top-1/2 md:-translate-y-1/2 left-0 ${
+                key={`img-${block.id}`}
+                className={`img-wrapper relative mb-5 h-[360px] w-full overflow-hidden rounded-[16px] md:absolute md:top-1/2 md:mb-0 md:h-[400px] md:-translate-y-1/2 md:rounded-[24px] left-0 ${
                   index === 0
                     ? 'order-1'
                     : index === 1
@@ -228,8 +175,8 @@ export default function OrigemCriativa() {
                 }`}
               >
                 <Image
-                  src={block.imageUrl}
-                  alt={block.title}
+                  src={block.src}
+                  alt={block.alt || block.title}
                   fill
                   priority={index === 0}
                   className="object-cover"
@@ -240,17 +187,8 @@ export default function OrigemCriativa() {
           </div>
         </div>
 
-        <div className="spacer h-[20vh] md:h-[30vh] w-full" />
+        <div className="spacer h-[20vh] w-full md:h-[30vh]" />
       </div>
-
-      <style jsx global>{`
-        @media (max-width: 768px) {
-          .arch__left,
-          .arch__right {
-            display: contents;
-          }
-        }
-      `}</style>
     </section>
   );
 }

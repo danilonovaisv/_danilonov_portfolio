@@ -1,9 +1,11 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { motionTokens } from './motion';
+
 import { AntigravityCTA } from '@/components/ui/AntigravityCTA';
 import { ABOUT_CONTENT } from '@/config/content';
+
+import { motionTokens } from './motion';
 
 export function AboutClosing() {
   const prefersReducedMotion = useReducedMotion();

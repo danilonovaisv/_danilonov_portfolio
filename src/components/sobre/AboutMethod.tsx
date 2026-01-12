@@ -2,10 +2,12 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { ABOUT_CONTENT } from '@/config/content';
-import { motionTokens, motionSprings } from './motion';
 import { Container } from '@/components/layout/Container';
+
+import { motionTokens, motionSprings } from './motion';
 
 export default function AboutMethod() {
   const containerRef = useRef<HTMLDivElement>(null);

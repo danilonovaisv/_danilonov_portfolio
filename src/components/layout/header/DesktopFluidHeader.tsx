@@ -98,14 +98,12 @@ export default function DesktopFluidHeader({
 
                   const common =
                     'transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-md text-xs uppercase tracking-[0.2em]';
-                  const baseText = isLight
-                    ? 'text-bluePrimary'
-                    : 'text-white/70';
+                  const baseText = isLight ? 'text-white' : 'text-white/70';
                   const hoverText = isLight
-                    ? 'hover:text-bluePrimary'
+                    ? 'hover:text-blueAccent'
                     : 'hover:text-white';
                   const activeText = isLight
-                    ? 'text-bluePrimary'
+                    ? 'text-blueAccent'
                     : 'text-bluePrimary';
                   const textColor = isActive
                     ? `${activeText} font-semibold`

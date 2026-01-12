@@ -39,17 +39,17 @@ export default function FeaturedProjectCard({
   const CardContent = () => (
     <>
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.h} w-full bg-white/5 transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-md h-[400px] md:${project.layout.h} w-full bg-white/5 transition-all duration-500 ${
           reducedMotion
             ? ''
-            : 'group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] group-hover:-translate-y-1 active:translate-y-0'
+            : 'group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] group-hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]'
         }`}
       >
         {/* Subtle Noise Overlay */}
         <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-        {/* Tags - Workflow Spec: Top Right, #E6EFEF 70% opacity */}
-        <div className="absolute top-4 right-4 z-20 flex gap-1.5 flex-wrap justify-end">
+        {/* Tags - Mobile: Top Left | Desktop: Top Right */}
+        <div className="absolute top-4 left-4 md:left-auto md:right-4 z-20 flex gap-1.5 flex-wrap justify-start md:justify-end">
           {project.tags.map((tag) => (
             <span
               key={tag}

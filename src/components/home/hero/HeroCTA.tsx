@@ -2,6 +2,7 @@
 
 import { motion, Variants } from 'framer-motion';
 import HeroAntigravityCTA from '@/components/ui/HeroAntigravityCTA';
+import { HOME_CONTENT } from '@/config/content';
 
 const itemAnimation: Variants = {
   initial: { opacity: 0, y: 24 },
@@ -26,7 +27,7 @@ export default function HeroCTA({ isLoaded = true }: { isLoaded?: boolean }) {
       variants={itemAnimation}
       className="flex justify-center pointer-events-auto"
     >
-      <HeroAntigravityCTA href="/sobre" text="step inside" />
+      <HeroAntigravityCTA href="/sobre" text={HOME_CONTENT.hero.cta} />
     </motion.div>
   );
 }
