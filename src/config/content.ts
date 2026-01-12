@@ -1,6 +1,7 @@
 export const HOME_CONTENT = {
   hero: {
     tag: '[BRAND AWARENESS]',
+    // Otimizado: Array permite animação escalonada (stagger) linha a linha
     title: ['Você não vê o design.'],
     subtitle: 'Mas ele vê você.',
     cta: 'step inside',
@@ -28,16 +29,17 @@ export const HOME_CONTENT = {
         id: 'brand-campaigns',
         label: 'Brand & Campaigns',
         titleDesktop: 'Brand & Campaigns',
-        titleMobile: 'Brand & Campaigns',
+        // Otimizado: Quebra forçada para evitar viúva em mobile pequeno
+        titleMobile: 'Brand &\nCampaigns',
         align: 'end',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       },
       {
         id: 'videos-motions',
-        label: 'Videos & Motions',
-        titleDesktop: 'Videos & Motions',
-        titleMobile: 'Videos & Motions',
+        label: 'Videos & Motion', // Corrigido: Motion (singular)
+        titleDesktop: 'Videos & Motion',
+        titleMobile: 'Videos &\nMotion',
         align: 'center',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
@@ -45,8 +47,10 @@ export const HOME_CONTENT = {
       {
         id: 'websites-webcampaigns-tech',
         label: 'Web Campaigns, Websites & Tech',
+        // Otimizado: Balanceamento visual para desktop
         titleDesktop: 'Web Campaigns,\nWebsites & Tech',
-        titleMobile: 'Web Campaigns, Websites & Tech',
+        // Otimizado: Quebra estratégica para mobile (3 linhas equilibradas)
+        titleMobile: 'Web Campaigns,\nWebsites & Tech',
         align: 'start',
         thumb:
           'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
@@ -65,7 +69,8 @@ export const HOME_CONTENT = {
       tags: ['Branding', 'Campaign'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(1).webp',
       layout: {
-        h: 'h-[400px] md:h-[500px]',
+        // Otimizado: 'min-h' previne overflow de texto, 'aspect' mantém proporção visual
+        h: 'min-h-[400px] md:h-[500px] aspect-[4/5] md:aspect-auto',
         cols: 'md:col-span-5',
         sizes: '(max-width: 1024px) 100vw, 42vw',
       },
@@ -80,7 +85,7 @@ export const HOME_CONTENT = {
       tags: ['Strategy', 'Identity'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
       layout: {
-        h: 'h-[400px] md:h-[500px]',
+        h: 'min-h-[400px] md:h-[500px] aspect-[4/5] md:aspect-auto',
         cols: 'md:col-span-7',
         sizes: '(max-width: 1024px) 100vw, 58vw',
       },
@@ -95,7 +100,8 @@ export const HOME_CONTENT = {
       tags: ['Art Direction'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/converted-(5).webp',
       layout: {
-        h: 'h-[400px] md:h-[600px]',
+        // Otimizado: Altura maior para destaque full-width
+        h: 'min-h-[400px] md:h-[600px]',
         cols: 'md:col-span-12',
         sizes: '100vw',
       },
@@ -110,7 +116,7 @@ export const HOME_CONTENT = {
       tags: ['UX/UI', 'Animation'],
       img: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
       layout: {
-        h: 'h-[400px] md:h-[400px]',
+        h: 'min-h-[400px] md:h-[400px] aspect-video md:aspect-auto',
         cols: 'md:col-span-8',
         sizes: '(max-width: 1024px) 100vw, 66vw',
       },
@@ -119,11 +125,10 @@ export const HOME_CONTENT = {
 
   clients: {
     title: 'marcas com as quais já trabalhei',
-    // Gerador de URLs para os 12 SVGs monocromáticos
     logos: Array.from({ length: 12 }, (_, i) => ({
       id: i + 1,
       src: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/client${i + 1}.svg`,
-      alt: `Client Logo ${i + 1}`,
+      alt: `Logo do cliente ${i + 1}`, // Otimizado: Português para consistência
     })),
   },
 
@@ -137,8 +142,7 @@ export const ABOUT_CONTENT = {
   hero: {
     title: { text: 'Sou ', highlight: 'Danilo Novais. ' },
     manifesto: [
-      { text: 'Você ', highlight: 'não vê tudo ' },
-      { text: 'o que eu faço.' },
+      { text: 'Você ', highlight: 'não vê tudo o que eu faço. ' },
       { text: 'Mas sente quando ', highlight: 'funciona.' },
     ],
     description: [
@@ -154,7 +158,7 @@ export const ABOUT_CONTENT = {
   beliefsIntro: [
     { text: 'Acredito no ' },
     { text: 'design que muda o dia', highlight: true },
-    { text: ' de alguém.', newLine: true },
+    { text: ' de alguém.', newLine: true }, // newLine mantido para controle visual
     { text: 'Não pelo choque, ' },
     { text: 'mas pela conexão.', highlight: true },
   ],

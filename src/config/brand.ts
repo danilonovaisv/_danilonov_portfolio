@@ -48,4 +48,12 @@ export const BRAND = {
     manifesto:
       'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
   },
+
+  // Leis de Layout (Absolute Laws)
+  layout: {
+    mobile: {
+      stacking: 'vertical', // Todas as sessões com cards devem empilhar um abaixo do outro
+      alignment: 'center',
+    },
+  },
 };

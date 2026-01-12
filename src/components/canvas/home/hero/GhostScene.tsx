@@ -589,35 +589,40 @@ export default function GhostScene() {
     const isMobile = isTouchDevice || isMobileWidth;
 
     // Event Listeners
+    let scrollY = 0;
+    const onScroll = () => {
+      scrollY = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     const mouse = new THREE.Vector2();
-    const prevMouse = new THREE.Vector2();
-    const mouseSpeed = new THREE.Vector2();
-    let lastMouseUpdate = 0;
-    let isMouseMoving = false;
-    let mouseMovementTimer: NodeJS.Timeout;
     let hasReceivedMouseInput = false;
+    let touchTimeout: NodeJS.Timeout;
+
+    const updateMousePos = (x: number, y: number) => {
+      hasReceivedMouseInput = true;
+      mouse.x = (x / window.innerWidth) * 2 - 1;
+      mouse.y = -(y / window.innerHeight) * 2 + 1;
+
+      clearTimeout(touchTimeout);
+      touchTimeout = setTimeout(() => {
+        hasReceivedMouseInput = false;
+      }, 3000); // Retorna ao modo automático após 3s sem toque/mouse
+    };
 
     const onMouseMove = (e: MouseEvent) => {
-      hasReceivedMouseInput = true;
-      const now = performance.now();
-      if (now - lastMouseUpdate > 16) {
-        prevMouse.x = mouse.x;
-        prevMouse.y = mouse.y;
-        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-        mouseSpeed.x = mouse.x - prevMouse.x;
-        mouseSpeed.y = mouse.y - prevMouse.y;
-        isMouseMoving = true;
-        clearTimeout(mouseMovementTimer);
-        mouseMovementTimer = setTimeout(() => {
-          isMouseMoving = false;
-        }, 80);
-        lastMouseUpdate = now;
+      updateMousePos(e.clientX, e.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        updateMousePos(e.touches[0].clientX, e.touches[0].clientY);
       }
     };
-    if (!isMobile) {
-      window.addEventListener('mousemove', onMouseMove);
-    }
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchstart', onTouchMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
 
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -673,22 +678,28 @@ export default function GhostScene() {
       let targetX: number;
       let targetY: number;
 
-      if (isMobile || !hasReceivedMouseInput) {
-        // Movimento automático otimizado para Mobile (Mais rápido e dinâmico)
-        const autoSpeed = 0.85; // Velocidade aumentada (era 0.3)
-        const amplitudeX = 9; // Range maior (era 6)
-        const amplitudeY = 6; // Range maior (era 4)
+      // Movimento base automático (Sempre ativo para dar vida)
+      const autoSpeed = 0.85;
+      const amplitudeX = 9;
+      const amplitudeY = 6;
 
-        // Curva de Lissajous complexa para evitar repetição óbvia e dar mais vida
-        targetX =
-          Math.sin(time * autoSpeed) * amplitudeX +
-          Math.cos(time * autoSpeed * 0.5) * 2;
-        targetY =
-          Math.sin(time * autoSpeed * 0.7 + Math.PI / 2) * amplitudeY +
-          Math.sin(time * autoSpeed * 1.3) * 1.5;
+      const autoX =
+        Math.sin(time * autoSpeed) * amplitudeX +
+        Math.cos(time * autoSpeed * 0.5) * 2;
+      const autoY =
+        Math.sin(time * autoSpeed * 0.7 + Math.PI / 2) * amplitudeY +
+        Math.sin(time * autoSpeed * 1.3) * 1.5;
+
+      if (!hasReceivedMouseInput) {
+        targetX = autoX;
+        // Offset Y baseado no scroll para mobile sempre presente
+        const scrollOffset = (scrollY / window.innerHeight) * -15;
+        targetY = autoY + scrollOffset;
       } else {
-        targetX = mouse.x * 11;
-        targetY = mouse.y * 7;
+        // Quando há interação, segue o input mas mantém um pouco do balanço automático
+        targetX = mouse.x * 12 + autoX * 0.1;
+        targetY =
+          mouse.y * 8 + autoY * 0.1 + (scrollY / window.innerHeight) * -15;
       }
 
       const prevPos = ghostGroup.position.clone();
@@ -730,7 +741,7 @@ export default function GhostScene() {
       const shouldCreate = isMobile
         ? currentMovement > 0.003 // Threshold menor para mobile (movimento automático é mais suave)
         : params.createParticlesOnlyWhenMoving
-          ? currentMovement > 0.005 && isMouseMoving
+          ? currentMovement > 0.005 && hasReceivedMouseInput
           : currentMovement > 0.005;
       if (shouldCreate && timestamp - lastParticleTime > 100) {
         const count = Math.min(
@@ -768,16 +779,21 @@ export default function GhostScene() {
         if (!particles[i].visible) particles.splice(i, 1);
       }
 
-      composer.render();
+      if (performanceConfig.enablePostProcessing) {
+        composer.render();
+      } else {
+        renderer.render(scene, camera);
+      }
     };
 
     animate(0);
 
     // --- CLEANUP ---
     return () => {
-      if (!isMobile) {
-        window.removeEventListener('mousemove', onMouseMove);
-      }
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchstart', onTouchMove);
+      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
       cancelAnimationFrame(animationId);
       // pane.dispose(); // Removed
