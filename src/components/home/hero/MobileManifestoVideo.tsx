@@ -6,7 +6,7 @@ export default function MobileManifestoVideo() {
       className="block md:hidden w-full relative pt-[64px]" // Padding top for header
       aria-label="Manifesto Video"
     >
-      <div className="w-full aspect-video relative overflow-hidden bg-black">
+      <div className="w-full h-[50vh] relative overflow-hidden bg-black">
         <video
           autoPlay
           loop

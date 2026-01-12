@@ -22,7 +22,7 @@ const { duration, offset } = MOTION_TOKENS;
 export default function PortfolioHeroNew() {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useMediaQuery('(max-width: 768px)');
-
+  
   // Seleciona o vídeo correto baseado no dispositivo
   const videoSrc = isMobile
     ? PORTFOLIO_CONTENT.hero.video.mobile
@@ -40,7 +40,8 @@ export default function PortfolioHeroNew() {
     <section 
       id="portfolio-hero"
       aria-label="Portfolio Hero"
-      className="relative h-dvh min-h-[600px] max-h-[900px] w-full overflow-hidden"
+      // Mobile: h-[70vh] to allow scroll. Desktop: h-screen
+      className="relative h-[70vh] md:h-screen min-h-[500px] w-full overflow-hidden"
     >
       {/* Video Background - Responsivo Desktop/Mobile */}
       <div className="absolute inset-0 z-0">
@@ -74,7 +75,7 @@ export default function PortfolioHeroNew() {
       </div>
 
       {/* Content - Posicionado no rodapé da seção */}
-      <div className="relative z-20 h-full flex flex-col justify-end px-6 md:px-12 lg:px-16 pb-16 md:pb-24">
+      <div className="relative z-20 h-full flex flex-col justify-end px-6 md:px-12 lg:px-16 pb-16 md:pb-24 items-center md:items-start text-center md:text-left">
         {/* Título principal - "portfólio" em azul primário, "showcase" em branco */}
         <motion.h1
           initial={prefersReducedMotion ? false : { opacity: 0, y: offset.large, filter: 'blur(8px)' }}
@@ -103,29 +104,31 @@ export default function PortfolioHeroNew() {
       </div>
 
       {/* Scroll indicator - Ethereal animation */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={ghostTransition(1.2, duration.slow)}
-        className="absolute bottom-10 right-6 md:right-12 lg:right-16 z-20 flex flex-col items-center gap-3"
-        aria-hidden="true"
-      >
-        <span className="text-[10px] uppercase tracking-[0.35em] font-medium text-text-light/60">
-          scroll
-        </span>
+      {!isMobile && (
         <motion.div
-          animate={prefersReducedMotion ? {} : { 
-            y: [0, 12, 0],
-            opacity: [0.4, 0.7, 0.4],
-          }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 2.8, 
-            ease: GHOST_EASE,
-          }}
-          className="w-px h-10 portfolio-hero-scroll-line will-change-transform"
-        />
-      </motion.div>
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={ghostTransition(1.2, duration.slow)}
+          className="absolute bottom-10 right-6 md:right-12 lg:right-16 z-20 flex flex-col items-center gap-3"
+          aria-hidden="true"
+        >
+          <span className="text-[10px] uppercase tracking-[0.35em] font-medium text-text-light/60">
+            scroll
+          </span>
+          <motion.div
+            animate={prefersReducedMotion ? {} : { 
+              y: [0, 12, 0],
+              opacity: [0.4, 0.7, 0.4],
+            }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: 2.8, 
+              ease: GHOST_EASE,
+            }}
+            className="w-px h-10 portfolio-hero-scroll-line will-change-transform"
+          />
+        </motion.div>
+      )}
     </section>
   );
 }

@@ -25,18 +25,24 @@
   justify-content: center;
   pointer-events: none;
   z-index: 12;
-  -webkit-mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh),
-      rgb(1, 1, 16) 0%,
-      rgba(0, 0, 0, 0.85) 25%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.15) 75%,
-      rgba(0, 0, 0, 0) 100%);
-  mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh),
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0.85) 25%,
-      rgba(0, 0, 0, 0.5) 50%,
-      rgba(0, 0, 0, 0.15) 75%,
-      rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: radial-gradient(
+    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
+      var(--ghost-y, 50vh),
+    rgb(1, 1, 16) 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.15) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
+      var(--ghost-y, 50vh),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.85) 25%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.15) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
@@ -62,10 +68,10 @@
 }
 
 .heroSubtitle {
-  font-size: clamp(1rem, 10vw, 5rem) !important;
+  font-size: clamp(1rem, 8vw, 5rem) !important;
   /* MUITO DISCRETA: clamp(1rem, 3vw, 2rem) */
   font-weight: 600 !important;
-  line-height: 1.0 !important;
+  line-height: 1 !important;
   opacity: 0.5 !important;
   letter-spacing: 0.05em !important;
   text-transform: none !important;

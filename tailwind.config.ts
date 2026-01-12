@@ -27,6 +27,7 @@ const config: Config = {
         display: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
         h1: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
         h2: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
+        outfit: ['Outfit', 'sans-serif'],
       },
     },
   },

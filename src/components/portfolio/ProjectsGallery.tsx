@@ -111,7 +111,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: easing }}
-              className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-16 md:mb-24"
+              className="flex flex-col items-center text-center md:flex-row md:items-end md:justify-between md:text-left gap-8 md:gap-6 mb-16 md:mb-24"
             >
               <div className="flex flex-col gap-2">
                 <h2 className="text-3xl md:text-5xl font-semibold tracking-tight text-white">
@@ -126,6 +126,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
               <CategoryFilter
                 activeCategory={activeCategory}
                 onChange={setActiveCategory}
+                className="justify-center md:justify-end"
               />
             </motion.div>
           )}

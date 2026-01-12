@@ -42,7 +42,7 @@ export default function FeaturedProjectCard({
         className={`relative overflow-hidden rounded-md h-[400px] md:${project.layout.h} w-full bg-white/5 transition-all duration-500 ${
           reducedMotion
             ? ''
-            : 'group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] group-hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]'
+            : 'md:group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] md:group-hover:-translate-y-1 active:scale-[0.98]'
         }`}
       >
         {/* Subtle Noise Overlay */}
@@ -65,8 +65,8 @@ export default function FeaturedProjectCard({
           alt={`Logo da marca ${project.client} para ${project.category} - ${project.title}`}
           fill
           sizes={project.layout.sizes}
-          className={`object-cover transition-transform duration-700 opacity-90 group-hover:opacity-100 ${
-            reducedMotion ? '' : 'group-hover:scale-103'
+          className={`object-cover transition-transform duration-700 opacity-90 md:group-hover:opacity-100 ${
+            reducedMotion ? '' : 'md:group-hover:scale-103'
           }`}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -92,7 +92,7 @@ export default function FeaturedProjectCard({
             </span>
           </div>
           {/* Title */}
-          <h3 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white leading-[1.2] transition-colors duration-500 group-hover:text-primary">
+          <h3 className="text-xl md:text-2xl lg:text-3xl font-medium tracking-tight text-white leading-[1.2] transition-colors duration-500 md:group-hover:text-primary">
             {project.title}
           </h3>
         </div>
@@ -102,17 +102,17 @@ export default function FeaturedProjectCard({
           className={`bg-white/5 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white shrink-0 border border-white/10 transition-all duration-700 ${
             reducedMotion
               ? ''
-              : 'group-hover:translate-x-5 group-hover:bg-primary group-hover:border-primary group-hover:shadow-[0_0_20px_rgba(0,72,255,0.4)]'
+              : 'md:group-hover:translate-x-5 md:group-hover:bg-primary md:group-hover:border-primary md:group-hover:shadow-[0_0_20px_rgba(0,72,255,0.4)]'
           }`}
         >
-          <ArrowIcon className="w-5 h-5 md:w-6 md:h-6 -rotate-45 transition-transform duration-500 group-hover:rotate-0" />
+          <ArrowIcon className="w-5 h-5 md:w-6 md:h-6 -rotate-45 transition-transform duration-500 md:group-hover:rotate-0" />
         </div>
       </div>
     </>
   );
 
   const commonClasses =
-    'group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md text-left';
+    'group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md text-center md:text-left';
 
   if (isModalMode) {
     return (

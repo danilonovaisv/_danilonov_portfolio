@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+.arch {
+  @apply flex gap-[60px] justify-between max-w-[1100px] mx-auto;
+}
+
+.arch__left {
+  @apply flex flex-col min-w-[300px];
+}
+
+.arch__info {
+  @apply max-w-[356px] h-screen grid place-items-center;
+}
+
+.arch__info h2.header {
+  @apply font-bold text-[32px] leading-[1.2] tracking-[-0.84px] font-outfit text-[#0048ff];
+}
+
+@media (min-width: 768px) {
+  .arch__info h2.header {
+    @apply text-[48px];
+  }
+}
+
+.arch__info p.desc {
+  @apply text-[#fcffff] text-[16px] leading-[1.6] tracking-[-0.54px] mt-1 -mb-10;
+}
+
+@media (min-width: 768px) {
+  .arch__info p.desc {
+    @apply text-[20px];
+  }
+}
+
+.content.text-right {
+  @apply text-right;
+}
+
+.content.text-left {
+  @apply text-left;
+}
+
+.arch__info a.link {
+  @apply no-underline p-[16px] pl-[18px] rounded-full inline-flex gap-[4px] items-center;
+}
+
+.arch__right {
+  @apply shrink h-screen w-full max-w-[540px] relative flex flex-col;
+}
+
+.arch__right .img-wrapper {
+  @apply absolute top-1/2 left-0 transform -translate-y-1/2 h-[400px] w-full rounded-2xl overflow-hidden;
+}
+
+.arch__right .img-wrapper img {
+  @apply w-full h-full object-cover object-center;
+}
+
+/* Adjust content vertical position to slightly above center (-10%) */
+.content {
+  @apply relative top-[-10%];
+}
+
+@media (max-width: 900px) {
+  .arch {
+    @apply gap-[30px];
+  }
+}
+
+@media (max-width: 768px) {
+  .arch {
+    @apply flex-col gap-[20px];
+  }
+
+  .arch__left,
+  .arch__right {
+    @apply contents;
+  }
+
+  .arch__right {
+    @apply h-auto max-w-full;
+  }
+
+  .arch__right .img-wrapper {
+    @apply static transform-none h-[360px] w-full mb-[20px];
+  }
+
+  .arch__left .arch__info {
+    @apply h-auto py-[20px];
+  }
+}
+
+@media (max-width: 560px) {
+  .arch {
+    @apply gap-[12px];
+  }
+
+  .container {
+    @apply p-[10px];
+  }
+
+  .arch__right .img-wrapper {
+    @apply rounded-2xl h-[280px];
+  }
+
+  .arch__info h2.header {
+    @apply text-[24px];
+  }
+
+  .arch__info p.desc {
+    @apply text-[14px];
+  }
+
+  /* On mobile, remove the vertical offset */
+  .content {
+    @apply top-0;
+  }
+}

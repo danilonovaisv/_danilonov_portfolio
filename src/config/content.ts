@@ -176,6 +176,7 @@ export const ABOUT_CONTENT = {
         description: '',
         src: 'https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp',
         alt: 'Observando os detalhes',
+        align: 'right',
       },
       {
         type: 'block',
