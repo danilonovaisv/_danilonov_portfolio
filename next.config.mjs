@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /**
-   * 🔴 ESSENCIAL
-   * Ativa o Static Export e faz o Next gerar a pasta /out
+   * Build com server runtime (necessário para /admin e Supabase Auth)
    */
-  output: 'export',
+  output: 'standalone',
 
   /**
    * Mantém exatamente como você já tinha

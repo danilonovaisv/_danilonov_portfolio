@@ -2,7 +2,7 @@
 
 import { useTransition, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/client';
@@ -26,8 +26,10 @@ export function TagForm({ tag, onSaved }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof tagSchema>>({
-    resolver: zodResolver(tagSchema),
+  type FormValues = z.infer<typeof tagSchema>;
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(tagSchema) as Resolver<FormValues>,
     defaultValues: {
       label: tag?.label ?? '',
       slug: tag?.slug ?? '',
@@ -37,7 +39,7 @@ export function TagForm({ tag, onSaved }: Props) {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof tagSchema>) => {
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
     setError(null);
     startTransition(async () => {
       try {

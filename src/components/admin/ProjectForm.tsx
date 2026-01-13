@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
@@ -43,7 +43,7 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
   const router = useRouter();
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(projectSchema) as Resolver<FormValues>,
     defaultValues: {
       title: project?.title ?? '',
       slug: project?.slug ?? '',
@@ -64,7 +64,7 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
 
   const selectedTags = form.watch('tags') || [];
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit: SubmitHandler<FormValues> = (values) => {
     setError(null);
     startTransition(async () => {
       try {
