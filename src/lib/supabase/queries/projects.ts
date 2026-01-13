@@ -87,11 +87,14 @@ export async function upsertProject(
   return data as DbProject;
 }
 
-export async function togglePublish(projectId: string, isPublished: boolean) {
+export async function togglePublish(formData: FormData) {
+  'use server';
+  const projectId = formData.get('id') as string;
+  const nextStatus = (formData.get('nextStatus') as string) === 'true';
   const supabase = await createClient();
   const { error } = await supabase
     .from('portfolio_projects')
-    .update({ is_published: isPublished })
+    .update({ is_published: nextStatus })
     .eq('id', projectId);
   if (error) throw error;
 }

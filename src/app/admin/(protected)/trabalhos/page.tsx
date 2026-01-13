@@ -1,14 +1,48 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { togglePublish } from '@/lib/supabase/queries/projects';
 
-export default async function TrabalhosPage() {
+type Props = {
+  searchParams?: {
+    tag?: string;
+    year?: string;
+    type?: string;
+    status?: 'published' | 'draft';
+    search?: string;
+  };
+};
+
+export default async function TrabalhosPage({ searchParams = {} }: Props) {
   const supabase = await createClient();
-  const { data: projects } = await supabase
+
+  // filtros básicos
+  const tagFilter = searchParams.tag;
+  const yearFilter = searchParams.year ? Number(searchParams.year) : undefined;
+  const typeFilter = searchParams.type;
+  const statusFilter = searchParams.status;
+  const search = searchParams.search;
+
+  let query = supabase
     .from('portfolio_projects')
     .select(
-      'id, title, client_name, year, featured_on_home, featured_on_portfolio, is_published, thumbnail_path, project_type, slug'
+      'id, title, client_name, year, featured_on_home, featured_on_portfolio, is_published, thumbnail_path, project_type, slug, tags:portfolio_project_tags(tag:portfolio_tags(label, slug))'
     )
     .order('updated_at', { ascending: false });
+
+  if (tagFilter) query = query.eq('tags.tag.slug', tagFilter);
+  if (yearFilter) query = query.eq('year', yearFilter);
+  if (typeFilter) query = query.eq('project_type', typeFilter);
+  if (statusFilter === 'published') query = query.eq('is_published', true);
+  if (statusFilter === 'draft') query = query.eq('is_published', false);
+  if (search) query = query.or(`title.ilike.%${search}%,client_name.ilike.%${search}%`);
+
+  const [{ data: projects }, { data: tags }] = await Promise.all([
+    query,
+    supabase.from('portfolio_tags').select('id, label, slug').order('sort_order', { ascending: true, nullsFirst: false }),
+  ]);
+
+  const uniqueYears = Array.from(new Set((projects ?? []).map((p) => p.year).filter(Boolean))).sort((a, b) => (b ?? 0) - (a ?? 0));
+  const uniqueTypes = Array.from(new Set((projects ?? []).map((p) => p.project_type).filter(Boolean)));
 
   return (
     <div className="space-y-6">
@@ -25,6 +59,13 @@ export default async function TrabalhosPage() {
         </Link>
       </div>
 
+      <Filters
+        tags={tags ?? []}
+        years={uniqueYears as number[]}
+        types={uniqueTypes as string[]}
+        current={{ tag: tagFilter, year: yearFilter, type: typeFilter, status: statusFilter, search }}
+      />
+
       <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-900/60">
         <table className="min-w-full text-sm">
           <thead>
@@ -33,6 +74,7 @@ export default async function TrabalhosPage() {
               <th className="px-4 py-3">Cliente</th>
               <th className="px-4 py-3">Ano</th>
               <th className="px-4 py-3">Tipo</th>
+              <th className="px-4 py-3">Tags</th>
               <th className="px-4 py-3">Flags</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3 text-right">Ações</th>
@@ -41,10 +83,30 @@ export default async function TrabalhosPage() {
           <tbody>
             {projects?.map((project) => (
               <tr key={project.id} className="border-t border-white/5">
-                <td className="px-4 py-3 font-medium text-white">{project.title}</td>
+                <td className="px-4 py-3 font-medium text-white">
+                  <div className="flex items-center gap-3">
+                    {project.thumbnail_path && (
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/portfolio-media/${project.thumbnail_path}`}
+                        alt={project.title}
+                        className="h-10 w-16 rounded object-cover border border-white/10"
+                      />
+                    )}
+                    <span>{project.title}</span>
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-slate-300">{project.client_name}</td>
                 <td className="px-4 py-3 text-slate-300">{project.year ?? '—'}</td>
                 <td className="px-4 py-3 text-slate-300">{project.project_type}</td>
+                <td className="px-4 py-3 text-slate-300">
+                  <div className="flex flex-wrap gap-1 text-[11px]">
+                    {project.tags?.map((t: any) => (
+                      <span key={t.tag.slug} className="px-2 py-1 rounded bg-white/10">
+                        {t.tag.label}
+                      </span>
+                    ))}
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-slate-300">
                   <div className="flex gap-2 text-xs">
                     {project.featured_on_home && <span className="px-2 py-1 rounded bg-white/10">Home</span>}
@@ -54,11 +116,20 @@ export default async function TrabalhosPage() {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-slate-300">
-                  {project.is_published ? (
-                    <span className="text-green-400">Publicado</span>
-                  ) : (
-                    <span className="text-slate-400">Rascunho</span>
-                  )}
+                  <form action={togglePublish}>
+                    <input type="hidden" name="id" value={project.id} />
+                    <input type="hidden" name="nextStatus" value={project.is_published ? 'false' : 'true'} />
+                    <button
+                      type="submit"
+                      className={`rounded px-2 py-1 text-xs font-semibold ${
+                        project.is_published
+                          ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                          : 'bg-slate-700 text-slate-200 border border-white/10'
+                      }`}
+                    >
+                      {project.is_published ? 'Publicado' : 'Rascunho'}
+                    </button>
+                  </form>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Link
@@ -72,8 +143,8 @@ export default async function TrabalhosPage() {
             ))}
             {!projects?.length && (
               <tr>
-                <td className="px-4 py-6 text-center text-slate-400" colSpan={7}>
-                  Nenhum projeto cadastrado.
+                <td className="px-4 py-6 text-center text-slate-400" colSpan={8}>
+                  Nenhum projeto encontrado.
                 </td>
               </tr>
             )}
@@ -81,5 +152,93 @@ export default async function TrabalhosPage() {
         </table>
       </div>
     </div>
+  );
+}
+
+function Filters({
+  tags,
+  years,
+  types,
+  current,
+}: {
+  tags: Array<{ id: string; label: string; slug: string }>;
+  years: number[];
+  types: string[];
+  current: {
+    tag?: string;
+    year?: number;
+    type?: string;
+    status?: string;
+    search?: string;
+  };
+}) {
+  return (
+    <form className="grid gap-3 md:grid-cols-5" method="get">
+      <input
+        name="search"
+        placeholder="Buscar por título ou cliente"
+        defaultValue={current.search}
+        className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm md:col-span-2"
+      />
+      <select
+        name="tag"
+        defaultValue={current.tag || ''}
+        className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
+      >
+        <option value="">Todas as tags</option>
+        {tags.map((tag) => (
+          <option key={tag.id} value={tag.slug}>
+            {tag.label}
+          </option>
+        ))}
+      </select>
+      <select
+        name="year"
+        defaultValue={current.year || ''}
+        className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
+      >
+        <option value="">Todos os anos</option>
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
+      <select
+        name="type"
+        defaultValue={current.type || ''}
+        className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
+      >
+        <option value="">Todos os tipos</option>
+        {types.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </select>
+      <select
+        name="status"
+        defaultValue={current.status || ''}
+        className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
+      >
+        <option value="">Todos</option>
+        <option value="published">Publicado</option>
+        <option value="draft">Rascunho</option>
+      </select>
+      <div className="flex gap-3 md:col-span-5">
+        <button
+          type="submit"
+          className="rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-600"
+        >
+          Filtrar
+        </button>
+        <Link
+          href="/admin/trabalhos"
+          className="rounded-md border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+        >
+          Limpar
+        </Link>
+      </div>
+    </form>
   );
 }
