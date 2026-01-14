@@ -172,30 +172,30 @@ export const GHOST_CONFIG: GhostConfig = {
   rendererDPR: [1, 2],
 
   // Aparência do Ghost (MATCHED to CodePen Reference)
-  ghostScale: 1.4, // FIXED: was 1.2
-  bodyColor: 'deepSpace', // 0x0f2027
+  ghostScale: 0.4, // FIXED: was 1.2
+  bodyColor: 'ghostBlue', // 0x0f2027
   glowColor: 'blue', // "blue"
   eyeGlowColor: 'purple', // FIXED: CodePen uses 'blue' (0x0080ff)
 
-  ghostOpacity: 0.48,
-  emissiveIntensity: 5.5, // FIXED: was 5.8
+  ghostOpacity: 0.88,
+  emissiveIntensity: 8.5, // FIXED: was 5.8
   pulseSpeed: 1.6,
   pulseIntensity: 0.6,
-  floatSpeed: 0.8, // FIXED: was 1.6
+  floatSpeed: 1.6, // FIXED: was 1.6
 
   // Comportamento do Ghost
   followSpeed: 0.05, // FIXED: was 0.05
   movementThreshold: 0.07,
 
   // Iluminação
-  rimLightIntensity: 2.8,
-  ambientLightColor: 'blue',
+  rimLightIntensity: 1.8,
+  ambientLightColor: 'cyan',
   ambientLightIntensity: 0.08,
 
   // Véu Atmosférico (Revelação)
-  veilColor: 'cyan',
+  veilColor: 'ghostBlue',
   veilEmissive: 'blue',
-  veilEmissiveIntensity: 5.6,
+  veilEmissiveIntensity: 3.6,
   veilOpacity: 3.9,
   veilPulseAmount: 1.6,
   veilBackgroundColor: 'blue',
@@ -237,20 +237,20 @@ export const GHOST_CONFIG: GhostConfig = {
   eyeGlowDecay: 0.95,
 
   // Efeitos de Pós-Processamento (Matched to CodePen)
-  analogGrain: 0.4,
-  analogBleeding: 0.5,
+  analogGrain: 2.4,
+  analogBleeding: 1.5,
   analogScanlines: 0.7,
-  analogVignette: 1.4,
+  analogVignette: 0.9,
   analogIntensity: 0.9,
   analogJitter: 0.5,
   analogVSync: 0.7,
   limboMode: false,
 
   // Parâmetros do Véu Atmosférico (MATCHED to CodePen Reference)
-  revealRadius: 50, // Increased for better text readability
-  fadeStrength: 1.7,
-  baseOpacity: 0.98, // Darker background to create reveal contrast
-  revealOpacity: 0.0, // Fully transparent reveal
+  revealRadius: 17, // Increased for better text readability
+  fadeStrength: 0.7,
+  baseOpacity: 0.08, // Darker background to create reveal contrast
+  revealOpacity: -0.2, // Fully transparent reveal
 };
 
 // Helper para converter cor do config para formato numérico (Three.js)

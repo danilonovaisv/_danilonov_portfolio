@@ -61,14 +61,7 @@ export default function HomeHero() {
           )}
         </AnimatePresence>
 
-        {/* Camada: Ghost WebGL (Z-0) - Fundo atmosférico */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="sticky top-0 h-screen w-full">
-            <GhostScene />
-          </div>
-        </div>
-
-        {/* Camada: Texto Editorial (Z-10) */}
+        {/* Camada: Texto Editorial (Z-10) - Base content */}
         <div className="absolute inset-0 z-10 pointer-events-none">
           <div className="flex items-center justify-center w-full h-screen md:sticky md:top-0">
             <div className="w-full pointer-events-auto">
@@ -77,9 +70,16 @@ export default function HomeHero() {
           </div>
         </div>
 
-        {/* Camada: CTA (Z-20) */}
+        {/* Camada: Ghost WebGL (Z-20) - Atmosfera sobre o texto */}
+        <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+          <div className="sticky top-0 h-screen w-full">
+            <GhostScene />
+          </div>
+        </div>
+
+        {/* Camada: CTA (Z-30) - Top level interaction */}
         {/* Mobile: Absolute centering matching Copy | Desktop: Absolute Sticky */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
+        <div className="absolute inset-0 z-30 pointer-events-none">
           <div className="flex items-center md:items-end justify-center w-full h-screen md:sticky md:top-0 lg:pb-20">
             <div className="translate-y-[24vh] md:translate-y-0 md:pb-12 pointer-events-auto">
               <HeroCTA isLoaded={isLoaded} />
