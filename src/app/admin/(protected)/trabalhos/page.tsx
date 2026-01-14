@@ -7,19 +7,20 @@ import { createClient } from '@/lib/supabase/server';
 import { togglePublish } from '@/lib/supabase/queries/projects';
 
 type Props = {
-  searchParams?: {
+  searchParams: Promise<{
     tag?: string;
     year?: string;
     type?: string;
     status?: 'published' | 'draft';
     search?: string;
-  };
+  }>;
 };
 
-export default async function TrabalhosPage({ searchParams }: Props) {
+export default async function TrabalhosPage(props: Props) {
+  const searchParams = await props.searchParams;
   const supabase = await createClient();
 
-  const resolvedSearchParams = (await Promise.resolve(searchParams)) ?? {};
+  const resolvedSearchParams = searchParams || {};
 
   // filtros básicos
   const tagFilter = resolvedSearchParams.tag;

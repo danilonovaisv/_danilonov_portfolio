@@ -7,10 +7,11 @@ import { createClient } from '@/lib/supabase/server';
 import { ProjectForm } from '@/components/admin/ProjectForm';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default async function EditProjectPage({ params }: Props) {
+export default async function EditProjectPage(props: Props) {
+  const params = await props.params;
   const { id } = params;
   const supabase = await createClient();
 
