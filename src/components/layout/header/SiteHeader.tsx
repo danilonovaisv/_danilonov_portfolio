@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 import { BRAND } from '@/config/brand';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useSiteAssetUrl } from '@/contexts/site-assets';
 
 import type { NavItem, SiteHeaderProps } from './types';
 import DesktopFluidHeader from './DesktopFluidHeader';
@@ -119,8 +120,11 @@ export default function SiteHeader({
     return () => observer.disconnect();
   }, []);
 
-  const logoDesktop = BRAND.assets.logos.logoLight;
-  const logoMobile = BRAND.assets.logos.logoLight;
+  const logoUrl =
+    useSiteAssetUrl('global.logo_header', BRAND.assets.logos.logoLight) ??
+    BRAND.assets.logos.logoLight;
+  const logoDesktop = logoUrl;
+  const logoMobile = logoUrl;
 
   if (!isMounted) return null;
 

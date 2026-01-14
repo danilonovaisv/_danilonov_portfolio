@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { Calendar, Building2, Tag } from 'lucide-react';
 import type { PortfolioProject } from '@/types/project';
 import AntigravityCTA from '@/components/ui/AntigravityCTA';
+import { easing } from '@/components/portfolio/modal/variants';
 
 interface TypeBContentProps {
   project: PortfolioProject;

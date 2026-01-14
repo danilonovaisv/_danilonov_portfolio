@@ -3,15 +3,19 @@ import { siteMetadata, siteViewport } from '@/config/metadata';
 import ClientLayout from '@/components/layout/ClientLayout';
 import JsonLd from '@/components/ui/JsonLd';
 import './globals.css'; // Fonts and styles are loaded here
+import { getSiteAssets } from '@/lib/supabase/site-assets';
+import { SiteAssetsProvider } from '@/contexts/site-assets';
 
 export const metadata: Metadata = siteMetadata;
 export const viewport: Viewport = siteViewport;
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const assets = await getSiteAssets();
+
   return (
     <html lang="pt-BR" data-scroll-behavior="smooth">
       <head>
@@ -24,7 +28,9 @@ export default function RootLayout({
         >
           Pular para o conteúdo
         </a>
-        <ClientLayout>{children}</ClientLayout>
+        <SiteAssetsProvider assets={assets}>
+          <ClientLayout>{children}</ClientLayout>
+        </SiteAssetsProvider>
       </body>
     </html>
   );

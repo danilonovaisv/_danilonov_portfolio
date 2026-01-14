@@ -94,10 +94,9 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       className={`relative z-10 bg-background transition-[height] duration-300 ease-out h-(--gallery-height) ${className}`}
     >
       {/* Gallery Track (Fixed or Static) */}
-      <motion.div 
-        ref={trackRef}
-        style={style}
-        className={`w-full py-20 md:py-32 overflow-hidden ${
+        <motion.div
+          ref={trackRef}
+          className={`w-full py-20 md:py-32 overflow-hidden ${
           !prefersReducedMotion && 'md:fixed md:top-0 md:left-0 md:w-full will-change-transform'
         }`}
       >

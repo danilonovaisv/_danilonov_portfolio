@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Calendar, Building2 } from 'lucide-react';
 import type { PortfolioProject } from '@/types/project';
+import { easing } from '@/components/portfolio/modal/variants';
 
 interface TypeAContentProps {
   project: PortfolioProject;
