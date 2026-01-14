@@ -410,6 +410,9 @@ estratégia e tecnologia — na medida certa.
 
 **Stack Técnico:** GSAP 3.13 + ScrollTrigger + Lenis
 
+**Referência:** https://codepen.io/danilonovaisv/pen/KwMgWMG
+**CÓDIGO REFERENCIA:** https://drive.google.com/drive/folders/1SZg3TTXHT3l6OHZhxeFbCC8vR0k2RHE3?usp=sharing
+
 #### Desktop
 
 **Layout:**
@@ -458,7 +461,7 @@ estratégia e tecnologia — na medida certa.
 **Layout:**
 - Stack vertical intercalado: Texto → Imagem
 - Ordem controlada via CSS `order`
-- Imagens: 280–360px
+- Imagens: 400–400px
 
 **Composição Mobile:**
 
@@ -501,7 +504,7 @@ Enquanto muitos olhavam para o brilho imediato,
 eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo.
 A essência das coisas sempre falou mais alto do que a superfície.
 ```
-- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp`
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.1.webp`
 - Texto: alinhado à direita, -10% vertical
 
 **2. DO TRAÇO À INTENÇÃO** (H1, `bluePrimary`)
@@ -515,7 +518,7 @@ Aos poucos, aquilo que era instinto virou direção.
 Com cada tentativa, aprendi a dar forma ao invisível —
 até que os conceitos começaram a falar por si.
 ```
-- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/sobre-2.webp`
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.2.webp`
 - Texto: alinhado à esquerda, -10% vertical
 
 **3. A DESCOBERTA DO INVISÍVEL** (H1, `bluePrimary`)
@@ -530,7 +533,7 @@ Ele está presente nos detalhes que ninguém percebe,
 mas que todos sentem.
 Transformar sem que se perceba a transformação: isso é potência.
 ```
-- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/sobre-3.webp`
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.3.webp`
 - Texto: alinhado à direita, -10% vertical
 
 **4. EXPANSÃO COM PROPÓSITO** (H1, `bluePrimary`)
@@ -544,7 +547,7 @@ O futuro pede novas ferramentas — e eu as abracei.
 Mas nunca deixei que a tecnologia apagasse o que me move:
 a sensibilidade, o olhar atento, a busca pelo significado.
 ```
-- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/sobre-4.webp`
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.4.webp`
 - Texto: alinhado à esquerda, -10% vertical
 
 #### Animação GSAP

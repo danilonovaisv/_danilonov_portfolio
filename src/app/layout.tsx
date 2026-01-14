@@ -26,7 +26,8 @@ export default async function RootLayout({
   try {
     assets = await getSiteAssets();
   } catch (error) {
-    console.error('Falha ao carregar site_assets:', error);
+    // Log a more descriptive error message with the actual error details
+    console.error('Falha ao carregar site_assets:', error instanceof Error ? error.message : error);
     try {
       const response = await fetch(`${baseUrl}/api/site-assets`, {
         cache: 'no-store',
@@ -34,10 +35,10 @@ export default async function RootLayout({
       if (response.ok) {
         assets = await response.json();
       } else {
-        console.error('Erro ao buscar site_assets via API:', response.status);
+        console.error('Erro ao buscar site_assets via API:', response.status, response.statusText);
       }
     } catch (fallbackError) {
-      console.error('Erro fallback de site_assets:', fallbackError);
+      console.error('Erro fallback de site_assets:', fallbackError instanceof Error ? fallbackError.message : fallbackError);
     }
   }
   const assetMap = assets.reduce<Record<string, string>>((acc, asset) => {
