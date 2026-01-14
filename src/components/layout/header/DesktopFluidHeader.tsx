@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import React, { useMemo, useRef } from 'react';
 import type { NavItem } from './types';
 import styles from './DesktopFluidHeader.module.css';
@@ -69,22 +68,21 @@ export default function DesktopFluidHeader({
 
             {/* content */}
             <div className="relative z-10 h-full px-10 flex items-center justify-between gap-6">
-              <Link
-                href="/"
-                aria-label="Ir para Home"
-                className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
-              >
-                <Image
-                  src={logoUrl} // Parent handles logic, but ensures dark logo usage if isLight
-                  alt="Danilo"
-                  width={32}
-                  height={32}
-                  className="h-8 w-auto transition-colors duration-300"
-                  style={{ width: 'auto' }}
-                  unoptimized
-                  loading="eager"
-                />
-              </Link>
+                <Link
+                  href="/"
+                  aria-label="Ir para Home"
+                  className="flex items-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+                >
+                  <img
+                    src={logoUrl}
+                    alt="Danilo"
+                    width={32}
+                    height={32}
+                    className="h-8 w-auto transition-colors duration-300"
+                    style={{ width: 'auto' }}
+                    loading="eager"
+                  />
+                </Link>
 
               <nav
                 aria-label="Navegação principal"

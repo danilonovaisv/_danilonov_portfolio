@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import React from 'react';
 import { motion, useReducedMotion, Variants } from 'framer-motion';
 import { HOME_CONTENT } from '@/config/content';
@@ -87,12 +86,11 @@ export default function ClientsBrandsSection() {
                 aria-label={logo.alt}
               >
                 <div className="relative w-full h-full max-w-[98px] md:max-w-[140px]">
-                  <Image
+                  <img
                     src={logo.src}
                     alt={logo.alt}
                     width={140}
                     height={60}
-                    unoptimized
                     className="object-contain filter brightness-0 invert opacity-90 transition-opacity duration-500 group-hover:opacity-100"
                   />
                 </div>
