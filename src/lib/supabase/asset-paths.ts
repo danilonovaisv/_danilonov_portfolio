@@ -30,7 +30,8 @@ export function buildAssetFilePath({
   }
 
   const sanitizedKey = sanitizeAssetKey(key);
-  const normalizedExtension = extension.toLowerCase().replace(/^\.+/, '') || 'bin';
+  const normalizedExtension =
+    extension.toLowerCase().replace(/^\.+/, '') || 'bin';
   const fileName = `${sanitizedKey}.${normalizedExtension}`;
   return `${segments.join('/')}/${fileName}`;
 }

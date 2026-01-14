@@ -4,8 +4,14 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import Image from 'next/image';
 import { uploadSiteAsset } from '@/lib/supabase/storage';
-import { siteAssetRoleMap, type SiteAssetRole } from '@/lib/supabase/asset-roles';
-import { assignAssetRole, removeAsset } from '@/app/admin/(protected)/midia/actions';
+import {
+  siteAssetRoleMap,
+  type SiteAssetRole,
+} from '@/lib/supabase/asset-roles';
+import {
+  assignAssetRole,
+  removeAsset,
+} from '@/app/admin/(protected)/midia/actions';
 import type { DbAsset } from '@/types/admin';
 import { createClient } from '@/lib/supabase/client';
 import { AssetRoleMenu } from '@/components/admin/AssetRoleMenu';

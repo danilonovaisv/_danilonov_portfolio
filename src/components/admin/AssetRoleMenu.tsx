@@ -6,10 +6,13 @@ import { siteAssetRoleGroups } from '@/lib/supabase/asset-roles';
 
 type AssetRoleMenuProps = {
   currentKey: string;
-  onSelectRole: (role: SiteAssetRole) => void;
+  onSelectRole: (_role: SiteAssetRole) => void;
 };
 
-export function AssetRoleMenu({ currentKey, onSelectRole }: AssetRoleMenuProps) {
+export function AssetRoleMenu({
+  currentKey,
+  onSelectRole,
+}: AssetRoleMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (role: SiteAssetRole) => {
@@ -25,7 +28,9 @@ export function AssetRoleMenu({ currentKey, onSelectRole }: AssetRoleMenuProps) 
         className="flex items-center gap-2 rounded-md border border-white/10 bg-slate-900/70 px-3 py-1 text-[12px] text-white hover:border-blue-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
       >
         <span>Papel do asset</span>
-        <span className="text-xs text-slate-400">{isOpen ? 'Fechar' : 'Abrir'}</span>
+        <span className="text-xs text-slate-400">
+          {isOpen ? 'Fechar' : 'Abrir'}
+        </span>
       </button>
 
       {isOpen && (
@@ -51,8 +56,12 @@ export function AssetRoleMenu({ currentKey, onSelectRole }: AssetRoleMenuProps) 
                         }`}
                       >
                         <span className="font-semibold">{role.label}</span>
-                        <span className="text-[11px] text-slate-400">{role.key}</span>
-                        <span className="text-[11px] text-slate-500">{role.description}</span>
+                        <span className="text-[11px] text-slate-400">
+                          {role.key}
+                        </span>
+                        <span className="text-[11px] text-slate-500">
+                          {role.description}
+                        </span>
                       </button>
                     );
                   })}

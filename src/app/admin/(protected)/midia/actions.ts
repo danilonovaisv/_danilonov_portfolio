@@ -1,7 +1,10 @@
 'use server';
 
 import type { SiteAssetRole } from '@/lib/supabase/asset-roles';
-import { buildAssetFilePath, getFileExtension } from '@/lib/supabase/asset-paths';
+import {
+  buildAssetFilePath,
+  getFileExtension,
+} from '@/lib/supabase/asset-paths';
 import { createClient } from '@/lib/supabase/server';
 
 type AssetPayload = {

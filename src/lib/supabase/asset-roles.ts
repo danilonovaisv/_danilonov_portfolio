@@ -99,15 +99,18 @@ const globalFonts: SiteAssetRole[] = [
   },
 ];
 
-const clientStrips: SiteAssetRole[] = Array.from({ length: 12 }, (_, index) => ({
-  key: `clients.strip.${index + 1}`,
-  label: `Logo cliente ${index + 1}`,
-  description: 'Logo para a faixa de clientes',
-  page: 'clients',
-  asset_type: 'image',
-  subPath: 'clients',
-  sort_order: index + 1,
-}));
+const clientStrips: SiteAssetRole[] = Array.from(
+  { length: 12 },
+  (_, index) => ({
+    key: `clients.strip.${index + 1}`,
+    label: `Logo cliente ${index + 1}`,
+    description: 'Logo para a faixa de clientes',
+    page: 'clients',
+    asset_type: 'image',
+    subPath: 'clients',
+    sort_order: index + 1,
+  })
+);
 
 const aboutHeroVideos: SiteAssetRole[] = [
   {
@@ -128,15 +131,18 @@ const aboutHeroVideos: SiteAssetRole[] = [
   },
 ];
 
-const aboutOriginImages: SiteAssetRole[] = Array.from({ length: 4 }, (_, index) => ({
-  key: `about.origin_image.${index + 1}`,
-  label: `Origem imagem ${index + 1}`,
-  description: 'Imagem da seção Origem',
-  page: 'about',
-  asset_type: 'image',
-  subPath: 'origin',
-  sort_order: index + 1,
-}));
+const aboutOriginImages: SiteAssetRole[] = Array.from(
+  { length: 4 },
+  (_, index) => ({
+    key: `about.origin_image.${index + 1}`,
+    label: `Origem imagem ${index + 1}`,
+    description: 'Imagem da seção Origem',
+    page: 'about',
+    asset_type: 'image',
+    subPath: 'origin',
+    sort_order: index + 1,
+  })
+);
 
 const aboutMethodVideo: SiteAssetRole = {
   key: 'about.method_video',
