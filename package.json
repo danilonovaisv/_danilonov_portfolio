@@ -31,6 +31,9 @@
     "deploy": "pnpm run build && firebase deploy --only hosting --project portfolio-danilo-novais",
     "update": "npx npm-check-updates -u && pnpm install",
     "manage-keys": "tsx scripts/manage-service-account-keys.ts",
+    "assets:sync": "tsx scripts/sync-site-assets.ts assets.json",
+    "assets:sync:about": "tsx scripts/sync-site-assets.ts assets-about.json",
+    "prepare-deploy": "tsx scripts/prep-deploy.ts",
     "postinstall": "pnpm run prebuild"
   },
   "dependencies": {
