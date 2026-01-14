@@ -549,10 +549,13 @@ export default function GhostScene() {
 
       if (!p) return null;
 
-      const pColor = new THREE.Color(fluorescentColors[params.particleColor]);
-      pColor.offsetHSL(Math.random() * 0.1 - 0.05, 0, 0);
       const pMaterial = p.material as THREE.MeshBasicMaterial;
-      pMaterial.color = pColor;
+
+      // ⚡ Bolt: Reuse color object instead of creating new one
+      const targetColorHex = fluorescentColors[params.particleColor];
+      pMaterial.color.setHex(targetColorHex);
+      pMaterial.color.offsetHSL(Math.random() * 0.1 - 0.05, 0, 0);
+
       p.position.copy(ghostGroup.position);
       p.position.z -= 0.8 + Math.random() * 0.6;
       p.position.x += (Math.random() - 0.5) * 3.5;
@@ -564,16 +567,22 @@ export default function GhostScene() {
 
       p.userData.life = 1.0;
       p.userData.decay = Math.random() * 0.003 + params.particleDecayRate;
-      p.userData.rotationSpeed = {
-        x: (Math.random() - 0.5) * 0.015,
-        y: (Math.random() - 0.5) * 0.015,
-        z: (Math.random() - 0.5) * 0.015,
-      };
-      p.userData.velocity = {
-        x: (Math.random() - 0.5) * 0.012,
-        y: (Math.random() - 0.5) * 0.012 - 0.002,
-        z: (Math.random() - 0.5) * 0.012 - 0.006,
-      };
+
+      // ⚡ Bolt: Reuse userData objects to reduce GC
+      if (!p.userData.rotationSpeed) {
+        p.userData.rotationSpeed = { x: 0, y: 0, z: 0 };
+      }
+      p.userData.rotationSpeed.x = (Math.random() - 0.5) * 0.015;
+      p.userData.rotationSpeed.y = (Math.random() - 0.5) * 0.015;
+      p.userData.rotationSpeed.z = (Math.random() - 0.5) * 0.015;
+
+      if (!p.userData.velocity) {
+        p.userData.velocity = { x: 0, y: 0, z: 0 };
+      }
+      p.userData.velocity.x = (Math.random() - 0.5) * 0.012;
+      p.userData.velocity.y = (Math.random() - 0.5) * 0.012 - 0.002;
+      p.userData.velocity.z = (Math.random() - 0.5) * 0.012 - 0.006;
+
       pMaterial.opacity = Math.random() * 0.9;
       particles.push(p);
     }
@@ -645,6 +654,20 @@ export default function GhostScene() {
     let animationId: number;
     let lastParticleTime = 0;
 
+    // Visibilidade (Intersection Observer)
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          // Reset lastFrameTime to prevent huge deltaTime jump on resume
+          lastFrameTime = performance.now();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(renderer.domElement);
+
     const forceInitialRender = () => {
       for (let i = 0; i < 3; i++) composer.render();
       for (let i = 0; i < 10; i++) createParticle();
@@ -659,6 +682,9 @@ export default function GhostScene() {
     const animate = (timestamp: number) => {
       animationId = requestAnimationFrame(animate);
       if (!isInitialized) return;
+
+      // ⚡ Bolt: Pause rendering when out of viewport
+      if (!isVisible) return;
 
       const deltaTime = timestamp - lastFrameTime;
       lastFrameTime = timestamp;
@@ -796,6 +822,7 @@ export default function GhostScene() {
       window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('resize', onResize);
       cancelAnimationFrame(animationId);
+      observer.disconnect();
       // pane.dispose(); // Removed
       renderer.dispose();
       if (mountElement && renderer.domElement) {

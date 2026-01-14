@@ -1,4 +1,4 @@
-## 2024-05-23 - Consolidating Post-Processing Passes
+## 2025-01-28 - Optimizing WebGL Animation Loops
 
-**Learning:** `EffectComposer` in `@react-three/postprocessing` executes each effect as a separate render pass (unless merged by the library, which custom effects are not). Stacking separate `Noise`, `Vignette`, and a custom `AnalogDecay` (which internally calculated grain and vignette) resulted in 4+ full-screen shader passes per frame.
-**Action:** Always inspect custom shader effects to see if they can handle standard effects like grain or vignette internally. Consolidating these into a single custom shader pass significantly reduces GPU overhead, especially for full-screen effects.
+**Learning:** When using `requestAnimationFrame` for continuous rendering (like WebGL scenes), always pair it with an `IntersectionObserver` to pause the loop when the component is off-screen. This saves significant GPU/CPU resources on long scrolling pages.
+**Action:** Implement `isVisible` flag in animation loops toggled by `IntersectionObserver`. Crucially, reset `lastFrameTime` (or similar delta trackers) when visibility resumes to prevent "time jumps" causing physics glitches.
