@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { createClient } from '@/lib/supabase/server';
 
@@ -14,16 +14,14 @@ type AssetPayload = {
 
 export async function upsertAsset(payload: AssetPayload) {
   const supabase = await createClient();
-  const { error } = await supabase
-    .from('site_assets')
-    .upsert(
-      {
-        ...payload,
-        bucket: payload.bucket ?? 'site-assets',
-        is_active: true,
-      },
-      { onConflict: 'key' }
-    );
+  const { error } = await supabase.from('site_assets').upsert(
+    {
+      ...payload,
+      bucket: payload.bucket ?? 'site-assets',
+      is_active: true,
+    },
+    { onConflict: 'key' }
+  );
   if (error) throw error;
 }
 
@@ -34,11 +32,14 @@ export async function removeAsset(payload: {
 }) {
   const supabase = await createClient();
   if (payload.file_path) {
-    const { error: storageError } = await supabase
-      .storage.from(payload.bucket)
+    const { error: storageError } = await supabase.storage
+      .from(payload.bucket)
       .remove([payload.file_path]);
     if (storageError) throw storageError;
   }
-  const { error } = await supabase.from('site_assets').delete().eq('id', payload.id);
+  const { error } = await supabase
+    .from('site_assets')
+    .delete()
+    .eq('id', payload.id);
   if (error) throw error;
 }

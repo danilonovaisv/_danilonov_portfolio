@@ -76,7 +76,8 @@ export function AssetCard({ asset }: Props) {
   return (
     <div className="rounded-lg border border-white/10 bg-slate-900/60 p-4 flex gap-4">
       <div className="w-24 h-24 rounded-md bg-slate-800 overflow-hidden relative">
-        {asset.asset_type === 'image' && process.env.NEXT_PUBLIC_SUPABASE_URL ? (
+        {asset.asset_type === 'image' &&
+        process.env.NEXT_PUBLIC_SUPABASE_URL ? (
           <Image
             src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${asset.bucket}/${asset.file_path}`}
             alt={asset.key}
@@ -105,7 +106,9 @@ export function AssetCard({ asset }: Props) {
           />
           {isPending ? 'Enviando...' : 'Substituir arquivo'}
         </label>
-        <div className="mt-2 text-xs text-slate-400">Status: {asset.is_active ? 'Ativo' : 'Inativo'}</div>
+        <div className="mt-2 text-xs text-slate-400">
+          Status: {asset.is_active ? 'Ativo' : 'Inativo'}
+        </div>
         <button
           type="button"
           onClick={toggleActive}

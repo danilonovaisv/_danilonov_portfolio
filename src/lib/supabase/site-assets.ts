@@ -13,13 +13,14 @@ export async function getSiteAssets() {
 
   if (error) throw error;
 
-  const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
 
   return (data ?? []).map((asset) => ({
     ...asset,
     publicUrl:
       asset.file_path && baseUrl
         ? `${baseUrl}/storage/v1/object/public/${asset.bucket}/${asset.file_path}`
-        : asset.file_path ?? '',
+        : (asset.file_path ?? ''),
   })) as SiteAsset[];
 }

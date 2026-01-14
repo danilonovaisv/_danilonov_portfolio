@@ -19,8 +19,7 @@ type Props = {
 export default async function TrabalhosPage({ searchParams }: Props) {
   const supabase = await createClient();
 
-  const resolvedSearchParams =
-    (await Promise.resolve(searchParams)) ?? {};
+  const resolvedSearchParams = (await Promise.resolve(searchParams)) ?? {};
 
   // filtros básicos
   const tagFilter = resolvedSearchParams.tag;

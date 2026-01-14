@@ -1,6 +1,11 @@
 'use client';
 
-import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  type ReactNode,
+} from 'react';
 import type { SiteAsset } from '@/lib/supabase/site-assets';
 
 type SiteAssetsContextValue = {

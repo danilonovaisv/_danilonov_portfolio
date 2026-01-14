@@ -36,7 +36,12 @@ export function AssetForm({ preset }: AssetFormProps) {
         if (file) {
           const normalizedKey = key.replace(/\./g, '-');
           const folderPath = [page, subPath].filter(Boolean).join('/') || page;
-          file_path = await uploadToBucket('site-assets', folderPath, normalizedKey, file);
+          file_path = await uploadToBucket(
+            'site-assets',
+            folderPath,
+            normalizedKey,
+            file
+          );
         }
 
         await upsertAsset({
@@ -115,7 +120,9 @@ export function AssetForm({ preset }: AssetFormProps) {
           <input
             type="number"
             value={sortOrder ?? ''}
-            onChange={(e) => setSortOrder(e.target.value ? Number(e.target.value) : undefined)}
+            onChange={(e) =>
+              setSortOrder(e.target.value ? Number(e.target.value) : undefined)
+            }
             className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
             placeholder="10"
           />

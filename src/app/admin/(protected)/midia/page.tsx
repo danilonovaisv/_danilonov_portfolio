@@ -26,14 +26,18 @@ export default async function MidiaPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Mídia</p>
+          <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
+            Mídia
+          </p>
           <h1 className="text-3xl font-semibold">Assets do site</h1>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
         <div className="rounded-xl border border-white/10 bg-slate-900/60 p-4">
-          <h2 className="text-lg font-semibold mb-3">Adicionar/atualizar asset</h2>
+          <h2 className="text-lg font-semibold mb-3">
+            Adicionar/atualizar asset
+          </h2>
           <AssetForm />
           <div className="mt-4 text-xs text-slate-400 space-y-1">
             <p>Use nomes consistentes para keys. Sugestões:</p>
@@ -44,7 +48,8 @@ export default async function MidiaPage() {
                 <code className="text-[11px]">global.font_primary</code>
               </li>
               <li>
-                Clients: <code className="text-[11px]">clients.strip</code> (logo strip) ou múltiplas logos
+                Clients: <code className="text-[11px]">clients.strip</code>{' '}
+                (logo strip) ou múltiplas logos
               </li>
               <li>
                 Sobre: <code className="text-[11px]">about.hero_video</code>,{' '}
@@ -53,7 +58,8 @@ export default async function MidiaPage() {
                 <code className="text-[11px]">about.curriculum_pdf</code>
               </li>
               <li>
-                Portfolio: <code className="text-[11px]">portfolio.hero_video</code>
+                Portfolio:{' '}
+                <code className="text-[11px]">portfolio.hero_video</code>
               </li>
             </ul>
           </div>
@@ -73,10 +79,7 @@ export default async function MidiaPage() {
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {list.map((asset) => (
-                <AssetCard
-                  key={asset.id}
-                  asset={asset}
-                />
+                <AssetCard key={asset.id} asset={asset} />
               ))}
             </div>
           </section>

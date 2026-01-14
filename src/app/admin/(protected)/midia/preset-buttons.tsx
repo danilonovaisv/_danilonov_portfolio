@@ -84,7 +84,8 @@ export function PresetButtons() {
         ))}
       </div>
       <p className="text-xs text-slate-400">
-        Clique para preencher o formulário ao lado com a key, página e tipo recomendados.
+        Clique para preencher o formulário ao lado com a key, página e tipo
+        recomendados.
       </p>
     </div>
   );
@@ -93,10 +94,18 @@ export function PresetButtons() {
 function PresetButton({ preset }: { preset: Preset }) {
   const fillForm = () => {
     if (typeof window === 'undefined') return;
-    const keyInput = document.querySelector<HTMLInputElement>('form input[name="asset-key"]');
-    const pageSelect = document.querySelector<HTMLSelectElement>('form select[name="asset-page"]');
-    const typeSelect = document.querySelector<HTMLSelectElement>('form select[name="asset-type"]');
-    const subPathInput = document.querySelector<HTMLInputElement>('form input[name="asset-subpath"]');
+    const keyInput = document.querySelector<HTMLInputElement>(
+      'form input[name="asset-key"]'
+    );
+    const pageSelect = document.querySelector<HTMLSelectElement>(
+      'form select[name="asset-page"]'
+    );
+    const typeSelect = document.querySelector<HTMLSelectElement>(
+      'form select[name="asset-type"]'
+    );
+    const subPathInput = document.querySelector<HTMLInputElement>(
+      'form input[name="asset-subpath"]'
+    );
     if (keyInput) keyInput.value = preset.key;
     if (pageSelect) pageSelect.value = preset.page;
     if (typeSelect) typeSelect.value = preset.asset_type;
@@ -118,7 +127,9 @@ function PresetButton({ preset }: { preset: Preset }) {
       <div className="text-xs text-slate-400">
         {preset.page} • {preset.asset_type}
       </div>
-      {preset.description && <div className="text-xs text-slate-500">{preset.description}</div>}
+      {preset.description && (
+        <div className="text-xs text-slate-500">{preset.description}</div>
+      )}
     </button>
   );
 }
