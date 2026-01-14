@@ -34,6 +34,7 @@
     "assets:sync": "tsx scripts/sync-site-assets.ts assets.json",
     "assets:sync:about": "tsx scripts/sync-site-assets.ts assets-about.json",
     "prepare-deploy": "tsx scripts/prep-deploy.ts",
+    "validate-env": "tsx scripts/validate-env.ts",
     "postinstall": "pnpm run prebuild"
   },
   "dependencies": {

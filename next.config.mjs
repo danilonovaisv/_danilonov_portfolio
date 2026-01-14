@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const nextConfig = {
   /**
@@ -26,7 +30,7 @@ const nextConfig = {
     // Firebase Hosting/App Hosting não está servindo a rota /_next/image;
     // Utilizamos um loader customizado para usar as transformações de imagem do Supabase.
     loader: 'custom',
-    loaderFile: path.resolve('./src/lib/supabase/image-loader.ts'),
+    loaderFile: path.join(__dirname, 'src/lib/supabase/image-loader.ts'),
 
     remotePatterns: [
       {

@@ -17,10 +17,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   let assets: SiteAsset[] = [];
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.SITE_URL ??
+    'http://localhost:3000';
+
   try {
     assets = await getSiteAssets();
   } catch (error) {
     console.error('Falha ao carregar site_assets:', error);
+    try {
+      const response = await fetch(`${baseUrl}/api/site-assets`, {
+        cache: 'no-store',
+      });
+      if (response.ok) {
+        assets = await response.json();
+      } else {
+        console.error('Erro ao buscar site_assets via API:', response.status);
+      }
+    } catch (fallbackError) {
+      console.error('Erro fallback de site_assets:', fallbackError);
+    }
   }
   const assetMap = assets.reduce<Record<string, string>>((acc, asset) => {
     if (asset.key && asset.publicUrl) {
