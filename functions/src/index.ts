@@ -8,6 +8,7 @@
  */
 
 import { setGlobalOptions } from 'firebase-functions';
+import './config/admin-config'; // Import Firebase Admin configuration
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
