@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import path from 'node:path';
+
 const nextConfig = {
   /**
    * Build com server runtime (necessário para /admin e Supabase Auth)
@@ -24,7 +26,7 @@ const nextConfig = {
     // Firebase Hosting/App Hosting não está servindo a rota /_next/image;
     // Utilizamos um loader customizado para usar as transformações de imagem do Supabase.
     loader: 'custom',
-    loaderFile: 'src/lib/supabase/image-loader.ts',
+    loaderFile: path.resolve('./src/lib/supabase/image-loader.ts'),
 
     remotePatterns: [
       {
