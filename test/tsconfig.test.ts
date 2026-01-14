@@ -30,8 +30,8 @@ describe('tsconfig.json', () => {
     expect(tsconfig.compilerOptions.allowJs).toBe(true);
   });
 
-  it('should support JSX with preserve (Next.js default)', () => {
-    expect(tsconfig.compilerOptions.jsx).toBe('preserve');
+  it('should support JSX with react-jsx', () => {
+    expect(tsconfig.compilerOptions.jsx).toBe('react-jsx');
   });
 
   it('should include necessary library types', () => {
@@ -42,7 +42,7 @@ describe('tsconfig.json', () => {
   });
 
   it('should have proper path mappings', () => {
-    expect(tsconfig.compilerOptions.paths['@/*']).toEqual(['./*', './src/*']);
+    expect(tsconfig.compilerOptions.paths['@/*']).toEqual(['./src/*']);
   });
 
   it('should include test and source files', () => {

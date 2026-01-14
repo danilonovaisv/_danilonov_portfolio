@@ -79,3 +79,5 @@ docs/*.png
 .qodo/
 .vscode/
 pentest-workflow.yaml
+project_truth.json
+test-results/
