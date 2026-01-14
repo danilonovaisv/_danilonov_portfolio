@@ -1,5 +1,7 @@
 'use server';
 
+import type { SiteAssetRole } from '@/lib/supabase/asset-roles';
+import { buildAssetFilePath, getFileExtension } from '@/lib/supabase/asset-paths';
 import { createClient } from '@/lib/supabase/server';
 
 type AssetPayload = {
@@ -23,6 +25,56 @@ export async function upsertAsset(payload: AssetPayload) {
     { onConflict: 'key' }
   );
   if (error) throw error;
+}
+
+type AssignAssetRolePayload = {
+  assetId: string;
+  role: SiteAssetRole;
+};
+
+export async function assignAssetRole(payload: AssignAssetRolePayload) {
+  const supabase = await createClient();
+  const { data: existing, error: fetchError } = await supabase
+    .from('site_assets')
+    .select('bucket,file_path')
+    .eq('id', payload.assetId)
+    .single();
+
+  if (fetchError || !existing) {
+    throw fetchError ?? new Error('Asset não encontrado.');
+  }
+
+  const extension = getFileExtension(existing.file_path) || 'bin';
+  const targetPath = buildAssetFilePath({
+    page: payload.role.page,
+    key: payload.role.key,
+    subPath: payload.role.subPath,
+    extension,
+  });
+
+  let file_path = existing.file_path;
+
+  if (file_path !== targetPath) {
+    const { error: moveError } = await supabase.storage
+      .from(existing.bucket)
+      .move(file_path, targetPath);
+    if (moveError) throw moveError;
+    file_path = targetPath;
+  }
+
+  const { error: updateError } = await supabase
+    .from('site_assets')
+    .update({
+      key: payload.role.key,
+      page: payload.role.page,
+      asset_type: payload.role.asset_type,
+      description: payload.role.description,
+      sort_order: payload.role.sort_order ?? null,
+      file_path,
+    })
+    .eq('id', payload.assetId);
+
+  if (updateError) throw updateError;
 }
 
 export async function removeAsset(payload: {

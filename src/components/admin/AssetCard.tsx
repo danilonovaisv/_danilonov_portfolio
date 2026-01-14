@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import Image from 'next/image';
-import { uploadToBucket } from '@/lib/supabase/storage';
-import { createClient } from '@/lib/supabase/client';
-import { removeAsset } from '@/app/admin/(protected)/midia/actions';
+import { uploadSiteAsset } from '@/lib/supabase/storage';
+import { siteAssetRoleMap, type SiteAssetRole } from '@/lib/supabase/asset-roles';
+import { assignAssetRole, removeAsset } from '@/app/admin/(protected)/midia/actions';
 import type { DbAsset } from '@/types/admin';
+import { createClient } from '@/lib/supabase/client';
+import { AssetRoleMenu } from '@/components/admin/AssetRoleMenu';
 
 type Props = {
   asset: DbAsset;
@@ -16,24 +18,39 @@ export function AssetCard({ asset }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const currentRole = siteAssetRoleMap.get(asset.key);
+  const roleLabel = currentRole?.label ?? 'Sem papel definido';
 
   const handleUpload = (file?: File | null) => {
     if (!file) return;
     setError(null);
     startTransition(async () => {
       try {
-        const newPath = await uploadToBucket(
-          asset.bucket as 'site-assets',
-          asset.page ? `${asset.page}` : 'global',
-          asset.key.replace(/\./g, '-'),
-          file
-        );
+        const newPath = await uploadSiteAsset({
+          file,
+          key: asset.key,
+          page: asset.page,
+          subPath: currentRole?.subPath,
+          bucket: asset.bucket as 'site-assets',
+        });
         const supabase = createClient();
         const { error: updateError } = await supabase
           .from('site_assets')
           .update({ file_path: newPath })
           .eq('id', asset.id);
         if (updateError) throw updateError;
+        router.refresh();
+      } catch (err: any) {
+        setError(err.message);
+      }
+    });
+  };
+
+  const handleRoleChange = (role: SiteAssetRole) => {
+    setError(null);
+    startTransition(async () => {
+      try {
+        await assignAssetRole({ assetId: asset.id, role });
         router.refresh();
       } catch (err: any) {
         setError(err.message);
@@ -96,6 +113,7 @@ export function AssetCard({ asset }: Props) {
         <div className="text-xs text-slate-500 mt-1">
           {asset.bucket}/{asset.file_path}
         </div>
+        <div className="text-xs text-slate-400 mt-1">Papel: {roleLabel}</div>
         {error && <div className="text-xs text-red-400 mt-2">{error}</div>}
         <label className="mt-3 inline-flex items-center gap-2 text-xs text-blue-300 cursor-pointer">
           <input
@@ -106,6 +124,7 @@ export function AssetCard({ asset }: Props) {
           />
           {isPending ? 'Enviando...' : 'Substituir arquivo'}
         </label>
+        <AssetRoleMenu currentKey={asset.key} onSelectRole={handleRoleChange} />
         <div className="mt-2 text-xs text-slate-400">
           Status: {asset.is_active ? 'Ativo' : 'Inativo'}
         </div>

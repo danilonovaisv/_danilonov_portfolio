@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { uploadToBucket } from '@/lib/supabase/storage';
+import { uploadSiteAsset } from '@/lib/supabase/storage';
+import { getSiteAssetRoleByKey } from '@/lib/supabase/asset-roles';
 import { upsertAsset } from '@/app/admin/(protected)/midia/actions';
 
 type AssetFormProps = {
@@ -32,23 +33,23 @@ export function AssetForm({ preset }: AssetFormProps) {
     setError(null);
     startTransition(async () => {
       try {
+        const role = getSiteAssetRoleByKey(key);
         let file_path: string | null = null;
         if (file) {
-          const normalizedKey = key.replace(/\./g, '-');
-          const folderPath = [page, subPath].filter(Boolean).join('/') || page;
-          file_path = await uploadToBucket(
-            'site-assets',
-            folderPath,
-            normalizedKey,
-            file
-          );
+          file_path = await uploadSiteAsset({
+            file,
+            key,
+            page,
+            subPath: role?.subPath ?? subPath,
+            bucket: 'site-assets',
+          });
         }
 
         await upsertAsset({
           key,
           page,
           asset_type: assetType,
-          description,
+          description: description || role?.description || null,
           sort_order: sortOrder ?? null,
           file_path,
           bucket: 'site-assets',

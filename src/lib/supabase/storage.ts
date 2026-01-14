@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client';
+import { buildAssetFilePath } from '@/lib/supabase/asset-paths';
 
 type UploadBucket = 'portfolio-media' | 'site-assets';
 
@@ -18,6 +19,36 @@ export async function uploadToBucket(
   const ext = file.name.split('.').pop();
   const name = ext ? `${identifier}.${ext}` : identifier;
   const path = buildPath(basePath, name);
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .upload(path, file, { cacheControl: '3600', upsert: true });
+
+  if (error) throw error;
+  return data.path;
+}
+
+export async function uploadSiteAsset({
+  file,
+  key,
+  page,
+  subPath,
+  bucket = 'site-assets',
+}: {
+  file: File;
+  key: string;
+  page?: string | null;
+  subPath?: string;
+  bucket?: UploadBucket;
+}) {
+  const supabase = createClient();
+  const extension = file.name.split('.').pop() ?? 'bin';
+  const path = buildAssetFilePath({
+    page,
+    key,
+    subPath,
+    extension,
+  });
+
   const { data, error } = await supabase.storage
     .from(bucket)
     .upload(path, file, { cacheControl: '3600', upsert: true });
