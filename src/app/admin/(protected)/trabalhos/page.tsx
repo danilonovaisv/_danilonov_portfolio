@@ -229,6 +229,7 @@ function Filters({
       />
       <select
         name="tag"
+        title="Filtrar por Tag"
         defaultValue={current.tag || ''}
         className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
       >
@@ -241,6 +242,7 @@ function Filters({
       </select>
       <select
         name="year"
+        title="Filtrar por Ano"
         defaultValue={current.year || ''}
         className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
       >
@@ -253,6 +255,7 @@ function Filters({
       </select>
       <select
         name="type"
+        title="Filtrar por Tipo"
         defaultValue={current.type || ''}
         className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
       >
@@ -265,6 +268,7 @@ function Filters({
       </select>
       <select
         name="status"
+        title="Filtrar por Status"
         defaultValue={current.status || ''}
         className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
       >
