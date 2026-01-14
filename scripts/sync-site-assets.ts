@@ -127,7 +127,7 @@ function buildRecordEntry(rawPath: string) {
   const role = siteAssetRoleMap.get(key);
   const asset_type = role?.asset_type ?? detectAssetType(extension);
   const sort_order = role?.sort_order ?? parseSortOrder(key);
-  const file_path = ['site-assets', ...pathSegments].join('/');
+  const file_path = pathSegments.join('/');
   return {
     key: role?.key ?? key,
     bucket: 'site-assets',

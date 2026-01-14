@@ -6,6 +6,7 @@ import {
   getFileExtension,
 } from '@/lib/supabase/asset-paths';
 import { createClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
 
 type AssetPayload = {
   key: string;
@@ -28,6 +29,7 @@ export async function upsertAsset(payload: AssetPayload) {
     { onConflict: 'key' }
   );
   if (error) throw error;
+  refreshAssetRoutes();
 }
 
 type AssignAssetRolePayload = {
@@ -78,6 +80,7 @@ export async function assignAssetRole(payload: AssignAssetRolePayload) {
     .eq('id', payload.assetId);
 
   if (updateError) throw updateError;
+  refreshAssetRoutes();
 }
 
 export async function removeAsset(payload: {
@@ -97,4 +100,11 @@ export async function removeAsset(payload: {
     .delete()
     .eq('id', payload.id);
   if (error) throw error;
+  refreshAssetRoutes();
+}
+
+function refreshAssetRoutes() {
+  revalidatePath('/');
+  revalidatePath('/about');
+  revalidatePath('/portfolio');
 }
