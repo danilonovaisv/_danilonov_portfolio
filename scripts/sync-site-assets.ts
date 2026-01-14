@@ -11,9 +11,12 @@ const {
   SUPABASE_SERVICE_KEY,
   SUPABASE_ANON_KEY,
 } = loadEnvOverrides();
-const supabaseUrl = NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL;
-const serviceRoleKey =
-  SUPABASE_SERVICE_ROLE_KEY ?? SUPABASE_SERVICE_KEY ?? SUPABASE_ANON_KEY;
+const supabaseUrl = normalizeEnvValue(
+  NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL ?? undefined
+);
+const serviceRoleKey = normalizeEnvValue(
+  SUPABASE_SERVICE_ROLE_KEY ?? SUPABASE_SERVICE_KEY ?? SUPABASE_ANON_KEY
+);
 
 if (!supabaseUrl || !serviceRoleKey) {
   throw new Error(
@@ -59,6 +62,14 @@ function loadEnvOverrides() {
     SUPABASE_ANON_KEY:
       process.env.SUPABASE_ANON_KEY ?? overrides.SUPABASE_ANON_KEY,
   };
+}
+
+function normalizeEnvValue(value?: string) {
+  if (!value) return value;
+  return value
+    .replace(/[\u2018\u2019\u201C\u201D]/g, '')
+    .replace(/[^\x00-\x7F]/g, '')
+    .trim();
 }
 
 function detectAssetType(extension: string) {
@@ -145,6 +156,17 @@ async function run() {
     }
   });
   const payload = Array.from(unique.values());
+  const duplicates = payload.filter((entry) =>
+    entry.file_path.includes('site-assets/site-assets')
+  );
+  if (duplicates.length > 0) {
+    console.warn(
+      'Atenção: os seguintes registros ainda contêm o prefixo duplicado "site-assets/site-assets":'
+    );
+    duplicates.forEach((entry) => {
+      console.warn(`  key=${entry.key} → ${entry.file_path}`);
+    });
+  }
 
   const { error } = await supabase
     .from('site_assets')
