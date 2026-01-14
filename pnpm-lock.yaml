@@ -299,9 +299,6 @@ importers:
         specifier: ^7.0.0
         version: 7.0.2(firebase-admin@13.6.0(encoding@0.1.13))
     devDependencies:
-      '@types/handlebars':
-        specifier: ^4.0.0
-        version: 4.1.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.53.0
         version: 8.53.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -4902,13 +4899,6 @@ packages:
       {
         integrity: sha512-dVd04UKsfpINUnK0yBoYHDF3xu7xVH4BuDotC/xGuycx4CgbP48X/KF/586bcObxT0HENHXEU8Nqtu6NR+eKhw==,
       }
-
-  '@types/handlebars@4.1.0':
-    resolution:
-      {
-        integrity: sha512-gq9YweFKNNB1uFK71eRqsd4niVkXrxHugqWFQkeLRJvGjnxsLr16bYtcsG4tOFwmYi0Bax+wCkbf1reUfdl4kA==,
-      }
-    deprecated: This is a stub types definition. handlebars provides its own type definitions, so you do not need this installed.
 
   '@types/http-errors@2.0.5':
     resolution:
@@ -18043,10 +18033,6 @@ snapshots:
       '@types/express-serve-static-core': 4.19.7
       '@types/qs': 6.14.0
       '@types/serve-static': 1.15.10
-
-  '@types/handlebars@4.1.0':
-    dependencies:
-      handlebars: 4.7.8
 
   '@types/http-errors@2.0.5': {}
 
