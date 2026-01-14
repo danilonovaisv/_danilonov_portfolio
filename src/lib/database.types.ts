@@ -183,20 +183,22 @@ export type Database = {
         Relationships: []
       }
     }
-    /* eslint-disable no-unused-vars */
     Views: {
-      [_never in never]: never
+      // eslint-disable-next-line no-unused-vars
+      [_ in never]: never
     }
     Functions: {
-      [_never in never]: never
+      // eslint-disable-next-line no-unused-vars
+      [_ in never]: never
     }
     Enums: {
-      [_never in never]: never
+      // eslint-disable-next-line no-unused-vars
+      [_ in never]: never
     }
     CompositeTypes: {
-      [_never in never]: never
+      // eslint-disable-next-line no-unused-vars
+      [_ in never]: never
     }
-    /* eslint-enable no-unused-vars */
   }
 }
 

@@ -8,7 +8,9 @@ import { useSiteAssetsByPrefix } from '@/contexts/site-assets';
 
 export default function ClientsBrandsSection() {
   const reducedMotion = useReducedMotion();
-  const assets = useSiteAssetsByPrefix('clients.');
+  const assets = useSiteAssetsByPrefix('clients.').filter(
+    (asset) => asset.publicUrl
+  );
 
   const logos =
     assets.length > 0
@@ -84,11 +86,12 @@ export default function ClientsBrandsSection() {
                 tabIndex={0}
                 aria-label={logo.alt}
               >
-                <div className="relative w-full h-full max-w-[98px] md:max-w-[140px] transition-all duration-300 group-hover:scale-[1.04] group-hover:brightness-[1.1]">
+                <div className="relative w-full h-full max-w-[98px] md:max-w-[140px]">
                   <Image
                     src={logo.src}
                     alt={logo.alt}
-                    fill
+                    width={140}
+                    height={60}
                     unoptimized
                     className="object-contain filter brightness-0 invert opacity-90 transition-opacity duration-500 group-hover:opacity-100"
                   />

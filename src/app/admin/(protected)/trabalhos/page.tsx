@@ -16,15 +16,20 @@ type Props = {
   };
 };
 
-export default async function TrabalhosPage({ searchParams = {} }: Props) {
+export default async function TrabalhosPage({ searchParams }: Props) {
   const supabase = await createClient();
 
+  const resolvedSearchParams =
+    (await Promise.resolve(searchParams)) ?? {};
+
   // filtros básicos
-  const tagFilter = searchParams.tag;
-  const yearFilter = searchParams.year ? Number(searchParams.year) : undefined;
-  const typeFilter = searchParams.type;
-  const statusFilter = searchParams.status;
-  const search = searchParams.search;
+  const tagFilter = resolvedSearchParams.tag;
+  const yearFilter = resolvedSearchParams.year
+    ? Number(resolvedSearchParams.year)
+    : undefined;
+  const typeFilter = resolvedSearchParams.type;
+  const statusFilter = resolvedSearchParams.status;
+  const search = resolvedSearchParams.search;
 
   let query = supabase
     .from('portfolio_projects')
