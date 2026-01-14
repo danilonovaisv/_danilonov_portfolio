@@ -48,6 +48,32 @@ export const SITE_ASSET_KEYS = {
   },
 } as const;
 
+const fontDefinitions: SiteAssetDefinition[] = Object.entries(
+  SITE_ASSET_KEYS.fonts
+).map(([name, key]) => ({
+  key,
+  label: `Fonte ${name}`,
+  page: 'global',
+  category: 'font',
+}));
+
+const originImages: SiteAssetDefinition[] =
+  SITE_ASSET_KEYS.about.originImages.map((key, index) => ({
+    key,
+    label: `Origem imagem ${index + 1}`,
+    page: 'about',
+    category: 'image',
+  }));
+
+const clientLogos: SiteAssetDefinition[] = SITE_ASSET_KEYS.clients.strips.map(
+  (key, index) => ({
+    key,
+    label: `Logo cliente ${index + 1}`,
+    page: 'clients',
+    category: 'client',
+  })
+);
+
 export const SITE_ASSET_DEFINITIONS: SiteAssetDefinition[] = [
   {
     key: SITE_ASSET_KEYS.logos.headerLight,
@@ -73,12 +99,7 @@ export const SITE_ASSET_DEFINITIONS: SiteAssetDefinition[] = [
     page: 'global',
     category: 'logo',
   },
-  ...Object.entries(SITE_ASSET_KEYS.fonts).map(([name, key]) => ({
-    key,
-    label: `Fonte ${name}`,
-    page: 'global',
-    category: 'font',
-  })),
+  ...fontDefinitions,
   {
     key: SITE_ASSET_KEYS.heroVideos.homeManifesto,
     label: 'Vídeo manifesto',
@@ -103,12 +124,7 @@ export const SITE_ASSET_DEFINITIONS: SiteAssetDefinition[] = [
     page: 'about',
     category: 'video',
   },
-  ...SITE_ASSET_KEYS.about.originImages.map((key, index) => ({
-    key,
-    label: `Origem imagem ${index + 1}`,
-    page: 'about',
-    category: 'image',
-  })),
+  ...originImages,
   {
     key: SITE_ASSET_KEYS.portfolio.heroDesktop,
     label: 'Vídeo hero Portfólio (desktop)',
@@ -121,10 +137,5 @@ export const SITE_ASSET_DEFINITIONS: SiteAssetDefinition[] = [
     page: 'portfolio',
     category: 'video',
   },
-  ...SITE_ASSET_KEYS.clients.strips.map((key, index) => ({
-    key,
-    label: `Logo cliente ${index + 1}`,
-    page: 'clients',
-    category: 'client',
-  })),
+  ...clientLogos,
 ];

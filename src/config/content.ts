@@ -155,7 +155,11 @@ export const TAG_CATALOG = [
       { label: 'Animação', slug: 'animation', type: 'tag' },
       { label: 'Animação 2D', slug: '2d-animation', type: 'tag' },
       { label: 'Tipografia Cinética', slug: 'kinetic-typography', type: 'tag' },
-      { label: 'Transições Animadas', slug: 'animated-transitions', type: 'tag' },
+      {
+        label: 'Transições Animadas',
+        slug: 'animated-transitions',
+        type: 'tag',
+      },
       { label: 'Microinterações', slug: 'micro-interactions', type: 'tag' },
       { label: 'Narrativa Visual', slug: 'visual-storytelling', type: 'tag' },
       { label: 'Roteiro', slug: 'script', type: 'tag' },

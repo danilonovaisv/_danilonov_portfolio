@@ -107,12 +107,13 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
           }
         }
 
+        const { tags: formTags, ...payloadData } = values;
         const { data, error: upsertError } = await supabase
           .from('portfolio_projects')
           .upsert(
             {
               id: project?.id,
-              ...values,
+              ...payloadData,
               gallery: galleryEntries,
               thumbnail_path,
               hero_image_path,

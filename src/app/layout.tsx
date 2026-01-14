@@ -3,7 +3,7 @@ import { siteMetadata, siteViewport } from '@/config/metadata';
 import ClientLayout from '@/components/layout/ClientLayout';
 import JsonLd from '@/components/ui/JsonLd';
 import './globals.css'; // Fonts and styles are loaded here
-import { getSiteAssets } from '@/lib/supabase/site-assets';
+import { getSiteAssets, type SiteAsset } from '@/lib/supabase/site-assets';
 import { SiteAssetsProvider } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import type { CSSProperties } from 'react';
@@ -16,7 +16,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const assets = await getSiteAssets();
+  let assets: SiteAsset[] = [];
+  try {
+    assets = await getSiteAssets();
+  } catch (error) {
+    console.error('Falha ao carregar site_assets:', error);
+  }
   const assetMap = assets.reduce<Record<string, string>>((acc, asset) => {
     if (asset.key && asset.publicUrl) {
       acc[asset.key] = asset.publicUrl;
