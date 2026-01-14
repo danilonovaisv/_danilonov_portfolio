@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@dataconnect/admin-generated": "link:src/dataconnect-admin-generated",
+    "@dataconnect/generated": "link:src/dataconnect-generated",
     "@genkit-ai/google-genai": "^1.27.0",
     "@google/adk": "^0.2.2",
     "@gsap/react": "^2.1.2",
