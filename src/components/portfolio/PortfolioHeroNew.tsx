@@ -15,6 +15,7 @@ import {
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 // Motion config - Ghost Era ethereal timing
 const { duration, offset } = MOTION_TOKENS;
@@ -23,11 +24,11 @@ export default function PortfolioHeroNew() {
   const prefersReducedMotion = useReducedMotion();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const desktopVideo = useSiteAssetUrl(
-    'portfolio.hero_desktop_video',
+    SITE_ASSET_KEYS.heroVideos.portfolioDesktop,
     PORTFOLIO_CONTENT.hero.video.desktop
   );
   const mobileVideo = useSiteAssetUrl(
-    'portfolio.hero_mobile_video',
+    SITE_ASSET_KEYS.heroVideos.portfolioMobile,
     PORTFOLIO_CONTENT.hero.video.mobile
   );
 

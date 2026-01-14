@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 interface VideoManifestoProps {
   src: string;
 }
 
 export function VideoManifesto({ src }: VideoManifestoProps) {
-  const manifestoSrc = useSiteAssetUrl('home.manifesto_video', src) ?? src;
+  const manifestoSrc =
+    useSiteAssetUrl(SITE_ASSET_KEYS.heroVideos.homeManifesto, src) ?? src;
   const [muted, setMuted] = useState(true);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [videoQuality, setVideoQuality] = useState<'hd' | 'sd'>('hd');

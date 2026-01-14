@@ -12,6 +12,7 @@ import {
 import { ABOUT_CONTENT } from '@/config/content';
 import { motionTokens, motionSprings } from './motion';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 export function AboutHero() {
   const prefersReducedMotion = useReducedMotion();
@@ -39,11 +40,11 @@ export function AboutHero() {
   );
 
   const desktopVideo = useSiteAssetUrl(
-    'about.hero.desktop_video',
+    SITE_ASSET_KEYS.heroVideos.aboutDesktop,
     ABOUT_CONTENT.hero.videos.desktop
   );
   const mobileVideo = useSiteAssetUrl(
-    'about.hero.mobile_video',
+    SITE_ASSET_KEYS.heroVideos.aboutMobile,
     ABOUT_CONTENT.hero.videos.mobile
   );
 
