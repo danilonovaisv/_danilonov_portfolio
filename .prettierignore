@@ -2,7 +2,8 @@
 /dataconnect/default/*.gql
 /functions/src/dataconnect-admin-generated
 /src/dataconnect-admin-generated
-functions/lib/*.js
+functions/lib/
+pnpm-lock.yaml
 .firebase
 dist
 src/dataconnect-generated

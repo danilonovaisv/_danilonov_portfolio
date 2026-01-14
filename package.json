@@ -103,6 +103,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
+    "@types/handlebars": "^4.1.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.0.8",
     "@types/react": "^19.2.8",
