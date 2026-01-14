@@ -13,20 +13,11 @@
     }
   ],
   "hosting": {
-    "public": "out",
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "headers": [
-      {
-        "source": "**/*.@(js|css|woff2|png|jpg|jpeg|svg|webp)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public,max-age=31536000,immutable"
-          }
-        ]
-      }
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
     ],
     "rewrites": [
       {
