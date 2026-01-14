@@ -3,8 +3,16 @@ import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default [
-  { files: ['**/*.{js,mjs,cjs,ts}'] },
-  { languageOptions: { globals: globals.node } },
+  { 
+    files: ['**/*.{js,mjs,cjs,ts}'],
+    languageOptions: { 
+      globals: globals.node,
+      parserOptions: {
+        project: ['tsconfig.json', 'tsconfig.dev.json'],
+        sourceType: 'module',
+      }
+    }
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {

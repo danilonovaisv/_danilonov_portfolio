@@ -1,6 +1,7 @@
 {
   "projects": {
-    "default": "portfolio-danilo-novais"
+    "default": "portfolio-danilo-novais",
+    "portfoliodanilo.com": "portfolio-danilo-novais"
   },
   "targets": {},
   "etags": {

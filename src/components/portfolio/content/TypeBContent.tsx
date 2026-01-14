@@ -58,7 +58,7 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
         
         {/* Accent color overlay on bottom */}
         {project.accentColor && (
-          <div 
+          <motion.div 
             className="absolute inset-x-0 bottom-0 h-1/3"
             style={{ 
               background: `linear-gradient(to top, ${project.accentColor}40, transparent)` 

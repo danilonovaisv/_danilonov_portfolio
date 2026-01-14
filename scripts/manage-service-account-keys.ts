@@ -1,8 +1,8 @@
 /**
  * Script to help manage service account keys
- * 
+ *
  * This script helps rotate and manage service account keys to avoid hitting the 10-key limit
- * 
+ *
  * Usage:
  * npx tsx scripts/manage-service-account-keys.ts --account=SERVICE_ACCOUNT_EMAIL
  */
@@ -55,24 +55,36 @@ function executeGcloudCommand(args: string[]): Promise<string> {
 async function listKeys(serviceAccountEmail: string) {
   try {
     const result = await executeGcloudCommand([
-      'iam', 'service-accounts', 'keys', 'list',
-      '--iam-account', serviceAccountEmail,
-      '--format', 'json'
+      'iam',
+      'service-accounts',
+      'keys',
+      'list',
+      '--iam-account',
+      serviceAccountEmail,
+      '--format',
+      'json',
     ]);
 
     const keys = JSON.parse(result);
-    
+
     if (keys.length === 0) {
       console.log(`No keys found for service account: ${serviceAccountEmail}`);
       return;
     }
 
-    console.log(`Found ${keys.length} keys for service account: ${serviceAccountEmail}`);
+    console.log(
+      `Found ${keys.length} keys for service account: ${serviceAccountEmail}`
+    );
     keys.forEach((key: any) => {
-      console.log(`Key ID: ${key.name.split('/').pop()}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`);
+      console.log(
+        `Key ID: ${key.name.split('/').pop()}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`
+      );
     });
   } catch (error) {
-    console.error('Error listing keys:', error.message);
+    console.error(
+      'Error listing keys:',
+      error instanceof Error ? error.message : String(error)
+    );
   }
 }
 
@@ -82,13 +94,18 @@ async function listKeys(serviceAccountEmail: string) {
 async function cleanupOldKeys(serviceAccountEmail: string) {
   try {
     const result = await executeGcloudCommand([
-      'iam', 'service-accounts', 'keys', 'list',
-      '--iam-account', serviceAccountEmail,
-      '--format', 'json'
+      'iam',
+      'service-accounts',
+      'keys',
+      'list',
+      '--iam-account',
+      serviceAccountEmail,
+      '--format',
+      'json',
     ]);
 
     const keys = JSON.parse(result);
-    
+
     if (keys.length === 0) {
       console.log(`No keys found for service account: ${serviceAccountEmail}`);
       return;
@@ -109,33 +126,48 @@ async function cleanupOldKeys(serviceAccountEmail: string) {
       return;
     }
 
-    console.log(`Found ${oldKeys.length} keys older than 30 days. Removing them...`);
-    
+    console.log(
+      `Found ${oldKeys.length} keys older than 30 days. Removing them...`
+    );
+
     for (const key of oldKeys) {
       const keyId = key.name.split('/').pop();
       console.log(`Removing key: ${keyId}`);
-      
+
       try {
         await executeGcloudCommand([
-          'iam', 'service-accounts', 'keys', 'delete', keyId,
-          '--iam-account', serviceAccountEmail,
-          '--quiet' // Skip confirmation
+          'iam',
+          'service-accounts',
+          'keys',
+          'delete',
+          keyId,
+          '--iam-account',
+          serviceAccountEmail,
+          '--quiet', // Skip confirmation
         ]);
-        
+
         console.log(`Successfully removed key: ${keyId}`);
       } catch (error) {
-        console.error(`Failed to remove key ${keyId}:`, error.message);
+        console.error(
+          `Failed to remove key ${keyId}:`,
+          error instanceof Error ? error.message : String(error)
+        );
       }
     }
   } catch (error) {
-    console.error('Error during cleanup:', error.message);
+    console.error(
+      'Error during cleanup:',
+      error instanceof Error ? error.message : String(error)
+    );
   }
 }
 
 // Main execution
 async function main() {
   if (!options.account) {
-    console.error('Error: Service account email is required. Use -a or --account to specify it.');
+    console.error(
+      'Error: Service account email is required. Use -a or --account to specify it.'
+    );
     process.exit(1);
   }
 
@@ -144,12 +176,14 @@ async function main() {
   } else if (options.cleanup) {
     await cleanupOldKeys(options.account);
   } else {
-    console.log('Please specify an action: --list to list keys, --cleanup to remove old keys');
+    console.log(
+      'Please specify an action: --list to list keys, --cleanup to remove old keys'
+    );
   }
 }
 
 // Run the script
-main().catch(error => {
+main().catch((error) => {
   console.error('Script failed:', error);
   process.exit(1);
 });

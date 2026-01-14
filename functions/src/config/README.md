@@ -10,7 +10,7 @@ To use Firebase Admin SDK, you need to download your service account JSON file f
 2. Select your project (portfolio-danilo-novais)
 3. Navigate to Project Settings (gear icon)
 4. Go to the Service Accounts tab
-5. Click "Generate New Private Key" 
+5. Click "Generate New Private Key"
 6. Save the JSON file to your project root as `portfolio-danilo-novais-firebase-adminsdk-fbsvc-2bc940e508.json`
 
 ### Security Considerations
@@ -50,6 +50,7 @@ gcloud iam service-accounts keys delete KEY_ID --iam-account=github-action-11088
 8. Keep only the keys that are actively being used
 
 Alternatively, you can use Google Cloud CLI to remove keys:
+
 ```bash
 # List all keys for the service account
 gcloud iam service-accounts keys list --iam-account=github-action-1108800623@appspot.gserviceaccount.com

@@ -141,7 +141,7 @@ export default function PortfolioModalNew({
                 <button
                   ref={closeButtonRef}
                   onClick={onClose}
-                  className="fixed top-6 right-6 md:top-10 md:right-10 z-[110] flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all duration-300 hover:rotate-90"
+                  className="fixed top-6 right-6 md:top-10 md:right-10 z-110 flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all duration-300 hover:rotate-90"
                   aria-label="Fechar modal"
                 >
                   <X className="w-5 h-5 md:w-7 md:h-7" />
