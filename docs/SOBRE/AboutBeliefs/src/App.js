@@ -58,7 +58,10 @@ export default function App() {
   const reduceMotion = useReducedMotion();
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const progress = Number.isFinite(latest) ? latest : 0;
+    const progress = Math.min(
+      1,
+      Math.max(0, Number.isFinite(latest) ? latest : 0),
+    );
     const nextStep = Math.min(
       totalSteps - 1,
       Math.max(0, Math.floor(progress * totalSteps)),
@@ -77,7 +80,7 @@ export default function App() {
       className="belief-section"
       initial={{ backgroundColor: backgroundColors[0] }}
       animate={{ backgroundColor }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: easing }}
     >
       <div className="belief-inner">
         <div className="belief-grid">

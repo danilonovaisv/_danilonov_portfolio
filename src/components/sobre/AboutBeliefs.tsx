@@ -1,172 +1,203 @@
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
+  useInView,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-} from 'framer-motion';
-import './AboutBeliefs.css';
+} from "framer-motion";
+import "./AboutBeliefs.css";
 
-const phrases = [
-  'Um vídeo que respira.',
-  'Uma marca que se reconhece.',
-  'Um detalhe que fica.',
-  'Crio para gerar presença.',
-  'Mesmo quando não estou ali.',
-  'Mesmo quando ninguém percebe o esforço.',
+const PHRASES = [
+  <>Um vídeo que <strong>respira</strong>.</>,
+  <>Uma marca que se <strong>reconhece</strong>.</>,
+  <>Um detalhe que <strong>fica</strong>.</>,
+  <>
+    <strong>Crio</strong> para gerar presença.
+  </>,
+  <>
+    <strong>Mesmo</strong> quando não estou ali.
+  </>,
+  <>
+    <strong>Mesmo</strong> quando ninguém percebe o esforço.
+  </>,
 ];
 
-const backgroundColors = [
-  '#0048ff',
-  '#8705f2',
-  '#f501d3',
-  '#0048ff',
-  '#8705f2',
-  '#f501d3',
-  '#0048ff',
+const BACKGROUNDS = [
+  "#0048ff", // início azul principal
+  "#8705f2",
+  "#f501d3",
+  "#0048ff",
+  "#8705f2",
+  "#f501d3",
+  "#0048ff", // termina azul principal
 ];
 
-const easing: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
-const totalSteps = phrases.length + 1;
-
-const phraseVariants = {
-  hidden: (reduceMotion: boolean) => ({
-    opacity: reduceMotion ? 1 : 0,
-    filter: reduceMotion ? 'none' : 'blur(12px)',
-    y: reduceMotion ? 0 : 28,
-  }),
-  visible: {
-    opacity: 1,
-    filter: 'none',
-    y: 0,
-  },
-  exit: (reduceMotion: boolean) => ({
-    opacity: 0,
-    filter: reduceMotion ? 'none' : 'blur(12px)',
-    y: reduceMotion ? 0 : -28,
-  }),
-};
-
-const manifestoVariants = {
-  initial: (reduceMotion: boolean) => ({
-    opacity: 0,
-    scale: reduceMotion ? 1 : 0.95,
-    filter: reduceMotion ? 'none' : 'blur(12px)',
-  }),
-  animate: {
-    opacity: 1,
-    scale: 1,
-    filter: 'none',
-  },
-  exit: (reduceMotion: boolean) => ({
-    opacity: 0,
-    scale: reduceMotion ? 1 : 0.88,
-    filter: reduceMotion ? 'none' : 'blur(12px)',
-  }),
-};
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
 
 export function AboutBeliefs() {
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const prefersReduced = useReducedMotion();
+
+  const sectionRef = useRef(null);
+  const titleRef = useRef(null);
+  const phraseRef = useRef(null);
+
+  // seção: ~140vh → sticky content ocupa 100vh enquanto o scroll “avança” os steps
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start start', 'end end'],
+    offset: ["start start", "end end"],
   });
+
+  const steps = useMemo(() => PHRASES.length + 1, []); // 6 frases + 1 final manifesto
   const [stepIndex, setStepIndex] = useState(0);
-  const reduceMotion = useReducedMotion();
 
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    const progress = Number.isFinite(latest) ? latest : 0;
-    const nextStep = Math.min(
-      totalSteps - 1,
-      Math.max(0, Math.floor(progress * totalSteps)),
-    );
-    setStepIndex((current) => (current === nextStep ? current : nextStep));
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const idx = Math.round(latest * (steps - 1));
+    setStepIndex(clamp(idx, 0, steps - 1));
   });
 
-  const isFinalStep = stepIndex === totalSteps - 1;
-  const currentPhrase = phrases[Math.min(stepIndex, phrases.length - 1)];
-  const backgroundColor =
-    backgroundColors[Math.min(stepIndex, backgroundColors.length - 1)];
+  const titleInView = useInView(titleRef, { amount: 0.4, once: true });
+
+  const isFinal = stepIndex === steps - 1;
+  const phraseIndex = clamp(stepIndex, 0, PHRASES.length - 1);
+  const bg = BACKGROUNDS[stepIndex] ?? BACKGROUNDS[BACKGROUNDS.length - 1];
+  const phraseInView = useInView(phraseRef, {
+    margin: "-20% 0px -20% 0px",
+    amount: "some",
+  });
 
   return (
     <motion.section
       ref={sectionRef}
-      className="belief-section"
-      aria-label="Acreditações de design"
-      initial={{ backgroundColor: backgroundColors[0] }}
-      animate={{ backgroundColor }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      className="moveSection"
+      animate={{ backgroundColor: bg }}
+      transition={{
+        duration: prefersReduced ? 0 : 0.8,
+        ease: [0.17, 0.55, 0.55, 1],
+      }}
     >
-      <div className="belief-inner">
-        <div className="belief-grid">
-          <motion.div
-            className="belief-title"
-            initial={{
-              opacity: 0,
-              filter: reduceMotion ? 'none' : 'blur(10px)',
-              y: reduceMotion ? 0 : 16,
-            }}
-            animate={{
-              opacity: 1,
-              filter: 'none',
-              y: 0,
-            }}
-            transition={{ duration: 1.2, ease: easing }}
-          >
-            <span className="belief-title-line belief-title-line--display">
-              Acredito no design que muda o dia de alguém.
-            </span>
-            <span className="belief-title-line belief-title-line--h2">
-              Não pelo choque, mas pela conexão.
-            </span>
-          </motion.div>
+      <div className="moveSticky">
+        <div className="grid">
+          {/* 1) BIG TÍTULO FIXO */}
+          <div className="titleArea" ref={titleRef}>
+            <motion.div
+              initial={{ opacity: 0, filter: "blur(10px)" }}
+              animate={
+                titleInView || prefersReduced
+                  ? { opacity: 1, filter: "blur(0px)" }
+                  : undefined
+              }
+              transition={{
+                duration: prefersReduced ? 0 : 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+            >
+              <div className="font-display titleLine">
+                Acredito no design que muda o dia de alguém.
+              </div>
+              <div className="font-h2 titleLine">
+                Não pelo choque, mas pela conexão.
+              </div>
+            </motion.div>
+          </div>
 
-          <div className="belief-frame" aria-live="polite">
-            <AnimatePresence mode="wait">
-              {!isFinalStep && currentPhrase && (
-                <motion.p
-                  key={currentPhrase}
-                  className="belief-phrase"
-                  custom={reduceMotion}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  variants={phraseVariants}
-                  transition={
-                    reduceMotion
-                      ? { duration: 0.4 }
-                      : { duration: 0.8, ease: easing }
-                  }
-                >
-                  {currentPhrase}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            <AnimatePresence mode="wait">
-              {isFinalStep && (
+          {/* 2) ÁREA CENTRAL: frases rotativas (1 por vez) */}
+          <div className="phraseArea" aria-live="polite" ref={phraseRef}>
+            <div className="colorBlockWrap">
+              <AnimatePresence mode="wait">
                 <motion.div
-                  className="belief-manifesto"
-                  custom={reduceMotion}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={manifestoVariants}
-                  transition={{ duration: 0.8, ease: easing }}
+                  key={`block-${stepIndex}`}
+                  className="colorBlock"
+                  initial={
+                    prefersReduced ? { opacity: 1 } : { y: "100%", opacity: 1 }
+                  }
+                  animate={
+                    prefersReduced
+                      ? { opacity: 1 }
+                      : { y: "0%", opacity: 1 }
+                  }
+                  exit={
+                    prefersReduced
+                      ? { opacity: 0 }
+                      : { y: "-100%", opacity: 1 }
+                  }
+                  transition={{
+                    duration: prefersReduced ? 0 : 0.65,
+                    ease: [0.2, 0.65, 0.45, 1],
+                  }}
+                  style={{ backgroundColor: bg }}
+                />
+              </AnimatePresence>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {!isFinal ? (
+                <motion.div
+                  key={`phrase-${phraseIndex}`}
+                  className="font-h2 phrase"
+                  initial={
+                    prefersReduced || !phraseInView
+                      ? { opacity: 1 }
+                      : { opacity: 0, x: 60, filter: "blur(10px)" }
+                  }
+                  animate={
+                    prefersReduced
+                      ? { opacity: 1 }
+                      : { opacity: 1, x: 0, filter: "blur(0px)" }
+                  }
+                  exit={
+                    prefersReduced
+                      ? { opacity: 0 }
+                      : { opacity: 0, x: -40, filter: "blur(10px)" }
+                  }
+                  transition={{
+                    duration: prefersReduced ? 0 : 0.65,
+                    ease: [0.2, 0.65, 0.45, 1],
+                  }}
                 >
-                  <span>ISSO É</span>
-                  <span>GHOST</span>
-                  <span>DESIGN</span>
+                  {PHRASES[phraseIndex]}
+                </motion.div>
+              ) : (
+                /* 3) TEXTO FINAL (3 linhas, BIG, branco) */
+                <motion.div
+                  key="final-manifesto"
+                  className="finalWrap"
+                  initial={
+                    prefersReduced || !phraseInView
+                      ? { opacity: 1 }
+                      : { opacity: 0, x: 80, scale: 0.98, filter: "blur(12px)" }
+                  }
+                  animate={
+                    prefersReduced
+                      ? { opacity: 1 }
+                      : { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }
+                  }
+                  transition={{
+                    duration: prefersReduced ? 0 : 0.75,
+                    ease: [0.2, 0.65, 0.45, 1],
+                  }}
+                >
+                  <div className="font-display finalText">
+                    <div>ISSO É</div>
+                    <div>GHOST</div>
+                    <div>DESIGN</div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
       </div>
-      <div className="belief-spacer" aria-hidden="true" />
+
+      {/* “handoff” visual/espacial para a próxima seção (onde o Ghost entra) */}
+      <div className="handoffSpacer" aria-hidden="true" />
     </motion.section>
   );
 }
+
+export default AboutBeliefs;

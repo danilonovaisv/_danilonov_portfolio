@@ -19,10 +19,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // For static generation, we'll use default values from BRAND config
-  // Actual assets will be loaded client-side by the SiteAssetsProvider
-  const assets = []; // Empty initially, will be populated client-side
-
   const cssVars: Record<string, string> = {};
   const setVar = (name: string, value?: string) => {
     if (value) cssVars[name] = value;

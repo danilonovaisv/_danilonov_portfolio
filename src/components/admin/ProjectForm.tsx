@@ -107,7 +107,7 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
           }
         }
 
-        const { tags: formTags, ...payloadData } = values;
+        const { tags: formTags = [], ...payloadData } = values;
         const { data, error: upsertError } = await supabase
           .from('portfolio_projects')
           .upsert(
@@ -130,7 +130,7 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
             .from('portfolio_project_tags')
             .delete()
             .eq('project_id', data.id);
-          const tagIds = selectedTags;
+          const tagIds = formTags.length > 0 ? formTags : selectedTags;
           if (tagIds.length > 0) {
             await supabase.from('portfolio_project_tags').insert(
               tagIds.map((tagId) => ({
