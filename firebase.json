@@ -9,11 +9,11 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "source": "functions",
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint",
         "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
+      ],
+      "source": "functions"
     }
   ],
   "hosting": {
@@ -24,7 +24,7 @@
       "**/node_modules/**"
     ],
     "frameworksBackend": {
-      "region": "us-central1"
+      "region": "us-west1"
     }
   },
   "emulators": {
@@ -53,5 +53,8 @@
   },
   "database": {
     "rules": "database.rules.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }
