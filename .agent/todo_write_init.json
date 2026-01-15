@@ -1,0 +1,17 @@
+[
+  {
+    "content": "#1 ✓ [Infra] Fix Firebase Deploy configuration (scripts, engines, pnpm)",
+    "status": "completed",
+    "activeForm": "Done"
+  },
+  {
+    "content": "#2 ✓ [Quality] Run Project Lint & Fix",
+    "status": "completed",
+    "activeForm": "Passed"
+  },
+  {
+    "content": "#3 ✓ [Build] Verify Production Build",
+    "status": "completed",
+    "activeForm": "Success"
+  }
+]
