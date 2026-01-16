@@ -8,8 +8,8 @@ const firebaseConfig = {
   projectId: 'portfolio-danilo-novais',
   storageBucket: 'portfolio-danilo-novais.firebasestorage.app',
   messagingSenderId: '350817205989',
-  appId: '1:350817205989:web:f7ae32f12d353ef081de0c',
-  measurementId: 'G-PM34VYPZZW',
+  appId: '1:350817205989:web:6329ec75abd0747481de0c',
+  measurementId: 'G-JV88VCE2CF',
 };
 
 // Initialize Firebase

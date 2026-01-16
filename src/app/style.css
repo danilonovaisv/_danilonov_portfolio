@@ -1,8 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto");
-@import url("https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/global/404.webp");
-html, body {
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+@import url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/global/404.webp');
+html,
+body {
   background: #040013;
-  font-family: "Roboto";
+  font-family: 'Roboto';
 }
 
 * {
@@ -32,10 +33,11 @@ html, body {
 .box .box__ghost .symbol:nth-child(1) {
   opacity: 0.2;
   -webkit-animation: shine 4s ease-in-out 3s infinite;
-          animation: shine 4s ease-in-out 3s infinite;
+  animation: shine 4s ease-in-out 3s infinite;
 }
-.box .box__ghost .symbol:nth-child(1):before, .box .box__ghost .symbol:nth-child(1):after {
-  content: "";
+.box .box__ghost .symbol:nth-child(1):before,
+.box .box__ghost .symbol:nth-child(1):after {
+  content: '';
   width: 12px;
   height: 4px;
   background: #fff;
@@ -61,15 +63,16 @@ html, body {
   border-color: #fff;
   opacity: 0.2;
   -webkit-animation: shine 4s ease-in-out 1.3s infinite;
-          animation: shine 4s ease-in-out 1.3s infinite;
+  animation: shine 4s ease-in-out 1.3s infinite;
 }
 .box .box__ghost .symbol:nth-child(3) {
   opacity: 0.2;
   -webkit-animation: shine 3s ease-in-out 0.5s infinite;
-          animation: shine 3s ease-in-out 0.5s infinite;
+  animation: shine 3s ease-in-out 0.5s infinite;
 }
-.box .box__ghost .symbol:nth-child(3):before, .box .box__ghost .symbol:nth-child(3):after {
-  content: "";
+.box .box__ghost .symbol:nth-child(3):before,
+.box .box__ghost .symbol:nth-child(3):after {
+  content: '';
   width: 12px;
   height: 4px;
   background: #fff;
@@ -87,10 +90,11 @@ html, body {
 .box .box__ghost .symbol:nth-child(4) {
   opacity: 0.2;
   -webkit-animation: shine 6s ease-in-out 1.6s infinite;
-          animation: shine 6s ease-in-out 1.6s infinite;
+  animation: shine 6s ease-in-out 1.6s infinite;
 }
-.box .box__ghost .symbol:nth-child(4):before, .box .box__ghost .symbol:nth-child(4):after {
-  content: "";
+.box .box__ghost .symbol:nth-child(4):before,
+.box .box__ghost .symbol:nth-child(4):after {
+  content: '';
   width: 15px;
   height: 4px;
   background: #fff;
@@ -116,15 +120,16 @@ html, body {
   border-color: #fff;
   opacity: 0.2;
   -webkit-animation: shine 1.7s ease-in-out 7s infinite;
-          animation: shine 1.7s ease-in-out 7s infinite;
+  animation: shine 1.7s ease-in-out 7s infinite;
 }
 .box .box__ghost .symbol:nth-child(6) {
   opacity: 0.2;
   -webkit-animation: shine 2s ease-in-out 6s infinite;
-          animation: shine 2s ease-in-out 6s infinite;
+  animation: shine 2s ease-in-out 6s infinite;
 }
-.box .box__ghost .symbol:nth-child(6):before, .box .box__ghost .symbol:nth-child(6):after {
-  content: "";
+.box .box__ghost .symbol:nth-child(6):before,
+.box .box__ghost .symbol:nth-child(6):after {
+  content: '';
   width: 15px;
   height: 4px;
   background: #fff;
@@ -147,7 +152,7 @@ html, body {
   position: relative;
   margin: 0 auto;
   -webkit-animation: upndown 3s ease-in-out infinite;
-          animation: upndown 3s ease-in-out infinite;
+  animation: upndown 3s ease-in-out infinite;
 }
 .box .box__ghost .box__ghost-container .box__ghost-eyes {
   position: absolute;
@@ -197,11 +202,11 @@ html, body {
 }
 .box .box__ghost .box__ghost-shadow {
   height: 20px;
-  box-shadow: 0 50px 15px 5px #3B3769;
+  box-shadow: 0 50px 15px 5px #3b3769;
   border-radius: 50%;
   margin: 0 auto;
   -webkit-animation: smallnbig 3s ease-in-out infinite;
-          animation: smallnbig 3s ease-in-out infinite;
+  animation: smallnbig 3s ease-in-out infinite;
 }
 .box .box__description {
   position: absolute;
@@ -245,7 +250,7 @@ html, body {
   -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 .box .box__description .box__button:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 20px;
   height: 100px;

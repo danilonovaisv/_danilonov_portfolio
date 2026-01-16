@@ -21,7 +21,7 @@ describe('global site links', () => {
     );
     expect(footerHrefs).toContain('#hero');
     expect(footerHrefs).toContain('/sobre');
-    expect(footerHrefs).toContain('#portfolio-showcase');
+    expect(footerHrefs).toContain('/portfolio');
     expect(footerHrefs).toContain('#contact');
   });
 

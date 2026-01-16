@@ -599,7 +599,7 @@ export default function GhostScene() {
       p.userData.rotationSpeed.z = (Math.random() - 0.5) * 0.015;
 
       if (!p.userData.velocity) {
-          p.userData.velocity = new THREE.Vector3();
+        p.userData.velocity = new THREE.Vector3();
       }
       p.userData.velocity.set(
         (Math.random() - 0.5) * 0.012,
@@ -659,8 +659,8 @@ export default function GhostScene() {
       }
       if (analogDecayPass) {
         analogDecayPass.uniforms.uResolution.value.set(
-            window.innerWidth,
-            window.innerHeight
+          window.innerWidth,
+          window.innerHeight
         );
       }
     };
@@ -718,7 +718,9 @@ export default function GhostScene() {
       atmosphereMaterial.uniforms.time.value = time;
       if (analogDecayPass) {
         analogDecayPass.uniforms.uTime.value = time;
-        analogDecayPass.uniforms.uLimboMode.value = params.limboMode ? 1.0 : 0.0;
+        analogDecayPass.uniforms.uLimboMode.value = params.limboMode
+          ? 1.0
+          : 0.0;
       }
 
       // Movimento do Fantasma
@@ -805,7 +807,9 @@ export default function GhostScene() {
         );
 
         const currentParticleCount = currentConfig.particleCount * 5;
-        Array.from({ length: count }).forEach(() => createParticle(currentParticleCount));
+        Array.from({ length: count }).forEach(() =>
+          createParticle(currentParticleCount)
+        );
         lastParticleTime = timestamp;
       }
 
@@ -834,8 +838,8 @@ export default function GhostScene() {
       // Limpeza de array O(1) - Swap and Pop
       for (let i = particles.length - 1; i >= 0; i--) {
         if (!particles[i].visible) {
-            particles[i] = particles[particles.length - 1];
-            particles.pop();
+          particles[i] = particles[particles.length - 1];
+          particles.pop();
         }
       }
 

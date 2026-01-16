@@ -185,10 +185,8 @@ export const ABOUT_CONTENT = {
       'Crio design que observa, entende e guia experiências com intenção, estratégia e tecnologia, na medida certa.',
     ],
     videos: {
-      desktop:
-        siteAsset('about/hero/about.hero.desktop_video.mp4'),
-      mobile:
-        siteAsset('about/hero/about.hero.mobile_video.mp4'),
+      desktop: siteAsset('about/hero/about.hero.desktop_video.mp4'),
+      mobile: siteAsset('about/hero/about.hero.mobile_video.mp4'),
     },
   },
   beliefsIntro: [
@@ -274,10 +272,8 @@ export const ABOUT_CONTENT = {
   method: {
     title: ['Criatividade com método.', 'Impacto sem ruído.'],
     videos: {
-      desktop:
-        siteAsset('about/method/about.method.desktop_video.mp4'),
-      mobile:
-        siteAsset('about/method/about.method.mobile_video.mp4'),
+      desktop: siteAsset('about/method/about.method.desktop_video.mp4'),
+      mobile: siteAsset('about/method/about.method.mobile_video.mp4'),
     },
     intro: [
       'Antes da estética, existe intenção.',
@@ -330,10 +326,8 @@ export const ABOUT_CONTENT = {
 export const PORTFOLIO_CONTENT = {
   hero: {
     video: {
-      desktop:
-        siteAsset('portfolio/portfolio.hero_desktop_video.mp4'),
-      mobile:
-        siteAsset('portfolio/portfolio.hero_mobile_video.mp4'),
+      desktop: siteAsset('portfolio/portfolio.hero_desktop_video.mp4'),
+      mobile: siteAsset('portfolio/portfolio.hero_mobile_video.mp4'),
     },
   },
 };
