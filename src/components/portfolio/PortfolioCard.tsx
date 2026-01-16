@@ -12,6 +12,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useParallaxElement } from '@/hooks/useParallax';
 import type { PortfolioProject } from '@/types/project';
 import { MOTION_TOKENS, ghostTransition } from '@/config/motion';
+import { applyImageFallback } from '@/utils/utils';
 
 interface PortfolioCardProps {
   project: PortfolioProject;
@@ -83,7 +84,8 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            loading={index < 4 ? 'eager' : 'lazy'}
+            loading="lazy"
+            onError={applyImageFallback}
           />
         </motion.div>
       </div>
@@ -101,7 +103,9 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
             alt=""
             fill
             className="object-cover"
+            loading="lazy"
             unoptimized
+            onError={applyImageFallback}
           />
         </motion.div>
       )}

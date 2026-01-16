@@ -6,8 +6,9 @@ import Link from 'next/link';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GHOST_EASE } from '@/lib/motionTokens';
+import { applyImageFallback } from '@/utils/utils';
 
-const GHOST_EASE = [0.22, 1, 0.36, 1] as const;
 const GHOST_SPRING = { damping: 30, stiffness: 200, mass: 1 } as const;
 
 interface Category {
@@ -104,6 +105,8 @@ export function CategoryStripe({
                   fill
                   className="object-cover"
                   sizes="288px"
+                  loading="lazy"
+                  onError={applyImageFallback}
                 />
               </motion.div>
             </div>
