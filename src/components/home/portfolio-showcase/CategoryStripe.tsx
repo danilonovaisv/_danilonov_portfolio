@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
@@ -47,12 +47,17 @@ export function CategoryStripe({
   const smoothProgress = useSpring(scrollYProgress, GHOST_SPRING);
   const parallaxY = useTransform(smoothProgress, [0, 1], [-20, 20]);
 
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const isVideo =
+    category.thumbnail.endsWith('.mp4') || category.thumbnail.endsWith('.webm');
+
   return (
     <motion.div
       ref={stripeRef}
       initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
+      onViewportEnter={() => setShouldLoadVideo(true)}
       transition={{
         duration: 0.8,
         ease: GHOST_EASE,
@@ -98,13 +103,26 @@ export function CategoryStripe({
                 style={{ y: prefersReducedMotion ? 0 : parallaxY }}
                 className="absolute inset-0 w-full h-[120%]"
               >
-                <Image
-                  src={category.thumbnail}
-                  alt={title.join(' ')}
-                  fill
-                  className="object-cover"
-                  sizes="288px"
-                />
+                {isVideo ? (
+                  shouldLoadVideo ? (
+                    <video
+                      src={category.thumbnail}
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      className="object-cover w-full h-full"
+                    />
+                  ) : null
+                ) : (
+                  <Image
+                    src={category.thumbnail}
+                    alt={title.join(' ')}
+                    fill
+                    className="object-cover"
+                    sizes="288px"
+                  />
+                )}
               </motion.div>
             </div>
           </motion.div>
