@@ -1,0 +1,27 @@
+[
+  {
+    "content": "#1 ✓ [Infra] Fix Firebase Deploy configuration (scripts, engines, pnpm)",
+    "status": "completed",
+    "activeForm": "Done"
+  },
+  {
+    "content": "#2 ✓ [Quality] Run Project Lint & Fix",
+    "status": "completed",
+    "activeForm": "Passed"
+  },
+  {
+    "content": "#3 ✓ [Build] Verify Production Build",
+    "status": "completed",
+    "activeForm": "Success"
+  },
+  {
+    "content": "#4 ✓ [Debug] Analyze firebase-debug.log",
+    "status": "completed",
+    "activeForm": "Log analyzed (JSON parser error)"
+  },
+  {
+    "content": "#5 ○ [Fix] Remove .npmrc and generate package-lock.json",
+    "status": "in_progress",
+    "activeForm": "Sanitizing env"
+  }
+]

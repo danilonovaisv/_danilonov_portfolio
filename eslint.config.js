@@ -1,5 +1,12 @@
 import parser from '@typescript-eslint/parser';
 
+// Try to load the Next.js ESLint plugin; fall back gracefully if not installed (e.g., offline)
+const nextPluginModule =
+  (await import('@next/eslint-plugin-next').catch(() => null)) ?? null;
+const nextPlugin =
+  (nextPluginModule && (nextPluginModule.default ?? nextPluginModule)) || null;
+const nextCoreWebVitals = nextPlugin?.configs?.['core-web-vitals'];
+
 export default [
   {
     ignores: [
@@ -46,7 +53,14 @@ export default [
         React: 'readonly',
       },
     },
+    plugins: nextPlugin
+      ? {
+          '@next/next': nextPlugin,
+        }
+      : {},
+    settings: nextCoreWebVitals?.settings ?? {},
     rules: {
+      ...(nextCoreWebVitals?.rules ?? {}),
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'prefer-const': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],

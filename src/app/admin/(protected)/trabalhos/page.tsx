@@ -3,6 +3,7 @@ export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
 import Link from 'next/link';
+import Image from 'next/image'; // Added import for next/image
 import { createClient } from '@/lib/supabase/server';
 import { togglePublish } from '@/lib/supabase/queries/projects';
 
@@ -18,6 +19,7 @@ type Props = {
 
 export default async function TrabalhosPage(props: Props) {
   const searchParams = await props.searchParams;
+
   const supabase = await createClient();
 
   const resolvedSearchParams = searchParams || {};
@@ -111,9 +113,11 @@ export default async function TrabalhosPage(props: Props) {
                 <td className="px-4 py-3 font-medium text-white">
                   <div className="flex items-center gap-3">
                     {project.thumbnail_path && (
-                      <img
+                      <Image
                         src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/portfolio-media/${project.thumbnail_path}`}
                         alt={project.title}
+                        width={64} // Assuming width of 16 * 4 = 64px at 1x scale
+                        height={40} // Assuming height of 10 * 4 = 40px at 1x scale
                         className="h-10 w-16 rounded object-cover border border-white/10"
                       />
                     )}
@@ -131,14 +135,18 @@ export default async function TrabalhosPage(props: Props) {
                 </td>
                 <td className="px-4 py-3 text-slate-300">
                   <div className="flex flex-wrap gap-1 text-[11px]">
-                    {project.tags?.map((t: any) => (
-                      <span
-                        key={t.tag.slug}
-                        className="px-2 py-1 rounded bg-white/10"
-                      >
-                        {t.tag.label}
-                      </span>
-                    ))}
+                    {project.tags?.map((t: any) => {
+                      const tag = Array.isArray(t.tag) ? t.tag[0] : t.tag;
+                      if (!tag) return null;
+                      return (
+                        <span
+                          key={tag.slug}
+                          className="px-2 py-1 rounded bg-white/10"
+                        >
+                          {tag.label}
+                        </span>
+                      );
+                    })}
                   </div>
                 </td>
                 <td className="px-4 py-3 text-slate-300">

@@ -11,15 +11,10 @@ const nextConfig = {
    */
   reactStrictMode: true,
 
+  // output: 'standalone',
   experimental: {
     // any needed experimental flags
   },
-
-  allowedDevOrigins: [
-    'http://192.168.0.14:3000',
-    'http://192.168.0.34:3000',
-    'http://192.168.0.57:3000',
-  ],
 
   /**
    * Configuração de imagens (Supabase)
@@ -29,7 +24,7 @@ const nextConfig = {
     // Firebase Hosting/App Hosting não está servindo a rota /_next/image;
     // Utilizamos um loader customizado para usar as transformações de imagem do Supabase.
     loader: 'custom',
-    loaderFile: './src/lib/supabase/image-loader.ts',
+    loaderFile: './supabase-image-loader.js',
 
     remotePatterns: [
       {
