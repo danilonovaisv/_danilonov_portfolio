@@ -22,15 +22,11 @@ const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
   { label: 'Contato', href: '#contact' },
 ];
 
-const DEMO_IMAGES: {
-  url: string;
-  position: [number, number, number];
-  scale: [number, number] | number;
-}[] = [
-  { url: '/assets/demo/cs1.webp', position: [-2, 0, 0], scale: [3, 1.2] },
-  { url: '/assets/demo/cs2.webp', position: [2, 0, 3], scale: [3, 3] },
-  // Add more demo images as needed
-];
+const DEMO_IMAGES = [
+  { url: '/assets/demo/cs1.webp', position: [-2, 0, 0] as const, scale: [3, 1.2] as const },
+  { url: '/assets/demo/cs2.webp', position: [2, 0, 3] as const, scale: [3, 3] as const },
+  { url: '/assets/demo/cs3.webp', position: [0, -1, -2] as const, scale: [2, 2] as const },
+] as const;
 
 interface HeaderFluidGlassProps {
   navItems?: HeaderNavItem[];
@@ -65,8 +61,8 @@ function Images() {
       {DEMO_IMAGES.map((image, index) => (
         <Image
           key={`${image.url}-${index}`}
-          position={image.position}
-          scale={image.scale}
+          position={[image.position[0], image.position[1], image.position[2]]}
+          scale={[image.scale[0], image.scale[1]]}
           url={image.url}
         />
       ))}
