@@ -247,7 +247,7 @@ const OrigemCriativa: React.FC = () => {
   return (
     <section className="relative w-full overflow-hidden transition-colors duration-1000" ref={containerRef}>
       {/* Progress Line */}
-      <div className="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 h-48 md:h-80 w-[2px] bg-white/10 z-[100] rounded-full overflow-hidden hidden lg:block">
+      <div className="fixed right-4 md:right-12 top-1/2 -translate-y-1/2 h-48 md:h-80 w-[2px] bg-white/10 z-100 rounded-full overflow-hidden hidden lg:block">
         <div 
           ref={progressLineRef}
           className="w-full h-full bg-[#3b82f6] origin-top scale-y-0"
@@ -260,7 +260,7 @@ const OrigemCriativa: React.FC = () => {
         
         {/* Section Title "Origem" - CustomLight, 28px, Cyan */}
         <div className="mb-24 text-center select-none">
-          <h1 className="text-[1.75rem] font-['CustomLight'] font-[300] leading-none text-[#4fe6ff] uppercase tracking-[0.2em]">
+          <h1 className="text-[1.75rem] font-['CustomLight'] font-light leading-none text-[#4fe6ff] uppercase tracking-[0.2em]">
             Origem
           </h1>
         </div>
@@ -277,11 +277,11 @@ const OrigemCriativa: React.FC = () => {
                 <div className="content w-full lg:max-w-[520px] flex flex-col gap-8 lg:transform lg:-translate-y-[15%]">
                   <div className="space-y-6">
                     {/* H2 using CustomLight font and #0048ff color */}
-                    <h2 className="reveal-text text-[32px] md:text-[42px] lg:text-[48px] font-['CustomLight'] font-[300] leading-[1.1] text-[#0048ff] uppercase tracking-wide">
+                    <h2 className="reveal-text text-[32px] md:text-[42px] lg:text-[48px] font-['CustomLight'] font-light leading-[1.1] text-[#0048ff] uppercase tracking-wide">
                       {block.title}
                     </h2>
                     {/* Responsive body text */}
-                    <p className="reveal-text text-[16px] md:text-[18px] lg:text-[20px] font-[400] leading-[1.7] text-[#fcffff] opacity-75">
+                    <p className="reveal-text text-[16px] md:text-[18px] lg:text-[20px] font-normal leading-[1.7] text-[#fcffff] opacity-75">
                       {block.desc}
                     </p>
                   </div>
@@ -300,7 +300,7 @@ const OrigemCriativa: React.FC = () => {
           </div>
 
           {/* Desktop Pinned Images (1:1 Aspect Ratio) */}
-          <div className="arch__right hidden lg:flex col-span-6 relative h-screen sticky top-0 items-center justify-center" ref={archRightRef}>
+          <div className="arch__right hidden lg:flex col-span-6 sticky top-0 h-screen items-center justify-center" ref={archRightRef}>
             <div className="relative w-full aspect-square max-w-[560px]">
               {CONTENT_BLOCKS.map((block) => (
                 <div 
@@ -321,8 +321,8 @@ const OrigemCriativa: React.FC = () => {
       </div>
 
       <div className="h-[40vh] w-full flex flex-col items-center justify-center pointer-events-none gap-4">
-        <div className="w-[1px] h-24 bg-gradient-to-b from-[#3b82f6] to-transparent opacity-20" />
-        <span className="text-[12px] tracking-[0.5em] font-[800] text-[#3b82f6] uppercase opacity-30">Trajetória Completa</span>
+        <div className="w-px h-24 bg-linear-to-b from-[#3b82f6] to-transparent opacity-20" />
+        <span className="text-[12px] tracking-[0.5em] font-extrabold text-[#3b82f6] uppercase opacity-30">Trajetória Completa</span>
       </div>
     </section>
   );

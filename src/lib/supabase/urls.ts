@@ -1,10 +1,12 @@
 const normalizeUrl = (value: string) => value.replace(/\/+$/, '');
+const DEFAULT_SUPABASE_URL = 'https://umkmwbkwvulxtdodzmzf.supabase.co';
 
 export function getSupabaseBaseUrl() {
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ??
     process.env.SUPABASE_URL ??
-    process.env.NEXT_PUBLIC_SUPABASE_URL;
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??
+    DEFAULT_SUPABASE_URL;
 
   if (!url) return '';
   try {
@@ -50,7 +52,8 @@ export function buildSupabaseStorageUrl(
 ) {
   if (!filePath) return '';
 
-  const isHttp = filePath.startsWith('http://') || filePath.startsWith('https://');
+  const isHttp =
+    filePath.startsWith('http://') || filePath.startsWith('https://');
   const isSupabaseUrl = filePath.includes('/storage/v1/');
   if (isHttp && !isSupabaseUrl) {
     return filePath;

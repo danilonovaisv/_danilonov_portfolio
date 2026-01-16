@@ -7,8 +7,6 @@ import {
 
 export type SiteAsset = NormalizedSiteAsset;
 
-export type { SiteAsset };
-
 export async function getSiteAssets() {
   const supabase = await createClient();
   const { data, error } = await supabase
