@@ -4,11 +4,18 @@ interface SupabaseLoaderProps {
   quality?: number;
 }
 
+const DEFAULT_SUPABASE_URL = 'https://umkmwbkwvulxtdodzmzf.supabase.co';
+
 export default function supabaseLoader({
   src,
   width,
   quality,
 }: SupabaseLoaderProps): string {
+  const appendParams = (url: string, w: number, q: number) => {
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}width=${w}&quality=${q || 75}`;
+  };
+
   // If the image is already a full URL, we need to extract the path or modify it.
 
   // 1. Handle local images (starting with /). Return as-is to avoid breaking them.
@@ -20,7 +27,7 @@ export default function supabaseLoader({
 
   // SVGs should not be transformed by Supabase Image API (often leads to errors or isn't needed)
   if (src.endsWith('.svg')) {
-    return src;
+    return appendParams(src, width, quality || 75);
   }
 
   let projectId = '';
@@ -50,19 +57,16 @@ export default function supabaseLoader({
     }
   }
 
-  // Helper to append params safely
-  const appendParams = (url: string, w: number, q: number) => {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}width=${w}&quality=${q || 75}`;
-  };
-
   // Logic to transform the URL
   // Current pattern: .../storage/v1/object/public/bucket/path/to/image.ext
   // Target pattern: .../storage/v1/render/image/public/bucket/path/to/image.ext?width=...
 
   if (src.includes('/storage/v1/object/public/')) {
+    const base = src.startsWith('http')
+      ? src
+      : `${DEFAULT_SUPABASE_URL}${src.startsWith('/') ? '' : '/'}${src}`;
     // Replace /object/ with /render/image/
-    const newSrc = src.replace(
+    const newSrc = base.replace(
       '/storage/v1/object/public/',
       '/storage/v1/render/image/public/'
     );

@@ -1,10 +1,12 @@
 const normalizeUrl = (value: string) => value.replace(/\/+$/, '');
+const DEFAULT_SUPABASE_URL = 'https://umkmwbkwvulxtdodzmzf.supabase.co';
 
 export function getSupabaseBaseUrl() {
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ??
     process.env.SUPABASE_URL ??
-    process.env.NEXT_PUBLIC_SUPABASE_URL;
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??
+    DEFAULT_SUPABASE_URL;
 
   if (!url) return '';
   try {
