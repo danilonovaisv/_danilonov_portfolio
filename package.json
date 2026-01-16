@@ -119,6 +119,7 @@
     "autoprefixer": "^10.4.23",
     "commander": "^14.0.2",
     "depcheck": "^1.4.7",
+    "esbuild": "0.19.12",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.2",
     "eslint-config-prettier": "^10.1.8",
@@ -137,7 +138,8 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "which": "4.0.0"
   },
   "overrides": {
     "test-exclude": "7.0.1"
