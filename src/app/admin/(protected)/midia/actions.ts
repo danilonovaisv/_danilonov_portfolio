@@ -5,6 +5,7 @@ import {
   buildAssetFilePath,
   getFileExtension,
 } from '@/lib/supabase/asset-paths';
+import { normalizeStoragePath } from '@/lib/supabase/urls';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
@@ -20,11 +21,15 @@ type AssetPayload = {
 
 export async function upsertAsset(payload: AssetPayload) {
   const supabase = await createClient();
+  const normalizedPath = payload.file_path
+    ? normalizeStoragePath(payload.file_path, payload.bucket ?? 'site-assets')
+    : null;
   const { error } = await supabase.from('site_assets').upsert(
     {
       ...payload,
       bucket: payload.bucket ?? 'site-assets',
       is_active: true,
+      file_path: normalizedPath,
     },
     { onConflict: 'key' }
   );
@@ -49,7 +54,8 @@ export async function assignAssetRole(payload: AssignAssetRolePayload) {
     throw fetchError ?? new Error('Asset não encontrado.');
   }
 
-  const extension = getFileExtension(existing.file_path) || 'bin';
+  const currentPath = normalizeStoragePath(existing.file_path, existing.bucket);
+  const extension = getFileExtension(currentPath) || 'bin';
   const targetPath = buildAssetFilePath({
     page: payload.role.page,
     key: payload.role.key,
@@ -57,7 +63,7 @@ export async function assignAssetRole(payload: AssignAssetRolePayload) {
     extension,
   });
 
-  let file_path = existing.file_path;
+  let file_path = currentPath;
 
   if (file_path !== targetPath) {
     const { error: moveError } = await supabase.storage
@@ -90,9 +96,13 @@ export async function removeAsset(payload: {
 }) {
   const supabase = await createClient();
   if (payload.file_path) {
+    const normalizedPath = normalizeStoragePath(
+      payload.file_path,
+      payload.bucket
+    );
     const { error: storageError } = await supabase.storage
       .from(payload.bucket)
-      .remove([payload.file_path]);
+      .remove([normalizedPath]);
     if (storageError) throw storageError;
   }
   const { error } = await supabase

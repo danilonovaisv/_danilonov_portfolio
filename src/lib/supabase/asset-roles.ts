@@ -1,3 +1,5 @@
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
+
 export type SiteAssetRole = {
   key: string;
   label: string;
@@ -15,7 +17,7 @@ export type SiteAssetRoleGroup = {
 
 const globalLogos: SiteAssetRole[] = [
   {
-    key: 'global.logo_header_light',
+    key: SITE_ASSET_KEYS.logos.headerLight,
     label: 'Logo header (claro)',
     description: 'Versão clara do logo do header',
     page: 'global',
@@ -23,7 +25,7 @@ const globalLogos: SiteAssetRole[] = [
     subPath: 'logos',
   },
   {
-    key: 'global.logo_header_dark',
+    key: SITE_ASSET_KEYS.logos.headerDark,
     label: 'Logo header (escuro)',
     description: 'Versão escura do logo do header',
     page: 'global',
@@ -31,7 +33,7 @@ const globalLogos: SiteAssetRole[] = [
     subPath: 'logos',
   },
   {
-    key: 'global.favicon_light',
+    key: SITE_ASSET_KEYS.logos.faviconLight,
     label: 'Favicon claro',
     description: 'Favicon claro utilizado na aba',
     page: 'global',
@@ -39,7 +41,7 @@ const globalLogos: SiteAssetRole[] = [
     subPath: 'logos',
   },
   {
-    key: 'global.favicon_dark',
+    key: SITE_ASSET_KEYS.logos.faviconDark,
     label: 'Favicon escuro',
     description: 'Favicon escuro utilizado na aba',
     page: 'global',
@@ -50,7 +52,7 @@ const globalLogos: SiteAssetRole[] = [
 
 const globalFonts: SiteAssetRole[] = [
   {
-    key: 'global.font_display',
+    key: SITE_ASSET_KEYS.fonts.display,
     label: '--font-display',
     description: 'Fonte principal de destaque',
     page: 'global',
@@ -58,7 +60,7 @@ const globalFonts: SiteAssetRole[] = [
     subPath: 'fonts',
   },
   {
-    key: 'global.font_h1',
+    key: SITE_ASSET_KEYS.fonts.h1,
     label: '--font-h1',
     description: 'Fonte dos títulos h1',
     page: 'global',
@@ -66,7 +68,7 @@ const globalFonts: SiteAssetRole[] = [
     subPath: 'fonts',
   },
   {
-    key: 'global.font_h2',
+    key: SITE_ASSET_KEYS.fonts.h2,
     label: '--font-h2',
     description: 'Fonte dos títulos h2',
     page: 'global',
@@ -74,7 +76,7 @@ const globalFonts: SiteAssetRole[] = [
     subPath: 'fonts',
   },
   {
-    key: 'global.font_h3',
+    key: SITE_ASSET_KEYS.fonts.h3,
     label: '--font-h3',
     description: 'Fonte dos títulos h3',
     page: 'global',
@@ -82,7 +84,7 @@ const globalFonts: SiteAssetRole[] = [
     subPath: 'fonts',
   },
   {
-    key: 'global.font_body',
+    key: SITE_ASSET_KEYS.fonts.body,
     label: '--font-body',
     description: 'Fonte do corpo de texto',
     page: 'global',
@@ -90,7 +92,7 @@ const globalFonts: SiteAssetRole[] = [
     subPath: 'fonts',
   },
   {
-    key: 'global.font_light',
+    key: SITE_ASSET_KEYS.fonts.light,
     label: '--font-light',
     description: 'Fonte auxiliar leve',
     page: 'global',
@@ -99,10 +101,9 @@ const globalFonts: SiteAssetRole[] = [
   },
 ];
 
-const clientStrips: SiteAssetRole[] = Array.from(
-  { length: 12 },
-  (_, index) => ({
-    key: `clients.strip.${index + 1}`,
+const clientStrips: SiteAssetRole[] = SITE_ASSET_KEYS.clients.strips.map(
+  (key, index) => ({
+    key,
     label: `Logo cliente ${index + 1}`,
     description: 'Logo para a faixa de clientes',
     page: 'clients',
@@ -114,7 +115,7 @@ const clientStrips: SiteAssetRole[] = Array.from(
 
 const aboutHeroVideos: SiteAssetRole[] = [
   {
-    key: 'about.hero_video.desktop',
+    key: SITE_ASSET_KEYS.heroVideos.aboutDesktop,
     label: 'Vídeo hero Sobre (desktop)',
     description: 'Vídeo da hero da página Sobre (desktop)',
     page: 'about',
@@ -122,7 +123,7 @@ const aboutHeroVideos: SiteAssetRole[] = [
     subPath: 'hero',
   },
   {
-    key: 'about.hero_video.mobile',
+    key: SITE_ASSET_KEYS.heroVideos.aboutMobile,
     label: 'Vídeo hero Sobre (mobile)',
     description: 'Versão mobile da hero sobre',
     page: 'about',
@@ -131,21 +132,19 @@ const aboutHeroVideos: SiteAssetRole[] = [
   },
 ];
 
-const aboutOriginImages: SiteAssetRole[] = Array.from(
-  { length: 4 },
-  (_, index) => ({
-    key: `about.origin_image.${index + 1}`,
+const aboutOriginImages: SiteAssetRole[] =
+  SITE_ASSET_KEYS.about.originImages.map((key, index) => ({
+    key,
     label: `Origem imagem ${index + 1}`,
     description: 'Imagem da seção Origem',
     page: 'about',
     asset_type: 'image',
     subPath: 'origin',
     sort_order: index + 1,
-  })
-);
+  }));
 
 const aboutMethodVideo: SiteAssetRole = {
-  key: 'about.method_video',
+  key: SITE_ASSET_KEYS.heroVideos.method,
   label: 'Vídeo método',
   description: 'Vídeo da seção Método',
   page: 'about',
@@ -164,7 +163,7 @@ const aboutCurriculum: SiteAssetRole = {
 
 const portfolioHeroVideos: SiteAssetRole[] = [
   {
-    key: 'portfolio.hero_video.desktop',
+    key: SITE_ASSET_KEYS.heroVideos.portfolioDesktop,
     label: 'Vídeo hero Portfólio (desktop)',
     description: 'Hero do portfólio desktop',
     page: 'portfolio',
@@ -172,7 +171,7 @@ const portfolioHeroVideos: SiteAssetRole[] = [
     subPath: 'hero',
   },
   {
-    key: 'portfolio.hero_video.mobile',
+    key: SITE_ASSET_KEYS.heroVideos.portfolioMobile,
     label: 'Vídeo hero Portfólio (mobile)',
     description: 'Hero do portfólio mobile',
     page: 'portfolio',
@@ -181,9 +180,18 @@ const portfolioHeroVideos: SiteAssetRole[] = [
   },
 ];
 
+const homeHeroVideo: SiteAssetRole = {
+  key: SITE_ASSET_KEYS.heroVideos.homeManifesto,
+  label: 'Vídeo manifesto (home)',
+  description: 'Vídeo principal da hero da Home',
+  page: 'home',
+  asset_type: 'video',
+};
+
 export const siteAssetRoleGroups: SiteAssetRoleGroup[] = [
   { label: 'Global • Logos', roles: globalLogos },
   { label: 'Global • Fonts', roles: globalFonts },
+  { label: 'Home • Hero', roles: [homeHeroVideo] },
   { label: 'Clients • Logos', roles: clientStrips },
   { label: 'Sobre • Hero vídeos', roles: aboutHeroVideos },
   { label: 'Sobre • Origem', roles: aboutOriginImages },

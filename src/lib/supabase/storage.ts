@@ -1,5 +1,6 @@
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { buildAssetFilePath } from '@/lib/supabase/asset-paths';
+import { normalizeStoragePath } from '@/lib/supabase/urls';
 
 type UploadBucket = 'portfolio-media' | 'site-assets';
 
@@ -24,7 +25,7 @@ export async function uploadToBucket(
     .upload(path, file, { cacheControl: '3600', upsert: true });
 
   if (error) throw error;
-  return data.path;
+  return normalizeStoragePath(data.path, bucket);
 }
 
 export async function uploadSiteAsset({
@@ -54,5 +55,5 @@ export async function uploadSiteAsset({
     .upload(path, file, { cacheControl: '3600', upsert: true });
 
   if (error) throw error;
-  return data.path;
+  return normalizeStoragePath(data.path, bucket);
 }

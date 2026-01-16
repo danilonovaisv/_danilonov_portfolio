@@ -7,6 +7,7 @@ import { AssetCard } from '@/components/admin/AssetCard';
 import { AssetForm } from '@/components/admin/AssetForm';
 import { AssetGuide } from '@/components/admin/AssetGuide';
 import { PresetButtons } from './preset-buttons';
+import { normalizeAssetRecord } from '@/lib/supabase/site-asset-utils';
 
 export default async function MidiaPage() {
   const supabase = await createClient();
@@ -16,12 +17,17 @@ export default async function MidiaPage() {
     .order('page', { ascending: true })
     .order('sort_order', { ascending: true, nullsFirst: false });
 
-  const groups = (assets ?? []).reduce<Record<string, any[]>>((acc, asset) => {
-    const page = asset.page || 'global';
-    acc[page] = acc[page] || [];
-    acc[page].push(asset);
-    return acc;
-  }, {});
+  const normalizedAssets = (assets ?? []).map(normalizeAssetRecord);
+
+  const groups = normalizedAssets.reduce<Record<string, any[]>>(
+    (acc, asset) => {
+      const page = asset.page || 'global';
+      acc[page] = acc[page] || [];
+      acc[page].push(asset);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="space-y-6">
@@ -63,7 +69,7 @@ export default async function MidiaPage() {
             </div>
           </section>
         ))}
-        {!assets?.length && (
+        {!normalizedAssets.length && (
           <div className="text-slate-400 text-sm">
             Nenhum asset cadastrado ainda.
           </div>

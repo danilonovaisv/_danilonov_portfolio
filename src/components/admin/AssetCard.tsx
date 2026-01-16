@@ -15,10 +15,11 @@ import {
 } from '@/lib/supabase/asset-roles';
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { uploadSiteAsset } from '@/lib/supabase/storage';
-import type { DbAsset } from '@/types/admin';
+import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
+import type { NormalizedSiteAsset } from '@/lib/supabase/site-asset-utils';
 
 type Props = {
-  asset: DbAsset;
+  asset: NormalizedSiteAsset;
 };
 
 export function AssetCard({ asset }: Props) {
@@ -99,13 +100,14 @@ export function AssetCard({ asset }: Props) {
     });
   };
 
+  const previewUrl = buildSupabaseStorageUrl(asset.bucket, asset.file_path);
+
   return (
     <div className="rounded-lg border border-white/10 bg-slate-900/60 p-4 flex gap-4">
       <div className="w-24 h-24 rounded-md bg-slate-800 overflow-hidden relative">
-        {asset.asset_type === 'image' &&
-        process.env.NEXT_PUBLIC_SUPABASE_URL ? (
+        {asset.asset_type === 'image' && previewUrl ? (
           <Image
-            src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${asset.bucket}/${asset.file_path}`}
+            src={previewUrl}
             alt={asset.key}
             fill
             className="object-cover"

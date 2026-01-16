@@ -3,6 +3,7 @@ import { promises as fs, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { siteAssetRoleMap } from '../src/lib/supabase/asset-roles';
+import { normalizeStoragePath } from '../src/lib/supabase/urls';
 
 const {
   NEXT_PUBLIC_SUPABASE_URL,
@@ -105,14 +106,18 @@ async function readAssetList(filePath: string) {
 }
 
 function buildRecordEntry(rawPath: string) {
-  const normalized = rawPath.replace(/^\/+/, '');
-  const segments = normalized.split('/').filter(Boolean);
-  if (segments.length === 0) {
+  const normalizedInput = rawPath.replace(/^\/+/, '').replace(/"+/g, '');
+  const bucketMatch = normalizedInput.match(
+    /(?:object\/public|render\/image\/public)\/([^/]+)/
+  );
+  const bucket = bucketMatch?.[1] ?? 'site-assets';
+
+  const cleanPath = normalizeStoragePath(normalizedInput, bucket);
+  if (!cleanPath) {
     throw new Error(`Invalid path ${rawPath}`);
   }
 
-  const pathSegments =
-    segments[0] === 'site-assets' ? segments.slice(1) : segments;
+  const pathSegments = cleanPath.split('/').filter(Boolean);
   if (pathSegments.length === 0) {
     throw new Error(`Invalid path ${rawPath}`);
   }
@@ -127,11 +132,10 @@ function buildRecordEntry(rawPath: string) {
   const role = siteAssetRoleMap.get(key);
   const asset_type = role?.asset_type ?? detectAssetType(extension);
   const sort_order = role?.sort_order ?? parseSortOrder(key);
-  const file_path = pathSegments.join('/');
   return {
     key: role?.key ?? key,
-    bucket: 'site-assets',
-    file_path,
+    bucket,
+    file_path: cleanPath,
     asset_type,
     page: role?.page ?? page,
     description: role?.description ?? null,

@@ -1,7 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
 import type { DbAsset } from '@/types/admin';
+import {
+  normalizeAssetRecord,
+  type NormalizedSiteAsset,
+} from '@/lib/supabase/site-asset-utils';
 
-export type SiteAsset = DbAsset & { publicUrl: string };
+export type SiteAsset = NormalizedSiteAsset;
+
+export type { SiteAsset };
 
 export async function getSiteAssets() {
   const supabase = await createClient();
@@ -13,14 +19,7 @@ export async function getSiteAssets() {
 
   if (error) throw error;
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-
-  return (data ?? []).map((asset) => ({
-    ...asset,
-    publicUrl:
-      asset.file_path && baseUrl
-        ? `${baseUrl}/storage/v1/object/public/${asset.bucket}/${asset.file_path}`
-        : (asset.file_path ?? ''),
-  })) as SiteAsset[];
+  return (data ?? []).map((asset) =>
+    normalizeAssetRecord(asset as DbAsset)
+  ) as SiteAsset[];
 }

@@ -19,6 +19,31 @@ describe('buildSupabaseStorageUrl', () => {
       'https://test.supabase.co/storage/v1/object/public/portfolio-media/projects/thumb.png'
     );
   });
+
+  it('normalizes paths that include the bucket prefix', () => {
+    const url = buildSupabaseStorageUrl(
+      'site-assets',
+      'site-assets/global/logos/logo.svg'
+    );
+    expect(url).toBe(
+      'https://test.supabase.co/storage/v1/object/public/site-assets/global/logos/logo.svg'
+    );
+  });
+
+  it('normalizes full Supabase URLs to the current project base URL', () => {
+    const url = buildSupabaseStorageUrl(
+      'site-assets',
+      'https://old-project.supabase.co/storage/v1/object/public/site-assets/global/fonts/font.woff2'
+    );
+    expect(url).toBe(
+      'https://test.supabase.co/storage/v1/object/public/site-assets/global/fonts/font.woff2'
+    );
+  });
+
+  it('keeps external URLs untouched', () => {
+    const external = 'https://example.com/image.png';
+    expect(buildSupabaseStorageUrl('site-assets', external)).toBe(external);
+  });
 });
 
 describe('mapDbProjectToPortfolioProject', () => {

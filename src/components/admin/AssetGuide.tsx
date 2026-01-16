@@ -1,90 +1,101 @@
 'use client';
 
 import React from 'react';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 const assetGuide = [
   {
-    key: 'global.logo_header',
-    description: 'Logo principal do header',
+    key: SITE_ASSET_KEYS.logos.headerLight,
+    description: 'Logo principal do header (claro)',
     change:
-      'Atualize o arquivo e certifique-se de que o header usa useSiteAssetUrl nesta key.',
+      'Atualize o arquivo (SVG recomendado) e valide o cabeçalho com useSiteAssetUrl.',
     page: 'global',
   },
   {
-    key: 'global.favicon',
-    description: 'Favicon usado em <head>',
-    change:
-      'Faça upload de um SVG/ICO e mantenha o mesmo nome no metadata/JsonLd.',
+    key: SITE_ASSET_KEYS.logos.headerDark,
+    description: 'Logo principal do header (escuro)',
+    change: 'Mantenha dimensões iguais ao claro para evitar saltos.',
     page: 'global',
   },
   {
-    key: 'global.font_display',
-    description: 'Fonte display principal (Tailwind e h1)',
-    change:
-      'Altere o registro para a nova fonte e garanta que tailwind e typography usem esse nome.',
+    key: SITE_ASSET_KEYS.logos.faviconLight,
+    description: 'Favicon claro usado em <head>',
+    change: 'SVG/ICO com fundo transparente; mantenha metadata/JsonLd alinhado.',
     page: 'global',
   },
   {
-    key: 'home.manifesto_video',
+    key: SITE_ASSET_KEYS.logos.faviconDark,
+    description: 'Favicon escuro usado em <head>',
+    change: 'Mesmo tamanho do claro para consistência.',
+    page: 'global',
+  },
+  {
+    key: SITE_ASSET_KEYS.fonts.display,
+    description: 'Fonte display principal (--font-display)',
+    change: 'Atualize e revise tailwind/theme para usar a nova família.',
+    page: 'global',
+  },
+  {
+    key: SITE_ASSET_KEYS.fonts.body,
+    description: 'Fonte do corpo (--font-body)',
+    change: 'Confirme fallback stack e pesos no tema tipográfico.',
+    page: 'global',
+  },
+  {
+    key: SITE_ASSET_KEYS.heroVideos.homeManifesto,
     description: 'Vídeo do manifesto na hero da Home',
-    change: 'Substitua o MP4 e poste poster & 720p com mesmo prefixo.',
+    change:
+      'Substitua o MP4; gere poster e versão -720p mantendo o mesmo prefixo.',
     page: 'home',
   },
   {
-    key: 'global.font_body',
-    description: 'Fonte secundária do corpo (p/ todo o texto)',
-    change:
-      'Atualize o asset e use a nova fonte em BRAN.config/tailwind se necessário.',
-    page: 'global',
+    key: SITE_ASSET_KEYS.heroVideos.aboutDesktop,
+    description: 'Vídeo da hero Sobre (desktop)',
+    change: 'Sincronize com a versão mobile para evitar discrepâncias.',
+    page: 'about',
   },
   {
-    key: 'clients.strip',
+    key: SITE_ASSET_KEYS.heroVideos.aboutMobile,
+    description: 'Vídeo da hero Sobre (mobile)',
+    change: 'O hook AboutHero troca automaticamente entre desktop/mobile.',
+    page: 'about',
+  },
+  {
+    key: SITE_ASSET_KEYS.heroVideos.method,
+    description: 'Vídeo da sessão Método',
+    change: 'Use o mesmo prefixo para versões alternativas se necessário.',
+    page: 'about',
+  },
+  ...SITE_ASSET_KEYS.about.originImages.map((key, index) => ({
+    key,
+    description: `Imagem ${index + 1} da sessão Origem`,
+    change: 'Siga o padrão about.origin_image.N para cada card.',
+    page: 'about',
+  })),
+  {
+    key: SITE_ASSET_KEYS.heroVideos.portfolioDesktop,
+    description: 'Vídeo hero do portfólio (desktop)',
+    change: 'Atualize em par com a versão mobile.',
+    page: 'portfolio',
+  },
+  {
+    key: SITE_ASSET_KEYS.heroVideos.portfolioMobile,
+    description: 'Vídeo hero do portfólio (mobile)',
+    change: 'Sincronize duração e cor com a versão desktop.',
+    page: 'portfolio',
+  },
+  {
+    key: 'clients.strip.*',
     description: 'Strip de logos da sessão de clients',
     change:
-      'Adicione novos arquivos com nomes como clients-strip-1 e os use via useSiteAssetsByPrefix.',
+      'Use clients.strip.N (1-12) e carregue via useSiteAssetsByPrefix.',
     page: 'clients',
   },
   {
-    key: 'about.hero.desktop_video',
-    description: 'Vídeo principal da hero Sobre (desktop)',
-    change: 'Mantenha a trait about.hero.mobile_video também atualizada.',
+    key: 'about.curriculum_pdf',
+    description: 'Currículo da seção About',
+    change: 'Envie PDF atualizado; mantenha nome consistente.',
     page: 'about',
-  },
-  {
-    key: 'about.hero.mobile_video',
-    description: 'Vídeo da hero Sobre para mobile',
-    change: 'O hook sobre AboutHero troca automaticamente.',
-    page: 'about',
-  },
-  {
-    key: 'about.method.desktop_video',
-    description: 'Vídeo da sessão Método (desktop)',
-    change: 'Junte com version mobile e use os dois para os cards.',
-    page: 'about',
-  },
-  {
-    key: 'about.method.mobile_video',
-    description: 'Vídeo da sessão Método (mobile)',
-    change: 'Modernize ambos os assets juntos.',
-    page: 'about',
-  },
-  {
-    key: 'about.origin_image.1',
-    description: 'Imagem 1 da sessão Origem',
-    change: 'Para cada card use about.origin_image.N no mesmo padrão.',
-    page: 'about',
-  },
-  {
-    key: 'portfolio.hero_desktop_video',
-    description: 'Vídeo hero do portfólio (desktop)',
-    change: 'Atualize também portfolio.hero_mobile_video.',
-    page: 'portfolio',
-  },
-  {
-    key: 'portfolio.hero_mobile_video',
-    description: 'Vídeo hero do portfólio (mobile)',
-    change: 'Garante mobile/desktop alinhados.',
-    page: 'portfolio',
   },
 ];
 
