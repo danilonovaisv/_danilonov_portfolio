@@ -14,14 +14,14 @@ const PHRASES = [
 ];
 
 const COLORS = [
-  '#0048ff', // Azul Real
-  '#8705f2', // Roxo Vibrante
-  '#f501d3', // Rosa Choque
-  '#0048ff', // Azul Real
-  '#8705f2', // Roxo Vibrante
+  'bg-bluePrimary', // Azul Real
+  'bg-purpleDetails', // Roxo Vibrante
+  'bg-pinkDetails', // Rosa Choque
+  'bg-bluePrimary', // Azul Real
+  'bg-purpleDetails', // Roxo Vibrante
 ];
 
-const FINAL_COLOR = '#0048ff'; // Azul Real
+const FINAL_COLOR = 'bg-bluePrimary'; // Azul Real
 
 import { useScroll, useTransform } from 'framer-motion';
 
@@ -45,8 +45,7 @@ export const AboutBeliefs: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden"
-      style={{ backgroundColor: COLORS[0] }}
+      className={`relative w-full overflow-hidden ${COLORS[0]}`}
     >
       <BeliefFixedHeader opacity={headerOpacity} />
 

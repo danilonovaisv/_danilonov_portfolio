@@ -39,8 +39,7 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   return (
     <section
       ref={containerRef}
-      style={{ backgroundColor: bgColor }}
-      className="relative w-full h-screen flex items-start justify-start overflow-hidden pt-[25vh] md:pt-[20vh] lg:pt-[15vh] transition-colors duration-500 ease-linear"
+      className={`relative w-full h-screen flex items-start justify-start overflow-hidden pt-[25vh] md:pt-[20vh] lg:pt-[15vh] transition-colors duration-500 ease-linear ${bgColor}`}
     >
       <div className="std-grid">
         <motion.div

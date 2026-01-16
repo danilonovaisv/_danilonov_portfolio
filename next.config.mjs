@@ -11,7 +11,7 @@ const nextConfig = {
    */
   reactStrictMode: true,
 
-  output: 'standalone',
+  // output: 'standalone',
   experimental: {
     // any needed experimental flags
   },
