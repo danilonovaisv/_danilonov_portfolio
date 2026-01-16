@@ -32,8 +32,24 @@
       "source": "portcode"
     },
     {
-      "source": "portfoliodan",
       "codebase": "portfoliodan",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ],
+      "source": "portfoliodan"
+    },
+    {
+      "source": "danportfuncion",
+      "codebase": "danportfuncion",
       "disallowLegacyRuntimeConfig": true,
       "ignore": [
         "node_modules",
@@ -74,7 +90,14 @@
       "port": 9099
     },
     "dataconnect": {
-      "dataDir": "dataconnect/.dataconnect/pgliteData"
+      "dataDir": "dataconnect/.dataconnect/pgliteData",
+      "port": 9399
+    },
+    "database": {
+      "port": 9000
+    },
+    "storage": {
+      "port": 9199
     }
   },
   "dataconnect": {
