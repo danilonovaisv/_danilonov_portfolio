@@ -23,9 +23,21 @@ const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
 ];
 
 const DEMO_IMAGES = [
-  { url: '/assets/demo/cs1.webp', position: [-2, 0, 0] as const, scale: [3, 1.2] as const },
-  { url: '/assets/demo/cs2.webp', position: [2, 0, 3] as const, scale: [3, 3] as const },
-  { url: '/assets/demo/cs3.webp', position: [0, -1, -2] as const, scale: [2, 2] as const },
+  {
+    url: '/assets/demo/cs1.webp',
+    position: [-2, 0, 0] as const,
+    scale: [3, 1.2] as const,
+  },
+  {
+    url: '/assets/demo/cs2.webp',
+    position: [2, 0, 3] as const,
+    scale: [3, 3] as const,
+  },
+  {
+    url: '/assets/demo/cs3.webp',
+    position: [0, -1, -2] as const,
+    scale: [2, 2] as const,
+  },
 ] as const;
 
 interface HeaderFluidGlassProps {
@@ -92,7 +104,7 @@ function Typography() {
   }, []);
 
   type DeviceKey = keyof typeof DEVICE;
-  
+
   const { fontSize } = DEVICE[device as DeviceKey];
 
   return (
