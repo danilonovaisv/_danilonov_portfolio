@@ -28,9 +28,7 @@ export default function supabaseLoader({ src, width, quality }) {
     const base = src.startsWith('http')
       ? src
       : `${DEFAULT_SUPABASE_URL}${src.startsWith('/') ? '' : '/'}${src}`;
-    const isImage = IMAGE_EXTENSIONS.some((ext) =>
-      normalizedSrc.endsWith(ext)
-    );
+    const isImage = IMAGE_EXTENSIONS.some((ext) => normalizedSrc.endsWith(ext));
     if (isImage) {
       const newSrc = base.replace(
         '/storage/v1/object/public/',

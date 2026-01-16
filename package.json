@@ -10,12 +10,11 @@
     "react-three-fiber"
   ],
   "engines": {
-    "node": "18"
+    "node": "20 || 22"
   },
   "packageManager": "npm@10.28.0",
   "scripts": {
     "dev": "next dev --turbo",
-    "dev:inspect": "next dev --inspect",
     "build": "next build",
     "build:prod": "npm run prebuild && next build",
     "start": "next start",

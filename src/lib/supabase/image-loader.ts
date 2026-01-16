@@ -37,9 +37,7 @@ export default function supabaseLoader({
   }
 
   // Skip transformation for non-image formats (videos, SVGs, GIFs)
-  if (
-    NON_TRANSFORM_EXTENSIONS.some((ext) => normalizedSrc.endsWith(ext))
-  ) {
+  if (NON_TRANSFORM_EXTENSIONS.some((ext) => normalizedSrc.endsWith(ext))) {
     return src;
   }
 
@@ -75,9 +73,7 @@ export default function supabaseLoader({
       ? src
       : `${DEFAULT_SUPABASE_URL}${src.startsWith('/') ? '' : '/'}${src}`;
 
-    const isImage = IMAGE_EXTENSIONS.some((ext) =>
-      normalizedSrc.endsWith(ext)
-    );
+    const isImage = IMAGE_EXTENSIONS.some((ext) => normalizedSrc.endsWith(ext));
 
     // Only apply Supabase image renderer for supported image extensions
     if (isImage) {
@@ -101,9 +97,7 @@ export default function supabaseLoader({
   // construct the full Supabase URL.
   // This path is hit if `src` is something like 'my-bucket/image.png' (not starting with /)
   if (!src.startsWith('http') && projectId) {
-    const isImage = IMAGE_EXTENSIONS.some((ext) =>
-      normalizedSrc.endsWith(ext)
-    );
+    const isImage = IMAGE_EXTENSIONS.some((ext) => normalizedSrc.endsWith(ext));
     const prefix = isImage
       ? '/storage/v1/render/image/public/'
       : '/storage/v1/object/public/';

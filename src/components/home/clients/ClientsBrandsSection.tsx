@@ -13,9 +13,7 @@ export default function ClientsBrandsSection() {
 
   // Remove duplicatas baseado na key e publicUrl
   const uniqueAssets = Array.from(
-    new Map(
-      assets.map((asset) => [asset.key, asset])
-    ).values()
+    new Map(assets.map((asset) => [asset.key, asset])).values()
   );
 
   const logos =
