@@ -16,8 +16,8 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
       className="fixed inset-0 z-100 flex items-center pointer-events-none"
     >
       <div className="std-grid w-full flex justify-end">
-        <div className="flex flex-col items-end text-right w-full max-w-[280px] sm:max-w-[320px] md:max-w-[480px] lg:max-w-[700px]">
-          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-display leading-[1.1] tracking-tighter mb-4 sm:mb-6 uppercase font-black">
+        <div className="flex flex-col items-end text-right w-full max-w-[320px] md:max-w-[480px] lg:max-w-[700px]">
+          <h1 className="text-white text-3xl md:text-5xl lg:text-7xl xl:text-8xl font-display leading-[1.1] tracking-tighter mb-6 uppercase font-black">
             Acredito no
             <br />
             design que
@@ -26,7 +26,7 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
             <br />
             de alguém.
           </h1>
-          <h2 className="text-white text-xs sm:text-sm md:text-lg lg:text-3xl xl:text-4xl font-h2 opacity-80 leading-tight sm:leading-none tracking-normal font-bold">
+          <h2 className="text-white text-xs md:text-xl lg:text-4xl font-h2 opacity-80 leading-none tracking-normal font-bold">
             Não pelo choque,
             <br />
             mas pela conexão.
