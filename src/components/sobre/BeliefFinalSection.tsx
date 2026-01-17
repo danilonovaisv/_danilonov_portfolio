@@ -21,7 +21,7 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
         className="flex flex-col items-center justify-center text-center text-white font-display leading-[0.78] w-full max-w-[98vw]"
         initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: false }}
+        viewport={{ once: true }}
         transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
       >
         <div className="text-[16vw] md:text-[14rem] tracking-tighter uppercase font-black">

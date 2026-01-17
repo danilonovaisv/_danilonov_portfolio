@@ -21,19 +21,19 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
     offset: ['start end', 'end start'],
   });
 
-  // Animação do texto entrando da esquerda para direita
+  // Animação do texto entrando da esquerda para direita em sincronia com a mudança de cor
   const x = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.8, 1],
+    [0, 0.05, 0.95, 1],
     ['-100%', '-100%', '0%', '0%']
   );
 
   // Y acompanha o scroll para dar a sensação de ancoragem na parte superior da cor
-  const y = useTransform(scrollYProgress, [0.7, 0.95], ['0vh', '-100vh']);
+  const y = useTransform(scrollYProgress, [0, 1], ['0vh', '-100vh']);
 
   // Opacidade rápida na entrada para colar com o background
   // Adicionamos um DELAY na primeira para garantir que o manifesto fixo seja lido primeiro
-  const opacityRange = isFirst ? [0.35, 0.45, 0.8, 0.95] : [0, 0.15, 0.8, 0.95];
+  const opacityRange = isFirst ? [0, 0.05, 0.95, 1] : [0, 0.05, 0.95, 1];
   const opacity = useTransform(scrollYProgress, opacityRange, [0, 1, 1, 0]);
 
   return (

@@ -14,6 +14,7 @@ import CategoryFilter from './CategoryFilter';
 import PortfolioCard from './PortfolioCard';
 import useParallax from '@/hooks/useParallax';
 import { Container } from '@/components/layout/Container';
+import AntigravityCTA from '@/components/ui/AntigravityCTA';
 
 interface ProjectsGalleryProps {
   projects: PortfolioProject[];
@@ -100,8 +101,8 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
         <motion.div
           ref={trackRef}
           style={parallaxStyle}
-          className={`w-full py-20 md:py-32 overflow-hidden ${
-          !prefersReducedMotion && 'md:fixed md:top-0 md:left-0 md:w-full will-change-transform'
+          className={`w-full py-16 md:py-24 overflow-hidden ${
+          !prefersReducedMotion && 'md:sticky md:top-0 md:w-full will-change-transform'
         }`}
       >
         {/* Background glow effects */}
@@ -111,6 +112,29 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
         </div>
 
         <Container>
+          {/* Section Heading + CTA */}
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: easing, delay: 0.1 }}
+            className="flex flex-col md:flex-row items-center md:items-end justify-between gap-6 md:gap-8 mb-10 md:mb-14"
+          >
+            <div className="w-full">
+              <p className="text-sm uppercase tracking-[0.32em] text-blueAccent mb-3">
+                [portfolio]
+              </p>
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                portfólio showcase
+              </h2>
+            </div>
+            <AntigravityCTA
+              href="#contact"
+              text="vamos trabalhar juntos"
+              className="relative w-full md:w-auto"
+            />
+          </motion.div>
+
           {/* Header com título e filtros */}
           {showFilter && (
             <motion.div
