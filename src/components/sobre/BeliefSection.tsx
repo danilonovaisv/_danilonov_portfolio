@@ -21,11 +21,11 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
     offset: ['start end', 'end start'],
   });
 
-  // X simplificado para 0 para garantir que o texto "nasça" com a cor, sem atraso de slide horizontal
+  // Animação do texto entrando da esquerda para direita
   const x = useTransform(
     scrollYProgress,
     [0, 0.2, 0.8, 1],
-    ['0vw', '0vw', '0vw', '0vw']
+    ['-100%', '-100%', '0%', '0%']
   );
 
   // Y acompanha o scroll para dar a sensação de ancoragem na parte superior da cor
@@ -39,14 +39,14 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   return (
     <section
       ref={containerRef}
-      className={`relative w-full h-screen flex items-start justify-start overflow-hidden pt-[25vh] md:pt-[20vh] lg:pt-[15vh] transition-colors duration-500 ease-linear ${bgColor}`}
+      className={`relative w-full min-h-screen flex items-start justify-start overflow-hidden pt-[25vh] sm:pt-[20vh] md:pt-[15vh] transition-colors duration-500 ease-linear ${bgColor}`}
     >
       <div className="std-grid max-w-none">
         <motion.div
           style={{ x, y, opacity }}
           className="w-full flex justify-start z-10"
         >
-          <span className="text-[#4fe6ff] font-h2 text-4xl md:text-6xl lg:text-[5vw] xl:text-[6vw] leading-[0.9] tracking-[-0.04em] text-left whitespace-pre-line select-none font-black italic max-w-[60%] lg:max-w-[50%]">
+          <span className="text-[#4fe6ff] font-h2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[5vw] 2xl:text-[6vw] leading-[0.9] tracking-[-0.04em] text-left whitespace-pre-line select-none font-black italic max-w-full sm:max-w-[60%] lg:max-w-[50%]">
             {text}
           </span>
         </motion.div>

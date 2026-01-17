@@ -7,6 +7,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import type { MouseEvent } from 'react';
 import { PORTFOLIO_CONTENT } from '@/config/content';
 import {
   MOTION_TOKENS,
@@ -35,7 +36,9 @@ export default function PortfolioHeroNew() {
   // Seleciona o vídeo correto baseado no dispositivo
   const videoSrc = isMobile ? mobileVideo : desktopVideo;
 
-  const handleCTAClick = () => {
+  const handleCTAClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
     // Scroll suave para a seção de contato
     const contactSection = document.querySelector('#contact');
     if (contactSection) {
@@ -111,6 +114,7 @@ export default function PortfolioHeroNew() {
         >
           <AntigravityCTA
             onClick={handleCTAClick}
+            href="#contact"
             text="vamos trabalhar juntos"
             className="relative"
           />

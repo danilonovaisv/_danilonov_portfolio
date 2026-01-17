@@ -3,6 +3,8 @@ import PortfolioClient from './PortfolioClient';
 import { listProjects } from '@/lib/supabase/queries/projects';
 import { mapDbProjectToPortfolioProject } from '@/lib/portfolio/project-mappers';
 import { createStaticClient } from '@/lib/supabase/static';
+import { HOME_CONTENT } from '@/config/content';
+import type { PortfolioProject, ProjectCategory } from '@/types/project';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,18 +14,89 @@ export const metadata: Metadata = {
     'Explore uma seleção curada de projetos de Branding, Motion Design e Creative Development.',
 };
 
-export default async function PortfolioPage() {
-  const supabase = createStaticClient();
-  let dbProjects: Awaited<ReturnType<typeof listProjects>> = [];
+const FALLBACK_CATEGORY_MAP: Record<string, ProjectCategory> = {
+  'branding & campanha': 'branding',
+  branding: 'branding',
+  campanha: 'campanha',
+  'web & motion': 'web',
+  'web & digital': 'web',
+  'motion & video': 'motion',
+};
 
-  try {
-    dbProjects = await listProjects({}, supabase);
-  } catch (error) {
-    console.error('Error fetching projects:', error);
+function mapFallbackCategory(label?: string): ProjectCategory {
+  if (!label) return 'branding';
+  const normalized = label.trim().toLowerCase();
+  return FALLBACK_CATEGORY_MAP[normalized] ?? 'branding';
+}
+
+function buildFallbackProjects(): PortfolioProject[] {
+  return (HOME_CONTENT.featuredProjects ?? []).map((project, index) => {
+    const layout = project.layout ?? {};
+    const category = mapFallbackCategory(project.category);
+
+    return {
+      id: `fallback-${project.id ?? index}`,
+      slug: project.slug ?? `fallback-${index}`,
+      title: project.title ?? 'Projeto de portfólio',
+      subtitle: project.category,
+      client: project.client ?? 'Cliente confidencial',
+      category,
+      displayCategory: project.category ?? 'Projeto',
+      tags: project.tags ?? [],
+      year:
+        typeof project.year === 'number'
+          ? project.year
+          : Number(project.year) || new Date().getFullYear(),
+      image: project.img,
+      type: index < 4 ? 'A' : 'B',
+      layout: {
+        cols: layout.cols ?? 'md:col-span-4',
+        height: layout.h ?? layout.height ?? 'min-h-[320px]',
+        aspectRatio: layout.aspect ?? layout.aspectRatio,
+        sizes: layout.sizes,
+      },
+      detail: {
+        description: project.title ?? 'Projeto de portfólio',
+        highlights: project.tags,
+      },
+      accentColor:
+        category === 'branding'
+          ? '#0057ff'
+          : category === 'campanha'
+            ? '#ff3366'
+            : undefined,
+      featuredOnPortfolio: true,
+    };
+  });
+}
+
+export default async function PortfolioPage() {
+  const hasSupabaseEnv =
+    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+    Boolean(
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+    );
+
+  let projects: PortfolioProject[] = [];
+
+  if (hasSupabaseEnv) {
+    try {
+      const supabase = createStaticClient();
+      const dbProjects = await listProjects({}, supabase);
+      projects = dbProjects.map((project, index) =>
+        mapDbProjectToPortfolioProject(project, index)
+      );
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      projects = buildFallbackProjects();
+    }
+  } else {
+    console.error(
+      'Supabase env vars ausentes para /portfolio. Usando fallback estático.'
+    );
+    projects = buildFallbackProjects();
   }
 
-  const projects = dbProjects.map((project, index) =>
-    mapDbProjectToPortfolioProject(project, index)
-  );
   return <PortfolioClient projects={projects} />;
 }

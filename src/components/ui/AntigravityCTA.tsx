@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 
@@ -22,7 +22,7 @@ import { ArrowUpRight } from 'lucide-react';
 interface AntigravityCTAProps {
   text?: string;
   href?: string;
-  onClick?: () => void;
+  onClick?: (_event: MouseEvent<HTMLAnchorElement>) => void;
   className?: string;
 }
 

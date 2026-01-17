@@ -45,7 +45,7 @@ export const AboutBeliefs: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className={`relative w-full overflow-hidden ${COLORS[0]}`}
+      className={`relative w-full overflow-hidden ${COLORS[0]} min-h-screen`}
     >
       <BeliefFixedHeader opacity={headerOpacity} />
 
