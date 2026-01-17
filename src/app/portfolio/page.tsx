@@ -31,7 +31,14 @@ function mapFallbackCategory(label?: string): ProjectCategory {
 
 function buildFallbackProjects(): PortfolioProject[] {
   return (HOME_CONTENT.featuredProjects ?? []).map((project, index) => {
-    const layout = project.layout ?? {};
+    const layout =
+      (project.layout as {
+        h?: string;
+        cols?: string;
+        sizes?: string;
+        aspect?: string;
+        aspectRatio?: string;
+      }) ?? {};
     const category = mapFallbackCategory(project.category);
 
     return {
@@ -51,7 +58,7 @@ function buildFallbackProjects(): PortfolioProject[] {
       type: index < 4 ? 'A' : 'B',
       layout: {
         cols: layout.cols ?? 'md:col-span-4',
-        height: layout.h ?? layout.height ?? 'min-h-[320px]',
+        height: layout.h ?? 'min-h-[320px]',
         aspectRatio: layout.aspect ?? layout.aspectRatio,
         sizes: layout.sizes,
       },

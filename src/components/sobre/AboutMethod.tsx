@@ -93,7 +93,7 @@ export default function AboutMethod() {
                   viewport={{ once: true, margin: '-20%' }}
                   className="mb-8 lg:mb-12 text-center lg:text-left"
                 >
-                  <h2 className="leading-[1.08] tracking-[-0.02em] text-[clamp(32px,5vw,64px)] font-bold uppercase">
+                  <h2 className="leading-[1.08] tracking-[-0.02em] text-[clamp(32px,5vw,64px)] font-bold">
                     <div className="text-primary leading-tight">
                       Criatividade com método.
                     </div>
@@ -109,7 +109,7 @@ export default function AboutMethod() {
                   initial={prefersReducedMotion ? 'visible' : 'hidden'}
                   whileInView="visible"
                   viewport={{ once: true, margin: '-20%' }}
-                  className="text-white leading-[1.8] space-y-1 mb-12 lg:mb-16 text-center lg:text-left text-[16px] md:text-[18px] lg:text-[20px] font-medium opacity-90 max-w-full lg:max-w-[550px]"
+                  className="text-white leading-[2.4] space-y-1 mb-12 lg:mb-16 text-center lg:text-left text-[16px] md:text-[18px] lg:text-[20px] font-medium opacity-90 max-w-full lg:max-w-[550px]"
                 >
                   {ABOUT_CONTENT.method.intro.map((line, i) => (
                     <p key={i}>{line}</p>

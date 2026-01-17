@@ -2,17 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useSiteAssetUrl } from '@/contexts/site-assets';
-import { SITE_ASSET_KEYS } from '@/config/site-assets';
-import { ASSET_PLACEHOLDER } from '@/utils/utils';
 
 interface VideoManifestoProps {
   src: string;
 }
 
 export function VideoManifesto({ src }: VideoManifestoProps) {
-  const manifestoSrc =
-    useSiteAssetUrl(SITE_ASSET_KEYS.heroVideos.homeManifesto, src) ?? src;
   const [muted, setMuted] = useState(true);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [videoQuality, setVideoQuality] = useState<'hd' | 'sd'>('hd');
@@ -85,21 +80,17 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
   }, [muted]);
 
   const videoSrc =
-    videoQuality === 'hd'
-      ? manifestoSrc
-      : manifestoSrc.replace('.mp4', '-720p.mp4');
+    videoQuality === 'hd' ? src : src.replace('.mp4', '-720p.mp4');
 
-  const posterSrc = manifestoSrc.endsWith('.mp4')
-    ? ASSET_PLACEHOLDER
-    : manifestoSrc;
+  const posterSrc = src.replace('.mp4', '-poster.jpg');
 
   return (
     <motion.section
       ref={sectionRef}
       className="video-manifesto w-full overflow-hidden rounded-[2px]"
-      initial={{ opacity: 0, y: 20, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+      initial={{ opacity: 0, scale: 1.1, rotate: -1, y: 40 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
+      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, amount: 0.2 }}
     >
       <div
