@@ -38,7 +38,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
   const prefersReducedMotion = useReducedMotion();
   
   // Parallax Setup
-  const { galleryRef, trackRef, isScrolling } = useParallax({
+  const { galleryRef, trackRef, isScrolling, style: parallaxStyle } = useParallax({
     springConfig: { stiffness: 45, damping: 25 },
     enabled: !prefersReducedMotion && !isPaused,
   });
@@ -93,11 +93,13 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       ref={galleryRef as React.RefObject<HTMLElement>}
       id="projects-gallery"
       aria-label="Galeria de Projetos"
-      className={`relative z-10 bg-background transition-[height] duration-300 ease-out h-(--gallery-height) ${className}`}
+      className={`relative z-10 bg-background transition-[height] duration-300 ease-out ${className}`}
+      style={{ height: galleryHeight }}
     >
       {/* Gallery Track (Fixed or Static) */}
         <motion.div
           ref={trackRef}
+          style={parallaxStyle}
           className={`w-full py-20 md:py-32 overflow-hidden ${
           !prefersReducedMotion && 'md:fixed md:top-0 md:left-0 md:w-full will-change-transform'
         }`}

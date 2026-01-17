@@ -99,20 +99,35 @@ export function buildSupabaseStorageUrl(
 
 // Função adicional para validar e construir URLs de links externos
 export function validateExternalUrl(url: string): string {
+  if (!url) return '';
+  const normalized = url.trim();
+  if (!normalized) return '';
+
+  const allowedProtocols = ['https:', 'http:'];
+
   try {
-    const parsedUrl = new URL(url);
-    
-    // Permitir apenas HTTPS
-    if (parsedUrl.protocol !== 'https:') {
-      console.warn(`Link externo inseguro bloqueado: ${url}`);
-      return '';
+    const parsedUrl = new URL(normalized);
+    if (allowedProtocols.includes(parsedUrl.protocol)) {
+      return parsedUrl.toString();
     }
-    
-    // Bloquear certos domínios se necessário (opcional)
-    // Exemplo: bloquear domínios conhecidos por phishing
-    
-    return parsedUrl.toString();
-  } catch (e) {
+
+    console.warn(`Link externo inseguro bloqueado: ${url}`);
+    return '';
+  } catch {
+    if (normalized.startsWith('/') || normalized.startsWith('#')) {
+      return normalized;
+    }
+
+    if (normalized.startsWith('//')) {
+      try {
+        const parsedFallback = new URL(`https:${normalized}`);
+        return parsedFallback.toString();
+      } catch {
+        console.error(`URL externa inválida: ${url}`);
+        return '';
+      }
+    }
+
     console.error(`URL externa inválida: ${url}`);
     return '';
   }
