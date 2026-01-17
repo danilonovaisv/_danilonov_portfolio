@@ -4,15 +4,20 @@ import path from 'node:path';
 import { promises as fs, readFileSync } from 'node:fs';
 import { normalizeStoragePath } from '../src/lib/supabase/urls';
 
-type SiteAssetRow = {
-  id: string;
-  key: string;
-  bucket: string | null;
-  file_path: string | null;
-  updated_at: string | null;
-};
+/**
+ * @typedef {Object} SiteAssetRow
+ * @property {string} id
+ * @property {string} key
+ * @property {string|null} bucket
+ * @property {string|null} file_path
+ * @property {string|null} updated_at
+ */
 
-function parseEnvFile(filePath: string) {
+/**
+ * @param {string} filePath
+ * @returns {Record<string, string>}
+ */
+function parseEnvFile(filePath) {
   try {
     const content = readFileSync(filePath, 'utf8');
     return content
@@ -47,6 +52,10 @@ function loadEnvOverrides() {
   };
 }
 
+/**
+ * Main execution function
+ * @returns {Promise<void>}
+ */
 async function main() {
   const {
     NEXT_PUBLIC_SUPABASE_URL,

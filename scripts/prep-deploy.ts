@@ -6,7 +6,12 @@ import path from 'node:path';
 const assetLists = process.argv.slice(2);
 const defaultLists = ['assets.json', 'assets-about.json'];
 
-async function runCommand(command: string, args: string[]) {
+/**
+ * @param {string} command
+ * @param {string[]} args
+ * @returns {Promise<void>}
+ */
+async function runCommand(command, args) {
   return new Promise<void>((resolve, reject) => {
     const proc = spawn(command, args, {
       stdio: 'inherit',
@@ -23,7 +28,11 @@ async function runCommand(command: string, args: string[]) {
   });
 }
 
-async function ensureFileExists(filePath: string) {
+/**
+ * @param {string} filePath
+ * @returns {Promise<void>}
+ */
+async function ensureFileExists(filePath) {
   await access(filePath);
 }
 

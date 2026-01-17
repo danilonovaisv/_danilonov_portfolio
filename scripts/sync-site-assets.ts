@@ -29,7 +29,11 @@ const supabase = createClient(supabaseUrl, serviceRoleKey);
 
 const DEFAULT_FILE = 'assets.json';
 
-function parseEnvFile(filePath: string) {
+/**
+ * @param {string} filePath
+ * @returns {Record<string, string>}
+ */
+function parseEnvFile(filePath) {
   const env: Record<string, string> = {};
   try {
     const content = readFileSync(filePath, 'utf8');
@@ -65,7 +69,11 @@ function loadEnvOverrides() {
   };
 }
 
-function normalizeEnvValue(value?: string) {
+/**
+ * @param {string|undefined} value
+ * @returns {string|undefined}
+ */
+function normalizeEnvValue(value) {
   if (!value) return value;
   return value
     .replace(/[\u2018\u2019\u201C\u201D]/g, '')
@@ -73,7 +81,11 @@ function normalizeEnvValue(value?: string) {
     .trim();
 }
 
-function detectAssetType(extension: string) {
+/**
+ * @param {string} extension
+ * @returns {string}
+ */
+function detectAssetType(extension) {
   const ext = extension.toLowerCase();
   if (['svg', 'webp', 'png', 'jpg', 'jpeg', 'gif', 'avif'].includes(ext)) {
     return 'image';
@@ -90,14 +102,22 @@ function detectAssetType(extension: string) {
   return 'image';
 }
 
-function parseSortOrder(key: string) {
+/**
+ * @param {string} key
+ * @returns {number|null}
+ */
+function parseSortOrder(key) {
   const segments = key.split('.');
   const last = segments[segments.length - 1];
   const candidate = Number(last);
   return Number.isNaN(candidate) ? null : candidate;
 }
 
-async function readAssetList(filePath: string) {
+/**
+ * @param {string} filePath
+ * @returns {Promise<string[]>}
+ */
+async function readAssetList(filePath) {
   const raw = await fs.readFile(path.resolve(filePath), 'utf8');
   return raw
     .split(/\r?\n/)
@@ -105,7 +125,11 @@ async function readAssetList(filePath: string) {
     .filter(Boolean);
 }
 
-function buildRecordEntry(rawPath: string) {
+/**
+ * @param {string} rawPath
+ * @returns {Object}
+ */
+function buildRecordEntry(rawPath) {
   const normalizedInput = rawPath.replace(/^\/+/, '').replace(/"+/g, '');
   const bucketMatch = normalizedInput.match(
     /(?:object\/public|render\/image\/public)\/([^/]+)/
@@ -144,6 +168,10 @@ function buildRecordEntry(rawPath: string) {
   } as const;
 }
 
+/**
+ * Main execution function
+ * @returns {Promise<void>}
+ */
 async function run() {
   const input = process.argv[2] ?? DEFAULT_FILE;
   const entries = await readAssetList(input);

@@ -43,7 +43,7 @@ function analyzeDependencies() {
         ? unusedDevDeps
         : ['Nenhuma dependência inútil detectada']
     );
-  } catch (err: any) {
+  } catch (err) {
     // Depcheck retorna exit code 255 se houver dependências não utilizadas, o que é um "erro" no execSync
     if (err.stdout) {
       try {

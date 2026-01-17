@@ -24,7 +24,11 @@ const options = program.opts();
 /**
  * Executes a gcloud command
  */
-function executeGcloudCommand(args: string[]): Promise<string> {
+/**
+ * @param {string[]} args
+ * @returns {Promise<string>}
+ */
+function executeGcloudCommand(args: string[]) {
   return new Promise((resolve, reject) => {
     let stdout = '';
     let stderr = '';
@@ -75,7 +79,7 @@ async function listKeys(serviceAccountEmail: string) {
     console.log(
       `Found ${keys.length} keys for service account: ${serviceAccountEmail}`
     );
-    keys.forEach((key: any) => {
+    keys.forEach((key) => {
       console.log(
         `Key ID: ${key.name.split('/').pop()}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`
       );
@@ -116,7 +120,7 @@ async function cleanupOldKeys(serviceAccountEmail: string) {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     // Filter keys older than 30 days
-    const oldKeys = keys.filter((key: any) => {
+    const oldKeys = keys.filter((key) => {
       const creationDate = new Date(key.validAfterTime);
       return creationDate < thirtyDaysAgo;
     });

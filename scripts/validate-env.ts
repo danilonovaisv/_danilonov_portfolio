@@ -8,7 +8,11 @@ const REQUIRED_KEYS = [
   'SUPABASE_SERVICE_ROLE_KEY',
 ];
 
-function parseEnv(filePath: string) {
+/**
+ * @param {string} filePath
+ * @returns {Record<string, string>}
+ */
+function parseEnv(filePath) {
   const content = readFileSync(filePath, 'utf8');
   const entries = content
     .split(/\r?\n/)
@@ -32,7 +36,7 @@ function validateEnv() {
   } catch (error) {
     console.error(
       `Não foi possível ler ${ENV_FILE}:`,
-      (error as Error).message
+      error.message
     );
     process.exit(1);
   }
