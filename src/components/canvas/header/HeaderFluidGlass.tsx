@@ -1,7 +1,7 @@
 'use client';
 
 import * as THREE from 'three';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import {
   Image,
   Preload,
@@ -22,21 +22,23 @@ const DEFAULT_NAV_ITEMS: HeaderNavItem[] = [
   { label: 'Contato', href: '#contact' },
 ];
 
-const DEMO_IMAGES: {
-  url: string;
-  position: [number, number, number];
-  scale: [number, number, number];
-}[] = [
-  { url: '/assets/demo/cs1.webp', position: [-2, 0, 0], scale: [3, 1.2, 1] },
-  { url: '/assets/demo/cs2.webp', position: [2, 0, 3], scale: [3, 3, 1] },
-  { url: '/assets/demo/cs3.webp', position: [-2.05, -1, 6], scale: [1, 3, 1] },
-  { url: '/assets/demo/cs4.webp', position: [-0.6, -1, 9], scale: [1, 2, 1] },
+const DEMO_IMAGES = [
   {
-    url: '/assets/demo/cs5.webp',
-    position: [0.75, -1, 10.5],
-    scale: [1.5, 1.5, 1],
+    url: '/assets/demo/cs1.webp',
+    position: [-2, 0, 0] as const,
+    scale: [3, 1.2] as const,
   },
-];
+  {
+    url: '/assets/demo/cs2.webp',
+    position: [2, 0, 3] as const,
+    scale: [3, 3] as const,
+  },
+  {
+    url: '/assets/demo/cs3.webp',
+    position: [0, -1, -2] as const,
+    scale: [2, 2] as const,
+  },
+] as const;
 
 interface HeaderFluidGlassProps {
   navItems?: HeaderNavItem[];
@@ -52,16 +54,14 @@ type ZoomGroup = THREE.Group & { children: ZoomMesh[] };
 function Images() {
   const group = useRef<ZoomGroup>(null!);
   const data = useScroll();
-  const { height } = useThree((state) => state.viewport);
 
   useFrame(() => {
     if (!group.current) return;
-    group.current.children.forEach((obj, index) => {
-      const child = obj as unknown as ZoomMesh;
-      if (child.material) {
-        child.material.zoom = 1 + data.range(0, 1 / 3) / 3;
+    group.current.children.forEach((obj: ZoomMesh, index: number) => {
+      if (obj.material) {
+        obj.material.zoom = 1 + data.range(0, 1 / 3) / 3;
         if (index > 1) {
-          child.material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
+          obj.material.zoom = 1 + data.range(1.15 / 3, 1 / 3) / 2;
         }
       }
     });
@@ -72,13 +72,8 @@ function Images() {
       {DEMO_IMAGES.map((image, index) => (
         <Image
           key={`${image.url}-${index}`}
-          position={image.position as [number, number, number]}
-          scale={
-            [image.scale[0], (image.scale[1] * height) / 1.1] as [
-              number,
-              number,
-            ]
-          }
+          position={[image.position[0], image.position[1], image.position[2]]}
+          scale={[image.scale[0], image.scale[1]]}
           url={image.url}
         />
       ))}
@@ -108,7 +103,9 @@ function Typography() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const { fontSize } = DEVICE[device];
+  type DeviceKey = keyof typeof DEVICE;
+
+  const { fontSize } = DEVICE[device as DeviceKey];
 
   return (
     <Text

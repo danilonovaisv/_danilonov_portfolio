@@ -5,9 +5,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { Container } from '@/components/layout/Container';
 import { CategoryStripe } from './CategoryStripe';
-
-// Ghost easing
-const GHOST_EASE = [0.22, 1, 0.36, 1] as const;
+import { getAssetUrl } from '@/utils/utils';
+import { GHOST_EASE } from '@/lib/motionTokens';
 
 // Category data with assets
 const CATEGORIES = [
@@ -15,8 +14,7 @@ const CATEGORIES = [
     id: 'brand-campaigns',
     title: 'Brand & Campaigns',
     slug: 'branding',
-    thumbnail:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Branding-Project.webp',
+    thumbnail: getAssetUrl('site-assets/home/showcase/Branding-Project.webp'),
     alignment: 'right' as const,
     showLabel: true, // Show floating label on this stripe
   },
@@ -24,8 +22,7 @@ const CATEGORIES = [
     id: 'videos-motions',
     title: 'Videos & Motions',
     slug: 'motion',
-    thumbnail:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/show.video.mp4',
+    thumbnail: getAssetUrl('site-assets/home/showcase/show.video.mp4'),
     alignment: 'center' as const,
     showLabel: false,
   },
@@ -33,8 +30,7 @@ const CATEGORIES = [
     id: 'websites-tech',
     title: ['Web Campaigns,', 'Websites & Tech'],
     slug: 'web',
-    thumbnail:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/webdesigner-2.gif',
+    thumbnail: getAssetUrl('site-assets/home/showcase/webdesigner-2.gif'),
     alignment: 'left' as const,
     showLabel: false,
   },

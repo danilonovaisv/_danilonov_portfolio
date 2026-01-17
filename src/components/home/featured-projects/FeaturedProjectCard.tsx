@@ -6,6 +6,7 @@ import { useReducedMotion } from 'framer-motion';
 import { ArrowIcon } from '@/components/ui/ArrowIcon';
 import Link from 'next/link';
 import type { PortfolioProject } from '@/types/project';
+import { applyImageFallback } from '@/utils/utils';
 
 interface FeaturedProjectCardProps {
   project: PortfolioProject;
@@ -28,7 +29,7 @@ export default function FeaturedProjectCard({
   const CardContent = () => (
     <>
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.height} ${project.layout.cols} w-full bg-white/5 transition-all duration-500 ${
+        className={`relative overflow-hidden rounded-md ${project.layout.height} w-full bg-white/5 transition-all duration-500 ${
           reducedMotion
             ? ''
             : 'md:group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] md:group-hover:-translate-y-1 active:scale-[0.98]'
@@ -57,11 +58,8 @@ export default function FeaturedProjectCard({
           className={`object-cover transition-transform duration-700 opacity-90 md:group-hover:opacity-100 ${
             reducedMotion ? '' : 'md:group-hover:scale-103'
           }`}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src =
-              'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/placeholder.webp';
-          }}
+          loading="lazy"
+          onError={applyImageFallback}
         />
       </div>
 

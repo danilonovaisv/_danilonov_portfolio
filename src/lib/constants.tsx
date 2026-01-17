@@ -8,6 +8,7 @@ import {
   Twitter,
   Facebook, // Adicionado conforme spec
 } from 'lucide-react';
+import { getAssetUrl } from '@/utils/utils';
 
 // Se não tiveres um ficheiro de tipos, podes definir aqui ou importar
 // import { ProjectCategory } from './types';
@@ -20,14 +21,10 @@ export type ProjectCategory = {
 
 // --- 1. ASSETS GLOBAIS ---
 export const ASSETS = {
-  videoManifesto:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4',
-  favicon:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/logo.svg',
-  logoLight:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/faivcon-02.svg',
-  logoDark:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/faivcon.svg',
+  videoManifesto: getAssetUrl('site-assets/home/home.manifesto_video.mp4'),
+  favicon: getAssetUrl('logo_site/logo.svg'),
+  logoLight: getAssetUrl('logo_site/faivcon-02.svg'),
+  logoDark: getAssetUrl('logo_site/faivcon.svg'),
 };
 
 // --- 2. CONTEÚDO DA HOME (TEXTOS) ---
@@ -57,8 +54,7 @@ export const FEATURED_PROJECTS = [
     client: 'Magic',
     category: 'branding & campanha',
     displayCategory: 'branding & campanha',
-    imageUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Brand-Identity%20copy.webp',
+    imageUrl: getAssetUrl('project-images/Brand-Identity%20copy.webp'),
     isHero: true,
     year: '2023',
   },
@@ -68,8 +64,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'branding',
     displayCategory: 'branding',
-    imageUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+    imageUrl: getAssetUrl('project-images/Branding-Project.webp'),
     isHero: false,
     year: '2022',
   },
@@ -79,8 +74,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'campanha',
     displayCategory: 'campanha',
-    imageUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+    imageUrl: getAssetUrl('project-images/Key-Visual.webp'),
     isHero: false,
     year: '2021',
   },
@@ -90,8 +84,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'web & motion',
     displayCategory: 'web & motion',
-    imageUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+    imageUrl: getAssetUrl('project-images/webdesigner-2%202.gif'),
     isHero: false,
     year: '2023',
   },
@@ -102,22 +95,19 @@ export const CATEGORIES: ProjectCategory[] = [
   {
     id: 'brand-campaigns',
     label: 'Brand & Campaigns',
-    posterUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+    posterUrl: getAssetUrl('project-images/Branding-Project.webp'),
     thumbnailUrl: '',
   },
   {
     id: 'videos-motions',
     label: 'Videos & Motions',
-    posterUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
+    posterUrl: getAssetUrl('project-images/webdesigner-2%202.gif'),
     thumbnailUrl: '',
   },
   {
     id: 'websites-webcampaigns-tech',
     label: 'Web Campaigns, Websites & Tech',
-    posterUrl:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
+    posterUrl: getAssetUrl('project-images/WelcomeAd_800x500px.webp'),
     thumbnailUrl: '',
   },
 ];
@@ -126,51 +116,51 @@ export const CATEGORIES: ProjectCategory[] = [
 export const CLIENT_LOGOS = [
   {
     name: 'Client 1',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client1.svg',
+    src: getAssetUrl('client-logos/client1.svg'),
   },
   {
     name: 'Client 2',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client2.svg',
+    src: getAssetUrl('client-logos/client2.svg'),
   },
   {
     name: 'Client 3',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client3.svg',
+    src: getAssetUrl('client-logos/client3.svg'),
   },
   {
     name: 'Client 4',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client4.svg',
+    src: getAssetUrl('client-logos/client4.svg'),
   },
   {
     name: 'Client 5',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client5.svg',
+    src: getAssetUrl('client-logos/client5.svg'),
   },
   {
     name: 'Client 6',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client6.svg',
+    src: getAssetUrl('client-logos/client6.svg'),
   },
   {
     name: 'Client 7',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client7.svg',
+    src: getAssetUrl('client-logos/client7.svg'),
   },
   {
     name: 'Client 8',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client8.svg',
+    src: getAssetUrl('client-logos/client8.svg'),
   },
   {
     name: 'Client 9',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client9.svg',
+    src: getAssetUrl('client-logos/client9.svg'),
   },
   {
     name: 'Client 10',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client10.svg',
+    src: getAssetUrl('client-logos/client10.svg'),
   },
   {
     name: 'Client 11',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client11.svg',
+    src: getAssetUrl('client-logos/client11.svg'),
   },
   {
     name: 'Client 12',
-    src: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/client12.svg',
+    src: getAssetUrl('client-logos/client12.svg'),
   },
 ];
 

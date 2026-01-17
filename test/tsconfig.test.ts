@@ -30,7 +30,7 @@ describe('tsconfig.json', () => {
     expect(tsconfig.compilerOptions.allowJs).toBe(true);
   });
 
-  it('should support JSX with preserve (Next.js default)', () => {
+  it('should support JSX with react-jsx', () => {
     expect(tsconfig.compilerOptions.jsx).toBe('react-jsx');
   });
 

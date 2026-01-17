@@ -541,7 +541,7 @@ stagger: 120ms entre faixas
 
 ---
 
-### 4.5 Featured Projects (Bento Grid)
+### 4.5 Featured Projects (Grid)
 
 #### Objetivo
 Showcase curado de trabalhos de alta qualidade em layout editorial estilo revista.
@@ -1033,16 +1033,16 @@ NEXT_PUBLIC_GA_ID=UA-XXXXXXXXX-X (opcional)
 
 ```bash
 # Desenvolvimento
-pnpm dev
+npm dev
 
 # Build
-pnpm build
+npm build
 
 # Preview local
-pnpm start
+npm start
 
 # Lint
-pnpm lint
+npm lint
 ```
 
 ---

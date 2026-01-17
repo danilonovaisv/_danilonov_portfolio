@@ -69,8 +69,7 @@ export default function MobileHeaderBar({
                 alt="Danilo"
                 width={32}
                 height={32}
-                className="h-8 w-8 object-contain"
-                style={{ width: 'auto' }}
+                className="h-20 w-20 object-contain"
                 unoptimized
                 loading="eager"
               />

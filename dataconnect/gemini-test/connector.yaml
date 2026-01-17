@@ -4,6 +4,12 @@ generate:
     - outputDir: ../../src/dataconnect-admin-generated
       package: '@dataconnect/admin-generated'
       packageJsonDir: ../..
+    - outputDir: ../../portfoliodan/src/dataconnect-admin-generated
+      package: '@dataconnect/admin-generated'
+      packageJsonDir: ../../portfoliodan
+    - outputDir: ../../functions/src/dataconnect-admin-generated
+      package: '@dataconnect/admin-generated'
+      packageJsonDir: ../../functions
   javascriptSdk:
     - outputDir: ../../src/dataconnect-generated
       package: '@dataconnect/generated'

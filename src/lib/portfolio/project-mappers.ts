@@ -50,20 +50,50 @@ function determineProjectType(project: DbProjectWithTags): ProjectType {
 }
 
 function buildLayout(projectType: ProjectType, index: number): ProjectGridLayout {
+  // Magazine-style irregular grid for featured projects (Type A)
+  if (projectType === 'A') {
+    const featuredLayouts = [
+      // Card 1: 336×500px (5 cols)
+      {
+        cols: 'md:col-span-5',
+        height: 'min-h-[400px] md:h-[500px]',
+        aspectRatio: 'aspect-[4/5]',
+        sizes: '(max-width: 1024px) 100vw, 42vw',
+      },
+      // Card 2: 840×500px (7 cols)
+      {
+        cols: 'md:col-span-7',
+        height: 'min-h-[400px] md:h-[500px]',
+        aspectRatio: 'aspect-[4/5]',
+        sizes: '(max-width: 1024px) 100vw, 58vw',
+      },
+      // Card 3: 1176×600px (12 cols - full width)
+      {
+        cols: 'md:col-span-12',
+        height: 'min-h-[400px] md:h-[600px]',
+        aspectRatio: 'aspect-video',
+        sizes: '100vw',
+      },
+      // Card 4: 784×400px (8 cols)
+      {
+        cols: 'md:col-span-8',
+        height: 'min-h-[400px] md:h-[400px]',
+        aspectRatio: 'aspect-video',
+        sizes: '(max-width: 1024px) 100vw, 66vw',
+      },
+    ];
+    
+    // Use specific layout for first 4 cards, then cycle through pattern
+    const layoutIndex = index % featuredLayouts.length;
+    return featuredLayouts[layoutIndex];
+  }
+  
+  // Type B: smaller grid cards
   return {
     ...LAYOUT_PRESETS[projectType],
-    cols:
-      projectType === 'A'
-        ? index % 2 === 0
-          ? 'md:col-span-6'
-          : 'md:col-span-7'
-        : 'md:col-span-4',
-    height:
-      projectType === 'A' ? 'min-h-[400px] md:h-[520px]' : 'min-h-[280px] md:h-[360px]',
-    sizes:
-      projectType === 'A'
-        ? '(max-width: 1024px) 100vw, 42vw'
-        : '(max-width: 1024px) 100vw, 30vw',
+    cols: 'md:col-span-4',
+    height: 'min-h-[280px] md:h-[360px]',
+    sizes: '(max-width: 1024px) 100vw, 30vw',
   };
 }
 

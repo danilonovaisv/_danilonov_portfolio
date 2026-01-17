@@ -37,7 +37,7 @@ export default function RootLayout({
   const jsonLdLogoUrl = BRAND.assets.logos.logoLight;
 
   return (
-    <html lang="pt-BR" data-scroll-behavior="smooth">
+    <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <JsonLd logoUrl={jsonLdLogoUrl} />
       </head>
