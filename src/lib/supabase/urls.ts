@@ -64,7 +64,7 @@ export function buildSupabaseStorageUrl(
   const isHttp =
     filePath.startsWith('http://') || filePath.startsWith('https://');
   const isSupabaseUrl = filePath.includes('/storage/v1/');
-  
+
   // Verifica se é uma URL externa não-Supabase
   if (isHttp && !isSupabaseUrl) {
     // Validação de segurança para URLs externas
@@ -77,7 +77,7 @@ export function buildSupabaseStorageUrl(
       }
       // Aqui poderíamos adicionar validação de domínio se necessário
       return filePath;
-    } catch (e) {
+    } catch {
       console.error(`URL inválida: ${filePath}`);
       return '';
     }

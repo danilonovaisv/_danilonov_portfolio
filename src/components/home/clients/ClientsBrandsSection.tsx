@@ -17,16 +17,25 @@ export default function ClientsBrandsSection() {
     new Map(assets.map((asset) => [asset.key, asset])).values()
   );
 
-  const logos =
+  type LogoItem = {
+    id: string | number;
+    src: string;
+    alt: string;
+    href?: string | null;
+  };
+
+  const logos: LogoItem[] =
     uniqueAssets.length > 0
       ? uniqueAssets.slice(0, 8).map((asset) => ({
           id: asset.key,
           src: asset.publicUrl,
           alt: asset.description ?? asset.key,
-          // Adicionando campo opcional para links externos
           href: asset.href || null,
         }))
-      : HOME_CONTENT.clients.logos.slice(0, 8);
+      : HOME_CONTENT.clients.logos.slice(0, 8).map((logo) => ({
+          ...logo,
+          href: null,
+        }));
 
   const hasLogos = logos.length > 0;
 
@@ -70,9 +79,13 @@ export default function ClientsBrandsSection() {
           >
             {logos.map((logo) => {
               const isSvg = logo.src?.toLowerCase().endsWith('.svg');
-              
+
               // Renderizar como link se tiver href
-              const LogoElement = ({ children }: { children: React.ReactNode }) => {
+              const LogoElement = ({
+                children,
+              }: {
+                children: React.ReactNode;
+              }) => {
                 if (logo.href) {
                   const validatedHref = validateExternalUrl(logo.href);
                   if (validatedHref) {
@@ -89,7 +102,7 @@ export default function ClientsBrandsSection() {
                     );
                   }
                 }
-                
+
                 return (
                   <div
                     className="group relative w-32 h-16 md:w-40 md:h-20 flex items-center justify-center"

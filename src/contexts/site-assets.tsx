@@ -32,7 +32,7 @@ export function SiteAssetsProvider({
         const validatedHref = validateExternalUrl(asset.href);
         map[asset.key] = {
           ...asset,
-          href: validatedHref
+          href: validatedHref,
         };
       } else {
         map[asset.key] = asset;
@@ -51,7 +51,7 @@ export function SiteAssetsProvider({
         const asset = assetsMap[key];
         if (asset?.href) {
           const validatedHref = validateExternalUrl(asset.href);
-          return validatedHref ? {...asset, href: validatedHref} : asset;
+          return validatedHref ? { ...asset, href: validatedHref } : asset;
         }
         return asset;
       },

@@ -40,6 +40,7 @@ export type DbAsset = {
   description: string | null;
   is_active: boolean;
   sort_order: number | null;
+  href?: string | null;
   created_at: string | null;
   updated_at: string | null;
 };

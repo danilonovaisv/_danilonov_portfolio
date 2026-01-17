@@ -5,7 +5,10 @@ import {
   validateExternalUrl,
 } from '@/lib/supabase/urls';
 
-export type NormalizedSiteAsset = DbAsset & { publicUrl: string; href?: string };
+export type NormalizedSiteAsset = DbAsset & {
+  publicUrl: string;
+  href?: string | null;
+};
 
 export function normalizeAssetRecord(asset: DbAsset): NormalizedSiteAsset {
   const bucket = ((asset.bucket || 'site-assets') as string)
@@ -21,7 +24,7 @@ export function normalizeAssetRecord(asset: DbAsset): NormalizedSiteAsset {
     '';
 
   // Processar href se existir
-  let processedAsset = {
+  let processedAsset: NormalizedSiteAsset = {
     ...asset,
     bucket,
     file_path: cleanPath,
@@ -33,7 +36,7 @@ export function normalizeAssetRecord(asset: DbAsset): NormalizedSiteAsset {
     if (validatedHref) {
       processedAsset = {
         ...processedAsset,
-        href: validatedHref
+        href: validatedHref,
       };
     }
   }
