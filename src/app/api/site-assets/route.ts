@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { normalizeAssetRecord } from '@/lib/supabase/site-asset-utils';
+import { normalizeAssetList } from '@/lib/supabase/site-asset-utils';
 import type { DbAsset } from '@/types/admin';
 
 export const dynamic = 'force-static';
@@ -34,9 +34,9 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const assets = (data ?? []).map((asset) =>
-    normalizeAssetRecord(asset as DbAsset)
-  );
+  const assets = normalizeAssetList((data ?? []) as DbAsset[], {
+    onlyActive: true,
+  });
 
   return NextResponse.json(assets, { status: 200 });
 }

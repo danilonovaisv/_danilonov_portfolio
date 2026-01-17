@@ -3,11 +3,11 @@ export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
 import { createClient } from '@/lib/supabase/server';
-import { AssetCard } from '@/components/admin/AssetCard';
 import { AssetForm } from '@/components/admin/AssetForm';
 import { AssetGuide } from '@/components/admin/AssetGuide';
 import { PresetButtons } from './preset-buttons';
-import { normalizeAssetRecord } from '@/lib/supabase/site-asset-utils';
+import { normalizeAssetList } from '@/lib/supabase/site-asset-utils';
+import { AssetGallery } from '@/components/admin/AssetGallery';
 
 export default async function MidiaPage() {
   const supabase = await createClient();
@@ -17,17 +17,8 @@ export default async function MidiaPage() {
     .order('page', { ascending: true })
     .order('sort_order', { ascending: true, nullsFirst: false });
 
-  const normalizedAssets = (assets ?? []).map(normalizeAssetRecord);
-
-  const groups = normalizedAssets.reduce<Record<string, any[]>>(
-    (acc, asset) => {
-      const page = asset.page || 'global';
-      acc[page] = acc[page] || [];
-      acc[page].push(asset);
-      return acc;
-    },
-    {}
-  );
+  const normalizedAssets = normalizeAssetList(assets ?? []);
+  const activeCount = normalizedAssets.filter((asset) => asset.is_active).length;
 
   return (
     <div className="space-y-6">
@@ -37,6 +28,9 @@ export default async function MidiaPage() {
             Mídia
           </p>
           <h1 className="text-3xl font-semibold">Assets do site</h1>
+          <p className="text-sm text-slate-400">
+            {activeCount} ativos de {normalizedAssets.length} registros válidos
+          </p>
         </div>
       </div>
 
@@ -53,28 +47,7 @@ export default async function MidiaPage() {
         </div>
       </div>
 
-      <div className="space-y-8">
-        {Object.entries(groups).map(([page, list]) => (
-          <section key={page} className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold capitalize">{page}</h2>
-              <span className="text-xs text-slate-400">
-                {list.length} itens
-              </span>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {list.map((asset) => (
-                <AssetCard key={asset.id} asset={asset} />
-              ))}
-            </div>
-          </section>
-        ))}
-        {!normalizedAssets.length && (
-          <div className="text-slate-400 text-sm">
-            Nenhum asset cadastrado ainda.
-          </div>
-        )}
-      </div>
+      <AssetGallery assets={normalizedAssets} />
     </div>
   );
 }

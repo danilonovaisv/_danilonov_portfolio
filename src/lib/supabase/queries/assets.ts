@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { DbAsset } from '@/types/admin';
 import {
-  normalizeAssetRecord,
+  normalizeAssetList,
   type NormalizedSiteAsset,
 } from '@/lib/supabase/site-asset-utils';
 import { normalizeStoragePath } from '@/lib/supabase/urls';
@@ -15,7 +15,7 @@ export async function listAssets(): Promise<NormalizedSiteAsset[]> {
     .order('sort_order', { ascending: true, nullsFirst: false });
 
   if (error) throw error;
-  return (data ?? []).map((asset) => normalizeAssetRecord(asset as DbAsset));
+  return normalizeAssetList((data ?? []) as DbAsset[]);
 }
 
 export async function upsertAsset(payload: Partial<DbAsset>) {

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { runExperienceOrchestrator } from '@/lib/antigravity';
 import { useAntigravityStore } from '@/store/antigravity.store';
 
-export function useExperience() {
+export function useExperience(enabled = true) {
   /*
    * 🧠 UNIFIED BRAIN: ANTIGRAVITY ORCHESTRATOR
    * Coordinates: Flags (Logic), Viewport (Sensors) and Hydration
@@ -13,6 +13,8 @@ export function useExperience() {
   const setViewport = useAntigravityStore((state) => state.setViewport);
 
   useEffect(() => {
+    if (!enabled) return;
+
     // 1. Initial Sensing
     const handleResize = () => {
       const width = window.innerWidth;
@@ -43,5 +45,5 @@ export function useExperience() {
     // Listeners
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [setFlags, setViewport]);
+  }, [enabled, setFlags, setViewport]);
 }

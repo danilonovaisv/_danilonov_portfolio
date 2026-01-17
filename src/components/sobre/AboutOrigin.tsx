@@ -6,36 +6,39 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import '@/styles/about-origin.css';
+import { useSiteAssetUrl } from '@/contexts/site-assets';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
+import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CONTENT_BLOCKS = [
+const FALLBACK_BLOCKS = [
   {
     id: '1',
     title: 'O QUE PERMANECE',
     desc: 'Desde cedo, sempre prestei atenção no que ficava — não só no que aparecia. Enquanto muitos olhavam para o brilho imediato, eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo. A essência das coisas sempre falou mais alto do que a superfície.',
-    img: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.1.webp',
+    fallback: 'about/origin/about.origin_image.1.webp',
     alt: 'O que permanece - essência que sobrevive ao tempo',
   },
   {
     id: '2',
     title: 'DO TRAÇO À INTENÇÃO',
     desc: 'Rabiscos viraram ideias. Ideias viraram projetos. E os projetos começaram a deixar rastros. Meu processo criativo nasceu do improviso, do lápis na margem do caderno. Aos poucos, aquilo que era instinto virou direção. Com cada tentativa, aprendi a dar forma ao invisível — até que os conceitos começaram a falar por si.',
-    img: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.2.webp',
+    fallback: 'about/origin/about.origin_image.2.webp',
     alt: 'Do traço à intenção - processo criativo emergente',
   },
   {
     id: '3',
     title: 'A DESCOBERTA DO INVISÍVEL',
     desc: 'Foi ali que entendi: design não é enfeite. É ferramenta invisível de transformação. Por trás de cada escolha visual, existe intenção. Descobri que o design verdadeiro não grita — ele conduz. Ele está presente nos detalhes que ninguém percebe, mas que todos sentem. Transformar sem que se perceba a transformação: isso é potência.',
-    img: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.3.webp',
+    fallback: 'about/origin/about.origin_image.3.webp',
     alt: 'Descoberta do invisível - design como transformação',
   },
   {
     id: '4',
     title: 'EXPANSÃO COM PROPÓSITO',
     desc: 'Estudei Comunicação, mergulhei no design, no branding e hoje uso inteligência artificial para expandir o alcance sem perder a essência humana da criação. Minha trajetória uniu intuição com método, arte com estratégia. O futuro pede novas ferramentas — e eu as abracei. Mas nunca deixei que a tecnologia apagasse o que me move: a sensibilidade, o olhar atento, a busca pelo significado.',
-    img: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.4.webp',
+    fallback: 'about/origin/about.origin_image.4.webp',
     alt: 'Expansão com propósito - intuição + tecnologia',
   },
 ];
@@ -45,6 +48,38 @@ const AboutOrigin: React.FC = () => {
   const archRef = useRef<HTMLDivElement>(null);
   const archRightRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
+
+  const originImage1 =
+    useSiteAssetUrl(
+      SITE_ASSET_KEYS.about.originImages[0],
+      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback)
+    ) ??
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback);
+  const originImage2 =
+    useSiteAssetUrl(
+      SITE_ASSET_KEYS.about.originImages[1],
+      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback)
+    ) ??
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback);
+  const originImage3 =
+    useSiteAssetUrl(
+      SITE_ASSET_KEYS.about.originImages[2],
+      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback)
+    ) ??
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback);
+  const originImage4 =
+    useSiteAssetUrl(
+      SITE_ASSET_KEYS.about.originImages[3],
+      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback)
+    ) ??
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback);
+
+  const CONTENT_BLOCKS = [
+    { ...FALLBACK_BLOCKS[0], img: originImage1 },
+    { ...FALLBACK_BLOCKS[1], img: originImage2 },
+    { ...FALLBACK_BLOCKS[2], img: originImage3 },
+    { ...FALLBACK_BLOCKS[3], img: originImage4 },
+  ];
 
   useEffect(() => {
     // Initialize Lenis with safe typed options

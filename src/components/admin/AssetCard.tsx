@@ -100,7 +100,9 @@ export function AssetCard({ asset }: Props) {
     });
   };
 
-  const previewUrl = buildSupabaseStorageUrl(asset.bucket, asset.file_path);
+  const previewUrl =
+    asset.publicUrl || buildSupabaseStorageUrl(asset.bucket, asset.file_path);
+  const resolvedPage = asset.page ?? asset.resolvedPage ?? 'global';
 
   return (
     <div className="rounded-lg border border-white/10 bg-slate-900/60 p-4 flex gap-4">
@@ -110,6 +112,7 @@ export function AssetCard({ asset }: Props) {
             src={previewUrl}
             alt={asset.key}
             fill
+            sizes="96px"
             className="object-cover"
             unoptimized={previewUrl.toLowerCase().endsWith('.svg')}
           />
@@ -120,7 +123,15 @@ export function AssetCard({ asset }: Props) {
         )}
       </div>
       <div className="flex-1">
-        <div className="text-sm font-semibold text-white">{asset.key}</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="text-sm font-semibold text-white">{asset.key}</div>
+          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[11px] text-slate-200">
+            {resolvedPage}
+          </span>
+          <span className="rounded-full bg-blue-500/15 px-2 py-0.5 text-[11px] text-blue-100">
+            {asset.asset_type}
+          </span>
+        </div>
         <div className="text-xs text-slate-400">{asset.description}</div>
         <div className="text-xs text-slate-500 mt-1">
           {asset.bucket}/{asset.file_path}

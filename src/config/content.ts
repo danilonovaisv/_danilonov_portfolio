@@ -174,16 +174,29 @@ export const TAG_CATALOG = [
   },
 ];
 
-export const ABOUT_CONTENT = {
+exportconst ABOUT_CONTENT = {
   hero: {
-    title: { text: 'Sou ', highlight: 'Danilo Novais. ' },
+    title: {
+      text: 'Sou ',
+      highlight: 'Danilo Novais. '
+    },
     manifesto: [
-      { text: 'Você ', highlight: 'não vê tudo o que eu faço. ' },
-      { text: 'Mas sente quando ', highlight: 'funciona.' },
+      {
+        text: 'Você ',
+        highlight: 'não vê tudo ',
+        textEnd: 'o que eu faço.'
+      },
+      {
+        text: 'Mas sente quando ',
+        highlight: 'funciona.'
+      }
     ],
     description: [
-      'Crio design que observa, entende e guia experiências com intenção, estratégia e tecnologia, na medida certa.',
-    ],
+      'Crio designs que observam, entendem e guiam experiências com intenção,',
+      'estratégia e tecnologia, na medida exata.'
+    ]
+  }
+};
     videos: {
       desktop: siteAsset('about/hero/about.hero.desktop_video.mp4'),
       mobile: siteAsset('about/hero/about.hero.mobile_video.mp4'),

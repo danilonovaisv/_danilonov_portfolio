@@ -56,6 +56,32 @@ body {
   display: none;
 }
 
+/* Admin surface should keep scrollbars visible to avoid locking the panel */
+.admin-surface,
+.admin-shell {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+}
+
+.admin-surface::-webkit-scrollbar,
+.admin-shell::-webkit-scrollbar {
+  display: block;
+  width: 10px;
+  height: 10px;
+}
+
+.admin-surface::-webkit-scrollbar-thumb,
+.admin-shell::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
+}
+
+.admin-surface::-webkit-scrollbar-track,
+.admin-shell::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 * {
   border-color: rgba(255, 255, 255, 0.1);
 }

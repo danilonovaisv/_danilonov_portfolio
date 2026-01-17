@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { DbAsset } from '@/types/admin';
 import {
-  normalizeAssetRecord,
+  normalizeAssetList,
   type NormalizedSiteAsset,
 } from '@/lib/supabase/site-asset-utils';
 
@@ -17,7 +17,5 @@ export async function getSiteAssets() {
 
   if (error) throw error;
 
-  return (data ?? []).map((asset) =>
-    normalizeAssetRecord(asset as DbAsset)
-  ) as SiteAsset[];
+  return normalizeAssetList((data ?? []) as DbAsset[], { onlyActive: true });
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import SmoothScroll from '@/components/layout/SmoothScroll';
 import Header from '@/components/layout/Header';
 
@@ -20,8 +21,25 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 🧠 ORQUESTRAÇÃO GLOBAL DA EXPERIÊNCIA
-  useExperience();
+  const pathname = usePathname();
+  const isAdmin = useMemo(
+    () => pathname?.startsWith('/admin') ?? false,
+    [pathname]
+  );
+
+  // 🧠 ORQUESTRAÇÃO GLOBAL DA EXPERIÊNCIA (desativada no /admin para evitar scroll lock)
+  useExperience(!isAdmin);
+
+  if (isAdmin) {
+    return (
+      <main
+        id="main-content"
+        className="admin-surface relative min-h-screen bg-slate-950 text-slate-50"
+      >
+        {children}
+      </main>
+    );
+  }
 
   return (
     <SmoothScroll>

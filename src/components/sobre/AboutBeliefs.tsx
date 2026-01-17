@@ -9,8 +9,8 @@ const PHRASES = [
   'Um vídeo\nque respira.',
   'Uma marca\n que se\n reconhece.',
   'Um detalhe\n que fica.',
-  'Crio para\n gerar\npresença.',
-  'Mesmo\n quando ninguém\n percebe o\n esforço.',
+  'Crio para\n gerar\n presença.',
+  'Mesmo\n quando\n ninguém\npercebe\n o esforço.',
 ];
 
 const COLORS = [
