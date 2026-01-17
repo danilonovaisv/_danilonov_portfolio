@@ -18,12 +18,12 @@ export default function ClientsBrandsSection() {
 
   const logos =
     uniqueAssets.length > 0
-      ? uniqueAssets.map((asset) => ({
+      ? uniqueAssets.slice(0, 8).map((asset) => ({
           id: asset.key,
           src: asset.publicUrl,
           alt: asset.description ?? asset.key,
         }))
-      : HOME_CONTENT.clients.logos;
+      : HOME_CONTENT.clients.logos.slice(0, 8);
 
   const hasLogos = logos.length > 0;
 

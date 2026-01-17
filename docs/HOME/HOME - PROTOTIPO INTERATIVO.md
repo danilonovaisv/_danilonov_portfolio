@@ -541,7 +541,7 @@ stagger: 120ms entre faixas
 
 ---
 
-### 4.5 Featured Projects (Bento Grid)
+### 4.5 Featured Projects (Grid)
 
 #### Objetivo
 Showcase curado de trabalhos de alta qualidade em layout editorial estilo revista.
