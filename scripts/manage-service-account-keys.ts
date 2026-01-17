@@ -10,6 +10,13 @@
 import { spawn } from 'child_process';
 import { Command } from 'commander';
 
+// Define interfaces for type safety
+interface ServiceAccountKey {
+  name: string;
+  validAfterTime: string;
+  validBeforeTime: string;
+}
+
 const program = new Command();
 
 program
@@ -28,7 +35,7 @@ const options = program.opts();
  * @param {string[]} args
  * @returns {Promise<string>}
  */
-function executeGcloudCommand(args: string[]) {
+function executeGcloudCommand(args: string[]): Promise<string> {
   return new Promise((resolve, reject) => {
     let stdout = '';
     let stderr = '';
@@ -69,7 +76,7 @@ async function listKeys(serviceAccountEmail: string) {
       'json',
     ]);
 
-    const keys = JSON.parse(result);
+    const keys = JSON.parse(result) as ServiceAccountKey[];
 
     if (keys.length === 0) {
       console.log(`No keys found for service account: ${serviceAccountEmail}`);
@@ -80,9 +87,16 @@ async function listKeys(serviceAccountEmail: string) {
       `Found ${keys.length} keys for service account: ${serviceAccountEmail}`
     );
     keys.forEach((key) => {
-      console.log(
-        `Key ID: ${key.name.split('/').pop()}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`
-      );
+      const keyId = key.name.split('/').pop();
+      if (keyId) {
+        console.log(
+          `Key ID: ${keyId}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`
+        );
+      } else {
+        console.log(
+          `Could not extract key ID from: ${key.name}, Created: ${key.validAfterTime}, Expires: ${key.validBeforeTime}`
+        );
+      }
     });
   } catch (error) {
     console.error(
@@ -108,7 +122,7 @@ async function cleanupOldKeys(serviceAccountEmail: string) {
       'json',
     ]);
 
-    const keys = JSON.parse(result);
+    const keys = JSON.parse(result) as ServiceAccountKey[];
 
     if (keys.length === 0) {
       console.log(`No keys found for service account: ${serviceAccountEmail}`);
@@ -136,6 +150,12 @@ async function cleanupOldKeys(serviceAccountEmail: string) {
 
     for (const key of oldKeys) {
       const keyId = key.name.split('/').pop();
+
+      if (!keyId) {
+        console.log(`Could not extract key ID from: ${key.name}. Skipping...`);
+        continue;
+      }
+
       console.log(`Removing key: ${keyId}`);
 
       try {

@@ -33,7 +33,7 @@ const DEFAULT_FILE = 'assets.json';
  * @param {string} filePath
  * @returns {Record<string, string>}
  */
-function parseEnvFile(filePath) {
+function parseEnvFile(filePath: string): Record<string, string> {
   const env: Record<string, string> = {};
   try {
     const content = readFileSync(filePath, 'utf8');
@@ -73,7 +73,7 @@ function loadEnvOverrides() {
  * @param {string|undefined} value
  * @returns {string|undefined}
  */
-function normalizeEnvValue(value) {
+function normalizeEnvValue(value: string | undefined): string | undefined {
   if (!value) return value;
   return value
     .replace(/[\u2018\u2019\u201C\u201D]/g, '')
@@ -85,7 +85,7 @@ function normalizeEnvValue(value) {
  * @param {string} extension
  * @returns {string}
  */
-function detectAssetType(extension) {
+function detectAssetType(extension: string): string {
   const ext = extension.toLowerCase();
   if (['svg', 'webp', 'png', 'jpg', 'jpeg', 'gif', 'avif'].includes(ext)) {
     return 'image';
@@ -106,7 +106,7 @@ function detectAssetType(extension) {
  * @param {string} key
  * @returns {number|null}
  */
-function parseSortOrder(key) {
+function parseSortOrder(key: string): number | null {
   const segments = key.split('.');
   const last = segments[segments.length - 1];
   const candidate = Number(last);
@@ -117,7 +117,7 @@ function parseSortOrder(key) {
  * @param {string} filePath
  * @returns {Promise<string[]>}
  */
-async function readAssetList(filePath) {
+async function readAssetList(filePath: string): Promise<string[]> {
   const raw = await fs.readFile(path.resolve(filePath), 'utf8');
   return raw
     .split(/\r?\n/)
@@ -129,7 +129,7 @@ async function readAssetList(filePath) {
  * @param {string} rawPath
  * @returns {Object}
  */
-function buildRecordEntry(rawPath) {
+function buildRecordEntry(rawPath: string) {
   const normalizedInput = rawPath.replace(/^\/+/, '').replace(/"+/g, '');
   const bucketMatch = normalizedInput.match(
     /(?:object\/public|render\/image\/public)\/([^/]+)/

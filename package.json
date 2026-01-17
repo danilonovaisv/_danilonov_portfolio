@@ -10,7 +10,7 @@
     "react-three-fiber"
   ],
   "engines": {
-    "node": "20"
+    "node": "22.0.0"
   },
   "packageManager": "npm@11.7.0",
   "scripts": {

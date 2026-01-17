@@ -11,7 +11,7 @@ const defaultLists = ['assets.json', 'assets-about.json'];
  * @param {string[]} args
  * @returns {Promise<void>}
  */
-async function runCommand(command, args) {
+async function runCommand(command: string, args: string[]) {
   return new Promise<void>((resolve, reject) => {
     const proc = spawn(command, args, {
       stdio: 'inherit',
@@ -32,7 +32,7 @@ async function runCommand(command, args) {
  * @param {string} filePath
  * @returns {Promise<void>}
  */
-async function ensureFileExists(filePath) {
+async function ensureFileExists(filePath: string) {
   await access(filePath);
 }
 

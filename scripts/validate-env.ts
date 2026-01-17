@@ -12,7 +12,7 @@ const REQUIRED_KEYS = [
  * @param {string} filePath
  * @returns {Record<string, string>}
  */
-function parseEnv(filePath) {
+function parseEnv(filePath: string): Record<string, string> {
   const content = readFileSync(filePath, 'utf8');
   const entries = content
     .split(/\r?\n/)
@@ -36,7 +36,7 @@ function validateEnv() {
   } catch (error) {
     console.error(
       `Não foi possível ler ${ENV_FILE}:`,
-      error.message
+      error instanceof Error ? error.message : error
     );
     process.exit(1);
   }
