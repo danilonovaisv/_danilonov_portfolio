@@ -14,7 +14,11 @@ const projectRoot = process.cwd();
 /** @type {ReportSection[]} */
 const report = [];
 
-function logSection(title: string, content: string[]) {
+/**
+ * @param {string} title
+ * @param {string[]} content
+ */
+function logSection(title, content) {
   report.push({ title, content });
   console.log(`✅ ${title}`);
 }
