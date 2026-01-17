@@ -103,10 +103,25 @@ export function normalizeAssetList(
     );
   };
 
-  const hasDoublePrefix = (value?: string | null) => {
-    if (!value) return false;
-    const compact = value.replace(/[\\/]/g, '.').toLowerCase();
-    return /^(?:key:)?([a-z0-9_-]+)\.([a-z0-9_-]+)\.\1\./.test(compact);
+  const dedupeDoublePrefix = (value?: string | null) => {
+    if (!value) return value;
+    const trimmed = value.trim();
+    if (!trimmed) return value;
+
+    const delimiter = trimmed.includes('/') ? '/' : '.';
+    const parts = trimmed.split(delimiter).filter(Boolean);
+    if (parts.length < 4) return value;
+
+    const maxPrefix = Math.min(3, Math.floor(parts.length / 2));
+    for (let len = 1; len <= maxPrefix; len++) {
+      const first = parts.slice(0, len).join('|').toLowerCase();
+      const second = parts.slice(len, len * 2).join('|').toLowerCase();
+      if (first === second) {
+        const deduped = [...parts.slice(0, len), ...parts.slice(len * 2)];
+        return deduped.join(delimiter);
+      }
+    }
+    return value;
   };
 
   const scoreRecord = (record: NormalizedSiteAsset) => {
@@ -118,14 +133,13 @@ export function normalizeAssetList(
   };
 
   for (const asset of assets) {
-    if (
-      dropInvalid &&
-      (hasDoublePrefix(asset.key) || hasDoublePrefix(asset.file_path))
-    ) {
-      continue;
-    }
+    const cleanedAsset: DbAsset = {
+      ...asset,
+      key: dedupeDoublePrefix(asset.key) ?? asset.key,
+      file_path: dedupeDoublePrefix(asset.file_path) ?? asset.file_path,
+    };
 
-    const record = normalizeAssetRecord(asset);
+    const record = normalizeAssetRecord(cleanedAsset);
     const key = record.key?.trim();
     if (!key) continue;
 
@@ -136,7 +150,7 @@ export function normalizeAssetList(
     if (onlyActive && !record.is_active) continue;
 
     const hasUsableUrl = Boolean(
-      record.publicUrl || record.asset_type === 'font'
+      record.publicUrl || record.asset_type === 'font' || record.href
     );
     if (dropInvalid && !hasUsableUrl) continue;
 

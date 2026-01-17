@@ -1,5 +1,7 @@
 const normalizeUrl = (value: string) => value.replace(/\/+$/, '');
-const DEFAULT_SUPABASE_URL = 'https://umkmwbkwvulxtdodzmzf.supabase.co';
+// Fallback alinhado ao projeto principal (aymuvxysygrwoicsjgxj) para evitar
+// geração de links quebrados quando variáveis de ambiente estiverem ausentes.
+const DEFAULT_SUPABASE_URL = 'https://aymuvxysygrwoicsjgxj.supabase.co';
 
 export function getSupabaseBaseUrl() {
   const url =
@@ -87,6 +89,17 @@ export function buildSupabaseStorageUrl(
   const normalizedPath = normalizeStoragePath(filePath, cleanBucket);
   if (!normalizedPath) {
     return filePath.startsWith('http') ? filePath : '';
+  }
+
+  // Preserva a origem caso o caminho já seja uma URL completa de outro projeto Supabase
+  if (isHttp && isSupabaseUrl) {
+    try {
+      const url = new URL(filePath);
+      const baseOrigin = `${url.protocol}//${url.host}`;
+      return `${baseOrigin}/storage/v1/object/public/${cleanBucket}/${normalizedPath}`;
+    } catch {
+      // se falhar, segue fluxo padrão
+    }
   }
 
   const baseUrl = getSupabaseBaseUrl();

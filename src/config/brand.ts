@@ -1,7 +1,9 @@
+// O projeto principal é o aymuvxysygrwoicsjgxj; usamos como fallback seguro
+// para evitar perda de links quando as envs não estão presentes (ex.: build local).
 const SUPABASE_PROJECT_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ??
   process.env.SUPABASE_URL ??
-  'https://umkmwbkwvulxtdodzmzf.supabase.co';
+  'https://aymuvxysygrwoicsjgxj.supabase.co';
 
 export const SUPABASE_STORAGE_URL = `${SUPABASE_PROJECT_URL.replace(
   /\/$/,
