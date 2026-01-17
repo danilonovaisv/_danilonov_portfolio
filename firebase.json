@@ -48,7 +48,6 @@
       "source": "portfoliodan"
     },
     {
-      "source": "danportfuncion",
       "codebase": "danportfuncion",
       "disallowLegacyRuntimeConfig": true,
       "ignore": [
@@ -61,14 +60,19 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint",
         "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
+      ],
+      "source": "danportfuncion"
     }
   ],
   "hosting": {
     "source": ".",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "frameworksBackend": {
-      "region": "us-east1"
+      "region": "us-central1"
     }
   },
   "emulators": {
@@ -94,6 +98,9 @@
     },
     "storage": {
       "port": 9199
+    },
+    "firestore": {
+      "port": 8080
     }
   },
   "dataconnect": {
