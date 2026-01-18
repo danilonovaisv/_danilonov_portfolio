@@ -38,6 +38,7 @@ const MobileMenuButton = forwardRef<HTMLButtonElement, MobileMenuButtonProps>(
               <span
                 className="block h-[1em] leading-none text-sm tracking-wide"
                 key={`${line}-${i}`}
+                style={{ visibility: i === textLines.length - 1 ? 'visible' : 'hidden' }}
               >
                 {line}
               </span>

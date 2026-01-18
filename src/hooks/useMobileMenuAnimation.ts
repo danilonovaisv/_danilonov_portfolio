@@ -97,15 +97,13 @@ export function useMobileMenuAnimation(
 
     const currentLabel = opening ? 'Menu' : 'Close';
     const targetLabel = opening ? 'Close' : 'Menu';
-    const cycles = 3;
+    const cycles = 1; // Reduce cycles for cleaner transition
 
     const seq: string[] = [currentLabel];
     let last = currentLabel;
     for (let i = 0; i < cycles; i++) {
       last = last === 'Menu' ? 'Close' : 'Menu';
-      seq.push(last);
     }
-    if (last !== targetLabel) seq.push(targetLabel);
     seq.push(targetLabel);
 
     setTextLines(seq);
@@ -116,7 +114,7 @@ export function useMobileMenuAnimation(
 
     textCycleAnimRef.current = gsap.to(inner, {
       yPercent: -finalShift,
-      duration: 0.6 + lineCount * 0.08,
+      duration: 0.6,
       ease: 'expo.out',
     });
   }, []);
@@ -285,6 +283,20 @@ export function useMobileMenuAnimation(
       }
     }
   }, [isOpen, playOpen, playClose, animateIcon, animateText]);
+
+  // Ensure text is always in sync with isOpen state
+  useLayoutEffect(() => {
+    // Only trigger animation when state actually changes
+    if (isOpen !== openRef.current) {
+      if (isOpen) {
+        animateText(true);
+      } else {
+        animateText(false);
+      }
+    }
+    openRef.current = isOpen;
+    setOpen(isOpen);
+  }, [isOpen, animateText]);
 
   const toggleMenu = useCallback(() => {
     const target = !openRef.current;
