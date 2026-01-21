@@ -3,7 +3,8 @@ name: 🛡️ AI Self-Healing Agent
 on:
   workflow_run:
     workflows:
-      - Deploy to Firebase App Hosting
+      - Deploy to Firebase Hosting on merge
+      - Deploy to Firebase Hosting on PR
     types:
       - completed
 

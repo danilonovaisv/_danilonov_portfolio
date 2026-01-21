@@ -12,13 +12,19 @@ jobs:
       - name: 🛠️ Checkout do repositório
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # necessário para acessar todas as branches
+          fetch-depth: 0
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
 
       - name: ⚙️ Instalar dependências
         run: npm ci
 
       - name: 🔍 Rodar auditoria
-        run: npm run audit:project
+        run: npm run analyze:project
 
       - name: 💾 Commit do relatório
         run: |
