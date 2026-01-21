@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { LandingPageBlock, BlockType } from '@/types/landing-page';
+import { LandingPageBlock } from '@/types/landing-page';
 
 interface BlockRendererProps {
   block: LandingPageBlock;
@@ -22,7 +22,7 @@ const fadeInUp = {
   },
 };
 
-export default function BlockRenderer({ block, index }: BlockRendererProps) {
+export default function BlockRenderer({ block }: BlockRendererProps) {
   const { type, content } = block;
 
   // Resolvers for media helper

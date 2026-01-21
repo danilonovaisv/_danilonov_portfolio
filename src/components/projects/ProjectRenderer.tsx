@@ -6,45 +6,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-
-interface Section {
-  id: string;
-  type: 'text' | 'image' | 'video';
-  content: string;
-}
+import { LandingPageBlock } from '@/types/landing-page';
+import BlockRenderer from './BlockRenderer';
 
 interface ProjectRendererProps {
   project: {
     title: string;
     cover: string;
-    content: Section[];
+    content: LandingPageBlock[];
   };
 }
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.22, 1, 0.36, 1] as any,
-    },
-  },
-};
-
 export default function ProjectRenderer({ project }: ProjectRendererProps) {
-  // Resolve relative paths to full Supabase URLs
-  const resolvedContent = project.content.map((s) => {
-    if (s.type !== 'text' && s.content && !s.content.startsWith('http')) {
-      return {
-        ...s,
-        content: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/${s.content}`,
-      };
-    }
-    return s;
-  });
-
+  // Resolve cover URL
   const coverUrl =
     project.cover && !project.cover.startsWith('http')
       ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/${project.cover}`
@@ -114,54 +88,19 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
 
       {/* Dynamic Content Sections */}
       <div className="space-y-32 md:space-y-64 pb-32">
-        {resolvedContent.map((section, index) => (
-          <motion.section
-            key={section.id}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-10%' }}
-            variants={fadeInUp}
-            className="w-full"
-          >
-            {section.type === 'text' && (
-              <div className="std-grid">
-                <div className="max-w-3xl mx-auto text-center">
-                  <p className="text-xl md:text-3xl lg:text-4xl font-light leading-relaxed text-slate-200">
-                    {section.content}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {section.type === 'image' && (
-              <div className="w-full px-4 md:px-0">
-                <div className="relative aspect-video md:aspect-21/9 w-full max-w-[1920px] mx-auto overflow-hidden rounded-xl md:rounded-none">
-                  <Image
-                    src={section.content}
-                    alt={`Section ${index}`}
-                    fill
-                    className="object-cover transition-transform duration-[3s] hover:scale-105"
-                  />
-                </div>
-              </div>
-            )}
-
-            {section.type === 'video' && (
-              <div className="w-full px-4 md:px-0">
-                <div className="relative aspect-video md:aspect-21/9 w-full max-w-[1920px] mx-auto overflow-hidden rounded-xl md:rounded-none bg-slate-900">
-                  <video
-                    src={section.content}
-                    className="w-full h-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                  />
-                </div>
-              </div>
-            )}
-          </motion.section>
-        ))}
+        {project.content && Array.isArray(project.content) ? (
+          project.content.map((block, index) => (
+            <BlockRenderer
+              key={block.id || index}
+              block={block}
+              index={index}
+            />
+          ))
+        ) : (
+          <div className="text-center text-slate-500 py-20">
+            Sem conteúdo disponível.
+          </div>
+        )}
       </div>
 
       {/* Footer / CTA */}
