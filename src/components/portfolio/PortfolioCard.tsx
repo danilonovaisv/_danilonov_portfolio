@@ -13,6 +13,7 @@ import { useParallaxElement } from '@/hooks/useParallax';
 import type { PortfolioProject } from '@/types/project';
 import { MOTION_TOKENS, ghostTransition } from '@/config/motion';
 import { applyImageFallback } from '@/utils/utils';
+import { useRouter } from 'next/navigation';
 
 interface PortfolioCardProps {
   project: PortfolioProject;
@@ -30,6 +31,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
   className = '',
 }) => {
   const prefersReducedMotion = useReducedMotion();
+  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -44,6 +46,10 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
   const overlayOpacity = isHovered ? 1 : 0;
 
   const handleClick = () => {
+    if (project.landingPageSlug) {
+        router.push(`/projects/${project.landingPageSlug}?from=portfolio`);
+        return;
+    }
     if (onOpen) {
       onOpen(project);
     }

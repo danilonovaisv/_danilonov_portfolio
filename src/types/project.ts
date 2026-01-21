@@ -95,6 +95,7 @@ export interface PortfolioProject {
   isFeatured?: boolean;
   featuredOnHome?: boolean;
   featuredOnPortfolio?: boolean;
+  landingPageSlug?: string | null;
 }
 
 /**

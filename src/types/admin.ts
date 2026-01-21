@@ -16,8 +16,18 @@ export type DbProject = {
   featured_home_order: number | null;
   featured_portfolio_order: number | null;
   is_published: boolean;
+  landing_page_id: string | null;
   created_at: string | null;
   updated_at: string | null;
+};
+
+export type DbLandingPage = {
+  id: string;
+  title: string;
+  slug: string;
+  cover: string | null;
+  content: any;
+  created_at: string;
 };
 
 export type DbTag = {

@@ -3,6 +3,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 
 interface Section {
   id: string;
@@ -47,6 +50,12 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
       ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/${project.cover}`
       : project.cover;
 
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
+  const backUrl = from === 'portfolio' ? '/portfolio' : '/';
+  const backLabel =
+    from === 'portfolio' ? 'Voltar ao Portfólio' : 'Voltar para Home';
+
   return (
     <div className="bg-[#040013] text-white selection:bg-blue-600 selection:text-white">
       {/* Hero Section */}
@@ -68,6 +77,20 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
             <div className="absolute inset-0 bg-linear-to-b from-transparent via-[#040013]/50 to-[#040013]" />
           </motion.div>
         )}
+
+        <div className="absolute top-0 left-0 z-50 p-6 md:p-10 w-full flex justify-between items-start pointer-events-none">
+          <Link
+            href={backUrl}
+            className="pointer-events-auto group flex items-center gap-3 text-white/50 hover:text-white transition-colors duration-300"
+          >
+            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-black/20 backdrop-blur-md group-hover:bg-white/10 transition-all">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            </div>
+            <span className="text-sm font-medium uppercase tracking-widest opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+              {backLabel}
+            </span>
+          </Link>
+        </div>
 
         <div className="std-grid relative z-10 text-center">
           <motion.h1
@@ -161,22 +184,5 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
         </div>
       </section>
     </div>
-  );
-}
-
-// Minimal Link component for project footer
-function Link({
-  href,
-  children,
-  className,
-}: {
-  href: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <a href={href} className={className}>
-      {children}
-    </a>
   );
 }

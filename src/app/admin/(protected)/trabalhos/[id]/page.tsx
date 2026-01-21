@@ -15,18 +15,25 @@ export default async function EditProjectPage(props: Props) {
   const { id } = params;
   const supabase = await createClient();
 
-  const [{ data: project, error: projectError }, { data: tags }] =
-    await Promise.all([
-      supabase
-        .from('portfolio_projects')
-        .select('*, project_tags:portfolio_project_tags(tag_id)')
-        .eq('id', id)
-        .single(),
-      supabase
-        .from('portfolio_tags')
-        .select('*')
-        .order('sort_order', { ascending: true, nullsFirst: false }),
-    ]);
+  const [
+    { data: project, error: projectError },
+    { data: tags },
+    { data: landingPages },
+  ] = await Promise.all([
+    supabase
+      .from('portfolio_projects')
+      .select('*, project_tags:portfolio_project_tags(tag_id)')
+      .eq('id', id)
+      .single(),
+    supabase
+      .from('portfolio_tags')
+      .select('*')
+      .order('sort_order', { ascending: true, nullsFirst: false }),
+    supabase
+      .from('landing_pages')
+      .select('id, title, slug')
+      .order('title', { ascending: true }),
+  ]);
 
   if (projectError || !project) {
     notFound();
@@ -48,6 +55,7 @@ export default async function EditProjectPage(props: Props) {
       <ProjectForm
         project={project}
         tags={tags ?? []}
+        landingPages={landingPages ?? []}
         selectedTagIds={selectedTagIds}
       />
     </div>

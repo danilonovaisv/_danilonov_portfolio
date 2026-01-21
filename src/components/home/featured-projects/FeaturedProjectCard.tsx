@@ -101,6 +101,18 @@ export default function FeaturedProjectCard({
   const commonClasses =
     'group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md text-center md:text-left';
 
+  if (project.landingPageSlug) {
+    return (
+      <Link
+        href={`/projects/${project.landingPageSlug}?from=home`}
+        aria-label={`Ver Landing Page: ${project.title}`}
+        className={commonClasses}
+      >
+        <CardContent />
+      </Link>
+    );
+  }
+
   if (isModalMode) {
     return (
       <button

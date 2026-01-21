@@ -178,6 +178,7 @@ export function mapDbProjectToPortfolioProject(
     featuredOnHome: project.featured_on_home,
     featuredOnPortfolio: project.featured_on_portfolio,
     videoPreview: toVideoPreview(gallery),
+    landingPageSlug: project.landing_page?.slug,
   };
 }
 
@@ -215,5 +216,6 @@ export function mapStaticProjectToPortfolioProject(
     featuredOnHome: true,
     featuredOnPortfolio: true,
     videoPreview: undefined,
+    landingPageSlug: undefined,
   };
 }

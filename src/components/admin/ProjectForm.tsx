@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { uploadToBucket } from '@/lib/supabase/storage';
-import type { DbProject, DbTag } from '@/types/admin';
+import type { DbProject, DbTag, DbLandingPage } from '@/types/admin';
 
 const projectSchema = z.object({
   title: z.string().min(3),
@@ -24,6 +24,7 @@ const projectSchema = z.object({
   featured_home_order: z.coerce.number().int().optional().nullable(),
   featured_portfolio_order: z.coerce.number().int().optional().nullable(),
   is_published: z.boolean().optional(),
+  landing_page_id: z.string().optional().nullable(),
   tags: z.array(z.string()).optional(),
 });
 
@@ -32,10 +33,16 @@ type FormValues = z.infer<typeof projectSchema>;
 type Props = {
   project?: DbProject;
   tags: DbTag[];
+  landingPages: Pick<DbLandingPage, 'id' | 'title' | 'slug'>[];
   selectedTagIds?: string[];
 };
 
-export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
+export function ProjectForm({
+  project,
+  tags,
+  landingPages,
+  selectedTagIds = [],
+}: Props) {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [hero, setHero] = useState<File | null>(null);
   const [gallery, setGallery] = useState<File[]>([]);
@@ -59,6 +66,7 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
       featured_home_order: project?.featured_home_order ?? undefined,
       featured_portfolio_order: project?.featured_portfolio_order ?? undefined,
       is_published: project?.is_published ?? true,
+      landing_page_id: project?.landing_page_id ?? '',
       tags: selectedTagIds,
     },
   });
@@ -109,6 +117,12 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
         }
 
         const { tags: formTags = [], ...payloadData } = values;
+
+        // Clean landing_page_id to be null if empty string
+        if (payloadData.landing_page_id === '') {
+          payloadData.landing_page_id = null;
+        }
+
         const { data, error: upsertError } = await supabase
           .from('portfolio_projects')
           .upsert(
@@ -270,6 +284,32 @@ export function ProjectForm({ project, tags, selectedTagIds = [] }: Props) {
             className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
             {...form.register('featured_portfolio_order')}
           />
+        </label>
+      </div>
+
+      <div className="p-6 bg-blue-600/5 border border-blue-600/10 rounded-xl space-y-4">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-blue-400">
+          Página de Destino (Link Interno)
+        </h3>
+        <label className="flex flex-col gap-2">
+          <span className="text-xs text-slate-400">
+            Selecione uma Landing Page para este trabalho
+          </span>
+          <select
+            className="rounded-md bg-slate-900 border border-white/10 px-3 py-2 text-sm text-white"
+            {...form.register('landing_page_id')}
+          >
+            <option value="">Nenhuma (Default)</option>
+            {landingPages.map((lp) => (
+              <option key={lp.id} value={lp.id}>
+                {lp.title} (/{lp.slug})
+              </option>
+            ))}
+          </select>
+          <p className="text-[10px] text-slate-500 italic">
+            Quando vinculado, o clique no trabalho abrirá a Landing Page
+            customizada em vez de uma visualização padrão.
+          </p>
         </label>
       </div>
 

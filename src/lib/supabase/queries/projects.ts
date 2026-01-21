@@ -13,6 +13,7 @@ type ProjectFilters = {
 
 export type DbProjectWithTags = DbProject & {
   tags?: Array<{ tag: DbTag } | null> | null;
+  landing_page?: { slug: string } | null;
 };
 
 export async function listProjects(
@@ -24,7 +25,7 @@ export async function listProjects(
   let query = supabase
     .from('portfolio_projects')
     .select(
-      '*, tags:portfolio_project_tags(tag:portfolio_tags(id, slug, label, kind))'
+      '*, tags:portfolio_project_tags(tag:portfolio_tags(id, slug, label, kind)), landing_page:landing_pages(slug)'
     )
     .order('featured_portfolio_order', { ascending: true, nullsFirst: false });
 
