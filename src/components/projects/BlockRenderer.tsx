@@ -3,10 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { LandingPageBlock } from '@/types/landing-page';
+import { BlockType } from '@/types/project';
+import { blocksConfig } from '../config/blocks';
 
 interface BlockRendererProps {
-  block: LandingPageBlock;
+  block: BlockType;
   index: number;
 }
 
@@ -17,7 +18,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
