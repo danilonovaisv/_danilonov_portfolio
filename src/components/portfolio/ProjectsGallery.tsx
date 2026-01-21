@@ -95,8 +95,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       ref={galleryRef as React.RefObject<HTMLElement>}
       id="projects-gallery"
       aria-label="Galeria de Projetos"
-      className={`relative z-10 bg-background transition-[height] duration-300 ease-out ${className}`}
-      style={{ height: galleryHeight }}
+      className={`relative z-10 bg-background transition-[height] duration-300 ease-out h-(--gallery-height) ${className}`}
     >
       {/* Gallery Track (Fixed or Static) */}
         <motion.div

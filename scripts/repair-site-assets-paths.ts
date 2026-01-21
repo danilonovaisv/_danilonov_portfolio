@@ -10,6 +10,7 @@ interface SiteAssetRow {
   bucket: string | null;
   file_path: string | null;
   updated_at: string | null;
+  asset_type: string | null;
 }
 
 function parseEnvFile(filePath: string): Record<string, string> {
@@ -72,7 +73,7 @@ async function main() {
 
   const { data, error } = await supabase
     .from('site_assets')
-    .select('id,key,bucket,file_path,updated_at');
+    .select('id,key,bucket,file_path,updated_at,asset_type');
 
   if (error) {
     throw error;
@@ -149,6 +150,8 @@ async function main() {
         file_path: normalizedPath,
         key: correctedKey,
         bucket,
+        asset_type: asset.asset_type,
+        updated_at: new Date().toISOString(),
       };
     })
     .filter(Boolean) as Array<{
@@ -156,6 +159,8 @@ async function main() {
     file_path: string;
     key?: string;
     bucket: string;
+    asset_type?: string | null;
+    updated_at: string;
   }>;
 
   if (updates.length === 0) {
