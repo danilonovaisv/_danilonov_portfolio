@@ -40,6 +40,10 @@ export default async function ProtectedLayout({
     }
 
     if (!user) {
+      // Avoid redirecting during build time to prevent "Cannot find module" errors
+      if (process.env.NEXT_PHASE === 'phase-production-build') {
+        return null;
+      }
       redirect(ADMIN_NAVIGATION.dashboard + '/login');
     }
 
