@@ -9,7 +9,16 @@ export async function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase server client credentials');
+    const missing = [];
+    if (!supabaseUrl) missing.push('NEXT_PUBLIC_SUPABASE_URL');
+    if (!supabaseKey) missing.push('SUPABASE_KEY (ANON or PUBLISHABLE)');
+
+    console.error(
+      `[Supabase Server] Error: Missing credentials. ${missing.join(', ')}`
+    );
+    throw new Error(
+      `Missing Supabase server client credentials: ${missing.join(', ')}`
+    );
   }
 
   return createServerClient(supabaseUrl, supabaseKey, {

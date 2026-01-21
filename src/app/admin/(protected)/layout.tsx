@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 import type { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { AdminShell } from '@/components/admin/AdminShell';
+import { AdminErrorDisplay } from '@/components/admin/AdminErrorDisplay';
 import { createClient } from '@/lib/supabase/server';
 import { ADMIN_NAVIGATION } from '@/config/admin-navigation';
 
@@ -27,16 +28,44 @@ export default async function ProtectedLayout({
 }: {
   children: ReactNode;
 }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect(ADMIN_NAVIGATION.dashboard + '/login');
+    if (error) {
+      console.error('[Admin Layout] auth.getUser error:', error.message);
+    }
+
+    if (!user) {
+      redirect(ADMIN_NAVIGATION.dashboard + '/login');
+    }
+
+    return (
+      <AdminShell userEmail={user.email ?? undefined}>{children}</AdminShell>
+    );
+  } catch (error) {
+    // Importante: Não interceptar o erro de redirecionamento do Next.js
+    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+      throw error;
+    }
+
+    console.error(
+      '[Admin Layout] Critical failure:',
+      error instanceof Error ? error.message : error
+    );
+
+    const isMissingEnv =
+      error instanceof Error &&
+      error.message.includes('Missing Supabase server client credentials');
+
+    return (
+      <AdminErrorDisplay
+        message={error instanceof Error ? error.message : 'Falha desconhecida'}
+        isMissingEnv={isMissingEnv}
+      />
+    );
   }
-
-  return (
-    <AdminShell userEmail={user.email ?? undefined}>{children}</AdminShell>
-  );
 }

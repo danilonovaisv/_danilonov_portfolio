@@ -38,6 +38,7 @@
     "assets:sync": "tsx scripts/sync-site-assets.ts assets.json",
     "assets:clean": "tsx scripts/repair-site-assets-clean.ts",
     "assets:repair": "tsx scripts/repair-site-assets-paths.ts",
+    "assets:fix": "tsx scripts/repair-comprehensive.ts",
     "assets:sync:about": "tsx scripts/sync-site-assets.ts assets-about.json",
     "assets:check-links": "tsx scripts/check-storage-links.ts",
     "assets:check-unused": "node scripts/check-unused-assets.cjs",
@@ -48,6 +49,7 @@
     "cleanup:project": "bash scripts/cleanup-project.sh",
     "prepare-deploy": "tsx scripts/prep-deploy.ts",
     "validate-env": "tsx scripts/validate-env.ts",
+    "test:portfolio": "node scripts/test-portfolio-page.js",
     "postinstall": "npm run prebuild"
   },
   "dependencies": {
