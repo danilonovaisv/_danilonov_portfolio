@@ -6,7 +6,7 @@ import { createStaticClient } from '@/lib/supabase/static';
 import { HOME_CONTENT } from '@/config/content';
 import type { PortfolioProject, ProjectCategory } from '@/types/project';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'Portfólio',
@@ -21,6 +21,9 @@ const FALLBACK_CATEGORY_MAP: Record<string, ProjectCategory> = {
   'web & motion': 'web',
   'web & digital': 'web',
   'motion & video': 'motion',
+  'video & motion': 'motion',
+  'motion': 'motion',
+  'videos & motions': 'motion',
 };
 
 function mapFallbackCategory(label?: string): ProjectCategory {
@@ -78,30 +81,28 @@ function buildFallbackProjects(): PortfolioProject[] {
 }
 
 export default async function PortfolioPage() {
-  const hasSupabaseEnv =
-    Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
-    Boolean(
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-    );
-
   let projects: PortfolioProject[] = [];
 
-  if (hasSupabaseEnv) {
-    try {
+  try {
+    const hasSupabaseEnv =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      Boolean(
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+          process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+      );
+
+    if (hasSupabaseEnv) {
       const supabase = createStaticClient();
       const dbProjects = await listProjects({}, supabase);
       projects = dbProjects.map((project, index) =>
         mapDbProjectToPortfolioProject(project, index)
       );
-    } catch (error) {
-      console.error('Error fetching projects:', error);
+    } else {
+      console.warn('Supabase env vars missing, using fallback projects.');
       projects = buildFallbackProjects();
     }
-  } else {
-    console.error(
-      'Supabase env vars ausentes para /portfolio. Usando fallback estático.'
-    );
+  } catch (error) {
+    console.error('Error in PortfolioPage:', error);
     projects = buildFallbackProjects();
   }
 

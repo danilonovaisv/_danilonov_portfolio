@@ -21,9 +21,13 @@ export function AssetGallery({ assets }: AssetGalleryProps) {
 
   // Filtrar assets válidos e extrair opções únicas
   const validAssets = useMemo(() => {
-    return assets.filter(asset => {
+    return assets.filter((asset) => {
       // Filtrar assets com chaves ou caminhos inválidos
-      if (!asset.key || asset.key.startsWith('updated_at:') || asset.key.startsWith('key:')) {
+      if (
+        !asset.key ||
+        asset.key.startsWith('updated_at:') ||
+        asset.key.startsWith('key:')
+      ) {
         return false;
       }
       return true;
@@ -32,13 +36,17 @@ export function AssetGallery({ assets }: AssetGalleryProps) {
 
   const pageOptions = useMemo(() => {
     const set = new Set<string>();
-    validAssets.forEach((asset) => set.add(asset.page ?? asset.resolvedPage ?? ''));
+    validAssets.forEach((asset) =>
+      set.add(asset.page ?? asset.resolvedPage ?? '')
+    );
     return Array.from(set).filter(Boolean).sort();
   }, [validAssets]);
 
   const typeOptions = useMemo(() => {
     const set = new Set<string>();
-    validAssets.forEach((asset) => asset.asset_type && set.add(asset.asset_type));
+    validAssets.forEach(
+      (asset) => asset.asset_type && set.add(asset.asset_type)
+    );
     return Array.from(set).filter(Boolean).sort();
   }, [validAssets]);
 

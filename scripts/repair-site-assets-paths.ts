@@ -86,21 +86,23 @@ async function main() {
   await fs.writeFile(backupPath, JSON.stringify(rows, null, 2), 'utf8');
 
   // Função auxiliar para limpar valores
-  const cleanValue = (value: string | null | undefined): string | null | undefined => {
+  const cleanValue = (
+    value: string | null | undefined
+  ): string | null | undefined => {
     if (!value) return value;
 
     let cleaned = value;
-    
+
     // Remover prefixos de metadados
     cleaned = cleaned.replace(/^key:\s*/i, '');
     cleaned = cleaned.replace(/^updated_at:\s*/i, '');
-    
+
     // Remover aspas e vírgulas extras
     cleaned = cleaned.replace(/^"+|"+$/g, '');
     cleaned = cleaned.replace(/^'+|'+$/g, '');
     cleaned = cleaned.replace(/,+$/g, '');
     cleaned = cleaned.trim();
-    
+
     // Remover duplicação de prefixos (ex: clients.clients.strip -> clients.strip)
     const segments = cleaned.split(/[.\//]/);
     if (segments.length >= 4) {
@@ -121,7 +123,7 @@ async function main() {
         }
       }
     }
-    
+
     return cleaned || value; // Retorna o valor original se o resultado limpo for vazio
   };
 
@@ -129,18 +131,19 @@ async function main() {
     .map((asset) => {
       // Primeiro tenta normalizar o caminho
       const bucket = (asset.bucket ?? 'site-assets').replace(/^\/+|\/+$/g, '');
-      
+
       // Aplica limpeza tanto à chave quanto ao caminho
       const correctedKey = cleanValue(asset.key) ?? asset.key;
       const correctedPath = cleanValue(asset.file_path) ?? asset.file_path;
-      
+
       const normalizedPath = normalizeStoragePath(correctedPath, bucket);
-      
+
       // Determina se alguma atualização é necessária
-      const needsUpdate = normalizedPath !== asset.file_path || correctedKey !== asset.key;
-      
+      const needsUpdate =
+        normalizedPath !== asset.file_path || correctedKey !== asset.key;
+
       if (!needsUpdate) return null;
-      
+
       return {
         id: asset.id,
         file_path: normalizedPath,
@@ -156,7 +159,9 @@ async function main() {
   }>;
 
   if (updates.length === 0) {
-    console.log('Nenhum registro com dados inválidos ou duplicados encontrado.');
+    console.log(
+      'Nenhum registro com dados inválidos ou duplicados encontrado.'
+    );
     console.log(`Backup salvo em ${backupPath}`);
     return;
   }
@@ -180,11 +185,16 @@ async function main() {
       .upsert(batch, { onConflict: 'id' });
 
     if (updateError) {
-      console.error(`Erro ao atualizar lote ${Math.floor(i/batchSize) + 1}:`, updateError);
+      console.error(
+        `Erro ao atualizar lote ${Math.floor(i / batchSize) + 1}:`,
+        updateError
+      );
       throw updateError;
     }
-    
-    console.log(`Lote ${Math.floor(i/batchSize) + 1} de atualizações concluído (${Math.min(batchSize, updates.length - i)} registros)`);
+
+    console.log(
+      `Lote ${Math.floor(i / batchSize) + 1} de atualizações concluído (${Math.min(batchSize, updates.length - i)} registros)`
+    );
   }
 
   console.log(

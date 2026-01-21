@@ -105,8 +105,9 @@ export function AssetCard({ asset }: Props) {
   const resolvedPage = asset.page ?? asset.resolvedPage ?? 'global';
 
   // Verificar se a chave ou caminho é inválido
-  const isInvalidAsset = asset.key.startsWith('updated_at:') || asset.key.startsWith('key:');
-  
+  const isInvalidAsset =
+    asset.key.startsWith('updated_at:') || asset.key.startsWith('key:');
+
   if (isInvalidAsset) {
     return (
       <div className="rounded-lg border border-red-500/50 bg-slate-900/60 p-4 flex gap-4">
@@ -115,7 +116,9 @@ export function AssetCard({ asset }: Props) {
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="text-sm font-semibold text-red-400">{asset.key}</div>
+            <div className="text-sm font-semibold text-red-400">
+              {asset.key}
+            </div>
             <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-[11px] text-red-200">
               {resolvedPage}
             </span>

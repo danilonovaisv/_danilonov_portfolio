@@ -57,7 +57,7 @@ async function fixDuplicateAssets() {
     cleaned = cleaned.replace(/^key:\s*/i, '');
     cleaned = cleaned.replace(/^updated_at:\s*/i, '');
     cleaned = cleaned.replace(/^page:\s*/i, '');
-    
+
     // Remover aspas e vírgulas extras
     cleaned = cleaned.replace(/^"+|"+$/g, '');
     cleaned = cleaned.replace(/^'+|'+$/g, '');
@@ -151,7 +151,11 @@ async function fixDuplicateAssets() {
       const newPath = cleanValue(originalPath);
       const newPage = cleanValue(originalPage);
 
-      if (newKey !== originalKey || newPath !== originalPath || newPage !== originalPage) {
+      if (
+        newKey !== originalKey ||
+        newPath !== originalPath ||
+        newPage !== originalPage
+      ) {
         updatesToPerform.set(keeper.id, {
           id: keeper.id,
           key: newKey || originalKey,
@@ -169,7 +173,11 @@ async function fixDuplicateAssets() {
       const newPath = cleanValue(originalPath);
       const newPage = cleanValue(originalPage);
 
-      if (newKey !== originalKey || newPath !== originalPath || newPage !== originalPage) {
+      if (
+        newKey !== originalKey ||
+        newPath !== originalPath ||
+        newPage !== originalPage
+      ) {
         updatesToPerform.set(asset.id, {
           id: asset.id,
           key: newKey || originalKey,
@@ -220,7 +228,11 @@ async function fixDuplicateAssets() {
           const newPath = cleanValue(originalPath);
           const newPage = cleanValue(originalPage);
 
-          if (newKey !== originalKey || newPath !== originalPath || newPage !== originalPage) {
+          if (
+            newKey !== originalKey ||
+            newPath !== originalPath ||
+            newPage !== originalPage
+          ) {
             updatesToPerform.set(keeper.id, {
               id: keeper.id,
               key: newKey || originalKey,

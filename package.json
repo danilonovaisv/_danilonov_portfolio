@@ -38,6 +38,13 @@
     "assets:sync": "tsx scripts/sync-site-assets.ts assets.json",
     "assets:repair": "tsx scripts/repair-site-assets-paths.ts",
     "assets:sync:about": "tsx scripts/sync-site-assets.ts assets-about.json",
+    "assets:check-links": "tsx scripts/check-storage-links.ts",
+    "assets:check-unused": "node scripts/check-unused-assets.cjs",
+    "assets:fix-duplicates": "tsx scripts/fix-duplicate-assets.ts",
+    "assets:update-urls": "tsx scripts/update-supabase-urls.ts",
+    "assets:verify-corrections": "tsx scripts/verify-asset-corrections.ts",
+    "analyze:project": "tsx scripts/analyze-project.ts",
+    "cleanup:project": "bash scripts/cleanup-project.sh",
     "prepare-deploy": "tsx scripts/prep-deploy.ts",
     "validate-env": "tsx scripts/validate-env.ts",
     "postinstall": "npm run prebuild"
