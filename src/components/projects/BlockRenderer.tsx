@@ -3,10 +3,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { BlockType } from '@/types/landing-page';
+import { LandingPageBlock } from '@/types/landing-page';
 
 interface BlockRendererProps {
-  block: BlockType;
+  block: LandingPageBlock;
   index: number;
 }
 
