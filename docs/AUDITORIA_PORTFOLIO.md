@@ -136,6 +136,23 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 [Supabase SSR Package (Criação de Clientes)](https://supabase.com/docs/guides/auth/server-side/nextjs) 
 
 
+> **Contexto do Projeto:** Estou a utilizar **Next.js (App Router)** com **Supabase Auth (@supabase/ssr)**. O meu sistema de administração está dividido em rotas de autenticação e rotas protegidas através de um `layout.tsx`.
+> **O Problema:** Existe um erro de "login loop". Após o utilizador introduzir as credenciais no `LoginForm.tsx`, o cliente identifica a sessão e tenta redirecionar para `/admin`. No entanto, o `ProtectedLayout` no servidor não reconhece o utilizador imediatamente através de `getUser()` e redireciona de volta para o login.
+> **Ficheiros para Análise:**
+> 1. **admin/LoginForm.tsx**: Utiliza `supabase.auth.getSession()` no `useEffect` e `window.location.href` para navegação.
+> 2. **app/admin/(protected)/layout.tsx**: Utiliza `supabase.auth.getUser()` para validar o acesso no servidor.
+> 3. **app/auth/callback/route.ts**: Gere a troca do código de autenticação por uma sessão persistente.
+> 
+> 
+> **Tarefa:**
+> * Identifica a falha na sincronização de cookies que impede o servidor de ver o utilizador autenticado logo após o login no cliente.
+> * Corrige o `LoginForm.tsx` para garantir que o `router.refresh()` ou a estratégia de navegação assegura a persistência dos headers de autenticação.
+> * Ajusta a lógica do `ProtectedLayout` para lidar com estados de transição e evitar redirecionamentos desnecessários quando a sessão ainda está a ser processada.
+> * Verifica se a configuração do cliente Supabase no servidor (`createClient`) está a lidar corretamente com a escrita de cookies.
+> 
+> 
+
+---
 
 ---
 
@@ -145,16 +162,5 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 2. Inspecione o navegador (Aba Application -> Cookies) após o login para ver se os cookies `sb-*-auth-token` estão sendo criados.
 3. Utilize o metacomando `/troubleshoot` se precisar analisar o seu arquivo de Middleware.
 
-Ajuste o projeto utilizando as etapas essenciais para execução:
-1. Analise o escopo detalhado fornecido.
-2. Monte um plano de execução com base nesse escopo.
-3. Implemente os ajustes necessários no código.
-4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
-5. Ao concluir, revise e valide se:
-   - Todas as alterações foram aplicadas corretamente.
-   - O sistema está funcionando como esperado.
-   - O visual está 100% fiel às referências.
-
-✅ Nenhum ponto deve ser ignorado.
 
 
