@@ -17,16 +17,10 @@
   "main": "lib/index.js",
   "dependencies": {
     "@dataconnect/admin-generated": "file:src/dataconnect-admin-generated",
-    "@google-cloud/firestore": "^8.2.0",
     "firebase-admin": "^13.6.0",
-    "firebase-frameworks": "0.11.8",
-    "firebase-functions": "^7.0.0",
-    "next": "^16.1.4",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "firebase-functions": "^7.0.0"
   },
   "devDependencies": {
-    "@types/tough-cookie": "^4.0.5",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
     "eslint": "^8.9.0",

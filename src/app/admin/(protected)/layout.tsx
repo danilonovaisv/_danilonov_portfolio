@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { AdminShell } from '@/components/admin/AdminShell';
 import { AdminErrorDisplay } from '@/components/admin/AdminErrorDisplay';
+import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -39,10 +40,8 @@ export default async function ProtectedLayout({
 
     if (!user) {
       // O middleware já redireciona para /admin/login se não houver usuário.
-      // Se chegarmos aqui sem usuário, significa que houve um delay na sincronização.
-      // Renderizamos o shell com usuário genérico para evitar 'blank page' e permitir que
-      // o cliente ou o próximo request resolva.
-      return <AdminShell userEmail={undefined}>{children}</AdminShell>;
+      // Adicionamos um redirecionamento explícito aqui como safeguard.
+      redirect('/admin/login');
     }
 
     return (
