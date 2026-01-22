@@ -38,6 +38,7 @@
     "manage-keys": "tsx scripts/manage-service-account-keys.ts --account=firebase-adminsdk-fbsvc@portfolio-danilo-novais.iam.gserviceaccount.com",
     "assets:sync": "tsx scripts/sync-site-assets.ts assets.json",
     "assets:clean": "tsx scripts/repair-site-assets-clean.ts",
+    "clean:deploy": "npm run clean && rm -rf dist deploy-public",
     "assets:repair": "tsx scripts/repair-site-assets-paths.ts",
     "assets:fix": "tsx scripts/repair-comprehensive.ts",
     "assets:sync:about": "tsx scripts/sync-site-assets.ts assets-about.json",
