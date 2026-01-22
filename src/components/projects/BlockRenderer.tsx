@@ -3,8 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { BlockType } from '@/types/project';
-import { blocksConfig } from '../config/blocks';
+import { BlockType } from '@/types/landing-page';
 
 interface BlockRendererProps {
   block: BlockType;

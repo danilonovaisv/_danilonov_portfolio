@@ -36,15 +36,31 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
+  // IMPORTANT: Do not use auth.getSession() - it reads from cookies without validation
+  // Use auth.getUser() which always validates the session with Supabase Auth server
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect /admin routes
-  if (
-    request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.startsWith('/admin/login')
-  ) {
+  const pathname = request.nextUrl.pathname;
+  const isLoginPage = pathname === '/admin/login';
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isAuthCallbackRoute = pathname.startsWith('/auth/callback');
+
+  // Skip auth callback route
+  if (isAuthCallbackRoute) {
+    return supabaseResponse;
+  }
+
+  // If user is logged in and trying to access login page, redirect to dashboard
+  if (user && isLoginPage) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/admin';
+    return NextResponse.redirect(url);
+  }
+
+  // Protect /admin routes (except login)
+  if (isAdminRoute && !isLoginPage) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = '/admin/login';

@@ -1,8 +1,8 @@
 // Client component for login
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useTransition, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { ADMIN_NAVIGATION } from '@/config/admin-navigation';
 
@@ -11,7 +11,32 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Check for auth errors from callback
+  useEffect(() => {
+    const authError = searchParams.get('error');
+    if (authError) {
+      setError('Erro na autenticação. Por favor, tente novamente.');
+    }
+  }, [searchParams]);
+
+  // Check if already logged in on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const supabase = createClientComponentClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        setIsRedirecting(true);
+        window.location.href = ADMIN_NAVIGATION.dashboard;
+      }
+    };
+    checkSession();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,18 +45,28 @@ export default function AdminLoginPage() {
     startTransition(async () => {
       try {
         const supabase = createClientComponentClient();
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { data, error: signInError } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
         if (signInError) {
           setError(signInError.message);
           return;
         }
-        // Force refresh to update server-side session state
-        router.refresh();
-        // Use hard navigation to ensure middleware sees the new cookie
-        window.location.href = ADMIN_NAVIGATION.dashboard;
+
+        if (data.session) {
+          setIsRedirecting(true);
+          // Pequeno delay para garantir que os cookies foram sincronizados
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          // Force router refresh to update RSC
+          router.refresh();
+          // Usar hard navigation após garantir a sessão
+          window.location.href = ADMIN_NAVIGATION.dashboard;
+        } else {
+          setError('Falha ao estabelecer sessão. Tente novamente.');
+        }
       } catch (err) {
         console.error('Login error:', err);
         setError('Ocorreu um erro inesperado.');
@@ -78,9 +113,13 @@ export default function AdminLoginPage() {
         <button
           type="submit"
           className="w-full rounded-md bg-blue-500 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-600 disabled:opacity-60"
-          disabled={isPending}
+          disabled={isPending || isRedirecting}
         >
-          {isPending ? 'Entrando...' : 'Entrar'}
+          {isRedirecting
+            ? 'Redirecionando...'
+            : isPending
+              ? 'Entrando...'
+              : 'Entrar'}
         </button>
       </form>
     </div>
