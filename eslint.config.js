@@ -23,6 +23,15 @@ export default [
       'src/dataconnect-generated/**',
       'src/dataconnect-admin-generated/**',
       'docs/**',
+      // Utility scripts (standalone TS files not part of main build)
+      'scripts/**',
+      // Static/deployed assets (not source code)
+      'public/**',
+      'deploy-public/**',
+      // SSR function generated code
+      'ssr_function/**',
+      // Subproject directories
+      'portfoliodan/**',
     ],
   },
   {

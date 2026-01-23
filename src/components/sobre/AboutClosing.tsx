@@ -46,7 +46,37 @@ export function AboutClosing() {
                 {paragraph}
               </p>
             ))}
-          </div>
+
+            {/* Vídeo - Adicionado após a frase sobre liderança */}
+            <div className="mt-6 md:mt-8 flex justify-center">
+              <video
+                className="w-full max-w-[560px] rounded-lg shadow-lg"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-label="Vídeo de apresentação do trabalho"
+                style={{ aspectRatio: '16 / 9' }}
+              >
+                {/* Placeholder para o link do vídeo que será fornecido posteriormente */}
+                <source src="" type="video/mp4" /> 
+                Seu navegador não suporta vídeos.
+              </video>
+            </div>
+            {/* Vídeo após a frase sobre experiências */}
+            <div className="mt-6 md:mt-8 flex justify-center">
+              <video
+                src="/path/to/video.mp4" /* Placeholder - link será substituído posteriormente */
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full max-w-[560px] rounded-lg shadow-xl"
+                aria-label="Demonstração visual da experiência criativa"
+                style={{ aspectRatio: '16 / 9' }}
+              ></video>
+            </div>
 
           {/* CTAs - Using AntigravityCTA component */}
           <div className="flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-6 md:gap-8 justify-self-center">
