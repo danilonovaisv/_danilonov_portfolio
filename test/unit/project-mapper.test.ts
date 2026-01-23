@@ -6,8 +6,8 @@ describe('buildSupabaseStorageUrl', () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://test.supabase.co/';
   });
 
-  it('returns empty string when file path is missing', () => {
-    expect(buildSupabaseStorageUrl('bucket', '')).toBe('');
+  it('returns null when file path is missing', () => {
+    expect(buildSupabaseStorageUrl('bucket', '')).toBeNull();
   });
 
   it('builds a public object URL', () => {
