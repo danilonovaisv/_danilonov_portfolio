@@ -23,7 +23,10 @@ interface BlockRendererProps {
   index: number;
 }
 
-export default function BlockRenderer({ block, index: _index }: BlockRendererProps) {
+export default function BlockRenderer({
+  block,
+  index: _index,
+}: BlockRendererProps) {
   const { type, content } = block;
 
   const resolveMedia = (path?: string): string => {

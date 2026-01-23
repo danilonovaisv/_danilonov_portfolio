@@ -73,7 +73,7 @@ async function initializeNextApp(): Promise<void> {
       nextAppInitialized = true;
       logger.info('Next.js app prepared successfully');
     })();
-    
+
     await initPromise;
   } catch (error) {
     logger.error('Failed to initialize Next.js app:', error);
@@ -91,11 +91,11 @@ export const ssr_modern = onRequest(
   async (req, res) => {
     try {
       await initializeNextApp();
-      
+
       if (!nextApp) {
         throw new Error('Next.js app is not initialized');
       }
-      
+
       const handle = nextApp.getRequestHandler();
       return handle(req, res);
     } catch (err) {

@@ -11,6 +11,7 @@ Foram criados dois scripts para facilitar o processo:
 Localização: `scripts/test-and-deploy.sh`
 
 Este script:
+
 - Executa os testes (`npm test`)
 - Se os testes passarem, executa o build (`npm run build`)
 - Se o build for bem-sucedido, executa o deploy (`npm run deploy`)
@@ -20,6 +21,7 @@ Este script:
 Localização: `scripts/run-full-test-and-deploy.ts`
 
 Este script:
+
 - Testa o ambiente (variáveis de ambiente, conexão com Supabase)
 - Executa lint (`npm run lint`)
 - Executa typecheck (`npm run typecheck`)
@@ -63,6 +65,7 @@ Se qualquer etapa falhar, o processo será interrompido e o deploy não ocorrer�
 ## Scripts Originais
 
 Os scripts criados se baseiam nos seguintes scripts definidos no `package.json`:
+
 - `test`: Executa lint + typecheck + testes unitários
 - `build`: Faz o build do projeto Next.js
 - `deploy`: Executa o script de deploy com Firebase

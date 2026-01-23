@@ -10,11 +10,11 @@ import { createStaticClient } from '../src/lib/supabase/static';
 function runCommand(command: string, args: string[] = []): Promise<void> {
   return new Promise((resolve, reject) => {
     console.log(`\n🔧 Executando: ${command} ${args.join(' ')}`);
-    
+
     const child = spawn(command, args, {
       stdio: 'inherit',
       cwd: process.cwd(),
-      env: process.env
+      env: process.env,
     });
 
     child.on('close', (code) => {
@@ -36,7 +36,7 @@ function runCommand(command: string, args: string[] = []): Promise<void> {
 
 async function testEnvironment() {
   console.log('🧪 Testando ambiente...');
-  
+
   // Testa as variáveis de ambiente
   const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const hasKey = Boolean(
@@ -46,10 +46,15 @@ async function testEnvironment() {
 
   console.log('📋 Verificando variáveis de ambiente:');
   console.log('  NEXT_PUBLIC_SUPABASE_URL:', hasUrl ? '✅ SET' : '❌ MISSING');
-  console.log('  NEXT_PUBLIC_SUPABASE_ANON_KEY:', hasKey ? '✅ SET' : '❌ MISSING');
+  console.log(
+    '  NEXT_PUBLIC_SUPABASE_ANON_KEY:',
+    hasKey ? '✅ SET' : '❌ MISSING'
+  );
 
   if (!hasUrl || !hasKey) {
-    console.log('⚠️  Aviso: Variáveis de ambiente ausentes - pode afetar alguns testes');
+    console.log(
+      '⚠️  Aviso: Variáveis de ambiente ausentes - pode afetar alguns testes'
+    );
   }
 
   // Testa conexão com Supabase se as variáveis estiverem presentes
@@ -60,15 +65,20 @@ async function testEnvironment() {
       console.log('  ✅ Cliente Supabase criado com sucesso');
 
       // Testa uma consulta simples
-      const { data, error } = await supabase.from('portfolio_projects').select('count').single();
-      
+      const { data, error } = await supabase
+        .from('portfolio_projects')
+        .select('count')
+        .single();
+
       if (error) {
         console.log(`  ⚠️  Aviso: Erro na consulta de teste: ${error.message}`);
       } else {
         console.log(`  ✅ Conexão com banco de dados bem-sucedida`);
       }
     } catch (error) {
-      console.log(`  ⚠️  Aviso: Não foi possível conectar ao Supabase: ${(error as Error).message}`);
+      console.log(
+        `  ⚠️  Aviso: Não foi possível conectar ao Supabase: ${(error as Error).message}`
+      );
     }
   }
 
@@ -102,7 +112,9 @@ async function runFullTestAndDeploy() {
     console.log('\n🚢 Executando deploy...');
     await runCommand('npm', ['run', 'deploy']);
 
-    console.log('\n🎉 Processo completo: todos os testes passaram e deploy realizado com sucesso!');
+    console.log(
+      '\n🎉 Processo completo: todos os testes passaram e deploy realizado com sucesso!'
+    );
   } catch (error) {
     console.error('\n💥 Erro durante o processo:', (error as Error).message);
     console.error('❌ Processo interrompido devido a falha.');
