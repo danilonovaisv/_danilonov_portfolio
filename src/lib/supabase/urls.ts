@@ -3,14 +3,14 @@ const normalizeUrl = (value: string) => value.replace(/\/+$/, '');
 // geração de links quebrados quando variáveis de ambiente estiverem ausentes.
 const DEFAULT_SUPABASE_URL = 'https://aymuvxysygrwoicsjgxj.supabase.co';
 
-export function getSupabaseBaseUrl() {
+export function getSupabaseBaseUrl(): string | null {
   const url =
     process.env.NEXT_PUBLIC_SUPABASE_URL ??
     process.env.SUPABASE_URL ??
     process.env.NEXT_PUBLIC_SUPABASE_URL ??
     DEFAULT_SUPABASE_URL;
 
-  if (!url) return '';
+  if (!url) return null;
   try {
     return normalizeUrl(url);
   } catch {
@@ -20,9 +20,9 @@ export function getSupabaseBaseUrl() {
 
 export function normalizeStoragePath(
   filePath?: string | null,
-  bucket?: string
-) {
-  if (!filePath) return '';
+  bucket?: string,
+): string | null {
+  if (!filePath) return null;
 
   const bucketPrefix = bucket?.replace(/^\/+|\/+$/g, '');
 
@@ -39,13 +39,13 @@ export function normalizeStoragePath(
 
   normalized = normalized.replace(
     /^https?:\/\/[^/]+\/storage\/v1\/(?:render\/image|object)\/public\//,
-    ''
+    '',
   );
 
   // Remove local /storage/v1/object/public prefix if the path was stored like that
   normalized = normalized.replace(
     /^\/?storage\/v1\/(?:render\/image|object)\/public\//,
-    ''
+    '',
   );
 
   normalized = normalized.replace(/^\/+/, '');
@@ -59,9 +59,9 @@ export function normalizeStoragePath(
 
 export function buildSupabaseStorageUrl(
   bucket: string,
-  filePath?: string | null
-) {
-  if (!filePath) return '';
+  filePath?: string | null,
+): string | null {
+  if (!filePath) return null;
 
   const isHttp =
     filePath.startsWith('http://') || filePath.startsWith('https://');
@@ -75,20 +75,20 @@ export function buildSupabaseStorageUrl(
       // Permitir apenas protocolos seguros
       if (url.protocol !== 'https:') {
         console.warn(`Protocolo inseguro detectado: ${filePath}`);
-        return '';
+        return null;
       }
       // Aqui poderíamos adicionar validação de domínio se necessário
       return filePath;
     } catch {
       console.error(`URL inválida: ${filePath}`);
-      return '';
+      return null;
     }
   }
 
   const cleanBucket = bucket.replace(/^\/+|\/+$/g, '');
   const normalizedPath = normalizeStoragePath(filePath, cleanBucket);
   if (!normalizedPath) {
-    return filePath.startsWith('http') ? filePath : '';
+    return filePath.startsWith('http') ? filePath : null;
   }
 
   // Preserva a origem caso o caminho já seja uma URL completa de outro projeto Supabase
@@ -104,17 +104,17 @@ export function buildSupabaseStorageUrl(
 
   const baseUrl = getSupabaseBaseUrl();
   if (!baseUrl) {
-    return filePath.startsWith('http') ? filePath : '';
+    return filePath.startsWith('http') ? filePath : null;
   }
 
   return `${baseUrl}/storage/v1/object/public/${cleanBucket}/${normalizedPath}`;
 }
 
 // Função adicional para validar e construir URLs de links externos
-export function validateExternalUrl(url: string): string {
-  if (!url) return '';
+export function validateExternalUrl(url: string): string | null {
+  if (!url) return null;
   const normalized = url.trim();
-  if (!normalized) return '';
+  if (!normalized) return null;
 
   const allowedProtocols = ['https:', 'http:'];
 
@@ -125,7 +125,7 @@ export function validateExternalUrl(url: string): string {
     }
 
     console.warn(`Link externo inseguro bloqueado: ${url}`);
-    return '';
+    return null;
   } catch {
     if (normalized.startsWith('/') || normalized.startsWith('#')) {
       return normalized;
@@ -137,11 +137,11 @@ export function validateExternalUrl(url: string): string {
         return parsedFallback.toString();
       } catch {
         console.error(`URL externa inválida: ${url}`);
-        return '';
+        return null;
       }
     }
 
     console.error(`URL externa inválida: ${url}`);
-    return '';
+    return null;
   }
 }
