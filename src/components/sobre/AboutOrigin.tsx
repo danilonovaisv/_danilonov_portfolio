@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,6 +12,7 @@ import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// cspell:ignore webp gsap
 const FALLBACK_BLOCKS = [
   {
     id: '1',
@@ -48,31 +49,29 @@ const AboutOrigin: React.FC = () => {
   const archRef = useRef<HTMLDivElement>(null);
   const archRightRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
+  const rafId = useRef<number>(0);
+  const [isClient, setIsClient] = useState(false);
 
-  const originImage1 =
-    useSiteAssetUrl(
-      SITE_ASSET_KEYS.about.originImages[0],
-      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback) ||
-        undefined
-    ) ?? buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback);
-  const originImage2 =
-    useSiteAssetUrl(
-      SITE_ASSET_KEYS.about.originImages[1],
-      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback) ||
-        undefined
-    ) ?? buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback);
-  const originImage3 =
-    useSiteAssetUrl(
-      SITE_ASSET_KEYS.about.originImages[2],
-      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback) ||
-        undefined
-    ) ?? buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback);
-  const originImage4 =
-    useSiteAssetUrl(
-      SITE_ASSET_KEYS.about.originImages[3],
-      buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback) ||
-        undefined
-    ) ?? buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback);
+  // Resolver URLs de imagem com fallback seguro
+  const originImage1 = useSiteAssetUrl(
+    SITE_ASSET_KEYS.about.originImages[0],
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback)
+  ) || buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[0].fallback);
+
+  const originImage2 = useSiteAssetUrl(
+    SITE_ASSET_KEYS.about.originImages[1],
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback)
+  ) || buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[1].fallback);
+
+  const originImage3 = useSiteAssetUrl(
+    SITE_ASSET_KEYS.about.originImages[2],
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback)
+  ) || buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[2].fallback);
+
+  const originImage4 = useSiteAssetUrl(
+    SITE_ASSET_KEYS.about.originImages[3],
+    buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback)
+  ) || buildSupabaseStorageUrl('site-assets', FALLBACK_BLOCKS[3].fallback);
 
   const CONTENT_BLOCKS = [
     { ...FALLBACK_BLOCKS[0], img: originImage1 },
@@ -82,7 +81,8 @@ const AboutOrigin: React.FC = () => {
   ];
 
   useEffect(() => {
-    // Initialize Lenis with safe typed options
+    setIsClient(true);
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -90,15 +90,12 @@ const AboutOrigin: React.FC = () => {
     });
     lenisRef.current = lenis;
 
-    function raf(time: number) {
+    const raf = (time: number) => {
       lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+      rafId.current = requestAnimationFrame(raf);
+    };
+    rafId.current = requestAnimationFrame(raf);
 
-    // Using any to bypass Lenis type mismatch if present in the event listener,
-    // or just rely on ScrollTrigger.update binding
-    // @ts-ignore - lenis types might mismatch with generic event emitter
     lenis.on('scroll', ScrollTrigger.update);
 
     const mm = gsap.matchMedia();
@@ -111,7 +108,6 @@ const AboutOrigin: React.FC = () => {
       const infoBlocks = gsap.utils.toArray<HTMLElement>('.arch__info');
       const bgColors = ['#040013', '#060018', '#08001e', '#0a001a'];
 
-      // Pinning & Transition Timeline
       const mainTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: archRef.current,
@@ -123,7 +119,6 @@ const AboutOrigin: React.FC = () => {
         },
       });
 
-      // Initial Image States
       gsap.set(images, {
         clipPath: 'inset(0% 0% 0% 0%)',
         objectPosition: '0px 0%',
@@ -137,7 +132,6 @@ const AboutOrigin: React.FC = () => {
         el.style.zIndex = (CONTENT_BLOCKS.length - idx).toString();
       });
 
-      // Initial reveal of the first image when pin starts
       gsap.to(images[0], {
         filter: 'blur(0px)',
         opacity: 1,
@@ -150,148 +144,96 @@ const AboutOrigin: React.FC = () => {
         },
       });
 
-      // Synchronized Image Transitions
+      // Correção do erro de adição da timeline
       CONTENT_BLOCKS.forEach((_, index) => {
         const currentWrapper = wrappers[index];
         const currentImg = images[index];
         const nextImage = images[index + 1];
 
-        const sectionTimeline = gsap.timeline();
-
         if (index < CONTENT_BLOCKS.length - 1) {
-          sectionTimeline
-            .to(
-              'body',
-              {
-                backgroundColor: bgColors[index + 1],
-                duration: 1.5,
-                ease: 'none',
-              },
-              0
-            )
-            .to(
-              currentWrapper,
-              {
-                clipPath: 'inset(0px 0px 100% 0px)',
-                duration: 1.5,
-                ease: 'none',
-              },
-              0
-            )
-            .to(
-              currentImg,
-              {
-                objectPosition: '0px 60%',
-                yPercent: 15,
-                duration: 1.5,
-                ease: 'none',
-              },
-              0
-            )
-            .to(
-              nextImage,
-              {
-                objectPosition: '0px 0%',
-                yPercent: -15,
-                filter: 'blur(0px)',
-                opacity: 1,
-                duration: 1.5,
-                ease: 'none',
-              },
-              0
-            );
+          const sectionTimeline = gsap.timeline({ paused: true });
 
-          mainTimeline.add(sectionTimeline);
+          sectionTimeline
+            .to('body', { backgroundColor: bgColors[index + 1], duration: 1.5, ease: 'none' }, 0)
+            .to(currentWrapper, { clipPath: 'inset(0px 0px 100% 0px)', duration: 1.5, ease: 'none' }, 0)
+            .to(currentImg, { objectPosition: '0px 60%', yPercent: 15, duration: 1.5, ease: 'none' }, 0)
+            .to(nextImage, {
+              objectPosition: '0px 0%',
+              yPercent: -15,
+              filter: 'blur(0px)',
+              opacity: 1,
+              duration: 1.5,
+              ease: 'none',
+            }, 0);
+
+          mainTimeline.add(() => sectionTimeline.play()); // Correção aqui
         }
       });
 
-      // Improved Desktop Text Entry Animation
       infoBlocks.forEach((block) => {
-        const h2 = block.querySelector('h2');
-        const p = block.querySelector('p');
+        const h2 = block.querySelector('h2') as HTMLElement;
+        const p = block.querySelector('p') as HTMLElement;
 
-        gsap.fromTo(
-          h2,
-          {
-            y: 40,
-            opacity: 0,
-            filter: 'blur(12px)',
-          },
-          {
-            y: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            duration: 0.8,
-            ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-            scrollTrigger: {
-              trigger: block,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+        if (h2) {
+          gsap.fromTo(
+            h2,
+            { y: 40, opacity: 0, filter: 'blur(12px)' },
+            {
+              y: 0,
+              opacity: 1,
+              filter: 'blur(0px)',
+              duration: 0.8,
+              ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              scrollTrigger: {
+                trigger: block,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        }
 
-        gsap.fromTo(
-          p,
-          {
-            y: 30,
-            opacity: 0,
-            filter: 'blur(8px)',
-          },
-          {
-            y: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            duration: 0.8,
-            delay: 0.1,
-            ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-            scrollTrigger: {
-              trigger: block,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
+        if (p) {
+          gsap.fromTo(
+            p,
+            { y: 30, opacity: 0, filter: 'blur(8px)' },
+            {
+              y: 0,
+              opacity: 1,
+              filter: 'blur(0px)',
+              duration: 0.8,
+              delay: 0.1,
+              ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+              scrollTrigger: {
+                trigger: block,
+                start: 'top 80%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        }
       });
     });
 
     mm.add('(max-width: 1023px)', () => {
-      const mobileImages = gsap.utils.toArray<HTMLElement>(
-        '.mobile-img-container'
-      );
-      const mobileTexts = gsap.utils.toArray<HTMLElement>(
-        '.mobile-text-container'
-      );
+      const mobileImages = gsap.utils.toArray<HTMLElement>('.mobile-img-container');
+      const mobileTexts = gsap.utils.toArray<HTMLElement>('.mobile-text-container');
       const bgColors = ['#040013', '#060018', '#08001e', '#0a001a'];
 
-      // Mobile Parallax: Image and Text moving at different speeds
       mobileImages.forEach((container, index) => {
-        const img = container.querySelector('img');
+        const img = container.querySelector('img') as HTMLImageElement;
         if (!img) return;
 
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: container,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          })
-          .fromTo(
-            img,
-            { y: -40, scale: 1.1 },
-            { y: 40, scale: 1, ease: 'none' }
-          )
-          .to(
-            'body',
-            {
-              backgroundColor: bgColors[index],
-              duration: 0.5,
-              ease: 'power2.inOut',
-            },
-            0
-          );
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        })
+        .fromTo(img, { y: -40, scale: 1.1 }, { y: 40, scale: 1, ease: 'none' })
+        .to('body', { backgroundColor: bgColors[index], duration: 0.5, ease: 'power2.inOut' }, 0);
       });
 
       mobileTexts.forEach((text) => {
@@ -314,33 +256,41 @@ const AboutOrigin: React.FC = () => {
       });
     });
 
-    setTimeout(() => ScrollTrigger.refresh(), 500);
+    const refreshST = () => ScrollTrigger.refresh();
+    window.addEventListener('load', refreshST);
+    setTimeout(refreshST, 500);
 
     return () => {
+      window.removeEventListener('load', refreshST);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
       mm.revert();
       lenis.destroy();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
+  if (!isClient) {
+    return (
+      <section className="relative w-full overflow-hidden transition-colors duration-1000">
+        <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 py-24">
+          <div className="mb-24 text-center select-none">
+            <h1 className="text-[1.75rem] font-['CustomLight'] font-light leading-none text-[#4fe6ff] tracking-[0.2em] uppercase">
+              LOADING...
+            </h1>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section
-      className="relative w-full overflow-hidden transition-colors duration-1000"
-      ref={containerRef}
-    >
+    <section className="relative w-full overflow-hidden transition-colors duration-1000" ref={containerRef}>
       <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 py-24">
-        {/* Section Title "Origem" - CustomLight, 28px, Cyan */}
         <div className="mb-24 text-center select-none">
-          <h1 className="text-[1.75rem] font-['CustomLight'] font-light leading-none text-[#4fe6ff] tracking-[0.2em] uppercase">
-            ORIGEM
-          </h1>
+          <h1 className="text-[1.75rem] font-['CustomLight'] font-light leading-none text-[#4fe6ff] tracking-[0.2em] uppercase">ORIGEM</h1>
         </div>
 
-        <div
-          className="arch relative grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-8 md:gap-12 max-w-[1440px] mx-auto"
-          ref={archRef}
-        >
-          {/* Text Column: Centered on mobile, Right on Desktop */}
+        <div className="arch relative grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-8 md:gap-12 max-w-[1440px] mx-auto" ref={archRef}>
           <div className="col-span-4 md:col-span-8 lg:col-span-6 flex flex-col">
             {CONTENT_BLOCKS.map((block) => (
               <div
@@ -349,22 +299,18 @@ const AboutOrigin: React.FC = () => {
               >
                 <div className="content w-full lg:max-w-[520px] flex flex-col gap-8 lg:transform lg:-translate-y-[15%]">
                   <div className="mobile-text-container space-y-6">
-                    <h2 className="text-h1 font-bold leading-[1.1] text-primary normal-case">
-                      {block.title}
-                    </h2>
-                    <p className="text-[16px] md:text-[18px] lg:text-[20px] font-normal leading-[1.7] text-[#fcffff] opacity-75">
-                      {block.desc}
-                    </p>
+                    <h2 className="text-h1 font-bold leading-[1.1] text-primary normal-case">{block.title}</h2>
+                    <p className="text-[16px] md:text-[18px] lg:text-[20px] font-normal leading-[1.7] text-[#fcffff] opacity-75">{block.desc}</p>
                   </div>
 
-                  {/* Mobile Image Container */}
                   <div className="mobile-img-container lg:hidden relative mt-8 w-full aspect-square min-h-[240px] rounded-[24px] overflow-hidden bg-[#060018] shadow-2xl">
                     <Image
-                      src={block.img}
+                      src={block.img || '/placeholder-image.jpg'} // Correção do erro de tipo no src
                       alt={block.alt}
                       fill
                       className="w-full h-full object-cover will-change-transform"
                       sizes="(max-width: 1024px) 100vw, 560px"
+                      priority={block.id === '1'}
                     />
                   </div>
                 </div>
@@ -372,11 +318,7 @@ const AboutOrigin: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop Pinned Images (1:1 Aspect Ratio) */}
-          <div
-            className="arch__right hidden lg:flex col-span-6 h-screen sticky top-0 items-center justify-center"
-            ref={archRightRef}
-          >
+          <div className="arch__right hidden lg:flex col-span-6 h-screen sticky top-0 items-center justify-center" ref={archRightRef}>
             <div className="relative w-full aspect-square max-w-[560px]">
               {CONTENT_BLOCKS.map((block) => (
                 <div
@@ -384,11 +326,12 @@ const AboutOrigin: React.FC = () => {
                   className="img-wrapper absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,1)] bg-[#040013]"
                 >
                   <Image
-                    src={block.img || ''}
+                    src={block.img || '/placeholder-image.jpg'} // Correção do erro de tipo no src
                     alt={block.alt}
                     fill
                     className="w-full h-full object-cover will-change-transform"
                     sizes="(min-width: 1024px) 560px, 100vw"
+                    priority={block.id === '1'}
                   />
                 </div>
               ))}

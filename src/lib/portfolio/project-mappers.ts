@@ -122,12 +122,14 @@ function toTagsList(tags?: DbProjectWithTags['tags'] | string[]): string[] {
   );
 }
 
-function createGallery(project: DbProjectWithTags) {
+function createGallery(project: DbProjectWithTags): string[] {
   const entries = project.gallery ?? [];
   return entries
-    .map((entry) => entry?.path)
+    .filter((entry): entry is { path: string; caption?: string } => !!entry)
+    .map((entry) => entry.path)
     .filter((path): path is string => !!path)
-    .map((path) => buildSupabaseStorageUrl('portfolio-media', path));
+    .map((path) => buildSupabaseStorageUrl('portfolio-media', path))
+    .filter((url): url is string => !!url); // Additional filter to remove any null urls from buildSupabaseStorageUrl
 }
 
 function toVideoPreview(galleryUrls: string[]) {
@@ -156,7 +158,7 @@ export function mapDbProjectToPortfolioProject(
   const detail = {
     description: project.description ?? '',
     highlights: tags.length ? tags.slice(0, 3) : undefined,
-    gallery,
+    gallery, // Already filtered in createGallery function
   };
 
   return {
