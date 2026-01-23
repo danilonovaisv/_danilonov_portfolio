@@ -300,15 +300,15 @@ const AboutOrigin: React.FC = () => {
           text,
           { y: 80, opacity: 0, filter: 'blur(10px)' },
           {
-            y: -40,
+            y: 0,
             opacity: 1,
             filter: 'blur(0px)',
-            ease: 'none',
+            duration: 1.0,
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: text,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
             },
           }
         );

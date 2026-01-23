@@ -22,6 +22,11 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = createServerClient(supabaseUrl, supabaseKey, {
+      cookieOptions: {
+        name: '__session',
+        sameSite: 'lax',
+        secure: true,
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll();

@@ -25,6 +25,12 @@ export async function createClient() {
     FALLBACK_SUPABASE_ANON_KEY;
 
   return createServerClient(supabaseUrl, supabaseKey, {
+    cookieOptions: {
+      // Firebase Hosting (Functions/Frameworks) só encaminha "__session"
+      name: '__session',
+      sameSite: 'lax',
+      secure: true,
+    },
     cookies: {
       getAll() {
         return cookieStore?.getAll() ?? [];
