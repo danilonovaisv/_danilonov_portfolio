@@ -37,7 +37,7 @@ export const MobileCard = ({
       whileInView="visible"
       viewport={{ once: true, margin: '-10%' }}
       variants={variants}
-      className="group relative flex flex-col items-center justify-center text-center text-white outline-none bg-[#0048ff] w-full h-auto min-h-[100px] py-6 rounded-[12px] px-6 gap-2 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
+      className="card-shell group relative flex flex-col items-center justify-center text-center text-white outline-none bg-[#0048ff] w-full h-auto py-6 rounded-[12px] px-6 gap-2 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
     >
       <div className="text-[1.75rem] font-black leading-none text-[#8705f2] transition-colors duration-200 group-hover:text-white">
         {formattedNumber}

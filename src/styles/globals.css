@@ -21,6 +21,9 @@
 
   /* Espaçamento Global */
   --container-padding: clamp(24px, 5vw, 96px);
+
+  /* Ghost Cards */
+  --ghost-card-height-desktop: 480px;
 }
 
 body {
@@ -72,4 +75,30 @@ body {
   font-family: 'PPSupplyMono', monospace;
   font-size: var(--font-micro);
   line-height: 1.4;
+}
+
+/* Card sizing helpers — same height on desktop, 5x4 on mobile */
+.card-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  min-height: 0;
+}
+
+@media (min-width: 768px) {
+  .card-shell {
+    aspect-ratio: unset;
+    min-height: var(--ghost-card-height-desktop);
+    height: var(--ghost-card-height-desktop);
+  }
+}
+
+.card-media {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
 }

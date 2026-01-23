@@ -60,7 +60,7 @@ export const DesktopCard = ({
       <article
         tabIndex={0}
         aria-label={text}
-        className="group relative flex flex-row items-center text-white outline-none bg-[#0048ff] min-h-[140px] w-[260px] shrink-0 rounded-[16px] px-5 py-5 gap-4 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
+        className="card-shell group relative flex flex-row items-center text-white outline-none bg-[#0048ff] w-[260px] shrink-0 rounded-[16px] px-5 py-5 gap-4 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
       >
         <div className="text-[2.5rem] font-black leading-none text-[#8705f2]">
           {formattedNumber}
@@ -76,7 +76,7 @@ export const DesktopCard = ({
     <motion.article
       tabIndex={0}
       aria-label={text}
-      className="group relative flex flex-row items-center text-white outline-none will-change-transform bg-[#0048ff] min-h-[140px] w-[260px] shrink-0 rounded-[16px] px-5 py-5 gap-4 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
+      className="card-shell group relative flex flex-row items-center text-white outline-none will-change-transform bg-[#0048ff] w-[260px] shrink-0 rounded-[16px] px-5 py-5 gap-4 hover:brightness-110 focus-visible:ring-2 focus-visible:ring-[#4fe6ff]"
       style={{
         x: smoothX,
         opacity: smoothOpacity,

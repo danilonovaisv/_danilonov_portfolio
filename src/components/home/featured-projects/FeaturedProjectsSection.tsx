@@ -62,7 +62,7 @@ export default function FeaturedProjectsSection({
               <motion.div
                 key={project.id}
                 variants={cardVariants}
-                // Mobile: full-width | Desktop: bento-style spans
+                // Mobile: full-width | Desktop: bento-style spans (width varies, height fixed by .card-shell)
                 className={`w-full col-span-4 ${project.layout.cols}`}
               >
                 <FeaturedProjectCard project={project} onOpen={onProjectOpen} />

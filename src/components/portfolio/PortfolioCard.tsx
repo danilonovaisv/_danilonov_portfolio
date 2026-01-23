@@ -67,7 +67,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-50px' }}
       transition={ghostTransition(index * stagger.tight, duration.normal)}
-      className={`group relative overflow-hidden rounded-2xl md:rounded-3xl cursor-pointer bg-white/5 will-change-transform ${project.layout.cols} ${project.layout.height} ${className}`}
+      className={`card-shell group relative overflow-hidden rounded-2xl md:rounded-3xl cursor-pointer bg-white/5 will-change-transform ${project.layout.cols} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -77,7 +77,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
       aria-label={`Ver projeto: ${project.title}`}
     >
       {/* Container de Imagem com Parallax */}
-      <div className="relative h-full w-full overflow-hidden">
+      <div className="card-media overflow-hidden">
         <motion.div
            className="absolute inset-0 -top-[17.5%] h-[135%] w-full will-change-transform"
            style={prefersReducedMotion ? {} : parallaxStyle}

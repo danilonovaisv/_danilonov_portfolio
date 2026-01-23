@@ -44,7 +44,7 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: TIMELINE.MEDIA, duration: 0.24, ease: 'easeOut' }}
-        className="relative w-full aspect-video md:aspect-21/9 rounded-2xl overflow-hidden bg-white/5"
+        className="card-shell relative w-full rounded-2xl overflow-hidden bg-white/5"
       >
         {isVideo(project.image) ? (
           <video

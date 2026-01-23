@@ -29,7 +29,7 @@ export default function FeaturedProjectCard({
   const CardContent = () => (
     <>
       <div
-        className={`relative overflow-hidden rounded-md ${project.layout.height} w-full bg-white/5 transition-all duration-500 ${
+        className={`card-shell relative overflow-hidden rounded-md w-full bg-white/5 transition-all duration-500 ${
           reducedMotion
             ? ''
             : 'md:group-hover:shadow-[0_22px_54px_-12px_rgba(0,72,255,0.15)] md:group-hover:-translate-y-1 active:scale-[0.98]'

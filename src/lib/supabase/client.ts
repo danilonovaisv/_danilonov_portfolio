@@ -19,7 +19,15 @@ export function createClientComponentClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
     FALLBACK_SUPABASE_ANON_KEY;
 
-  supabaseClient = createBrowserClient(supabaseUrl, supabaseKey);
+  supabaseClient = createBrowserClient(supabaseUrl, supabaseKey, {
+    // Firebase Hosting só encaminha o cookie "__session" para as Functions.
+    // Forçamos o Supabase a usar esse nome para persistir a sessão.
+    cookieOptions: {
+      name: '__session',
+      sameSite: 'lax',
+      secure: true,
+    },
+  });
 
   return supabaseClient;
 }
