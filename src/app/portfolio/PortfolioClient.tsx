@@ -15,14 +15,16 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
   const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Handler para abrir o projeto
   const handleOpenProject = useCallback((project: PortfolioProject) => {
     setSelectedProject(project);
     setIsModalOpen(true);
   }, []);
 
+  // Handler para fechar o modal
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-    // Limpa o projeto após a animação de saída
+    // Limpa o projeto após a animação de saída (400ms matching transition)
     setTimeout(() => {
       setSelectedProject(null);
     }, 400);
@@ -30,24 +32,24 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
 
   return (
     <div className="min-h-screen bg-background text-text">
-      {/* Hero com video */}
+      {/* Hero com video loop */}
       <PortfolioHeroNew />
 
-      {/* Galeria de projetos com filtros */}
+      {/* Galeria de projetos com motor de Parallax (Lerp) */}
       <ProjectsGallery 
         projects={projects}
-        onProjectOpen={handleOpenProject} 
-        isPaused={isModalOpen}
+        onProjectSelect={handleOpenProject} 
       />
 
-      {/* Modal de projeto */}
+      {/* Modal de Detalhes (Ghost) */}
       <PortfolioModalNew
         project={selectedProject}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
 
-      {/* Global Closure */}
+      {/* Global Closure (Footer Area) */}
+      {/* Note: ProjectsGallery has built-in spacing, but SiteClosure might be needed for nav/footer links */}
       <SiteClosure />
     </div>
   );

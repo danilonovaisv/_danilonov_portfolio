@@ -1,7 +1,6 @@
 const normalizeUrl = (value: string) => value.replace(/\/+$/, '');
-// Fallback alinhado ao projeto principal (aymuvxysygrwoicsjgxj) para evitar
-// geração de links quebrados quando variáveis de ambiente estiverem ausentes.
-const DEFAULT_SUPABASE_URL = 'https://aymuvxysygrwoicsjgxj.supabase.co';
+// Fallback alinhado ao projeto Ghost Era (umkmwbkwvulxtdodzmzf)
+const DEFAULT_SUPABASE_URL = 'https://umkmwbkwvulxtdodzmzf.supabase.co';
 
 export function getSupabaseBaseUrl(): string | null {
   const url =

@@ -6,6 +6,9 @@ const siteAsset = (path: string) =>
 const projectMedia = (path: string) =>
   buildSupabaseStorageUrl('portfolio-media', path);
 
+const projectVideo = (path: string) =>
+  buildSupabaseStorageUrl('project-videos', path);
+
 export const HOME_CONTENT = {
   hero: {
     tag: '[BRAND AWARENESS]',
@@ -337,8 +340,8 @@ export const ABOUT_CONTENT = {
 export const PORTFOLIO_CONTENT = {
   hero: {
     video: {
-      desktop: siteAsset('portfolio/portfolio.hero_desktop_video.mp4'),
-      mobile: siteAsset('portfolio/portfolio.hero_mobile_video.mp4'),
+      desktop: projectVideo('VIDEO-APRESENTACAO-PORTFOLIO.mp4'),
+      mobile: projectVideo('VIDEO-APRESENTACAO-PORTFOLIO.mp4'), // Usando o mesmo por enquanto, ou variante se existir
     },
   },
 };

@@ -1,102 +1,103 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import {
-  useSpring,
-  useTransform,
-  useScroll,
-  type MotionValue,
-} from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { useScroll, useTransform, useSpring } from 'framer-motion';
 
-interface UseParallaxOptions {
-  /** Configuração do spring para suavidade 'ghost' */
-  springConfig?: { stiffness: number; damping: number; mass?: number };
-  /** Ativar/desativar */
-  enabled?: boolean;
+/**
+ * Linear Interpolation Function
+ */
+export function lerp(start: number, end: number, t: number) {
+  return start * (1 - t) + end * t;
 }
 
 interface UseParallaxReturn {
-  /** Ref para o container da galeria (viewport) */
-  galleryRef: React.RefObject<HTMLElement | null>;
-  /** Ref para a track interna (que se move) */
+  galleryRef: React.RefObject<HTMLDivElement | null>;
   trackRef: React.RefObject<HTMLDivElement | null>;
-  /** Estilo de transformação para aplicar na track */
-  style: { y: MotionValue<number> | number };
-  /** Se o scroll está ativo (opcional) */
-  isScrolling: boolean;
+  y: number; // Current Y position (interpolated)
 }
 
 /**
- * Hook de Parallax com useSpring (Ghost Era)
- * Sincroniza o scroll nativo com uma track fixa/parallax.
+ * Hook de Parallax Engine (Lerp Loop)
+ * Gerencia o scroll suave customizado com requestAnimationFrame.
  */
-export function useParallax(
-  options: UseParallaxOptions = {}
-): UseParallaxReturn {
-  const {
-    springConfig = { stiffness: 45, damping: 25, mass: 1 },
-    enabled = true,
-  } = options;
+export function useParallax(): UseParallaxReturn {
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const galleryRef = useRef<HTMLElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  const [isMobile, setIsMobile] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-
-  // Detecta mobile para desativar parallax pesado
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const isActive = enabled && !isMobile;
-
-  // Sincroniza o progresso do scroll do container
-  const { scrollYProgress } = useScroll({
-    target: galleryRef as React.RefObject<HTMLElement>,
-    offset: ['start start', 'end end'],
+  // Refs for state to avoid re-renders in the loop
+  const state = useRef({
+    current: 0,
+    target: 0,
+    isResizing: false,
   });
 
-  // Aplica física de mola ao progresso
-  const smoothProgress = useSpring(scrollYProgress, springConfig);
-
-  // Monitora dimensões para cálculo de pixels
   useEffect(() => {
-    if (!trackRef.current || !isActive) return;
+    const gallery = galleryRef.current;
+    const track = trackRef.current;
+    const isMobile = window.innerWidth < 1024; // Simple mobile check
 
-    const updateDimensions = () => {
-      if (trackRef.current) {
-        setContentHeight(trackRef.current.offsetHeight);
+    // Disable on mobile if desired, or keep generic
+    if (isMobile) return;
+
+    // Helper to update body height to match track height (since track is fixed)
+    const updateHeight = () => {
+      if (track && gallery) {
+        document.body.style.height = `${track.getBoundingClientRect().height}px`;
       }
-      setViewportHeight(window.innerHeight);
     };
 
-    const resizeObserver = new ResizeObserver(updateDimensions);
-    resizeObserver.observe(trackRef.current);
-    updateDimensions();
+    const onScroll = () => {
+      state.current.target = window.scrollY;
+    };
 
-    return () => resizeObserver.disconnect();
-  }, [isActive]);
+    const onResize = () => {
+      state.current.isResizing = true;
+      updateHeight();
+      state.current.isResizing = false;
+    };
 
-  // Transforma progresso (0-1) em translação pixel-perfect
-  // Move de 0 até o limite negativo (altura total do conteúdo - altura da janela)
-  const moveY = useTransform(
-    smoothProgress,
-    [0, 1],
-    [0, -(contentHeight - viewportHeight)]
-  );
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onResize);
+
+    // Initial size set
+    updateHeight();
+
+    let animationFrameId: number;
+
+    const loop = () => {
+      const { current, target } = state.current;
+
+      // Lerp logic: current moves towards target
+      // Damping 0.05
+      const newY = lerp(current, target, 0.05);
+
+      // Update state
+      state.current.current = newY;
+
+      // Update transform directly for performance
+      if (track) {
+        // Using translate3d for GPU acceleration
+        track.style.transform = `translate3d(0, -${newY}px, 0)`;
+      }
+
+      animationFrameId = requestAnimationFrame(loop);
+    };
+
+    loop();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      cancelAnimationFrame(animationFrameId);
+      document.body.style.height = ''; // Reset body height
+      if (track) track.style.transform = '';
+    };
+  }, []);
 
   return {
     galleryRef,
     trackRef,
-    style: {
-      y: isActive ? moveY : 0,
-    },
-    isScrolling: false, // Pode ser implementado via Velocity se necessário
+    y: state.current.current,
   };
 }
 
@@ -117,9 +118,11 @@ interface UseParallaxElementOptions {
 /**
  * Hook para parallax em elementos individuais baseado na posição na tela.
  */
-export function useParallaxElement(options: UseParallaxElementOptions = {}) {
+export function useParallaxElement<T extends HTMLElement = HTMLDivElement>(
+  options: UseParallaxElementOptions = {}
+) {
   const { speed = 0.2, direction = 'up', enabled = true } = options;
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<T>(null);
 
   // Usamos useScroll com a própria ref do elemento
   const { scrollYProgress } = useScroll({
@@ -139,8 +142,8 @@ export function useParallaxElement(options: UseParallaxElementOptions = {}) {
   const offset = useTransform(
     smoothProgress,
     [0, 1],
-    direction === 'up' ? [20 * speed, -20 * speed] : [-20 * speed, 20 * speed],
-    { ease: (v) => v } // Linear
+    direction === 'up' ? [20 * speed, -20 * speed] : [-20 * speed, 20 * speed]
+    // Note: Since we are using framer-motion values here, this returns a MotionValue
   );
 
   return {
@@ -150,5 +153,3 @@ export function useParallaxElement(options: UseParallaxElementOptions = {}) {
     },
   };
 }
-
-export default useParallax;
