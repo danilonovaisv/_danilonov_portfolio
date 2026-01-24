@@ -211,7 +211,7 @@ export function AboutHero() {
               }}
               className="space-y-4"
             >
-              <h1 className="type-h1 text-text-light leading-[1.1] flex flex-col gap-1">
+              <h1 className="type-h2 text-white leading-tight flex flex-col gap-1">
                 <span>
                   Sou <span className="text-bluePrimary">Danilo Novais.</span>
                 </span>

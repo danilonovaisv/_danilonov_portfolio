@@ -142,13 +142,8 @@ export default function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Right Side: Form */}
-          <div className="lg:col-span-7 w-full order-4 md:order-2">
-            <ContactForm />
-          </div>
-
-          {/* Mobile Socials */}
-          <div className="lg:hidden flex flex-wrap justify-center gap-4 py-8 border-t border-[#0e0e0e]/20 w-full order-3 md:order-3">
+          {/* Mobile Socials - Moved before Form for correct mobile flow and accessibility */}
+          <div className="lg:hidden flex flex-wrap justify-center gap-4 py-8 border-t border-[#0e0e0e]/20 w-full">
             {socialLinks.map((social) => (
               <a
                 key={`mobile-${social.href}`}
@@ -161,6 +156,11 @@ export default function ContactSection() {
                 {social.icon}
               </a>
             ))}
+          </div>
+
+          {/* Right Side: Form */}
+          <div className="lg:col-span-7 w-full">
+            <ContactForm />
           </div>
         </div>
       </Container>

@@ -56,7 +56,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
               : item.href;
             const isActive = activeHref === hash;
             const pageHighlight = isPageActive
-              ? 'text-primary font-semibold'
+              ? 'text-blueAccent font-semibold'
               : '';
 
             return (
@@ -66,7 +66,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
                   className={`sm-panel-item text-4xl font-light tracking-wide transition-colors text-left leading-none uppercase will-change-transform origin-bottom ${
                     pageHighlight ||
                     (isActive
-                      ? 'text-primary font-medium'
+                      ? 'text-blueAccent font-medium underline underline-offset-4'
                       : 'text-white/80 hover:text-white')
                   }`}
                 >

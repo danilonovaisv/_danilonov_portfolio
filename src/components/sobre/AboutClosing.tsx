@@ -43,10 +43,10 @@ export function AboutClosing() {
             todos os canais.
           </p>
 
-          {/* Vídeo em Loop */}
-          <div className="mt-12 w-full overflow-hidden rounded-xl shadow-2xl md:mt-11">
+          {/* Vídeo em Loop - Container com aspect-video para evitar Layout Shift */}
+          <div className="mt-12 w-full overflow-hidden rounded-xl shadow-2xl md:mt-11 aspect-video">
             <video
-              className="aspect-video w-full object-cover"
+              className="aspect-video w-full h-full object-cover"
               autoPlay
               loop
               muted
@@ -54,13 +54,16 @@ export function AboutClosing() {
               preload="auto"
               aria-label="Demonstração visual de experiências"
             >
+              {/* Mobile: loads ONLY up to 768px */}
               <source
                 src="https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/VIDEO-SKILLS-MOBILE-FINAL.mp4"
-                media="(max-width: 767px)"
+                media="(max-width: 768px)"
                 type="video/mp4"
               />
+              {/* Desktop: loads ONLY from 769px onwards */}
               <source
-                src="https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/VIDEO-SKILLS-FINAL_compressed.mp4" /* Link será enviado pelo usuário futuramente */
+                src="https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/VIDEO-SKILLS-FINAL_compressed.mp4"
+                media="(min-width: 769px)"
                 type="video/mp4"
               />
               Seu navegador não suporta vídeos.

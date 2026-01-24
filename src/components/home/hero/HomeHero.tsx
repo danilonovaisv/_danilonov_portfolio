@@ -64,7 +64,7 @@ export default function HomeHero() {
         {/* Camada: Texto Editorial (Z-20) */}
         <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="flex items-center justify-center w-full h-screen md:sticky md:top-0">
-            <div className="w-full pointer-events-auto">
+            <div className="w-full pointer-events-auto pb-32 md:pb-0">
               <HeroCopy isLoaded={isLoaded} />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function HomeHero() {
         {/* Mobile: Bottom absolute | Desktop: Sticky bottom */}
         <div className="absolute inset-0 z-50 pointer-events-none">
           <div className="flex items-end justify-center w-full h-screen md:sticky md:top-0">
-            <div className="pb-8 md:pb-12 lg:pb-20">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pb-12 lg:pb-20 pointer-events-auto">
               <HeroCTA isLoaded={isLoaded} />
             </div>
           </div>
