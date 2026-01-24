@@ -38,18 +38,6 @@ export default function FeaturedProjectCard({
         {/* Subtle Noise Overlay */}
         <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
-        {/* Tags - Mobile: Top Left | Desktop: Top Right */}
-        <div className="absolute top-4 left-4 md:left-auto md:right-4 z-20 flex gap-1.5 flex-wrap justify-start md:justify-end">
-          {(project.tags ?? []).map((tag) => (
-            <span
-              key={tag}
-              className="bg-[#E6EFEF]/60 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-mono font-medium uppercase tracking-widest text-[#040013]"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
         {isVideo(project.image) ? (
           <video
             src={project.image}
