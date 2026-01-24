@@ -1,414 +1,1169 @@
-'use client';
+import type { FC } from 'react';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-
-const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-const PROMPTS_TEXT = `
-Estes prompts foram desenhados para serem "atômicos" (uma tarefa por vez), garantindo que os agentes executores tenham clareza total sobre o que mudar, onde mudar e como validar a correção, mantendo a consistência do seu stack (Next.js, Tailwind, Framer Motion).
-
----
-
-### 📝 Panorama Geral da Solução
-
-Vamos dividir as correções em três blocos lógicos:
-
-1. **Mobile Fixes (01-06):** Foco em usabilidade, layout e carregamento de mídia.
-2. **Desktop UX & Motion (07-10):** Foco em interatividade e refinamento visual.
-3. **Portfolio Engine (11-12):** Foco na lógica de grid matemático e alinhamento de mídia.
-
----
-
-### Regras Globais obrigatórias para TODOS os prompts
-
-- ❌ Não reinventar layout  
-- ❌ Não adicionar novos efeitos de animação  
-- ❌ Não alterar textos ou conteúdo  
-- ✅ A imagem de referência (HOME-PORTFOLIO-LAYOUYT-GHOST.jpg) é a verdade final de layout  
-- ✅ Header e Hero devem funcionar como um sistema único  
-- ✅ Foco exclusivo em layout + animação  
-- ✅ Usar apenas propriedades otimizadas para animação (transform/opacity)  
-- ✅ Respeitar prefers-reduced-motion em todas as alterações de motion  
-
-Além disso, ao aplicar qualquer correção, validar sempre o seguinte **Checklist de Bug de Motion**:
-
-1. **Propriedades otimizadas?** (somente transform/opacity; nunca width/height/margin/padding/top/left em animação)  
-2. **Hardware acceleration?** (usar will-change ou transform 3D quando necessário)  
-3. **Spring vs Tween:** a física faz sentido para o “peso” do elemento?  
-4. **Ordem de execução:** não há sobreposição/confusão de animações simultâneas?
-
----
-
-## 🛠️ Prompts para os Agentes (Google Antigravity)
-
-### 🛠️ Prompt #01 — [Mobile] Correção Crítica de Interação no Header
-
-**Objetivo**
-
-Corrigir falhas de clique e visibilidade do texto no menu mobile, garantindo interação consistente durante toda a animação.
-
-**Arquivos envolvidos**
-
-- \`src/components/layout/Header/...\` (MobileMenu ou StaggeredMenu)
-
-**Ações**
-
-1. Verificar o \`z-index\` do container do menu mobile e garantir que ele esteja acima de qualquer camada da Hero quando aberto.
-2. Inspecionar estados animados (Framer Motion e/ou CSS) e remover qualquer uso indevido de \`pointer-events: none\` que possa bloquear cliques em links e botões.
-3. Garantir que a cor do texto do menu (vibration/ghost ou equivalente) nunca fique invisível (texto preto sobre fundo preto ou texto transparente) em nenhum estado de scroll ou animação.
-4. Padronizar easing e duração da animação de abertura/fechamento usando a curva \`[0.22, 1, 0.36, 1]\` para manter consistência com o restante do sistema.
-5. Verificar o comportamento com \`prefers-reduced-motion\`: no modo reduzido, desabilitar ou simplificar a animação, mantendo o menu funcional e sem delays.
-
-**Critérios de aceite**
-
-- [ ] Clique nos itens do menu funcional em 100% das tentativas, mesmo durante a animação.  
-- [ ] Texto do menu sempre legível (sem sumir ou colidir com o fundo).  
-- [ ] Nenhum layout shift brusco ao abrir/fechar o menu.  
-- [ ] Animações usando apenas transform/opacity.  
-- [ ] Comportamento consistente para usuários com motion normal e com motion reduzido.
-
----
-
-### 🛠️ Prompt #02 — [Mobile] Layout Hero Home (CTA + Texto)
-
-**Objetivo**
-
-Reposicionar o CTA da Home no mobile para evitar sobreposição com o texto principal da Hero, respeitando a referência visual.
-
-**Arquivos envolvidos**
-
-- \`src/components/home/HomeHero.tsx\`
-
-**Ações**
-
-1. Reposicionar o CTA (botão/link principal) no mobile usando posicionamento relativo/absoluto (por exemplo, \`absolute bottom-4 left-1/2 -translate-x-1/2\` ou solução equivalente) para mantê-lo próximo à base da seção.
-2. Adicionar \`padding-bottom\` suficiente na área de texto da Hero para garantir que o CTA nunca cubra o título ou subtítulo em telas menores.
-3. Usar Tailwind para ajustar o layout apenas em breakpoints móveis, preservando o layout atual em desktop.
-4. Garantir que quaisquer animações do CTA usem apenas \`transform\` e \`opacity\`, com easing \`[0.22, 1, 0.36, 1]\`.
-5. Validar visualmente contra \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\` para garantir alinhamento perfeito.
-
-**Critérios de aceite**
-
-- [ ] CTA posicionado próximo à base da Hero em dispositivos móveis.  
-- [ ] Texto da Hero (título e subtítulo) 100% legível e nunca coberto pelo CTA.  
-- [ ] Layout idêntico à referência visual em mobile.  
-- [ ] Nenhuma regressão em desktop.  
-
----
-
-### 🛠️ Prompt #03 — [Mobile] Centralização do Bloco “Featured Projects”
-
-**Objetivo**
-
-Centralizar o bloco de encerramento da seção de projetos (texto + CTA) no mobile para reforçar a hierarquia visual.
-
-**Arquivos envolvidos**
-
-- \`src/components/home/FeaturedProjects.tsx\` (ou seção equivalente de encerramento de projetos)
-
-**Ações**
-
-1. Aplicar \`text-center\` ao container do texto de fechamento (ex.: “Like what you see?”).
-2. Garantir que o container do CTA (botão/link) use \`mx-auto\`, \`justify-center\` ou combinação equivalente (flex) para centralização horizontal perfeita.
-3. Verificar que o espaçamento vertical entre texto e CTA siga o ritmo visual da página (sem espaços excessivos ou comprimidos).
-4. Assegurar que não há animações que movam o CTA via propriedades não otimizadas (ex.: margin/left/top).
-
-**Critérios de aceite**
-
-- [ ] Texto e CTA centralizados horizontalmente em mobile.  
-- [ ] Layout desktop inalterado.  
-- [ ] Nenhuma animação de layout causando jumps.  
-
----
-
-### 🛠️ Prompt #04 — [Mobile] Reordenação Hierárquica da Seção de Contato
-
-**Objetivo**
-
-Ajustar a hierarquia de leitura da seção de contato no mobile, sem quebrar o layout no desktop.
-
-**Arquivos envolvidos**
-
-- \`src/components/sections/Contact.tsx\`
-
-**Ações**
-
-1. Reorganizar a ordem visual dos blocos no mobile usando \`order-1\`, \`order-2\`, etc. para obter a seguinte sequência:  
-   1. Texto de apoio (intro da seção)  
-   2. Informações de contato (Email/Tel)  
-   3. Ícones de redes sociais  
-   4. Formulário de contato
-2. Manter a estrutura de DOM original para desktop, ajustando apenas a ordem via Tailwind em breakpoints móveis.
-3. Garantir que os estados de foco (focus) dos elementos interativos continuem acessíveis e visíveis após a reordenação.
-4. Verificar que nenhuma animação extra seja adicionada, apenas o reordenamento de layout.
-
-**Critérios de aceite**
-
-- [ ] Fluxo de leitura mobile: Texto → Contato → Social → Formulário.  
-- [ ] Layout desktop preservado.  
-- [ ] Estados de foco/hover continuam claros e funcionais.  
-
----
-
-### 🛠️ Prompt #05 — [Mobile] Tipografia e Contraste da About Hero
-
-**Objetivo**
-
-Melhorar o contraste e a legibilidade do manifesto inicial da página About em dispositivos móveis.
-
-**Arquivos envolvidos**
-
-- \`src/components/about/AboutHero.tsx\`
-
-**Ações**
-
-1. Alterar a cor do texto principal do manifesto para \`text-white\` (ou token equivalente) garantindo contraste adequado com o background.
-2. Aplicar a escala tipográfica correspondente a \`font-h3\` (ou token equivalente do design system).
-3. Ajustar o line-height para \`leading-tight\` (ou valor equivalente) para melhorar legibilidade em telas estreitas, evitando parágrafos visualmente “soltos”.
-4. Validar que os tamanhos e pesos tipográficos respeitam a hierarquia global (H1, H2, H3, body).
-
-**Critérios de aceite**
-
-- [ ] Texto do manifesto em branco com contraste AA ou melhor.  
-- [ ] Tamanho tipográfico equivalente a H3 aplicado corretamente.  
-- [ ] Leitura confortável no mobile, sem cortes de linha estranhos.  
-
----
-
-### 🛠️ Prompt #06 — [Config] Mídias Dinâmicas na Seção About Closed
-
-**Objetivo**
-
-Configurar troca de vídeo baseada no dispositivo (desktop vs mobile) na seção About Closed, otimizando carregamento e experiência.
-
-**Arquivos envolvidos**
-
-- \`src/components/about/AboutClosed.tsx\`
-
-**Ações**
-
-1. Implementar múltiplas fontes de vídeo usando a tag \`<source>\` dentro de \`<video>\`, com media queries, por exemplo:  
-   - \`<source src=".../VIDEO-SKILLS-MOBILE-FINAL.mp4" media="(max-width: 768px)" />\`  
-   - \`<source src=".../VIDEO-SKILLS-FINAL_compressed.mp4" media="(min-width: 769px)" />\`
-2. Garantir que apenas a fonte apropriada seja carregada por dispositivo (sem downloads duplicados).
-3. Manter qualquer animação de entrada/saída do vídeo existente, mas garantindo que use apenas transform/opacity.
-4. Validar que o vídeo não introduz layout shifts ao carregar (altura reservada desde o início).
-
-**Critérios de aceite**
-
-- [ ] Vídeo mobile carregado apenas em dispositivos móveis.  
-- [ ] Vídeo desktop carregado apenas em telas maiores.  
-- [ ] Nenhum layout shift perceptível no carregamento.  
-
----
-
-### 🛠️ Prompt #07 — [Desktop] Autoplay & Mute Control do Vídeo Manifesto
-
-**Objetivo**
-
-Controlar o áudio do Vídeo Manifesto com base na visibilidade (scroll), evitando áudio fora de contexto.
-
-**Arquivos envolvidos**
-
-- \`src/components/home/VideoManifesto.tsx\`
-
-**Ações**
-
-1. Usar \`framer-motion\` (ex.: \`whileInView\`, \`useInView\`) ou \`IntersectionObserver\` para detectar quando o vídeo entra e sai da viewport.
-2. Definir \`muted = false\` automaticamente quando o vídeo estiver visível acima de um limiar configurado (ex.: 50% em viewport), respeitando restrições de autoplay do navegador.
-3. Definir \`muted = true\` quando o vídeo estiver fora da viewport ou abaixo do limiar.
-4. Caso exista controle manual de som (botão Mute/Unmute), garantir que a escolha manual do usuário tenha prioridade sobre o controle automático.
-5. Garantir que, em \`prefers-reduced-motion\`, o vídeo não inicia com áudio automático (somente após ação explícita do usuário, se desejado).
-
-**Critérios de aceite**
-
-- [ ] Som ativado apenas quando o vídeo estiver claramente visível.  
-- [ ] Som desativado quando o vídeo sai da tela.  
-- [ ] Nenhuma surpresa sonora para o usuário (especialmente com prefers-reduced-motion ativo).  
-
----
-
-### 🛠️ Prompt #08 — [Desktop] Restauração da Animação de Scroll na About Origin
-
-**Objetivo**
-
-Restaurar o efeito de animação baseada em scroll na imagem da seção Origin (About), mantendo fluidez e consistência com o restante do site.
-
-**Arquivos envolvidos**
-
-- \`src/components/about/AboutOrigin.tsx\`
-
-**Ações**
-
-1. Reimplementar \`useScroll\` e \`useTransform\` do Framer Motion para vincular o progresso de scroll de um container (ou da página) à opacidade e/ou posição Y da imagem.
-2. Definir um mapeamento suave de scroll → \`y\` e \`opacity\` (por exemplo, imagem entra de baixo e se assenta ao centro com opacidade de 0 → 1).
-3. Aplicar a curva de easing \`[0.22, 1, 0.36, 1]\` e durações coerentes com as demais animações da página.
-4. Validar que a animação não causa stuttering ou quedas de FPS perceptíveis (alvo 60fps).
-
-**Critérios de aceite**
-
-- [ ] Efeito de scroll ativo e suave na seção Origin.  
-- [ ] Animação perceptível, mas sutil, sem distrair da leitura.  
-- [ ] Nenhum impacto negativo de performance nas seções adjacentes.  
-
----
-
-### 🛠️ Prompt #09 — [Desktop] UI Refinement dos Ícones (What I Do)
-
-**Objetivo**
-
-Padronizar os ícones dos cards “What I Do” com visual premium e interação consistente.
-
-**Arquivos envolvidos**
-
-- \`src/components/about/WhatIDoCard.tsx\`
-
-**Ações**
-
-1. Ajustar o container do ícone para ter formato circular, fundo azul (token da identidade) e ícone de seta centralizado.
-2. Implementar animação de hover usando Framer Motion apenas com \`transform\` (ex.: leve \`scale\` ou \`translateY\`), mantendo o easing global.
-3. Adicionar efeito de glow roxo no hover utilizando Tailwind:  
-   - \`shadow-[0_0_20px_rgba(168,85,247,0.5)]\`
-4. Garantir que o mesmo feedback visual seja acessível via \`focus-visible\` para navegação por teclado.
-5. Verificar que o stagger entre cards (se existir) esteja suave e consistente.
-
-**Critérios de aceite**
-
-- [ ] Ícones com formato circular, fundo azul e seta padronizada.  
-- [ ] Hover/focus com animação suave e glow roxo perceptível, porém sutil.  
-- [ ] Nenhum flicker ou travamento em hovers repetidos rápidos.  
-
----
-
-### 🛠️ Prompt #10 — [Desktop] Tipografia do Título em About Método
-
-**Objetivo**
-
-Aplicar a fonte de destaque (display) ao título principal da seção Método, reforçando hierarquia visual.
-
-**Arquivos envolvidos**
-
-- \`src/components/about/AboutMetodo.tsx\`
-
-**Ações**
-
-1. Aplicar a classe \`font-display\` (ou token equivalente configurado no Tailwind) ao título “Criatividade com método...” (ou texto equivalente atual).
-2. Garantir que o estilo seja consistente em todos os breakpoints (mobile e desktop), usando classes responsivas se necessário.
-3. Validar que o título se destaque visualmente em relação a subtítulos e corpo de texto, sem quebrar o layout definido pela imagem de referência.
-
-**Critérios de aceite**
-
-- [ ] Título de Método usando tipografia display da identidade visual.  
-- [ ] Coerência visual em mobile e desktop.  
-- [ ] Nenhuma alteração de texto, apenas tipografia.  
-
----
-
-### 🛠️ Prompt #11 — [Portfolio] Grid Matemático Seamless
-
-**Objetivo**
-
-Criar/ajustar o grid de cards de portfólio com altura fixa por linha e larguras adaptáveis “edge-to-edge”, sem gaps laterais.
-
-**Arquivos envolvidos**
-
-- \`src/app/portfolio/page.tsx\`
-- \`src/components/portfolio/PortfolioGrid.tsx\`
-
-**Ações**
-
-1. Configurar o grid de cards usando \`flex\` ou \`grid\` para garantir que todos os cards de uma mesma linha tenham a mesma altura (por exemplo, via \`items-stretch\`).
-2. Permitir larguras diferentes na mesma linha (ex.: card 1 = 60%, card 2 = 40%) usando \`flex-grow\` ou combinações de \`grid-cols\` que resultem em 100% da linha.
-3. Garantir que não haja gaps laterais: as colunas devem encostar nas margens de layout definidas, respeitando a referência \`HOME-PORTFOLIO-LAYOUYT-GHOST.jpg\`.
-4. Ajustar os breakpoints para que, em mobile, o layout continue legível (ex.: 1 coluna), mantendo a lógica “edge-to-edge”.
-
-**Critérios de aceite**
-
-- [ ] Alinhamento lateral perfeito (sem “buracos” ou margens irregulares).  
-- [ ] Altura uniforme dos cards por linha.  
-- [ ] Layout fiel à referência visual em desktop e funcional em mobile.  
-
----
-
-### 🛠️ Prompt #12 — [Portfolio] Alinhamento de Mídia nos Project Cards
-
-**Objetivo**
-
-Garantir centralização absoluta e enquadramento correto de imagens e vídeos dentro dos cards de portfólio.
-
-**Arquivos envolvidos**
-
-- \`src/components/portfolio/ProjectCard.tsx\`
-
-**Ações**
-
-1. Aplicar \`object-cover\` e \`object-center\` em todas as imagens/vídeos renderizados dentro dos cards para evitar distorções e letterboxing indesejado.
-2. Configurar o container da mídia com \`flex\`, \`items-center\` e \`justify-center\` para centralizar o conteúdo tanto na vertical quanto na horizontal.
-3. Verificar o comportamento com diferentes proporções (mais horizontal, mais vertical) e garantir consistência visual em todos os casos.
-4. Manter qualquer animação já existente apenas em \`transform\` e \`opacity\`, sem adicionar novos efeitos.
-
-**Critérios de aceite**
-
-- [ ] Mídias centralizadas independentemente da proporção original.  
-- [ ] Nenhuma distorção perceptível nas imagens/vídeos.  
-- [ ] Layout dos cards alinhado ao grid matemático definido no Prompt #11.  
-`;
-
-/**
- * Ajuste o projeto utilizando as etapas essenciais para execução:
- * 1. Analise o escopo detalhado fornecido.
- * 2. Monte um plano de execução com base nesse escopo.
- * 3. Implemente os ajustes necessários no código.
- * 4. Utilize as imagens anexas como **referência visual absoluta** — o layout e comportamento final devem refletir exatamente o que está nelas.
- * 5. Ao concluir, revise e valide se:
- *    - Todas as alterações foram aplicadas corretamente.
- *    - O sistema está funcionando como esperado.
- *    - O visual está 100% fiel às referências.
- *
- * ✅ Nenhum ponto deve ser ignorado.
- */
-
-// src/app/google-antigravity-prompts/page.tsx
-
-export default function GoogleAntigravityPromptsPage() {
+const GhostPortfolioAuditReport: FC = () => {
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-50">
-      <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
-        <motion.header
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE_OUT }}
-          className="space-y-2"
-        >
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Prompts Técnicos para Agentes Google Antigravity
-          </h1>
-          <p className="text-sm text-neutral-400">
-            Copie cada prompt abaixo e dispare individualmente para os agentes,
-            garantindo que cada tarefa seja executada de forma atômica (uma por
-            vez), sempre respeitando layout, conteúdo e identidade definidos.
-          </p>
-        </motion.header>
+    <div className="w-full max-w-5xl mx-auto px-4 py-10 space-y-12 text-sm leading-relaxed text-zinc-100">
+      {/* 1️⃣ Visão Geral */}
+      <section className="space-y-4">
+        <h1 className="text-2xl font-semibold">1️⃣ Visão Geral</h1>
+        <p>
+          A estrutura do projeto está organizada em App Router, com{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/app/layout.tsx
+          </code>{' '}
+          como RootLayout e páginas segmentadas para Home (
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/app/page.tsx
+          </code>
+          ), Sobre (
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/app/sobre/page.tsx
+          </code>
+          ) e Portfólio (
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/app/portfolio/page.tsx
+          </code>
+          ). Essa arquitetura segue o padrão recomendado do App Router, com um
+          layout raiz envolvendo todas as rotas
+          :OaiMdDirective_Annotations_km5a7{(attrs = 'eyJpbmRleCI6MH0')}.
+        </p>
+        <p>
+          A camada de layout reutilizável está concentrada em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/components/layout
+          </code>{' '}
+          (incluindo <code>Header</code>, <code>Container</code> e{' '}
+          <code>ClientLayout</code>), enquanto as seções de página se apoiam em
+          componentes específicos: Home em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/components/home/*
+          </code>
+          , Sobre em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/components/sobre/*
+          </code>{' '}
+          e Portfólio em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/components/portfolio/*
+          </code>
+          . A cena 3D Ghost/ROME está centralizada em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            src/components/canvas/home/hero/GhostScene.tsx
+          </code>
+          .
+        </p>
+        <p>
+          Com base nas pendências que você descreveu (ajustes de grid, margens,
+          CTAs, áudio do Manifesto, vídeo dinâmico no About Closed, grid do
+          portfólio e parallax), e sem acesso direto ao CSS/TSX ou às imagens de
+          referência a partir deste ambiente, assumo que ainda existem desvios
+          relevantes em relação às imagens canônicas em{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            docs/HOME
+          </code>
+          ,{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            docs/SOBRE
+          </code>{' '}
+          e{' '}
+          <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+            docs/PORTFOLIO
+          </code>
+          . Abaixo, o checklist parte do princípio conservador de que qualquer
+          ponto não explicitamente fechado deve ser tratado como “Não” até que
+          os ajustes propostos sejam implementados e validados visualmente.
+        </p>
+      </section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.05 }}
-          className="overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/70 shadow-lg shadow-black/40"
-        >
-          <div className="border-b border-neutral-800 bg-gradient-to-r from-purple-500/10 via-sky-500/5 to-transparent px-4 py-3 sm:px-6">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-              Bloco de prompts atômicos
+      {/* 2️⃣ Diagnóstico por Seção */}
+      <section className="space-y-10">
+        <h2 className="text-xl font-semibold">2️⃣ Diagnóstico por Seção</h2>
+
+        {/* 2.1 Home Hero */}
+        <section className="space-y-3">
+          <h3 className="text-lg font-semibold">2.1 Home Hero</h3>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Checklist de Fidelidade:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                O grid e as margens laterais correspondem exatamente à imagem?{' '}
+                <strong>Não</strong> — é necessário travar todas as colunas em
+                um único container matemático (provavelmente via{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  Container
+                </code>
+                ) compartilhado entre Home, Sobre e Portfólio.
+              </li>
+              <li>
+                O alinhamento “duas laterais” está consistente em todo o scroll?{' '}
+                <strong>Não</strong> — existe indício de “saltos” entre seções
+                (Hero → Manifesto → Featured Projects).
+              </li>
+              <li>
+                Os cards do portfólio ocupam toda a largura horizontal sem gaps?{' '}
+                <strong>Não se aplica</strong> (seção sem cards tipo mosaico).
+              </li>
+              <li>
+                A animação de parallax e hover segue a fluidez do CodePen
+                referência? <strong>Não</strong> — o Ghost/ROME precisa seguir
+                exatamente o timing/easing e amplitude definidos no blueprint,
+                incluindo profundidade suave em resposta ao scroll/mouse.
+              </li>
+              <li>
+                O mobile está livre de overflow horizontal e com touch targets
+                adequados? <strong>Não</strong> — há relato de problemas de
+                clique no Header e possíveis quebras de alinhamento/padding no
+                Hero em telas pequenas.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Inconsistências principais:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                Hero não está perfeitamente alinhado ao grid Ghost definido em{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  docs/HOME/HERO.jpg
+                </code>
+                , com diferença de margens laterais e possivelmente da distância
+                entre título, subtítulo e CTA.
+              </li>
+              <li>
+                Cena <code>GhostScene</code> (posição, scale, brightness) ainda
+                não casada 1:1 com o enquadramento da imagem canônica.
+              </li>
+              <li>
+                Em mobile, o Hero herdando problemas do Header (área de clique /
+                nav) e potencial overflow horizontal residual.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 2.2 Manifesto */}
+        <section className="space-y-3">
+          <h3 className="text-lg font-semibold">2.2 Manifesto</h3>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Checklist de Fidelidade:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                O grid e as margens laterais correspondem exatamente à imagem?{' '}
+                <strong>Não</strong> — Manifesto precisa seguir o mesmo
+                container de Hero e Featured Projects, sem variação de paddings.
+              </li>
+              <li>
+                O alinhamento “duas laterais” está consistente em todo o scroll?{' '}
+                <strong>Não</strong> — transição Ghost → Manifesto ainda não é
+                ótica e matematicamente contínua.
+              </li>
+              <li>
+                Os cards do portfólio ocupam toda a largura horizontal sem gaps?{' '}
+                <strong>Não se aplica</strong>.
+              </li>
+              <li>
+                A animação de parallax e hover segue a fluidez do CodePen
+                referência? <strong>Não</strong> — a interação aqui é
+                principalmente áudio + scroll; a fluidez de entrada/saída do
+                texto e controles de áudio ainda não está “Ghost level”.
+              </li>
+              <li>
+                O mobile está livre de overflow horizontal e com touch targets
+                adequados? <strong>Não</strong> — player/controle de áudio e CTA
+                precisam ser garantidos como touch-friendly (min 44×44px).
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Inconsistências principais:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                Sincronia entre áudio do Manifesto e scroll não está descrita
+                como finalizada (auto-mute/unmute em função da presença em
+                viewport).
+              </li>
+              <li>
+                Possível variação de largura do texto/legenda em relação ao
+                container global.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 2.3 Featured Projects (Home) */}
+        <section className="space-y-3">
+          <h3 className="text-lg font-semibold">
+            2.3 Featured Projects (Home)
+          </h3>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Checklist de Fidelidade:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                O grid e as margens laterais correspondem exatamente à imagem?{' '}
+                <strong>Não</strong> — o layout precisa espelhar{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  docs/HOME/HOME-PORTFOLIO-BLACK---GHOST.jpg
+                </code>
+                .
+              </li>
+              <li>
+                O alinhamento “duas laterais” está consistente em todo o scroll?{' '}
+                <strong>Não</strong> — atual “salto” visual entre o final do
+                Manifesto e o início dos cards.
+              </li>
+              <li>
+                Os cards do portfólio ocupam toda a largura horizontal sem gaps?{' '}
+                <strong>Não</strong> — o mosaico ainda não preenche 100% da
+                largura útil com larguras variáveis e alturas equalizadas por
+                linha.
+              </li>
+              <li>
+                A animação de parallax e hover segue a fluidez do CodePen
+                referência? <strong>Não</strong> — precisa replicar precisamente
+                profundidade, easing e latência do CodePen.
+              </li>
+              <li>
+                O mobile está livre de overflow horizontal e com touch targets
+                adequados? <strong>Não</strong> — existe pendência explícita
+                para centralizar textos/CTAs e evitar tap targets pequenos.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Inconsistências principais:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                Cards não compartilham sempre a mesma altura por linha,
+                quebrando a “barra ótica” Ghost.
+              </li>
+              <li>
+                Grid não parece derivar de um sistema matemático único (colunas
+                e gutters) compartilhado com o restante da página.
+              </li>
+              <li>
+                Em mobile, textos/CTAs desalinhados e possível overflow
+                horizontal em projeções mais largas.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 2.4 About (Origin / Method / What I Do) */}
+        <section className="space-y-3">
+          <h3 className="text-lg font-semibold">
+            2.4 About (Origin / Method / What I Do)
+          </h3>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Checklist de Fidelidade:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                O grid e as margens laterais correspondem exatamente à imagem?{' '}
+                <strong>Não</strong> — seções como{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  AboutOrigin.tsx
+                </code>{' '}
+                e{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  AboutMethod.tsx
+                </code>{' '}
+                ainda precisam ser rigidamente alinhadas ao mesmo container da
+                Home.
+              </li>
+              <li>
+                O alinhamento “duas laterais” está consistente em todo o scroll?{' '}
+                <strong>Não</strong> — especialmente na transição entre Origin →
+                Method → What I Do.
+              </li>
+              <li>
+                Os cards do portfólio ocupam toda a largura horizontal sem gaps?{' '}
+                <strong>Não se aplica</strong> (seções textuais + ícones).
+              </li>
+              <li>
+                A animação de parallax e hover segue a fluidez do CodePen
+                referência? <strong>Não</strong> — as micro-animações de scroll
+                e o glow roxo dos ícones circulares em{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  AboutWhatIDo.tsx
+                </code>{' '}
+                ainda precisam ser calibradas.
+              </li>
+              <li>
+                O mobile está livre de overflow horizontal e com touch targets
+                adequados? <strong>Não</strong> — o texto do About Hero (H3)
+                requer fonte branca para legibilidade e a hierarquia tipográfica
+                Ghost.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Inconsistências principais:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                <strong>About Hero</strong>: subtítulo/h3 não visível o
+                suficiente sobre o background; necessidade explícita de usar
+                fonte branca.
+              </li>
+              <li>
+                <strong>About Closed</strong> (
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  AboutClosing.tsx
+                </code>
+                ): falta troca dinâmica de vídeo Desktop vs Mobile via URLs do
+                Supabase.
+              </li>
+              <li>
+                <strong>Origin / Method</strong>: animações de entrada on scroll
+                ainda não seguem uma curva premium (sem bounce exagerado, sem
+                jitter).
+              </li>
+              <li>
+                <strong>What I Do</strong>: glow roxo e ícones circulares ainda
+                não replicam exatamente o look and feel Ghost.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 2.5 Portfolio Grid (/portfolio) */}
+        <section className="space-y-3">
+          <h3 className="text-lg font-semibold">
+            2.5 Portfolio Grid (/portfolio)
+          </h3>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Checklist de Fidelidade:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                O grid e as margens laterais correspondem exatamente à imagem?{' '}
+                <strong>Não</strong> — a página de Portfólio deve seguir a mesma
+                largura útil e margens da Home e das imagens em{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  docs/PORTFOLIO
+                </code>
+                .
+              </li>
+              <li>
+                O alinhamento “duas laterais” está consistente em todo o scroll?{' '}
+                <strong>Não</strong> — há risco de variação entre o Hero da
+                página e o grid/mosaico.
+              </li>
+              <li>
+                Os cards do portfólio ocupam toda a largura horizontal sem gaps?{' '}
+                <strong>Não</strong> — o mosaico em{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  PortfolioMosaicGrid.tsx
+                </code>{' '}
+                e <code>PortfolioCard.tsx</code> não está explicitamente
+                descrito como preenchendo 100% da largura útil com alturas
+                equalizadas.
+              </li>
+              <li>
+                A animação de parallax e hover segue a fluidez do CodePen
+                referência? <strong>Não</strong> — ainda não há menção de
+                replicação fiel do CodePen de referência.
+              </li>
+              <li>
+                O mobile está livre de overflow horizontal e com touch targets
+                adequados? <strong>Não</strong> — cartões e filtros (
+                <code>CategoryFilter.tsx</code>) precisam ser validados para
+                evitar scroll lateral e tap impreciso.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-1">
+            <p className="font-semibold">Inconsistências principais:</p>
+            <ul className="list-disc ml-6 space-y-1">
+              <li>
+                Cards não garantem a mesma altura vertical por linha em todas as
+                quebras de layout.
+              </li>
+              <li>
+                Mídias (imagem/vídeo) dentro de <code>PortfolioCard.tsx</code>{' '}
+                não estão explicitamente centralizadas/crocadas para preencher o
+                card independentemente da proporção.
+              </li>
+              <li>
+                Parallax e hover ainda não replicam a sensação “3D card stack”
+                do CodePen.
+              </li>
+            </ul>
+          </div>
+        </section>
+      </section>
+
+      {/* 3️⃣ Lista de Problemas (Severidade) */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">
+          3️⃣ Lista de Problemas (Severidade 🔴🟡🟢)
+        </h2>
+
+        <ul className="space-y-1">
+          <li>
+            🔴{' '}
+            <strong>P1 — Grid global e margens laterais inconsistentes</strong>:
+            falta de um único sistema de colunas/gutters aplicado em Home, Sobre
+            e Portfólio (RootLayout + Container).
+          </li>
+          <li>
+            🔴{' '}
+            <strong>
+              P2 — Layout do grid de portfólio (Home + /portfolio)
+            </strong>
+            : cards não ocupam 100% da largura, alturas não equalizadas por
+            linha, e alinhamento visual divergente da referência Ghost.
+          </li>
+          <li>
+            🔴 <strong>P3 — Mobile crítico (Header + Featured Projects)</strong>
+            : problemas de clique no Header, CTAs e textos não centralizados na
+            seção de projetos em destaque e risco de overflow horizontal.
+          </li>
+          <li>
+            🔴 <strong>P4 — Legibilidade no About Hero</strong>: subtítulo/h3
+            precisa ser branco e seguir a escala tipográfica Ghost para
+            contraste adequado.
+          </li>
+          <li>
+            🔴 <strong>P5 — Vídeo dinâmico em About Closed</strong>: ausência
+            (ou não finalização) da troca automática Desktop vs Mobile usando
+            URLs do Supabase.
+          </li>
+          <li>
+            🟡 <strong>P6 — Animações Framer Motion fora da curva Ghost</strong>
+            : timings/easings com bounce/scale possivelmente exagerados em
+            relação à especificação premium.
+          </li>
+          <li>
+            🟡 <strong>P7 — Falta de parallax de profundidade nos cards</strong>
+            : interações de hover/scroll do portfólio não reproduzem o CodePen
+            referência.
+          </li>
+          <li>
+            🟡{' '}
+            <strong>
+              P8 — Áudio do Manifesto acoplado de forma rudimentar
+            </strong>
+            : falta lógica clara de auto-mute/unmute com base em scroll e
+            visibilidade da seção.
+          </li>
+          <li>
+            🟡{' '}
+            <strong>
+              P9 — About Origin/Method/What I Do sem refinamento fino
+            </strong>
+            : scroll animations, glow roxo e ícones circulares ainda aquém do
+            desejo Ghost.
+          </li>
+          <li>
+            🟢{' '}
+            <strong>P10 — Uso inconsistente de Container/ClientLayout</strong>:
+            oportunidade de centralizar todas as páginas no mesmo componente de
+            grid para reduzir divergências.
+          </li>
+          <li>
+            🟢 <strong>P11 — Redução de movimento</strong>: adicionar fallback
+            suave para usuários com{' '}
+            <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+              prefers-reduced-motion
+            </code>{' '}
+            nas animações de hover/parallax.
+          </li>
+          <li>
+            🟢 <strong>P12 — Otimização de mídia</strong>: garantir lazy loading
+            inteligente e placeholders no grid de portfólio, sem alterar o
+            layout canônico.
+          </li>
+        </ul>
+      </section>
+
+      {/* 4️⃣ Prompts Técnicos para Agentes Google Antigravity (Atômicos) */}
+      <section className="space-y-6">
+        <h2 className="text-xl font-semibold">
+          4️⃣ Prompts Técnicos para Agentes Google Antigravity (Atômicos)
+        </h2>
+
+        <div className="space-y-8">
+          {/* Prompt 01 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #01 — Unificar grid global e margens laterais
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Garantir que Home, Sobre e Portfólio
+              usem exatamente o mesmo container (largura útil, gutters e
+              paddings) para obter alinhamento “duas laterais” perfeito em todo
+              o scroll.
             </p>
-          </div>
-          <div className="max-h-[80vh] overflow-y-auto px-4 py-4 sm:px-6 sm:py-6">
-            <pre className="whitespace-pre-wrap text-xs leading-relaxed text-neutral-100 sm:text-sm">
-              {PROMPTS_TEXT}
-            </pre>
-          </div>
-        </motion.section>
-      </div>
-    </main>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/layout.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/layout/ClientLayout.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/layout/Container.tsx
+              </code>
+              , todas as páginas de topo (
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/page.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/sobre/page.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/portfolio/page.tsx
+              </code>
+              ).
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Padronizar um único componente <code>Container</code> com
+                Tailwind (ex.:{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  mx-auto max-w-[...px] px-4 md:px-6
+                </code>
+                ) para refletir exatamente o grid das imagens Ghost.
+              </li>
+              <li>
+                Garantir que todas as seções principais de Home, Sobre e
+                Portfólio sejam diretamete embrulhadas por esse{' '}
+                <code>Container</code>, sem paddings laterais adicionais em cada
+                seção.
+              </li>
+              <li>
+                Ajustar{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  ClientLayout
+                </code>{' '}
+                (se usado) para não duplicar margens/paddings já definidos em{' '}
+                <code>Container</code>.
+              </li>
+              <li>
+                Confirmar que{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  globals.css
+                </code>{' '}
+                e Tailwind estão corretamente importados em{' '}
+                <code>layout.tsx</code>, conforme o padrão do App Router e
+                :OaiMdDirective_Annotations_km5a7{(attrs = 'eyJpbmRleCI6MX0')}{' '}
+                Tailwind v3 .
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Mobile-first, apenas ajustes de layout
+              (sem alterar textos), manter o grid idêntico às imagens em{' '}
+              <code>docs/HOME</code>, <code>docs/SOBRE</code> e{' '}
+              <code>docs/PORTFOLIO</code>.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Ao rolar de cima a baixo em
+              /, /sobre e /portfolio, as bordas esquerda/direita de títulos,
+              textos e cards mantêm alinhamento perfeito; o item “grid e margens
+              laterais correspondem exatamente à imagem?” pode ser marcado como{' '}
+              <strong>Sim</strong> para todas as seções.
+            </p>
+          </article>
+
+          {/* Prompt 02 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #02 — Corrigir Header e comportamento de clique em
+              mobile
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Garantir que o Header tenha área de
+              clique/touch consistente, sem interferência na rolagem ou nos CTAs
+              em mobile.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/layout/Header.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/layout/header/*
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/layout.tsx
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Revisar estrutura de nav e botões de menu (hamburger) para
+                garantir que nenhum elemento overlay capture cliques fora da
+                área esperada.
+              </li>
+              <li>
+                Em mobile, assegurar que cada item de navegação tenha área
+                mínima de 44×44px (via Tailwind, ex.:{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  px-3 py-2
+                </code>
+                ).
+              </li>
+              <li>
+                Validar se existe algum{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  pointer-events
+                </code>{' '}
+                indevido em wrappers do Header que interfiram em cliques no Hero
+                e nas seções abaixo.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não alterar o conteúdo textual nem
+              adicionar links novos; apenas ajustar estrutura e classes
+              Tailwind.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Em dispositivos touch, todos
+              os links do Header respondem com precisão, sem áreas “mortas” ou
+              cliques acidentais; nenhum overflow horizontal é introduzido pelo
+              Header; o item “mobile livre de overflow e com touch targets
+              adequados?” pode ser marcado como <strong>Sim</strong> para Home.
+            </p>
+          </article>
+
+          {/* Prompt 03 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #03 — Travar Home Hero + GhostScene na referência
+              HERO.jpg
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Ajustar tipografia, espaçamento e cena
+              3D do Hero para ficar 1:1 com <code>docs/HOME/HERO.jpg</code> e o
+              blueprint Ghost.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/home/hero/*
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/canvas/home/hero/GhostScene.tsx
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Equalizar hierarquia tipográfica (h1, h2/h3, body) com o
+                blueprint, ajustando apenas classes Tailwind (weights, tracking,
+                line-height), sem alterar o texto.
+              </li>
+              <li>
+                Revisar espaçamentos verticais entre título/subtítulo/CTA para
+                que as distâncias visuais coincidam com a imagem de referência.
+              </li>
+              <li>
+                Em <code>GhostScene.tsx</code>, ajustar posição, escala e
+                intensidade de luz/materiais para obter o mesmo enquadramento e
+                “glow” do Ghost na HERO.jpg.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não mexer no copy; qualquer ajuste 3D
+              deve preservar performance (usar{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                useFrame
+              </code>{' '}
+              apenas quando necessário e memoizar materiais).
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Comparando a Home Hero com{' '}
+              <code>docs/HOME/HERO.jpg</code>, espaçamentos, tipografia e
+              enquadramento do Ghost são indistinguíveis a olho nu; parallax
+              leve do Ghost permanece suave, sem jitter.
+            </p>
+          </article>
+
+          {/* Prompt 04 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #04 — Manifesto: áudio + scroll e grid alinhado
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Fazer o Manifesto respeitar o grid
+              global e implementar lógica de áudio que auto-mute/unmute conforme
+              a seção entra/sai da viewport.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/home/hero/*
+              </code>{' '}
+              (se Manifesto estiver acoplado), módulo específico de Manifesto
+              (onde o player é usado).
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Garantir que o container do Manifesto esteja dentro do mesmo{' '}
+                <code>Container</code> global, sem paddings extras.
+              </li>
+              <li>
+                Implementar observer de scroll (ex.:{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  IntersectionObserver
+                </code>{' '}
+                no client) para mutar o áudio quando a seção estiver abaixo de
+                um certo threshold de visibilidade.
+              </li>
+              <li>
+                Em desktop, permitir que o áudio inicie ao entrar na seção; em
+                mobile, respeitar a necessidade de interação explícita do
+                usuário para iniciar áudio.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não alterar o conteúdo do Manifesto;
+              manter a UI atual, refinando apenas comportamento e layout.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Manifesto ocupa a mesma
+              largura da Hero/Featured Projects; áudio nunca continua tocando
+              enquanto a seção está completamente fora de viewport; o checklist
+              de grid/alinhamento e mobile pode ser marcado como{' '}
+              <strong>Sim</strong> para Manifesto.
+            </p>
+          </article>
+
+          {/* Prompt 05 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #05 — Featured Projects: grid 100% horizontal e
+              mobile centrado
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Fazer os cards de projetos em destaque
+              preencherem 100% da largura do container, com alturas equalizadas
+              por linha e CTAs/textos centralizados em mobile.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/home/featured-projects/*
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Modelar o grid com Tailwind usando combinações de{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  grid-cols-*
+                </code>{' '}
+                e <code>auto-fit / auto-fill</code> (ou flex com{' '}
+                <code>flex-[x]</code>) para reproduzir a distribuição de
+                larguras da referência, sem espaços vazios.
+              </li>
+              <li>
+                Garantir que todos os cards de uma mesma linha compartilhem a
+                mesma altura (via{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  items-stretch
+                </code>{' '}
+                + conteúdo interno com{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  h-full
+                </code>
+                ).
+              </li>
+              <li>
+                Em mobile, centralizar títulos/descrições/CTAs dos cards e
+                revisar paddings para remover qualquer overflow horizontal.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Mobile-first; sem alterar textos;
+              comparação constante com{' '}
+              <code>docs/HOME/HOME-PORTFOLIO-BLACK---GHOST.jpg</code> e{' '}
+              <code>docs/HOME/HOME-PORTFOLIO-LAYOUYT-MOBILE---GHOST.jpg</code>.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Não há gaps horizontais no
+              fim de nenhuma linha; todos os cards têm mesma altura visual por
+              linha; em mobile, os CTAs ficam centralizados e facilmente
+              clicáveis.
+            </p>
+          </article>
+
+          {/* Prompt 06 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #06 — Portfólio (/portfolio): Mosaic Grid + parallax
+              estilo CodePen
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Ajustar o grid de{' '}
+              <code>/portfolio</code> para preencher 100% da largura, equalizar
+              alturas por linha e implementar parallax/hover inspirado no
+              CodePen de referência.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/portfolio/page.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/PortfolioMosaicGrid.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/MosaicCard.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/PortfolioCard.tsx
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Refatorar <code>PortfolioMosaicGrid</code> para calcular
+                larguras relativas por linha (ex.: colunas flex com{' '}
+                <code>basis-*</code> e <code>grow</code>) de forma a sempre
+                fechar 100% da largura do container.
+              </li>
+              <li>
+                Garantir que todos os cards de uma mesma linha tenham altura
+                igual (via{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  h-full
+                </code>{' '}
+                + wrappers internos com{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  flex flex-col
+                </code>{' '}
+                e{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  justify-between
+                </code>
+                ).
+              </li>
+              <li>
+                Implementar animações de hover/parallax nos cards usando Framer
+                Motion (ex.: leve{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  translateZ
+                </code>{' '}
+                em perspectiva simulada, com easing{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  cubic-bezier(0.22, 1, 0.36, 1)
+                </code>
+                ) para aproximar o efeito do CodePen.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não alterar estrutura de conteúdo dos
+              cards (título, descrição, tags); apenas layout e motion.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Qualquer linha de cards
+              ocupa 100% da largura do container; nenhuma linha apresenta gaps
+              residuais; hover/parallax são fluidos, sem overshoot ou bounce
+              exagerado, replicando a fluidez do CodePen.
+            </p>
+          </article>
+
+          {/* Prompt 07 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #07 — About Hero (tipografia) + About Closed (vídeo
+              Supabase)
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Corrigir a visibilidade do texto em
+              About Hero e implementar troca dinâmica de vídeo Desktop/Mobile em
+              About Closed usando URLs do Supabase.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/AboutHero.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/AboutClosing.tsx
+              </code>
+              , configuração Supabase (cliente utilitário).
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Em <code>AboutHero</code>, aplicar classes Tailwind para que o
+                subtítulo/h3 use cor branca e contraste adequado sobre o
+                background, respeitando a escala tipográfica Ghost.
+              </li>
+              <li>
+                Identificar no Supabase as chaves/URLs de vídeo para Desktop e
+                Mobile (por ex.: colunas{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  about_closed_desktop_url
+                </code>{' '}
+                e{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  about_closed_mobile_url
+                </code>
+                ).
+              </li>
+              <li>
+                Em <code>AboutClosing</code>, implementar lógica client-side
+                (hook de breakpoint ou{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  matchMedia
+                </code>
+                ) para escolher a URL correta no player de vídeo sem duplicar o
+                componente.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não mudar o texto dos títulos; apenas
+              cores/tailwind para visibilidade e seleção dinâmica de mídia.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Em qualquer breakpoint, o
+              subtítulo de About Hero é claramente legível; o About Closed
+              carrega automaticamente a versão de vídeo adequada ao viewport
+              (Desktop vs Mobile), sem que o usuário perceba troca de layout.
+            </p>
+          </article>
+
+          {/* Prompt 08 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #08 — About Origin / Method / What I Do: scroll
+              animations e glow roxo
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Refinar animações de scroll em Origin e
+              Method e implementar/ajustar glow roxo + ícones redondos em What I
+              Do, seguindo a especificação Ghost.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/AboutOrigin.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/AboutMethod.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/AboutWhatIDo.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/motion.ts
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Centralizar as variantes do Framer Motion em{' '}
+                <code>motion.ts</code> com um set de easings premium (por
+                exemplo, curvas suaves sem overshoot) e reutilizá-las em todas
+                as seções.
+              </li>
+              <li>
+                Em Origin/Method, disparar animações apenas quando o bloco
+                estiver parcialmente visível (ex.: 25–30% em viewport) para
+                evitar disparos prematuros.
+              </li>
+              <li>
+                Em What I Do, ajustar o glow roxo para que o efeito seja suave,
+                sem serrilhado, e centralizar os ícones em círculos perfeitos,
+                respeitando o grid lateral.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não alterar textos; evitar qualquer
+              animação que cause “bounce” exagerado ou fadiga visual.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> As animações de entrada
+              seguem o mesmo timing e easing em todas as seções; o glow roxo nos
+              ícones é sutil mas perceptível, alinhado ao look Ghost; o item
+              “animação de parallax/hover segue a fluidez Ghost?” pode ser
+              marcado como <strong>Sim</strong> para essas seções.
+            </p>
+          </article>
+
+          {/* Prompt 09 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #09 — Centralização absoluta de mídia nos cards de
+              portfólio
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Garantir que todas as imagens e vídeos
+              dentro dos cards de portfólio estejam sempre centralizados e
+              preencham o card de forma consistente, independentemente da
+              proporção.
+            </p>
+            <p>
+              <strong>Arquivos:</strong>{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/PortfolioCard.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/ProjectsGallery.tsx
+              </code>
+              .
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Envolver a mídia (img/video) em um wrapper com{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  relative overflow-hidden
+                </code>{' '}
+                e altura fixa ou proporcional à linha (para suportar alturas
+                equalizadas).
+              </li>
+              <li>
+                Definir mídia com{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  object-cover object-center w-full h-full
+                </code>{' '}
+                para garantir que sempre preencha o espaço sem distorção.
+              </li>
+              <li>
+                Validar casos extremos de proporção (super wide vs super
+                vertical) para garantir que o recorte preserve a parte visual
+                mais importante do conteúdo.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não alterar textos ou ordem de
+              informações do card; apenas o container de mídia.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Nenhum card mostra barras
+              pretas/brancas laterais ou em cima/baixo; todas as mídias parecem
+              perfeitamente centradas e recortadas, mantendo a altura dos cards
+              uniforme por linha.
+            </p>
+          </article>
+
+          {/* Prompt 10 */}
+          <article className="space-y-2">
+            <h3 className="font-semibold">
+              ### 🛠️ Prompt #10 — Eliminar overflow horizontal e validar touch
+              targets em todo o site
+            </h3>
+            <p>
+              <strong>Objetivo:</strong> Garantir que todas as páginas estejam
+              livres de scroll horizontal acidental e que todos os CTAs/cards
+              tenham zonas de toque confortáveis em mobile.
+            </p>
+            <p>
+              <strong>Arquivos:</strong> Páginas principais (
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/page.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/sobre/page.tsx
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/app/portfolio/page.tsx
+              </code>
+              ), componentes de seções (
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/home/*
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/sobre/*
+              </code>
+              ,{' '}
+              <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                src/components/portfolio/*
+              </code>
+              ).
+            </p>
+            <p>
+              <strong>Ações:</strong>
+            </p>
+            <ol className="list-decimal ml-6 space-y-1">
+              <li>
+                Auditar todos os wrappers horizontais (carrosséis, grids) para
+                remover larguras fixas que ultrapassem <code>100vw</code> em
+                mobile.
+              </li>
+              <li>
+                Garantir que todos os botões/links tenham{' '}
+                <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
+                  px-3 py-2
+                </code>{' '}
+                ou superior em mobile, mantendo a identidade Ghost.
+              </li>
+              <li>
+                Testar manualmente em breakpoints principais (sm/md/lg) para
+                confirmar ausência total de scroll horizontal.
+              </li>
+            </ol>
+            <p>
+              <strong>Regras:</strong> Não remover seções para resolver
+              overflow; a correção deve ser via layout/responsividade.
+            </p>
+            <p>
+              <strong>Critérios de Aceite:</strong> Nenhuma página apresenta
+              scroll horizontal em qualquer breakpoint; todos os CTAs e cards
+              são facilmente clicáveis em touchscreen; o item “mobile livre de
+              overflow e com touch targets adequados?” pode ser marcado como{' '}
+              <strong>Sim</strong> em todas as seções.
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
   );
-}
+};
+
+export default GhostPortfolioAuditReport;
