@@ -629,6 +629,32 @@ gsap.timeline({
 | Texto | `#ffffff` |
 | Numeração | `#8705f2` |
 
+### 1. Título
+
+- Posicionado no topo da seção, centralizado.
+- Duas linhas:
+
+  - text:
+  Do insight ao impacto.
+  Mesmo quando você não percebe.
+
+    •    Tipografia
+    •    font-display para titulo e font-h2 para subtitulo
+    •    font-size: 44–48px
+    •    line-height: 1.2
+    •    Cores
+    •    Linha 1:
+    •    “Do” / “ao impacto.” → branco (#FFFFFF)
+    •    “insight” / “impacto” → azul primário (primary)
+    •    Linha 2 → branco (#FFFFFF)
+    •    Espaçamentos
+    •    Margem superior: 64–80px em relação ao início da seção.
+    •    Margem inferior: 48–64px até o início dos cards.
+    •    max-width do bloco de título: 800px, centralizado.
+
+⸻
+
+
 #### Desktop (≥ 1024px)
 
 **Layout:**

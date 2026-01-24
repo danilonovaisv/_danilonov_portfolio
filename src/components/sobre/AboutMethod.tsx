@@ -6,7 +6,7 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { ABOUT_CONTENT } from '@/config/content';
-import { Container } from '@/components/layout/Container';
+// import { Container } from '@/components/layout/Container'; // Removed in favor of std-grid
 
 import { motionTokens, motionSprings } from './motion';
 
@@ -76,89 +76,87 @@ export default function AboutMethod() {
         />
       </div>
 
-      <Container>
-        <div className="relative z-10 w-full h-full">
-          <div className="flex flex-col lg:grid lg:grid-cols-12 w-full h-full pt-[50vh] md:pt-[100px]">
-            {/* Content Area */}
-            <div className="w-full lg:col-span-8 flex flex-col justify-center px-0 lg:pr-20 py-20 lg:py-32">
+      <div className="std-grid relative z-10 w-full h-full">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 w-full h-full pt-[50vh] md:pt-[100px]">
+          {/* Content Area */}
+          <div className="w-full lg:col-span-8 flex flex-col justify-center px-0 lg:pr-20 py-20 lg:py-32">
+            <motion.div
+              style={{ y: textY }}
+              className="w-full flex flex-col items-center lg:items-start"
+            >
+              {/* Título */}
               <motion.div
-                style={{ y: textY }}
-                className="w-full flex flex-col items-center lg:items-start"
+                variants={motionTokens.fadeGhost}
+                initial={prefersReducedMotion ? 'visible' : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, margin: '-20%' }}
+                className="mb-8 lg:mb-12 text-center lg:text-left"
               >
-                {/* Título */}
-                <motion.div
-                  variants={motionTokens.fadeGhost}
-                  initial={prefersReducedMotion ? 'visible' : 'hidden'}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-20%' }}
-                  className="mb-8 lg:mb-12 text-center lg:text-left"
-                >
-                  <h2 className="font-display leading-[1.08] tracking-[-0.02em] text-[clamp(32px,5vw,64px)] font-bold">
-                    <div className="text-primary leading-tight">
-                      Criatividade com método.
-                    </div>
-                    <div className="text-white leading-tight">
-                      Impacto sem ruído.
-                    </div>
-                  </h2>
-                </motion.div>
+                <h2 className="font-display leading-[1.08] tracking-[-0.02em] text-[clamp(32px,5vw,64px)] font-bold">
+                  <div className="text-primary leading-tight">
+                    Criatividade com método.
+                  </div>
+                  <div className="text-white leading-tight">
+                    Impacto sem ruído.
+                  </div>
+                </h2>
+              </motion.div>
 
-                {/* Texto introdutório */}
-                <motion.div
-                  variants={motionTokens.fadeGhost}
-                  initial={prefersReducedMotion ? 'visible' : 'hidden'}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-20%' }}
-                  className="text-white leading-[2.4] space-y-1 mb-12 lg:mb-16 text-center lg:text-left text-[16px] md:text-[18px] lg:text-[20px] font-medium opacity-90 max-w-full lg:max-w-[550px]"
-                >
-                  {ABOUT_CONTENT.method.intro.map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
-                </motion.div>
+              {/* Texto introdutório */}
+              <motion.div
+                variants={motionTokens.fadeGhost}
+                initial={prefersReducedMotion ? 'visible' : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, margin: '-20%' }}
+                className="text-white leading-[2.4] space-y-1 mb-12 lg:mb-16 text-center lg:text-left text-[16px] md:text-[18px] lg:text-[20px] font-medium opacity-90 max-w-full lg:max-w-[550px]"
+              >
+                {ABOUT_CONTENT.method.intro.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </motion.div>
 
-                {/* Steps List */}
-                <motion.div
-                  variants={{
-                    visible: {
-                      transition: {
-                        staggerChildren: 0.1,
-                      },
+              {/* Steps List */}
+              <motion.div
+                variants={{
+                  visible: {
+                    transition: {
+                      staggerChildren: 0.1,
                     },
-                  }}
-                  initial={prefersReducedMotion ? 'visible' : 'hidden'}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-10%' }}
-                  className="flex flex-col w-full border-t border-primary/40 px-4 md:px-0"
-                >
-                  {ABOUT_CONTENT.method.steps.map((step) => (
-                    <motion.div
-                      key={step.id}
-                      variants={motionTokens.riseSoft}
-                      className="
+                  },
+                }}
+                initial={prefersReducedMotion ? 'visible' : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true, margin: '-10%' }}
+                className="flex flex-col w-full border-t border-primary/40"
+              >
+                {ABOUT_CONTENT.method.steps.map((step) => (
+                  <motion.div
+                    key={step.id}
+                    variants={motionTokens.riseSoft}
+                    className="
                         group flex items-center gap-4 lg:gap-6 
                         py-5 lg:py-6 
                         border-b border-primary/40
                         transition-all duration-300
                         hover:bg-primary/5
                       "
-                    >
-                      <span className="text-primary font-bold text-[16px] lg:text-[20px] tabular-nums">
-                        {step.id}
-                      </span>
-                      <p className="text-white group-hover:text-primary transition-colors font-medium text-left text-[14px] md:text-[16px] lg:text-[20px] leading-[1.4]">
-                        {step.text}
-                      </p>
-                    </motion.div>
-                  ))}
-                </motion.div>
+                  >
+                    <span className="text-primary font-bold text-[16px] lg:text-[20px] tabular-nums">
+                      {step.id}
+                    </span>
+                    <p className="text-white group-hover:text-primary transition-colors font-medium text-left text-[14px] md:text-[16px] lg:text-[20px] leading-[1.4]">
+                      {step.text}
+                    </p>
+                  </motion.div>
+                ))}
               </motion.div>
-            </div>
-
-            {/* Ghost Visual Area Spacer (Reserved for the character on the right) */}
-            <div className="hidden lg:block lg:col-span-4" />
+            </motion.div>
           </div>
+
+          {/* Ghost Visual Area Spacer (Reserved for the character on the right) */}
+          <div className="hidden lg:block lg:col-span-4" />
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

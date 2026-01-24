@@ -96,9 +96,38 @@ body {
   }
 }
 
+
 .card-media {
   position: relative;
   flex: 1 1 auto;
   width: 100%;
   min-height: 0;
+}
+
+/* Layout & Grid System (Strict Standard) */
+.std-grid {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  /* Mobile: 24px */
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .std-grid {
+    padding-left: 3rem;
+    /* Tablet: 48px */
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .std-grid {
+    padding-left: 6rem;
+    /* Desktop: 96px */
+    padding-right: 6rem;
+    max-width: 1680px;
+    /* Max-width constraint */
+  }
 }
