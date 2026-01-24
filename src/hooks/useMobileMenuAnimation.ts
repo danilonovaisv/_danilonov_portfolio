@@ -27,7 +27,6 @@ export function useMobileMenuAnimation(
   const closeTweenRef = useRef<gsap.core.Tween | null>(null);
   const spinTweenRef = useRef<gsap.core.Timeline | null>(null);
   const textCycleAnimRef = useRef<gsap.core.Tween | null>(null);
-  const busyRef = useRef(false);
 
   const [open, setOpen] = useState(false);
   const openRef = useRef(false);
@@ -213,16 +212,15 @@ export function useMobileMenuAnimation(
   }, []);
 
   const playOpen = useCallback(() => {
-    if (busyRef.current) return;
-    busyRef.current = true;
+    // Force reset any closing animation
+    if (closeTweenRef.current) {
+      closeTweenRef.current.kill();
+      closeTweenRef.current = null;
+    }
+
     const tl = buildOpenTimeline();
     if (tl) {
-      tl.eventCallback('onComplete', () => {
-        busyRef.current = false;
-      });
       tl.play(0);
-    } else {
-      busyRef.current = false;
     }
   }, [buildOpenTimeline]);
 
@@ -259,8 +257,6 @@ export function useMobileMenuAnimation(
           if (socialTitle) gsap.set(socialTitle, { opacity: 0 });
           if (socialLinks.length) gsap.set(socialLinks, { x: 20, opacity: 0 });
         }
-
-        busyRef.current = false;
       },
     });
   }, []);
@@ -285,18 +281,6 @@ export function useMobileMenuAnimation(
   }, [isOpen, playOpen, playClose, animateIcon, animateText]);
 
   // Ensure text is always in sync with isOpen state
-  useLayoutEffect(() => {
-    // Only trigger animation when state actually changes
-    if (isOpen !== openRef.current) {
-      if (isOpen) {
-        animateText(true);
-      } else {
-        animateText(false);
-      }
-    }
-    openRef.current = isOpen;
-    setOpen(isOpen);
-  }, [isOpen, animateText]);
 
   // Update the toggleMenu function to ensure proper state synchronization
   const toggleMenu = useCallback(() => {

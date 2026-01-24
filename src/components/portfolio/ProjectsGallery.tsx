@@ -133,7 +133,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
           {/* Grid de projetos - Masonry com 12 colunas */}
           <motion.div
             layout={!prefersReducedMotion}
-            className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-x-8 md:gap-y-24"
+            className="grid grid-cols-1 md:grid-cols-12 gap-0 items-stretch"
             role="tabpanel"
             id={`projects-${activeCategory}`}
             aria-label={`Projetos de ${activeCategory}`}

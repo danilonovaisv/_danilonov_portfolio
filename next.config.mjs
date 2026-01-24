@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,7 @@ const nextConfig = {
   // Output standalone para compatibilidade com Firebase Functions (Frameworks Aware)
   output: 'standalone',
 
+  // Removido experimental.turbopack pois causa warning
   experimental: {
     // any needed experimental flags
   },
@@ -46,4 +48,8 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+export default bundleAnalyzer(nextConfig);

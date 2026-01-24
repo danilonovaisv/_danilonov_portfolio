@@ -7,9 +7,8 @@
 
 import { FC, useRef, useState } from 'react';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { useParallaxElement } from '@/hooks/useParallax';
 import type { PortfolioProject } from '@/types/project';
 import { MOTION_TOKENS, ghostTransition } from '@/config/motion';
 import { applyImageFallback, isVideo } from '@/utils/utils';
@@ -35,12 +34,14 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Parallax interno da imagem (só desktop)
-  const { ref: parallaxRef, style: parallaxStyle } = useParallaxElement({
-    speed: 0.15,
-    direction: 'up',
-    enabled: !prefersReducedMotion,
+  // Re-implementing useScroll directly for better control as requested by Animation Agent
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"],
   });
+  
+  const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
 
   // Hover animations condicionais
   const overlayOpacity = isHovered ? 1 : 0;
@@ -61,13 +62,15 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
         // @ts-ignore
         cardRef.current = node;
         // @ts-ignore
-        parallaxRef.current = node;
+        cardRef.current = node;
+        // @ts-ignore
+        targetRef.current = node;
       }}
       initial={{ opacity: 0, y: 24, filter: 'blur(4px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-50px' }}
       transition={ghostTransition(index * stagger.tight, duration.normal)}
-      className={`card-shell group relative overflow-hidden rounded-2xl md:rounded-3xl cursor-pointer bg-white/5 will-change-transform ${project.layout.cols} ${className}`}
+      className={`card-shell group relative overflow-hidden rounded-none cursor-pointer bg-white/5 will-change-transform h-full ${project.layout.cols} ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
@@ -80,7 +83,7 @@ const PortfolioCard: FC<PortfolioCardProps> = ({
       <div className="card-media overflow-hidden">
         <motion.div
            className="absolute inset-0 -top-[17.5%] h-[135%] w-full will-change-transform"
-           style={prefersReducedMotion ? {} : parallaxStyle}
+           style={prefersReducedMotion ? {} : { y }}
            animate={{ y: isHovered ? -8 : 0 }}
            transition={ghostTransition(0, duration.normal)}
         >

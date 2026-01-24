@@ -20,7 +20,7 @@ export function AboutClosing() {
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-80px' }}
-        className="mx-auto flex w-full max-w-[1000px] flex-col items-center text-center"
+        className="w-full flex-col items-center text-center"
       >
         {/* Bloco 1: Título Principal e Linhas */}
         <div className="w-full">
@@ -37,14 +37,14 @@ export function AboutClosing() {
 
         {/* Bloco 2: Frase 1 e Vídeo */}
         <div className="mt-16 md:mt-20 flex flex-col items-center">
-          <p className="type-h2 text-text opacity-90 max-w-[800px] leading-snug">
+          <p className="type-h2 text-text opacity-90 max-w-[800px] leading-snug mx-auto text-center">
             Já liderei marcas, agências, eventos e{' '}
             <span className="text-bluePrimary">criei experiências</span> para
             todos os canais.
           </p>
 
           {/* Vídeo em Loop */}
-          <div className="mt-12 w-full max-w-[800px] overflow-hidden rounded-xl shadow-2xl md:mt-11">
+          <div className="mt-12 w-full overflow-hidden rounded-xl shadow-2xl md:mt-11">
             <video
               className="aspect-video w-full object-cover"
               autoPlay
@@ -76,7 +76,7 @@ export function AboutClosing() {
                 key={index}
                 href={cta.href}
                 text={cta.label}
-                className="relative min-w-[200px]"
+                className="relative min-w-50"
               />
             ))}
           </div>

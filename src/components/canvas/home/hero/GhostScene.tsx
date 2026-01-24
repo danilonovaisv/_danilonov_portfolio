@@ -797,11 +797,50 @@ export default function GhostScene() {
       window.removeEventListener('resize', onResize);
       cancelAnimationFrame(animationId);
       // pane.dispose(); // Removed
+      // --- CLEANUP ---
+      // Dispose de geometrias e materiais para evitar memory leaks
+      atmosphereGeometry.dispose();
+      atmosphereMaterial.dispose();
+
+      ghostGeometry.dispose();
+      ghostMaterial.dispose();
+
+      eyes.leftEyeMaterial.dispose();
+      eyes.rightEyeMaterial.dispose();
+      eyes.leftOuterGlowMaterial.dispose();
+      eyes.rightOuterGlowMaterial.dispose();
+
+      fireflies.forEach((f) => {
+        f.geometry.dispose();
+        (f.material as THREE.Material).dispose();
+        if (f.userData.glowMat) f.userData.glowMat.dispose();
+        if (f.userData.fireflyMat) f.userData.fireflyMat.dispose();
+      });
+
+      // Cleanup de particulas (pool e ativas)
+      particleGeometries.forEach((g) => g.dispose());
+      particleBaseMaterial.dispose();
+      // As particulas clonam o material, entao precisamos limpar todos
+      particlePool.forEach((p) => {
+        p.geometry.dispose();
+        (p.material as THREE.Material).dispose();
+      });
+      particles.forEach((p) => {
+        p.geometry.dispose();
+        (p.material as THREE.Material).dispose();
+      });
+
+      // Cleanup do Composer e Passes
       renderer.dispose();
+
+      // Alguns passes criam rendertargets internos que precisam ser limpos se expostos
+      if (bloomPass.dispose) bloomPass.dispose();
+      if (renderPass.dispose) renderPass.dispose();
+      // analogDecayPass e outputPass usam shaders simples, sem targets extras geralmente
+
       if (mountElement && renderer.domElement) {
         mountElement.removeChild(renderer.domElement);
       }
-      // Opcional: Dispose de geometrias e materiais para limpeza completa
     };
   }, []);
 
