@@ -24,8 +24,7 @@ const GhostPortfolioAuditReport: FC = () => {
             src/app/portfolio/page.tsx
           </code>
           ). Essa arquitetura segue o padrão recomendado do App Router, com um
-          layout raiz envolvendo todas as rotas
-          :OaiMdDirective_Annotations_km5a7{(attrs = 'eyJpbmRleCI6MH0')}.
+          layout raiz envolvendo todas as rotas.
         </p>
         <p>
           A camada de layout reutilizável está concentrada em{' '}
@@ -561,8 +560,7 @@ const GhostPortfolioAuditReport: FC = () => {
                 </code>{' '}
                 e Tailwind estão corretamente importados em{' '}
                 <code>layout.tsx</code>, conforme o padrão do App Router e
-                :OaiMdDirective_Annotations_km5a7{(attrs = 'eyJpbmRleCI6MX0')}{' '}
-                Tailwind v3 .
+                Tailwind v3.
               </li>
             </ol>
             <p>

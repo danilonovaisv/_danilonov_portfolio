@@ -60,14 +60,24 @@ export default function MosaicCard({ item, priority = false }: MosaicCardProps) 
         />
 
         {item.imageSrc && (
-          <Image
-            src={item.imageSrc}
-            alt={item.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority={priority}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          <motion.div
+            className="absolute inset-0"
+            variants={{
+              rest: { scale: 1 },
+              visible: { scale: 1 },
+              hover: { scale: 1.05 },
+            }}
+            transition={{ duration: 0.6, ease: easing }}
+          >
+            <Image
+              src={item.imageSrc}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={priority}
+              className="h-full w-full object-cover object-center"
+            />
+          </motion.div>
         )}
 
         <div className="absolute inset-0 bg-linear-to-b from-black/20 via-transparent to-black/30 mix-blend-multiply" />

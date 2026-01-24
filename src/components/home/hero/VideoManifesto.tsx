@@ -124,7 +124,7 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
             {/* Toggle som */}
             <button
               type="button"
-              className="toggle-sound absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#4fe6ff] focus-visible:outline-offset-2"
+              className="toggle-sound absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#4fe6ff] focus-visible:outline-offset-2"
               onClick={() => setMuted((m) => !m)}
               aria-label={
                 muted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'
