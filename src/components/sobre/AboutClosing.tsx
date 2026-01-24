@@ -55,6 +55,11 @@ export function AboutClosing() {
               aria-label="Demonstração visual de experiências"
             >
               <source
+                src="https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/VIDEO-SKILLS-MOBILE-FINAL.mp4"
+                media="(max-width: 767px)"
+                type="video/mp4"
+              />
+              <source
                 src="https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/VIDEO-SKILLS-FINAL_compressed.mp4" /* Link será enviado pelo usuário futuramente */
                 type="video/mp4"
               />

@@ -4,6 +4,11 @@ from typing import List, Dict, Any, Callable
 from dataclasses import dataclass
 
 # Real ADK Imports
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools.function_tool import FunctionTool
 from google.adk.planners.plan_re_act_planner import PlanReActPlanner
