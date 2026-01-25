@@ -12,8 +12,8 @@ const nextConfig = {
    */
   reactStrictMode: true,
 
-  // Output standalone para compatibilidade com Firebase Functions (Frameworks Aware)
-  output: 'standalone',
+  // Removido output: 'standalone' pois impede o uso de middleware
+  // O deployment no Firebase Hosting ou Vercel não precisa mais dessa configuração
 
   // Removido experimental.turbopack pois causa warning
   experimental: {
@@ -25,9 +25,7 @@ const nextConfig = {
    * Mantida INTACTA
    */
   images: {
-    // Quando usando output: 'export', precisamos de um loader diferente
-    unoptimized: true, // Isso permite usar as imagens diretamente sem otimização do Next
-
+    // Configuração mantida para permitir imagens do Supabase
     remotePatterns: [
       {
         protocol: 'https',

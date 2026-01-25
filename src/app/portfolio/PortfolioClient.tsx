@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import type { PortfolioProject } from '@/types/project';
 import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
-import ProjectsGallery from '@/components/portfolio/ProjectsGallery';
+import PortfolioShowcaseSection from '@/components/portfolio/PortfolioShowcaseSection';
 import PortfolioModalNew from '@/components/portfolio/PortfolioModalNew';
 import { SiteClosure } from '@/components/layout/SiteClosure';
 
@@ -35,8 +35,8 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
       {/* Hero com video loop */}
       <PortfolioHeroNew />
 
-      {/* Galeria de projetos com motor de Parallax (Lerp) */}
-      <ProjectsGallery 
+      {/* Nova Seção de Cards com Animações de Overlay */}
+      <PortfolioShowcaseSection 
         projects={projects}
         onProjectSelect={handleOpenProject} 
       />
@@ -49,7 +49,6 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
       />
 
       {/* Global Closure (Footer Area) */}
-      {/* Note: ProjectsGallery has built-in spacing, but SiteClosure might be needed for nav/footer links */}
       <SiteClosure />
     </div>
   );
