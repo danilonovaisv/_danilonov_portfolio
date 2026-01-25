@@ -1,22 +1,26 @@
+'use client';
+
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { HOME_CONTENT } from '@/config/content';
 
+/**
+ * ClientsBrandsSection - Exibe logotipos das marcas/clientes
+ * Segue o Ghost System v3.0 com animações sutis e responsividade
+ */
 export default function ClientsBrandsSection() {
   const reducedMotion = useReducedMotion();
-  /*
-   * Bypass assets.json logic as it contains duplicated "strip" assets.
-   * We force HOME_CONTENT which now points to the correct 'client-logos' bucket.
-   */
   const logos = HOME_CONTENT.clients.logos.slice(0, 12);
 
   return (
     <section
       id="clients"
-      className="bg-[#0048ff] py-4 md:py-20 lg:py-24 relative z-10 overflow-hidden"
-      aria-label="marcas com as quais já trabalhei"
+      className="bg-(--blue-primary) py-16 md:py-20 lg:py-24 relative z-10 overflow-hidden"
+      aria-labelledby="clients-heading"
     >
-      <div className="max-w-[1680px] mx-auto px-4 md:px-[clamp(24px,5vw,96px)]">
+      {/* Container usando std-grid padrão do projeto */}
+      <div className="std-grid">
+        {/* Título da seção */}
         <motion.div
           initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -25,14 +29,20 @@ export default function ClientsBrandsSection() {
             duration: 0.6,
             ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
           }}
-          className="mb-8 md:mb-16 lg:mb-20"
+          className="mb-10 md:mb-16 lg:mb-20"
         >
-          <h2 className="text-white text-[1.5rem] md:text-[2rem] font-bold text-center tracking-tight leading-tight lowercase">
+          <h2
+            id="clients-heading"
+            className="text-white text-[1.5rem] md:text-[2rem] font-bold text-center tracking-tight leading-tight lowercase"
+          >
             {HOME_CONTENT.clients.title}
           </h2>
         </motion.div>
 
-        <motion.div
+        {/* Grid de Logos com acessibilidade */}
+        <motion.ul
+          role="list"
+          aria-label="Logotipos das marcas parceiras"
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: '-10%' }}
@@ -45,14 +55,15 @@ export default function ClientsBrandsSection() {
               },
             },
           }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 md:gap-12 items-center justify-items-center w-full"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 md:gap-12 items-center justify-items-center w-full"
         >
           {logos.map((logo) => {
             const isSvg = logo.src?.toLowerCase().endsWith('.svg');
 
             return (
-              <motion.div
+              <motion.li
                 key={logo.id}
+                role="listitem"
                 variants={{
                   hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
                   show: {
@@ -66,24 +77,21 @@ export default function ClientsBrandsSection() {
                   },
                 }}
               >
-                <div
-                  className="group relative w-32 h-16 md:w-40 md:h-20 flex items-center justify-center"
-                  aria-label={logo.alt}
-                >
+                <div className="group relative w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-20 flex items-center justify-center">
                   <Image
                     src={logo.src || ''}
                     alt={logo.alt}
                     fill
                     className="w-full h-full object-contain filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 will-change-transform"
-                    sizes="(max-width: 768px) 128px, (max-width: 1200px) 160px, 160px"
+                    sizes="(max-width: 640px) 112px, (max-width: 768px) 128px, 160px"
                     loading="lazy"
                     unoptimized={isSvg}
                   />
                 </div>
-              </motion.div>
+              </motion.li>
             );
           })}
-        </motion.div>
+        </motion.ul>
       </div>
     </section>
   );

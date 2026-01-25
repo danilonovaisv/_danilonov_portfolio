@@ -23,6 +23,14 @@ interface BlockRendererProps {
   index: number;
 }
 
+/** Configuration for text styling in blocks */
+interface TextConfig {
+  fontSize?: string;
+  fontWeight?: string;
+  textAlign?: string;
+  color?: string;
+}
+
 export default function BlockRenderer({
   block,
   index: _index,
@@ -42,7 +50,7 @@ export default function BlockRenderer({
     return match && match[2].length === 11 ? match[2] : null;
   };
 
-  const renderText = (text?: string, config?: any, className = '') => {
+  const renderText = (text?: string, config?: TextConfig, className = '') => {
     if (!text) return null;
 
     const textClasses = [
@@ -56,7 +64,7 @@ export default function BlockRenderer({
     const hexColor =
       config?.color && config.color.startsWith('#') ? config.color : null;
     const dynamicColorClass = hexColor
-      ? `md-text-${config.color.replace(/[^a-zA-Z0-9]/g, '')}`
+      ? `md-text-${hexColor.replace(/[^a-zA-Z0-9]/g, '')}`
       : '';
 
     return (

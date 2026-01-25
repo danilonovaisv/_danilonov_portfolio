@@ -10,32 +10,41 @@ import { Preloader } from '@/components/ui/Preloader';
 import HeroCTA from './HeroCTA';
 import HeroCopy from './HeroCopy';
 
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-
-// Dynamic import for WebGL Scene
-const GhostScene = dynamic(
-  () => import('@/components/canvas/home/hero/GhostScene'),
+// Dynamic import para o GhostCanvas (R3F wrapper com fallbacks embutidos)
+const GhostCanvas = dynamic(
+  () => import('@/components/canvas/home/hero/GhostCanvas'),
   {
     ssr: false,
-    loading: () => <div className="absolute inset-0 bg-background" />,
+    loading: () => (
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#0a0029_0%,#040013_70%)]" />
+    ),
   }
 );
 
 const CONFIG = {
-  preloadMs: 2000,
+  preloadMs: 1800, // Slightly faster for better UX
 } as const;
 
 export default function HomeHero() {
   const heroRef = useRef<HTMLElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const [canvasReady, setCanvasReady] = useState(false);
 
+  // Timer de segurança para garantir que o preloader some
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
     return () => clearTimeout(timer);
   }, []);
 
+  // Callback do preloader
   const handlePreloaderDone = useCallback(() => setIsLoaded(true), []);
+
+  // Callback quando o Canvas R3F está pronto
+  const handleCanvasReady = useCallback(() => {
+    setCanvasReady(true);
+    // Força o carregamento se o canvas estiver pronto antes do timer
+    setIsLoaded(true);
+  }, []);
 
   return (
     <>
@@ -45,18 +54,13 @@ export default function HomeHero() {
         className="relative w-full min-h-screen bg-[#040013]"
         aria-label="Portfolio Hero Section"
       >
-        {/* Fallback Mobile Background Gradient (Ghost Atmosphere) */}
-        {!isDesktop && (
-          <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,#0a0029_0%,#040013_70%)] animate-pulse opacity-60" />
-        )}
-
         {/* Preloader */}
         <AnimatePresence>
           {!isLoaded && (
             <Preloader
               durationMs={CONFIG.preloadMs}
               onComplete={handlePreloaderDone}
-              label="Initializing Experience"
+              label="Summoning spirits..."
             />
           )}
         </AnimatePresence>
@@ -65,24 +69,22 @@ export default function HomeHero() {
         <div className="absolute inset-0 z-20 pointer-events-none">
           <div className="flex items-center w-full h-screen md:sticky md:top-0">
             <div className="std-grid pointer-events-auto pb-32 md:pb-0">
-              <HeroCopy isLoaded={isLoaded} />
+              <HeroCopy isLoaded={isLoaded && canvasReady} />
             </div>
           </div>
         </div>
 
-        {/* Camada: Ghost WebGL (Z-30) - Agora ativo em mobile com auto-performance */}
+        {/* Camada: Ghost WebGL (Z-30) - R3F com fallbacks embutidos */}
         <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
           <div className="sticky top-0 h-screen w-full">
-            <GhostScene />
+            <GhostCanvas onCreated={handleCanvasReady} />
           </div>
         </div>
 
         {/* Camada: CTA (Z-50) */}
-        {/* Mobile: Bottom absolute | Desktop: Sticky bottom */}
         <div className="absolute inset-0 z-50 pointer-events-none">
           <div className="flex items-end w-full h-screen md:sticky md:top-0">
             <div className="std-grid relative w-full pointer-events-auto">
-              {/* Positioned relatively within the grid */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pb-12 lg:pb-20">
                 <HeroCTA isLoaded={isLoaded} />
               </div>
@@ -90,13 +92,12 @@ export default function HomeHero() {
           </div>
         </div>
 
+        {/* Screen Reader Description */}
         <div className="sr-only">
           Decorative animation of a floating spectral ghost with glowing
           particles following your cursor.
         </div>
       </section>
-
-      {/* Mobile-only Manifesto Section */}
     </>
   );
 }

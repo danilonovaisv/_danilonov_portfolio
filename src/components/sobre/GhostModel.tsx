@@ -11,6 +11,7 @@ import React from 'react';
 import { useGLTF, Float } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { GLTF } from 'three-stdlib';
+import { MotionValue } from 'framer-motion';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -30,7 +31,7 @@ type GLTFResult = GLTF & {
 export function GhostModel({
   scrollProgress,
   ...props
-}: React.ComponentProps<'group'> & { scrollProgress?: any }) {
+}: React.ComponentProps<'group'> & { scrollProgress?: MotionValue<number> }) {
   // Configuração da URL exata fornecida pelo usuário
   const { nodes, materials } = useGLTF(
     'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'

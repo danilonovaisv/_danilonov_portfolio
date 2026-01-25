@@ -41,7 +41,7 @@ export function BlockEditor({ block, onChange }: BlockEditorProps) {
     // @ts-ignore - Dynamic key access
     const config = block.content[configKey] || {};
 
-    const updateConfig = (updates: any) => {
+    const updateConfig = (updates: Record<string, string>) => {
       updateContent({ [configKey]: { ...config, ...updates } });
     };
 

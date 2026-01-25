@@ -38,7 +38,7 @@ interface LandingPageFormProps {
     title: string;
     slug: string;
     cover: string;
-    content: any[];
+    content: LandingPageBlock[];
   };
 }
 
@@ -205,9 +205,11 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
 
       router.push('/admin/landing-pages');
       router.refresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Erro desconhecido';
       console.error(err);
-      alert(`Erro ao salvar página: ${err.message || 'Erro desconhecido'}`);
+      alert(`Erro ao salvar página: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
