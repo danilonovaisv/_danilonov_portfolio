@@ -1,0 +1,66 @@
+# 🛡️ GLOBAL AGENT RULES & WORKFLOWS PRESET
+
+Este arquivo configura o acesso e o comportamento do agente para o projeto **Danilo Novais Portfolio (Ghost Era)**.
+
+## 📂 RULES REGISTRY
+
+As regras abaixo estão localizadas em `./agent/rules/` e devem ser seguidas estritamente:
+
+- **Instruções de Contexto**: `00-project-context.md`
+- **Tech Stack**: `01-tech-stack.md`
+- **Motion & UX**: `02-ux-motion-principles.md`
+- **Regras Inegociáveis**: `03-non-negotiables.md`
+- **Acessibilidade & Performance**: `04-accessibility-performance.md`
+- **Sistema R3F (Ghost Blue)**: `05-r3f-ghost-system.md`
+- **Integridade de Assets**: `asset-integrity.md`
+- **Estilo de Código**: `coding-style.md`
+- **Customizações**: `customizations.md`
+- **Princípios Chave**: `key-principle.md`
+- **Descoberta de Conhecimento**: `knowledge-discovery.md`
+- **Layout & Grid**: `layout-grid-padrao.md`
+- **Responsividade Mobile**: `responsivity-mobile.md`
+- **Skills Bible**: `skills-bible.md`
+- **Frontend Design Skills**: `skills-frontend-design.md`
+- **Política de Testes**: `testing-policy.md`
+- **Definição de Ferramentas**: `tools.md`
+- **Informações do Usuário**: `user-information.md`
+- **Desenvolvimento Web**: `web-application-development.md`
+
+## 🔄 WORKFLOWS REGISTRY
+
+Workflows operacionais disponíveis em `./agent/workflows/`:
+
+- **Debug Hero**: `agent-debug-hero.md`
+- **Ajuste Mobile**: `ajuste-mobile.md`
+- **Alinhamento & Calibragem**: `alinhamento-e-calibragem.md`
+- **Auditoria de Arquivos**: `audit-files.md`
+- **Implementação Ghost**: `audit-ghost-implemetetion.md`
+- **Auditoria de Páginas**: `audite-pages.md`
+- **Auditoria Home**: `auditoria-home.md`
+- **Auditoria Sobre**: `auditoria-sobre.md`
+- **Auditoria Template**: `auditoria-template.md`
+- **Call to Action**: `call-to-action.md`
+- **Clients & Brands**: `clients-brands.md`
+- **Refatoração & Qualidade**: `code-quality-refactor.md`
+- **Deploy**: `deploy.md`
+- **Featured Projects**: `featured-projects.md`
+- **Footer**: `footer.md`
+- **Ghost Hero**: `ghost-hero.md`
+- **Ghost Orchestrator**: `ghost-orchestrator.md`
+- **Assets Globais**: `global-assets-setup.md`
+- **Header**: `header-workflow.md`
+- **Hero Section**: `hero-section.md`
+- **Pentest R3F**: `pentest-r3f.md`
+- **Performance Audit**: `performance-audit.md`
+- **Portfolio Page**: `portfolio-page.md`
+- **Portfolio Showcase**: `portfolio-showcase.md`
+- **R3F Setup**: `r3f-setup.md`
+- **SEO Optimization**: `seo-optimization.md`
+- **Sobre (What I Do)**: `sobre-about-whatido.md`
+- **Sobre (Origin)**: `sobre-origin.md`
+- **Limpeza de Estrutura**: `structure-cleanup.md`
+- **Testes**: `test.md`
+- **Configurações YAML**: `workflow.yaml`, `pentest-workflow.yaml`
+
+---
+**Protocolo de Uso:** Sempre priorize as regras e workflows acima antes de realizar qualquer alteração estruturada no projeto.

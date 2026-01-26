@@ -10,6 +10,7 @@
 - [x] Restore/Sync `.agentrules` with `.agent/rules/*.md` and Workflows.
 - [x] Enforce Context & Memory Analysis rule.
 - [x] Verify workflow visibility.
+- [x] Configure .agentrules in root and agent_setup.md in customizations.
 - [x] Execute Audit Prompts #01 to #11 (Header, Hero, Menu, Preloader, Manifesto, Ghost, Footer, Portfolio, Featured, Clients, Contact).
 - [ ] Maintain the "Ghost/Ethereal" aesthetic in all new code.
 
