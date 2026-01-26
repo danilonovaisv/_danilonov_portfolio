@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { SiteAssetsProvider } from '@/contexts/site-assets';
 import { getClientSiteAssets } from '@/lib/supabase/site-assets-client';
 import ClientLayout from '@/components/layout/ClientLayout';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 interface AssetLoaderWrapperProps {
   children: React.ReactNode;
@@ -62,8 +63,10 @@ export default function AssetLoaderWrapper({
   }
 
   return (
-    <SiteAssetsProvider assets={assets}>
-      <ClientLayout>{children}</ClientLayout>
-    </SiteAssetsProvider>
+    <ErrorBoundary>
+      <SiteAssetsProvider assets={assets}>
+        <ClientLayout>{children}</ClientLayout>
+      </SiteAssetsProvider>
+    </ErrorBoundary>
   );
 }
