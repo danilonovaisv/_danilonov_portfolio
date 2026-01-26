@@ -1156,7 +1156,11 @@ Não pelo choque, mas pela conexão.
 - Text-align: center
 - Max-width: 700px
 
-**3. Reveal Final — Ghost + Manifesto**
+
+
+
+
+ **3. Reveal Final — Ghost + Manifesto**
 
 ```tsx
 <div className="grid grid-cols-12 gap-12 items-center mt-32">
@@ -1310,73 +1314,8 @@ useEffect(() => {
 | 1024–1279px | Grid 2 colunas reveal, título 40–44px, frases 30–34px, ghost 280–320px |
 | 1280px+ | Título 48–52px, frases 36–38px, ghost 320–380px, manifesto 60–64px |
 
-#### Ghost Interativo
+## **Ghost Interativo**
 
-**Funcionalidade:**
-- Olhos seguem cursor (desktop)
-- Animação sutil de respiração
-
-```tsx
-const GhostInteractive = () => {
-  const [eyePosition, setEyePosition] = useState({ x: 0, y: 0 });
-  
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const ghost = document.getElementById('ghost');
-      const rect = ghost.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      const deltaX = e.clientX - centerX;
-      const deltaY = e.clientY - centerY;
-      
-      const maxMove = 8;
-      const x = Math.max(-maxMove, Math.min(maxMove, deltaX / 20));
-      const y = Math.max(-maxMove, Math.min(maxMove, deltaY / 20));
-      
-      setEyePosition({ x, y });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-  
-  return (
-    <motion.div
-      id="ghost"
-      animate={{ 
-        y: [0, -10, 0],
-        scale: [1, 1.02, 1]
-      }}
-      transition={{ 
-        duration: 4,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }}
-    >
-      {/* Ghost SVG com olhos animados */}
-      <svg viewBox="0 0 200 200">
-        {/* Corpo do Ghost */}
-        <path d="..." fill="url(#ghostGradient)" />
-        
-        {/* Olhos */}
-        <circle 
-          cx={70 + eyePosition.x} 
-          cy={80 + eyePosition.y} 
-          r="8" 
-          fill="#0048ff"
-        />
-        <circle 
-          cx={130 + eyePosition.x} 
-          cy={80 + eyePosition.y} 
-          r="8" 
-          fill="#0048ff"
-        />
-      </svg>
-    </motion.div>
-  );
-};
-```
 
 ---
 
