@@ -1,14 +1,24 @@
 #!/usr/bin/env node
 
 import { createClient } from '@supabase/supabase-js';
+import { loadEnvOverrides, normalizeEnvValue } from './lib/env-loader';
 
 // Script para atualizar URLs antigas do Supabase no banco de dados
 async function updateSupabaseUrls() {
   // Carregar variáveis de ambiente
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-  const serviceRoleKey =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY;
+  const {
+    NEXT_PUBLIC_SUPABASE_URL,
+    SUPABASE_URL,
+    SUPABASE_SERVICE_ROLE_KEY,
+    SUPABASE_SERVICE_KEY,
+  } = loadEnvOverrides();
+
+  const supabaseUrl = normalizeEnvValue(
+    NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL ?? undefined
+  );
+  const serviceRoleKey = normalizeEnvValue(
+    SUPABASE_SERVICE_ROLE_KEY ?? SUPABASE_SERVICE_KEY ?? undefined
+  );
 
   if (!supabaseUrl || !serviceRoleKey) {
     console.error(

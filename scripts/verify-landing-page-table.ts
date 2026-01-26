@@ -1,10 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { loadEnvOverrides, normalizeEnvValue } from './lib/env-loader';
 
 async function checkLandingPageTable() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const { NEXT_PUBLIC_SUPABASE_URL, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } =
+    loadEnvOverrides();
+
+  const supabaseUrl = normalizeEnvValue(
+    NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL ?? undefined
+  );
+  const serviceKey = normalizeEnvValue(SUPABASE_SERVICE_ROLE_KEY ?? undefined);
 
   if (!supabaseUrl || !serviceKey) {
     console.error(

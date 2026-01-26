@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { createClient } from '@supabase/supabase-js';
 import path from 'node:path';
-import { promises as fs, readFileSync } from 'node:fs';
+import { promises as fs } from 'node:fs';
 import { normalizeStoragePath } from '../src/lib/supabase/urls';
+import { loadEnvOverrides, normalizeEnvValue } from './lib/env-loader';
 
 interface SiteAssetRow {
   id: string;
@@ -11,41 +12,6 @@ interface SiteAssetRow {
   file_path: string | null;
   updated_at: string | null;
   asset_type: string | null;
-}
-
-function parseEnvFile(filePath: string): Record<string, string> {
-  try {
-    const content = readFileSync(filePath, 'utf8');
-    return content
-      .split(/\r?\n/)
-      .reduce<Record<string, string>>((acc, line) => {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) return acc;
-        const [key, ...rest] = trimmed.split('=');
-        if (!key) return acc;
-        acc[key.trim()] = rest.join('=').trim().replace(/^"|"$/g, '');
-        return acc;
-      }, {});
-  } catch {
-    return {};
-  }
-}
-
-function loadEnvOverrides() {
-  const envFile =
-    process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local';
-  const overrides = parseEnvFile(envFile);
-  return {
-    NEXT_PUBLIC_SUPABASE_URL:
-      process.env.NEXT_PUBLIC_SUPABASE_URL ??
-      overrides.NEXT_PUBLIC_SUPABASE_URL,
-    SUPABASE_URL: process.env.SUPABASE_URL ?? overrides.SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY:
-      process.env.SUPABASE_SERVICE_ROLE_KEY ??
-      overrides.SUPABASE_SERVICE_ROLE_KEY,
-    SUPABASE_SERVICE_KEY:
-      process.env.SUPABASE_SERVICE_KEY ?? overrides.SUPABASE_SERVICE_KEY,
-  };
 }
 
 /**
@@ -60,8 +26,12 @@ async function main() {
     SUPABASE_SERVICE_KEY,
   } = loadEnvOverrides();
 
-  const supabaseUrl = NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL;
-  const serviceRoleKey = SUPABASE_SERVICE_ROLE_KEY ?? SUPABASE_SERVICE_KEY;
+  const supabaseUrl = normalizeEnvValue(
+    NEXT_PUBLIC_SUPABASE_URL ?? SUPABASE_URL ?? undefined
+  );
+  const serviceRoleKey = normalizeEnvValue(
+    SUPABASE_SERVICE_ROLE_KEY ?? SUPABASE_SERVICE_KEY ?? undefined
+  );
 
   if (!supabaseUrl || !serviceRoleKey) {
     throw new Error(

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { promises as fs, readFileSync } from 'node:fs';
+import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { siteAssetRoleMap } from '../src/lib/supabase/asset-roles';
 import { normalizeStoragePath } from '../src/lib/supabase/urls';
+import { loadEnvOverrides, normalizeEnvValue } from './lib/env-loader';
 
 const {
   NEXT_PUBLIC_SUPABASE_URL,
@@ -28,58 +29,6 @@ if (!supabaseUrl || !serviceRoleKey) {
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
 const DEFAULT_FILE = 'assets.json';
-
-/**
- * @param {string} filePath
- * @returns {Record<string, string>}
- */
-function parseEnvFile(filePath: string): Record<string, string> {
-  const env: Record<string, string> = {};
-  try {
-    const content = readFileSync(filePath, 'utf8');
-    for (const line of content.split(/\r?\n/)) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const [key, ...rest] = trimmed.split('=');
-      if (!key) continue;
-      env[key.trim()] = rest.join('=').trim().replace(/^"|"$/g, '');
-    }
-  } catch {
-    // ignore missing file
-  }
-  return env;
-}
-
-function loadEnvOverrides() {
-  const envFile =
-    process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local';
-  const overrides = parseEnvFile(envFile);
-  return {
-    NEXT_PUBLIC_SUPABASE_URL:
-      process.env.NEXT_PUBLIC_SUPABASE_URL ??
-      overrides.NEXT_PUBLIC_SUPABASE_URL,
-    SUPABASE_URL: process.env.SUPABASE_URL ?? overrides.SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY:
-      process.env.SUPABASE_SERVICE_ROLE_KEY ??
-      overrides.SUPABASE_SERVICE_ROLE_KEY,
-    SUPABASE_SERVICE_KEY:
-      process.env.SUPABASE_SERVICE_KEY ?? overrides.SUPABASE_SERVICE_KEY,
-    SUPABASE_ANON_KEY:
-      process.env.SUPABASE_ANON_KEY ?? overrides.SUPABASE_ANON_KEY,
-  };
-}
-
-/**
- * @param {string|undefined} value
- * @returns {string|undefined}
- */
-function normalizeEnvValue(value: string | undefined): string | undefined {
-  if (!value) return value;
-  return value
-    .replace(/[\u2018\u2019\u201C\u201D]/g, '')
-    .replace(/[^\x00-\x7F]/g, '')
-    .trim();
-}
 
 /**
  * @param {string} extension
@@ -118,11 +67,44 @@ function parseSortOrder(key: string): number | null {
  * @returns {Promise<string[]>}
  */
 async function readAssetList(filePath: string): Promise<string[]> {
-  const raw = await fs.readFile(path.resolve(filePath), 'utf8');
-  return raw
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const resolved = path.resolve(filePath);
+  try {
+    const raw = await fs.readFile(resolved, 'utf8');
+
+    // If the file is JSON, attempt to parse an array of paths
+    if (path.extname(resolved).toLowerCase() === '.json') {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          return parsed.map((p) => String(p).trim()).filter(Boolean);
+        }
+        // If parsed is an object with a `paths` or `assets` array, accept that too
+        if (parsed && typeof parsed === 'object') {
+          const arr = parsed.paths ?? parsed.assets ?? parsed.list ?? null;
+          if (Array.isArray(arr)) {
+            return arr.map((p) => String(p).trim()).filter(Boolean);
+          }
+        }
+        // Fall back to newline parsing if JSON shape is unexpected
+      } catch (err) {
+        // If JSON parse fails, fall back to newline parsing below
+      }
+    }
+
+    return raw
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+  } catch (error) {
+    const e = error as NodeJS.ErrnoException;
+    if (e && e.code === 'ENOENT') {
+      console.warn(
+        `Input file not found: ${resolved}. No assets will be synced. Create ${DEFAULT_FILE} or pass a file list as the first argument.`
+      );
+      return [];
+    }
+    throw error;
+  }
 }
 
 /**

@@ -5,29 +5,38 @@
  */
 
 import { createStaticClient } from '../src/lib/supabase/static';
+import { loadEnvOverrides } from './lib/env-loader';
 
 async function testPortfolioPage() {
   console.log('🧪 Testing Portfolio Page...\n');
 
   // 1. Check environment variables
   console.log('📋 Environment Variables:');
-  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  const hasKey = Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-  );
+  const env = loadEnvOverrides();
+
+  const hasUrl = Boolean(env.NEXT_PUBLIC_SUPABASE_URL);
+  const hasKey = Boolean(env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
   console.log('  NEXT_PUBLIC_SUPABASE_URL:', hasUrl ? '✅ SET' : '❌ MISSING');
   console.log(
     '  NEXT_PUBLIC_SUPABASE_ANON_KEY:',
     hasKey ? '✅ SET' : '❌ MISSING'
   );
-  console.log('  Value:', process.env.NEXT_PUBLIC_SUPABASE_URL || 'N/A');
+  console.log('  Value:', env.NEXT_PUBLIC_SUPABASE_URL || 'N/A');
   console.log();
 
   if (!hasUrl || !hasKey) {
     console.log('⚠️  Missing environment variables - will use fallback');
     return;
+  }
+
+  // Carregar variáveis no process.env para que createStaticClient() possa usá-las
+  if (env.NEXT_PUBLIC_SUPABASE_URL) {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = env.NEXT_PUBLIC_SUPABASE_URL;
+  }
+  if (env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY =
+      env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   }
 
   // 2. Test Supabase connection
