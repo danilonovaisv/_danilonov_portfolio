@@ -14,7 +14,9 @@ test.describe('Home Page', () => {
     // Verify Featured Projects section
     // I'll look for text that typically appears in this section
     const featuredSection = page.locator('section');
-    await expect(featuredSection.filter({ hasText: /Projetos/i }).first()).toBeVisible();
+    await expect(
+      featuredSection.filter({ hasText: /Projetos/i }).first()
+    ).toBeVisible();
 
     // Take a screenshot for verification
     await page.screenshot({ path: 'test-results/home-page.png' });

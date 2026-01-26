@@ -6,7 +6,7 @@ test.describe('About Page', () => {
 
     // Verify page content
     await expect(page.locator('main')).toBeVisible();
-    
+
     // Look for keywords common in an about page
     await expect(page.locator('body')).toContainText(/Origem/i);
 

@@ -20,8 +20,11 @@ export function createClientComponentClient() {
     return {
       from: () => mockQuery,
       auth: {
-        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+        getSession: () =>
+          Promise.resolve({ data: { session: null }, error: null }),
+        onAuthStateChange: () => ({
+          data: { subscription: { unsubscribe: () => {} } },
+        }),
       },
       storage: {
         from: () => ({

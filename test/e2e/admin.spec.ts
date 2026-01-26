@@ -5,8 +5,12 @@ test.describe('Admin Login Page', () => {
     await page.goto('/admin/login');
 
     // Verify presence of login fields
-    await expect(page.locator('input[type="email"], input[name="email"]')).toBeVisible();
-    await expect(page.locator('input[type="password"], input[name="password"]')).toBeVisible();
+    await expect(
+      page.locator('input[type="email"], input[name="email"]')
+    ).toBeVisible();
+    await expect(
+      page.locator('input[type="password"], input[name="password"]')
+    ).toBeVisible();
     await expect(page.locator('button[type="submit"]')).toBeVisible();
 
     await page.screenshot({ path: 'test-results/admin-login.png' });
