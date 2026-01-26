@@ -1,73 +1,30 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Container } from '@/components/layout/Container';
 import { GHOST_EASE } from '@/lib/motionTokens';
-import PortfolioMosaicGrid from './PortfolioMosaicGrid';
-import type { MosaicRow } from './types';
+import { PortfolioCardParallax } from './PortfolioCardParallax';
 import type { PortfolioProject } from '@/types/project';
 
 interface PortfolioShowcaseSectionProps {
-  projects?: PortfolioProject[];
+  projects: PortfolioProject[];
   onProjectSelect?: (_project: PortfolioProject) => void;
 }
 
 /**
  * Portfolio Showcase Section (Portfolio Page)
- * Grid de projetos com filtros e animações
+ * Grid de projetos com animações de parallax e overlays (Finch Style)
  */
-export default function PortfolioShowcaseSection({ projects }: PortfolioShowcaseSectionProps) {
+export default function PortfolioShowcaseSection({ projects, onProjectSelect }: PortfolioShowcaseSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = !!useReducedMotion();
-
-  // If projects are passed, map them to mosaic rows; otherwise, fallback to mock rows
-  const rows = useMemo<MosaicRow[]>(() => {
-    if (projects && projects.length > 0) {
-      // Simple mapping: group projects into rows of 2 for the mosaic grid
-      const grouped: MosaicRow[] = [];
-      for (let i = 0; i < projects.length; i += 2) {
-        grouped.push({
-          id: `row-${i / 2}`,
-          columns: 2,
-          items: projects.slice(i, i + 2).map((p) => ({
-            id: String(p.id),
-            gradient: 'from-gray-700 to-gray-900',
-            title: p.title,
-            subtitle: p.client || '',
-          })),
-        });
-      }
-      return grouped;
-    }
-
-    return [
-      {
-        id: 'row-1',
-        columns: 2,
-        items: [
-          {
-            id: 'placeholder-1',
-            gradient: 'from-blue-600 to-blue-900',
-            title: 'Projeto em Destaque',
-            subtitle: 'Branding & Design',
-          },
-          {
-            id: 'placeholder-2',
-            gradient: 'from-purple-600 to-purple-900',
-            title: 'Creative Development',
-            subtitle: 'Web & Tech',
-          },
-        ],
-      },
-    ];
-  }, [projects]);
 
   return (
     <section
       id="portfolio-showcase"
       ref={sectionRef}
-      className="relative w-full bg-background py-20 lg:py-32"
+      className="relative w-full bg-background pt-10 pb-20 lg:pb-32"
       aria-labelledby="portfolio-showcase-heading"
     >
       <Container>
@@ -79,7 +36,7 @@ export default function PortfolioShowcaseSection({ projects }: PortfolioShowcase
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: GHOST_EASE }}
-          className="text-center mb-10 lg:mb-14"
+          className="text-center mb-16 lg:mb-24"
         >
           <h2
             id="portfolio-showcase-heading"
@@ -92,8 +49,18 @@ export default function PortfolioShowcaseSection({ projects }: PortfolioShowcase
           </h2>
         </motion.header>
 
-        {/* Portfolio Grid */}
-        <PortfolioMosaicGrid rows={rows} />
+        {/* Portfolio Parallax Grid (Finch + CodePen inspired) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-2">
+          {projects.map((project, index) => (
+            <PortfolioCardParallax
+              key={project.id}
+              project={project}
+              index={index}
+              onOpen={onProjectSelect}
+              className={project.layout.cols === 'col-span-12' ? 'md:col-span-2 lg:col-span-3' : ''}
+            />
+          ))}
+        </div>
       </Container>
     </section>
   );
