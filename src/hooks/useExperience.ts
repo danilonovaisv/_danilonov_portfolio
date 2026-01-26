@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { runExperienceOrchestrator } from '@/lib/antigravity';
+import { runExperienceOrchestrator } from '@/lib/antigravity/antigravity';
 import { useAntigravityStore } from '@/store/antigravity.store';
 
 export function useExperience(enabled = true) {

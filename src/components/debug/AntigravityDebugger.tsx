@@ -34,12 +34,8 @@ export const AntigravityDebugger: React.FC = () => {
         </div>
         <div className="w-full bg-neutral-800 h-1 mt-1 rounded overflow-hidden">
           <div
-            className="bg-blue-500 h-full transition-all duration-75 w-(--progress)"
-            style={
-              {
-                '--progress': `${store.scrollProgress * 100}%`,
-              } as React.CSSProperties
-            }
+            className="bg-blue-500 h-full transition-all duration-75"
+            style={{ width: `${store.scrollProgress * 100}%` }}
           />
         </div>
       </div>
