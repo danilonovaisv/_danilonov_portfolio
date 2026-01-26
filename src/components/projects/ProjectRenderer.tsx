@@ -19,10 +19,14 @@ interface ProjectRendererProps {
 
 export default function ProjectRenderer({ project }: ProjectRendererProps) {
   // Resolve cover URL
+  const supabaseBaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
   const coverUrl =
     project.cover && !project.cover.startsWith('http')
-      ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/site-assets/${project.cover}`
-      : project.cover;
+      ? supabaseBaseUrl
+        ? `${supabaseBaseUrl}/storage/v1/object/public/site-assets/${project.cover}`
+        : ''
+      : project.cover || '';
 
   const searchParams = useSearchParams();
   const from = searchParams.get('from');
@@ -92,7 +96,7 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
           (project.content as LandingPageBlock[]).map(
             (block: LandingPageBlock, index: number) => (
               <BlockRenderer
-                key={block.id || `block-${index}`}
+                key={block.id ?? `block-${index}`}
                 block={block}
                 index={index}
               />

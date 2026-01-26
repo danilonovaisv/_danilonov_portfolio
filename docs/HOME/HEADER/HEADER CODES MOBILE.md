@@ -1,4 +1,4 @@
-
+```tsx
 ['/import StaggeredMenu from './StaggeredMenu';
 
 const menuItems = [
@@ -605,3 +605,4 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 };
 
 export default StaggeredMenu;']
+```

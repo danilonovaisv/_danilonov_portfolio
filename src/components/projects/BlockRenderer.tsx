@@ -53,6 +53,11 @@ export default function BlockRenderer({
   const renderText = (text?: string, config?: TextConfig, className = '') => {
     if (!text) return null;
 
+    // Sanitiza HTML embutido removendo atributos style/class perigosos que geram style como string (React error #62)
+    const sanitizedText = text
+      .replace(/\sstyle="[^"]*"/gi, '')
+      .replace(/\sclass(Name)?="[^"]*"/gi, '');
+
     const textClasses = [
       config?.fontSize || 'text-lg md:text-xl',
       config?.fontWeight || 'font-light',
@@ -84,6 +89,7 @@ export default function BlockRenderer({
           className={`prose prose-invert max-w-none ${className} ${dynamicColorClass}`}
         >
           <ReactMarkdown
+            skipHtml
             components={{
               p: ({ children }) => <p className={textClasses}>{children}</p>,
               h1: ({ children }) => (
@@ -127,7 +133,7 @@ export default function BlockRenderer({
               em: ({ children }) => <em className="italic">{children}</em>,
             }}
           >
-            {text}
+            {sanitizedText}
           </ReactMarkdown>
         </div>
       </>
