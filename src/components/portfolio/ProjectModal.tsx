@@ -85,7 +85,9 @@ export default function ProjectModal({
             exit="exit"
             className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0c1024] text-white shadow-[0_24px_90px_-30px_rgba(0,0,0,0.6)] border border-white/10"
           >
-            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(0,87,255,0.16),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(79,230,255,0.18),transparent_35%)]" />
+            <div className="absolute inset-0 pointer-events-none" style={{
+             backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(0,87,255,0.16), transparent 35%), radial-gradient(circle at 80% 10%, rgba(79,230,255,0.18), transparent 35%)'
+            }} />
 
             <div className="relative grid gap-8 p-6 md:grid-cols-[1.25fr,0.9fr] md:p-10">
               <div className="flex flex-col gap-4">

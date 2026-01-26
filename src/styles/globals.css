@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import './fonts.css';
 
 :root {
@@ -129,4 +133,26 @@ body {
     max-width: 1680px;
     /* Max-width constraint */
   }
+}
+
+/* Lenis styles from about-origin.css */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.img-wrapper {
+  clip-path: inset(0% 0% 0% 0%);
+  will-change: clip-path;
 }

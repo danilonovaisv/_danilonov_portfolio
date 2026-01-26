@@ -1,4 +1,4 @@
-// =============================================================================
+//=============================================================================
 // PortfolioModalNew - Ghost Era v2.0
 // Modal com animações editoriais e timings precisos
 // =============================================================================
@@ -24,7 +24,7 @@ interface PortfolioModalNewProps {
 const { offset } = MOTION_TOKENS;
 
 export default function PortfolioModalNew({
-  project,
+ project,
   isOpen,
   onClose,
 }: PortfolioModalNewProps) {
@@ -45,7 +45,7 @@ export default function PortfolioModalNew({
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose();
@@ -71,7 +71,7 @@ export default function PortfolioModalNew({
 
     document.addEventListener('keydown', handleKeyDown);
     
-    // Focus no botão de fechar ao abrir
+    // Focus no botãode fechar ao abrir
     setTimeout(() => {
       closeButtonRef.current?.focus();
     }, 100);
@@ -81,7 +81,7 @@ export default function PortfolioModalNew({
 
   // Previne click propagation no backdrop
   const handleBackdropClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e:React.MouseEvent) => {
       if (e.target === e.currentTarget) {
         onClose();
       }
@@ -96,7 +96,7 @@ export default function PortfolioModalNew({
       {isOpen && project && (
         <>
           {/* Backdrop */}
-          <motion.div
+<motion.div
             key="backdrop"
             initial="hidden"
             animate="visible"
@@ -124,10 +124,10 @@ export default function PortfolioModalNew({
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: offset.large }}
+            initial={prefersReducedMotion ? { opacity: 0 } :{ opacity: 0, y: offset.large }}
             animate={{ opacity: 1, y: 0 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: offset.standard }}
-            transition={ghostTransition(prefersReducedMotion ? 0 : 0.12, prefersReducedMotion ? 0.15 : 0.26)}
+            transition={ghostTransition(prefersReducedMotion ? 0 :0.12, prefersReducedMotion ? 0.15 : 0.26)}
             className="fixed inset-0 z-101 overflow-y-auto"
           >
             <div className="min-h-full flex items-start justify-center p-4 md:p-8 lg:p-12">
@@ -140,18 +140,21 @@ export default function PortfolioModalNew({
                 {/* Close button - Always Visible */}
                 <button
                   ref={closeButtonRef}
-                  onClick={onClose}
+                 onClick={onClose}
                   className="fixed top-6 right-6 md:top-10 md:right-10 z-110 flex items-center justify-center w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all duration-300 hover:rotate-90"
                   aria-label="Fechar modal"
                 >
                   <X className="w-5 h-5 md:w-7 md:h-7" />
                 </button>
 
-                {/* Header glow */}
+                {/*Header glow */}
                 <div className="absolute top-0 inset-x-0 h-40 pointer-events-none">
                   <div 
-                    className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_center_top,var(--glow-color,rgba(0,87,255,0.3)),transparent_70%)]"
-                    {...(project.accentColor && { style: { '--glow-color': `${project.accentColor}40` } as React.CSSProperties })}
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage: 'radial-gradient(ellipse at center top, var(--glow-color, rgba(0,87,255,0.3)), transparent 70%)',
+                      ...(project.accentColor && { '--glow-color': `${project.accentColor}40`})
+                    } as React.CSSProperties}
                   />
                 </div>
 

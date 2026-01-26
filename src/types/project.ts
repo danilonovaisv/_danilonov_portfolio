@@ -67,6 +67,8 @@ export interface PortfolioProject {
   title: string;
   /** Subtítulo ou tagline */
   subtitle?: string;
+  /** Descrição curta para cards */
+  shortDescription?: string;
   /** Cliente */
   client: string;
   /** Categoria principal */

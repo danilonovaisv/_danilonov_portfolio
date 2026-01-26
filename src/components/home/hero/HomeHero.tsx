@@ -2,24 +2,15 @@
 
 import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import dynamic from 'next/dynamic';
 import { AnimatePresence } from 'framer-motion';
 
 import { Preloader } from '@/components/ui/Preloader';
+import GhostSceneWrapper from '@/components/canvas/home/hero/GhostSceneWrapper';
 
 import HeroCTA from './HeroCTA';
 import HeroCopy from './HeroCopy';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-
-// Dynamic import for WebGL Scene
-const GhostScene = dynamic(
-  () => import('@/components/canvas/home/hero/GhostScene'),
-  {
-    ssr: false,
-    loading: () => <div className="absolute inset-0 bg-background" />,
-  }
-);
 
 const CONFIG = {
   preloadMs: 2000,
@@ -47,7 +38,13 @@ export default function HomeHero() {
       >
         {/* Fallback Mobile Background Gradient (Ghost Atmosphere) */}
         {!isDesktop && (
-          <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,#0a0029_0%,#040013_70%)] animate-pulse opacity-60" />
+          <div
+            className="absolute inset-0 z-0 animate-pulse opacity-60"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 50% 50%, #0a0029 0%, #040013 70%)',
+            }}
+          />
         )}
 
         {/* Preloader */}
@@ -73,7 +70,7 @@ export default function HomeHero() {
         {/* Camada: Ghost WebGL (Z-30) - Agora ativo em mobile com auto-performance */}
         <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
           <div className="sticky top-0 h-screen w-full">
-            <GhostScene />
+            <GhostSceneWrapper />
           </div>
         </div>
 
