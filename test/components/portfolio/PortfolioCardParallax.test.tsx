@@ -4,6 +4,15 @@ import '@testing-library/jest-dom';
 import { PortfolioCardParallax } from '@/components/portfolio/PortfolioCardParallax';
 import { PortfolioProject } from '@/types/project';
 
+// Mock Next Router
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 // Mock Framer Motion
 jest.mock('framer-motion', () => {
   const mockMotionValue = {
@@ -33,8 +42,15 @@ jest.mock('framer-motion', () => {
 // Mock Next/Image
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, className }: any) => (
-    <img src={src} alt={alt} className={className} />
+  // Render a lightweight accessible placeholder instead of an <img> to satisfy linting
+  default: ({ src, alt, className, ...props }: any) => (
+    <span
+      role="img"
+      aria-label={alt}
+      data-src={src}
+      className={className}
+      {...props}
+    />
   ),
 }));
 

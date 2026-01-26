@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-const lerp = (start: number, end: number, t: number) =>
-  start * (1 - t) + end * t;
+import { lerp } from '@/utils/math';
 
 /**
  * LERP-based scroll smoother for a fixed gallery track.

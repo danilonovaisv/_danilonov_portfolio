@@ -13,13 +13,7 @@ export function Container({
   ...props
 }: ContainerProps) {
   return (
-    <Component
-      className={cn(
-        'std-grid',
-        className
-      )}
-      {...props}
-    >
+    <Component className={cn('std-grid', className)} {...props}>
       {children}
     </Component>
   );

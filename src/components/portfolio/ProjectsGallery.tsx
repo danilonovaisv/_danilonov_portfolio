@@ -1,121 +1,144 @@
-// =============================================================================
-// ProjectsGallery - Parallax LERP Grid (CodePen reference)
-// =============================================================================
-
 'use client';
 
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import type { PortfolioProject, ProjectCategory } from '@/types/project';
-
-import { filterProjectsByCategory } from '@/data/projects';
-import CategoryFilter from './CategoryFilter';
-import GalleryCard from './GalleryCard';
+import React, { useRef } from 'react';
 import { useLERPScroll } from '@/hooks/useLERPScroll';
-import { useCardParallax } from '@/hooks/useCardParallax';
+import { ProjectCard } from './ProjectCard';
+import { PortfolioProject } from '@/types/project';
+
+// MOCK DATA - Replace with real data or imports later
+const PROJECTS: PortfolioProject[] = [
+  {
+    id: '1',
+    slug: 'garoto-nestle',
+    title: 'Garoto Nestlé',
+    client: 'Nestlé',
+    category: 'branding',
+    displayCategory: 'Branding',
+    year: 2024,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/garoto.jpg',
+    type: 'B',
+    layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Rebranding completo para uma das maiores marcas de chocolate do Brasil.',
+    },
+    tags: ['Branding', 'Packaging']
+  },
+  {
+    id: '2',
+    slug: 'nescafe',
+    title: 'Nescafé',
+    client: 'Nestlé',
+    category: 'web',
+    displayCategory: 'Web Design',
+    year: 2023,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/nescafe.jpg',
+    type: 'B',
+    layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Campanha digital global com foco em sustentabilidade.',
+    },
+    tags: ['Web', 'Campaign']
+  },
+   {
+    id: '3',
+    slug: 'mpdv',
+    title: 'MPDV',
+    client: 'MPDV',
+    category: 'institucional',
+    displayCategory: 'Institucional',
+    year: 2023,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/mpdv.jpg',
+    type: 'A',
+    layout: { cols: 'col-span-2', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Plataforma de inteligência de dados para varejo.',
+    },
+    tags: ['Product', 'UI/UX']
+  },
+  {
+    id: '4',
+    slug: 'swift',
+    title: 'Swift',
+    client: 'JBS',
+    category: 'motion',
+    displayCategory: 'Motion',
+    year: 2022,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/swift.jpg',
+    type: 'B',
+    layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Série de vídeos em motion graphics para mídias sociais.',
+    },
+    tags: ['Motion', 'Social']
+  },
+  {
+    id: '5',
+    slug: 'ambev',
+    title: 'Ambev Tech',
+    client: 'Ambev',
+    category: 'web',
+    displayCategory: 'Web',
+    year: 2024,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/ambev.jpg',
+    type: 'A',
+    layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Portal corporativo para talentos tech.',
+    },
+    tags: ['Web', 'Dev']
+  },
+   {
+    id: '6',
+    slug: 'unilever',
+    title: 'Unilever',
+    client: 'Unilever',
+    category: 'institucional', 
+    displayCategory: 'Accessibility',
+    year: 2023,
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/unilever.jpg',
+    type: 'B',
+    layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
+    detail: {
+        description: 'Consultoria de acessibilidade e performance.',
+    },
+    tags: ['Consultoria', 'A11y']
+  }
+];
 
 interface ProjectsGalleryProps {
-  projects: PortfolioProject[];
-  onProjectOpen?: (_project: PortfolioProject) => void;
-  showFilter?: boolean;
-  maxProjects?: number;
-  className?: string;
+  onOpenProject?: (_project: PortfolioProject) => void;
 }
 
-const easing = [0.22, 1, 0.36, 1] as const;
-
-const ProjectsGallery: FC<ProjectsGalleryProps> = ({
-  projects,
-  onProjectOpen,
-  showFilter = true,
-  maxProjects,
-  className = '',
-}) => {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
-  const prefersReducedMotion = useReducedMotion();
-  const parallaxEnabled = !prefersReducedMotion;
+export const ProjectsGallery = ({ onOpenProject }: ProjectsGalleryProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLElement | null)[]>([]);
-
-  // Smooth scroll of the fixed track
-  useLERPScroll(trackRef, parallaxEnabled);
-  // Individual card parallax
-  useCardParallax(cardRefs, parallaxEnabled);
-
-  const filteredProjects = useMemo(() => {
-    let filtered = filterProjectsByCategory(projects, activeCategory);
-    if (maxProjects) {
-      filtered = filtered.slice(0, maxProjects);
-    }
-    return filtered;
-  }, [activeCategory, maxProjects, projects]);
-
-  // Reset refs length whenever the visible list changes to avoid stale nodes
-  useEffect(() => {
-    cardRefs.current = new Array(filteredProjects.length).fill(null);
-  }, [filteredProjects.length]);
+  
+  // Initialize LERP Scroll
+  // The hook attaches height to .gallery (we need to make sure the parent has this class or we pass a ref)
+  const { galleryRef } = useLERPScroll(trackRef);
 
   return (
-    <main
-      id="projects-gallery"
-      aria-label="Galeria de Projetos"
-      className={`gallery relative z-10 bg-background ${className}`}
+    <div 
+      className="gallery relative z-0 w-full" 
+      ref={galleryRef as React.RefObject<HTMLDivElement>}
     >
-      {/* Track fixo que recebe o translateY suavizado */}
-      <div
+      <div 
         ref={trackRef}
-        className={`gallery-track ${parallaxEnabled ? 'fixed will-change-transform' : 'relative'} inset-x-0 top-0 grid grid-cols-12 gap-1 md:gap-1.5 px-1 md:px-1.5`}
+        className="fixed top-0 left-0 w-full will-change-transform"
       >
-        {showFilter && (
-          <div className="col-span-12 flex justify-center md:justify-end py-10 md:py-12 px-1 md:px-3">
-            <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: easing }}
-            >
-              <CategoryFilter
-                activeCategory={activeCategory}
-                onChange={setActiveCategory}
-              />
-            </motion.div>
-          </div>
-        )}
-
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              layout={!prefersReducedMotion}
-              className="col-span-12 md:col-span-6 lg:col-span-4"
-            >
-              <GalleryCard
-                project={project}
-                onProjectSelect={onProjectOpen ?? (() => {})}
-                cardRef={(el) => {
-                  cardRefs.current[index] = el;
-                }}
-              />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {filteredProjects.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="col-span-12 flex flex-col items-center justify-center py-20 text-center"
-          >
-            <span className="text-6xl mb-4">🔍</span>
-            <h3 className="text-xl font-medium text-white mb-2">
-              Nenhum projeto encontrado
-            </h3>
-            <p className="text-white/60">Tente selecionar outra categoria.</p>
-          </motion.div>
-        )}
+        <div className="std-grid py-24 sm:py-32">
+           <div className="col-span-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-8">
+             {PROJECTS.map((project, index) => (
+               <div key={project.id} className="w-full">
+                 <ProjectCard 
+                    project={project} 
+                    onClick={onOpenProject}
+                    priority={index < 3}
+                 />
+               </div>
+             ))}
+           </div>
+        </div>
       </div>
-    </main>
+    </div>
   );
 };
-
-export default ProjectsGallery;

@@ -6,13 +6,11 @@ import { motion, useMotionValue } from 'framer-motion';
 export interface CustomCursorProps {
   color?: string;
   size?: number;
-  hoverScale?: number;
 }
 
-export default function CustomCursor({ 
-  color = '#0048ff', 
-  size = 20, 
-  hoverScale = 2.5 
+export default function CustomCursor({
+  color = '#0048ff',
+  size = 20,
 }: CustomCursorProps) {
   const cursorRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
