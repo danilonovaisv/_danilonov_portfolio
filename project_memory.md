@@ -13,6 +13,7 @@
 - [2026-01-26] .agentrules validado e atualizado com todos os 19 arquivos de regras e 32 workflows.
 - [2026-01-26] .cursorrules refinado com core tech stack (Next.js 15, React 18.3, Tailwind v4/v3.4), Z-Index Hierarchy e Motion Principles.
 - [2026-01-26] Corrigida discrepância de informações do usuário no contexto das regras.
+- [2026-01-26] Criado workflow `setup-pm.md` e script utility `scripts/setup-package-manager.js` para gerenciamento de pacotes (Detectado: `pnpm`).
 
 ## [CONTEXTO TÉCNICO]
 
