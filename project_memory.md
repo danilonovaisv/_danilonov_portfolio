@@ -9,14 +9,20 @@
 - [2026-01-26] Criada regra de integridade em `.agent/rules/customizations.md` para priorizar este caminho.
 - [2026-01-26] Documentado o novo caminho em `AGENT.md`.
 
+- [2026-01-26] Sincronização e atualização mestre de regras concluída (@rules:atualizar).
+- [2026-01-26] .agentrules validado e atualizado com todos os 19 arquivos de regras e 32 workflows.
+- [2026-01-26] .cursorrules refinado com core tech stack (Next.js 15, React 18.3, Tailwind v4/v3.4), Z-Index Hierarchy e Motion Principles.
+- [2026-01-26] Corrigida discrepância de informações do usuário no contexto das regras.
+
 ## [CONTEXTO TÉCNICO]
 
-- O diretório `.agent/customizations` serve como local centralizado para overrides e contextos específicos do usuário/projeto que não devem poluir as regras globais.
-- A regra em `customizations.md` garante que o agente sempre verifique este diretório no início de cada missão.
+- **Tech Stack:** Confirmado o uso de Next.js 15 e React 18.3 para estabilidade com R3F e Post-processing.
+- **Hierarchy:** Mantida a arquitetura de camadas Z-Index rígida para garantir a atmosfera "Ghost".
+- **Single Source of Truth:** Definida a prioridade `./docs/blueprints_project/` > `./agent/rules/` > `.cursorrules`.
 
 ## [PRÓXIMOS PASSOS]
 
-- O usuário pode agora adicionar arquivos `.md` ou `.txt` em `.agent/customizations/` para ajustar o comportamento do agente.
+- O sistema está agora calibrado com as regras mais recentes. Auditorias de componentes podem ser realizadas seguindo os workflows de `./agent/workflows/`.
 
 ## [ALERTA DE BUGS]
 
