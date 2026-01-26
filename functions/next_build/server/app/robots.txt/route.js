@@ -1,10 +1,6 @@
-var R = require('../../chunks/[turbopack]_runtime.js')(
-  'server/app/robots.txt/route.js'
-);
-R.c('server/chunks/[root-of-the-server]__3e1ff79b._.js');
-R.c('server/chunks/[root-of-the-server]__71e0e3b9._.js');
-R.c(
-  'server/chunks/_next-internal_server_app_robots_txt_route_actions_9118e90f.js'
-);
-R.m(77067);
-module.exports = R.m(77067).exports;
+var R=require("../../chunks/[turbopack]_runtime.js")("server/app/robots.txt/route.js")
+R.c("server/chunks/[root-of-the-server]__9f90f3a5._.js")
+R.c("server/chunks/[root-of-the-server]__065fed90._.js")
+R.c("server/chunks/_next-internal_server_app_robots_txt_route_actions_9118e90f.js")
+R.m(90430)
+module.exports=R.m(90430).exports

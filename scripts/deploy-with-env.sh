@@ -23,8 +23,8 @@ echo "Versão do pnpm: $(pnpm --version)"
 echo "Versão do Firebase: $(firebase --version)"
 
 # Faz o build do projeto
-echo "Executando build do projeto..."
-pnpm run build
+# echo "Executando build do projeto..."
+# pnpm run build
 
 # Consolidar arquivos estáticos para deploy manual
 echo "Consolidando arquivos estáticos em deploy-public..."
@@ -46,4 +46,4 @@ fi
 
 # Executa o deploy
 echo "Executando deploy do Firebase..."
-pnpm dlx firebase deploy --only hosting,functions --project portfolio-danilo-novais
+firebase deploy --only hosting,functions --project portfolio-danilo-novais

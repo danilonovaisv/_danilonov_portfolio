@@ -60,12 +60,13 @@ async function initializeNextApp(): Promise<void> {
   }
 
   try {
+
     initPromise = (async () => {
       nextApp = ((next as any).default || next)({
         dev: false,
         hostname: '0.0.0.0',
         port: parseInt(process.env.PORT || '8080', 10),
-        conf: { distDir: 'next_build' },
+        // conf: { distDir: 'next_build' }, // Removed: using next.config.js instead
         dir: resolve(__dirname, '../'),
       });
 
@@ -76,6 +77,7 @@ async function initializeNextApp(): Promise<void> {
 
     await initPromise;
   } catch (error) {
+
     logger.error('Failed to initialize Next.js app:', error);
     throw error;
   }

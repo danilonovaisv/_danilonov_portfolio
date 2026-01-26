@@ -1,14 +1,12 @@
 {
-  "[project]/src/components/canvas/home/hero/GhostCanvas.tsx [app-client] (ecmascript, next/dynamic entry)": {
-    "id": "[project]/src/components/canvas/home/hero/GhostCanvas.tsx [app-client] (ecmascript, next/dynamic entry)",
+  "[project]/src/components/canvas/home/hero/GhostScene.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/components/canvas/home/hero/GhostScene.tsx [app-client] (ecmascript, next/dynamic entry)",
     "files": [
-      "static/chunks/node_modules_three_build_three_core_996ef05a.js",
-      "static/chunks/node_modules_three_build_three_module_0c59ee63.js",
-      "static/chunks/node_modules_three_build_three_module_f7d46d9b.js",
-      "static/chunks/node_modules_@react-three_fiber_dist_418bbe90._.js",
-      "static/chunks/node_modules_2cf20f2f._.js",
-      "static/chunks/src_cc32ffcf._.js",
-      "static/chunks/src_components_canvas_home_hero_GhostCanvas_tsx_abf11050._.js"
+      "static/chunks/b8468_three_build_three_core_d107bb6c.js",
+      "static/chunks/b8468_three_build_three_module_aa6b3f08.js",
+      "static/chunks/b8468_three_examples_jsm_0f901013._.js",
+      "static/chunks/src_331dfffa._.js",
+      "static/chunks/src_components_canvas_home_hero_GhostScene_tsx_efed3854._.js"
     ]
   }
 }

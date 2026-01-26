@@ -20,6 +20,7 @@
   "/opengraph-image/route": "/opengraph-image",
   "/page": "/",
   "/playground/page": "/playground",
+  "/portfolio-showcase/page": "/portfolio-showcase",
   "/portfolio/[slug]/page": "/portfolio/[slug]",
   "/portfolio/page": "/portfolio",
   "/projects/[slug]/page": "/projects/[slug]",

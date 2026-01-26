@@ -204,6 +204,30 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/portfolio-showcase": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/portfolio-showcase",
+      "dataRoute": "/portfolio-showcase.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/portfolio/brand_video": {
       "experimentalBypassFor": [
         {
@@ -607,8 +631,8 @@
   },
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "783aa007ee4027eb18ade1fe650941d0",
-    "previewModeSigningKey": "698b4b1fd7514c090f706c1b828271aa18e4dc52ec01e992caa8f106e13e7db2",
-    "previewModeEncryptionKey": "596cf69a7bf1b96ebc51d67c404e87ae784eb5c89dd6c243f1a49e5237ad9575"
+    "previewModeId": "6a1fdaabcc1102591281a1a29773f712",
+    "previewModeSigningKey": "478d0f7b17c96a564ed7ffd1651aa4501667a27c92ca27ef81e9251cce48be98",
+    "previewModeEncryptionKey": "ac830ffadf6c113ac3db8d780f4b096c64dbd558493696223fae6234ba404ac9"
   }
 }

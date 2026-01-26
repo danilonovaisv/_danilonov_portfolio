@@ -1,6 +1,6 @@
 {
   "node": {
-    "40740c92bcc2c60f6f122969647372afd3f85f2c1d": {
+    "405e27b487dec532f4064e409ab8c6fe42f2313931": {
       "workers": {
         "app/page": {
           "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/lib/supabase/queries/projects.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
@@ -24,5 +24,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "leoQLCpBPFxOhIYsfkuYdQyF9u8KTY+ch8DZX00P0FA="
+  "encryptionKey": "cENR+akDGuC/tYzDtEAD3DAQoFC2Hl7pbKjbQcvePFk="
 }

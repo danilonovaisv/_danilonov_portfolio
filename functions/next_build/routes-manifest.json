@@ -176,6 +176,12 @@
       "namedRegex": "^/portfolio(?:/)?$"
     },
     {
+      "page": "/portfolio-showcase",
+      "regex": "^/portfolio\\-showcase(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portfolio\\-showcase(?:/)?$"
+    },
+    {
       "page": "/robots.txt",
       "regex": "^/robots\\.txt(?:/)?$",
       "routeKeys": {},

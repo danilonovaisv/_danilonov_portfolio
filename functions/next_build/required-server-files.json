@@ -14,20 +14,45 @@
     "configOrigin": "next.config.mjs",
     "useFileSystemPublicRoutes": true,
     "generateEtags": true,
-    "pageExtensions": ["tsx", "ts", "jsx", "js"],
+    "pageExtensions": [
+      "tsx",
+      "ts",
+      "jsx",
+      "js"
+    ],
     "poweredByHeader": true,
     "compress": true,
     "images": {
-      "deviceSizes": [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-      "imageSizes": [32, 48, 64, 96, 128, 256, 384],
+      "deviceSizes": [
+        640,
+        750,
+        828,
+        1080,
+        1200,
+        1920,
+        2048,
+        3840
+      ],
+      "imageSizes": [
+        32,
+        48,
+        64,
+        96,
+        128,
+        256,
+        384
+      ],
       "path": "/_next/image",
       "loader": "default",
       "loaderFile": "",
       "domains": [],
       "disableStaticImages": false,
       "minimumCacheTTL": 14400,
-      "formats": ["image/webp"],
+      "formats": [
+        "image/webp"
+      ],
       "maximumRedirects": 3,
+      "maximumResponseBody": 50000000,
       "dangerouslyAllowLocalIP": false,
       "dangerouslyAllowSVG": true,
       "contentSecurityPolicy": "default-src 'self'; script-src 'none'; sandbox;",
@@ -41,9 +66,21 @@
       "remotePatterns": [
         {
           "protocol": "https",
+          "hostname": "aymuvxysygrwoicsjgxj.supabase.co",
+          "port": "",
+          "pathname": "/storage/v1/object/public/**"
+        },
+        {
+          "protocol": "https",
           "hostname": "umkmwbkwvulxtdodzmzf.supabase.co",
           "port": "",
           "pathname": "/storage/v1/object/public/**"
+        },
+        {
+          "protocol": "https",
+          "hostname": "aymuvxysygrwoicsjgxj.supabase.co",
+          "port": "",
+          "pathname": "/storage/v1/render/image/public/**"
         },
         {
           "protocol": "https",
@@ -52,7 +89,9 @@
           "pathname": "/storage/v1/render/image/public/**"
         }
       ],
-      "qualities": [75],
+      "qualities": [
+        75
+      ],
       "unoptimized": false
     },
     "devIndicators": {
