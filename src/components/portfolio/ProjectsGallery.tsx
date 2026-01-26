@@ -33,13 +33,14 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
 }) => {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
   const prefersReducedMotion = useReducedMotion();
+  const parallaxEnabled = !prefersReducedMotion;
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLElement | null)[]>([]);
 
   // Smooth scroll of the fixed track
-  useLERPScroll(trackRef, !prefersReducedMotion);
+  useLERPScroll(trackRef, parallaxEnabled);
   // Individual card parallax
-  useCardParallax(cardRefs, !prefersReducedMotion);
+  useCardParallax(cardRefs, parallaxEnabled);
 
   const filteredProjects = useMemo(() => {
     let filtered = filterProjectsByCategory(projects, activeCategory);
@@ -55,7 +56,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
   }, [filteredProjects.length]);
 
   return (
-    <section
+    <main
       id="projects-gallery"
       aria-label="Galeria de Projetos"
       className={`gallery relative z-10 bg-background ${className}`}
@@ -63,9 +64,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       {/* Track fixo que recebe o translateY suavizado */}
       <div
         ref={trackRef}
-        className={`gallery-track fixed inset-x-0 top-0 grid grid-cols-12 gap-1 md:gap-1.5 px-1 md:px-1.5 will-change-transform ${
-          prefersReducedMotion ? 'relative' : ''
-        }`}
+        className={`gallery-track ${parallaxEnabled ? 'fixed will-change-transform' : 'relative'} inset-x-0 top-0 grid grid-cols-12 gap-1 md:gap-1.5 px-1 md:px-1.5`}
       >
         {showFilter && (
           <div className="col-span-12 flex justify-center md:justify-end py-10 md:py-12 px-1 md:px-3">
@@ -83,24 +82,23 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
           </div>
         )}
 
-        <motion.div
-          layout={!prefersReducedMotion}
-          className="col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 md:gap-1.5"
-          role="list"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, index) => (
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              layout={!prefersReducedMotion}
+              className="col-span-12 md:col-span-6 lg:col-span-4"
+            >
               <GalleryCard
-                key={project.id}
                 project={project}
                 onProjectSelect={onProjectOpen ?? (() => {})}
                 cardRef={(el) => {
                   cardRefs.current[index] = el;
                 }}
               />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
         {filteredProjects.length === 0 && (
           <motion.div
@@ -116,7 +114,7 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
           </motion.div>
         )}
       </div>
-    </section>
+    </main>
   );
 };
 

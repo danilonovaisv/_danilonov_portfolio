@@ -24,7 +24,7 @@ export function GalleryCard({ project, cardRef, onProjectSelect }: GalleryCardPr
   return (
     <div
       ref={cardRef}
-      className="col-span-12 md:col-span-6 lg:col-span-4 h-[400px] overflow-hidden cursor-pointer"
+      className="h-[400px] overflow-hidden cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       role="button"
       tabIndex={0}
       aria-label={`Ver projeto ${project.title}`}
@@ -36,7 +36,7 @@ export function GalleryCard({ project, cardRef, onProjectSelect }: GalleryCardPr
         }
       }}
     >
-      <div className="relative h-[135%] card-image-wrapper will-change-transform">
+      <div className="relative h-[135%] card-image-wrapper motion-safe:will-change-transform">
         <Image
           src={imageUrl}
           alt={project.title}

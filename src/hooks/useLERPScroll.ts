@@ -18,7 +18,7 @@ export const useLERPScroll = (
   enabled = true
 ) => {
   const startY = useRef(0);
-  const targetY = useRef(0);
+  const endY = useRef(0);
   const rafId = useRef<number | null>(null);
   const galleryRef = useRef<HTMLElement | null>(null);
 
@@ -44,11 +44,11 @@ export const useLERPScroll = (
     };
 
     const animate = () => {
-      startY.current = lerp(startY.current, targetY.current, 0.05);
+      startY.current = lerp(startY.current, endY.current, 0.05);
 
       track.style.transform = `translateY(-${startY.current}px)`;
 
-      if (Math.abs(startY.current - targetY.current) > 0.35) {
+      if (Math.abs(startY.current - endY.current) > 0.5) {
         rafId.current = requestAnimationFrame(animate);
       } else {
         rafId.current = null;
@@ -56,7 +56,7 @@ export const useLERPScroll = (
     };
 
     const onScroll = () => {
-      targetY.current = window.scrollY;
+      endY.current = window.scrollY;
       if (!rafId.current) {
         rafId.current = requestAnimationFrame(animate);
       }
@@ -67,15 +67,17 @@ export const useLERPScroll = (
     resizeObserver.observe(track);
 
     updateHeight();
-    targetY.current = window.scrollY;
+    endY.current = window.scrollY;
     rafId.current = requestAnimationFrame(animate);
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', updateHeight);
+    window.addEventListener('load', updateHeight);
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', updateHeight);
+      window.removeEventListener('load', updateHeight);
       resizeObserver.disconnect();
 
       if (rafId.current) {
