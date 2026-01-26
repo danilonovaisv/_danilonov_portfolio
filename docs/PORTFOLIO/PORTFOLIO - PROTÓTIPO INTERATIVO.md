@@ -24,7 +24,7 @@ Criar a **página Portfolio Showcase completa** com:
 ### 🧱 Hierarquia de Componentes
 
 ```
-PortfolioShowcase
+Portfolio
 ├── Hero Section (Video Loop)
 │   ├── Video Background
 │   ├── Overlay Gradient
