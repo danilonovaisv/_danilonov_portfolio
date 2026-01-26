@@ -10942,7 +10942,9 @@ ${w}`;
           })),
         ]));
     }
-    if ((e.i(52683), void 0 !== E.default && E.default.env?.ppnpm_package_name)) {
+    if (
+      (e.i(52683), void 0 !== E.default && E.default.env?.ppnpm_package_name)
+    ) {
       let e = E.default.env.ppnpm_package_name;
       [
         '@supabase/auth-helpers-nextjs',
