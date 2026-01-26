@@ -6,17 +6,41 @@ import { Container } from '@/components/layout/Container';
 import { GHOST_EASE } from '@/lib/motionTokens';
 import PortfolioMosaicGrid from './PortfolioMosaicGrid';
 import type { MosaicRow } from './types';
+import type { PortfolioProject } from '@/types/project';
+
+interface PortfolioShowcaseSectionProps {
+  projects?: PortfolioProject[];
+  onProjectSelect?: (project: PortfolioProject) => void;
+}
 
 /**
  * Portfolio Showcase Section (Portfolio Page)
  * Grid de projetos com filtros e animações
  */
-export default function PortfolioShowcaseSection() {
+export default function PortfolioShowcaseSection({ projects }: PortfolioShowcaseSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = !!useReducedMotion();
 
-  // Mock data para exemplo - em produção, seria passado via props
+  // If projects are passed, map them to mosaic rows; otherwise, fallback to mock rows
   const rows = useMemo<MosaicRow[]>(() => {
+    if (projects && projects.length > 0) {
+      // Simple mapping: group projects into rows of 2 for the mosaic grid
+      const grouped: MosaicRow[] = [];
+      for (let i = 0; i < projects.length; i += 2) {
+        grouped.push({
+          id: `row-${i / 2}`,
+          columns: 2,
+          items: projects.slice(i, i + 2).map((p) => ({
+            id: String(p.id),
+            gradient: 'from-gray-700 to-gray-900',
+            title: p.title,
+            subtitle: p.client || '',
+          })),
+        });
+      }
+      return grouped;
+    }
+
     return [
       {
         id: 'row-1',
@@ -37,7 +61,7 @@ export default function PortfolioShowcaseSection() {
         ],
       },
     ];
-  }, []);
+  }, [projects]);
 
   return (
     <section

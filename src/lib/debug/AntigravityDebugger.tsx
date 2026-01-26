@@ -9,9 +9,9 @@ export default function AntigravityDebugger() {
 
   useEffect(() => {
     setIsMounted(true);
-    
+
     // Log para confirmar que o ambiente está limpo de erros de estilo globais
-    console.log(`[Antigravity] Debugger ativo em: ${pathname}`);
+    console.warn(`[Antigravity] Debugger ativo em: ${pathname}`);
   }, [pathname]);
 
   if (!isMounted) return null;

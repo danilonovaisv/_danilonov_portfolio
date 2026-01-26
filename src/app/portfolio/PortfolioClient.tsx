@@ -3,9 +3,18 @@
 import { useCallback, useState } from 'react';
 import type { PortfolioProject } from '@/types/project';
 import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
-import PortfolioShowcaseSection from '@/components/portfolio/PortfolioShowcaseSection';
+import { PortfolioShowcaseSection } from '@/components/portfolio/PortfolioShowcaseSection';
 import PortfolioModalNew from '@/components/portfolio/PortfolioModalNew';
 import { SiteClosure } from '@/components/layout/SiteClosure';
+import type { FC } from 'react';
+
+type ShowcaseProps = {
+  projects: PortfolioProject[];
+  onProjectSelect: (project: PortfolioProject) => void;
+};
+
+// Workaround: ensure TS understands the imported symbol is a React component with props
+const Showcase = PortfolioShowcaseSection as unknown as FC<ShowcaseProps>;
 
 type PortfolioClientProps = {
   projects: PortfolioProject[];
@@ -36,7 +45,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
       <PortfolioHeroNew />
 
       {/* Nova Seção de Cards com Animações de Overlay */}
-      <PortfolioShowcaseSection />
+      <Showcase projects={projects} onProjectSelect={handleOpenProject} />
 
       {/* Modal de Detalhes (Ghost) */}
       <PortfolioModalNew

@@ -2560,7 +2560,7 @@
   }
   .border-\[\#111111\]\/10 {
     border-color: #1111111a;
-    border-color: lab(5.06335% -0.00000745058 -0.00000298023/.1);
+    border-color: lab(5.06335% -0.00000745058 -0.00000298023/0.1);
   }
   .border-black {
     border-color: var(--color-black);
@@ -3199,7 +3199,7 @@
   }
   .bg-text\/20 {
     background-color: #fcffff33;
-    background-color: lab(99.7711% -1.02288 -0.36478/.2);
+    background-color: lab(99.7711% -1.02288 -0.36478/0.2);
   }
   .bg-transparent {
     background-color: #0000;
@@ -4689,7 +4689,7 @@
   }
   .text-\[\#111111\]\/60 {
     color: #1119;
-    color: lab(5.06335% -0.00000745058 -0.00000298023/.6);
+    color: lab(5.06335% -0.00000745058 -0.00000298023/0.6);
   }
   .text-\[\#cbd5f5\] {
     color: #cbd5f5;
@@ -6108,7 +6108,7 @@
   }
   .placeholder\:text-\[\#111111\]\/30::placeholder {
     color: #1111114d;
-    color: lab(5.06335% -0.00000745058 -0.00000298023/.3);
+    color: lab(5.06335% -0.00000745058 -0.00000298023/0.3);
   }
   .placeholder\:text-slate-500::placeholder {
     color: var(--color-slate-500);
