@@ -48,7 +48,10 @@ export const AboutBeliefs: React.FC = () => {
   );
 
   return (
-    <section ref={containerRef} className={`relative w-full overflow-hidden ${COLORS[0]}`}>
+    <section
+      ref={containerRef}
+      className={`relative w-full overflow-hidden ${COLORS[0]}`}
+    >
       {/* 
         LAYER 1: Canvas 3D (Background Fixed/Sticky) 
         Posicionado absolutamente/fixed por trás do conteúdo.
@@ -111,6 +114,6 @@ export const AboutBeliefs: React.FC = () => {
       </div>
     </section>
   );
-}
+};
 
 export default AboutBeliefs;

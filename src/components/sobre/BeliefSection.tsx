@@ -97,7 +97,7 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
     >
       <div className="std-grid max-w-none">
         <motion.div
-        style={{ y: yScroll, opacity }}
+          style={{ y: yScroll, opacity }}
           className="relative z-30 w-full flex flex-col justify-start"
         >
           {lines.map((line, i) => (
