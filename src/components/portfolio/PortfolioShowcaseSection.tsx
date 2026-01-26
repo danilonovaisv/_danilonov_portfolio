@@ -1,285 +1,240 @@
-// =============================================================================
-// PortfolioShowcaseSection - Ghost Era v2.0
-// Cards animados com overlay hover inspirado em referência CodePen
-// =============================================================================
-
+// components/portfolio/PortfolioShowcaseSection.tsx
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import CategoryFilter from './CategoryFilter';
-import type { PortfolioProject, ProjectCategory } from '@/types/project';
+import CategoryFilter from './CategoryFilter'; // Certifique-se que o caminho esteja correto
+import PortfolioModalNew from './PortfolioModalNew'; // Certifique-se que o caminho esteja correto
+import type { PortfolioProject } from '@/types/project'; // Certifique-se que o tipo esteja correto
+// import { PROJECT_CATEGORIES } from '@/data/projects'; // Se for usar dados reais
 
-// Ghost Design System easing
-const GHOST_EASE = [0.22, 1, 0.36, 1] as const;
+// Definindo os tipos necessários localmente ou importando de um lugar central
+type ProjectCategory = string; // Ou o tipo exato de sua enumeração de categorias
 
-interface PortfolioShowcaseSectionProps {
-  projects: PortfolioProject[];
-  onProjectSelect: (_project: PortfolioProject) => void;
+interface ShowcaseItem {
+  id: string;
+  title: string;
+  subtitle: string; // Usado no overlay, similar ao CodePen
+  category: ProjectCategory;
+  imageUrl: string; // Ou URL do vídeo
+  projectData: PortfolioProject; // Dados completos para o modal
+  widthClass?: string; // Para variação de tamanho (opcional)
+  heightClass?: string; // Para variação de tamanho (opcional)
 }
 
-const PortfolioShowcaseSection: React.FC<PortfolioShowcaseSectionProps> = ({
-  projects,
-  onProjectSelect,
-}) => {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
+// Dados de exemplo - Substitua pela sua fonte real de dados
+const mockPortfolioItems: ShowcaseItem[] = [
+  // Exemplo com base no HTML modelo e estilos atuais
+  {
+    id: '1',
+    title: 'Fringilla Fermentum',
+    subtitle: 'Web Design',
+    category: 'web',
+    imageUrl: '/images/art/p1.jpg', // Use imagens reais
+    projectData: {
+      id: '1',
+      slug: 'projeto-1',
+      title: 'Fringilla Fermentum',
+      subtitle: 'Um projeto incrível de Web Design',
+      displayCategory: 'Web Design',
+      category: 'web',
+      client: 'Cliente A',
+      year: '2025',
+      image: '/images/art/p1.jpg', // Imagem principal
+      tags: ['React', 'TypeScript'],
+      detail: { description: 'Descrição detalhada...' },
+      layout: { cols: 'col-span-2', height: 'row-span-2' }, // Exemplo de layout
+      landingPageSlug: 'projeto-1', // Se tiver página própria
+      type: 'A', // Tipo para o modal
+      accentColor: '#0048ff',
+    } as PortfolioProject,
+    widthClass: 'md:col-span-2',
+    heightClass: 'md:row-span-2',
+  },
+  {
+    id: '2',
+    title: 'Vestibulum Tellus',
+    subtitle: 'Graphic Design',
+    category: 'graphic',
+    imageUrl: '/images/art/p2.jpg',
+    projectData: {
+      id: '2',
+      slug: 'projeto-2',
+      title: 'Vestibulum Tellus',
+      subtitle: 'Design gráfico impactante',
+      displayCategory: 'Graphic Design',
+      category: 'graphic',
+      client: 'Cliente B',
+      year: '2025',
+      image: '/images/art/p2.jpg',
+      tags: ['Illustrator', 'Branding'],
+      detail: { description: 'Descrição detalhada...' },
+      layout: { cols: 'col-span-1', height: 'row-span-1' },
+      landingPageSlug: 'projeto-2',
+      type: 'B',
+      accentColor: '#8705f2',
+    } as PortfolioProject,
+  },
+  // ... adicione mais itens conforme seu portfólio
+  // Exemplo com video
+  // {
+  //   id: '3',
+  //   title: 'Motion Concept',
+  //   subtitle: 'Motion Graphics',
+  //   category: 'video',
+  //   imageUrl: '/path/to/video-thumb.jpg', // Thumbnail
+  //   projectData: { /* ... */ },
+  //   // widthClass, heightClass...
+  // }
+];
+
+const easing = [0.22, 1, 0.36, 1] as const;
+
+const PortfolioShowcaseSection = () => {
+  const [activeCategory, setActiveCategory] = useState<ProjectCategory>('*');
+  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Filtra os itens com base na categoria ativa
-  const filteredProjects = useMemo(() => {
-    if (activeCategory === 'all') return projects;
-    return projects.filter((project) => project.category === activeCategory);
-  }, [activeCategory, projects]);
+  const filteredItems = useMemo(() => {
+    if (activeCategory === '*') return mockPortfolioItems; // Mostra todos
+    return mockPortfolioItems.filter(item => item.category === activeCategory);
+  }, [activeCategory]);
 
-  // Handler para abrir projeto
-  const handleProjectClick = useCallback(
-    (project: PortfolioProject) => {
-      onProjectSelect(project);
-    },
-    [onProjectSelect]
-  );
+  // Abre o modal com os dados do projeto
+  const openModal = (project: PortfolioProject) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  // Fecha o modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  };
+
+  // Mapeia os itens filtrados para os cards animados
+  const renderedItems = filteredItems.map((item) => (
+    <motion.div
+      key={item.id}
+      layoutId={`card-container-${item.id}`} // Crucial para animação de layout com o modal
+      className={`
+        relative group overflow-hidden cursor-pointer
+        ${item.widthClass || 'col-span-1'} ${item.heightClass || 'row-span-1'}
+        aspect-[4/5] // Ajuste o aspect ratio conforme necessário
+      `}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.4, ease: easing }}
+      onClick={() => openModal(item.projectData)}
+    >
+      {/* Imagem de Fundo (ou Video Placeholder) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${item.imageUrl})` }}
+      />
+
+      {/* Overlay com Gradiente */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
+
+      {/* Overlay de Texto (animado como no CodePen) */}
+      <motion.div
+        className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 text-center"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
+        <motion.h3
+          className="text-xl md:text-2xl font-semibold mb-1"
+          initial={{ y: 20, opacity: 0 }}
+          whileHover={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: easing, delay: 0.05 }}
+        >
+          {item.title}
+        </motion.h3>
+        <motion.p
+          className="text-sm md:text-base text-white/80"
+          initial={{ y: 20, opacity: 0 }}
+          whileHover={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: easing, delay: 0.1 }}
+        >
+          {item.subtitle}
+        </motion.p>
+        {/* Botão opcional no overlay */}
+        <motion.div
+          className="mt-4 px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm font-medium opacity-0 group-hover:opacity-100"
+          initial={{ y: 20, opacity: 0 }}
+          whileHover={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: easing, delay: 0.15 }}
+        >
+          View Details
+        </motion.div>
+      </motion.div>
+
+      {/* Overlay mais escuro no hover */}
+      <motion.div
+        className="absolute inset-0 bg-black/20 pointer-events-none"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 0.3 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      />
+    </motion.div>
+  ));
 
   return (
-    <section
-      className="relative bg-background py-16 md:py-24 lg:py-32 px-4 sm:px-6 lg:px-8"
-      aria-labelledby="showcase-heading"
-    >
+    <section className="relative bg-[#0f172a] py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: GHOST_EASE }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <h2
-            id="showcase-heading"
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-          >
-            Projetos <span className="text-primary">em Destaque</span>
-          </h2>
-          <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto">
-            Uma seleção cuidadosa dos nossos trabalhos mais impactantes e
-            inovadores.
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Our Awesome Shots</h2>
+          <p className="text-base text-gray-300 max-w-2xl mx-auto">
+            Uma seleção cuidadosa dos nossos trabalhos mais impactantes e inovadores.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Filtro de Categorias */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: GHOST_EASE, delay: 0.1 }}
-          className="flex justify-center mb-10 md:mb-14"
-        >
+        <div className="mb-10">
           <CategoryFilter
-            activeCategory={activeCategory}
-            onChange={setActiveCategory}
+            activeCategory={activeCategory as any} // Ajuste de tipo necessário se ProjectCategory for string
+            onChange={setActiveCategory as any} // Ajuste de tipo necessário se onChange esperar tipo específico
           />
-        </motion.div>
+        </div>
 
-        {/* Grid de Cards */}
         <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8"
+          layout // Crucial para animação de layout dos filhos ao filtrar
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
-          <AnimatePresence mode="popLayout" initial={false}>
-            {filteredProjects.map((project, index) => (
-              <ShowcaseCard
-                key={project.id}
-                project={project}
-                index={index}
-                onClick={() => handleProjectClick(project)}
-              />
-            ))}
+          <AnimatePresence mode="popLayout" initial={false}> {/* Animação de entrada/saída dos cards */}
+            {renderedItems}
           </AnimatePresence>
         </motion.div>
 
-        {/* Estado vazio */}
-        {filteredProjects.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <p className="text-white/50 text-lg">
-              Nenhum projeto encontrado nesta categoria.
-            </p>
-          </motion.div>
-        )}
-
         {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: GHOST_EASE, delay: 0.2 }}
-          className="mt-16 md:mt-24 text-center"
-        >
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-6">
-            Vamos trabalhar <span className="text-primary">juntos?</span>
-          </h3>
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-bold text-white mb-6">Vamos trabalhar juntos?</h3>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a
-              href="/contato"
-              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-full text-white bg-primary hover:bg-primary-hover shadow-[0_0_24px_rgba(0,72,255,0.4)] hover:shadow-[0_0_32px_rgba(0,72,255,0.6)] transition-all duration-300"
+              href="#"
+              className="inline-block px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-200"
+            >
+              Ver Mais Trabalhos
+            </a>
+            <a
+              href="/contact"
+              className="inline-block px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors duration-200"
             >
               Entrar em Contato
             </a>
           </div>
-        </motion.div>
+        </div>
       </div>
+
+      {/* Modal Reutilizado */}
+      <PortfolioModalNew
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      />
     </section>
-  );
-};
-
-// =============================================================================
-// ShowcaseCard - Card individual com animações de overlay
-// =============================================================================
-
-interface ShowcaseCardProps {
-  project: PortfolioProject;
-  index: number;
-  onClick: () => void;
-}
-
-const ShowcaseCard: React.FC<ShowcaseCardProps> = ({
-  project,
-  index,
-  onClick,
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Determinar aspect ratio baseado no tipo
-  const aspectClass = project.type === 'A' ? 'aspect-[4/5]' : 'aspect-[1/1]';
-
-  return (
-    <motion.article
-      layoutId={`showcase-card-${project.id}`}
-      className={`relative group overflow-hidden rounded-2xl cursor-pointer ${aspectClass} bg-black/20`}
-      initial={{ opacity: 0, scale: 0.95, filter: 'blur(4px)' }}
-      animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-      exit={{ opacity: 0, scale: 0.95, filter: 'blur(4px)' }}
-      transition={{
-        duration: 0.5,
-        ease: GHOST_EASE,
-        delay: index * 0.05,
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && onClick()}
-      aria-label={`Ver projeto: ${project.title}`}
-    >
-      {/* Imagem de Fundo */}
-      <div className="absolute inset-0">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          loading="lazy"
-        />
-      </div>
-
-      {/* Overlay Gradiente Base */}
-      <motion.div
-        className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent"
-        initial={{ opacity: 0.7 }}
-        animate={{ opacity: isHovered ? 0.95 : 0.7 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-      />
-
-      {/* Overlay de Blur no Hover */}
-      <motion.div
-        className="absolute inset-0 backdrop-blur-[2px]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-      />
-
-      {/* Conteúdo do Card - Sempre Visível */}
-      <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-        {/* Tag de Categoria */}
-        <motion.span
-          className="inline-flex self-start items-center rounded-full bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 text-[10px] md:text-xs font-medium uppercase tracking-wide text-white/80 mb-3"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: GHOST_EASE, delay: 0.1 }}
-        >
-          {project.displayCategory}
-        </motion.span>
-
-        {/* Título */}
-        <motion.h3
-          className="text-xl md:text-2xl lg:text-3xl font-bold text-white leading-tight mb-1"
-          initial={{ y: 0 }}
-          animate={{ y: isHovered ? -4 : 0 }}
-          transition={{ duration: 0.4, ease: GHOST_EASE }}
-        >
-          {project.title}
-        </motion.h3>
-
-        {/* Subtítulo */}
-        <motion.p
-          className="text-sm md:text-base text-white/70"
-          initial={{ opacity: 0.7, y: 0 }}
-          animate={{
-            opacity: isHovered ? 1 : 0.7,
-            y: isHovered ? -4 : 0,
-          }}
-          transition={{ duration: 0.4, ease: GHOST_EASE, delay: 0.05 }}
-        >
-          {project.subtitle || `${project.client} · ${project.year}`}
-        </motion.p>
-
-        {/* Botão "Ver Projeto" - Aparece no hover */}
-        <motion.div
-          className="mt-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{
-            opacity: isHovered ? 1 : 0,
-            y: isHovered ? 0 : 16,
-          }}
-          transition={{ duration: 0.4, ease: GHOST_EASE, delay: 0.1 }}
-        >
-          <span className="inline-flex items-center gap-2 px-4 py-2 text-xs md:text-sm font-medium text-white border border-white/30 rounded-full hover:bg-white/10 transition-colors duration-200">
-            Ver Projeto
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </span>
-        </motion.div>
-      </div>
-
-      {/* Glow Effect no Hover */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at center, ${project.accentColor || '#0048ff'}20, transparent 70%)`,
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-      />
-
-      {/* Focus Ring */}
-      <div className="absolute inset-0 rounded-2xl ring-2 ring-primary ring-offset-2 ring-offset-background opacity-0 group-focus-visible:opacity-100 transition-opacity pointer-events-none" />
-    </motion.article>
   );
 };
 
