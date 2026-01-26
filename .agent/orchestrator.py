@@ -2,6 +2,8 @@ import logging
 import sys
 from typing import List, Dict, Any, Callable
 from dataclasses import dataclass
+from pathlib import Path
+import json
 
 # Real ADK Imports
 from dotenv import load_dotenv
@@ -20,18 +22,29 @@ from google.genai import types
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [GHOST-SYSTEM] - %(levelname)s - %(message)s')
 logger = logging.getLogger("GhostOrchestrator")
 
+# --- Configuration ---
+DEFAULT_MODEL_NAME = 'gemini-2.0-flash-001'
+APP_NAME = 'ghost_system_v3'
+DESIGN_TOKENS_PATH = 'config/design_tokens.json'
+
 # --- 1. Tooling (Adaptado para Contexto RAG) ---
 
 def fetch_design_token(token_name: str) -> str:
-    """Busca um token de design específico (cor, fonte, espaçamento) do Ghost System."""
-    # Simulação: Num caso real, isso leria do arquivo agent/rules/00-project-context.md
-    tokens = {
-        "bluePrimary": "#0048ff",
-        "blueAccent": "#4fe6ff",
-        "background": "#040013",
-        "easing": "cubic-bezier(0.22, 1, 0.36, 1)"
-    }
-    return f"Token '{token_name}': {tokens.get(token_name, 'Token not found - use default white')}"
+    """Busca um token de design específico de um arquivo JSON de configuração."""
+    config_path = Path(__file__).parent / DESIGN_TOKENS_PATH
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            tokens = json.load(f)
+        value = tokens.get(token_name)
+        if value:
+            return f"Token '{token_name}': {value}"
+        else:
+            return f"Token '{token_name}' não encontrado. Usando valor padrão."
+    except FileNotFoundError:
+        return "Arquivo de tokens de design não encontrado."
+    except Exception as e:
+        logger.error(f"Erro ao ler tokens de design: {e}")
+        return f"Erro ao ler tokens de design: {str(e)}"
 
 def read_file_content(filepath: str) -> str:
     """Lê o conteúdo de um arquivo de regra ou workflow."""
@@ -39,7 +52,7 @@ def read_file_content(filepath: str) -> str:
 
 # --- 2. Definição do Pelotão (The Ghost Unit) ---
 
-def create_ghost_battalion(model_name: str = 'gemini-2.0-flash-001') -> Dict[str, LlmAgent]:
+def create_ghost_battalion(model_name: str = DEFAULT_MODEL_NAME) -> Dict[str, LlmAgent]:
     """
     Instancia a unidade de elite para desenvolvimento do portfólio.
     """
@@ -110,31 +123,29 @@ def create_ghost_battalion(model_name: str = 'gemini-2.0-flash-001') -> Dict[str
         "audit_sentinel": audit_sentinel
     }
 
-# --- 3. Orquestrador Global ---
+# --- 3. Orquestrador Global (Otimizado) ---
 
-def create_ghost_orchestrator(battalion: Dict[str, LlmAgent]) -> LlmAgent:
+def create_delegation_tool(agent_name: str, agent_instance: LlmAgent, session_service: InMemorySessionService):
+    """Cria uma ferramenta de delegação para um agente específico."""
+    def delegate_task(instructions: str) -> str:
+        """Delega uma tarefa para um agente especialista."""
+        # Nota: Em um ambiente real, esta chamada seria assíncrona e usaria o runner do agente.
+        return f"Simulação: Agente {agent_name} processou: '{instructions}' e retornou código/análise."
     
+    delegate_task.__name__ = f"delegate_to_{agent_name}"
+    delegate_task.__doc__ = f"Envia uma tarefa específica para o especialista {agent_name}."
+    return FunctionTool(func=delegate_task)
+
+def create_ghost_orchestrator(battalion: Dict[str, LlmAgent], session_service: InMemorySessionService) -> LlmAgent:
     # Criar ferramentas de delegação dinamicamente
-    delegation_tools = []
+    delegation_tools = [
+        create_delegation_tool(name, agent, session_service) for name, agent in battalion.items()
+    ]
 
-    def make_delegate_tool(agent_name: str):
-        # Nota: Num ambiente real, conectaríamos isso ao SessionService real para manter histórico
-        def delegate_task(instructions: str) -> str:
-            """Delega uma tarefa para um agente especialista."""
-            return f"Simulação: Agente {agent_name} processou: '{instructions}' e retornou código/análise."
-        
-        delegate_task.__name__ = f"delegate_to_{agent_name}"
-        delegate_task.__doc__ = f"Envia uma tarefa específica para o especialista {agent_name}."
-        return FunctionTool(func=delegate_task)
-
-    for name, _ in battalion.items():
-        delegation_tools.append(make_delegate_tool(name))
-
-    # O Orquestrador usa o Planner para decidir quem chamar
     orchestrator = LlmAgent(
         name="ghost_commander",
-        model='gemini-2.0-flash-001',
-        planner=PlanReActPlanner(), 
+        model=DEFAULT_MODEL_NAME, # Poderia vir de uma configuração global
+        planner=PlanReActPlanner(),
         tools=delegation_tools,
         instruction=(
             "Você é o Gerente de Produto do 'Ghost Design System'. "
@@ -152,20 +163,16 @@ def create_ghost_orchestrator(battalion: Dict[str, LlmAgent]) -> LlmAgent:
 
 # --- 4. Execução do Workflow ---
 
-def run_project_mission(user_mission: str):
+def run_project_mission(user_mission: str, session_service: InMemorySessionService, battalion: Dict[str, LlmAgent]):
     """
     Executa uma missão no contexto do projeto.
     """
-    APP_NAME = "ghost_system_v3"
     
-    # Inicialização
-    battalion = create_ghost_battalion()
-    commander = create_ghost_orchestrator(battalion)
-    session_service = InMemorySessionService()
+    # O `commander` agora recebe o serviço de sessão
+    commander = create_ghost_orchestrator(battalion, session_service)
     
     session = session_service.create_session_sync(app_name=APP_NAME, user_id="danilo_novais")
     
-    # Runner
     runner = Runner(agent=commander, app_name=APP_NAME, session_service=session_service)
     
     print(f"\n👻 GHOST SYSTEM INITIALIZED | Mission: {user_mission}")
@@ -192,4 +199,8 @@ if __name__ == "__main__":
         "um título grande com tipografia Inter e animação de reveal escalonado (stagger). "
         "Garanta que seja responsivo e passe no teste de performance."
     )
-    run_project_mission(mission)
+    # Inicialização única
+    battalion = create_ghost_battalion()
+    session_service = InMemorySessionService() # Poderia ser substituído por um serviço persistente
+    
+    run_project_mission(mission, session_service, battalion)
