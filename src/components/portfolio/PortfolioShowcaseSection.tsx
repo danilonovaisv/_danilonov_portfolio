@@ -3,13 +3,13 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CategoryFilter from './CategoryFilter'; // Certifique-se que o caminho esteja correto
-import PortfolioModalNew from './PortfolioModalNew'; // Certifique-se que o caminho esteja correto
-import type { PortfolioProject } from '@/types/project'; // Certifique-se que o tipo esteja correto
-// import { PROJECT_CATEGORIES } from '@/data/projects'; // Se for usar dados reais
+import CategoryFilter from './CategoryFilter';
+import PortfolioModalNew from './PortfolioModalNew';
+import PortfolioCard from './PortfolioCard';
+import type { PortfolioProject } from '@/types/project';
 
 // Definindo os tipos necessários localmente ou importando de um lugar central
-type ProjectCategory = string; // Ou o tipo exato de sua enumeração de categorias
+type ProjectCategory = string;
 
 interface ShowcaseItem {
   id: string;
@@ -37,9 +37,9 @@ const mockPortfolioItems: ShowcaseItem[] = [
       title: 'Fringilla Fermentum',
       subtitle: 'Um projeto incrível de Web Design',
       displayCategory: 'Web Design',
-      category: 'web',
+      category: 'web' as const,
       client: 'Cliente A',
-      year: '2025',
+      year: 2025,
       image: '/images/art/p1.jpg', // Imagem principal
       tags: ['React', 'TypeScript'],
       detail: { description: 'Descrição detalhada...' },
@@ -55,7 +55,7 @@ const mockPortfolioItems: ShowcaseItem[] = [
     id: '2',
     title: 'Vestibulum Tellus',
     subtitle: 'Graphic Design',
-    category: 'graphic',
+    category: 'branding',
     imageUrl: '/images/art/p2.jpg',
     projectData: {
       id: '2',
@@ -63,9 +63,9 @@ const mockPortfolioItems: ShowcaseItem[] = [
       title: 'Vestibulum Tellus',
       subtitle: 'Design gráfico impactante',
       displayCategory: 'Graphic Design',
-      category: 'graphic',
+      category: 'branding' as const,
       client: 'Cliente B',
-      year: '2025',
+      year: 2025,
       image: '/images/art/p2.jpg',
       tags: ['Illustrator', 'Branding'],
       detail: { description: 'Descrição detalhada...' },
@@ -113,73 +113,18 @@ const PortfolioShowcaseSection = () => {
     setSelectedProject(null);
   };
 
-  // Mapeia os itens filtrados para os cards animados
+  // Mapeia os itens filtrados para os cards animados usando o novo componente
   const renderedItems = filteredItems.map((item) => (
-    <motion.div
+    <div
       key={item.id}
-      layoutId={`card-container-${item.id}`} // Crucial para animação de layout com o modal
-      className={`
-        relative group overflow-hidden cursor-pointer
-        ${item.widthClass || 'col-span-1'} ${item.heightClass || 'row-span-1'}
-        aspect-[4/5] // Ajuste o aspect ratio conforme necessário
-      `}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.4, ease: easing }}
-      onClick={() => openModal(item.projectData)}
+      className={`${item.widthClass || 'col-span-1'} ${item.heightClass || 'row-span-1'}`}
     >
-      {/* Imagem de Fundo (ou Video Placeholder) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${item.imageUrl})` }}
+      <PortfolioCard
+        project={item.projectData}
+        onClick={() => openModal(item.projectData)}
+        layoutId={`card-${item.id}`}
       />
-
-      {/* Overlay com Gradiente */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
-
-      {/* Overlay de Texto (animado como no CodePen) */}
-      <motion.div
-        className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 text-center"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-      >
-        <motion.h3
-          className="text-xl md:text-2xl font-semibold mb-1"
-          initial={{ y: 20, opacity: 0 }}
-          whileHover={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3, ease: easing, delay: 0.05 }}
-        >
-          {item.title}
-        </motion.h3>
-        <motion.p
-          className="text-sm md:text-base text-white/80"
-          initial={{ y: 20, opacity: 0 }}
-          whileHover={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3, ease: easing, delay: 0.1 }}
-        >
-          {item.subtitle}
-        </motion.p>
-        {/* Botão opcional no overlay */}
-        <motion.div
-          className="mt-4 px-4 py-2 border border-white/30 rounded-full text-xs md:text-sm font-medium opacity-0 group-hover:opacity-100"
-          initial={{ y: 20, opacity: 0 }}
-          whileHover={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3, ease: easing, delay: 0.15 }}
-        >
-          View Details
-        </motion.div>
-      </motion.div>
-
-      {/* Overlay mais escuro no hover */}
-      <motion.div
-        className="absolute inset-0 bg-black/20 pointer-events-none"
-        initial={{ opacity: 0 }}
-        whileHover={{ opacity: 0.3 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-      />
-    </motion.div>
+    </div>
   ));
 
   return (

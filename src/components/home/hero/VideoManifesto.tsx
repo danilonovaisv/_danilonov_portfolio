@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-import { MOTION_TOKENS, GHOST_EASE } from '@/config/motion';
-
 interface VideoManifestoProps {
   src: string;
 }
@@ -94,12 +92,9 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
     <motion.section
       ref={sectionRef}
       className="video-manifesto w-full overflow-hidden rounded-[2px]"
-      initial={{ opacity: 0, scale: 1.05, y: MOTION_TOKENS.offset.dramatic }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{
-        duration: MOTION_TOKENS.duration.slow,
-        ease: GHOST_EASE,
-      }}
+      initial={{ opacity: 0, scale: 1.1, rotate: -1, y: 40 }}
+      whileInView={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
+      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, amount: 0.2 }}
     >
       <div
@@ -129,7 +124,7 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
             {/* Toggle som */}
             <button
               type="button"
-              className="toggle-sound absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#4fe6ff] focus-visible:outline-offset-2"
+              className="toggle-sound absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#4fe6ff] focus-visible:outline-offset-2"
               onClick={() => setMuted((m) => !m)}
               aria-label={
                 muted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'

@@ -1,5 +1,4 @@
 import { useScroll, useTransform, useSpring } from 'framer-motion';
-import { MOTION_TOKENS } from '@/config/motion';
 
 export function useHeroAnimation(
   containerRef: React.RefObject<HTMLElement | null>
@@ -11,10 +10,11 @@ export function useHeroAnimation(
   });
 
   // Suaviza o scroll para não ficar "duro"
-  const smoothScroll = useSpring(
-    scrollYProgress,
-    MOTION_TOKENS.spring.responsive
-  );
+  const smoothScroll = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 20,
+    restDelta: 0.001,
+  });
 
   // Transparência do Texto Editorial (some rápido ao scrollar)
   const copyOpacity = useTransform(smoothScroll, [0, 0.2], [1, 0]);

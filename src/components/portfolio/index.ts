@@ -6,6 +6,7 @@
 // Main components
 export { default as PortfolioHeroNew } from './PortfolioHeroNew';
 export { default as PortfolioShowcaseSection } from './PortfolioShowcaseSection';
+export { default as PortfolioCard } from './PortfolioCard';
 export { default as CategoryFilter } from './CategoryFilter';
 export { default as PortfolioModalNew } from './PortfolioModalNew';
 

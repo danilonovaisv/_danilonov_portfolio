@@ -3,17 +3,16 @@
 import { motion, Variants } from 'framer-motion';
 import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { HOME_CONTENT } from '@/config/content';
-import { MOTION_TOKENS, GHOST_EASE } from '@/config/motion';
 
 const itemAnimation: Variants = {
-  initial: { opacity: 0, y: MOTION_TOKENS.offset.standard },
+  initial: { opacity: 0, y: 24 },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: MOTION_TOKENS.duration.normal,
-      ease: GHOST_EASE,
-      delay: 1.2, // Sync with HeroCopy text finish
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1], // Ghost ease
+      delay: 1.0,
     },
   },
 };

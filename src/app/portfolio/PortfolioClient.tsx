@@ -36,10 +36,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
       <PortfolioHeroNew />
 
       {/* Nova Seção de Cards com Animações de Overlay */}
-      <PortfolioShowcaseSection 
-        projects={projects}
-        onProjectSelect={handleOpenProject} 
-      />
+      <PortfolioShowcaseSection />
 
       {/* Modal de Detalhes (Ghost) */}
       <PortfolioModalNew

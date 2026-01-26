@@ -50,7 +50,7 @@
 
 /* Texto revelado (mais brilhante com glow) */
 .maskText {
-  color: var(--text-primary);
+  color: #ffffff;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.9),
     0 0 20px rgba(255, 255, 255, 0.7),
@@ -80,7 +80,7 @@
 
 /* Tag style matching spec 4.2 - blueAccent */
 .tag {
-  color: var(--text-primary);
+  color: #ffffff;
   font-size: clamp(0.9rem, 1.3vw, 2rem);
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -101,7 +101,7 @@
   width: 500px;
   height: 500px;
   border-radius: 50%;
-  background-color: var(--blue-primary-faint, rgba(0, 72, 255, 0.2));
+  background-color: rgba(0, 72, 255, 0.2);
   filter: blur(120px);
   pointer-events: none;
   mix-blend-mode: screen;
