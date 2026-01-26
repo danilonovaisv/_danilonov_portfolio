@@ -10,7 +10,7 @@ import type { PortfolioProject } from '@/types/project';
 
 interface PortfolioShowcaseSectionProps {
   projects?: PortfolioProject[];
-  onProjectSelect?: (project: PortfolioProject) => void;
+  onProjectSelect?: (_project: PortfolioProject) => void;
 }
 
 /**

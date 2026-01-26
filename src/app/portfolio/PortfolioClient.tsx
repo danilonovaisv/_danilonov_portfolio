@@ -3,14 +3,14 @@
 import { useCallback, useState } from 'react';
 import type { PortfolioProject } from '@/types/project';
 import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
-import { PortfolioShowcaseSection } from '@/components/portfolio/PortfolioShowcaseSection';
+import PortfolioShowcaseSection from '@/components/portfolio/PortfolioShowcaseSection';
 import PortfolioModalNew from '@/components/portfolio/PortfolioModalNew';
 import { SiteClosure } from '@/components/layout/SiteClosure';
 import type { FC } from 'react';
 
 type ShowcaseProps = {
   projects: PortfolioProject[];
-  onProjectSelect: (project: PortfolioProject) => void;
+  onProjectSelect: (_project: PortfolioProject) => void;
 };
 
 // Workaround: ensure TS understands the imported symbol is a React component with props
