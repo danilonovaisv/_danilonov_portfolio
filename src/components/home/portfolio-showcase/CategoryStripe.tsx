@@ -47,6 +47,7 @@ export function CategoryStripe({
 
   const smoothProgress = useSpring(scrollYProgress, GHOST_SPRING);
   const parallaxY = useTransform(smoothProgress, [0, 1], [-20, 20]);
+  const isVideo = category.thumbnail.endsWith('.mp4');
 
   return (
     <motion.div
@@ -99,15 +100,26 @@ export function CategoryStripe({
                 style={{ y: prefersReducedMotion ? 0 : parallaxY }}
                 className="absolute inset-0 w-full h-[120%]"
               >
-                <Image
-                  src={category.thumbnail}
-                  alt={title.join(' ')}
-                  fill
-                  className="object-cover"
-                  sizes="288px"
-                  loading="lazy"
-                  onError={applyImageFallback}
-                />
+                {isVideo ? (
+                  <video
+                    src={category.thumbnail}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  <Image
+                    src={category.thumbnail}
+                    alt={title.join(' ')}
+                    fill
+                    className="object-cover"
+                    sizes="288px"
+                    loading="lazy"
+                    onError={applyImageFallback}
+                  />
+                )}
               </motion.div>
             </div>
           </motion.div>

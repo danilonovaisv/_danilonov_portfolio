@@ -12,19 +12,20 @@ interface ParallaxProjectCardProps {
   onProjectSelect: (project: PortfolioProject) => void;
 }
 
-const ParallaxProjectCard: FC<ParallaxProjectCardProps> = ({ project, onProjectSelect }) => {
+const ParallaxProjectCard: FC<ParallaxProjectCardProps> = (props) => {
+  const { project: _project, onProjectSelect } = props;
   const { wrapperRef, cardRef } = useParallaxCard<HTMLDivElement>();
-  const imageUrl = useSiteAssetUrl(project.image);
+  const imageUrl = useSiteAssetUrl(_project.image);
 
   return (
     <motion.div
       ref={cardRef}
       className="relative h-[400px] overflow-hidden rounded-lg group cursor-pointer"
-      onClick={() => onProjectSelect(project)}
+      onClick={() => onProjectSelect(_project)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onProjectSelect(project)}
-      aria-label={`Ver projeto ${project.title}`}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onProjectSelect(_project)}
+      aria-label={`Ver projeto ${_project.title}`}
       whileHover="hover"
     >
       <div
@@ -33,7 +34,7 @@ const ParallaxProjectCard: FC<ParallaxProjectCardProps> = ({ project, onProjectS
       >
         <Image
           src={imageUrl}
-          alt={project.title}
+          alt={_project.title}
           fill
           className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
           priority // Assuming these images are important for LCP
@@ -41,8 +42,8 @@ const ParallaxProjectCard: FC<ParallaxProjectCardProps> = ({ project, onProjectS
       </div>
       <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300" />
       <div className="absolute bottom-0 left-0 p-6 text-white">
-        <h3 className="text-2xl font-bold">{project.title}</h3>
-        <p className="text-white/80">{project.shortDescription}</p>
+        <h3 className="text-2xl font-bold">{_project.title}</h3>
+        <p className="text-white/80">{_project.shortDescription}</p>
       </div>
     </motion.div>
   );

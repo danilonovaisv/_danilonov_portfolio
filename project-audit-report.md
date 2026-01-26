@@ -1,11 +1,10 @@
 # 🧩 Auditoria do Projeto Danilo Novais Portfolio
 
-Gerado em: 1/25/2026, 10:12:57 PM
+Gerado em: 1/26/2026, 7:27:33 AM
 
 ---
 
 ## 📦 Dependências não utilizadas
-
 - @dataconnect/admin-generated
 - @dataconnect/generated
 - @genkit-ai/google-genai
@@ -14,21 +13,22 @@ Gerado em: 1/25/2026, 10:12:57 PM
 - firebase-admin
 - firebase-frameworks
 - firebase-functions
-- frame
 - husky
 - lightningcss
 - lint-staged
 - motion-studio-mcp
 - postprocessing
+- statsig-js
+
 
 ## 🧱 Dependências de desenvolvimento não utilizadas
-
 - @tailwindcss/postcss
 - @tailwindcss/typography
 - @testing-library/user-event
 - @types/handlebars
 - autoprefixer
 - esbuild
+- eslint-config-next
 - eslint-plugin-react
 - jest-environment-jsdom
 - postcss
@@ -38,14 +38,12 @@ Gerado em: 1/25/2026, 10:12:57 PM
 - ts-node
 - which
 
-## 🌿 Branches no repositório
 
-- - main
+## 🌿 Branches no repositório
+- * main
 - remotes/origin/HEAD -> origin/main
 - remotes/origin/main
-- bolt/optimize-category-stripe-video-18415136703019510943
-- remotes/origin/bolt/optimize-category-stripe-video-18415136703019510943
+
 
 ## 🪓 Branches potencialmente obsoletas
 
-- remotes/origin/bolt/optimize-category-stripe-video-18415136703019510943

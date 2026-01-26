@@ -113,17 +113,25 @@ async function fixDuplicateAssets() {
     assetsByKey.get(cleanKey)?.push(asset);
 
     // Agrupar por caminho limpo
-    if (!assetsByPath.has(cleanPath)) {
-      assetsByPath.set(cleanPath, []);
+    if (cleanPath) {
+      if (!assetsByPath.has(cleanPath)) {
+        assetsByPath.set(cleanPath, []);
+      }
+      assetsByPath.get(cleanPath)?.push(asset);
     }
-    assetsByPath.get(cleanPath)?.push(asset);
   }
 
   // Identificar duplicatas para resolver
   const idsToDelete = new Set<string>();
   const updatesToPerform = new Map<
     string,
-    { id: string; key: string; file_path: string; page?: string }
+    {
+      id: string;
+      key: string;
+      file_path: string | null;
+      page?: string | null;
+      bucket: string | null;
+    }
   >();
 
   // Processar grupos por chave
@@ -144,7 +152,7 @@ async function fixDuplicateAssets() {
         if (!isMetadataA && isMetadataB) return -1;
 
         // Prefere registros com caminhos mais completos
-        return b.file_path.length - a.file_path.length;
+        return (b.file_path?.length ?? 0) - (a.file_path?.length ?? 0);
       });
 
       // Manter o primeiro (melhor candidato), excluir os outros
@@ -171,6 +179,7 @@ async function fixDuplicateAssets() {
           key: newKey || originalKey,
           file_path: newPath || originalPath,
           page: newPage || originalPage,
+          bucket: keeper.bucket, // Preservar o bucket
         });
       }
     } else {
@@ -193,6 +202,7 @@ async function fixDuplicateAssets() {
           key: newKey || originalKey,
           file_path: newPath || originalPath,
           page: newPage || originalPage,
+          bucket: asset.bucket, // Preservar o bucket
         });
       }
     }
@@ -223,7 +233,7 @@ async function fixDuplicateAssets() {
             if (isMetadataA && !isMetadataB) return 1;
             if (!isMetadataA && isMetadataB) return -1;
 
-            return b.file_path.length - a.file_path.length;
+            return (b.file_path?.length ?? 0) - (a.file_path?.length ?? 0);
           });
 
           const keeper = sortedGroup[0];
@@ -248,6 +258,7 @@ async function fixDuplicateAssets() {
               key: newKey || originalKey,
               file_path: newPath || originalPath,
               page: newPage || originalPage,
+              bucket: keeper.bucket, // Preservar o bucket
             });
           }
         }
