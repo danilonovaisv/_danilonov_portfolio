@@ -1,6 +1,6 @@
 'use client';
 
-import { useScroll, useTransform, MotionValue } from 'framer-motion';
+import { useScroll, useTransform } from 'framer-motion';
 import { MutableRefObject } from 'react';
 
 /**

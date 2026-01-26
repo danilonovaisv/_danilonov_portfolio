@@ -9,7 +9,8 @@ import ClientsBrandsSection from '@/components/home/clients/ClientsBrandsSection
 import ContactSection from '@/components/home/contact/ContactSection';
 
 export default function PortfolioShowcasePage() {
-  const [selectedProject, setSelectedProject] = useState<PortfolioProject | null>(null);
+  const [selectedProject, setSelectedProject] =
+    useState<PortfolioProject | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenProject = (project: PortfolioProject) => {
@@ -26,19 +27,19 @@ export default function PortfolioShowcasePage() {
   return (
     <main className="bg-[#040013] min-h-screen">
       <HeroSection />
-      
+
       <ProjectsGallery onOpenProject={handleOpenProject} />
-      
+
       {/* Legacy Sections covering the gallery track if needed */}
       <div className="relative z-10 bg-[#040013]">
-         <ClientsBrandsSection />
-         <ContactSection />
+        <ClientsBrandsSection />
+        <ContactSection />
       </div>
 
-      <PortfolioModal 
-        isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-        project={selectedProject} 
+      <PortfolioModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        project={selectedProject}
       />
     </main>
   );

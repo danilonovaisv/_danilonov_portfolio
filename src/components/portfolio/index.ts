@@ -5,7 +5,7 @@
 
 // Main components
 export { default as PortfolioHeroNew } from './PortfolioHeroNew';
-export { default as ProjectsGallery } from './ProjectsGallery';
+export { ProjectsGallery } from './ProjectsGallery';
 export { default as PortfolioCard } from './PortfolioCard';
 export { default as CategoryFilter } from './CategoryFilter';
 export { default as PortfolioModalNew } from './PortfolioModalNew';

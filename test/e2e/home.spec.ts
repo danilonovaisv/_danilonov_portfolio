@@ -13,9 +13,10 @@ test.describe('Home Page', () => {
 
     // Verify Featured Projects section
     // I'll look for text that typically appears in this section
-    const featuredSection = page.locator('section');
+    // Verify Featured Projects section or Portfolio Showcase
+    // Check for "portfólio showcase" heading which is prominent
     await expect(
-      featuredSection.filter({ hasText: /Projetos/i }).first()
+      page.locator('h2', { hasText: /portfólio/i }).first()
     ).toBeVisible();
 
     // Take a screenshot for verification

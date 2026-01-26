@@ -25,7 +25,7 @@ export const ProjectCard = ({
   return (
     <div
       ref={containerRef}
-      className={`group relative w-full overflow-hidden bg-black ${className} aspect-[3/4]`}
+      className={`group relative w-full overflow-hidden bg-black ${className} aspect-3/4`}
     >
       {/* Parallax Image Wrapper */}
       <motion.div
@@ -45,7 +45,7 @@ export const ProjectCard = ({
       {/* Overlay */}
       <div 
         onClick={() => onClick?.(project)}
-        className="absolute inset-0 z-10 flex cursor-pointer flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute inset-0 z-10 flex cursor-pointer flex-col justify-end bg-linear-to-t from-black/80 via-black/20 to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       >
         <div className="translate-y-4 transform transition-transform duration-300 group-hover:translate-y-0">
           <p className="mb-1 text-xs font-medium uppercase tracking-widest text-accent">

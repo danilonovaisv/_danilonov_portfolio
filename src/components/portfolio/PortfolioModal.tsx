@@ -42,7 +42,7 @@ export const PortfolioModal = ({ isOpen, onClose, project }: PortfolioModalProps
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18, ease: 'linear' }}
             onClick={onClose}
-            className="fixed inset-0 z-[990] bg-black/90 backdrop-blur-md"
+            className="fixed inset-0 z-990 bg-black/90 backdrop-blur-md"
           />
 
           {/* Container - 0.26s ease (delay 0.12s) */}
@@ -55,12 +55,12 @@ export const PortfolioModal = ({ isOpen, onClose, project }: PortfolioModalProps
                 ease: [0.22, 1, 0.36, 1],
                 delay: 0.12 
             }}
-            className="fixed inset-0 z-[995] overflow-y-auto"
+            className="fixed inset-0 z-995 overflow-y-auto"
           >
              <button 
                 onClick={onClose}
                 aria-label="Fechar galeria"
-                className="fixed top-6 right-6 z-[1000] flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20"
+                className="fixed top-6 right-6 z-1000 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20"
              >
                 <X size={24} />
              </button>
