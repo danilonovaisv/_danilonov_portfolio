@@ -1,22 +1,26 @@
-var R=require("../../../../chunks/ssr/[turbopack]_runtime.js")("server/app/admin/(protected)/trabalhos/page.js")
-R.c("server/chunks/ssr/[root-of-the-server]__0ed0ab11._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_9266b807._.js")
-R.c("server/chunks/ssr/_58bcd032._.js")
-R.c("server/chunks/ssr/[root-of-the-server]__821f7d03._.js")
-R.c("server/chunks/ssr/node_modules_e8f67c40._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_esm_9bea2a37._.js")
-R.c("server/chunks/ssr/[root-of-the-server]__1690ee0d._.js")
-R.c("server/chunks/ssr/[root-of-the-server]__4522055c._.js")
-R.c("server/chunks/ssr/_1c37b54d._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_22f8d72f._.js")
-R.c("server/chunks/ssr/src_app_global-error_tsx_aa661ba4._.js")
-R.c("server/chunks/ssr/src_62711678._.js")
-R.c("server/chunks/ssr/src_app_template_tsx_885a4533._.js")
-R.c("server/chunks/ssr/src_app_not-found_tsx_0f6131ce._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_client_components_2fffaa3a._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_15817684.js")
-R.c("server/chunks/ssr/_6c0c53ee._.js")
-R.c("server/chunks/ssr/node_modules_370719cb._.js")
-R.c("server/chunks/ssr/_6906b7f4._.js")
-R.m(84545)
-module.exports=R.m(84545).exports
+var R = require('../../../../chunks/ssr/[turbopack]_runtime.js')(
+  'server/app/admin/(protected)/trabalhos/page.js'
+);
+R.c('server/chunks/ssr/[root-of-the-server]__0ed0ab11._.js');
+R.c('server/chunks/ssr/node_modules_next_dist_9266b807._.js');
+R.c('server/chunks/ssr/_58bcd032._.js');
+R.c('server/chunks/ssr/[root-of-the-server]__821f7d03._.js');
+R.c('server/chunks/ssr/node_modules_e8f67c40._.js');
+R.c('server/chunks/ssr/node_modules_next_dist_esm_9bea2a37._.js');
+R.c('server/chunks/ssr/[root-of-the-server]__1690ee0d._.js');
+R.c('server/chunks/ssr/[root-of-the-server]__4522055c._.js');
+R.c('server/chunks/ssr/_1c37b54d._.js');
+R.c('server/chunks/ssr/node_modules_next_dist_22f8d72f._.js');
+R.c('server/chunks/ssr/src_app_global-error_tsx_aa661ba4._.js');
+R.c('server/chunks/ssr/src_62711678._.js');
+R.c('server/chunks/ssr/src_app_template_tsx_885a4533._.js');
+R.c('server/chunks/ssr/src_app_not-found_tsx_0f6131ce._.js');
+R.c('server/chunks/ssr/node_modules_next_dist_client_components_2fffaa3a._.js');
+R.c(
+  'server/chunks/ssr/node_modules_next_dist_client_components_builtin_unauthorized_15817684.js'
+);
+R.c('server/chunks/ssr/_6c0c53ee._.js');
+R.c('server/chunks/ssr/node_modules_370719cb._.js');
+R.c('server/chunks/ssr/_6906b7f4._.js');
+R.m(84545);
+module.exports = R.m(84545).exports;

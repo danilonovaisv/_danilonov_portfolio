@@ -14,9 +14,33 @@
 .HeroCopy-module__jwv1Aa__maskLayer {
   pointer-events: none;
   z-index: 12;
-  -webkit-mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh), #010110 0%, #000000d9 25%, #00000080 50%, #00000026 75%, #0000 100%);
-  -webkit-mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh), #000 0%, #000000d9 25%, #00000080 50%, #00000026 75%, #0000 100%);
-  mask-image: radial-gradient(circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw) var(--ghost-y, 50vh), #000 0%, #000000d9 25%, #00000080 50%, #00000026 75%, #0000 100%);
+  -webkit-mask-image: radial-gradient(
+    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
+      var(--ghost-y, 50vh),
+    #010110 0%,
+    #000000d9 25%,
+    #00000080 50%,
+    #00000026 75%,
+    #0000 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
+      var(--ghost-y, 50vh),
+    #000 0%,
+    #000000d9 25%,
+    #00000080 50%,
+    #00000026 75%,
+    #0000 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--ghost-radius, 420px) at var(--ghost-x, 50vw)
+      var(--ghost-y, 50vh),
+    #000 0%,
+    #000000d9 25%,
+    #00000080 50%,
+    #00000026 75%,
+    #0000 100%
+  );
   justify-content: center;
   align-items: center;
   display: flex;
@@ -29,20 +53,24 @@
 
 .HeroCopy-module__jwv1Aa__maskText {
   color: var(--text-primary);
-  text-shadow: 0 0 8px #ffffffe6, 0 0 20px #ffffffb3, 0 0 40px #4fe6ff80, 0 0 80px #0048ff66;
+  text-shadow:
+    0 0 8px #ffffffe6,
+    0 0 20px #ffffffb3,
+    0 0 40px #4fe6ff80,
+    0 0 80px #0048ff66;
 }
 
 .HeroCopy-module__jwv1Aa__heroTitle {
-  letter-spacing: -.07em !important;
+  letter-spacing: -0.07em !important;
   text-transform: none !important;
   font-size: clamp(5.5rem, 20vw, 10rem) !important;
   font-weight: 900 !important;
-  line-height: .9 !important;
+  line-height: 0.9 !important;
 }
 
 .HeroCopy-module__jwv1Aa__heroSubtitle {
-  opacity: .5 !important;
-  letter-spacing: .05em !important;
+  opacity: 0.5 !important;
+  letter-spacing: 0.05em !important;
   text-transform: none !important;
   font-size: clamp(1rem, 8vw, 5rem) !important;
   font-weight: 600 !important;
@@ -51,10 +79,10 @@
 
 .HeroCopy-module__jwv1Aa__tag {
   color: var(--text-primary);
-  letter-spacing: .25em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  opacity: .7;
-  font-size: clamp(.9rem, 1.3vw, 2rem);
+  opacity: 0.7;
+  font-size: clamp(0.9rem, 1.3vw, 2rem);
   font-weight: 600;
 }
 

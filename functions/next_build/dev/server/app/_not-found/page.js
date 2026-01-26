@@ -1,16 +1,26 @@
-var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
-R.c("server/chunks/ssr/node_modules_next_dist_c72d4351._.js")
-R.c("server/chunks/ssr/[root-of-the-server]__39cb92e7._.js")
-R.c("server/chunks/ssr/node_modules_9002f45e._.js")
-R.c("server/chunks/ssr/[externals]__864ab248._.js")
-R.c("server/chunks/ssr/[externals]_next_dist_compiled_@vercel_og_index_node_806848fc.js")
-R.c("server/chunks/ssr/node_modules_32658e05._.js")
-R.c("server/chunks/ssr/src_ea7fc475._.js")
-R.c("server/chunks/ssr/src_app_global-error_tsx_aa661ba4._.js")
-R.c("server/chunks/ssr/src_1326ed78._.js")
-R.c("server/chunks/ssr/src_app_template_tsx_885a4533._.js")
-R.c("server/chunks/ssr/src_app_not-found_tsx_0f6131ce._.js")
-R.c("server/chunks/ssr/node_modules_next_dist_client_components_2fffaa3a._.js")
-R.c("server/chunks/ssr/_next-internal_server_app__not-found_page_actions_554ec2bf.js")
-R.m("[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/_not-found/page { GLOBAL_ERROR_MODULE => \"[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)\", METADATA_0 => \"[project]/src/app/opengraph-image--metadata.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_1 => \"[project]/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_2 => \"[project]/src/app/template.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_3 => \"[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_4 => \"[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_5 => \"[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_6 => \"[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_7 => \"[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)\" } [app-rsc] (ecmascript)")
-module.exports=R.m("[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/_not-found/page { GLOBAL_ERROR_MODULE => \"[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)\", METADATA_0 => \"[project]/src/app/opengraph-image--metadata.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_1 => \"[project]/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_2 => \"[project]/src/app/template.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_3 => \"[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_4 => \"[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_5 => \"[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_6 => \"[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)\", MODULE_7 => \"[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)\" } [app-rsc] (ecmascript)").exports
+var R = require('../../chunks/ssr/[turbopack]_runtime.js')(
+  'server/app/_not-found/page.js'
+);
+R.c('server/chunks/ssr/node_modules_next_dist_c72d4351._.js');
+R.c('server/chunks/ssr/[root-of-the-server]__39cb92e7._.js');
+R.c('server/chunks/ssr/node_modules_9002f45e._.js');
+R.c('server/chunks/ssr/[externals]__864ab248._.js');
+R.c(
+  'server/chunks/ssr/[externals]_next_dist_compiled_@vercel_og_index_node_806848fc.js'
+);
+R.c('server/chunks/ssr/node_modules_32658e05._.js');
+R.c('server/chunks/ssr/src_ea7fc475._.js');
+R.c('server/chunks/ssr/src_app_global-error_tsx_aa661ba4._.js');
+R.c('server/chunks/ssr/src_1326ed78._.js');
+R.c('server/chunks/ssr/src_app_template_tsx_885a4533._.js');
+R.c('server/chunks/ssr/src_app_not-found_tsx_0f6131ce._.js');
+R.c('server/chunks/ssr/node_modules_next_dist_client_components_2fffaa3a._.js');
+R.c(
+  'server/chunks/ssr/_next-internal_server_app__not-found_page_actions_554ec2bf.js'
+);
+R.m(
+  '[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/_not-found/page { GLOBAL_ERROR_MODULE => "[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)", METADATA_0 => "[project]/src/app/opengraph-image--metadata.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_1 => "[project]/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/src/app/template.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_6 => "[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_7 => "[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript)'
+);
+module.exports = R.m(
+  '[project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/_not-found/page { GLOBAL_ERROR_MODULE => "[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)", METADATA_0 => "[project]/src/app/opengraph-image--metadata.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_1 => "[project]/src/app/layout.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/src/app/template.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_6 => "[project]/src/app/global-error.tsx [app-rsc] (ecmascript, Next.js Server Component)", MODULE_7 => "[project]/src/app/not-found.tsx [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript)'
+).exports;

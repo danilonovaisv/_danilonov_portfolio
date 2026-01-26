@@ -10,6 +10,7 @@ import { listProjects } from '@/lib/supabase/queries/projects';
 import { mapDbProjectToPortfolioProject } from '@/lib/portfolio/project-mappers';
 import { createStaticClient } from '@/lib/supabase/static';
 import type { PortfolioProject } from '@/types/project';
+// Removed unused AntigravityDebugger import
 
 export const metadata: Metadata = {
   title: 'Danilo Novais | Creative Developer',

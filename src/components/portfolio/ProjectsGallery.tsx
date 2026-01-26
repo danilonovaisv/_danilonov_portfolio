@@ -13,7 +13,7 @@ import type { PortfolioProject, ProjectCategory } from '@/types/project';
 import { filterProjectsByCategory } from '@/data/projects';
 import CategoryFilter from './CategoryFilter';
 import PortfolioCard from './PortfolioCard';
-import useParallax from '@/hooks/useParallax';
+import { useParallax } from '@/hooks/useParallax';
 import { Container } from '@/components/layout/Container';
 
 interface ProjectsGalleryProps {
@@ -38,12 +38,9 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
   const prefersReducedMotion = useReducedMotion();
 
-  
+
   // Parallax Setup
-  const { galleryRef, trackRef, isScrolling, style: parallaxStyle } = useParallax({
-    springConfig: { stiffness: 45, damping: 25 },
-    enabled: !prefersReducedMotion && !isPaused,
-  });
+  const { galleryRef, trackRef, y } = useParallax();
 
   // Estado para altura do container (Sync Track -> Scroll)
   const [galleryHeight, setGalleryHeight] = useState('auto');
@@ -100,7 +97,6 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
       {/* Gallery Track (Fixed or Static) */}
         <motion.div
           ref={trackRef}
-          style={parallaxStyle}
           className={`w-full py-16 md:py-24 overflow-hidden ${
           !prefersReducedMotion && 'md:sticky md:top-0 md:w-full will-change-transform'
         }`}
@@ -144,7 +140,6 @@ const ProjectsGallery: FC<ProjectsGalleryProps> = ({
                 project={project}
                 index={index}
                 onOpen={onProjectOpen}
-                className={isScrolling ? 'pointer-events-none' : ''}
               />
             ))}
           </AnimatePresence>
