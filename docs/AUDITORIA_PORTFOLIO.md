@@ -1,432 +1,115 @@
-**Contexto e Persona:**
-Atue como um **Staff Frontend Architect** e **Creative Developer Senior**. Você possui autoridade técnica total sobre este repositório Next.js. Seu objetivo é orquestrar a implementação do sistema "Ghost v2.2", fundindo a engenharia de alta performance (Virtual Scroll/LERP) com a identidade visual consolidada (Design System, Hero Video, Seção de Clientes e Contato).
 
-**Diretriz Primária:**
-Elevar o nível de engenharia do projeto. Estabeleça um ecossistema "Agent-Ready" robusto, performático e visualmente fiel aos protótipos.
+# Plano Integrado – Implementação e Ajustes do Sistema Ghost v2.2
 
----
+## 1. Contexto Geral
 
-## 🔍 FASE 1: AUDITORIA E RECONHECIMENTO (Executar Imediatamente)
-
-Utilize suas ferramentas de terminal para mapear o terreno:
-
-1. **Mapeamento:** Execute `ls -R` (ignorando node_modules/.git) para entender a estrutura atual.
-2. **Stack Check:** Leia `package.json`, `tsconfig.json` e `tailwind.config.ts`.
-3. **Content Gap:** Verifique a existência de assets críticos (logos de clientes, vídeos) ou prepare placeholders.
+Como **Staff Frontend Architect** e **Creative Developer Senior**, você tem autoridade completa sobre um repositório Next.js que já possui um **Design System**, seções de **Hero Video**, **Clientes** e **Contato**. O objetivo é integrar o sistema **Ghost v2.2** (virtual scroll/LERP) de forma performática, mantendo fidelidade visual aos protótipos e preparando a base para um ecossistema **“Agent‑Ready”**. Esta integração inclui uma nova seção "About Beliefs" com animações sincronizadas ao scroll, interação responsiva do modelo 3D e transição de cores conforme o texto.
 
 ---
 
-## ⚙️ PROTOCOLO DE EXECUÇÃO (ALGORITMO)
+## 2. Fase 1: Auditoria e Reconhecimento
 
-### FASE 1: PARSING E INDEXAÇÃO (Chain of Thought)
+1. **Mapeamento da Estrutura**
+   - Execute `ls -R` no repositório (ignorando `node_modules` e `.git`) para entender a estrutura de pastas e localizar onde ficam os componentes, páginas e assets.
+   - Registre caminhos relevantes, como `src/components/`, `src/app/` ou `src/features/`, para uso nas alterações.
 
-1. Ler e entender completamente o DESCRITIVO DA SESSÃO ABAIXO
-2. Identificar **todos os elementos, textos, animações, cores e interações** descritos nesse documento (um a um, na ordem em que aparecem).
-3. **Executar cada fase sequencialmente**, aplicando as mudanças no código.
-4. Para cada fase executado, rodar **testes de layout e animação** relacionados.
-5. Registrar o resultado de cada etapa (sucesso, falhas, pendências).
-6. Crie uma lista mental (ou JSON interno) contendo para cada item:
-   - `ID`: Identificador sequencial.
-   - `Contexto`: Arquivos alvo (ex: `src/components/Header.tsx`).
-   - `Ação`: O que mudar (ex: "Aumentar padding", "Corrigir Z-Index").
-   - `Validação`: Critério de sucesso (ex: "Compilar sem erros", "Igual à imagem X").
+2. **Verificação de Stack**
+   - Abra `package.json` para identificar dependências de React, Next.js, Framer Motion, @react-three/fiber, @react-three/drei e verificar versões.
+   - Consulte `tsconfig.json` para garantir que as configurações de TypeScript (paths, jsx, moduleResolution) estão alinhadas.
+   - Revise `tailwind.config.ts` para conhecer temas de cores (área `extend.colors`) e utilitários personalizados.
+
+3. **Content Gap Analysis**
+   - Verifique se há **assets críticos**: logos de clientes, vídeos do hero, modelo `ghost-transformed.glb`. Caso faltem, crie placeholders temporários e documente onde substituí-los.
+   - Confirme se a URL do modelo 3D (…/ghost-transformed.glb) está acessível ou se deve ser armazenada localmente.
+
+---
+
+## 3. Fase 2: Parsing e Indexação
+
+A partir do **Descrito da Sessão**, identifique todos os elementos (textos, cores, animações, interações) e transforme-os em tarefas sequenciais. Cada item abaixo inclui um **ID**, o **Contexto** do arquivo alvo, a **Ação** a ser executada e o **Critério de Validação**.
+
+### 3.1 Tarefas Identificadas
+
+| ID | Contexto (arquivo) | Ação | Critério de validação |
+|---|---|---|---|
+| **1** | `src/components/AboutBeliefs.tsx` | Criar/atualizar o componente **AboutBeliefs** para montar a seção: <br>- Definir arrays `PHRASES`, `COLORS` e `FINAL_COLOR` conforme o descrito (cores do design system). <br>- Configurar `useScroll` com `target: containerRef` e `offset: ['start end', 'end end']` para que `scrollYProgress` atinja 1 quando a seção termina. <br>- Declarar `headerOpacity` usando `useTransform` com ranges `[0.05, 0.12, 0.85, 0.95]` e easing `cubicBezier(0.22, 1, 0.36, 1)`. <br>- Renderizar `BeliefFixedHeader` passando `opacity` e `progress={scrollYProgress}`. <br>- Iterar `PHRASES` com `BeliefSection`, mantendo a cor de fundo correspondente em `bgColor` e marcando a primeira com `isFirst`. <br>- Renderizar `BeliefFinalSection` passando `bgColor={FINAL_COLOR}` e `scrollProgress={scrollYProgress}`. <br>- Adicionar camada de **Canvas** 3D com `<Environment preset="city" />`, luzes, e `<GhostModel scrollProgress={scrollYProgress} scale={0.6} position={[0, -1, 0]} />`. Garantir que `pointer-events` do canvas esteja em `auto` para permitir interação do mouse. | O componente deve compilar sem erros TypeScript/TSX; ao navegar para a seção, as frases aparecem sequencialmente com as cores corretas; a última seção fica azul primária e exibe o texto final ao atingir ~80% do scroll; o modelo 3D responde ao scroll e ao movimento do mouse. |
+| **2** | `src/components/BeliefFinalSection.tsx` | Ajustar **BeliefFinalSection** para controlar animações via `scrollProgress`: <br>- Receber `scrollProgress: MotionValue<number>` como prop. <br>- Definir intervalos `introStart = 0.8` e `introEnd = 0.88` para sincronizar o aparecimento de "ISSO É GHOST DESIGN" com a última frase. <br>- Usar `useTransform` para gerar `opacity`, `scale` e `blur` baseados em `scrollProgress` entre esses pontos. <br>- Substituir qualquer uso de `whileInView` ou `viewport` pelos transforms calculados. <br>- Remover transições declaradas no JSX; a animação deve ocorrer via scroll. | Durante a rolagem, a seção final deve surgir gradualmente com fade-in, aumento de escala e redução de desfoque. O texto final deve estar centralizado e responsivo (tamanhos em `vw`/`rem`), e a animação deve iniciar quando a última frase está desaparecendo. |
+| **3** | `src/components/GhostModel.tsx` | Atualizar o **GhostModel** para responder ao scroll e ao mouse: <br>- Manter import da malha com `useGLTF(...)` e tipagens. <br>- Adicionar estado `mousePosition` (x,y normalizados) e `useEffect` que adiciona listeners de `mousemove` ao `gl.domElement`, calculando a posição do mouse em coordenadas Normalized Device Coordinates (NDC) (-1 a 1). <br>- No `useFrame`, acessar `scrollProgress.get()` e atualizar a rotação y do grupo (`groupRef.current.rotation.y = -progress * Math.PI * 2`). <br>- Interpolar (com `THREE.MathUtils.lerp`) a `position` e `rotation` do grupo com base em `mousePosition`, usando um `mouseInfluence` (ex.: 0.1) para suavizar o movimento. <br>- Para `progress > 0.8`, intensificar a animação: aproximar no eixo Z, adicionar wobble extra com `Math.sin(clock.elapsedTime * 6)`, aumentar levemente a escala (0 – +10%). <br>- No else, suavizar o retorno dos valores base (z = 0, rotação z = 0 e escala = 0.6). <br>- Assegurar que o modelo seja **preload** somente no navegador (guardado por `if (typeof window !== 'undefined')`). | O modelo 3D deve rotacionar de forma suave ao scroll, flutuar e reagir ao movimento do mouse sem jitter. Ao aproximar do final da seção, o fantasma deve se mover mais intensamente, aumentando escala e oscilando; ao retornar, ele deve regressar ao estado inicial. Nenhum erro de event listener deve ser registrado no console. |
+| **4** | `src/components/BeliefFixedHeader.tsx` | Verificar se o componente **BeliefFixedHeader** ainda recebe a prop `progress` por questões de compatibilidade. Ele deve aceitar `opacity: MotionValue<number>` e `progress: MotionValue<number>`, mas o uso interno deve priorizar `opacity` para controlar a opacidade do header fixo. | O header fixo deve ficar invisível no início, surgir brevemente e desaparecer novamente ao final, conforme o `headerOpacity` definido em **AboutBeliefs**. |
+| **5** | `src/components/BeliefSection.tsx` | Confirmar que `BeliefSection` recebe `text`, `bgColor` e `isFirst`. Ele deve renderizar cada frase com a cor correspondente, usando classes do Tailwind. O espaço de tela deve garantir que cada frase ocupe a viewport inteira (‘section h-screen’) com a cor definida. | Cada frase da sequência deve ocupar uma tela inteira, com transição de cor e texto conforme o scroll. |
+| **6** | **Assets e Placeholders** | Certificar-se de que o modelo GLB está acessível via URL fornecida ou hospedado localmente. Verificar também a presença de qualquer logotipo, vídeo ou imagem usada em outras seções. Substituir ausências por placeholders temporários (ex.: caixas coloridas com texto "Logo Cliente" ou "Video Hero"). | O build não deve quebrar por falta de assets; os placeholders devem ser identificáveis para substituição posterior. |
+| **7** | **Testes de Layout e Performance** | Após cada alteração, rodar a aplicação (`npm run dev` ou `pnpm dev`) e navegar até a seção. Verificar: <br>- Uso de GPU vs CPU (componentes React Three Fiber devem ser leves). <br>- Fluidez das animações no scroll e no movimento do mouse. <br>- Consistência com o design system (cores, tipografia, espaçamento). <br>- Responsividade (desktop vs mobile). | O site deve manter 60 FPS em dispositivos modernos, sem travamentos; a renderização deve ser fiel às referências visuais anexadas. |
+
+### 3.2 Observações Finais
+
+- **Sincronização precisa**: O final da seção deve ocorrer quando `scrollYProgress ≈ 1`. Ajuste `introStart` e `introEnd` se necessário para alinhar a entrada do texto final com a mudança da cor de fundo.
+- **Acessibilidade**: Verifique contraste de cores e tamanho de fonte, adicionando atributos `aria` quando possível (por exemplo, `aria-label` em elementos de texto impactante). 
+- **Organização do Repositório**: Caso não exista pasta `components/about/`, crie-a para agrupar `BeliefSection`, `BeliefFinalSection`, `GhostModel` e `AboutBeliefs`. Atualize os imports de acordo.
+- **Esmagamento de z-index**: O Canvas é posicionado com `absolute` e `z-20`, enquanto o texto fica em `z-10` para permitir que o modelo fique acima do background mas abaixo do overlay, garantindo interatividade.
+
+---
+
+## 4. Atualização do Descritivo da Sessão – Fantasma 3D e Transições
+
+Esta seção complementa o plano acima com conclusões derivadas de referências externas, melhorando a interatividade e a responsividade do fantasma 3D e das transições de cor.
+
+### 4.1 Referências Analisadas
+
+- **Tutorial de Efeito de Vidro 3D (Olivier Larose)**: Mostra como criar uma cena 3D responsiva com React Three Fiber e utilizar a largura da viewport para ajustar a escala do grupo 3D:contentReference[oaicite:0]{index=0}. O uso de `Canvas` com `Environment` e luzes também enriquece a cena:contentReference[oaicite:1]{index=1}.
+- **Framer Motion useInView**: Demonstra o hook `useInView`, que retorna `true` quando um elemento entra na viewport, permitindo disparar transições de CSS ou animações na entrada dos elementos:contentReference[oaicite:2]{index=2}.
+
+### 4.2 Ajustes Implícitos
+
+1. **Flutuação constante**: O fantasma 3D deve flutuar suavemente o tempo todo, transmitindo leveza, mesmo sem interação do usuário.
+
+2. **Resposta a cursor e scroll**: O fantasma deve reagir à posição do cursor e ao progresso do scroll. Ao mover o mouse sobre a seção, ele inclina e acelera suavemente; ao rolar a página, sua rotação segue o progresso do scroll.
+
+3. **Aparição sincronizada**: O modelo aparece junto com a primeira frase, centralizado acima do texto, e continua centrado durante as mudanças. Quando a última frase entra em foco, o fantasma cresce cerca de 10% e intensifica suas oscilações.
+
+4. **Comportamento responsivo**: Utilize `viewport.width` para ajustar o `scale` do fantasma, tornando-o responsivo a diferentes tamanhos de tela:contentReference[oaicite:3]{index=3}.
+
+5. **Manter layout e opacidade**: Não altere o layout ou a posição do modelo 3D no canvas; o fantasma deve permanecer acima do texto, centralizado, sem se tornar translúcido ou transparente. A referência ao tutorial de vidro serve apenas para inspirar a animação e o comportamento fluido do modelo, não para aplicar materiais de vidro ou efeitos de transparência.
+
+6. **Transição de cores**: A mudança de cor do background deve ser disparada quando cada `BeliefSection` entra na viewport. Use `useInView` ou `scrollYProgress` para aplicar classes de Tailwind, gerando transições suaves:contentReference[oaicite:4]{index=4}.
+
+7. **Cores definidas**: O array de cores permanece:
+
+   ```tsx
+   const COLORS = [
+     'bg-bluePrimary',    // Azul Real
+     'bg-purpleDetails',  // Roxo Vibrante
+     'bg-pinkDetails',    // Rosa Choque
+     'bg-bluePrimary',    // Azul Real
+     'bg-purpleDetails',  // Roxo Vibrante
+   ];
+````
+
+Cada `BeliefSection` deve usar a cor correspondente, sendo a última seção azul primária.
+
+### 4.3 Integração com o Plano
+
+* **Atualização do GhostModel**: Garanta a flutuação constante e a resposta a cursor/scroll via `useFrame`, com ajuste de escala responsiva e aumento de 10% no final.
+* **Responsividade global**: Substitua valores fixos de escala por baseada em `viewport.width`.
+* **Sincronização de entrada**: O `AboutBeliefs` deve iniciar o fantasma no início do scroll e acionar as transições de cor conforme cada frase aparece.
+* **Estética e luzes**: Mesmo sem usar `MeshTransmissionMaterial`, mantenha `Environment` e iluminação consistentes.
+
+  * **Material sólido**: O fantasma deve manter seu material original e opaco; não aplique efeitos translúcidos. A referência ao tutorial de vidro é apenas para inspirar o movimento e a interação, não para mudar a estética ou o layout do 3D.
+* **BG via useInView**: Use `useInView` ou `useScroll` para acionar as mudanças de cor, como descrito.
+
+---
+
+## 5. Sumário do Plano de Execução
+
+1. **Auditoria**: mapear arquivos, verificar configurações e assets.
+2. **Parsing do Descritivo**: gerar tarefas com ID, contexto, ação e validação conforme as seções 3 e 4.
+3. **Implementação sequencial**: aplicar as modificações nos componentes (`AboutBeliefs`, `BeliefFinalSection`, `GhostModel`, etc.), incorporando a flutuação constante, responsividade e transições de cor.
+4. **Validação**: garantir que o comportamento está alinhado ao protótipo e às referências, que a performance se mantém e que não há regressão em outras partes do site.
+5. **Preparar para agentes**: manter o código limpo, tipado e modular para facilitar a orquestração por agentes copilotos.
 
 
 
 
-Aplicar os ajustes na sessão "About Beliefs". Abaixo estão os códigos ajustados para atender a todos os requisitos descritos, incluindo a sincronização precisa do texto final com o scroll e a resposta do modelo 3D Ghost ao mouse.
 
-**1. `AboutBeliefs.txt` (Ajustado)**
-
-Este arquivo agora passa o `scrollYProgress` para o `GhostModel` e remove a propriedade redundante `progress` do `BeliefFixedHeader` (embora o componente filho ainda a aceite para compatibilidade).
-
-```tsx
-'use client';
-import React, { Suspense } from 'react';
-import { cubicBezier, useScroll, useTransform } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
-import { BeliefSection } from './BeliefSection';
-import { BeliefFinalSection } from './BeliefFinalSection';
-import { BeliefFixedHeader } from './BeliefFixedHeader';
-import { GhostModel } from './GhostModel';
-
-const PHRASES = [
-  'Um\nvídeo\nque\nrespira.',
-  'Uma\nmarca\nque se\nreconhece.',
-  'Um\ndetalhe\nque\nfica.',
-  'Crio\npara\ngerar\npresença.',
-  'Mesmo\nquando\nninguém\npercebe\no esforço.',
-];
-
-const COLORS = [
-  'bg-bluePrimary', // Azul Real
-  'bg-purpleDetails', // Roxo Vibrante
-  'bg-pinkDetails', // Rosa Choque
-  'bg-bluePrimary', // Azul Real
-  'bg-purpleDetails', // Roxo Vibrante
-];
-
-const FINAL_COLOR = 'bg-bluePrimary'; // Azul Real
-
-export const AboutBeliefs: React.FC = () => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end end'], // Ajuste para que o scroll termine quando a seção termina no final da viewport
-  });
-
-  // Easing Ghost Padrão
-  const ghostEase = cubicBezier(0.22, 1, 0.36, 1);
-
-  // Opacidade do Header Fixo
-  const headerOpacity = useTransform(
-    scrollYProgress,
-    [0.05, 0.12, 0.85, 0.95],
-    [0, 1, 1, 0],
-    { ease: ghostEase }
-  );
-
-  return (
-    <section
-      ref={containerRef}
-      className={`relative w-full overflow-hidden ${COLORS[0]}`} // Mantém a cor da primeira seção como padrão
-    >
-      {/* LAYER 1: Conteúdo Textual (Background Relative) */}
-      <div className="relative pointer-events-none z-10"> {/* Adicionado z-10 para garantir que o texto fique sob o canvas, mas acima de outros backgrounds */}
-        <BeliefFixedHeader opacity={headerOpacity} progress={scrollYProgress} />
-        {PHRASES.map((phrase, index) => (
-          <BeliefSection
-            key={index}
-            text={phrase}
-            bgColor={COLORS[index]}
-            isFirst={index === 0}
-          />
-        ))}
-        {/* Passando o scrollYProgress para o BeliefFinalSection */}
-        <BeliefFinalSection bgColor={FINAL_COLOR} scrollProgress={scrollYProgress} />
-      </div>
-
-      {/* LAYER 2: Canvas 3D (Overlay Top) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-auto z-20"> {/* Mudei para pointer-events-auto para permitir interação com o mouse */}
-        <div className="sticky top-0 w-full h-screen overflow-hidden">
-          <Canvas
-            shadows
-            dpr={[1, 2]}
-            camera={{ position: [0, 0, 8], fov: 35 }} // Camera mais longe para reduzir tamanho visual
-            gl={{ alpha: true, antialias: true }}
-            className="w-full h-full"
-          >
-            <Environment preset="city" />
-            <ambientLight intensity={0.8} />
-            <spotLight
-              position={[10, 10, 10]}
-              angle={0.15}
-              penumbra={1}
-              intensity={1}
-            />
-            <Suspense fallback={null}>
-              {/* Passando o scrollYProgress para o GhostModel */}
-              <GhostModel
-                scrollProgress={scrollYProgress}
-                scale={0.6}
-                position={[0, -1, 0]}
-                rotation={[0, 0, 0]}
-              />
-            </Suspense>
-          </Canvas>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default AboutBeliefs;
-```
-
-**2. `BeliefFinalSection.txt` (Ajustado)**
-
-Este arquivo agora usa `useTransform` para controlar a animação com base no `scrollYProgress`, ativando-a na mesma faixa de scroll que a entrada da última frase e a mudança de cor para azul primário.
-
-```tsx
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, MotionValue, useTransform, cubicBezier } from 'framer-motion';
-
-interface BeliefFinalSectionProps {
-  bgColor: string;
-  scrollProgress: MotionValue<number>; // Recebe o scrollProgress
-}
-
-export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
-  bgColor,
-  scrollProgress, // Recebe como prop
-}) => {
-  const ref = useRef<HTMLElement>(null);
-
-  // Defina os ranges para a animação baseada no scroll
-  // Assumindo que a transição para azul primário (cor final) começa em ~0.8 do scroll
-  // e a animação do texto final deve começar nesse ponto ou logo após.
-  const introStart = 0.8; // Ajuste conforme necessário para sincronizar com a última frase
-  const introEnd = 0.88; // Duração da animação
-
-  // Transformações baseadas no scroll
-  const opacity = useTransform(scrollProgress, [introStart, introEnd], [0, 1]);
-  const scale = useTransform(scrollProgress, [introStart, introEnd], [0.9, 1]);
-  const blur = useTransform(scrollProgress, [introStart, introEnd], ['blur(10px)', 'blur(0px)']);
-
-  // Opcional: Se desejar que o texto saia após um certo ponto, adicione mais ranges
-  // const exitStart = 0.95;
-  // const exitEnd = 1.0;
-  // const opacity = useTransform(scrollProgress, [introStart, introEnd, exitStart, exitEnd], [0, 1, 1, 0]);
-  // const scale = useTransform(scrollProgress, [introStart, introEnd, exitStart, exitEnd], [0.9, 1, 1, 0.95]);
-
-  return (
-    <section
-      ref={ref}
-      className={`w-full h-screen flex flex-col items-center justify-center overflow-hidden px-4 ${bgColor}`}
-    >
-      <motion.div
-        style={{
-          opacity,
-          scale,
-          filter: blur,
-        }}
-        className="flex flex-col items-center justify-center text-center text-white font-display leading-[0.78] w-full max-w-[98vw]"
-        // Removido initial, whileInView, viewport e transition
-      >
-        <div className="text-[16vw] md:text-[14rem] tracking-tighter uppercase font-black">
-          ISSO É
-        </div>
-        <div className="text-[30vw] md:text-[25rem] font-black tracking-tighter uppercase">
-          GHOST
-        </div>
-        <div className="text-[24vw] md:text-[19rem] tracking-tighter uppercase font-black">
-          DESIGN
-        </div>
-      </motion.div>
-    </section>
-  );
-};
-```
-
-**3. `GhostModel.txt` (Ajustado)**
-
-Este arquivo agora responde ao movimento do mouse e à rolagem com mais dinamismo. Adicionei estados para rastrear a posição do mouse e usei `useEffect` para adicionar listeners de evento.
-
-```tsx
-/*
-Auto-generated by: https://github.com/pmndrs/gltfjsx
-Author: Noby Grand (https://sketchfab.com/NobyGrand)
-License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
-Source: https://sketchfab.com/3d-models/ghost-w-tophat-6b1217e3462440519a2d0e3e75bf16d3
-Title: Ghost w/ Tophat
-*/
-import * as THREE from 'three';
-import React, { useEffect, useRef, useState } from 'react';
-import { useGLTF, Float } from '@react-three/drei';
-import { useFrame, useThree } from '@react-three/fiber';
-import { GLTF } from 'three-stdlib';
-import { MotionValue } from 'framer-motion';
-
-type GLTFResult = GLTF & {
-  nodes: {
-    Body_Ghost_White_0: THREE.Mesh;
-    Eyes_Eyes_0: THREE.Mesh;
-    Hat_Hat_Black_0: THREE.Mesh;
-    Rim_Rim_Red_0: THREE.Mesh;
-  };
-  materials: {
-    Ghost_White: THREE.MeshStandardMaterial;
-    Eyes: THREE.MeshStandardMaterial;
-    Hat_Black: THREE.MeshStandardMaterial;
-    Rim_Red: THREE.MeshStandardMaterial;
-  };
-};
-
-// Definição da interface com scrollProgress
-interface GhostModelProps extends React.ComponentProps<'group'> {
-  scrollProgress?: MotionValue<number>;
-}
-
-export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
-  const { nodes, materials } = useGLTF(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  ) as unknown as GLTFResult;
-
-  const groupRef = useRef<THREE.Group>(null);
-  const { gl } = useThree(); // Obtém a referência ao canvas WebGL
-
-  // Estados para armazenar a posição do mouse normalizada (-1 a 1)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // Efeitos para adicionar e remover listeners de mouse
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      if (gl.domElement) { // Verifica se o domElement existe
-        // Normaliza a posição do mouse de -1 a 1
-        const rect = gl.domElement.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-        setMousePosition({ x, y });
-      }
-    };
-
-    // Adiciona listeners ao canvas WebGL
-    const canvas = gl.domElement;
-    canvas.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      // Remove listeners ao desmontar
-      canvas.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [gl]); // Dependência em gl para garantir que o listener seja reconfigurado se gl mudar
-
-  useFrame((state) => {
-    if (!groupRef.current || !scrollProgress) return;
-
-    const progress = scrollProgress.get();
-
-    // --- Animação Base ---
-    // Flutuação contínua
-    // (As props do Float já lidam com isso, mas você pode manipular diretamente se quiser mais controle)
-    // Rotação baseada no scroll (já existente)
-    groupRef.current.rotation.y = -progress * Math.PI * 2;
-
-    // --- Resposta ao Mouse ---
-    // Influencia levemente a posição e rotação com base na posição do mouse
-    // A intensidade pode ser ajustada com um fator
-    const mouseInfluence = 0.1; // Ajuste este valor para aumentar ou diminuir a resposta ao mouse
-    groupRef.current.position.x = THREE.MathUtils.lerp(
-      groupRef.current.position.x,
-      mousePosition.x * mouseInfluence,
-      0.05 // Velocidade de suavização
-    );
-    groupRef.current.position.y = THREE.MathUtils.lerp(
-      groupRef.current.position.y,
-      mousePosition.y * mouseInfluence,
-      0.05 // Velocidade de suavização
-    );
-
-    // Rotação leve baseada no mouse
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(
-      groupRef.current.rotation.x,
-      -mousePosition.y * mouseInfluence * 0.5, // Menor influência para rotação X
-      0.05
-    );
-    groupRef.current.rotation.z = THREE.MathUtils.lerp(
-      groupRef.current.rotation.z,
-      mousePosition.x * mouseInfluence * 0.5, // Menor influência para rotação Z
-      0.05
-    );
-
-    // --- Animação Final ---
-    // Lógica para "movimentar mais" na última seção (progress > 0.8)
-    // "ISSO É GHOST DESIGN"
-    if (progress > 0.8) {
-      // Intensifica a flutuação ou aproxima o modelo
-      const intensity = Math.min(1, (progress - 0.8) * 5); // 0 a 1 no final, limitado a 1
-
-      // Exemplo: Aproximação (Z) e leve wobble extra
-      groupRef.current.position.z = THREE.MathUtils.lerp(
-        groupRef.current.position.z,
-        1, // Valor de destino para Z (levemente mais perto)
-        0.05
-      );
-
-      // Oscilação adicional baseada no tempo e na intensidade
-      const timeBasedWobble = Math.sin(state.clock.elapsedTime * 6) * 0.1 * intensity;
-      const scrollBasedWobble = (progress - 0.8) * 0.2; // Oscilação baseada no progresso
-      groupRef.current.rotation.z = THREE.MathUtils.lerp(
-        groupRef.current.rotation.z,
-        timeBasedWobble + scrollBasedWobble,
-        0.1 // Velocidade de suavização para a oscilação final
-      );
-
-      // Opcional: Aumentar escala levemente
-      const scaleIncrease = 1 + 0.1 * intensity; // Cresce até 10%
-      groupRef.current.scale.setScalar(scaleIncrease);
-
-    } else {
-      // Reset suave para valores base
-      groupRef.current.position.z = THREE.MathUtils.lerp(
-        groupRef.current.position.z,
-        0,
-        0.05
-      );
-      groupRef.current.rotation.z = THREE.MathUtils.lerp(
-        groupRef.current.rotation.z,
-        0,
-        0.05
-      );
-      // Reset da escala
-      groupRef.current.scale.setScalar(0.6); // Volta para a escala base definida em props
-    }
-  });
-
-  return (
-    <Float
-      speed={2} // Velocidade da flutuação base
-      rotationIntensity={0.5} // Intensidade da rotação da flutuação base
-      floatIntensity={0.5} // Intensidade da altura da flutuação base
-      floatingRange={[-0.1, 0.1]} // Alcance da flutuação base no eixo Y
-    >
-      <group ref={groupRef} {...props} dispose={null}>
-        <mesh
-          name="Body_Ghost_White_0"
-          castShadow
-          receiveShadow
-          geometry={nodes.Body_Ghost_White_0.geometry}
-          material={materials.Ghost_White}
-          position={[0, 1.5578, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-        />
-        <mesh
-          name="Eyes_Eyes_0"
-          castShadow
-          receiveShadow
-          geometry={nodes.Eyes_Eyes_0.geometry}
-          material={materials.Eyes}
-          position={[0, 1.5578, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-        />
-        <mesh
-          name="Hat_Hat_Black_0"
-          castShadow
-          receiveShadow
-          geometry={nodes.Hat_Hat_Black_0.geometry}
-          material={materials.Hat_Black}
-          position={[0, 2.9913, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-        />
-        <mesh
-          name="Rim_Rim_Red_0"
-          castShadow
-          receiveShadow
-          geometry={nodes.Rim_Rim_Red_0.geometry}
-          material={materials.Rim_Red}
-          position={[0, 2.3541, 0]}
-          rotation={[-Math.PI / 2, 0, 0]}
-        />
-      </group>
-    </Float>
-  );
-}
-
-// Preload only in the browser to avoid Node/SSG environments where
-// Web Workers (used by meshopt decoding) are unavailable.
-if (typeof window !== 'undefined') {
-  useGLTF.preload(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  );
-}
-```
-
-**Explicações Adicionais:**
-
-*   **`AboutBeliefs`:** A principal mudança foi passar o `scrollYProgress` para os componentes `BeliefFinalSection` e `GhostModel`. Também foi ajustado o `offset` do `useScroll` para `'end end'` para que o progresso vá até 1 quando a seção inteira sai da parte inferior da viewport, o que pode ajudar na precisão da sincronização final. O `pointer-events` no canvas foi alterado para `auto` para permitir a detecção de movimento do mouse.
-*   **`BeliefFinalSection`:** Substituímos `whileInView` por transformações baseadas em `scrollProgress`. Os ranges `[introStart, introEnd]` determinam quando a animação de entrada (opacidade, escala, desfoque) ocorre com base no progresso do scroll. Você pode ajustar `introStart` e `introEnd` para sincronizar perfeitamente com a aparência da última frase e a cor de fundo.
-*   **`GhostModel`:** Adicionei um `useEffect` para adicionar um listener `mousemove` ao elemento canvas do WebGL (`gl.domElement`). A posição do mouse é normalizada de -1 a 1 e armazenada em `mousePosition`. No `useFrame`, essa posição é usada para influenciar levemente a posição e rotação do modelo, criando a sensação de que ele responde ao toque. A lógica final para `progress > 0.8` foi mantida e aprimorada para incluir aumento de escala. A escala é resetada no `else` para manter o estado base.  Ajuste o projeto utilizando as etapas essenciais para execução:
 1. Analise o escopo detalhado fornecido.
 2. Monte um plano de execução com base nesse escopo.
 3. Implemente os ajustes necessários no código.
