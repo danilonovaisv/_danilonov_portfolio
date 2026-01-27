@@ -58,28 +58,29 @@ export default function PortfolioHeroNew() {
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background via-background/80 to-transparent" />
       </div>
 
-      {/* Hero Content - Title & CTA Fixed Bottom */}
-      <div className="absolute bottom-0 left-0 w-full z-30 pb-8 md:pb-12">
-        <div className="std-grid items-end gap-6 md:gap-0">
-          {/* Title - Left aligned on desktop, Centered/Left on mobile */}
-          <div className="col-span-full md:col-span-7 lg:col-span-8 flex flex-col items-center md:items-start text-center md:text-left">
-            <h1
+      {/* Hero Content - Title & CTA Fixed Bottom - Single Visual Line */}
+      <div className="absolute bottom-0 left-0 w-full z-30 pb-10 md:pb-16 px-4 md:px-12">
+        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-end justify-between gap-6 md:gap-12">
+          
+          {/* Title - "portfólio showcase" */}
+          <div className="flex-1 text-center md:text-left">
+             <h1
               id="portfolio-hero-heading"
-              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight leading-none"
+              className="text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none font-bold"
             >
-              <span className="text-bluePrimary italic font-light mr-2 md:mr-4">
+              <span className="text-[#4fe6ff] mr-3 md:mr-6">
                 portfólio
               </span>
-              <span className="text-white font-bold">showcase</span>
+              <span className="text-white">showcase</span>
             </h1>
           </div>
 
-          {/* CTA - Right aligned on desktop, Centered on mobile */}
-          <div className="col-span-full md:col-span-6 lg:col-span-5 flex justify-center md:justify-end pb-2">
+          {/* CTA - "vamos trabalhar juntos" - Aligned to bottom baseline */}
+          <div className="shrink-0 flex justify-center md:justify-end pb-2">
             <AntigravityCTA
-              href="#contact" // Âncora para a seção de contato na mesma página (padrão para páginas internas)
+              href="#contact"
               text="vamos trabalhar juntos"
-              className="scale-90 md:scale-100 origin-bottom"
+              className="static! transform-none!" // Override default fixed positioning
             />
           </div>
         </div>

@@ -131,6 +131,7 @@ export const ProjectsGallery = ({ onOpenProject }: ProjectsGalleryProps) => {
                <div key={project.id} className="w-full">
                  <ProjectCard 
                     project={project} 
+                    index={index}
                     onClick={onOpenProject}
                     priority={index < 3}
                  />

@@ -340,8 +340,8 @@ export const ABOUT_CONTENT = {
 export const PORTFOLIO_CONTENT = {
   hero: {
     video: {
-      desktop: projectVideo('VIDEO-APRESENTACAO-PORTFOLIO.mp4'),
-      mobile: projectVideo('VIDEO-APRESENTACAO-PORTFOLIO.mp4'), // Usando o mesmo por enquanto, ou variante se existir
+      desktop: projectVideo('video-heroPort.mp4'),
+      mobile: projectVideo('video-heroPort-mobile.mp4'),
     },
   },
 };
