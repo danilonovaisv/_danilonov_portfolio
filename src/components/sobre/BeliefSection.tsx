@@ -89,11 +89,11 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   return (
     <section
       ref={containerRef}
-      className={`relative w-full h-screen flex justify-start overflow-hidden transition-colors duration-500 ease-linear ${
-        isFirst
+      aria-label={text.replace(/\n/g, ' ')}
+      className={`relative w-full h-screen flex justify-start overflow-hidden ${isFirst
           ? 'items-center pt-0'
           : 'items-start pt-[20vh] md:pt-[20vh] lg:pt-[15vh]'
-      } ${bgColor}`}
+        } ${bgColor}`}
     >
       <div className="std-grid max-w-none">
         <motion.div

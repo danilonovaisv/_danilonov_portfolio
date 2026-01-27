@@ -37,28 +37,27 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
   ) as unknown as GLTFResult;
 
-  // Ref para o grupo interno (animações locais)
+  const { gl, viewport } = useThree();
   const animRef = useRef<THREE.Group>(null);
-  const { gl } = useThree();
-
-  // UseRef para guardar posição do mouse (NÃO provoca re-render)
   const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       if (gl.domElement) {
         const rect = gl.domElement.getBoundingClientRect();
-        // Normaliza de -1 a 1
         const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
         mouseRef.current = { x, y };
       }
     };
-
     const canvas = gl.domElement;
     canvas.addEventListener('mousemove', handleMouseMove);
     return () => canvas.removeEventListener('mousemove', handleMouseMove);
   }, [gl]);
+
+  // --- Responsividade (Policy 4.3) ---
+  const isMobile = viewport.width < 5;
+  const baseScale = isMobile ? viewport.width * 0.18 : 0.6;
 
   useFrame((state) => {
     if (!animRef.current || !scrollProgress) return;
@@ -72,7 +71,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 
     // --- Resposta ao Mouse (Posição e Rotação) ---
     const mouseInfluence = 0.1;
-    
+
     // Lerp positions (relativo ao 0,0,0 do grupo pai)
     animRef.current.position.x = THREE.MathUtils.lerp(
       animRef.current.position.x,
@@ -99,22 +98,23 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     // --- Efeitos de Final de Seção ---
     if (progress > 0.8) {
       const intensity = Math.min(1, (progress - 0.8) * 5);
-      
+
       // Move Z para frente (aproximação)
       animRef.current.position.z = THREE.MathUtils.lerp(
         animRef.current.position.z,
-        1 * intensity, 
+        1 * intensity,
         0.05
       );
 
       // Adiciona wobble extra ao Z
-      const timeBasedWobble = Math.sin(state.clock.elapsedTime * 6) * 0.1 * intensity;
+      const timeBasedWobble =
+        Math.sin(state.clock.elapsedTime * 6) * 0.1 * intensity;
       const scrollBasedWobble = (progress - 0.8) * 0.2;
-      
+
       // Combina influência do mouse + efeitos finais
       targetZ += timeBasedWobble + scrollBasedWobble;
-      
-      // Aumenta escala interna
+
+      // Aumenta escala interna (zoom effect)
       targetScale = 1 + 0.1 * intensity;
     } else {
       // Retorna Z para 0
@@ -132,7 +132,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       0.05
     );
 
-    // Aplica escala
+    // Aplica escala interna (multiplicação sobre a escala base do grupo pai)
     animRef.current.scale.setScalar(targetScale);
   });
 
@@ -143,8 +143,8 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       floatIntensity={0.5}
       floatingRange={[-0.1, 0.1]}
     >
-      {/* Grupo Pai: Recebe as props de posicionamento global (ex: position={[0, -1, 0]}) */}
-      <group {...props} dispose={null}>
+      {/* Grupo Pai: Recebe as props de posicionamento global, mas tem escala controlada responsivamente */}
+      <group {...props} scale={baseScale} dispose={null}>
         {/* Grupo Interno: Recebe as animações (rotação, mouse sway) relativas ao pai */}
         <group ref={animRef}>
           <mesh

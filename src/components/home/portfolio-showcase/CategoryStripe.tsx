@@ -183,7 +183,7 @@ export function CategoryStripe({
             {/* Gradient overlay for text legibility */}
             <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
           </div>
-          
+
           {/* Title + Arrow Row */}
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col flex-1">

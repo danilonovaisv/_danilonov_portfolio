@@ -48,13 +48,15 @@ export const AboutBeliefs: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className={`relative w-full ${COLORS[0]}`} // Removido overflow-hidden para corrigir behavior do sticky
+      className="relative w-full"
     >
-      {/* LAYER 1: Canvas 3D (Background/Middle - Sticky) */}
-      {/* Z-Index 10: Fica atrás do texto, mas acima do background base das seções */}
+      {/* LAYER 0: Background Color (Fixed/Sticky) - Changes based on scroll */}
+      <BackgroundController progress={scrollYProgress} colors={COLORS} finalColor={FINAL_COLOR} />
+
+      {/* LAYER 1: Canvas 3D (Sticky) */}
+      {/* Z-Index 10: Behind Text, Front of BG */}
       <div className="absolute inset-0 w-full h-full pointer-events-none z-10">
         <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto">
-          {/* pointer-events-auto no container sticky interno para capturar mouse */}
           <Canvas
             shadows
             dpr={[1, 2]}
@@ -73,7 +75,6 @@ export const AboutBeliefs: React.FC = () => {
             <Suspense fallback={null}>
               <GhostModel
                 scrollProgress={scrollYProgress}
-                scale={0.6}
                 position={[0, -1, 0]}
                 rotation={[0, 0, 0]}
               />
@@ -86,20 +87,51 @@ export const AboutBeliefs: React.FC = () => {
       {/* Z-Index 20: Texto sobre o Ghost */}
       <div className="relative pointer-events-none z-20">
         <BeliefFixedHeader opacity={headerOpacity} progress={scrollYProgress} />
+
         {PHRASES.map((phrase, index) => (
           <BeliefSection
             key={index}
             text={phrase}
-            bgColor={COLORS[index]}
+            // Pass transparent explicitly, BG handled by BackgroundController
+            bgColor="bg-transparent"
             isFirst={index === 0}
           />
         ))}
         <BeliefFinalSection
-          bgColor={FINAL_COLOR}
+          bgColor="bg-transparent"
           scrollProgress={scrollYProgress}
         />
       </div>
     </section>
+  );
+};
+
+// Sub-component to handle background classes efficiently
+import { MotionValue } from 'framer-motion';
+
+const BackgroundController = ({ progress, colors, finalColor }: { progress: MotionValue<number>, colors: string[], finalColor: string }) => {
+  const [currentClass, setCurrentClass] = React.useState(colors[0]);
+
+  useTransform(progress, (p: number) => {
+    // Simple logic to detect active section
+    // 5 sections + 1 final. Range 0 to 1.
+    // Approx 0.0 - 0.16 -> Section 1
+    // 0.16 - 0.32 -> Section 2
+    // etc.
+    const total = colors.length; // 5
+    const step = 0.8 / total; // 0.16 per section, leaving 0.2 for final
+
+    if (p >= 0.8) {
+      if (currentClass !== finalColor) setCurrentClass(finalColor);
+    } else {
+      const index = Math.floor(p / step);
+      const targetColor = colors[Math.min(index, total - 1)] || colors[0];
+      if (currentClass !== targetColor) setCurrentClass(targetColor);
+    }
+  });
+
+  return (
+    <div className={`fixed inset-0 z-0 w-full h-full transition-colors duration-700 ease-in-out ${currentClass}`} />
   );
 };
 
