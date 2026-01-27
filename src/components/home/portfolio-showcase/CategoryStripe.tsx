@@ -156,20 +156,50 @@ export function CategoryStripe({
           </div>
         </div>
 
-        {/* Mobile Card */}
-        <div className="lg:hidden flex items-center justify-between py-6 border-t border-blueAccent/40">
-          <div className="flex flex-col">
-            {title.map((line, i) => (
-              <span
-                key={i}
-                className="text-xl font-normal tracking-tight text-white"
-              >
-                {line}
-              </span>
-            ))}
+        {/* Mobile Card - Enhanced with thumbnail preview and better touch targets */}
+        <div className="lg:hidden flex flex-col gap-4 py-5 border-t border-blueAccent/40 active:bg-white/5 transition-colors duration-200 rounded-lg -mx-2 px-2">
+          {/* Thumbnail Preview - Mobile */}
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+            {isVideo ? (
+              <video
+                src={category.thumbnail}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="object-cover w-full h-full"
+              />
+            ) : (
+              <Image
+                src={category.thumbnail}
+                alt={title.join(' ')}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw"
+                loading="lazy"
+                onError={applyImageFallback}
+              />
+            )}
+            {/* Gradient overlay for text legibility */}
+            <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
           </div>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-[#0048ff]">
-            <ArrowUpRight className="w-4 h-4 text-white" />
+          
+          {/* Title + Arrow Row */}
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col flex-1">
+              {title.map((line, i) => (
+                <span
+                  key={i}
+                  className="text-lg sm:text-xl font-medium tracking-tight text-white leading-tight"
+                >
+                  {line}
+                </span>
+              ))}
+            </div>
+            {/* Touch target: 48px minimum for accessibility */}
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-[#0048ff] active:bg-[#8705f2] active:scale-95 transition-all duration-200">
+              <ArrowUpRight className="w-5 h-5 text-white" />
+            </div>
           </div>
         </div>
       </Link>

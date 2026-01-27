@@ -30,7 +30,9 @@ const AntigravityCTA: React.FC<AntigravityCTAProps> = ({
   text = "let's build something great",
   href = '/',
   onClick,
-  className = 'fixed bottom-8 right-8 lg:bottom-12 lg:right-12 z-100 md:z-50',
+  // Mobile: bottom-20 para evitar gesture bar, right-4 para edge comfort
+  // Desktop: posição original
+  className = 'fixed bottom-20 right-4 sm:bottom-12 sm:right-8 lg:bottom-12 lg:right-12 z-100 md:z-50',
 }) => {
   // State para controlar hover
   const [isHovered, setIsHovered] = useState(false);
@@ -87,40 +89,43 @@ const AntigravityCTA: React.FC<AntigravityCTAProps> = ({
         transition={springTransition}
       />
 
-      {/* Pílula de Texto */}
+      {/* Pílula de Texto - Mobile-First Sizing */}
       <motion.div
         className="
           relative z-10 
           flex items-center justify-center 
-          h-[68px] pl-10 pr-8
-          min-w-[240px]
+          h-12 sm:h-14 lg:h-[68px]
+          pl-5 pr-4 sm:pl-8 sm:pr-6 lg:pl-10 lg:pr-8
+          min-w-[180px] sm:min-w-[200px] lg:min-w-[240px]
           text-white 
           shadow-lg
           rounded-full
           select-none
-          transition-colors duration-300
+          transition-colors duration-200
+          active:scale-[0.98]
         "
         style={{
           backgroundColor: isHovered ? '#8705f2' : '#0048ff',
         }}
       >
-        <span className="text-lg font-medium tracking-wider whitespace-nowrap leading-none font-sans">
+        <span className="text-sm sm:text-base lg:text-lg font-medium tracking-wide sm:tracking-wider whitespace-nowrap leading-none font-sans">
           {text}
         </span>
       </motion.div>
 
-      {/* Círculo com Ícone (separado mas conectado na ponta) */}
+      {/* Círculo com Ícone - Mobile-First Touch Target (min 48px) */}
       <motion.div
         ref={iconRef}
         className="
           relative z-20 
           flex items-center justify-center 
-          h-[68px] w-[68px]
-          -ml-1
+          h-12 w-12 sm:h-14 sm:w-14 lg:h-[68px] lg:w-[68px]
+          -ml-0.5 sm:-ml-1
           text-white 
           shadow-lg
           rounded-full
-          transition-colors duration-300
+          transition-colors duration-200
+          active:scale-95
         "
         style={{
           backgroundColor: isHovered ? '#8705f2' : '#0048ff',
@@ -131,7 +136,7 @@ const AntigravityCTA: React.FC<AntigravityCTAProps> = ({
         transition={springTransition}
       >
         <ArrowUpRight
-          size={28}
+          className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7"
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"

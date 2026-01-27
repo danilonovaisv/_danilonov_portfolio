@@ -31,10 +31,10 @@ export default function SiteFooter() {
 
   return (
     <footer
-      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-0"
+      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-0 pb-[env(safe-area-inset-bottom,0)]"
       aria-label="Rodapé do site"
     >
-      <div className="std-grid flex flex-col lg:flex-row items-center justify-between py-10 lg:py-0 lg:h-[64px] gap-8 lg:gap-0">
+      <div className="std-grid flex flex-col lg:flex-row items-center justify-between py-12 lg:py-0 lg:h-[64px] gap-10 lg:gap-0">
         {/* 1. Copyright (Order 1 on Mobile, Left on Desktop) */}
         <div className="order-1 lg:order-0">
           <p className="text-[0.875rem] lg:text-[10px] font-medium tracking-[0.05em] uppercase opacity-90 lg:opacity-100 text-center lg:text-left">
@@ -44,14 +44,14 @@ export default function SiteFooter() {
 
         {/* 2. Navigation (Order 2 on Mobile, Center/Right on Desktop) */}
         <nav
-          className="flex flex-row flex-wrap justify-center items-center gap-6 lg:gap-8 order-2 lg:order-0"
+          className="flex flex-row flex-wrap justify-center items-center gap-2 sm:gap-4 lg:gap-8 order-2 lg:order-0"
           aria-label="Navegação do rodapé"
         >
           {NAVIGATION.footer.links.map((link) => (
             <Link
               key={link.label}
               href={link.href}
-              className="group relative text-[11px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity duration-200 py-3 lg:py-0"
+              className="group relative text-[11px] sm:text-[12px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity duration-200 py-4 px-3 sm:px-4 lg:py-0 lg:px-0 min-h-[48px] flex items-center"
             >
               {link.label}
               {/* Hover Underline (Desktop Only) */}

@@ -40,8 +40,14 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       <nav
         ref={ref}
         id="mobile-menu-panel"
-        className="fixed inset-0 bg-[#0048ff] backdrop-blur-xl flex flex-col justify-center px-8 z-50 pointer-events-auto"
-        aria-hidden={!open}
+        className="fixed inset-0 bg-[#0048ff] backdrop-blur-xl flex flex-col justify-center px-8 z-50 pointer-events-auto sm:px-12 md:px-16"
+        style={{
+          paddingTop: 'env(safe-area-inset-top, 2rem)',
+          paddingBottom: 'env(safe-area-inset-bottom, 2rem)',
+          paddingLeft: 'max(2rem, env(safe-area-inset-left, 2rem))',
+          paddingRight: 'max(2rem, env(safe-area-inset-right, 2rem))',
+        }}
+        aria-hidden={open ? 'false' : 'true'}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             onClose();
@@ -63,7 +69,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
               <li key={item.href} className="overflow-hidden leading-none">
                 <button
                   onClick={() => onNavigate(item.href)}
-                  className={`sm-panel-item w-full py-3 text-4xl font-light tracking-wide transition-colors text-left leading-none uppercase will-change-transform origin-bottom min-h-[48px] ${
+                  className={`sm-panel-item w-full py-4 text-4xl sm:text-5xl font-light tracking-wide transition-all text-left leading-none uppercase will-change-transform origin-bottom min-h-[56px] active:translate-x-2 active:opacity-70 ${
                     pageHighlight ||
                     (isActive
                       ? 'text-blueAccent font-medium underline underline-offset-4'

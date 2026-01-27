@@ -75,7 +75,7 @@ export default function ContactSection() {
       id="contact"
       data-light-section
       aria-label="Contato"
-      className="bg-[#f0f0f0] py-16 md:py-24 lg:py-32 relative z-10"
+      className="bg-[#f0f0f0] py-12 sm:py-16 md:py-24 lg:py-32 relative z-10"
     >
       <Container>
         {/* 2 & 3. Info & Form Grid */}
@@ -88,7 +88,7 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-5 flex flex-col space-y-10 order-1 md:order-1 lg:order-none"
+            className="lg:col-span-5 flex flex-col space-y-10 order-1 md:order-1 lg:order-0"
           >
             {/* Header */}
             <div className="text-center lg:text-left mb-6 lg:mb-10">
@@ -113,12 +113,13 @@ export default function ContactSection() {
                       : undefined
                   }
                   aria-label={link.ariaLabel}
-                  className="flex items-center gap-4 group w-fit"
+                  className="flex items-center gap-3 sm:gap-4 group w-fit py-2 active:opacity-80 transition-opacity"
                 >
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent border border-[#0057FF] text-[#0057FF] transition-all group-hover:bg-[#0057FF] group-hover:text-white group-hover:scale-110">
+                  {/* Touch target: 48px minimum */}
+                  <span className="flex h-12 w-12 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-transparent border-2 border-[#0057FF] text-[#0057FF] transition-all duration-200 group-hover:bg-[#0057FF] group-hover:text-white group-active:bg-[#0057FF] group-active:text-white group-active:scale-95">
                     {link.icon}
                   </span>
-                  <span className="text-lg md:text-xl font-semibold text-[#111111] transition-all duration-300 group-hover:text-[#0057FF] group-hover:underline group-hover:underline-offset-4">
+                  <span className="text-base sm:text-lg md:text-xl font-semibold text-[#111111] transition-all duration-200 group-hover:text-[#0057FF] group-hover:underline group-hover:underline-offset-4">
                     {link.label}
                   </span>
                 </a>
@@ -142,8 +143,8 @@ export default function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Mobile Socials - Moved before Form for correct mobile flow and accessibility */}
-          <div className="lg:hidden flex flex-wrap justify-center gap-4 py-8 border-t border-[#0e0e0e]/20 w-full order-2">
+          {/* Mobile Socials - Touch-optimized with 48px targets */}
+          <div className="lg:hidden flex flex-wrap justify-center gap-3 sm:gap-4 py-6 sm:py-8 border-t border-[#0e0e0e]/20 w-full order-2">
             {socialLinks.map((social) => (
               <a
                 key={`mobile-${social.href}`}
@@ -151,7 +152,7 @@ export default function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#0e0e0e]/30 bg-transparent text-[#0e0e0e] shadow-sm active:scale-95 active:bg-[#0048ff] active:border-[#0048ff] active:text-white"
+                className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#0e0e0e]/30 bg-transparent text-[#0e0e0e] shadow-sm transition-all duration-200 active:scale-90 active:bg-[#0048ff] active:border-[#0048ff] active:text-white"
               >
                 {social.icon}
               </a>
@@ -159,7 +160,7 @@ export default function ContactSection() {
           </div>
 
           {/* Right Side: Form */}
-          <div className="lg:col-span-7 w-full order-3 lg:order-none">
+          <div className="lg:col-span-7 w-full order-3 lg:order-0">
             <ContactForm />
           </div>
         </div>
