@@ -260,7 +260,7 @@ const variants = {
 
 ## Seções Detalhadas
 
-### 1. Header
+# **1. Header
 
 **Comportamento:** Idêntico à página Home
 
@@ -285,7 +285,10 @@ const variants = {
 
 ---
 
-### 2. Hero / Manifesto
+
+
+
+# **2. Hero / Manifesto
 
 **Função:** Estabelecer presença sem exposição. Primeiro contato silencioso.
 
@@ -404,7 +407,7 @@ estratégia e tecnologia — na medida certa.
 
 ---
 
-### 3. Origem Criativa
+# **3. Origem Criativa**
 
 **Função:** Revelar trajetória criativa através de efeito mask reveal pinned — imagens emergem de baixo para cima como "memórias sendo descobertas".
 
@@ -614,7 +617,7 @@ gsap.timeline({
 
 ---
 
-### 4. O Que Eu Faço
+# **4. O Que Eu Faço
 
 **Função:** Transformar serviços em sequência visual progressiva com animação horizontal guiada pelo scroll.
 
@@ -810,7 +813,7 @@ gsap.from(".service-card", {
 
 ---
 
-### 5. Como Eu Trabalho
+# **5. Como Eu Trabalho
 
 **Função:** Gerar confiança racional através do método. Mostrar que criatividade é suportada por processo.
 
@@ -1062,7 +1065,7 @@ gsap.from(".service-card", {
 
 
 
-### 6. O Que Me Move
+# **6. O Que Me Move - About Biliefed
 
 **Função:** Criar vínculo emocional através de manifesto pessoal. Momento mais íntimo da página.
 
@@ -1314,9 +1317,787 @@ useEffect(() => {
 | 1024–1279px | Grid 2 colunas reveal, título 40–44px, frases 30–34px, ghost 280–320px |
 | 1280px+ | Título 48–52px, frases 36–38px, ghost 320–380px, manifesto 60–64px |
 
+
+
+
+# **SEÇÃO 06 — FECHAMENTO / CONFIRMAÇÃO**
+
+**Função:** Convite claro e humano.  
+Conectar narrativa com ação, sem agressividade.
+
+---
+
+## Layout — Desktop
+
+### Estrutura Geral
+- **Altura alvo:** 80–100vh
+- **Fundo:** `backgroundDark` (#040013)
+- **Container:** 12 colunas, max-width ≈ 1120px
+- **Padding vertical:** 80–100px
+- **Padding lateral:** 32–40px
+
+### Composição
+
+#### Área de Conteúdo (Centralizada)
+- Colunas 3–11
+- Display: flex, flex-direction: column, align-items: center
+- Text-align: center
+
+#### Título Principal
+- Primeira linha com destaque em `primary`
+- Margin-bottom: 32–40px
+
+**Texto:**
+> Hoje sou **Diretor de Criação**,  
+> com mais de **10 anos de estrada**.
+
+**Estilo:**
+- Font-size: 40–48px
+- Line-height: 1.25
+- Font-weight: 700
+- "Diretor de Criação" e "10 anos de estrada" em `primary`
+- Max-width: 800px
+
+#### Parágrafos de Contexto
+- Dois blocos de texto
+- Spacing entre blocos: 24–32px
+- Margin-bottom total: 48–56px
+
+**Bloco 1:**
+> Já liderei marcas, agências, eventos  
+> e **criei experiências** para todos os canais.
+
+**Bloco 2:**
+> Agora, quero criar algo que permaneça —  
+> **com você**.
+
+**Estilo:**
+- Font-size: 20–24px
+- Line-height: 1.5
+- Font-weight: 400
+- Opacity: 0.92
+- "criei experiências" e "com você" em `primary`
+- Max-width: 700px
+
+#### CTAs (Call-to-Actions)
+- Layout: flex row, gap 20–24px
+- Alinhamento: center
+- Margin-top: 56–64px
+
+**Botão 1: "fale comigo"**
+- Primary button style
+- Background: `primary` (#5B5FFF)
+- Color: white
+- Padding: 16–20px 36–44px
+- Border-radius: 50px (pill shape)
+- Font-size: 16–18px
+- Font-weight: 600
+- Ícone: seta diagonal (arrow-up-right) à direita do texto
+
+**Botão 2: "baixar curriculum"**
+- Secondary/Ghost button style
+- Background: transparent
+- Border: 2px solid `primary`
+- Color: `primary`
+- Padding: 16–20px 36–44px
+- Border-radius: 50px
+- Font-size: 16–18px
+- Font-weight: 600
+- Ícone: seta diagonal (arrow-up-right) à direita do texto
+
+---
+
+## Layout — Mobile
+
+### Estrutura
+- **1 coluna**, largura 100%
+- **Padding lateral:** 20–24px
+- **Padding vertical:** 60–80px
+- **Altura:** Flexível
+
+### Conteúdo
+
+#### Título Principal
+- Centralizado
+- Font-size: 28–34px
+- Line-height: 1.3
+- Margin-bottom: 24–28px
+- Quebras de linha ajustadas:
+  - "Hoje sou **Diretor de Criação**,"
+  - "com mais de **10 anos de estrada**."
+
+#### Parágrafos
+- Font-size: 17–19px
+- Line-height: 1.6
+- Spacing entre blocos: 20–24px
+- Margin-bottom: 40–48px
+- Max-width: 100%
+
+#### CTAs
+- **Layout:** flex column (empilhados verticalmente)
+- **Gap:** 16px
+- **Largura:** 100% cada botão (max-width: 320px opcional)
+- **Order:**
+  1. "fale comigo" (primary)
+  2. "baixar curriculum" (secondary)
+
+**Estilo dos botões (mobile):**
+- Padding: 14–16px 28–32px
+- Font-size: 15–16px
+- Mantém pill shape
+
+---
+
+## Responsividade Detalhada
+
+### Small (`sm`: 640px–767px)
+- Título: 28–30px
+- Texto: 16–17px
+- CTAs empilhados, largura 100%
+- Gap entre CTAs: 14px
+
+### Medium (`md`: 768px–1023px)
+- Título: 32–36px
+- Texto: 18–20px
+- CTAs ainda empilhados ou começam a ficar lado a lado
+- Max-width dos botões: 280px cada
+
+### Large (`lg`: 1024px–1279px)
+- **CTAs lado a lado** (flex row)
+- Título: 38–42px
+- Texto: 20–22px
+- Gap entre CTAs: 20px
+
+### Extra Large (`xl`: 1280px+)
+- Título: 44–48px
+- Texto: 22–24px
+- Gap entre CTAs: 24px
+- Máximo respiro e espaçamento
+
+---
+
+## Comportamento dos Botões
+
+### Estados
+
+**Default:**
+- Primary: background `primary`, color white
+- Secondary: border `primary`, color `primary`, background transparent
+
+**Hover (Desktop):**
+- **Primary:**
+  - Background: lighten `primary` em 8–10%
+  - Transform: `translateY(-2px)`
+  - Box-shadow: `0 8px 20px rgba(91, 95, 255, 0.3)`
+- **Secondary:**
+  - Background: `rgba(91, 95, 255, 0.1)`
+  - Border-color: lighten `primary` em 10%
+  - Transform: `translateY(-2px)`
+- **Transition:** 0.3s ease
+- **Cursor:** pointer
+
+**Active:**
+- Transform: `translateY(0)`
+- Transition mais rápida: 0.15s
+
+**Focus (Acessibilidade):**
+- Outline: 3px solid `primary` com offset 3px
+- Sem remoção do outline padrão
+
+**Disabled (se aplicável):**
+- Opacity: 0.5
+- Cursor: not-allowed
+- Sem hover effects
+
+### Ícones
+- **Biblioteca:** Lucide React ou similar
+- **Nome:** `ArrowUpRight`
+- **Size:** 18–20px
+- **Position:** à direita do texto com margin-left: 8–10px
+- **Animação no hover:** 
+  - Ícone: `translate(2px, -2px)` (movimento diagonal)
+  - Duration: 0.3s
+
+---
+
+## Interação & Motion
+
+### Animação de Entrada (Scroll)
+
+**Título:**
+- Trigger: 20% da seção no viewport
+- `opacity: 0 → 1`
+- `translateY: 30px → 0`
+- `filter: blur(8px) → blur(0)`
+- Duration: 0.8s
+- Easing: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`
+
+**Parágrafos:**
+- Delay: 0.2s após título
+- Mesma animação do título
+- Duration: 0.7s
+
+**CTAs:**
+- Delay: 0.3s após parágrafos
+- `opacity: 0 → 1`
+- `translateY: 20px → 0`
+- Stagger: 0.1s entre botões
+- Duration: 0.6s
+- Easing: ease-out
+
+### Sensação de "Respirar"
+- **Sem loops ou animações contínuas**
+- Uma vez que entra, permanece estático
+- Apenas hover effects nos botões
+- Movimento só retorna ao scroll
+
+### prefers-reduced-motion
+- Todas as animações reduzidas para fade-in simples
+- Duration: 0.3s
+- Sem translateY ou blur
+- Sem stagger
+
+---
+
+## Hierarquia Visual & Fluxo
+
+### Sequência de Leitura
+1. **Título** → estabelece credibilidade ("Diretor de Criação, 10 anos")
+2. **Experiência** → valida através de histórico
+3. **Proposta** → convite pessoal ("com você")
+4. **Ação** → CTAs claros e acessíveis
+
+### Linha Horizontal (Opcional)
+- Entre título e parágrafos
+- Ou acima/abaixo da seção
+- Width: 100% do container ou 60%
+- Height: 1px
+- Color: `rgba(255, 255, 255, 0.1)`
+- Margin: 40–48px vertical
+
+---
+
+## Conteúdo dos CTAs
+
+### Botão 1: "fale comigo"
+- **Ação:** Scroll suave até seção de contato (formulário)
+- **Comportamento:** 
+  - `document.querySelector('#contato').scrollIntoView({ behavior: 'smooth' })`
+  - Ou abre modal de contato
+  - Ou link mailto (menos recomendado)
+
+### Botão 2: "baixar curriculum"
+- **Ação:** Download direto do CV em PDF
+- **Comportamento:**
+  - `<a href="/path/curriculum.pdf" download="GhostDesign_Curriculum.pdf">`
+  - Ou abre em nova aba: `target="_blank" rel="noopener noreferrer"`
+- **Analytics:** Track download event
+
+---
+
+## Seções Subsequentes
+
+Após esta seção, na ordem:
+
+1. **Marcas / Clientes** (fundo escuro mantido ou transição gradual)
+2. **Contato** (formulário em fundo claro — contraste forte)
+3. **Footer** (retorna ao fundo escuro)
+
+### Transição para Seção de Marcas
+- Padding-top generoso: 80–120px
+- Pode ter linha divisória sutil
+- Mantém fundo escuro ou inicia transição gradual
+
+---
+
+## Notas de Implementação
+
+### Acessibilidade
+- Heading hierarchy: `<h2>` para título principal
+- Botões com `aria-label` descritivos se necessário
+- Focus visible em todos os elementos interativos
+- Contraste mínimo AA/AAA
+
+### Performance
+- Lazy load de assets se fora do viewport inicial
+- Intersection Observer para animações
+- `will-change` apenas durante animações
+
+### Analytics
+- Track impressions da seção
+- Track clicks em cada CTA
+- Track downloads do curriculum
+- Eventos: `section_view`, `cta_click`, `cv_download`
+
+### SEO
+- Conteúdo semântico bem estruturado
+- Texto alternativo em ícones (se relevante)
+- Schema.org markup para pessoa/profissional (opcional)
+
+---
+
+## Variações Opcionais
+
+### Versão com Linha do Tempo
+- Adicionar mini timeline visual de carreira
+- Apenas se não interferir na simplicidade
+
+### Versão com Depoimento
+- Quote curto de cliente/parceiro
+- Posicionado entre parágrafos e CTAs
+- Estilo ghost/sutil
+
+### Versão com Social Proof
+- Logos pequenos de 3-5 marcas principais
+- Acima ou abaixo dos CTAs
+- Escala de cinza, opacity 0.6
+
+**Recomendação:** manter versão minimal e direta conforme especificado inicialmente.
+
+
+
+------
+
+
+🎬 **MOTION TOKENS (RESUMO)**  
+- Duração padrão: `0.9s`  
+- Duração longa: `1.4–1.6s`  
+- Delay padrão: `0.2–0.4s`  
+- Easing principal: `cubic-bezier(0.22, 1, 0.36, 1)` (`ghostIn`)  
+- Escala: **proibida**  
+- Bounce: **proibido**  
+- Rotate: **proibido**  
+- Opacity nunca é brusca.  
+- Imagens nunca chegam a 100% — usar máx `0.85–0.9`.
+
+---
+
+📱 **BREAKPOINTS (COMPORTAMENTO NA /SOBRE)**  
+
+| Breakpoint | Min width | Regra principal                                             |
+|------------|-----------|-------------------------------------------------------------|
+| sm         | 640px     | Fonte maior, 1 coluna em todas as seções                   |
+| md         | 768px     | Ainda 1 coluna; ajustes de respiro e hierarquia            |
+| lg         | 1024px    | Layout completo com colunas duplas onde previsto           |
+| xl         | 1280px    | Mais respiro lateral e grids de 3 colunas (listas)         |
+
+*Mapeamento técnico: ver tokens breakpoints na Parte 2.*
+
+---
+
+🚫 **REGRAS ABSOLUTAS — PÁGINA /SOBRE**  
+❌ Texto diretamente sobre imagem/vídeo sem overlay escuro 80%+  
+❌ Blur excessivo que prejudique leitura  
+❌ Scale / bounce / rotate em conteúdo  
+
+✅ **Exceções controladas:**  
+- Hero (texto sobre vídeo com overlay sólido).  
+- Seção 04 (texto em card escuro sobre vídeo).  
+- Alternância fluida desktop texto ↔ mídia  
+- Mobile-first (texto sempre antes da imagem)  
+- Ritmo frase ↔ imagem, sem colagens visuais.
+
+---
+
+🧩 **EXPERIÊNCIA FINAL (NARRATIVA)**  
+O usuário não percebe a técnica.  
+Não vê o esforço.  
+Não sente ruído.  
+
+Mas sente presença.  
+Sente fluidez.  
+Sente confiança.  
+
+Isso é o protótipo interativo da página SOBRE.
+
+---
+
+---
+
+## **PARTE 2 — DESIGN SYSTEM TÉCNICO (IMPLEMENTAÇÃO)**
+
+🧠 **GHOST DESIGN SYSTEM — TÉCNICO**  
+_Tokens + Componentes_  
+portifoliodanilo.com  
+
+### 1. VISÃO GERAL  
+Ghost Design é um sistema silencioso de interface.  
+Ele prioriza:  
+- Presença sem ruído  
+- Movimento como respiração  
+- Design como guia invisível  
+
+Este documento é a fonte técnica oficial para design, frontend e motion.
+
+### 2. DESIGN TOKENS  
+#### 2.1 Color Tokens  
+```ts
+export const colors = {
+  primary: '#0048ff',
+  accent: '#4fe6ff',
+  ghostPurple: '#8705f2',
+  background: '#000022',
+  backgroundDark: '#040013',
+  backgroundLight: '#f0f0f0',
+  textPrimary: '#fcffff',
+  textSecondary: '#a1a3a3',
+  textInverse: '#0e0e0e',
+  neutral: '#0b0d3a',
+  neutralLight: '#F5F5F5',
+};
+```
+
+#### 2.2 Typography Tokens  
+```ts
+export const typography = {
+  fontFamily: {
+    primary: '"Inter", system-ui, sans-serif',
+  },
+  fontSize: {
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '20px',
+    xl: '28px',
+    xxl: '40px',
+    display: '56px',
+  },
+  fontWeight: {
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+  },
+  lineHeight: {
+    tight: 1.2,
+    normal: 1.5,
+    relaxed: 1.7,
+  },
+};
+```
+
+#### 2.3 Spacing Tokens  
+```ts
+export const spacing = {
+  xs: '4px',
+  sm: '8px',
+  md: '16px',
+  lg: '24px',
+  xl: '40px',
+  xxl: '64px',
+  section: '120px',
+};
+```
+
+#### 2.4 Motion Tokens (CRÍTICO)  
+```ts
+export const motion = {
+  duration: {
+    fast: '0.6s',
+    base: '0.9s',
+    slow: '1.4s',
+  },
+  delay: {
+    none: '0s',
+    short: '0.2s',
+    base: '0.4s',
+    long: '1s',
+  },
+  easing: {
+    ghost: 'cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+};
+```
+
+**🚫 Proibido:**  
+- scale  
+- bounce  
+- rotate  
+
+**Permitido:**  
+- opacity  
+- blur  
+- translateY (máx 18px)  
+
+### 3. COMPONENTES BASE  
+#### 3.1 `<GhostText />`  
+_Uso: Manifestos, frases-chave_  
+```tsx
+<GhostText as="p" delay={0.4}>
+  Você não vê tudo o que eu faço.
+</GhostText>
+```  
+**Comportamento**  
+- Fade + blur.  
+- Entrada por tempo ou viewport.  
+- Nunca reanima depois de visível.  
+
+#### 3.2 `<GhostHeading />`  
+```tsx
+<GhostHeading level="h1">
+  Sou Danilo Novais.
+</GhostHeading>
+```  
+- Alinhamento fluido.  
+- Peso médio.  
+- Tracking negativo leve.  
+
+#### 3.3 `<GhostSection />`  
+_Wrapper padrão de seção._  
+```tsx
+<GhostSection height="100vh">
+  {children}
+</GhostSection>
+```  
+**Regras**  
+- Uma seção = uma intenção.  
+- Nunca empilhar múltiplas animações diferentes na mesma área.  
+
+#### 3.4 `<GhostList />`  
+```tsx
+<GhostList
+  items={[
+    'Direção criativa que organiza o caos',
+    'Design estratégico que guia decisões',
+  ]}
+/>
+```  
+- Entrada item a item.  
+- Stagger fixo: 0.18s.  
+- Hover só altera opacity/cor do texto.  
+
+#### 3.5 `<GhostMedia />`  
+```tsx
+<GhostMedia type="video" src="/sobre/AI.mp4" />
+```  
+**Regras**  
+- Opacity máx 0.85.  
+- Blur permanente sutil.  
+- Nunca texto diretamente sobre a mídia; se houver, usar overlay sólido.  
+
+#### 3.6 `<GhostCTA />`  
+```tsx
+<GhostCTA href="/contato">
+  Fale comigo
+</GhostCTA>
+```  
+- Sem glow exagerado.  
+- Hover silencioso (opacity/cor).  
+- Sempre com tom humano, nunca agressivo.  
+
+### 4. LAYOUT SYSTEM  
+#### 4.1 Grid Invisível  
+**Desktop (lg+)**  
+- 12 colunas virtuais.  
+- Texto tipicamente em colunas 2–7.  
+- Mídia em colunas 8–12.  
+
+**Mobile (sm / md)**  
+- 1 coluna.  
+- Texto sempre antes da imagem/vídeo.  
+
+*Objetivo: o usuário não percebe o grid, apenas o ritmo.*
+
+#### 4.2 Section Heights  
+
+| Tipo        | Altura alvo |
+|-------------|-------------|
+| Hero        | 100vh       |
+| Conteúdo    | 120–140vh   |
+| Fechamento  | 80–100vh    |
+
+*Valores são referências, não travas rígidas. A prioridade é fluxo narrativo.*
+
+#### 4.3 Layout Responsivo por Seção  
+- **Seção 01**  
+  - Mobile: 1 coluna, texto centralizado.  
+  - Desktop: texto à direita sobre vídeo com overlay.  
+- **Seção 02 (Origem)**  
+  - Mobile: blocos texto → mídia empilhados.  
+  - Desktop: alternância texto ↔ mídia em 2 colunas.  
+- **Seção 03 (O que eu faço)**  
+  - Mobile: lista em 1 coluna.  
+  - Desktop: grid de 2–3 colunas de cards.  
+- **Seção 04 (Como eu trabalho)**  
+  - Mobile: texto em faixa escura sobre vídeo recortado (lado direito).  
+  - Desktop: texto à esquerda, vídeo/ghost em evidência à direita.  
+- **Seção 05 (O que me move)**  
+  - Mobile: texto centralizado + ghost abaixo.  
+  - Desktop: texto à esquerda, ghost à direita.  
+- **Seção 06 (Fechamento)**  
+  - Mobile: CTAs empilhados.  
+  - Desktop: CTAs lado a lado, com texto central.  
+
+### 5. BREAKPOINTS (TÉCNICO)  
+```ts
+export const breakpoints = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+};
+```
+
+### 6. ACESSIBILIDADE & PERFORMANCE  
+- Respeitar `prefers-reduced-motion` em todas as animações.  
+- Nenhuma animação rodando fora do viewport.  
+- **Vídeos:**  
+  - `loading="lazy"` (quando possível).  
+  - `muted`, `autoplay`, `loop`.  
+- Sem re-render em scroll contínuo:  
+  - Usar observers (`IntersectionObserver`) em vez de listeners de scroll diretos.  
+- Contraste sempre AA+:  
+  - Especialmente em hero e seção 04 (texto sobre vídeo com overlay).  
+
+### 7. REGRAS ABSOLUTAS DO SISTEMA  
+❌ Texto direto sobre imagem/vídeo sem overlay  
+❌ Animações chamativas (glow, bounce, scale)  
+❌ Motion decorativo desconectado da narrativa  
+
+✅ Ritmo  
+✅ Silêncio  
+✅ Presença  
+
+### 8. MANIFESTO TÉCNICO  
+O melhor design:  
+- não explica  
+- não chama atenção  
+- não se impõe  
+
+Ele permanece.  
+
+Isso é Ghost Design System.
+
+🧩 **REGRA FINAL**  
+Se algo:  
+- não está aqui  
+- não respeita este documento  
+- ou altera o ritmo Ghost  
+
+➡ É BUG.  
+
+Ghost Design não é estilo.  
+É comportamento.
+
+
+
+### Checklist de Acessibilidade
+
+**Antes do Deploy:**
+
+- [ ] Contraste de cores validado (WCAG AA/AAA)
+- [ ] Navegação completa por teclado (Tab, Enter, Esc, Setas)
+- [ ] Hierarquia semântica correta (H1 único, sequência H2-H6)
+- [ ] ALT texts descritivos em todas as imagens
+- [ ] `aria-label` em elementos interativos sem texto
+- [ ] `prefers-reduced-motion` implementado
+- [ ] Focus visível em todos os elementos interativos
+- [ ] Testado com screen reader (NVDA/JAWS/VoiceOver)
+- [ ] Zoom 200% sem quebra de layout
+- [ ] Landmarks semânticos (`<main>`, `<nav>`, `<section>`)
+- [ ] Vídeos com `aria-hidden` quando decorativos
+- [ ] Formulários com labels associados
+- [ ] Skip links para navegação rápida
+
+----
+
+## Observações Finais
+
+### Fonte Única da Verdade
+
+Este documento consolida **TODO** o conteúdo da página /sobre. Nenhuma decisão fora deste documento é válida sem atualização prévia deste arquivo.
+
+### Princípios de Implementação
+
+1. **Mobile-first:** começar pela menor tela, expandir progressivamente
+2. **Progressive enhancement:** funcionalidade básica primeiro, melhorias depois
+3. **Performance:** lazy load, GPU transforms, otimização de assets
+4. **Modularidade:** componentes reutilizáveis e isolados
+5. **Manutenibilidade:** código limpo, comentado, documentado
+6. **Acessibilidade:** WCAG AA mínimo, AAA preferencial
+
+### Stack Técnica Recomendada
+
+**Framework & Ferramentas:**
+- **Framework:** Next.js 14+ (App Router)
+- **Linguagem:** TypeScript
+- **Animações:** Framer Motion 11+, GSAP 3.13+ + ScrollTrigger
+- **Smooth Scroll:** Lenis
+- **Styling:** Tailwind CSS 3.4+
+- **Fonts:** Self-hosted (TT Norms Pro)
+- **Assets:** Supabase Storage
+- **Otimização de Imagens:** Next/Image com sharp
+
+**Estrutura de Pastas:**
+
+```
+/app
+  /sobre
+    page.tsx
+    /components
+      Header.tsx
+      Hero.tsx
+      OrigemCriativa.tsx
+      AboutWhatIDo.tsx
+      AboutMethod.tsx
+      AboutBeliefs.tsx
+      Footer.tsx
+    /lib
+      animations.ts
+      gsap-config.ts
+    layout.tsx
+
+
+### Performance Targets
+
+| Métrica | Target | Ferramenta |
+|---------|--------|------------|
+| Lighthouse Performance | ≥ 90 | Lighthouse |
+| First Contentful Paint (FCP) | < 1.8s | PageSpeed Insights |
+| Largest Contentful Paint (LCP) | < 2.5s | PageSpeed Insights |
+| Cumulative Layout Shift (CLS) | < 0.1 | PageSpeed Insights |
+| Time to Interactive (TTI) | < 3.8s | PageSpeed Insights |
+| Total Blocking Time (TBT) | < 200ms | Lighthouse |
+
+**Otimizações críticas:**
+- Lazy load de vídeos fora do viewport
+- Preload de fontes críticas
+- Code splitting por seção
+- Compressão de imagens (WebP com fallback)
+- Minificação de CSS/JS
+- CDN para assets estáticos
+
+### Versionamento
+
+**Formato:** Semantic Versioning (MAJOR.MINOR.PATCH)
+
+- **MAJOR:** Mudanças estruturais na página
+- **MINOR:** Novas seções ou funcionalidades
+- **PATCH:** Correções e ajustes
+
+**Changelog:**
+```
+v1.0.0 (2026-01-13)
+- Lançamento inicial da documentação completa
+- Design System unificado
+- Grid system otimizado (4/8/12 colunas)
+- 6 seções principais documentadas
+- Especificações de acessibilidade WCAG AA/AAA
+```
+
+### Contato e Manutenção
+
+**Responsável:** Danilo Novais  
+**Domínio:** portifoliodanilo.com  
+**Última atualização:** Janeiro 2026  
+**Próxima revisão:** Trimestral
+
+---
+
+**Documento oficial — Página Sobre**  
+**Ghost Design — presença que guia sem aparecer**
+
+
 ## **Ghost Interativo**
-
-
 ---
 
 ## Responsividade
@@ -1560,7 +2341,7 @@ useEffect(() => {
 }
 ```
 
-#### Textos Alternativos
+# Textos Alternativos
 
 **Imagens decorativas:**
 ```tsx
@@ -1664,118 +2445,3 @@ const MyComponent = () => {
   <HamburgerIcon aria-hidden="true" />
 </button>
 ```
-
-### Checklist de Acessibilidade
-
-**Antes do Deploy:**
-
-- [ ] Contraste de cores validado (WCAG AA/AAA)
-- [ ] Navegação completa por teclado (Tab, Enter, Esc, Setas)
-- [ ] Hierarquia semântica correta (H1 único, sequência H2-H6)
-- [ ] ALT texts descritivos em todas as imagens
-- [ ] `aria-label` em elementos interativos sem texto
-- [ ] `prefers-reduced-motion` implementado
-- [ ] Focus visível em todos os elementos interativos
-- [ ] Testado com screen reader (NVDA/JAWS/VoiceOver)
-- [ ] Zoom 200% sem quebra de layout
-- [ ] Landmarks semânticos (`<main>`, `<nav>`, `<section>`)
-- [ ] Vídeos com `aria-hidden` quando decorativos
-- [ ] Formulários com labels associados
-- [ ] Skip links para navegação rápida
-
----
-
-## Observações Finais
-
-### Fonte Única da Verdade
-
-Este documento consolida **TODO** o conteúdo da página /sobre. Nenhuma decisão fora deste documento é válida sem atualização prévia deste arquivo.
-
-### Princípios de Implementação
-
-1. **Mobile-first:** começar pela menor tela, expandir progressivamente
-2. **Progressive enhancement:** funcionalidade básica primeiro, melhorias depois
-3. **Performance:** lazy load, GPU transforms, otimização de assets
-4. **Modularidade:** componentes reutilizáveis e isolados
-5. **Manutenibilidade:** código limpo, comentado, documentado
-6. **Acessibilidade:** WCAG AA mínimo, AAA preferencial
-
-### Stack Técnica Recomendada
-
-**Framework & Ferramentas:**
-- **Framework:** Next.js 14+ (App Router)
-- **Linguagem:** TypeScript
-- **Animações:** Framer Motion 11+, GSAP 3.13+ + ScrollTrigger
-- **Smooth Scroll:** Lenis
-- **Styling:** Tailwind CSS 3.4+
-- **Fonts:** Self-hosted (TT Norms Pro)
-- **Assets:** Supabase Storage
-- **Otimização de Imagens:** Next/Image com sharp
-
-**Estrutura de Pastas:**
-```
-/app
-  /sobre
-    page.tsx
-    /components
-      Header.tsx
-      Hero.tsx
-      OrigemCriativa.tsx
-      AboutWhatIDo.tsx
-      AboutMethod.tsx
-      AboutBeliefs.tsx
-      Footer.tsx
-    /lib
-      animations.ts
-      gsap-config.ts
-    layout.tsx
-```
-
-### Performance Targets
-
-| Métrica | Target | Ferramenta |
-|---------|--------|------------|
-| Lighthouse Performance | ≥ 90 | Lighthouse |
-| First Contentful Paint (FCP) | < 1.8s | PageSpeed Insights |
-| Largest Contentful Paint (LCP) | < 2.5s | PageSpeed Insights |
-| Cumulative Layout Shift (CLS) | < 0.1 | PageSpeed Insights |
-| Time to Interactive (TTI) | < 3.8s | PageSpeed Insights |
-| Total Blocking Time (TBT) | < 200ms | Lighthouse |
-
-**Otimizações críticas:**
-- Lazy load de vídeos fora do viewport
-- Preload de fontes críticas
-- Code splitting por seção
-- Compressão de imagens (WebP com fallback)
-- Minificação de CSS/JS
-- CDN para assets estáticos
-
-### Versionamento
-
-**Formato:** Semantic Versioning (MAJOR.MINOR.PATCH)
-
-- **MAJOR:** Mudanças estruturais na página
-- **MINOR:** Novas seções ou funcionalidades
-- **PATCH:** Correções e ajustes
-
-**Changelog:**
-```
-v1.0.0 (2026-01-13)
-- Lançamento inicial da documentação completa
-- Design System unificado
-- Grid system otimizado (4/8/12 colunas)
-- 6 seções principais documentadas
-- Especificações de acessibilidade WCAG AA/AAA
-```
-
-### Contato e Manutenção
-
-**Responsável:** Danilo Novais  
-**Domínio:** portifoliodanilo.com  
-**Última atualização:** Janeiro 2026  
-**Próxima revisão:** Trimestral
-
----
-
-**Documento oficial — Página Sobre**  
-**Ghost Design — presença que guia sem aparecer**
