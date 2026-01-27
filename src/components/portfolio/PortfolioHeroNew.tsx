@@ -76,7 +76,7 @@ export default function PortfolioHeroNew() {
           </div>
 
           {/* CTA - "vamos trabalhar juntos" - Aligned to bottom baseline */}
-          <div className="shrink-0 flex justify-center md:justify-end pb-2">
+          <div className="shrink-0 flex justify-center md:justify-end">
             <AntigravityCTA
               href="#contact"
               text="vamos trabalhar juntos"
