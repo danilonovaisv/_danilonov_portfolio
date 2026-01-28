@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
+import { useMotionGate } from '@/hooks/useMotionGate';
+import { ScrollContext } from '@/contexts/ScrollContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,6 +57,8 @@ function AboutOrigin() {
   const archRef = useRef<HTMLDivElement>(null);
   const archRightRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
+  const shouldReduceMotion = useMotionGate();
+  const { lenis } = useContext(ScrollContext);
 
   // Resolver URLs de imagem com fallback seguro
   const resolveFallback = (path: FallbackImage) =>
@@ -97,22 +100,27 @@ function AboutOrigin() {
   }, []);
 
   useEffect(() => {
-    if (!isClient) return;
+    if (!isClient || shouldReduceMotion) return;
 
-    let rafId = 0;
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
-    });
+    const handleLenisScroll = () => ScrollTrigger.update();
+    if (lenis) {
+      lenis.on('scroll', handleLenisScroll);
 
-    const raf = (time: DOMHighResTimeStamp) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-
-    lenis.on('scroll', ScrollTrigger.update);
+      ScrollTrigger.scrollerProxy(document.body, {
+        scrollTop(value) {
+          if (typeof value === 'number') {
+            lenis.scrollTo(value, { immediate: true });
+          }
+          return lenis.scroll;
+        },
+        getBoundingClientRect: () => ({
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        }),
+      });
+    }
 
     const mm = gsap.matchMedia();
 
@@ -329,12 +337,13 @@ function AboutOrigin() {
 
     return () => {
       window.removeEventListener('load', refreshST);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (lenis) {
+        lenis.off?.('scroll', handleLenisScroll);
+      }
       mm.revert();
-      lenis.destroy();
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, [isClient]);
+  }, [isClient, shouldReduceMotion, lenis]);
 
   if (!isClient) {
     return (

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { GHOST_EASE } from '@/lib/motionTokens';
+import { GHOST_EASE } from '@/config/motion';
 import { applyImageFallback } from '@/utils/utils';
 
 const GHOST_SPRING = { damping: 30, stiffness: 200, mass: 1 } as const;

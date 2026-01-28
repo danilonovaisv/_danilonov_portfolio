@@ -1,8 +1,11 @@
 import { useScroll, useTransform, useSpring } from 'framer-motion';
+import { useMotionGate } from '@/hooks/useMotionGate';
 
 export function useHeroAnimation(
   containerRef: React.RefObject<HTMLElement | null>
 ) {
+  const shouldReduceMotion = useMotionGate();
+
   // Monitora o scroll APENAS dentro da seção Hero (que tem 250vh de altura para dar tempo do scroll acontecer)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -17,7 +20,11 @@ export function useHeroAnimation(
   });
 
   // Transparência do Texto Editorial (some rápido ao scrollar)
-  const copyOpacity = useTransform(smoothScroll, [0, 0.2], [1, 0]);
+  const copyOpacity = useTransform(
+    smoothScroll,
+    shouldReduceMotion ? [0, 1] : [0, 0.2],
+    shouldReduceMotion ? [1, 1] : [1, 0]
+  );
 
   return {
     scrollYProgress,

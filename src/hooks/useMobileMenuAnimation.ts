@@ -1,11 +1,14 @@
 import { useRef, useState, useCallback, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
+import { useMotionGate } from '@/hooks/useMotionGate';
 
 export function useMobileMenuAnimation(
   isOpen: boolean,
   onOpen: () => void,
   onClose: () => void
 ) {
+  const motionDisabled = useMotionGate();
+
   // Animation refs
   const panelRef = useRef<HTMLElement>(null);
   const preLayersRef = useRef<HTMLDivElement>(null);
@@ -33,6 +36,8 @@ export function useMobileMenuAnimation(
 
   // Initialize GSAP Context
   useLayoutEffect(() => {
+    if (motionDisabled) return;
+
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
       const preContainer = preLayersRef.current;
@@ -63,9 +68,10 @@ export function useMobileMenuAnimation(
       gsap.set(textInner, { yPercent: 0 });
     });
     return () => ctx.revert();
-  }, []);
+  }, [motionDisabled]);
 
   const animateIcon = useCallback((opening: boolean) => {
+    if (motionDisabled) return;
     const icon = iconRef.current;
     const h = plusHRef.current;
     const v = plusVRef.current;
@@ -89,6 +95,11 @@ export function useMobileMenuAnimation(
   }, []);
 
   const animateText = useCallback((opening: boolean) => {
+    if (motionDisabled) {
+      setTextLines([opening ? 'Close' : 'Menu']);
+      return;
+    }
+
     const inner = textInnerRef.current;
     if (!inner) return;
 
@@ -119,6 +130,7 @@ export function useMobileMenuAnimation(
   }, []);
 
   const buildOpenTimeline = useCallback(() => {
+    if (motionDisabled) return null;
     const panel = panelRef.current;
     const layers = preLayerElsRef.current;
     if (!panel) return null;
@@ -212,6 +224,7 @@ export function useMobileMenuAnimation(
   }, []);
 
   const playOpen = useCallback(() => {
+    if (motionDisabled) return;
     // Force reset any closing animation
     if (closeTweenRef.current) {
       closeTweenRef.current.kill();
@@ -225,6 +238,7 @@ export function useMobileMenuAnimation(
   }, [buildOpenTimeline]);
 
   const playClose = useCallback(() => {
+    if (motionDisabled) return;
     openTlRef.current?.kill();
     openTlRef.current = null;
 
@@ -267,18 +281,28 @@ export function useMobileMenuAnimation(
       if (isOpen) {
         openRef.current = true;
         setOpen(true);
-        playOpen();
-        animateIcon(true);
-        animateText(true);
+        if (!motionDisabled) {
+          playOpen();
+          animateIcon(true);
+          animateText(true);
+        } else {
+          onOpen();
+          setTextLines(['Close']);
+        }
       } else {
         openRef.current = false;
         setOpen(false);
-        playClose();
-        animateIcon(false);
-        animateText(false);
+        if (!motionDisabled) {
+          playClose();
+          animateIcon(false);
+          animateText(false);
+        } else {
+          onClose();
+          setTextLines(['Menu']);
+        }
       }
     }
-  }, [isOpen, playOpen, playClose, animateIcon, animateText]);
+  }, [isOpen, playOpen, playClose, animateIcon, animateText, motionDisabled, onClose, onOpen]);
 
   // Ensure text is always in sync with isOpen state
 
@@ -292,6 +316,13 @@ export function useMobileMenuAnimation(
     openRef.current = target;
     setOpen(target);
 
+    if (motionDisabled) {
+      if (target) onOpen();
+      else onClose();
+      setTextLines([target ? 'Close' : 'Menu']);
+      return;
+    }
+
     if (target) {
       onOpen();
       playOpen();
@@ -302,7 +333,7 @@ export function useMobileMenuAnimation(
 
     animateIcon(target);
     animateText(target);
-  }, [onOpen, onClose, playOpen, playClose, animateIcon, animateText]);
+  }, [onOpen, onClose, playOpen, playClose, animateIcon, animateText, motionDisabled]);
 
   return {
     refs: {
