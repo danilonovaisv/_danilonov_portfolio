@@ -1,6 +1,7 @@
 
 import React, { useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import styles from './AboutBeliefsFinal.module.css';
 
 interface FinalSectionProps {
   bgColor: string;
@@ -26,11 +27,16 @@ const FinalSection: React.FC<FinalSectionProps> = ({ bgColor }) => {
     return () => clearInterval(timer);
   }, [phrases.length]);
 
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.style.setProperty('--final-section-bg', bgColor);
+    }
+  }, [bgColor]);
+
   return (
     <section
       ref={ref}
-      style={{ backgroundColor: bgColor }}
-      className="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden px-4"
+      className={`relative w-full h-screen flex flex-col items-center justify-center overflow-hidden px-4 ${styles.section}`}
     >
       <motion.div
         className="flex flex-col items-center justify-center text-center text-white font-display leading-[0.78] w-full max-w-[98vw] z-10"

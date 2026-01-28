@@ -128,8 +128,8 @@ importers:
         specifier: ^0.11.8
         version: 0.11.8(firebase-admin@13.6.0(encoding@0.1.13))(firebase@12.8.0)
       firebase-functions:
-        specifier: ^7.0.4
-        version: 7.0.4(firebase-admin@13.6.0(encoding@0.1.13))(graphql@16.12.0)
+        specifier: ^7.0.5
+        version: 7.0.5(firebase-admin@13.6.0(encoding@0.1.13))(graphql@16.12.0)
       framer-motion:
         specifier: ^12.29.2
         version: 12.29.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -5478,8 +5478,8 @@ packages:
       '@as-integrations/express4':
         optional: true
 
-  firebase-functions@7.0.4:
-    resolution: {integrity: sha512-JQW73BgMGljsZ63zh28dixMY1ZCdguIx3WVMBVW31X5w81VmvYSbPpzHAgW3AJcqVKnffqfqLgDTLNch9HV7eA==}
+  firebase-functions@7.0.5:
+    resolution: {integrity: sha512-uG2dR5AObLuUrWWjj/de5XxNHCVi+Ehths0DSRcLjHJdgw1TSejwoZZ5na6gVrl3znNjRdBRy5Br5UlhaIU3Ww==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -7258,7 +7258,7 @@ packages:
     resolution: {integrity: sha512-/k+NuycVV8pykxyiTCoFzIVLA95Nb1BFIVvfSu9L50/6K6qNeAYtkxXILy/LRutt7AzaYDc2myj0wkCVVYAPPA==}
 
   motion-studio-mcp@https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest:
-    resolution: {integrity: sha512-oqMIfG/OxwiSpLR4X97NUFBjovBN8Hm1tSqjl/oHdhB5f3vAJC9C52Lym0VjaWqOCoy8tVUXHSxSDnZ0VIB4sw==, tarball: https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest}
+    resolution: {tarball: https://api.motion.dev/registry.tgz?package=motion-studio-mcp&version=latest}
     version: 5.2.0
     hasBin: true
 
@@ -15658,7 +15658,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  firebase-functions@7.0.4(firebase-admin@13.6.0(encoding@0.1.13))(graphql@16.12.0):
+  firebase-functions@7.0.5(firebase-admin@13.6.0(encoding@0.1.13))(graphql@16.12.0):
     dependencies:
       '@types/cors': 2.8.19
       '@types/express': 4.17.25
