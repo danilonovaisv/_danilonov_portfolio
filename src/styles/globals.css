@@ -193,6 +193,10 @@ html.admin-page body {
   padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
 }
 
+.footer-safe-area {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
 .safe-area-top {
   padding-top: max(16px, env(safe-area-inset-top, 16px));
 }
