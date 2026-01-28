@@ -29,6 +29,11 @@ const config: Config = {
         h2: [BRAND.assets.fonts.primary, 'ui-sans-serif'],
         outfit: ['Outfit', 'sans-serif'],
       },
+      minWidth: {
+        'cta-mobile': '181px',
+        'cta-tablet': '201px',
+        'cta-desktop': '241px',
+      },
     },
   },
   plugins: [],

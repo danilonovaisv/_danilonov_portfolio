@@ -76,6 +76,23 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
   const isMobile = viewport.width < 5;
   const baseScale = isMobile ? viewport.width * 0.18 : 0.6;
 
+  // Handle touch interactions simply by updating mouseRef
+  useEffect(() => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0 && gl.domElement) {
+        const touch = e.touches[0];
+        const rect = gl.domElement.getBoundingClientRect();
+        const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+        mouseRef.current = { x, y };
+      }
+    };
+
+    const canvas = gl.domElement;
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
+    return () => canvas.removeEventListener('touchmove', handleTouchMove);
+  }, [gl]);
+
   useFrame((state) => {
     if (!animRef.current || !scrollProgress || !groupRef.current) return;
 
@@ -89,14 +106,23 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       0.05
     );
 
-    // --- Animação Base (Rotação Y pelo scroll) ---
-    // Aplica rotação Y baseada no scroll NO GRUPO INTERNO
-    animRef.current.rotation.y = -progress * Math.PI * 2;
+    // --- Animação Base ---
+    // REMOVIDA ROTAÇÃO Y PELO SCROLL (Pedido: "não rotacione, fique sempre vista frontal")
+    // animRef.current.rotation.y = -progress * Math.PI * 2;
+    // Mantemos 0 ou uma rotação base fixa se necessário
+    animRef.current.rotation.y = THREE.MathUtils.lerp(
+      animRef.current.rotation.y,
+      0,
+      0.05
+    );
 
     // --- Resposta ao Mouse (Posição e Rotação) ---
-    const mouseInfluence = 0.1;
+    // Desktop: Inclina levemente (rotationX/rotationZ) e desloca posição x/y
+    // Mobile: Resposta baseada em touch (já mapeado no mouseRef)
+    const mouseInfluence = 0.2; // Aumentado um pouco para ser perceptível "intensificar"
 
     // Lerp positions (relativo ao 0,0,0 do grupo pai)
+    // Movimento suave seguindo o cursor
     animRef.current.position.x = THREE.MathUtils.lerp(
       animRef.current.position.x,
       mouse.x * mouseInfluence,
@@ -108,15 +134,21 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       0.05
     );
 
-    // Lerp rotações X e Z baseadas no mouse (Wobble)
+    // Lerp rotações X e Z baseadas no mouse (Tilt suave)
+    // RotationX: Inclina para cima/baixo
     animRef.current.rotation.x = THREE.MathUtils.lerp(
       animRef.current.rotation.x,
-      -mouse.y * mouseInfluence * 0.5,
+      -mouse.y * mouseInfluence * 0.8, // Slight tilt vertical
       0.05
     );
 
-    // Base target para Z rotation (mouse sway)
-    let targetZ = mouse.x * mouseInfluence * 0.5;
+    // RotationZ: Inclina para os lados (Bank)
+    animRef.current.rotation.z = THREE.MathUtils.lerp(
+      animRef.current.rotation.z,
+      -mouse.x * mouseInfluence * 0.5, // Slight tilt horizontal
+      0.05
+    );
+
     let targetScale = 1; // Escala base interna (multiplicativa)
 
     // --- Efeitos de Final de Seção ---
@@ -130,13 +162,11 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
         0.05
       );
 
-      // Adiciona wobble extra ao Z
+      // Adiciona wobble extra ao Z (se desejado, mas mantendo frontalidade)
+      // Manter wobble sutil
       const timeBasedWobble =
-        Math.sin(state.clock.elapsedTime * 6) * 0.1 * intensity;
-      const scrollBasedWobble = (progress - 0.8) * 0.2;
-
-      // Combina influência do mouse + efeitos finais
-      targetZ += timeBasedWobble + scrollBasedWobble;
+        Math.sin(state.clock.elapsedTime * 2) * 0.05 * intensity;
+      animRef.current.rotation.z += timeBasedWobble;
 
       // Aumenta escala interna (zoom effect)
       targetScale = 1 + 0.1 * intensity;
@@ -148,13 +178,6 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
         0.05
       );
     }
-
-    // Aplica rotação Z final combinada
-    animRef.current.rotation.z = THREE.MathUtils.lerp(
-      animRef.current.rotation.z,
-      targetZ,
-      0.05
-    );
 
     // Aplica escala interna (multiplicação sobre a escala base do grupo pai)
     animRef.current.scale.setScalar(targetScale);

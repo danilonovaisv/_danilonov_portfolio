@@ -25,6 +25,14 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   const [lenisInstance, setLenisInstance] = useState<Lenis | null>(null);
 
   useEffect(() => {
+    if (isAdminRoute) {
+      document.documentElement.classList.add('admin-page');
+    } else {
+      document.documentElement.classList.remove('admin-page');
+    }
+  }, [isAdminRoute]);
+
+  useEffect(() => {
     // ♿ SE REDUCED MOTION → SEM LENIS
     if (flags.reducedMotion || isAdminRoute) {
       setLenisInstance(null);

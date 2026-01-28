@@ -1057,15 +1057,15 @@ gsap.from(".service-card", {
       - CTA implícito (emocional): reforçar a percepção de valor do estúdio.  
       - Não há botão direto aqui; o CTA funcional acontece em seções posteriores (Clientes/Contato), mas essa sessão prepara o usuário emocionalmente para clicar lá.
 
-- [ ] **Texto de apoio (parágrafos, bullets, etc.)**  
+- [ ] **Texto de apoio - font-h1 - blueAccent**  
       - **Frases rotativas (manifesto em camadas):**
-        1. “Um vídeo que **respira**.”
-        2. “Uma marca que se **reconhece**.”
-        3. “Um detalhe que **fica**.”
-        4. “**Crio** para gerar presença.”
-        5. “**Mesmo** quando não estou ali.”
-        6. “**Mesmo** quando ninguém percebe o esforço.”
-      - Palavras-chave destacadas em `bluePrimary` e negrito, reforçando os conceitos centrais: respira, reconhece, fica, crio, mesmo…
+        1. “Um vídeo que respira.”
+        2. “Uma marca que se reconhece.”
+        3. “Um detalhe que fica.”
+        4. “Crio para gerar presença.”
+        5. “Mesmo quando não estou ali.”
+        6. “Mesmo quando ninguém percebe o esforço.”
+     
       - Manifesto final:  
         > ISSO É  
         > GHOST DESIGN.
@@ -1142,7 +1142,7 @@ gsap.from(".service-card", {
 
 - [ ] **Comportamentos especiais com o mouse ou touch**  
       - Ghost 3D:
-        - Flutuação padrão contínua (como no tutorial de “3D glass effect” do Olivier Larose, referência de suavidade e fluidez).  
+        - Flutuação padrão contínua.  
         - **Mouse move (desktop):**  
           - Ghost inclina levemente (rotationX/rotationZ) e desloca posição x/y seguindo o cursor de forma amortecida (LERP), nunca brusca.  
         - **Touch (mobile/tablet):**  

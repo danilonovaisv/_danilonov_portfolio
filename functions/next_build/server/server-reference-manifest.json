@@ -1,6 +1,6 @@
 {
   "node": {
-    "40ad3f16a742876fb1293ccebc078fb87889a1ae37": {
+    "4076374fa3a56ce044d70eaad90235cb95916bc8a9": {
       "workers": {
         "app/admin/(protected)/trabalhos/page": {
           "moduleId": 44954,
@@ -36,7 +36,7 @@
       "filename": "src/lib/supabase/queries/projects.ts",
       "exportedName": "$$RSC_SERVER_ACTION_0"
     },
-    "00d08089cb6c8c8c243eedc6d961487fe76bc63d1a": {
+    "005a218bee4541ccdaaafbd757fb155e1499eb8889": {
       "workers": {
         "app/admin/(protected)/config/page": {
           "moduleId": 85800,
@@ -114,7 +114,7 @@
       "filename": "src/lib/supabase/auth-actions.ts",
       "exportedName": "signOut"
     },
-    "40ff2118cc4137aadb09e1036482ecc4c0d5939225": {
+    "40ea46ab3e0514c9d792e97c855183d50fbd800bbd": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -129,7 +129,7 @@
       "filename": "src/app/admin/(protected)/midia/actions.ts",
       "exportedName": "upsertAsset"
     },
-    "40a7611c0e3cd1c59854bf38802b4992fd4b8a1c3e": {
+    "40842a36f85048cb5bb891a0cb010e31b428fc4e17": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -144,7 +144,7 @@
       "filename": "src/app/admin/(protected)/midia/actions.ts",
       "exportedName": "assignAssetRole"
     },
-    "40dfe0ecffaf9cb8a04e04d45a3e2043ec03dccbbc": {
+    "4018afb266064ae8126dbcd4ad409f27e2f7fb0c11": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -161,5 +161,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "s8RUdGzlLwZEZ39l2WF9lOSXFwAHRDx41wHSy5goBC4="
+  "encryptionKey": "85IBDi+LaPyLiqGpyhSx0wEfNVakvnpDv5x1t6Rj0S4="
 }
