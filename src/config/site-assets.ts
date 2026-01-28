@@ -38,6 +38,35 @@ export const SITE_ASSET_KEYS = {
     ],
     methodDesktop: 'about.method_video',
     methodMobile: 'about.method_video',
+    beliefs: {
+      ghostModel: 'about.beliefs.ghost-transformed.glb',
+      skillsVideo: 'about.beliefs.VIDEO-SKILLS-FINAL_compressed.mp4',
+      skillsVideoMobile: 'about.beliefs.VIDEO-SKILLS-MOBILE-FINAL.mp4',
+    },
+  },
+  projects: {
+    campaign: {
+      cover: 'projects.campaign.cover.webp',
+      hero: 'projects.campaign.hero.webp',
+      thumb: 'projects.campaign.thumb.webp',
+    },
+    keyVision: {
+      cover: 'projects.key-visual.cover.webp',
+      hero: 'projects.key_vision.hero.webp',
+      thumb: 'projects.key_vision.thumb.webp',
+    },
+    brandVideo: {
+      hero: 'projects.brand_video.hero.png',
+      thumb: 'projects.brand_video.thumb.mp4',
+    },
+    advertisingVideo: {
+      hero: 'projects.advertising_video.hero.png',
+      thumb: 'projects.advertising_video.thumb.png',
+    },
+    creativeDirection: {
+      hero: 'projects.creative-direction.hero.webp',
+      thumb: 'projects.creative-direction.thumb.webp',
+    },
   },
   portfolio: {
     heroDesktop: 'portfolio.hero_video.desktop',

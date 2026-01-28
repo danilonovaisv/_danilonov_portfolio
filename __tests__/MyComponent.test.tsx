@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import MyComponent from '../src/components/MyComponent';
+import MyComponent from '../src/components/ui/MyComponent';
 
 const killMock = jest.fn();
 const fromToMock = jest.fn(() => ({ kill: killMock }));

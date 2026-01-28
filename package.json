@@ -47,6 +47,7 @@
     "assets:fix-duplicates": "tsx scripts/fix-duplicate-assets.ts",
     "assets:clean": "tsx scripts/repair-site-assets-clean.ts",
     "assets:update-urls": "tsx scripts/update-supabase-urls.ts",
+    "audit:assets": "python3 scripts/audit_assets.py",
     "assets:check-links": "tsx scripts/check-storage-links.ts",
     "assets:check-unused": "node scripts/check-unused-assets.cjs",
     "assets:verify-corrections": "tsx scripts/verify-asset-corrections.ts",
