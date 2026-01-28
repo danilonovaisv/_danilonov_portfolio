@@ -7,10 +7,30 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.1"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -175,66 +195,6 @@ export type Database = {
           label?: string
           slug?: string
           sort_order?: number | null
-        }
-        Relationships: []
-      }
-      project_config: {
-        Row: {
-          accessed_by: string | null
-          api_keys: Json | null
-          auth_providers: Json | null
-          created_at: string | null
-          created_by: string | null
-          environment: string | null
-          id: string
-          is_active: boolean | null
-          jwt_expiry: number | null
-          last_accessed: string | null
-          project_description: string | null
-          project_domain: string | null
-          project_name: string
-          public_env_vars: Json | null
-          storage_buckets: Json | null
-          storage_permissions: Json | null
-          updated_at: string | null
-        }
-        Insert: {
-          accessed_by?: string | null
-          api_keys?: Json | null
-          auth_providers?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          environment?: string | null
-          id?: string
-          is_active?: boolean | null
-          jwt_expiry?: number | null
-          last_accessed?: string | null
-          project_description?: string | null
-          project_domain?: string | null
-          project_name: string
-          public_env_vars?: Json | null
-          storage_buckets?: Json | null
-          storage_permissions?: Json | null
-          updated_at?: string | null
-        }
-        Update: {
-          accessed_by?: string | null
-          api_keys?: Json | null
-          auth_providers?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          environment?: string | null
-          id?: string
-          is_active?: boolean | null
-          jwt_expiry?: number | null
-          last_accessed?: string | null
-          project_description?: string | null
-          project_domain?: string | null
-          project_name?: string
-          public_env_vars?: Json | null
-          storage_buckets?: Json | null
-          storage_permissions?: Json | null
-          updated_at?: string | null
         }
         Relationships: []
       }
@@ -414,7 +374,11 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },
 } as const
+
