@@ -302,7 +302,16 @@ export function useMobileMenuAnimation(
         }
       }
     }
-  }, [isOpen, playOpen, playClose, animateIcon, animateText, motionDisabled, onClose, onOpen]);
+  }, [
+    isOpen,
+    playOpen,
+    playClose,
+    animateIcon,
+    animateText,
+    motionDisabled,
+    onClose,
+    onOpen,
+  ]);
 
   // Ensure text is always in sync with isOpen state
 
@@ -333,7 +342,15 @@ export function useMobileMenuAnimation(
 
     animateIcon(target);
     animateText(target);
-  }, [onOpen, onClose, playOpen, playClose, animateIcon, animateText, motionDisabled]);
+  }, [
+    onOpen,
+    onClose,
+    playOpen,
+    playClose,
+    animateIcon,
+    animateText,
+    motionDisabled,
+  ]);
 
   return {
     refs: {
