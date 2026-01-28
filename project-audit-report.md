@@ -1,11 +1,10 @@
 # 🧩 Auditoria do Projeto Danilo Novais Portfolio
 
-Gerado em: 1/26/2026, 2:29:51 PM
+Gerado em: 1/28/2026, 2:24:44 AM
 
 ---
 
 ## 📦 Dependências não utilizadas
-
 - @dataconnect/admin-generated
 - @dataconnect/generated
 - @genkit-ai/google-genai
@@ -21,8 +20,8 @@ Gerado em: 1/26/2026, 2:29:51 PM
 - postprocessing
 - statsig-js
 
-## 🧱 Dependências de desenvolvimento não utilizadas
 
+## 🧱 Dependências de desenvolvimento não utilizadas
 - @tailwindcss/postcss
 - @tailwindcss/typography
 - @testing-library/user-event
@@ -39,10 +38,13 @@ Gerado em: 1/26/2026, 2:29:51 PM
 - ts-node
 - which
 
-## 🌿 Branches no repositório
 
-- - main
+## 🌿 Branches no repositório
+- * main
 - remotes/origin/HEAD -> origin/main
 - remotes/origin/main
+- remotes/origin/codex/fix-configuration-bug-on-about-page
+
 
 ## 🪓 Branches potencialmente obsoletas
+- remotes/origin/codex/fix-configuration-bug-on-about-page

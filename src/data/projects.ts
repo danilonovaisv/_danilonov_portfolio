@@ -3,12 +3,12 @@ import type { PortfolioProject, ProjectCategory } from '@/types/project';
 // Asset Constants (conforme regras de integridade)
 const ASSETS = {
   BRANDING:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Branding-Project.webp',
+    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Branding-Project.webp',
   KEY_VISUAL:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/Key-Visual.webp',
+    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Key-Visual.webp',
   MOTION:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/webdesigner-2%202.gif',
-  TECH: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-images/WelcomeAd_800x500px.webp',
+    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/webdesigner-2.gif',
+  TECH: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/campaign/cover.webp',
 };
 
 export const PROJECT_CATEGORIES: Array<{

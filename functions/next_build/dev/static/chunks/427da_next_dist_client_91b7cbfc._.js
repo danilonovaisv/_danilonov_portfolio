@@ -3238,13 +3238,13 @@ function AppContainer({ children }) {
                                         "remotePatterns": ("TURBOPACK compile-time value", [
                                             ("TURBOPACK compile-time value", {
                                                 "protocol": ("TURBOPACK compile-time value", "https"),
-                                                "hostname": ("TURBOPACK compile-time value", "aymuvxysygrwoicsjgxj.supabase.co"),
+                                                "hostname": ("TURBOPACK compile-time value", "umkmwbkwvulxtdodzmzf.supabase.co"),
                                                 "port": ("TURBOPACK compile-time value", ""),
                                                 "pathname": ("TURBOPACK compile-time value", "/storage/v1/object/public/**")
                                             }),
                                             ("TURBOPACK compile-time value", {
                                                 "protocol": ("TURBOPACK compile-time value", "https"),
-                                                "hostname": ("TURBOPACK compile-time value", "aymuvxysygrwoicsjgxj.supabase.co"),
+                                                "hostname": ("TURBOPACK compile-time value", "umkmwbkwvulxtdodzmzf.supabase.co"),
                                                 "port": ("TURBOPACK compile-time value", ""),
                                                 "pathname": ("TURBOPACK compile-time value", "/storage/v1/render/image/public/**")
                                             })

@@ -15,11 +15,11 @@ const PROJECTS: PortfolioProject[] = [
     category: 'branding',
     displayCategory: 'Branding',
     year: 2024,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/garoto.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/campaign/cover.webp',
     type: 'B',
     layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Rebranding completo para uma das maiores marcas de chocolate do Brasil.',
+      description: 'Rebranding completo para uma das maiores marcas de chocolate do Brasil.',
     },
     tags: ['Branding', 'Packaging']
   },
@@ -31,15 +31,15 @@ const PROJECTS: PortfolioProject[] = [
     category: 'web',
     displayCategory: 'Web Design',
     year: 2023,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/nescafe.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/portfolio-media/projects/creative-direction/hero.webp',
     type: 'B',
     layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Campanha digital global com foco em sustentabilidade.',
+      description: 'Campanha digital global com foco em sustentabilidade.',
     },
     tags: ['Web', 'Campaign']
   },
-   {
+  {
     id: '3',
     slug: 'mpdv',
     title: 'MPDV',
@@ -47,11 +47,11 @@ const PROJECTS: PortfolioProject[] = [
     category: 'institucional',
     displayCategory: 'Institucional',
     year: 2023,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/mpdv.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/key-visual/cover.webp',
     type: 'A',
     layout: { cols: 'col-span-2', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Plataforma de inteligência de dados para varejo.',
+      description: 'Plataforma de inteligência de dados para varejo.',
     },
     tags: ['Product', 'UI/UX']
   },
@@ -63,11 +63,11 @@ const PROJECTS: PortfolioProject[] = [
     category: 'motion',
     displayCategory: 'Motion',
     year: 2022,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/swift.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/portfolio-media/projects/brand_video/hero.png',
     type: 'B',
     layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Série de vídeos em motion graphics para mídias sociais.',
+      description: 'Série de vídeos em motion graphics para mídias sociais.',
     },
     tags: ['Motion', 'Social']
   },
@@ -79,27 +79,27 @@ const PROJECTS: PortfolioProject[] = [
     category: 'web',
     displayCategory: 'Web',
     year: 2024,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/ambev.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Key-Visual.webp',
     type: 'A',
     layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Portal corporativo para talentos tech.',
+      description: 'Portal corporativo para talentos tech.',
     },
     tags: ['Web', 'Dev']
   },
-   {
+  {
     id: '6',
     slug: 'unilever',
     title: 'Unilever',
     client: 'Unilever',
-    category: 'institucional', 
+    category: 'institucional',
     displayCategory: 'Accessibility',
     year: 2023,
-    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/portfolio/projects/cover/unilever.jpg',
+    image: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Branding-Project.webp',
     type: 'B',
     layout: { cols: 'col-span-1', height: 'h-[400px]', colsMobile: 'col-span-1' },
     detail: {
-        description: 'Consultoria de acessibilidade e performance.',
+      description: 'Consultoria de acessibilidade e performance.',
     },
     tags: ['Consultoria', 'A11y']
   }
@@ -111,33 +111,33 @@ interface ProjectsGalleryProps {
 
 export const ProjectsGallery = ({ onOpenProject }: ProjectsGalleryProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
-  
+
   // Initialize LERP Scroll
   // The hook attaches height to .gallery (we need to make sure the parent has this class or we pass a ref)
   const { galleryRef } = useLERPScroll(trackRef);
 
   return (
-    <div 
-      className="gallery relative z-0 w-full" 
+    <div
+      className="gallery relative z-0 w-full"
       ref={galleryRef as React.RefObject<HTMLDivElement>}
     >
-      <div 
+      <div
         ref={trackRef}
         className="fixed top-0 left-0 w-full will-change-transform"
       >
         <div className="std-grid py-24 sm:py-32">
-           <div className="col-span-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-8">
-             {PROJECTS.map((project, index) => (
-               <div key={project.id} className="w-full">
-                 <ProjectCard 
-                    project={project} 
-                    index={index}
-                    onClick={onOpenProject}
-                    priority={index < 3}
-                 />
-               </div>
-             ))}
-           </div>
+          <div className="col-span-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-8">
+            {PROJECTS.map((project, index) => (
+              <div key={project.id} className="w-full">
+                <ProjectCard
+                  project={project}
+                  index={index}
+                  onClick={onOpenProject}
+                  priority={index < 3}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
