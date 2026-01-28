@@ -357,7 +357,7 @@ function AboutOrigin() {
     >
       <div className="max-w-420 mx-auto px-6 md:px-12 lg:px-16 xl:px-24 py-24">
         <div className="mb-24 text-center select-none">
-          <h1 className="text-[1.75rem] font-['CustomLight'] font-light leading-none text-[#4fe6ff] tracking-[0.2em] uppercase">
+          <h1 className="text-[1.75rem] font-bold leading-none text-bluePrimary tracking-[0.2em] uppercase">
             ORIGEM
           </h1>
         </div>

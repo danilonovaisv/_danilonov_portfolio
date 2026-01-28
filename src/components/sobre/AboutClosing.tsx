@@ -25,7 +25,7 @@ export function AboutClosing() {
         {/* Bloco 1: Título Principal e Linhas */}
         <div className="w-full">
           <div className="mb-10 h-px w-full bg-blueAccent/30" />
-          <h2 className="type-h1 font-semibold leading-tight text-white md:leading-[1.2]">
+          <h2 className="type-h1 font-bold leading-tight text-white md:leading-[1.2]">
             Hoje sou{' '}
             <span className="text-bluePrimary">Diretor de Criação</span>,
             <br />

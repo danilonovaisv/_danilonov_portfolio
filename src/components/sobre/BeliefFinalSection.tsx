@@ -31,8 +31,12 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
   return (
     <section
       ref={ref}
-      className="w-full h-screen overflow-hidden"
-      style={{ backgroundColor: bgColor }}
+      className="w-full h-screen overflow-hidden bg-(--section-bg)"
+      style={
+        {
+          '--section-bg': bgColor,
+        } as React.CSSProperties
+      }
     >
       <motion.div
         style={{
