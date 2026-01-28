@@ -8,7 +8,7 @@ Postgres performance optimization and best practices from Supabase. Use this ski
 
 ## Structure
 
-```
+```text
 supabase-postgres-best-practices/
   SKILL.md       # Main skill file - read this first
   AGENTS.md      # This navigation guide
@@ -95,4 +95,4 @@ Reference files are named `{prefix}-{topic}.md` (e.g., `query-missing-indexes.md
 
 ---
 
-_30 reference files across 8 categories_
+30 reference files across 8 categories
