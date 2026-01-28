@@ -1,6 +1,6 @@
 {
   "node": {
-    "40c3fbb7e06034faa0281bd0d716d436d9b115300d": {
+    "40d90223c98a33ca69b08e68bf67dbec839ec07c1f": {
       "workers": {
         "app/portfolio/[slug]/page": {
           "moduleId": 13284,
