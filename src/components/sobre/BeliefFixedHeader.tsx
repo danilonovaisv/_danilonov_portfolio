@@ -44,43 +44,45 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
       <div className="std-grid w-full h-full">
         <div className="flex h-full items-start md:items-center justify-end pt-16 md:pt-0">
           <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
-          {/* Primeira parte: "Acredito no..." */}
-          <h1 className="text-white text-2xl md:text-5xl lg:text-6xl xl:text-7xl font-display leading-[1.1] tracking-tighter mb-4 md:mb-8 uppercase font-black mix-blend-difference whitespace-nowrap">
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.1, 0.2]}>
-                Acredito no
-              </MorphText>
-            </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.12, 0.22]}>
-                design que
-              </MorphText>
-            </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.14, 0.24]}>
-                muda o dia
-              </MorphText>
-            </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.16, 0.26]}>
-                de alguém.
-              </MorphText>
-            </div>
-          </h1>
+            {/* Primeira parte: "Acredito no..." */}
+            <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
+              <h1 className="text-white text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display leading-[1.1] tracking-tighter mb-4 md:mb-8 uppercase font-black mix-blend-difference whitespace-nowrap">
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.1, 0.2]}>
+                    Acredito no
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.12, 0.22]}>
+                    design que
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.14, 0.24]}>
+                    muda o dia
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.16, 0.26]}>
+                    de alguém.
+                  </MorphText>
+                </div>
+              </h1>
 
-          {/* Segunda parte: "Não pelo choque..." */}
-          <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.22, 0.32]}>
-                Não pelo choque,
-              </MorphText>
+              {/* Segunda parte: "Não pelo choque..." */}
+              <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.22, 0.32]}>
+                    Não pelo choque,
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={progress} range={[0.24, 0.34]}>
+                    mas pela conexão.
+                  </MorphText>
+                </div>
+              </div>
             </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.24, 0.34]}>
-                mas pela conexão.
-              </MorphText>
-            </div>
-          </div>
           </div>
         </div>
       </div>

@@ -106,10 +106,9 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     const progress = scrollProgress.get();
     const mouse = mouseRef.current;
 
-    // Mobile: posiciona no canto inferior direito
-    // Desktop: mantém centralizado
-    const finalOffsetX = isMobile ? viewport.width * 0.25 : 0;
-    const finalOffsetY = isMobile ? -viewport.height * 0.25 : 0;
+    // Manter o fantasma sempre centralizado independentemente do dispositivo
+    const finalOffsetX = 0;
+    const finalOffsetY = 0;
 
     groupRef.current.position.x = THREE.MathUtils.lerp(
       groupRef.current.position.x,
@@ -133,43 +132,47 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       0.05
     );
 
-    // --- Resposta ao Mouse (Posição e Rotação) ---
-    // Desktop: Inclina levemente (rotationX/rotationZ) e desloca posição x/y
-    // Mobile: Resposta baseada em touch (já mapeado no mouseRef)
-    const mouseInfluence = 0.15; // Influência reduzida para movimento mais sutil
+    // --- Resposta ao Mouse/Scroll (Posição e Rotação) ---
+    // Aumentar influência para tornar mais sensível como na home
+    const mouseInfluence = 0.4; // Influência aumentada para movimento mais perceptível
+    const scrollInfluence = 2.0; // Influência do scroll aumentada
 
     // Movimento lateral suave (side-to-side) com oscilação natural
     const time = state.clock.elapsedTime;
-    const sideToSideOffset = Math.sin(time * 0.5) * 0.15; // Oscilação lenta lateral
-    const upDownOffset = Math.sin(time * 0.7) * 0.1; // Oscilação vertical leve
+    const sideToSideOffset = Math.sin(time * 0.5) * 0.3; // Oscilação lenta lateral aumentada
+    const upDownOffset = Math.sin(time * 0.7) * 0.2; // Oscilação vertical aumentada
+
+    // Calcula movimento baseado no scroll para adicionar à posição
+    const scrollX = (progress - 0.5) * scrollInfluence; // Usar o progresso do scroll para mover o ghost
+    const scrollY = Math.sin(progress * Math.PI * 2) * scrollInfluence * 0.5; // Movimento vertical baseado no scroll
 
     // Lerp positions (relativo ao 0,0,0 do grupo pai)
-    // Combina movimento do mouse com oscilação natural
+    // Combina movimento do mouse com scroll e oscilação natural
     animRef.current.position.x = THREE.MathUtils.lerp(
       animRef.current.position.x,
-      mouse.x * mouseInfluence + sideToSideOffset,
-      0.03 // Lerp mais suave para movimento fluido
+      mouse.x * mouseInfluence + scrollX + sideToSideOffset,
+      0.08 // Lerp mais rápido para resposta mais imediata
     );
     animRef.current.position.y = THREE.MathUtils.lerp(
       animRef.current.position.y,
-      mouse.y * mouseInfluence + upDownOffset,
-      0.03
+      mouse.y * mouseInfluence + scrollY + upDownOffset,
+      0.08 // Lerp mais rápido para resposta mais imediata
     );
 
-    // Lerp rotações X e Z baseadas no mouse (Tilt suave)
+    // Lerp rotações X e Z baseadas no mouse (Tilt mais perceptível)
     // RotationX: Inclina para cima/baixo
     animRef.current.rotation.x = THREE.MathUtils.lerp(
       animRef.current.rotation.x,
-      -mouse.y * mouseInfluence * 0.5, // Tilt vertical mais sutil
-      0.03
+      -mouse.y * mouseInfluence * 0.8, // Tilt vertical mais perceptível
+      0.08
     );
 
     // RotationZ: Inclina para os lados (Bank) com oscilação natural
-    const naturalTilt = Math.sin(time * 0.6) * 0.05; // Leve balanço natural
+    const naturalTilt = Math.sin(time * 0.6) * 0.1; // Balanço natural aumentado
     animRef.current.rotation.z = THREE.MathUtils.lerp(
       animRef.current.rotation.z,
-      -mouse.x * mouseInfluence * 0.3 + naturalTilt, // Tilt horizontal mais sutil
-      0.03
+      -mouse.x * mouseInfluence * 0.6 + naturalTilt, // Tilt horizontal mais perceptível
+      0.08
     );
 
     let targetScale = 1; // Escala base interna (multiplicativa)
@@ -181,7 +184,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       // Move Z para frente (aproximação)
       animRef.current.position.z = THREE.MathUtils.lerp(
         animRef.current.position.z,
-        1 * intensity,
+        intensity,
         0.05
       );
 

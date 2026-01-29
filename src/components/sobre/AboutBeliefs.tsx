@@ -91,7 +91,7 @@ export const AboutBeliefs: React.FC = () => {
             <Suspense fallback={null}>
               <GhostModel
                 scrollProgress={scrollYProgress}
-                position={[0, -1, 0]}
+                position={[0, 0, 0]}
                 rotation={[0, 0, 0]}
               />
             </Suspense>
