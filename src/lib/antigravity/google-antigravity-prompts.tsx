@@ -535,7 +535,7 @@ const GhostPortfolioAuditReport: FC = () => {
                 Padronizar um único componente <code>Container</code> com
                 Tailwind (ex.:{' '}
                 <code className="text-xs bg-zinc-900 px-1 py-0.5 rounded">
-                  mx-auto max-w-[...px] px-4 md:px-6
+                  mx-auto max-w-screen-xl px-4 md:px-6
                 </code>
                 ) para refletir exatamente o grid das imagens Ghost.
               </li>
