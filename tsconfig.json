@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "noEmit": true,
+    "strict": true,
+    "incremental": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "ignoreDeprecations": "5.0",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "types": ["node", "jest"]
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/types/**/*.d.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "AJUSTES",
+    "AJUSTE HERO",
+    "docs",
+    "REFERENCIA_HERO-GHOST",
+    "functions",
+    "TROCAR",
+    "src/index.tsx",
+    "src/App.tsx"
+  ]
+}

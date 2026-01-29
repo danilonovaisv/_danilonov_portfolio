@@ -1,0 +1,91 @@
+{
+  "functions": [
+    {
+      "codebase": "modern_ssr",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local",
+        ".next"
+      ],
+      "predeploy": [
+        "rm -rf functions/next_build || true",
+        "mkdir -p functions/next_build",
+        "rsync -av .next/ functions/next_build/ --exclude cache || true",
+        "pnpm --prefix \"$RESOURCE_DIR\" run build",
+        "pnpm --prefix \"$RESOURCE_DIR\" run lint || true"
+      ],
+      "source": "functions"
+    }
+  ],
+  "hosting": {
+    "public": "deploy-public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": {
+          "codebase": "modern_ssr",
+          "functionId": "ssr_modern",
+          "region": "us-central1"
+        }
+      }
+    ]
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "hosting": {
+      "port": 5005
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    },
+    "dataconnect": {
+      "dataDir": "dataconnect/.dataconnect/pgliteData",
+      "port": 9399
+    },
+    "database": {
+      "port": 9000
+    },
+    "storage": {
+      "port": 9199
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "pubsub": {
+      "port": 8085
+    }
+  },
+  "dataconnect": {
+    "source": "dataconnect"
+  },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "firestore": {
+    "database": "portfolio-danilo-novais",
+    "location": "southamerica-east1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "extensions": {}
+}

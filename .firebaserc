@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "portfolio-danilo-novais",
+    "portfoliodanilo.com": "portfolio-danilo-novais"
+  },
+  "targets": {},
+  "etags": {
+    "portfolio-danilo-novais": {
+      "extensionInstances": {}
+    }
+  }
+}
