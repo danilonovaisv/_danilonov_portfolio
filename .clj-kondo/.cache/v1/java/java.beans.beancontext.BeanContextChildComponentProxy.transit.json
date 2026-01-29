@@ -1,9 +1,0 @@
-[
-  "^ ",
-  "~:members",
-  [
-    "^ ",
-    "getComponent",
-    ["~#set", [["^ ", "~:flags", ["^2", ["~:method", "~:public"]]]]]
-  ]
-]

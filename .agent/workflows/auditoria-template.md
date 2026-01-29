@@ -7,13 +7,6 @@ description: 🛡️ PROTOCOLO GHOST - TEMPLATE DE AUDITORIA MESTRE V3.1
 **Status:** `READY_FOR_EXECUTION`
 **Nível de Rigor:** Máximo (Orchestrated)
 
-## 📂 FONTE DA VERDADE
-
-O arquivo mestre é: `docs/AUDITORIA_PORTFOLIO.md` (ou caminho equivalente fornecido).
-Este arquivo dita O QUE fazer. O código atual dita ONDE fazer.
-
-Documentação para consulta e imagens de cada pagina com layout absoluto na pasta: '.context'
-
 ## 🌌 1. DESIGNAÇÃO DO BATALHÃO (@orchestration)
 
 | Agente | Responsabilidade | Check-in Requerido |
