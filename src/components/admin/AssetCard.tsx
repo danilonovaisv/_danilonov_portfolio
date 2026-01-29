@@ -13,7 +13,7 @@ import {
   siteAssetRoleMap,
   type SiteAssetRole,
 } from '@/lib/supabase/asset-roles';
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { uploadSiteAsset } from '@/lib/supabase/storage';
 import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
 import type { NormalizedSiteAsset } from '@/lib/supabase/site-asset-utils';

@@ -1,4 +1,4 @@
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { buildAssetFilePath } from '@/lib/supabase/asset-paths';
 import { normalizeStoragePath } from '@/lib/supabase/urls';
 

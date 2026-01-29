@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from 'react';
 
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import LandingPageForm from '@/components/admin/LandingPageForm';
 
 interface Props {

@@ -1,4 +1,4 @@
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import type { DbAsset } from '@/types/admin';
 import {
   normalizeAssetList,
