@@ -74,7 +74,14 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 
   // --- Responsividade (Policy 4.3) ---
   const isMobile = viewport.width < 5;
-  const baseScale = isMobile ? viewport.width * 0.18 : 0.6;
+  const isTablet = viewport.width >= 5 && viewport.width < 8;
+
+  // Escala responsiva: mobile menor, tablet médio, desktop maior
+  const baseScale = isMobile
+    ? viewport.width * 0.15  // Mobile: 15% da largura do viewport (menor)
+    : isTablet
+    ? viewport.width * 0.12  // Tablet: 12% da largura
+    : viewport.width * 0.08; // Desktop: 8% da largura (proporcional)
 
   // Handle touch interactions simply by updating mouseRef
   useEffect(() => {
@@ -98,11 +105,21 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 
     const progress = scrollProgress.get();
     const mouse = mouseRef.current;
-    const finalOffsetX = 0;
+
+    // Mobile: posiciona no canto inferior direito
+    // Desktop: mantém centralizado
+    const finalOffsetX = isMobile ? viewport.width * 0.25 : 0;
+    const finalOffsetY = isMobile ? -viewport.height * 0.25 : 0;
 
     groupRef.current.position.x = THREE.MathUtils.lerp(
       groupRef.current.position.x,
       basePosition.x + finalOffsetX,
+      0.05
+    );
+
+    groupRef.current.position.y = THREE.MathUtils.lerp(
+      groupRef.current.position.y,
+      basePosition.y + finalOffsetY,
       0.05
     );
 
@@ -119,34 +136,40 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     // --- Resposta ao Mouse (Posição e Rotação) ---
     // Desktop: Inclina levemente (rotationX/rotationZ) e desloca posição x/y
     // Mobile: Resposta baseada em touch (já mapeado no mouseRef)
-    const mouseInfluence = 0.2; // Aumentado um pouco para ser perceptível "intensificar"
+    const mouseInfluence = 0.15; // Influência reduzida para movimento mais sutil
+
+    // Movimento lateral suave (side-to-side) com oscilação natural
+    const time = state.clock.elapsedTime;
+    const sideToSideOffset = Math.sin(time * 0.5) * 0.15; // Oscilação lenta lateral
+    const upDownOffset = Math.sin(time * 0.7) * 0.1; // Oscilação vertical leve
 
     // Lerp positions (relativo ao 0,0,0 do grupo pai)
-    // Movimento suave seguindo o cursor
+    // Combina movimento do mouse com oscilação natural
     animRef.current.position.x = THREE.MathUtils.lerp(
       animRef.current.position.x,
-      mouse.x * mouseInfluence,
-      0.05
+      mouse.x * mouseInfluence + sideToSideOffset,
+      0.03 // Lerp mais suave para movimento fluido
     );
     animRef.current.position.y = THREE.MathUtils.lerp(
       animRef.current.position.y,
-      mouse.y * mouseInfluence,
-      0.05
+      mouse.y * mouseInfluence + upDownOffset,
+      0.03
     );
 
     // Lerp rotações X e Z baseadas no mouse (Tilt suave)
     // RotationX: Inclina para cima/baixo
     animRef.current.rotation.x = THREE.MathUtils.lerp(
       animRef.current.rotation.x,
-      -mouse.y * mouseInfluence * 0.8, // Slight tilt vertical
-      0.05
+      -mouse.y * mouseInfluence * 0.5, // Tilt vertical mais sutil
+      0.03
     );
 
-    // RotationZ: Inclina para os lados (Bank)
+    // RotationZ: Inclina para os lados (Bank) com oscilação natural
+    const naturalTilt = Math.sin(time * 0.6) * 0.05; // Leve balanço natural
     animRef.current.rotation.z = THREE.MathUtils.lerp(
       animRef.current.rotation.z,
-      -mouse.x * mouseInfluence * 0.5, // Slight tilt horizontal
-      0.05
+      -mouse.x * mouseInfluence * 0.3 + naturalTilt, // Tilt horizontal mais sutil
+      0.03
     );
 
     let targetScale = 1; // Escala base interna (multiplicativa)
@@ -185,10 +208,10 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 
   return (
     <Float
-      speed={2}
-      rotationIntensity={0.5}
-      floatIntensity={0.5}
-      floatingRange={[-0.1, 0.1]}
+      speed={1.5}              // Velocidade mais suave
+      rotationIntensity={0.3}  // Rotação mais sutil
+      floatIntensity={1.2}     // Flutuação mais pronunciada
+      floatingRange={[-0.3, 0.3]} // Maior amplitude vertical (up-down)
     >
       {/* Grupo Pai: Recebe as props de posicionamento global, mas tem escala controlada responsivamente */}
       <group ref={groupRef} {...props} scale={baseScale} dispose={null}>

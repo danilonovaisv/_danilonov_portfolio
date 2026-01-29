@@ -39,12 +39,13 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
   return (
     <motion.header
       style={{ opacity }}
-      className="sticky top-0 z-30 flex h-screen items-center pointer-events-none"
+      className="sticky top-0 z-30 flex h-screen pointer-events-none"
     >
-      <div className="std-grid w-full flex justify-end">
-        <div className="flex flex-col items-end text-right w-full max-w-[320px] md:max-w-[500px] lg:max-w-[750px]">
+      <div className="std-grid w-full h-full">
+        <div className="flex h-full items-start md:items-center justify-end pt-16 md:pt-0">
+          <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
           {/* Primeira parte: "Acredito no..." */}
-          <h1 className="text-white text-3xl md:text-5xl lg:text-7xl xl:text-8xl font-display leading-[1.1] tracking-tighter mb-8 uppercase font-black mix-blend-difference whitespace-nowrap">
+          <h1 className="text-white text-2xl md:text-5xl lg:text-6xl xl:text-7xl font-display leading-[1.1] tracking-tighter mb-4 md:mb-8 uppercase font-black mix-blend-difference whitespace-nowrap">
             <div className="overflow-visible">
               <MorphText progress={progress} range={[0.1, 0.2]}>
                 Acredito no
@@ -68,7 +69,7 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
           </h1>
 
           {/* Segunda parte: "Não pelo choque..." */}
-          <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h2 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
+          <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
             <div className="overflow-visible">
               <MorphText progress={progress} range={[0.22, 0.32]}>
                 Não pelo choque,
@@ -79,6 +80,7 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
                 mas pela conexão.
               </MorphText>
             </div>
+          </div>
           </div>
         </div>
       </div>
