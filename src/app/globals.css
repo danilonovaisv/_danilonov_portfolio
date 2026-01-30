@@ -1,6 +1,7 @@
 @import '../styles/fonts.css';
 
 @import 'tailwindcss';
+@config "../../tailwind.config.ts";
 
 :root {
   /* Tipografia Fluida (Mobile -> Desktop) */
