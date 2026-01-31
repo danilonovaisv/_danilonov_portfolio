@@ -24,7 +24,7 @@
     "build:prod": "pnpm run build:strict",
     "prepare-deploy": "tsx scripts/prep-deploy.ts",
     "predeploy": "python3 scripts/audit_assets.py",
-    "deploy": "pnpm run predeploy && bash scripts/deploy-with-env.sh",
+    "deploy": "pnpm run predeploy && bash scripts/deploy.sh",
     "deploy:hosting": "pnpm run build && bash scripts/prepare-hosting.sh && firebase deploy --only hosting --debug",
     "deploy:enable-web": "firebase experiments:enable webframeworks",
     "test-and-deploy": "tsx scripts/run-full-test-and-deploy.ts",
