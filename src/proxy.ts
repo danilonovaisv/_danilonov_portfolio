@@ -17,7 +17,7 @@ const buildContentSecurityPolicy = () => {
     scriptSrc.push("'unsafe-eval'");
   }
 
-  return [
+  const directives = [
     "default-src 'self'",
     `script-src ${scriptSrc.join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
@@ -27,8 +27,14 @@ const buildContentSecurityPolicy = () => {
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    'upgrade-insecure-requests',
-  ].join('; ');
+  ];
+
+  // Só força upgrade-insecure-requests em produção; em dev quebra http://localhost
+  if (IS_PROD) {
+    directives.push('upgrade-insecure-requests');
+  }
+
+  return directives.join('; ');
 };
 
 const securityHeaders = {
