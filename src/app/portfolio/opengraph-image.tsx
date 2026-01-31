@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ImageResponse } from 'next/og';
 import { BRAND } from '@/config/brand';
 

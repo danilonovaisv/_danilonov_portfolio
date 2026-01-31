@@ -1,0 +1,20 @@
+{
+  "node": {
+    "408c1a2dbc52a3996806b24ea74943cf5536b6ec3f": {
+      "workers": {
+        "app/page": {
+          "moduleId": 89011,
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/lib/supabase/queries/projects.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/lib/supabase/queries/projects.ts"
+    }
+  },
+  "edge": {}
+}
