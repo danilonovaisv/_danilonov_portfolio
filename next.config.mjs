@@ -10,9 +10,8 @@ const buildSupabaseHosts = () => {
   // Fallback to known project URL if env var is missing (e.g. file lock issues)
   const mainUrl =
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    'https://aymuvxysygrwoicsjgxj.supabase.co';
-  if (!mainUrl) {
-  }
+    'https://umkmwbkwvulxtdodzmzf.supabase.co';
+  if (!mainUrl) return [];
 
   const primaryHost = new URL(mainUrl).host;
   const extraHosts = (process.env.NEXT_PUBLIC_SUPABASE_IMAGE_HOSTS ?? '')
@@ -20,7 +19,13 @@ const buildSupabaseHosts = () => {
     .map((h) => h.trim())
     .filter(Boolean);
 
-  return Array.from(new Set([primaryHost, ...extraHosts]));
+  // Fallback para o host atual do portfolio se não estiver no env
+  const fallbackHost = 'umkmwbkwvulxtdodzmzf.supabase.co';
+  const aymuHost = 'aymuvxysygrwoicsjgxj.supabase.co';
+
+  return Array.from(
+    new Set([primaryHost, fallbackHost, aymuHost, ...extraHosts])
+  );
 };
 
 const nextConfig = {
