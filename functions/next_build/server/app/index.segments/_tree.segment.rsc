@@ -1,0 +1,3 @@
+:HL["/_next/static/chunks/7187e4b96386775c.css","style"]
+:HL["/_next/static/chunks/321d3b6f76e652df.css","style"]
+0:{"buildId":"KmpMwpnXi4DQgmew7lTU2","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

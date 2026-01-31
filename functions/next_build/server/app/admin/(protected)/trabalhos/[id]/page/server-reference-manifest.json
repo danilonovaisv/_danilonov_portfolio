@@ -1,6 +1,6 @@
 {
   "node": {
-    "00f509689d3be30731d8344b8d1606688cd4775653": {
+    "00e0bbc6fb7040e91f5c5e046e7de36c8ccd37a8f7": {
       "workers": {
         "app/admin/(protected)/trabalhos/[id]/page": {
           "moduleId": 81121,
