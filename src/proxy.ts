@@ -8,21 +8,26 @@ const buildContentSecurityPolicy = () => {
     "'self'",
     'https://*.supabase.co',
     'https://*.firebaseio.com',
+    'https://dl.polyhaven.org',
   ];
   const scriptSrc = ["'self'"];
+  const fontSrc = ["'self'", 'data:', 'https://*.supabase.co', 'https://assets.codepen.io'];
+  const imgSrc = ["'self'", 'https:', 'data:'];
+  const mediaSrc = ["'self'", 'https:', 'data:', 'blob:'];
 
-  // Em dev, liberar HMR/WebSocket e unsafe-eval para webpack
+  // Em dev, liberar HMR/WebSocket e inline/eval para webpack
   if (!IS_PROD) {
     connectSrc.push('ws://localhost:3000', 'ws://127.0.0.1:3000');
-    scriptSrc.push("'unsafe-eval'");
+    scriptSrc.push("'unsafe-eval'", "'unsafe-inline'");
   }
 
   const directives = [
-    "default-src 'self'",
+    "default-src 'self' https: data: blob:",
     `script-src ${scriptSrc.join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' https: data:",
-    "font-src 'self' data:",
+    `img-src ${imgSrc.join(' ')}`,
+    `font-src ${fontSrc.join(' ')}`,
+    `media-src ${mediaSrc.join(' ')}`,
     `connect-src ${connectSrc.join(' ')}`,
     "frame-ancestors 'none'",
     "base-uri 'self'",
