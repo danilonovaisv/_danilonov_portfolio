@@ -53,6 +53,18 @@
         "hostname": "^(?:^(?:umkmwbkwvulxtdodzmzf\\.supabase\\.co)$)$",
         "port": "",
         "pathname": "^(?:\\/storage\\/v1\\/render\\/image\\/public(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$"
+      },
+      {
+        "protocol": "https",
+        "hostname": "^(?:^(?:aymuvxysygrwoicsjgxj\\.supabase\\.co)$)$",
+        "port": "",
+        "pathname": "^(?:\\/storage\\/v1\\/object\\/public(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$"
+      },
+      {
+        "protocol": "https",
+        "hostname": "^(?:^(?:aymuvxysygrwoicsjgxj\\.supabase\\.co)$)$",
+        "port": "",
+        "pathname": "^(?:\\/storage\\/v1\\/render\\/image\\/public(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$"
       }
     ],
     "qualities": [
