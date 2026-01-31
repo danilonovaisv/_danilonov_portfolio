@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 interface ProjectCardProps {
   project: PortfolioProject;
   index: number;
-  onClick?: (project: PortfolioProject) => void;
+  onClick?: (_project: PortfolioProject) => void;
   className?: string;
   priority?: boolean;
 }

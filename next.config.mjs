@@ -30,17 +30,20 @@ const buildSupabaseHosts = () => {
 
 const supabaseHosts = buildSupabaseHosts().join(' ');
 
+// Adicionando hosts adicionais para assets do drei/three.js
+const supabaseAndExternalHosts = `${supabaseHosts} https://raw.githack.com https://dl.polyhaven.org https://www.gstatic.com https://raw.githubusercontent.com`;
+
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval';
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: ${supabaseHosts};
+    img-src 'self' blob: data: ${supabaseAndExternalHosts};
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     frame-ancestors 'none';
-    connect-src 'self' ${supabaseHosts};
+    connect-src 'self' ${supabaseAndExternalHosts} https://*.supabase.co https://*.firebaseio.com https://dl.polyhaven.org ws://localhost:3000 ws://127.0.0.1:3000;
 `.replace(/\s{2,}/g, ' ').trim();
 
 

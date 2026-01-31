@@ -9,6 +9,9 @@ const buildContentSecurityPolicy = () => {
     'https://*.supabase.co',
     'https://*.firebaseio.com',
     'https://dl.polyhaven.org',
+    'https://raw.githack.com', // Para assets do drei/three.js
+    'https://www.gstatic.com', // Para DRACO decoder
+    'https://raw.githubusercontent.com', // Para assets do drei/three.js
   ];
   const scriptSrc = ["'self'"];
   const fontSrc = [
@@ -17,7 +20,7 @@ const buildContentSecurityPolicy = () => {
     'https://*.supabase.co',
     'https://assets.codepen.io',
   ];
-  const imgSrc = ["'self'", 'https:', 'data:'];
+  const imgSrc = ["'self'", 'https:', 'data:', 'https://raw.githack.com', 'https://dl.polyhaven.org', 'https://www.gstatic.com', 'https://raw.githubusercontent.com'];
   const mediaSrc = ["'self'", 'https:', 'data:', 'blob:'];
 
   // Em dev, liberar HMR/WebSocket e inline/eval para webpack

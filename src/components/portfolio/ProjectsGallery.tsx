@@ -8,8 +8,8 @@ import { galleryProjects } from '@/data/projects';
 
 interface ProjectsGalleryProps {
   projects?: PortfolioProject[];
-  onProjectSelect?: (project: PortfolioProject) => void;
-  onOpenProject?: (project: PortfolioProject) => void;
+  onProjectSelect?: (_project: PortfolioProject) => void;
+  onOpenProject?: (_project: PortfolioProject) => void;
 }
 
 /**
