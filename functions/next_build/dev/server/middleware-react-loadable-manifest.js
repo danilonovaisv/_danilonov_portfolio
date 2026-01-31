@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST="{\"components/canvas/home/hero/GhostSceneWrapper.tsx -> @/components/canvas/home/hero/GhostScene\":{\"id\":\"components/canvas/home/hero/GhostSceneWrapper.tsx -> @/components/canvas/home/hero/GhostScene\",\"files\":[\"static/chunks/_app-pages-browser_src_components_canvas_home_hero_GhostScene_tsx.js\"]}}"
