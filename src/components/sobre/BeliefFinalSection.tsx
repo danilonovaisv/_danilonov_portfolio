@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, MotionValue } from 'framer-motion';
 
 interface BeliefFinalSectionProps {
   bgColor: string;
+  scrollProgress?: MotionValue<number>;
 }
 
 export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
   bgColor,
+  scrollProgress,
 }) => {
   const ref = useRef<HTMLElement>(null);
 
