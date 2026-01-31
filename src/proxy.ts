@@ -1,19 +1,40 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from './lib/supabase/middleware';
 
-const securityHeaders = {
-  'Content-Security-Policy': [
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+const buildContentSecurityPolicy = () => {
+  const connectSrc = [
+    "'self'",
+    'https://*.supabase.co',
+    'https://*.firebaseio.com',
+  ];
+  const scriptSrc = ["'self'"];
+
+  // Em dev, liberar HMR/WebSocket e unsafe-eval para webpack
+  if (!IS_PROD) {
+    connectSrc.push('ws://localhost:3000', 'ws://127.0.0.1:3000');
+    scriptSrc.push("'unsafe-eval'");
+  }
+
+  return [
     "default-src 'self'",
-    "script-src 'self'",
+    `script-src ${scriptSrc.join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' https: data:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.supabase.co https://*.firebaseio.com",
+    `connect-src ${connectSrc.join(' ')}`,
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
     'upgrade-insecure-requests',
-  ].join('; '),
+  ].join('; ');
+};
+
+const securityHeaders = {
+  get 'Content-Security-Policy'() {
+    return buildContentSecurityPolicy();
+  },
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'X-Content-Type-Options': 'nosniff',
