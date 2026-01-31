@@ -1,6 +1,6 @@
 {
   "node": {
-    "00e0bbc6fb7040e91f5c5e046e7de36c8ccd37a8f7": {
+    "00094007d315fb88b30bc04419884119b439ed0c29": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -15,7 +15,7 @@
       "exportedName": "signOut",
       "filename": "src/lib/supabase/auth-actions.ts"
     },
-    "40a6b15a731dd6d1bc9720bd74a1b2f04c4a672f4c": {
+    "40710b3430c76415cd4154599e9265cfbc44273939": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -30,7 +30,7 @@
       "exportedName": "upsertAsset",
       "filename": "src/app/admin/(protected)/midia/actions.ts"
     },
-    "40b8168bf1491bd533c4ca2ecba76b326ea7ca62df": {
+    "40e1cddcaae63703099162eb8cc5ea38bc39f2f48b": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
@@ -45,7 +45,7 @@
       "exportedName": "assignAssetRole",
       "filename": "src/app/admin/(protected)/midia/actions.ts"
     },
-    "40289338cf55b257badc0019ccc36be02a00262c0b": {
+    "409493f6d0ce1077496251e6aaf765941fa46c523e": {
       "workers": {
         "app/admin/(protected)/midia/page": {
           "moduleId": 6020,
