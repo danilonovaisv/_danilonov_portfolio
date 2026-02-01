@@ -29,7 +29,7 @@ export interface OriginBlock {
 /**
  * Content blocks with fallback images stored in Supabase
  * Each block represents a chapter in the origin story
- * Images path: https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/
+ * Images base path: [SUPABASE_STORAGE]/site-assets/about/origin/
  */
 export const ORIGIN_CONTENT: OriginBlock[] = [
     {

@@ -1,0 +1,35 @@
+{
+  "node": {
+    "0040cc99f2d56953911f88bb094694a5f216f29253": {
+      "workers": {
+        "app/admin/(protected)/trabalhos/page": {
+          "moduleId": 44954,
+          "async": false,
+          "exportedName": "signOut",
+          "filename": "src/lib/supabase/auth-actions.ts"
+        }
+      },
+      "layer": {
+        "app/admin/(protected)/trabalhos/page": "action-browser"
+      },
+      "exportedName": "signOut",
+      "filename": "src/lib/supabase/auth-actions.ts"
+    },
+    "403765f80eb3964c20fc51e2e300be45fffcbd1a1e": {
+      "workers": {
+        "app/admin/(protected)/trabalhos/page": {
+          "moduleId": 44954,
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "src/lib/supabase/queries/projects.ts"
+        }
+      },
+      "layer": {
+        "app/admin/(protected)/trabalhos/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "src/lib/supabase/queries/projects.ts"
+    }
+  },
+  "edge": {}
+}
