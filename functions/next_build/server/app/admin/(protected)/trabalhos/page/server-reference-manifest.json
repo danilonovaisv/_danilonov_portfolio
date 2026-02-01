@@ -1,6 +1,6 @@
 {
   "node": {
-    "0040cc99f2d56953911f88bb094694a5f216f29253": {
+    "0067b0dfa4fa496fb5f6865639d9e32eeab24af6d0": {
       "workers": {
         "app/admin/(protected)/trabalhos/page": {
           "moduleId": 44954,
@@ -15,7 +15,7 @@
       "exportedName": "signOut",
       "filename": "src/lib/supabase/auth-actions.ts"
     },
-    "403765f80eb3964c20fc51e2e300be45fffcbd1a1e": {
+    "40fbad5cda9d879e0b24f3bc628c49a4bb3a5c5b53": {
       "workers": {
         "app/admin/(protected)/trabalhos/page": {
           "moduleId": 44954,
