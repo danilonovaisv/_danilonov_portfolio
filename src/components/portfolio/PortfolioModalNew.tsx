@@ -154,7 +154,7 @@ export default function PortfolioModalNew({
                   <X className="w-5 h-5 md:w-7 md:h-7" />
                 </button>
 
-                {/*Header glow */}
+                {/* Header glow - inline style required for dynamic CSS variable */}
                 <div
                   className={`absolute top-0 inset-x-0 h-40 pointer-events-none ${styles.headerGlow}`}
                   style={sanitizedAccentColor ? { '--glow-color': `${sanitizedAccentColor}40` } as React.CSSProperties : undefined}

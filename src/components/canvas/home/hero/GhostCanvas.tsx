@@ -55,7 +55,7 @@ export function GhostCanvas() {
             particleCount={performance.particleCount * 5}
           />
 
-          <Atmosphere ghostRef={ghostRef} />
+          <Atmosphere />
 
           <Preload all />
         </Suspense>

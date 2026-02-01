@@ -1,71 +1,101 @@
 'use client';
 
+import { RefObject } from 'react';
 import Image from 'next/image';
-import { ContentBlock } from './data';
+import { motion } from 'framer-motion';
+import type { OriginBlock } from './data';
 
 interface OriginInfoBlockProps {
-  block: ContentBlock & { img: string | undefined };
+    block: OriginBlock & { img?: string };
 }
 
+/**
+ * Individual content block with title, text, and mobile image
+ */
 export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
-  return (
-    <div className="arch__info min-h-screen lg:h-[120vh] flex flex-col justify-center mb-24 lg:mb-0 items-center text-center lg:items-end lg:text-right">
-      <div className="content w-full lg:max-w-130 flex flex-col gap-8 lg:transform lg:-translate-y-[15%]">
-        <div className="mobile-text-container space-y-6">
-          <h2 className="text-h1 font-bold leading-[1.1] text-primary normal-case">
-            {block.title}
-          </h2>
-          <p className="text-[16px] md:text-[18px] lg:text-[20px] font-normal leading-[1.7] text-[#fcffff] opacity-75">
-            {block.desc}
-          </p>
-        </div>
+    return (
+        <div
+            className="arch__info min-h-[80vh] lg:min-h-screen flex flex-col lg:flex-row lg:items-end lg:justify-end py-12 lg:py-24"
+            data-origin-block={block.id}
+        >
+            {/* Mobile Image */}
+            <div className="mobile-img-container lg:hidden mb-8">
+                {block.img && (
+                    <Image
+                        src={block.img}
+                        alt={block.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 0vw"
+                        priority={block.id === 1}
+                    />
+                )}
+            </div>
 
-        <div className="mobile-img-container lg:hidden relative mt-8 w-full aspect-square min-h-60 rounded-3xl overflow-hidden bg-[#060018] shadow-2xl">
-          <Image
-            src={block.img || '/placeholder-image.jpg'}
-            alt={block.alt}
-            fill
-            className="w-full h-full object-cover will-change-transform"
-            sizes="(max-width: 1024px) 100vw, 560px"
-            priority={block.id === '1'}
-          />
+            {/* Text Content */}
+            <div className="mobile-text-container lg:p-0 lg:max-w-md">
+                <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-20%' }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-xl md:text-2xl lg:text-3xl font-['CustomLight'] font-light text-[#4fe6ff] mb-4 lg:mb-6 tracking-wide"
+                >
+                    {block.title}
+                </motion.h2>
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-20%' }}
+                    transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="text-sm md:text-base lg:text-lg text-white/70 leading-relaxed lg:text-right"
+                >
+                    {block.paragraph}
+                </motion.p>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 interface OriginStickyGalleryProps {
-  blocks: (ContentBlock & { img: string | undefined })[];
-  archRightRef: React.RefObject<HTMLDivElement | null>;
+    blocks: (OriginBlock & { img?: string })[];
+    archRightRef: RefObject<HTMLDivElement | null>;
 }
 
+/**
+ * Sticky gallery that displays images on desktop
+ * Images transition as user scrolls through content blocks
+ */
 export function OriginStickyGallery({
-  blocks,
-  archRightRef,
+    blocks,
+    archRightRef,
 }: OriginStickyGalleryProps) {
-  return (
-    <div
-      className="arch__right hidden lg:flex col-span-6 h-screen sticky top-0 items-center justify-center"
-      ref={archRightRef}
-    >
-      <div className="relative w-full aspect-square max-w-140">
-        {blocks.map((block) => (
-          <div
-            key={`desktop-img-${block.id}`}
-            className="img-wrapper absolute inset-0 rounded-3xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,1)] bg-[#040013]"
-          >
-            <Image
-              src={block.img || '/placeholder-image.jpg'}
-              alt={block.alt}
-              fill
-              className="w-full h-full object-cover will-change-transform"
-              sizes="(min-width: 1024px) 560px, 100vw"
-              priority={block.id === '1'}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <div
+            className="arch__right hidden lg:flex col-span-6 h-screen sticky top-0"
+            ref={archRightRef}
+        >
+            <div className="relative w-full max-w-lg aspect-3/4">
+                {blocks.map((block, index) => (
+                    <div
+                        key={block.id}
+                        className={`img-wrapper origin-img ${index === 0 ? 'origin-img-active' : 'origin-img-hidden'}`}
+                        data-img-index={index}
+                        data-z-index={blocks.length - index}
+                    >
+                        {block.img && (
+                            <Image
+                                src={block.img}
+                                alt={block.title}
+                                fill
+                                className="object-cover"
+                                sizes="(min-width: 1024px) 33vw, 0vw"
+                                priority={index === 0}
+                            />
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }

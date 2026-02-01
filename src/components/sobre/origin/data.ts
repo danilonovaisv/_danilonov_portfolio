@@ -1,41 +1,53 @@
-// cspell:ignore webp
-export type FallbackImage = `${string}.${'webp' | 'jpg' | 'png'}`;
+/**
+ * Origin Section Data
+ * Content blocks for the AboutOrigin component
+ */
 
-export interface ContentBlock {
-  id: string;
-  title: string;
-  desc: string;
-  fallback: FallbackImage;
-  alt: string;
+export type FallbackImage =
+    | 'sobre/origin-1.webp'
+    | 'sobre/origin-2.webp'
+    | 'sobre/origin-3.webp'
+    | 'sobre/origin-4.webp';
+
+export interface OriginBlock {
+    id: number;
+    title: string;
+    paragraph: string;
+    fallback: FallbackImage;
+    img?: string;
 }
 
-export const ORIGIN_CONTENT: readonly ContentBlock[] = [
-  {
-    id: '1',
-    title: 'O que permanece',
-    desc: 'Desde cedo, sempre prestei atenção no que ficava — não só no que aparecia. Enquanto muitos olhavam para o brilho imediato, eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo. A essência das coisas sempre falou mais alto do que a superfície.',
-    fallback: 'about/origin/about.origin_image.1.webp',
-    alt: 'O que permanece - essência que sobrevive ao tempo',
-  },
-  {
-    id: '2',
-    title: 'Do traço à intenção',
-    desc: 'Rabiscos viraram ideias. Ideias viraram projetos. E os projetos começaram a deixar rastros. Meu processo criativo nasceu do improviso, do lápis na margem do caderno. Aos poucos, aquilo que era instinto virou direção. Com cada tentativa, aprendi a dar forma ao invisível — até que os conceitos começaram a falar por si.',
-    fallback: 'about/origin/about.origin_image.2.webp',
-    alt: 'Do traço à intenção - processo criativo emergente',
-  },
-  {
-    id: '3',
-    title: 'A descoberta do invisível',
-    desc: 'Foi ali que entendi: design não é enfeite. É ferramenta invisível de transformação. Por trás de cada escolha visual, existe intenção. Descobri que o design verdadeiro não grita — ele conduz. Ele está presente nos detalhes que ninguém percebe, mas que todos sentem. Transformar sem que se perceba a transformação: isso é potência.',
-    fallback: 'about/origin/about.origin_image.3.webp',
-    alt: 'Descoberta do invisível - design como transformação',
-  },
-  {
-    id: '4',
-    title: 'Expansão com propósito',
-    desc: 'Estudei Comunicação, mergulhei no design, no branding e hoje uso inteligência artificial para expandir o alcance sem perder a essência humana da criação. Minha trajetória uniu intuição com método, arte com estratégia. O futuro pede novas ferramentas — e eu as abracei. Mas nunca deixei que a tecnologia apagasse o que me move: a sensibilidade, o olhar atento, a busca pelo significado.',
-    fallback: 'about/origin/about.origin_image.4.webp',
-    alt: 'Expansão com propósito - intuição + tecnologia',
-  },
-] as const;
+/**
+ * Content blocks with fallback images stored in Supabase
+ * Each block represents a chapter in the origin story
+ */
+export const ORIGIN_CONTENT: OriginBlock[] = [
+    {
+        id: 1,
+        title: 'O Começo',
+        paragraph:
+            'Minha jornada começou com uma curiosidade insaciável pelo visual. Desde cedo, fui atraído pela intersecção entre tecnologia e arte, buscando formas de transformar ideias abstratas em experiências visuais impactantes.',
+        fallback: 'sobre/origin-1.webp',
+    },
+    {
+        id: 2,
+        title: 'A Evolução',
+        paragraph:
+            'Com o tempo, essa curiosidade se transformou em especialização. Estudei, experimentei e refinei minhas habilidades em motion design, direção de arte e desenvolvimento visual, sempre buscando a excelência em cada projeto.',
+        fallback: 'sobre/origin-2.webp',
+    },
+    {
+        id: 3,
+        title: 'A Filosofia',
+        paragraph:
+            'Acredito que o design vai além da estética. É sobre comunicação, emoção e experiência. Cada pixel, cada movimento, cada transição deve servir a um propósito maior: conectar marcas com pessoas de forma autêntica e memorável.',
+        fallback: 'sobre/origin-3.webp',
+    },
+    {
+        id: 4,
+        title: 'O Presente',
+        paragraph:
+            'Hoje, combino anos de experiência com uma visão sempre atualizada do mercado. Trabalho com marcas que buscam se destacar através de identidades visuais únicas e experiências digitais que deixam uma marca duradoura.',
+        fallback: 'sobre/origin-4.webp',
+    },
+];
