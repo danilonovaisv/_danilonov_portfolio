@@ -22,9 +22,11 @@ extend({ EffectComposer, RenderPass, UnrealBloomPass, ShaderPass });
 export function Ghost({
   particleCount: _particleCount = 100,
   ghostRef,
+  enableEffects = true,
 }: {
   particleCount?: number;
   ghostRef?: React.RefObject<THREE.Group | null>;
+  enableEffects?: boolean;
 }) {
   const internalRef = useRef<THREE.Group>(null!);
   const groupRef = ghostRef || internalRef;
@@ -71,7 +73,7 @@ export function Ghost({
 
   // Inicializar o compositor de efeitos com Resize Handler
   useEffect(() => {
-    if (!gl || !scene || !camera) return;
+    if (!gl || !scene || !camera || !enableEffects) return;
 
     // Garantir que o renderer suporte transparência
     gl.setClearColor(0x000000, 0);
@@ -104,7 +106,7 @@ export function Ghost({
       composer.dispose();
       setIsLoaded(false);
     };
-  }, [gl, scene, camera, size]);
+  }, [gl, scene, camera, size, enableEffects]);
 
   useFrame(({ clock }) => {
     if (!groupRef.current || !bodyRef.current) return;
@@ -191,10 +193,10 @@ export function Ghost({
     }
 
     // Renderizar com efeitos (SEMPRE, se composer existir)
-    if (composerRef.current && isLoaded) {
+    if (enableEffects && composerRef.current && isLoaded) {
       composerRef.current.render();
     }
-  }, 0.5);
+  }, 1);
 
   // Setup Eyes (Static Geometry)
   useEffect(() => {
