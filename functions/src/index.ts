@@ -44,7 +44,7 @@ setGlobalOptions({
 
 export const helloWorld = onRequest((request, response) => {
   logger.info('Hello logs!', { structuredData: true });
-  response.send('Hello from Firebase!');
+  response.send('Hello from Firebase! - node20 check');
 });
 
 // Initialize Next.js app with proper error handling
@@ -61,6 +61,10 @@ async function initializeNextApp(): Promise<void> {
 
   try {
     initPromise = (async () => {
+      // Log directory for debugging
+      logger.info('Current directory:', __dirname);
+      logger.info('Resolving next_build at:', resolve(__dirname, '../next_build'));
+
       nextApp = ((next as any).default || next)({
         dev: false,
         hostname: '0.0.0.0',
@@ -100,7 +104,11 @@ export const ssr_modern = onRequest(
       return handle(req, res);
     } catch (err) {
       logger.error('SSR Error:', err);
-      res.status(500).send('Internal Server Error - SSR Failed');
+      // Detailed error logging
+      if (err instanceof Error) {
+        logger.error('Stack:', err.stack);
+      }
+      res.status(500).send('Internal Server Error - SSR Failed: ' + (err instanceof Error ? err.message : String(err)));
     }
   }
 );
