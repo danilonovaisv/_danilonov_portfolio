@@ -15,7 +15,10 @@
     "ignore": [
         "src/components/ui/**",
         "src/dataconnect-generated/**",
-        "**/*.d.ts"
+        "**/*.d.ts",
+        ".agent/**",
+        ".cache/**",
+        "artifacts/**"
     ],
     "ignoreExportsUsedInFile": true,
     "ignoreDependencies": [
