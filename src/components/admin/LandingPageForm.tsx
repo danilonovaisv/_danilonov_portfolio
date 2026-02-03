@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Trash2,

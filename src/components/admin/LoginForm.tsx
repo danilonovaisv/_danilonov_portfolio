@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { ADMIN_NAVIGATION } from '@/config/admin-navigation';
 
 export default function LoginForm() {

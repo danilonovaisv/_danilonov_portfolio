@@ -17,6 +17,8 @@ const PHRASES = [
   'Mesmo\nquando\nninguém\npercebe\no esforço.',
 ];
 
+import { BRAND } from '@/config/brand';
+
 const COLORS = [
   'bg-bluePrimary', // Azul Real
   'bg-purpleDetails', // Roxo Vibrante
@@ -26,7 +28,7 @@ const COLORS = [
   'bg-pinkDetails', // Rosa Choque
 ];
 
-const FINAL_COLOR = 'bg-bluePrimary'; // Azul Real
+const FINAL_COLOR = BRAND.colors.bluePrimary;
 
 export const AboutBeliefs: React.FC = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -39,7 +41,6 @@ export const AboutBeliefs: React.FC = () => {
   const ghostEase = cubicBezier(0.22, 1, 0.36, 1);
 
   // Opacidade do Header Fixo
-  // Ajustado para garantir visibilidade correta durante o scroll
   const headerOpacity = useTransform(
     scrollYProgress,
     [0.05, 0.12, 0.85, 0.95],
@@ -48,16 +49,29 @@ export const AboutBeliefs: React.FC = () => {
   );
 
   return (
-    <section
-      ref={containerRef}
-      className="relative w-full"
-    >
-      {/* LAYER 0: Background Color (Fixed/Sticky) - Changes based on scroll */}
-      <BackgroundController progress={scrollYProgress} colors={COLORS} finalColor={FINAL_COLOR} />
+    <section ref={containerRef} className="relative w-full">
+      {/* LAYER 2: Conteúdo Textual (Foreground - Behind Ghost) */}
+      {/* Z-Index 20: Texto fica abaixo do Ghost agora, conforme solicitado */}
+      <div className="relative pointer-events-none z-20">
+        <BeliefFixedHeader opacity={headerOpacity} progress={scrollYProgress} />
 
-      {/* LAYER 1: Canvas 3D (Sticky) */}
-      {/* Z-Index 10: Behind Text, Front of BG */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-10">
+        {PHRASES.map((phrase, index) => (
+          <BeliefSection
+            key={index}
+            text={phrase}
+            bgColor={COLORS[index] || COLORS[0]}
+            isFirst={index === 0}
+          />
+        ))}
+        <BeliefFinalSection
+          bgColor={FINAL_COLOR}
+          scrollProgress={scrollYProgress}
+        />
+      </div>
+
+      {/* LAYER 3: Canvas 3D (Sticky - Top Layer) */}
+      {/* Z-Index 30: FANTASMA ACIMA DO TEXTO */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-30">
         <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto">
           <Canvas
             shadows
@@ -83,26 +97,6 @@ export const AboutBeliefs: React.FC = () => {
             </Suspense>
           </Canvas>
         </div>
-      </div>
-
-      {/* LAYER 2: Conteúdo Textual (Foreground) */}
-      {/* Z-Index 20: Texto sobre o Ghost */}
-      <div className="relative pointer-events-none z-20">
-        <BeliefFixedHeader opacity={headerOpacity} progress={scrollYProgress} />
-
-        {PHRASES.map((phrase, index) => (
-          <BeliefSection
-            key={index}
-            text={phrase}
-            // Pass transparent explicitly, BG handled by BackgroundController
-            bgColor="bg-transparent"
-            isFirst={index === 0}
-          />
-        ))}
-        <BeliefFinalSection
-          bgColor="bg-transparent"
-          scrollProgress={scrollYProgress}
-        />
       </div>
     </section>
   );

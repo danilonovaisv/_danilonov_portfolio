@@ -91,7 +91,7 @@ export function AboutHero() {
               viewport={{ once: true, amount: 0.3 }}
               className="col-span-6 flex flex-col items-end text-right -translate-y-[10%]"
             >
-              <div className="w-full flex flex-col items-end pr-[8vw] max-w-[750px] ml-auto">
+              <div className="w-full flex flex-col items-end max-w-[750px] ml-auto">
                 {/* Intro & Manifesto - Unified for natural wrapping */}
                 <motion.div
                   initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
@@ -124,6 +124,7 @@ export function AboutHero() {
                             {item.highlight}
                           </span>
                         )}
+                        {item.textEnd}
                       </p>
                     ))}
                   </div>
@@ -138,9 +139,10 @@ export function AboutHero() {
                     ease: [0.22, 1, 0.36, 1],
                     delay: 0.4,
                   }}
-                  className="text-[16px] leading-[1.8] text-text-secondary max-w-[520px] font-medium"
                 >
-                  {ABOUT_CONTENT.hero.description.join(' ')}
+                  <h3 className="type-h3 text-white text-right font-medium max-w-[620px]">
+                    {ABOUT_CONTENT.hero.description.join(' ')}
+                  </h3>
                 </motion.div>
               </div>
             </motion.div>

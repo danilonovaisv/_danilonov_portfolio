@@ -1,11 +1,307 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap');
-@source './**/*.{js,ts,jsx,tsx}';
-@source '../components/**/*.{js,ts,jsx,tsx}';
-@source '../lib/**/*.{js,ts,jsx,tsx}';
-@source '../hooks/**/*.{js,ts,jsx,tsx}';
-@source '../utils/**/*.{js,ts,jsx,tsx}';
-@source '../contexts/**/*.{js,ts,jsx,tsx}';
-@source '../store/**/*.{js,ts,jsx,tsx}';
-@source '../data/**/*.{js,ts,jsx,tsx}';
-@import 'tailwindcss' source(none);
-@import '../styles/globals.css';
+@import 'tailwindcss';
+
+@theme {
+  --color-background: #040013;
+  --color-text: #fcffff;
+  --color-primary: #0048ff;
+  --color-accent: #4fe6ff;
+  --color-surface: #0b0d3a;
+  --color-error: #ff3366;
+  --color-text-secondary: #a1a3a3;
+
+  --font-sans: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'PPSupplyMono', monospace;
+  --font-display: 'TT Norms Pro', ui-sans-serif;
+  --font-h1: 'TT Norms Pro', ui-sans-serif;
+  --font-h2: 'TT Norms Pro', ui-sans-serif;
+}
+
+/* ========================================================================
+   FONTS
+   ======================================================================== */
+/* TT Norms Pro - Primary Font */
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('/fonts/TT%20Norms%20Pro%20Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* PPSupplyMono - Tag/Micro Font */
+@font-face {
+  font-family: 'PPSupplyMono';
+  src: url('https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CustomLight */
+@font-face {
+  font-family: 'CustomLight';
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/global/fonts/global.font_light.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================================================================
+   GLOBAL VARIABLES
+   ======================================================================== */
+:root {
+  /* Fluid Typography (Mobile -> Desktop) */
+  --font-display: clamp(2.5rem, 5vw, 4.5rem);
+  --font-h1: clamp(2rem, 4vw, 3.5rem);
+  --font-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --font-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --font-body: clamp(1rem, 1.2vw, 1.125rem);
+
+  --font-small: 0.875rem; /* 14px */
+  --font-micro: 0.75rem; /* 12px */
+
+  /* Global Spacing */
+  --container-padding: clamp(24px, 5vw, 96px);
+
+  /* Global Colors (RGB for opacity support) */
+  --color-primary: 0, 72, 255;
+
+  /* Ghost Cards */
+  --ghost-card-height-desktop: 480px;
+
+  /* Header Height */
+  --header-height: 80px;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text antialiased;
+    font-family: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* Mobile-First: Safe area padding */
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+
+    /* Optimize */
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Reset for anchor tags */
+  a {
+    @apply transition-colors duration-200;
+  }
+}
+
+/* ========================================================================
+   UTILITIES
+   ======================================================================== */
+@layer utilities {
+  /* Typography Utilities */
+  .text-display {
+    @apply text-[length:--font-display] font-black leading-[1.1];
+  }
+
+  .text-h1 {
+    @apply text-[length:--font-h1] font-bold leading-[1.1];
+  }
+
+  .text-h2 {
+    @apply text-[length:--font-h2] font-bold leading-[1.15];
+  }
+
+  .text-h3 {
+    @apply text-[length:--font-h3] font-medium leading-[1.2];
+  }
+
+  .text-body {
+    @apply text-[length:--font-body] font-normal leading-relaxed;
+  }
+
+  .text-micro {
+    @apply font-mono text-[length:--font-micro] leading-snug;
+  }
+
+  /* Mobile-Optimized Text */
+  .text-mobile-hero {
+    font-size: clamp(2.5rem, 10vw, 6rem);
+    @apply leading-[0.95] tracking-tighter;
+  }
+
+  .text-mobile-title {
+    font-size: clamp(1.5rem, 6vw, 3rem);
+    @apply leading-[1.1];
+  }
+
+  .text-mobile-body {
+    font-size: clamp(0.875rem, 3.5vw, 1.125rem);
+    @apply leading-relaxed;
+  }
+
+  /* Layout & Grid System (Strict Standard)
+     Primary container for all page content. Enforces strict padding and max-width.
+     Usage: <div className="std-grid">...</div> */
+  .std-grid {
+    @apply w-full mx-auto px-6 md:px-12 lg:px-24 max-w-[1680px];
+  }
+
+  /* Card Helpers */
+  /* Ghost Card Container - Primary interaction shell
+     Provides aspect ratio maintainance and responsive height */
+  .card-shell {
+    @apply relative flex flex-col w-full h-auto aspect-[5/4] min-h-0 md:aspect-auto md:h-[var(--ghost-card-height-desktop)];
+  }
+
+  .card-media {
+    @apply relative flex-auto w-full min-h-0;
+  }
+
+  /* Touch Utilities */
+  .touch-target {
+    @apply min-w-[48px] min-h-[48px];
+  }
+
+  .touch-feedback {
+    @apply transition-all duration-150 ease-out active:scale-95 active:opacity-90;
+  }
+
+  /* Safe Area */
+  .safe-area-bottom {
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  .footer-safe-area {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .safe-area-top {
+    padding-top: max(16px, env(safe-area-inset-top, 16px));
+  }
+
+  .safe-area-x {
+    padding-left: max(16px, env(safe-area-inset-left, 16px));
+    padding-right: max(16px, env(safe-area-inset-right, 16px));
+  }
+
+  /* Scroll Snap */
+  .scroll-snap-x {
+    @apply overflow-x-auto snap-x snap-mandatory flex scrollbar-hide;
+  }
+
+  .scroll-snap-item {
+    @apply snap-start snap-always;
+  }
+
+  /* Image Wrapper */
+  .img-wrapper {
+    clip-path: inset(0% 0% 0% 0%);
+    will-change: clip-path;
+  }
+}
+
+@layer components {
+  /* Floating Cards */
+  .floating-cards-container {
+    perspective: 1000px;
+  }
+
+  .card-3d-wrapper {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .card-glass {
+    background-color: rgb(255 255 255 / 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    box-shadow: 0 8px 32px 0 #0000005e;
+  }
+
+  .text-glow-primary {
+    text-shadow: 0 0 10px rgba(0, 72, 255, 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-3d-wrapper {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================================================
+   FRAMEWORK OVERRIDES
+   ======================================================================== */
+/* Lenis Scroll */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Admin specific */
+html.admin-page {
+  scroll-behavior: auto !important;
+}
+
+html.admin-page,
+html.admin-page body {
+  overflow-y: auto !important;
+  height: auto;
+}

@@ -1,9 +1,0 @@
-[
-  "^ ",
-  "~:members",
-  [
-    "^ ",
-    "writeLocalTo",
-    ["~#set", [["^ ", "~:flags", ["^2", ["~:method", "~:public"]]]]]
-  ]
-]

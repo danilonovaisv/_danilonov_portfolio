@@ -46,4 +46,4 @@ fi
 
 # Executa o deploy
 echo "Executando deploy do Firebase..."
-firebase deploy --only hosting,functions --project portfolio-danilo-novais
+firebase deploy --only hosting,functions --project portfolio-danilo-novais --debug

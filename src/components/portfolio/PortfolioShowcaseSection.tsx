@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Container } from '@/components/layout/Container';
-import { GHOST_EASE } from '@/lib/motionTokens';
+import { GHOST_EASE } from '@/config/motion';
 import { ProjectCard } from './ProjectCard';
 import type { PortfolioProject } from '@/types/project';
 

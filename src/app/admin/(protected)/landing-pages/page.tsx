@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { Plus, Edit, Trash2, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { createClientComponentClient } from '@/lib/supabase/queries/client';
 import { uploadToBucket } from '@/lib/supabase/storage';
 import type { DbProject, DbTag, DbLandingPage } from '@/types/admin';
 

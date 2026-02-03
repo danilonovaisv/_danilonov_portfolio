@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useAntigravityStore } from '@/store/antigravity.store';
 
 export const AntigravityDebugger: React.FC = () => {
@@ -20,7 +21,7 @@ export const AntigravityDebugger: React.FC = () => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-9999 bg-black/90 text-[10px] font-mono p-3 rounded-lg border border-white/10 shadow-2xl backdrop-blur-md text-white min-w-[200px]">
+    <div className="fixed bottom-4 right-4 z-9999 bg-black/90 text-[10px] font-mono p-3 rounded-lg border border-white/10 shadow-2xl backdrop-blur-md text-white w-52">
       <div className="mb-2 uppercase tracking-wider text-neutral-500 font-bold border-b border-white/10 pb-1 flex justify-between">
         Antigravity System
         <span className="text-green-500">●</span>
@@ -33,9 +34,10 @@ export const AntigravityDebugger: React.FC = () => {
           {store.narrativeState}
         </div>
         <div className="w-full bg-neutral-800 h-1 mt-1 rounded overflow-hidden">
-          <div
-            className="bg-blue-500 h-full transition-all duration-75"
+          <motion.div
+            className="bg-blue-500 h-full"
             style={{ width: `${store.scrollProgress * 100}%` }}
+            transition={{ duration: 0.075, ease: 'linear' }} // Slight smooth
           />
         </div>
       </div>

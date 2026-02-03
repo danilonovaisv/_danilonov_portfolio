@@ -6,7 +6,7 @@ import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { Container } from '@/components/layout/Container';
 import { CategoryStripe } from './CategoryStripe';
 import { getAssetUrl } from '@/utils/utils';
-import { GHOST_EASE } from '@/lib/motionTokens';
+import { GHOST_EASE } from '@/config/motion';
 
 // Category data with assets
 const CATEGORIES = [
@@ -67,10 +67,8 @@ export default function PortfolioShowcase() {
             id="portfolio-showcase-heading"
             className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl tracking-tight"
           >
-            <span className="text-bluePrimary italic font-light">
-              portfólio{' '}
-            </span>
-            <span className="text-white font-bold">showcase</span>
+            <span className="text-white italic font-light">portfólio </span>
+            <span className="text-bluePrimary font-bold">showcase</span>
           </h2>
         </motion.header>
 

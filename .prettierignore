@@ -12,3 +12,12 @@ docs
 portfolio
 public
 docs/
+functions/next_build
+.next
+node_modules
+pnpm-lock.yaml
+coverage
+functions/.npm_cache
+functions/node_modules
+
+

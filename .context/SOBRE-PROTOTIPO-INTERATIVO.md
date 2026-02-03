@@ -1,212 +1,142 @@
 
 # 🧠 PROTÓTIPO INTERATIVO — PÁGINA “SOBRE”
 
-Domínio: **portifoliodanilo.com**  
-Conceito-mãe: **Ghost Design — presença que guia sem aparecer**
+# 🎯 Documentação Técnica — Página Sobre
+
+**Domínio:** portifoliodanilo.com  
+**Conceito:** Ghost Design — presença que guia sem aparecer  
+**Versão:** 1.0
 
 ---
 
-## 🎯 OBJETIVO DA PÁGINA
+## Visão Geral
 
-Criar conexão silenciosa, profundidade e confiança.  
-Nada grita. Nada explica demais.  
-O design age no subconsciente.
+### Objetivo da Página
 
-# **2. DESIGN SYSTEM**
+A página **/sobre** estabelece conexão silenciosa, profundidade e confiança através de design que age no subconsciente. Nenhum elemento grita. O design guia sem aparecer.
+
+### Princípios Fundamentais
+
+- **Mobile-first:** expansão progressiva para desktop
+- **Narrativa sequencial:** cada seção constrói sobre a anterior
+- **Espaço negativo:** elemento ativo do Ghost Design
+- **Contraste legível:** texto sempre acessível sobre mídias
+
+### Público-Alvo
+
+Profissionais que buscam:
+- Direção criativa estratégica
+- Design com propósito e método
+- Liderança criativa com visão técnica
+
+---
+
+## Design System
 
 ### 2.1 Color Palette
 
-| Token          | Value     | Uso                                                      |
-| -------------- | --------- | -------------------------------------------------------- |
-| bluePrimary    | `#0048ff` | Cor primária da marca, CTAs, links, elementos interativos |
-| blueAccent     | `#4fe6ff` | Destaques secundários, brilhos “ghost”/atmosfera        |
-| purpleDetails  | `#8705f2` | Pequenos detalhes e highlights                           |
-| pinkDetails    | `#f501d3` | Pequenos detalhes, ênfases pontuais                      |
-| background     | `#040013` | Fundo escuro principal                                   |
-| backgroundLight| `#f0f0f0` | Seções claras (forms, blocos alternados)                 |
-| text           | `#fcffff` | Texto principal em fundo escuro                          |
-| textInverse    | `#0e0e0e` | Texto em fundos claros                                   |
-| textEmphasis   | `#2E85F2` | Palavras destacadas no meio do texto                     |
-| textHighlight  | `#4fe6ff` | Destaques curtos, intros breves                          |
-| textSecondary  | `#a1a3a3` | Infos secundárias, metadata                              |
-| neutral        | `#0b0d3a` | Gradientes, fundos sutis                                 |
-| neutralLight   | `#F5F5F5` | Fundos de seções secundárias                             |
-
-> Obs: `textEmphasis` estava com `##2E85F2` e `textHilght` com typo — normalizei para `textHighlight`.
+| Token | Value | Uso Principal |
+|:------|:------|:--------------|
+| **bluePrimary** | `#0048ff` | Marca, CTAs, Links, Foco |
+| **blueAccent** | `#4fe6ff` | Atmosfera Ghost, Brilhos, Highlights |
+| **background** | `#040013` | Deep Void (Fundo Principal) |
+| **text** | `#fcffff` | Texto Primário (Contraste Alto) |
+| **textSecondary** | `#a1a3a3` | Metadados, Legendas |
+| **surface** | `#0b0d3a` | Cards sutis, Gradientes de fundo |
+| **error** | `#ff3366` | Validação de formulários |
 
 ---
 
 ### 2.2 Typography
 
-**Fonte primária:** TT Norms Pro (self-hosted, fallback: `ui-sans-serif, system-ui`)
+**Family:** `TT Norms Pro` (Primary), `Geist Mono` (Code/Tech details).
 
-Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos os breakpoints:
+#### Fluid Typography Tokens (clamp)
 
-| Token     | Mobile (~<640px) | Desktop (~≥1024px) | Peso   | Uso                                                                 |
-| --------- | ---------------- | ------------------ | ------ | ------------------------------------------------------------------- |
-| display   | 2.5rem (40px)    | 4.5rem (72px)      | Black   | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
-| h1        | 2rem (32px)      | 3.5rem (56px)      | Bold   | Hero headlines, títulos principais                                  |
-| h2        | 1.5rem (24px)    | 2.5rem (40px)      | Bold   | Títulos de seção                                                    |
-| h3        | 1.25rem (20px)   | 1.75rem (28px)     | Medium | Títulos de cards, subtítulos                                       |
-| body      | 1rem (16px)      | 1.125rem (18px)    | Regular| Texto corrido                                                       |
-| small     | 0.875rem (14px)  | 0.875rem (14px)    | Reg/Med| Labels, legendas                                                   |
-| micro     | 0.75rem (12px)   | 0.75rem (12px)     | Mono   | Tags, infos de sistema                                              |
+| Token | Mobile (<768px) | Desktop (≥1024px) | Weight | Tailwind Class |
+|:------|:----------------|:------------------|:-------|:---------------|
+| **Display** | 2.5rem (40px) | 5.5rem (88px) | Black | `text-display` |
+| **H1** | 2rem (32px) | 3.5rem (56px) | Bold | `text-h1` |
+| **H2** | 1.5rem (24px) | 2.5rem (40px) | Bold | `text-h2` |
+| **H3** | 1.25rem (20px) | 1.75rem (28px) | Medium | `text-h3` |
+| **Body** | 1rem (16px) | 1.125rem (18px) | Regular | `text-body` |
 
-#### Tokens em CSS com `clamp()`
+**CSS Implementation:**
 
-['css
-:root {
-  --font-display: clamp(2.5rem, 5vw, 4.5rem);
-  --font-h1:      clamp(2rem, 4vw, 3.5rem);
-  --font-h2:      clamp(1.5rem, 3vw, 2.5rem);
-  --font-h3:      clamp(1.25rem, 2vw, 1.75rem);
-  --font-body:    clamp(1rem, 1.2vw, 1.125rem);
-  --font-small:   0.875rem;
-  --font-micro:   0.75rem;
+```css
+@layer base {
+  :root {
+    --font-display: clamp(2.5rem, 5vw + 1rem, 5.5rem);
+    --font-h1: clamp(2rem, 4vw + 1rem, 3.5rem);
+    --font-h2: clamp(1.5rem, 3vw + 1rem, 2.5rem);
+    --font-h3: clamp(1.25rem, 2vw + 1rem, 1.75rem);
+    --font-body: clamp(1rem, 0.5vw + 0.8rem, 1.125rem);
+  }
 }
+```
 
-body {
-  font-family: "TT Norms Pro", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-}
+---
 
-.display-text {
-  font-size: var(--font-display);
-  font-weight: 700;
-  line-height: 1.1;
-}
+### 2.3 Spacing, Grid & Layout (OPTIMIZED)
 
-.h1 {
-  font-size: var(--font-h1);
-  font-weight: 700;
-  line-height: 1.1;
-}
+O sistema de Grid foi otimizado para **12 colunas** no desktop e **4 colunas** no mobile, garantindo alinhamento matemático perfeito.
 
-.h2 {
-  font-size: var(--font-h2);
-  font-weight: 700;
-  line-height: 1.15;
-}
+#### 📐 The Ghost Grid System
 
-.h3 {
-  font-size: var(--font-h3);
-  font-weight: 500;
-  line-height: 1.2;
-}
+| Breakpoint | Columns | Gutter (Gap) | Margin (X-Padding) | Container Max |
+|------------|---------|--------------|-------------------|---------------|
+| **Mobile** (<768px) | **4** | `16px` (gap-4) | `24px` (px-6) | 100% |
+| **Tablet** (768px+) | **8** | `24px` (gap-6) | `48px` (px-12) | 100% |
+| **Desktop** (1024px+) | **12** | `32px` (gap-8) | `64px` (px-16) | 1440px |
+| **Wide** (1600px+) | **12** | `40px` (gap-10) | `96px` (px-24) | 1680px |
 
-.body {
-  font-size: var(--font-body);
-  font-weight: 400;
-  line-height: 1.5;
-}
+#### 🧱 Tailwind Composition
 
-.small {
-  font-size: var(--font-small);
-}
+**1. Container Base:**
 
-.micro {
-  font-size: var(--font-micro);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-    monospace;
-}
+```tsx
+// Wrapper global para centralizar o conteúdo
+<div className="w-full max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
+  {children}
+</div>
+```
 
-Versão conceitual em Tailwind
+**2. Section Grid (Padrão):**
 
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['"TT Norms Pro"', "ui-sans-serif", "system-ui"],
-      },
-      fontSize: {
-        display: [
-          "clamp(2.5rem, 5vw, 4.5rem)",
-          { lineHeight: "1.1", fontWeight: "700" },
-        ],
-        h1: [
-          "clamp(2rem, 4vw, 3.5rem)",
-          { lineHeight: "1.1", fontWeight: "700" },
-        ],
-        h2: [
-          "clamp(1.5rem, 3vw, 2.5rem)",
-          { lineHeight: "1.15", fontWeight: "700" },
-        ],
-        h3: [
-          "clamp(1.25rem, 2vw, 1.75rem)",
-          { lineHeight: "1.2", fontWeight: "500" },
-        ],
-        body: [
-          "clamp(1rem, 1.2vw, 1.125rem)",
-          { lineHeight: "1.5", fontWeight: "400" },
-        ],
-        small: ["0.875rem", { lineHeight: "1.4" }],
-        micro: ["0.75rem", { lineHeight: "1.4" }],
-      },
-    },
-  },
-};']
-
-
-
-## 2.3 Spacing & Grid
-
-Container
-    •    max-width: 1680px
-    •    Padding horizontal: clamp(24px, 5vw, 96px)
-
-Ritmo Vertical
-    •    Seções: py-16 md:py-24
-    •    Componentes: gap-8 md:gap-12
-    •    Elementos internos: gap-4 md:gap-6
-
-Grid (Tailwind)
-    •    Mobile (até md):
-    •    Layout: 1 coluna (grid-cols-1 ou flex flex-col)
-    •    w-full
-    •    Alinhamento:
-    •    text-center para todos os textos
-    •    items-center e justify-center para stacks verticais (flex-col)
-    •    Tablet (md:):
-    •    Cards em md:grid-cols-2
-    •    Hero / destaques podem continuar 1 coluna
-    •    Textos podem voltar a text-left se fizer sentido
-    •    Desktop (lg:+):
-    •    Distribuição customizada por seção
-    •    Textos geralmente alinhados à esquerda para leitura longa
-
-Regra de alinhamento para mobile (base do sistema):
-
-Breakpoint padrão: < 768px
-Regra:
-    •    Todos os títulos (display, h1, h2, h3), parágrafos e CTAs usam text-align: center.
-    •    Componentes em coluna usam align-items: center.
-    •    Imagens e ícones principais centralizados (margin-inline: auto).
-
-Exemplo padrão de seção:
-
-<section className="flex flex-col items-center text-center md:items-start md:text-left">
-  {/* conteúdo */}
+```tsx
+// Grid responsivo automático
+<section className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 md:gap-8 w-full py-16 md:py-24">
+  {/* Ex: Card ocupando full no mobile e 4 colunas no desktop */}
+  <div className="col-span-4 md:col-span-4 lg:col-span-4">
+    Card Content
+  </div>
 </section>
+```
 
+#### Ritmo Vertical
 
-⸻
+- **Seções:** `py-16 md:py-24`
+- **Componentes:** `gap-8 md:gap-12`
+- **Elementos internos:** `gap-4 md:gap-6`
 
-## 2.4 Animation Principles
+---
 
-Filosofia: animações orgânicas e intencionais, nunca gratuitas.
+### 2.4 Animation Principles
 
-Core Library: Framer Motion
+**Filosofia:** animações orgânicas e intencionais, nunca gratuitas.
 
-Diretrizes:
-    •    Animar apenas transform e opacity (performance)
-    •    Easing: cubic-bezier(0.22, 1, 0.36, 1) (easeOutExpo)
-    •    Duração: 300–700ms na maioria das transições
-    •    Stagger: 60–120ms entre elementos sequenciais
-    •    Respeitar prefers-reduced-motion: desabilitar animações não essenciais
+**Core Library:** Framer Motion + GSAP
 
-Padrões comuns:
+**Diretrizes:**
+- Animar apenas `transform` e `opacity` (performance)
+- Easing: `cubic-bezier(0.22, 1, 0.36, 1)` (easeOutExpo)
+- Duração: 300–700ms na maioria das transições
+- Stagger: 60–120ms entre elementos sequenciais
+- Respeitar `prefers-reduced-motion`
 
+**Padrões comuns:**
+
+```jsx
 // Scroll reveal
 <motion.div
   initial={{ opacity: 0, y: 24 }}
@@ -225,108 +155,73 @@ const variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08 },
-  },
+    transition: { staggerChildren: 0.08 }
+  }
 };
+```
 
-Em mobile, como tudo é centralizado e o fluxo é vertical, as entradas preferenciais vêm de baixo (y: 24 → 0) acompanhando o scroll.
+---
 
-⸻
+### 2.5 Global Assets
 
-## 2.5 Display Text / Big Phrases (Frases em destaque)
+#### Logos
 
-Frases grandes no meio da página, com grande destaque visual, mas sem função de título semântico.
+- **Favicon:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
+- **Favicon Light:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
+- **Logo Light:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
+- **Logo Dark:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
 
-Token: display
+#### Fontes
 
-Diretrizes de uso:
-    •    Quando usar:
-    •    Frases de impacto, statements da marca, quotes, promessas fortes de seção.
-    •    Semântica:
-    •    Usar como <p> ou <span> com classe específica:
-    •    className="display-text" ou className="text-display"
-    •    Exemplo:
-
-<p className="text-display">
-  Construímos experiências digitais que parecem magia, mas são guiadas por dados.
-</p>
-
-
-    •    Alinhamento:
-    •    Mobile: sempre centralizado, com largura limitada:
-    •    Ex.: className="text-display max-w-2xl mx-auto text-center"
-    •    Desktop: pode ser centralizado ou seguir a grid da seção (recomendado manter centralizado em blocos de destaque).
-    •    Espaçamento:
-    •    Mais respiro que títulos normais:
-    •    Ex.: mt-16 mb-12 (ajustar conforme a seção).
-    •    Cores:
-    •    Base: text (#fcffff)
-    •    Palavras-chave com textEmphasis e textHighlight.
-
-Exemplo em JSX/Tailwind:
-
-<section className="py-16 flex flex-col items-center text-center">
-  <p className="text-display max-w-2xl mx-auto">
-    Criamos produtos que parecem
-    <span className="text-textHighlight"> magia</span>, mas são construídos com
-    <span className="textEmphasis"> engenharia séria</span>.
-  </p>
-</section>
-
-
-
-## 2.6 Global Assets
-Logos:
-- Favicon: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/Favicon.svg`
-- Favicon Light: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/FaviconLight.svg`
-- Logo Light (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoLight.svg`
-- Logo Dark (full): `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/logo_site/LogoDark.svg`
-
-## 2.7 Fonts:
- -  font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Thin.woff2') format('woff2');
+```css
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Thin.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
+}
 
-- font-face {
+@font-face {
   font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Light.woff2') format('woff2');
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
+}
 
-- font-face {
+@font-face {
   font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Regular.woff2') format('woff2');
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
 
-- font-face {
+@font-face {
   font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Medium.woff2') format('woff2');
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+}
 
-- font-face {
+@font-face {
   font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2') format('woff2');
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+}
 
-
-- font-face {
+@font-face {
   font-family: 'TT Norms Pro';
-  src: url('https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Black.woff2') format('woff2');
+  src: url('https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/assets/fonts/TT%20Norms%20Pro%20Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
-/* Fonte Mono para Tags */
 @font-face {
   font-family: 'PPSupplyMono';
   src: url('https://assets.codepen.io/7558/PPSupplyMono-Variable.woff2') format('woff2');
@@ -334,236 +229,289 @@ Logos:
   font-style: normal;
   font-display: swap;
 }
+```
 
-Videos:
-- Manifesto Video: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4`
+#### Vídeos
 
-Client Logos:
+- **Manifesto Video:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-videos/VIDEO-APRESENTACAO-PORTFOLIO.mp4`
+
+#### Client Logos
+
 - 12 monochromatic SVG logos: `client1.svg` through `client12.svg`
-- Base URL: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/client-logos/`
-
-
-## **Ordem das Seções (Sobre):**
-1.  Header
-2.  About Hero (Video Loop)
-3.  About Origin
-4.  About What I Do
-5.  About Method
-6. About Beliefs
-7. About Closing
-8. Clients / Brands
-9. Contact
-10. Footer
-
-
-## 📌 ESTE DOCUMENTO É A FONTE ÚNICA DA VERDADE
-
-Este arquivo consolida **TODO** o conteúdo da página **/sobre**:
-
-- Narrativa
-- Conteúdo textual
-- Layout (desktop + mobile)
-- Motion
-- Componentes
-- Tokens técnicos
-- Regras absolutas
-- Auditoria
-
-Nenhuma decisão fora deste documento é válida.
+- Base URL: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/client-logos/`
 
 ---
 
-## 🖥 + 📱 VARIAÇÕES POR DISPOSITIVO (VISÃO GERAL)
+## Estrutura da Página
 
-A página **/sobre** é pensada como **mobile-first**, com expansão progressiva para desktop.
+### Ordem das Seções
 
-### Desktop (lg / xl)
+1. Header
+2. Hero / Manifesto
+3. Origem Criativa
+4. O Que Eu Faço
+5. Como Eu Trabalho
+6. O Que Me Move
+7. Clients / Brands
+8. Contato
+9. Footer
 
-- Grid conceitual de **12 colunas** com `max-width` ≈ 1120–1200px.
-- Uso consistente de **espaço negativo** à esquerda ou direita para reforçar o conceito Ghost.
-- Seções chave usam **2 colunas** (texto ↔ imagem/mídia), com alternância fluida.
-- Vídeos e imagens têm **opacidade reduzida** e/ou **overlay escuro** para manter o texto sempre legível.
-- Hero e seção 04 usam **texto sobre vídeo**, porém **sempre com overlay escuro de alto contraste** (exceção controlada).
+---
 
-### Mobile (sm / md)
+## Seções Detalhadas
 
-- **Uma coluna** em toda a página.
-- **Texto sempre vem antes da imagem/vídeo** em cada bloco de conteúdo.
-- Tipografia ligeiramente maior que na home para garantir leitura confortável em scroll longo.
-- Espaçamentos verticais aumentados para separar claramente blocos de narrativa.
-- Vídeos recortados para focar o elemento principal (rosto, ghost, IA) e reduzidos em altura.
+# **1. Header
 
-### Tablets (md → < lg)
+**Comportamento:** Idêntico à página Home
 
-- Transição suave entre **uma** e **duas colunas**:
-  - Conteúdos mais densos permanecem em 1 coluna.
-  - Listas e grids podem começar a se dividir em 2 colunas.
-- Mantém foco em legibilidade, nunca sacrifica leitura por “layout desktop comprimido”.
+#### Desktop
+
+- Logo à esquerda
+- Navegação à direita (Home, Sobre, Portfólio do Acaso, Contato)
+- Link ativo (/sobre) destacado em `bluePrimary`
+- Fundo translúcido sobre vídeo hero
+- Borda inferior sutil em `bluePrimary`
+
+#### Mobile
+
+- Logo à esquerda
+- Ícone menu (hambúrguer) à direita
+- Menu overlay escuro ocupando tela inteira
+
+#### Scroll
+
+- Pode fixar no topo com fundo mais sólido
+- Sem efeitos de scale/bounce
 
 ---
 
 
----
 
 
-## HEADER — MESMO DA HOME
+# **2. Hero / Manifesto
 
-- Mesmo componente de header utilizado na página **/home**.
-- **Desktop**:
-  - Logo à esquerda.
-  - Navegação principal à direita (home, sobre, portfólio do acaso, contato).
-  - Link ativo (**/sobre**) destacado em `primary`.
-  - Fundo translúcido sobre o vídeo do hero com borda inferior sutil em `primary`.
-- **Mobile**:
-  - Logo à esquerda, ícone de menu (hambúrguer) à direita.
-  - Menu abre em overlay escuro, ocupando tela inteira, sem blur exagerado.
-- Comportamento em scroll:
-  - Pode fixar no topo com fundo mais sólido.
-  - Nunca utiliza efeitos chamativos de scale/bounce.
+**Função:** Estabelecer presença sem exposição. Primeiro contato silencioso.
 
----
+#### Desktop
 
-## 🟣 SEÇÃO 01 — HERO / MANIFESTO
+**Layout:**
+- Altura: `100vh`
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4`
+  - `object-fit: cover`
+  - Loop contínuo, sem controles
+- Overlay: gradiente `background` (#040013) com opacidade variável
+- Grid 12 colunas (max-width: 1440px):
+  - Colunas 1–6: espaço negativo + vídeo
+  - Colunas 7–12: bloco de texto
 
-**Função:** Primeiro contato. Estabelecer presença sem exposição.  
-O usuário entra direto em um estado de observação.
+**Composição Tailwind:**
 
-### Layout — Desktop
-- Altura: **100vh** (`h-screen`).
-- Fundo:
-  - Vídeo hero desktop (loop, sem controles visíveis):  
-    `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobre.mp4`
-  - `object-fit: cover`, ocupando toda a viewport.
-  - Overlay em `backgroundDark` com gradiente sutil da mesma cor do background.
-- Grid:
-  - Container central com `max-width` ≈ 1120px.
-  - Conceito 12 colunas:
-    - Colunas **1–6**: espaço negativo + vídeo.
-    - Colunas **7–12**: bloco de texto.
-- Texto:
-  - Bloco de texto **alinhado à direita da página (texto e bloco)**  dentro do bloco.
-  - Verticamente posicionado **ligeiramente acima do centro** (≈ -10%).
-  - Sem CTA aqui.
-- Regra de contraste:
-  - Hero é **exceção controlada** à regra “texto sobre imagem”, sempre com overlay escuro e contraste AA+.
-
-### Layout — Mobile
-
-- Header fixo no topo, comum à home.
-- Vídeo hero mobile:  
-  `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4`
-  - Posicionado logo abaixo do header.
-  - Altura aproximada: **45–55vh**, `object-fit: cover`, focando o rosto.
-- Overlay em `backgroundDark` com gradiente sutil da mesma cor do background.
-- Bloco de texto:
-  - Vem **logo abaixo** da área do vídeo, dentro do mesmo fundo escuro.
-  - Largura 100% do container, com padding horizontal de 16–20px.
-  - Texto **centralizado** (alinhamento visual mais próximo da composição do layout atual).
-- Altura:
-  - `min-height: 100vh`, permitindo scroll se o texto for mais longo.
+```tsx
+<section className="relative h-screen w-full overflow-hidden">
+  {/* Vídeo Background */}
+  <video className="absolute inset-0 w-full h-full object-cover" />
   
-  **DREGRADE DA COR DO BG NO FINAL DA SESSÃO PARA SUAVISAR A MUDANÇA DE SESSÃO**
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-r from-background/90 to-background/40" />
+  
+  {/* Container Grid */}
+  <div className="relative h-full max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
+    <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 md:gap-8 h-full items-center">
+      {/* Espaço negativo desktop */}
+      <div className="hidden lg:block lg:col-span-6" />
+      
+      {/* Bloco de texto */}
+      <div className="col-span-4 md:col-span-8 lg:col-span-6 text-right">
+        {/* Conteúdo */}
+      </div>
+    </div>
+  </div>
+</section>
+```
 
-### Motion (frame-by-frame)
+**Texto:**
+- Alinhado à direita dentro do bloco
+- Posicionado 10% acima do centro vertical
+- Sem CTA
 
-| Frame | Estado                      |
-|-------|-----------------------------|
-| 0%    | opacity 0 / blur 10px       |
-| 30%   | aparece linha 1             |
-| 60%   | aparece linha 2             |
-| 100%  | texto completo visível      |
+#### Mobile
 
-- Entrada **linha a linha**.
-- Delay entre linhas: **0.2s – 0.4s**.
-- Duração média: **1.4s**.
-- Easing: **ghostIn** = `cubic-bezier(0.22, 1, 0.36, 1)`.
-- Background de vídeo com **loop lento**, sem mudanças bruscas.
+**Layout:**
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/HeroSobreMobile.mp4`
+  - Altura: 45–55vh
+  - `object-fit: cover`, foco no rosto
+  - Logo abaixo do header fixo
+- Overlay: gradiente `background`
+- Bloco de texto:
+  - Abaixo do vídeo, dentro do fundo escuro
+  - Largura 100%, padding horizontal px-6
+  - Centralizado
+  - Min-height: 100vh (permite scroll)
 
-### Conteúdo
+**Composição Mobile:**
 
-**H1**
+```tsx
+<section className="relative min-h-screen w-full">
+  {/* Vídeo Hero */}
+  <div className="relative h-[50vh]">
+    <video className="w-full h-full object-cover" />
+    <div className="absolute inset-0 bg-gradient-to-b from-background/80 to-background" />
+  </div>
+  
+  {/* Conteúdo Texto */}
+  <div className="bg-background px-6 py-12 text-center">
+    {/* Conteúdo */}
+  </div>
+</section>
+```
 
-> Sou Danilo Novais.
+**Gradiente:** suaviza transição para próxima seção
 
-**Texto manifesto**
+#### Conteúdo
 
-**H1**
-> Você não vê tudo  
-> o que eu faço. Mas  
-> sente quando  
-> funciona.  
+**H1:**
+```
+Sou Danilo Novais.
+```
 
->**H2**
-> Crio design que observa, entende  
-> e guia experiências com intenção,  
-> estratégia e tecnologia — na medida certa.
+**Texto Manifesto (H1):**
+```
+Você não vê tudo
+o que eu faço. Mas
+sente quando
+funciona.
+```
 
-Palavras-chave como **Danilo Novais**, **“não vê tudo”** e **“funciona”** alterar cor para (bluePrimary).
+**Subtítulo (H2):**
+```
+Crio design que observa, entende
+e guia experiências com intenção,
+estratégia e tecnologia — na medida certa.
+```
+
+**Destaques:** "Danilo Novais", "não vê tudo", "funciona" em `bluePrimary`
+
+#### Animação
+
+| Frame | Estado |
+|-------|--------|
+| 0% | `opacity: 0`, `blur: 10px` |
+| 30% | Linha 1 aparece |
+| 60% | Linha 2 aparece |
+| 100% | Texto completo |
+
+- Entrada linha a linha
+- Delay entre linhas: 0.2–0.4s
+- Duração total: 1.4s
+- Easing: `cubic-bezier(0.22, 1, 0.36, 1)`
 
 ---
 
+# **3. Origem Criativa**
 
+**Função:** Revelar trajetória criativa através de efeito mask reveal pinned — imagens emergem de baixo para cima como "memórias sendo descobertas".
 
+**Stack Técnico:** GSAP 3.13 + ScrollTrigger + Lenis
 
+**Referência:** https://codepen.io/danilonovaisv/pen/KwMgWMG
+**CÓDIGO REFERENCIA:** https://drive.google.com/drive/folders/1SZg3TTXHT3l6OHZhxeFbCC8vR0k2RHE3?usp=sharing
 
+#### Desktop
 
-# ## 🟣 SEÇÃO 02 — ORIGEM CRIATIVA (ADAPTADA COM ANIMAÇÃO GSAP MASK REVEAL)
+**Layout:**
+- Grid 2 colunas fixas:
+  - Esquerda (300px mín): textos
+  - Direita (540px máx): imagens pinned
+- Container: 1440px
+- Gap: 60px
+- Padding: 2rem
 
+**Composição Grid:**
 
-### 1. 🎯 Objetivo da Página/Sessão
-
-| Item | Detalhamento |
-|------|--------------|
-| **Função principal** | Revelar trajetória criativa através de **efeito mask reveal pinned** - imagens emergem de baixo para cima como "memórias sendo descobertas" |
-| **Ação do usuário** | Scroll contínuo para revelar cada imagem sequencialmente + leitura natural dos textos laterais |
-| **Contribuição** | **Diferenciação visual extrema** + reforço emocional da narrativa pessoal + demonstração técnica avançada |
-
----
-
-### 2. 📐 Estrutura de Conteúdo
-
-| Elemento | Detalhes |
-|----------|----------|
-| **Título principal** | `"Origem"` (H1, `#fcffff`, centralizado topo, 64px desktop) |
-| **Subtítulo** | Não aplicável |
-| **Elementos visuais** | **4 imagens Supabase** (500x auto, pinned right, z-index 4→1) |
-| **CTA** | **Não** - progressão guiada por scroll |
-| **Texto de apoio** | **4 blocos H1+H3** (`bluePrimary` títulos, `#fcffff` corpo) |
-| **Layout Desktop** | **2-colunas fixas**: Textos (L, 300px min) + Imagens pinned (R, 540px max) |
-| **Layout Mobile** | **Intercalado**: Texto → Imagem (order CSS) |
-
-**Conteúdo dos blocos** (mantido 100% fiel):
+```tsx
+<section className="w-full bg-background py-24">
+  <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
+    {/* Título */}
+    <h1 className="text-h1 text-center mb-16">Origem</h1>
+    
+    {/* Grid Desktop */}
+    <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-8 md:gap-12">
+      {/* Textos - Esquerda */}
+      <div className="col-span-4 md:col-span-8 lg:col-span-6 space-y-24">
+        {/* Blocos de texto */}
+      </div>
+      
+      {/* Imagens Pinned - Direita */}
+      <div className="hidden lg:block lg:col-span-6 sticky top-24 h-fit">
+        {/* Imagens com mask reveal */}
+      </div>
+    </div>
+  </div>
+</section>
 ```
-A: "O QUE PERMANECE" + img1 (texto direita, -10% vertical)
-B: "DO TRAÇO À INTENÇÃO" + img2 (texto esquerda)
-C: "A DESCOBERTA DO INVISÍVEL" + img3 (texto direita) 
-D: "EXPANSÃO COM PROPÓSITO" + img4 (texto esquerda)
+
+**Imagens:**
+- 4 imagens (500px altura, auto largura)
+- Pinned à direita
+- Z-index: 4 → 1 (sequencial)
+- `object-fit: cover`
+- `border-radius: 24px`
+- `blur(4px)` inicial → `blur(0)`
+- `opacity: 0.85` → `1`
+
+#### Mobile
+
+**Layout:**
+- Stack vertical intercalado: Texto → Imagem
+- Ordem controlada via CSS `order`
+- Imagens: 400–400px
+
+**Composição Mobile:**
+
+```tsx
+<section className="w-full bg-background py-16">
+  <div className="max-w-[1680px] mx-auto px-6">
+    <h1 className="text-h1 text-center mb-12">Origem</h1>
+    
+    <div className="space-y-12">
+      {/* Bloco 1 */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className="text-h2 text-bluePrimary mb-4">O QUE PERMANECE</h2>
+          <p className="text-body">...</p>
+        </div>
+        <img src="..." className="w-full rounded-2xl" />
+      </div>
+      
+      {/* Repetir para blocos 2-4 */}
+    </div>
+  </div>
+</section>
 ```
 
-### Conteúdo completo:
+#### Conteúdo
 
-**Título (H1)**
-**texto:** 'Origem'
- 
-**Blocos textuais e mídias**
-**Títulos (H1) e conteúdo (H3)**
+**Título (H1):**
+```
+Origem
+```
 
-  - Bloco A: **Título(H1):** O QUE PERMANECE  (bluePrimary)
-**conteúdo (H3)**
+**Blocos:**
+
+**1. O QUE PERMANECE** (H1, `bluePrimary`)
+```
 Desde cedo, sempre prestei atenção no que ficava —
 não só no que aparecia.
 
 Enquanto muitos olhavam para o brilho imediato,
 eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo.
 A essência das coisas sempre falou mais alto do que a superfície.
+```
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.1.webp`
+- Texto: alinhado à direita, -10% vertical
 
-(mídia: ‘https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-1.webp’)
-  - texto **alinhado à direita do bloco**  dentro do bloco. (`#fcffff`)
-  - Verticamente posicionado **ligeiramente acima do centro** (≈ -10%).
-⸻
-
-  - Bloco B: **Título(H1):** DO TRAÇO À INTENÇÃO  (bluePrimary)
-**conteúdo (H3)**
+**2. DO TRAÇO À INTENÇÃO** (H1, `bluePrimary`)
+```
 Rabiscos viraram ideias.
 Ideias viraram projetos.
 E os projetos começaram a deixar rastros.
@@ -572,14 +520,12 @@ Meu processo criativo nasceu do improviso, do lápis na margem do caderno.
 Aos poucos, aquilo que era instinto virou direção.
 Com cada tentativa, aprendi a dar forma ao invisível —
 até que os conceitos começaram a falar por si.
+```
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.2.webp`
+- Texto: alinhado à esquerda, -10% vertical
 
-(mídia: ‘https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-2.webp’)
-  - texto **alinhado à esquerda do bloco**  dentro do bloco. (`#fcffff`)
-  - Verticamente posicionado **ligeiramente acima do centro** (≈ -10%).
-⸻
-
-  - Bloco C: **Título(H1):** A DESCOBERTA DO INVISÍVEL  (bluePrimary)
- **conteúdo (H3)**
+**3. A DESCOBERTA DO INVISÍVEL** (H1, `bluePrimary`)
+```
 Foi ali que entendi:
 design não é enfeite.
 É ferramenta invisível de transformação.
@@ -589,15 +535,12 @@ Descobri que o design verdadeiro não grita — ele conduz.
 Ele está presente nos detalhes que ninguém percebe,
 mas que todos sentem.
 Transformar sem que se perceba a transformação: isso é potência.
+```
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.3.webp`
+- Texto: alinhado à direita, -10% vertical
 
-(mídia: ‘https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-3.webp’)
-
-  - texto **alinhado à direita do bloco**  dentro do bloco. (`#fcffff`)
-  - Verticamente posicionado **ligeiramente acima do centro** (≈ -10%).
-⸻
-
-  - Bloco D: **Título(H1):** EXPANSÃO COM PROPÓSITO  (bluePrimary)
-**conteúdo (H3)**
+**4. EXPANSÃO COM PROPÓSITO** (H1, `bluePrimary`)
+```
 Estudei Comunicação, mergulhei no design, no branding
 e hoje uso inteligência artificial para expandir o alcance
 sem perder a essência humana da criação.
@@ -606,394 +549,431 @@ Minha trajetória uniu intuição com método, arte com estratégia.
 O futuro pede novas ferramentas — e eu as abracei.
 Mas nunca deixei que a tecnologia apagasse o que me move:
 a sensibilidade, o olhar atento, a busca pelo significado.
+```
+- **Imagem:** `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/origin/about.origin_image.4.webp`
+- Texto: alinhado à esquerda, -10% vertical
 
-(mídia: ‘https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/sobre-4.webp’)
+#### Animação GSAP
 
-  - texto **alinhado à esquerda do bloco**  dentro do bloco. (`#fcffff`)
-  - Verticamente posicionado **ligeiramente acima do centro** (≈ -10%).
-⸻
----
+**Desktop (Pin + Mask Reveal):**
 
-### 3. 🎨 Identidade Visual
+```tsx
+gsap.timeline({
+  scrollTrigger: { 
+    pin: ".arch__right", 
+    scrub: true,
+    start: "top top",
+    end: "bottom bottom"
+  }
+})
+.to(imgAtual, { 
+  clipPath: "inset(0 0 100%)",
+  duration: 1
+})
+.to(imgProxima, { 
+  objectPosition: "0px 40%",
+  duration: 1
+}, "<");
+```
+
+**Especificações:**
+- `clipPath: "inset(0 0 100%)"` → `inset(0)`
+- Object position: `0% 0%` → `60%` (atual) + `40%` (próxima)
+- Transição BG: `#040013` → `#0a001a` (duration: 1.5s)
+- Blur/Focus: `blur(4px)` → `blur(0px)` + `opacity: 0.85→1`
+
+**Mobile (Parallax):**
+- `objectPosition: 60% → 30%` por imagem
+- Trigger: Intersection Observer
+
+#### Identidade Visual
 
 | Elemento | Especificação |
 |----------|---------------|
-| **Cores** | `#040013` (bg inicial) → `#0a001a` (transição scroll), `#fcffff` (texto), `bluePrimary` (H1) |
-| **Tipografia** | **Outfit**: H1 `800` (32-48px), H3 `400` (16-20px), `line-height: 1.6` |
-| **Imagens** | `object-fit: cover`, `blur(4px)` inicial, `opacity: 0.85` → `1` on reveal |
-| **Espaçamentos** | Container `1440px`, gap `60px`, padding `2rem` |
-| **Bordas** | Imagens `border-radius: 24px` |
+| Cores | `#040013` → `#0a001a`, `#fcffff` (texto), `bluePrimary` (H1) |
+| Tipografia | TT Norms Pro: H1 800 (32-48px), H3 400 (16-20px), line-height: 1.6 |
+| Espaçamentos | Container 1440px, gap 60px, padding 2rem |
+| Bordas | `border-radius: 24px` |
+
+#### Responsividade
+
+| Breakpoint | Comportamento |
+|------------|---------------|
+| < 560px | Stack vertical, imgs 280px, container padding 10px |
+| 560–768px | Stack, imgs 360px, gap 20px |
+| 769–1024px | 2-col, right flexível, gap 30px |
+| 1024px+ | Pin completo, textos 356px fixos, max-width 1100px |
+| > 1440px | Container limitado, centralizado |
+
+#### Acessibilidade
+
+- Semântica: `<section class="origem-criativa">` + H1 por bloco
+- ALT texts descritivos (ex: "O que permanece - essência que sobrevive...")
+- Contraste: 21:1 (`#fcffff` sobre `#040013`)
+- Navegação por teclado nativa
+- `prefers-reduced-motion` support
+- SEO: H1 único "Origem" + H3s hierárquicos
+- Performance: `loading="lazy"`, GPU `transform`/`clip-path`
 
 ---
 
-### 4. 💫 Interatividade & Animações
+# **4. O Que Eu Faço
 
-**🛠️ Stack:** `GSAP 3.13 + ScrollTrigger + Lenis`
+**Função:** Transformar serviços em sequência visual progressiva com animação horizontal guiada pelo scroll.
 
-| Animação | Trigger | Detalhes |
-|----------|---------|----------|
-| **Pin + Mask Reveal** | `scrollTrigger: { pin: ".arch__right" }` | `clipPath: "inset(0 0 100%)"` → `inset(0)` |
-| **Transição BG** | Scroll progress | `#040013` → `#0a001a` (`duration: 1.5`) |
-| **Object Position** | Por imagem | `0% 0%` → `60%` (atual) + `40%` (próxima) |
-| **Blur/Focus** | Sync com reveal | `blur(4px)` → `blur(0px)` + `opacity: 0.85→1` |
-| **Mobile Parallax** | `@media (max-width: 768px)` | `objectPosition: 60%→30%` por imagem |
+**Referência:** https://codepen.io/luis-lessrain/pen/dPPOGaZ
 
-**Código chave:**
-```tsx
-gsap.timeline({
-  scrollTrigger: { pin: ".arch__right", scrub: true }
-}).to(imgAtual, { clipPath: "inset(0 0 100%)" })
-  .to(imgProxima, { objectPosition: "0px 40%" });
-```
+#### Identidade Visual
 
----
-
-### 5. 📱 Responsividade
-
-| Breakpoint | Comportamento | Ajustes |
-|------------|---------------|---------|
-| **<560px** | Stack vertical, imgs 280px | Container padding 10px |
-| **560-768px** | Stack, imgs 360px | Gap 20px |
-| **769-1024px** | 2-col, right flexível | Gap 30px |
-| **1024px+** | **Pin completo**, textos 356px fixos | Max-width 1100px |
-| **>1440px** | Container limitado | Centralizado |
-
-**Mobile ordering:** `texto.order=0, imagem.order=1` (CSS `order`)
-
----
-
-### 6. ♿ Acessibilidade & SEO
-
-| Item | Implementação |
-|------|---------------|
-| **Semântica** | `<section class="origem-criativa">` + `H1` por bloco |
-| **ALT texts** | `"O que permanece - essência que sobrevive..."` (descritivo) |
-| **Contraste** | **21:1** (`#fcffff` sobre `#040013`) |
-| **Teclado** | Scroll nativo + `prefers-reduced-motion` |
-| **SEO** | H1 único "Origem" + H3s hierárquicos |
-| **Performance** | `loading="lazy"`, GPU `transform`/`clip-path` |
-
----
-
-### 7. 🔌 Integrações ou Recursos Especiais
-
-| Recurso | Status | Detalhes |
-|---------|--------|----------|
-| **Carrossel/Slider** | Não | ScrollTrigger substitui |
-| **API** | Não | 4 URLs Supabase estáticas |
-| **Formulários** | Não | |
-| **Smooth Scroll** | ✅ **Lenis** | `raf()` loop com `ScrollTrigger.update()` |
-| **MatchMedia** | ✅ | Desktop pin vs Mobile parallax |
-
----
-
-### 8. ⚙️ Considerações Técnicas
-
-| Item | Detalhamento |
-|------|--------------|
-| **Renderização** | **`'use client'`** (GSAP não SSR) |
-| **Reutilização** | **Componente completo** + `useMaskReveal` hook |
-| **Next.js** | **App Router** (`useEffect`, `useRef`) |
-| **Fallbacks** | `prefers-reduced-motion`, erro img → placeholder |
-| **Performance** | **RAF loop**, `matchMedia`, lazy loading |
-| **Cleanup** | `ScrollTrigger.revert()`, `lenis.destroy()` |
-| **Bundle** | GSAP tree-shakeable + Lenis minified |
-
----
-
-## ✅ Checklist Técnico Preenchido
-
-✔ **GSAP mask reveal** pinned com 4 imagens  
-✔ **Posicionamento texto** exato (-10% vertical)  
-✔ **Mobile ordering** automático  
-✔ **Cores/typo** 100% spec  
-✔ **Acessibilidade** AAA  
-✔ **Next.js production-ready**  
-✔ **Smooth 60fps** scroll experience
-### 🧠 **Componente Principal:**
-
-
----
-
-
-
-
-# 🟣 SEÇÃO 03 — O QUE EU FAÇO - AboutWhatIDo
-### AboutWhatIDo -  Desktop & Mobile Scroll Animation
-
-Este documento descreve o **ajuste técnico, visual e conceitual** da **3ª sessão** da página  
-https://portfoliodanilo.com/sobre
-
-Referência de animação:  
-https://codepen.io/luis-lessrain/pen/dPPOGaZ
-
----
-
-## 🎯 Objetivo da Sessão
-Transformar **serviços/capabilities** em uma sequência visual clara, progressiva e silenciosa,  
-com **animação horizontal guiada pelo scroll**.
-
-- Desktop → **blocos**
-- Mobile → **barras**
-- Movimento: **direita → esquerda**
-- Origem **sempre fora da tela**, partindo da **extremidade lateral direita**
-- Finalização com **rodapé animado (marquee / ghost design)**
-
----
-
-## 🎨 Identidade Visual
 | Elemento | Cor |
-|--------|------|
-| Fundo da seção | `#040013` |
-| Blocos / Barras | `#0048ff` |
+|---------|------|
+| Fundo | `#040013` |
+| Cards | `#0048ff` |
 | Texto | `#ffffff` |
 | Numeração | `#8705f2` |
 
----
+### 1. Título
 
-## 🧠 Princípio de Motion
-- Movimento horizontal progressivo
-- Nenhum fade brusco ou pop-in
-- Sincronizado ao scroll (desktop)
-- Entrada por viewport (mobile)
-- Sempre respeitar `prefers-reduced-motion`
+- Posicionado no topo da seção, centralizado.
+- Duas linhas:
 
----
+  - text:
+  Do insight ao impacto.
+  Mesmo quando você não percebe.
 
-## 🖥️ Desktop (≥ 1024px)
+    •    Tipografia
+    •    font-display para titulo e font-h2 para subtitulo
+    •    font-size: 44–48px
+    •    line-height: 1.2
+    •    Cores
+    •    Linha 1:
+    •    “Do” / “ao impacto.” → branco (#FFFFFF)
+    •    “insight” / “impacto” → azul primário (primary)
+    •    Linha 2 → branco (#FFFFFF)
+    •    Espaçamentos
+    •    Margem superior: 64–80px em relação ao início da seção.
+    •    Margem inferior: 48–64px até o início dos cards.
+    •    max-width do bloco de título: 800px, centralizado.
 
-### Layout
+⸻
+
+
+#### Desktop (≥ 1024px)
+
+**Layout:**
 - Altura: ~100vh
-- Container central:
-  - max-width: 1200px
-  - padding-inline: 32px
-- Cards em **linha única (flex-row)**
-- 7 blocos, sem wrap
+- Container: max-width 1440px, padding conforme grid system
+- Cards em linha única (`flex-row`)
+- 7 blocos sem wrap
 
-### Cards
-- min-height: 140px
-- padding: 24px
-- border-radius: 16px
-- background: `#0048ff`
-- display: flex
-- align-items: center
-- gap interno: 16px
+**Composição:**
 
-### Numeração
-- Fonte grande
+```tsx
+<section className="w-full min-h-screen bg-background py-24">
+  <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
+    <div className="flex flex-row gap-6 overflow-x-auto scrollbar-hide">
+      {services.map((service, index) => (
+        <article 
+          key={index}
+          className="min-w-[320px] min-h-[140px] bg-bluePrimary rounded-2xl p-6 flex items-center gap-4"
+        >
+          <span className="text-4xl font-black text-[#8705f2]">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <p className="text-body text-white">
+            <strong className="text-blueAccent">{service.keyword}</strong>
+            {service.description}
+          </p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+```
+
+**Cards:**
+- Min-width: 320px
+- Min-height: 140px
+- Padding: 24px
+- Border-radius: 16px
+- Background: `#0048ff`
+- Display: flex, align-items: center
+- Gap interno: 16px
+
+**Numeração:**
 - Cor: `#8705f2`
 - Peso: 800
+- Display inline ou prefix
 
-### Animação (Scroll Driven)
+**Animação (Scroll Driven):**
 - Origem X: `+120vw`
 - Destino X: `0`
 - Opacidade: `0 → 1`
 - Stagger: `0.06s`
-- Trigger: entrada da seção no viewport
-- Técnica recomendada:
-  - `GSAP + ScrollTrigger` **ou**
-  - `Framer Motion + useScroll`
+- Técnica: GSAP + ScrollTrigger ou Framer Motion + useScroll
 
----
+```tsx
+// GSAP Implementation
+gsap.from(".service-card", {
+  x: "120vw",
+  opacity: 0,
+  stagger: 0.06,
+  scrollTrigger: {
+    trigger: ".services-section",
+    start: "top center",
+    end: "bottom center",
+    scrub: 1
+  }
+});
+```
 
-## 📱 Mobile (≤ 768px)
+#### Mobile (≤ 768px)
 
-### Layout
+**Layout:**
 - Coluna vertical
 - Gap: 12px
-- Cards ocupam 100% da largura
+- Cards 100% largura
 
-### Barras
-- Altura menor (70–90px)
-- padding: 18px
-- border-radius: 12px
+**Composição Mobile:**
 
-### Animação (Viewport-based)
+```tsx
+<section className="w-full bg-background py-16">
+  <div className="max-w-[1680px] mx-auto px-6">
+    <div className="flex flex-col gap-3">
+      {services.map((service, index) => (
+        <article 
+          key={index}
+          className="w-full min-h-[80px] bg-bluePrimary rounded-xl p-5 flex items-center gap-3"
+        >
+          <span className="text-2xl font-black text-[#8705f2]">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <p className="text-sm text-white">
+            <strong className="text-blueAccent">{service.keyword}</strong>
+            {service.description}
+          </p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+```
+
+**Barras:**
+- Altura: 70–90px
+- Padding: 18px
+- Border-radius: 12px
+
+**Animação (Viewport-based):**
 - Origem X: `+80px`
 - Destino X: `0`
 - Duração: `0.4s`
 - Delay progressivo por índice
 - Trigger: Intersection Observer
 
----
+```tsx
+// Framer Motion Implementation
+<motion.article
+  initial={{ x: 80, opacity: 0 }}
+  whileInView={{ x: 0, opacity: 1 }}
+  transition={{ duration: 0.4, delay: index * 0.1 }}
+  viewport={{ once: true }}
+>
+  {/* Card content */}
+</motion.article>
+```
 
-## 🧾 Conteúdo dos Cards
-1. **Direção** criativa que organiza o caos  
-2. **Design** estratégico que guia decisões  
-3. **Identidades** que permanecem na memória  
-4. **Campanhas** multicanais com lógica e emoção  
-5. **Branding** que não grita — mas marca  
-6. **Inteligência Artificial** aplicada à criação  
-7. **Liderança Criativa** com visão e método  
+#### Conteúdo
 
-Regra:
-- Palavra-chave inicial em azul claro
-- Complemento em branco
+1. **Direção** criativa que organiza o caos
+2. **Design** estratégico que guia decisões
+3. **Identidades** que permanecem na memória
+4. **Campanhas** multicanais com lógica e emoção
+5. **Branding** que não grita — mas marca
+6. **Inteligência Artificial** aplicada à criação
+7. **Liderança Criativa** com visão e método
 
----
+**Regra:** Palavra-chave inicial em `blueAccent`, complemento em branco.
 
----
+#### Acessibilidade
 
-## ♿ Acessibilidade
-- `<h2>` para o título
-- Cards como `<article>` com `aria-label`
-- Marquee com `aria-hidden="true"`
-- Contraste AA/AAA
-- Navegação por teclado
+- `<h2>` para título da seção
+- Cards como `<article>` com `aria-label` descritivo
+- Contraste AA/AAA verificado
+- Navegação por teclado funcional
+- `prefers-reduced-motion` respeitado
 
----
+#### Notas Técnicas
 
-## 🧩 Notas Técnicas
-- Usar `transform: translateX()`
-- `will-change: transform`
-- Evitar sombras pesadas
+- Usar `transform: translateX()` para performance
+- `will-change: transform` apenas durante animação
+- Evitar sombras pesadas (performance mobile)
 - Animações suaves (ease: linear / easeOut)
 - Código modular (AboutWhatIDo.tsx isolado)
 
 ---
 
+# **5. Como Eu Trabalho
 
+**Função:** Gerar confiança racional através do método. Mostrar que criatividade é suportada por processo.
 
+#### Desktop
 
-# 🟣 SEÇÃO 04 — COMO EU TRABALHO - About Method
+**Layout:**
+- Altura: ~120vh
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/AboutMethod.mp4`
+  - `object-fit: cover`, 100% largura/altura
+  - Loop contínuo, sem controles
+- Overlay: gradiente linear
+  - Esquerda (texto): `rgba(10, 10, 20, 0.85)`
+  - Direita (visual): `rgba(10, 10, 20, 0.4)`
+- Grid 12 colunas (max-width: 1440px)
+  - Coluna conteúdo (esquerda): colunas 2–7
+  - Área visual (direita): colunas 8–12
 
-**Função:** Gerar confiança racional através do método.  
-Mostra que a criatividade é suportada por processo.
+**Composição Grid:**
 
----
+```tsx
+<section className="relative w-full min-h-[120vh]">
+  {/* Vídeo Background */}
+  <video 
+    className="absolute inset-0 w-full h-full object-cover"
+    src="..."
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
+  
+  {/* Overlay Gradient */}
+  <div className="absolute inset-0 bg-gradient-to-r from-[rgba(10,10,20,0.85)] via-[rgba(10,10,20,0.65)] to-[rgba(10,10,20,0.4)]" />
+  
+  {/* Container Grid */}
+  <div className="relative max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 py-24">
+    <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-8">
+      {/* Conteúdo - Esquerda */}
+      <div className="col-span-4 md:col-span-8 lg:col-span-7 flex flex-col justify-center">
+        {/* Título, texto, lista */}
+      </div>
+      
+      {/* Área Visual - Direita */}
+      <div className="hidden lg:block lg:col-span-5" />
+    </div>
+  </div>
+</section>
+```
 
-## Layout — Desktop
-
-### Estrutura Geral
-- **Altura alvo:** ≈120vh (permite scroll se necessário).
-- **Fundo:**
-  - Vídeo abstrato/IA full-bleed: `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/AboutMethod.mp4`
-  - `object-fit: cover`, ocupando 100% de largura e altura da seção
-  - **Overlay:** com gradiente linear
-    - Mais opaco na área de texto (esquerda): `rgba(10, 10, 20, 0.85)`
-    - Mais transparente na área visual (direita): `rgba(10, 10, 20, 0.4)`
-  - Vídeo em loop contínuo, sem controles
-
-### Grid & Composição
-- Container de 12 colunas, max-width ≈ 1200px
-- **Coluna de conteúdo (esquerda):** colunas 2–7
-  - Padding vertical: 80–100px
-  - Padding lateral: 32–40px
-- **Área visual (direita):** colunas 8–12
-  - Vídeo/ghost aparece com mais clareza
-  - Sem texto sobreposto
-
-### Título
-- Alinhado à esquerda - versão desktop
+**Título:**
+- Alinhado à esquerda
 - Duas linhas:
-  - "**Criatividade** com **método**." (criatividade e método em `primary`)
-  - "**Impacto** sem **ruído**." (impacto em branco, ruído levemente dimmed)
-- Font-size: 44–52px
+  - "**Criatividade** com **método**."
+  - "**Impacto** sem **ruído**."
+- Destaques: "criatividade", "método" em `bluePrimary`
+- Font-size: 44–52px (clamp)
 - Line-height: 1.15
 - Font-weight: 700
 - Margin-bottom: 32–40px
 
-### Texto Introdutório
-- Três frases em parágrafos separados ou quebras de linha
+**Texto Introdutório:**
+- Três frases em parágrafos separados
 - Font-size: 18–20px
 - Line-height: 1.6
-- Font-weight: 400
 - Opacity: 0.9
 - Max-width: 520px
 - Margin-bottom: 48–56px
 
-### Lista de Processo
-- **6 itens** em blocos horizontais/verticais
-- Cada item estruturado como card:
-  - **Fundo:** `rgba(26, 26, 46, 0.7)` ou `rgba(255, 255, 255, 0.05)` com backdrop-filter blur
-  - **Borda esquerda:** 3px sólida em `primary`
-  - **Padding:** 20–24px
-  - **Margin-bottom:** 16–20px
-  - **Border-radius:** 6–8px
+**Lista de Processo:**
+- 6 itens em cards verticais
 
-**Estrutura de cada item:**
-- **Índice:** `01`–`06` em `primary`, font-size 16–18px, font-weight 700, display inline ou como prefix
-- **Texto:** em branco, font-size 16–18px, font-weight 400, line-height 1.5
-- Spacing entre índice e texto: 12–16px
+```tsx
+<div className="space-y-5">
+  {processItems.map((item, index) => (
+    <div 
+      key={index}
+      className="bg-surface/70 backdrop-blur-md border-l-4 border-bluePrimary rounded-lg p-6"
+    >
+      <span className="text-lg font-bold text-bluePrimary mr-4">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span className="text-body text-white">
+        {item.text}
+      </span>
+    </div>
+  ))}
+</div>
+```
 
----
+**Especificações do Card:**
+- Fundo: `rgba(26, 26, 46, 0.7)` com `backdrop-filter: blur(12px)`
+- Borda esquerda: 4px sólida em `bluePrimary`
+- Padding: 20–24px
+- Margin-bottom: 16–20px
+- Border-radius: 6–8px
+- Índice em `bluePrimary` (01–06)
+- Texto em branco
 
-## Layout — Mobile
+#### Mobile
 
-### Fundo
-- vídeo `https://aymuvxysygrwoicsjgxj.supabase.co/storage/v1/object/public/sobre_page/aboutmetodo-mob.mp4`
-- **Position:** `object-position: right center` **sem Overlay:** 
-- gradiente vertical (no fim do video)
-- Vídeo em loop contínuo, sem controles
+**Layout:**
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/aboutmetodo-mob.mp4`
+  - `object-position: right center`
+  - Gradiente vertical no fim
+  - Sem overlay pesado
+- 1 coluna, padding px-6
+- Conteúdo iniciando no meio do vídeo para baixo
 
-### Estrutura
-- **1 coluna**, largura 100%
-- Padding lateral: 20–24px
-- Padding vertical: 60–80px
+**Composição Mobile:**
 
-### Conteúdo iniciando no meio do video para baixo
-- **Título:**
-  - Centralizado
-  - Font-size: 32–36px
-  - Margin-bottom: 24–32px
+```tsx
+<section className="relative w-full min-h-screen">
+  {/* Vídeo Background */}
+  <video 
+    className="absolute inset-0 w-full h-full object-cover object-right"
+    src="..."
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
   
-- **Texto introdutório:**
-  - Centralizado
-  - Font-size: 16–17px
-  - Max-width: 100%
-  - Margin-bottom: 40–48px
-  - Frases podem estar em linha contínua ou separadas com `<br/>`
+  {/* Gradient Overlay (bottom only) */}
+  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
+  
+  {/* Conteúdo */}
+  <div className="relative px-6 py-20 flex flex-col justify-end min-h-screen">
+    <div className="text-center space-y-8">
+      {/* Título */}
+      <h2 className="text-h2">...</h2>
+      
+      {/* Texto intro */}
+      <p className="text-body">...</p>
+      
+      {/* Lista */}
+      <div className="space-y-4">
+        {/* Cards */}
+      </div>
+    </div>
+  </div>
+</section>
+```
 
-- **Lista:**
-  - 6 itens empilhados verticalmente
-  - Cada card com:
-    - Fundo mais sólido: `rgba(26, 26, 46, 0.85)`
-    - Padding: 16–20px
-    - Margin-bottom: 14–16px
-    - Borda esquerda mantida
+**Título:**
+- Centralizado
+- Font-size: 32–36px
+- Margin-bottom: 24–32px
 
-### Ghost/IA Visual
-- sem overlay do vídeo de fundo, utilizar formato real do video, com o titulo e subtitulo centralizados alinhado ao centro do video
-- **Nunca competindo** com legibilidade do texto
+**Texto introdutório:**
+- Centralizado
+- Font-size: 16–17px
+- Margin-bottom: 40–48px
 
+**Lista:**
+- Cards empilhados
+- Fundo: `rgba(26, 26, 46, 0.85)` (mais sólido)
+- Padding: 16–20px
+- Margin-bottom: 14–16px
 
-
----
-
-## Responsividade Detalhada
-
-### Small (`sm`: 640px–767px)
-- 1 coluna
-- Título: 30–32px
-- Texto intro: 15–16px
-- Lista ocupa 100% da largura
-- Spacing vertical entre cards: 14–16px
-
-### Medium (`md`: 768px–1023px)
-- 1 coluna
-- Título: 36–40px
-- Texto intro: 17–18px
-- Cards com max-width: 90%
-- Padding container: 24–28px
-
-### Large (`lg`: 1024px–1279px)
-- **2 blocos visuais:**
-  - Texto: colunas 1–7
-  - Vídeo visível: colunas 8–12
-- Título: 42–46px
-- Lista com max-width: 75% da área de texto
-- Cards com largura limitada para manter legibilidade
-
-### Extra Large (`xl`: 1280px+)
-- Grid: colunas 2–7 para texto, 8–12 para vídeo
-- Título: 48–52px
-- Texto intro: 19–20px
-- Cards: max-width ≈ 560px
-- Mais respiro horizontal e vertical
-
----
-
-## Conteúdo dos 6 Itens
+#### Conteúdo da Lista
 
 1. **01** | Briefings bem construídos para decisões claras
 2. **02** | Estratégia como base de qualquer criação
@@ -1002,288 +982,1448 @@ Mostra que a criatividade é suportada por processo.
 5. **05** | IA e automações para escalar com qualidade
 6. **06** | Métricas criativas: engajamento, retenção e resultado
 
----
-
-## Interação & Motion
-
-### Background Video descktop
-- **Parallax ultra sutil** (opcional):
-  - `translateY` de -20px a 20px no scroll
-  - Apenas se `prefers-reduced-motion: no-preference`
-- Vídeo em loop contínuo
-- Sem controles, muted, autoplay
-
-### Animação de Entrada (Scroll)
+#### Animação
 
 **Título:**
-- `opacity: 0 → 1`
-- `filter: blur(8px) → blur(0)`
-- `translateY: 30px → 0`
-- Duration: 0.8s
-- Easing: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`
+```tsx
+<motion.h2
+  initial={{ opacity: 0, filter: "blur(8px)", y: 30 }}
+  whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+  transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+  viewport={{ once: true }}
+>
+  {/* Conteúdo */}
+</motion.h2>
+```
 
 **Texto introdutório:**
-- Mesma animação do título
-- Delay: 0.2s após título
+- Mesma animação, delay 0.2s
 
-**Lista de processo:**
-- Cada card entra individualmente
-- **Stagger:** 0.12s entre itens
-- Animação:
-  - `opacity: 0 → 1`
-  - `translateX: -20px → 0`
-  - Duration: 0.5s
-  - Easing: `ease-out`
-- Delay inicial: 0.4s após texto introdutório
+**Lista:**
+```tsx
+{processItems.map((item, index) => (
+  <motion.div
+    key={index}
+    initial={{ opacity: 0, x: -20 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    transition={{ 
+      duration: 0.5, 
+      delay: 0.4 + (index * 0.12),
+      ease: "easeOut"
+    }}
+    viewport={{ once: true }}
+  >
+    {/* Card */}
+  </motion.div>
+))}
+```
 
-### Estados de Hover (Desktop)
+**Hover (Desktop):**
+```tsx
+<motion.div
+  whileHover={{
+    opacity: 1,
+    x: 4,
+    borderLeftWidth: "4px",
+    transition: { duration: 0.3 }
+  }}
+  className="opacity-90"
+>
+  {/* Card */}
+</motion.div>
+```
 
-**Cards da lista:**
-- **Default:** opacity 0.9
-- **Hover:**
-  - Opacity: 1.0
-  - Borda esquerda: 3px → 4px
-  - `translateX: 0 → 4px` (deslocamento sutil para direita)
-  - Backdrop blur aumenta levemente
-- Transition: 0.3s ease
+#### Responsividade
 
-### Acessibilidade
-- **prefers-reduced-motion:**
-  - Sem parallax
-  - Sem translateY/translateX
-  - Apenas fade-in instantâneo (0.2s)
-  - Sem stagger perceptível
+| Breakpoint | Ajustes |
+|------------|---------|
+| 640–767px | Título 30–32px, texto 15–16px, lista 100% |
+| 768–1023px | Título 36–40px, texto 17–18px, cards max-w-90% |
+| 1024–1279px | Grid 2 blocos (1-7 texto, 8-12 vídeo), título 42–46px |
+| 1280px+ | Grid otimizado 2–7 texto, 8–12 vídeo, título 48–52px |
+
+#### Acessibilidade
+
+**prefers-reduced-motion:**
+```css
+@media (prefers-reduced-motion: reduce) {
+  .method-title,
+  .method-card {
+    animation: none !important;
+    transition: opacity 0.2s !important;
+    transform: none !important;
+  }
+}
+```
+
+- Contraste WCAG AA mínimo verificado
+- Z-index stack: vídeo (1), overlay (2), conteúdo (3)
+- Navegação por teclado
+- Semântica: `<section>`, `<h2>`, `<ul>`, `<li>`
 
 ---
 
-## Notas de Implementação
 
-### Vídeo
-- Formato: MP4, WebM como fallback
-- Compressão otimizada para web
-- Resolução: 1920x1080 mínimo
-- Duração: 10–20s em loop
-- Considerar poster frame para carregamento inicial
 
-### Performance
-- Lazy load do vídeo se fora do viewport inicial
-- Usar Intersection Observer para animações
-- Considerar `will-change: transform, opacity` nos elementos animados
+# **6. O Que Me Move - About Biliefed
 
-### Overlay
-- Usar `::before` ou `::after` no container da seção
-- Position: absolute, z-index entre vídeo e conteúdo
-- Background: `linear-gradient(90deg, rgba(10,10,20,0.85) 0%, rgba(10,10,20,0.4) 100%)`
 
-### Contraste
-- Garantir WCAG AA mínimo em todo texto
-- Testar legibilidade em diferentes dispositivos
-- Ajustar overlay se necessário
-
-### Z-index Stack
-1. Vídeo: `z-index: 1`
-2. Overlay: `z-index: 2`
-3. Conteúdo: `z-index: 3`
+## 1. Objetivo da Página/Sessão
+- [ ] **Qual a principal função desta página/sessão?**  
+      Gerar vínculo emocional através de um manifesto pessoal, mostrando a visão de design do Danilo de forma íntima, sensível e memorável, conectando o visitante com o “porquê” por trás do trabalho.
+- [ ] **Qual ação o usuário deve realizar aqui?**  
+      Sentir identificação com o manifesto, reforçar confiança no estilo/abordagem do estúdio e seguir naturalmente o fluxo da página até as seções de prova social (clientes) e contato, mais propenso a entrar em contato ou continuar explorando.
+- [ ] **Como essa seção contribui para os objetivos do site?**  
+      Consolida a identidade do “Ghost Design” como conceito autoral, diferencia o estúdio pelo posicionamento emocional e prepara o usuário para enxergar o resto do site (cases, serviços, contato) sob essa lente de conexão, não apenas estética.
 
 ---
 
-## Variações de Implementação
+## 2. Estrutura de Conteúdo
+- [ ] **Título principal (headline)**  
+      - Texto:  
+        > “Acredito no **design que muda o dia** de alguém.  
+        > Não pelo choque, **mas pela conexão.**”  
+      - Sempre visível (sticky), funciona como “âncora” conceitual da sessão.
 
-### Opção 1: Vídeo Full-bleed (Recomendada)
-- Vídeo ocupa toda seção
-- Conteúdo em primeiro plano com overlay
-- Melhor impacto visual
+- [ ] **Subtítulo ou descrição**  
+      - Não há subtítulo textual explícito; o “subtexto” é construído pela sequência de frases rotativas e pelo manifesto final “ISSO É GHOST DESIGN.”  
 
-### Opção 2: Split Screen
-- Desktop: 50/50 texto/vídeo
-- Mobile: vídeo como background fixo
-- Mais tradicional, menos imersivo
+- [ ] **Elementos visuais (imagens, ícones, vídeos)**  
+      - Fantasma 3D (Ghost) central, renderizado com React Three Fiber + Drei.  
+      - Ghost fica **centrado acima do texto** nas fases de manifesto, flutuando de forma contínua.  
+      - O fantasma nunca para completamente:  
+        - Flutuação leve e constante.  
+        - Ganha velocidade e inclinação suave conforme o cursor se move e conforme o usuário rola a página.  
+        - Responde de forma fluida e etérea, como se “sentisse” o toque/scroll.  
+        - Entra junto com a **primeira frase** da área de manifesto e permanece centralizado na sessão.  
+        - Quando a **última frase** entra, ele cresce ~10% de escala e fica visivelmente mais animado (mais wobble/tilt e resposta mais intensa ao scroll).  
+      - No final, o manifesto “ISSO É / GHOST DESIGN.” sela o conceito ao lado/abaixo do Ghost, mantendo o layout original de grid/coluna como referência visual.
 
-### Opção 3: Vídeo como Card
-- Vídeo contido em card à direita
-- Mais controle, menos dramático
-- Útil se performance for crítica
+- [ ] **Chamada para ação (CTA)**  
+      - CTA implícito (emocional): reforçar a percepção de valor do estúdio.  
+      - Não há botão direto aqui; o CTA funcional acontece em seções posteriores (Clientes/Contato), mas essa sessão prepara o usuário emocionalmente para clicar lá.
 
-**Escolha baseada em:** performance do dispositivo, largura de banda esperada, e direção de arte geral do site.
+- [ ] **Texto de apoio (parágrafos, bullets, etc.)**  
+      - **Frases rotativas (manifesto em camadas):**
+        1. “Um vídeo que **respira**.”
+        2. “Uma marca que se **reconhece**.”
+        3. “Um detalhe que **fica**.”
+        4. “**Crio** para gerar presença.”
+        5. “**Mesmo** quando não estou ali.”
+        6. “**Mesmo** quando ninguém percebe o esforço.”
+      - Palavras-chave destacadas em `bluePrimary` e negrito, reforçando os conceitos centrais: respira, reconhece, fica, crio, mesmo…
+      - Manifesto final:  
+        > ISSO É  
+        > GHOST DESIGN.
+
+- [ ] **Layout desejado (colunas, cards, seções com fundo alternado, etc.)**  
+      - **Desktop:**
+        - Altura total da sessão: ~140vh.  
+        - Fundo base: `#040013` (mapeado como `bg-background`).  
+        - Container de conteúdo em 12 colunas (`max-width ~1440–1680px`, centrado, com `px-6 md:px-12 lg:px-16 xl:px-24`).  
+        - Estrutura em 3 momentos:
+          1. **Título Fixo** com layout de colunas 2–10, centralizado, `mt ~10–12vh` e `mb ~8–10vh`, `position: sticky` no topo (`top-24`).  
+          2. **Área de Frases Rotativas** centralizada em blocos, com Ghost 3D centrado acima do texto, ambos dentro de uma área de altura mínima (`min-h-[40vh]`) para criar respiro visual.  
+          3. **Reveal Final — Ghost + Manifesto**  
+             - Grid `grid-cols-12` com gap generoso (ex: `gap-12`).  
+             - Ghost em destaque (pode permanecer central, mas alinhado à esquerda do manifesto conforme layout original).  
+             - Manifesto “ISSO É GHOST DESIGN.” ocupando colunas equivalentes a metade do grid, com tipografia grande e impactante.
+
+      - **Mobile:**
+        - Layout em 1 coluna (`flex-col`), padding `px-6`, altura flexível (>120vh).  
+        - Ordem: título → frases rotativas + ghost → manifesto final.  
+        - Ghost centralizado acima do manifesto no eixo vertical.
+
+---
+
+## 3. Identidade Visual
+- [ ] **Cores usadas**  
+      - Fundo base: `#040013` (`bg-background`).  
+      - Acentos principais:  
+        - `bluePrimary` (azul real) — usado para realçar palavras-chave e o trecho “GHOST DESIGN”.  
+      - Transições de fundo durante o manifesto podem seguir uma paleta inspirada no sistema de crenças, por exemplo:  
+        ```ts
+        COLORS = [
+          'bg-bluePrimary',      // Azul Real
+          'bg-purpleDetails',    // Roxo Vibrante
+          'bg-pinkDetails',      // Rosa Choque
+          'bg-bluePrimary',      // Azul Real
+          'bg-purpleDetails',    // Roxo Vibrante
+        ];
+        ```  
+      - Essas cores podem ser usadas para **fades suaves de BG** sincronizados com a troca de frases, reforçando a sensação de fluxo.
+
+- [ ] **Tipografia (fontes e pesos)**  
+      - Headline e manifesto:  
+        - Fonte display (ex: `font-display` ou `font-black`).  
+        - `font-weight: 900` nas chamadas principais.  
+        - Tamanhos com `clamp`, por exemplo:  
+          - Desktop headline: `clamp(2.5rem, 5vw + 1rem, 5.5rem)`  
+          - Manifesto final: entre `text-[42px]` (mobile) e `text-[64px]`+ (desktop).  
+      - Frases rotativas:  
+        - `font-weight: 500`  
+        - Tamanho entre `32–38px` no desktop; `22–26px` no mobile.
+
+- [ ] **Ícones ou gráficos customizados**  
+      - Ghost 3D (releitura do “Ghost w/ Tophat” em GLB, estilizado para o universo Ghost Design).  
+      - Olhar/rotação do Ghost transmite “atenção” ao usuario (leve inclinação reagindo ao mouse/scroll).
+
+---
+
+## 4. Interatividade & Animações
+- [ ] **Animações de entrada/scroll (Framer Motion ou GSAP)**  
+      - Título fixo: fade-in com blur suave na entrada (ex: `opacity: 0 → 1`, `blur(10px) → blur(0px)` em ~1.2s, ease curva customizada).  
+      - Frases rotativas:  
+        - Cada frase entra de baixo (`y: 20 → 0`), aumenta opacidade, remove blur.  
+        - Sai para cima (`y: 0 → -20`) com blur.  
+        - Ciclo total de ~4.2s por frase (entrada, permanência, saída, pausa).  
+      - Reveal final (Ghost + manifesto):  
+        - Container entra com `opacity: 0 → 1`, `y: 40 → 0`.  
+        - Pode ser via `whileInView` ou sincronizado com scrollYProgress.
+
+- [ ] **Hover effects / microinterações**  
+      - Ghost reage sutilmente quando o usuário passa o mouse próximo ou sobre ele (wobble leve, micro tilt).  
+      - Textos-chave em `bluePrimary` podem ter micro animação (leve glow ou sublinhado animado) em hover sem virar distração.
+
+- [ ] **Comportamentos especiais com o mouse ou touch**  
+      - Ghost 3D:
+        - Flutuação padrão contínua (como no tutorial de “3D glass effect” do Olivier Larose, referência de suavidade e fluidez).  
+        - **Mouse move (desktop):**  
+          - Ghost inclina levemente (rotationX/rotationZ) e desloca posição x/y seguindo o cursor de forma amortecida (LERP), nunca brusca.  
+        - **Touch (mobile/tablet):**  
+          - Resposta baseada em scroll/posição do dedo; não precisa de hover, mas pode intensificar a animação quando o usuário interage com a área.  
+
+- [ ] **Animações vinculadas ao scroll (scroll sync)**  
+      - Ghost sincronizado com `scrollYProgress` da sessão:
+        - Rotação lenta no eixo Y enquanto o usuário percorre a sessão.  
+        - Para `scrollProgress > ~0.8` (entrada da última frase / manifesto final):  
+          - Aumenta escala ~10% (1.0 → 1.1).  
+          - Ganha wobble extra (oscilações adicionais baseadas em tempo + scroll).  
+          - Aproxima levemente no eixo Z para sensação de “chegar mais perto”.  
+      - Fundo (BG) pode interpolar entre cores da paleta `COLORS` conforme o progresso das frases, com animações suaves (ease bezier).
+
+---
+
+## 5. Responsividade
+- [ ] **Comportamento no mobile**  
+      - Layout em coluna única, tudo centralizado.  
+      - Ghost centralizado, com tamanho entre `200–240px`.  
+      - Título ~28–34px; frases ~22–26px; manifesto final ~36–42px.  
+      - Interações orientadas a scroll em vez de hover; animação do Ghost responde mais ao `scrollYProgress` do que ao mouse.
+
+- [ ] **Comportamento no tablet**  
+      - Transição gradual de 1 para 2 colunas no reveal final.  
+      - Ghost entre `220–260px`.  
+      - Tipografia intermediária: título 34–38px, frases 24–28px, manifesto 40–46px.  
+
+- [ ] **Comportamento no desktop**  
+      - Título sticky no topo (colunas 2–10).  
+      - Área de frases com Ghost 3D centralizada.  
+      - Reveal final em grid 2 colunas (Ghost + Manifesto) mantendo o layout original da referência.  
+      - Ghost entre `320–380px` no desktop grande.
+
+- [ ] **Ajustes específicos para telas grandes ou pequenas**  
+      - Telas muito grandes (1440px+): aumentar levemente spacing vertical entre blocos e máximo de fonte do manifesto.  
+      - Telas muito pequenas (<360px): reduzir margens verticais e fontes levemente para evitar quebra em excesso.
+
+---
+
+## 6. Acessibilidade & SEO
+- [ ] **Tags semânticas corretas (h1, h2, etc.)**  
+      - Sessão envolta em `<section>` com `aria-labelledby` apontando para o título.  
+      - Título principal da sessão como `<h2>` (assumindo que o `<h1>` já existe no topo da página).  
+      - Frases e manifesto como `<p>` e `<h3>` conforme a hierarquia.
+
+- [ ] **Imagens com ALT**  
+      - Ghost 3D deve ter descrição acessível (por exemplo, via `aria-label` no container da cena 3D):  
+        - `"Ilustração 3D de um fantasma estilizado representando o conceito Ghost Design."`
+
+- [ ] **Contraste adequado**  
+      - Texto branco sobre fundo `#040013` + acentos em `bluePrimary` → garantir contraste AA/AAA.  
+      - Evitar texto em `purpleDetails` ou `pinkDetails` diretamente sobre azul sem checar contraste.
+
+- [ ] **Navegabilidade por teclado**  
+      - A seção é principalmente de leitura; mas o container 3D não pode “travar” o foco.  
+      - Garantir que a cena 3D não capture tab-focus de forma desnecessária.  
+      - Se houver controles, devem ser alcançáveis e visíveis.
+
+- [ ] **Meta tags e estrutura amigável para buscadores**  
+      - Descrição da página (em outra camada SEO) pode mencionar “Manifesto Ghost Design, crenças e visão de projeto de Danilo Novais”.  
+      - Estrutura de headings coerente ajuda motores de busca a entenderem que esta é a seção de manifesto/valores.
+
+---
+
+## 7. Integrações ou Recursos Especiais
+- [ ] **Componentes dinâmicos? (Ex: carrossel, tabs, sliders)**  
+      - Frases rotativas implementadas como componente controlado por estado (timer com `setInterval` / `setTimeout`).  
+      - Cena 3D do Ghost como componente separado (`<GhostModel />`) reutilizável.
+
+- [ ] **Dados vindos de API?**  
+      - Não há dependência obrigatória de API nessa sessão.  
+      - Tudo pode ser estático, com assets carregados via Supabase Storage / CDN.
+
+- [ ] **Formulários? (Campos, validação, envio)**  
+      - Nenhum formulário nesta sessão.
+
+- [ ] **Outros?**  
+      - Integração com Supabase Storage apenas para servir o modelo GLB do Ghost (e possíveis texturas).  
+      - Uso de Drei (`<Float />`, `<Environment />`) para suavizar implementação da cena 3D.
+
+---
+
+## 8. Considerações Técnicas
+- [ ] **Componente client/server?**  
+      - Sessão “About Beliefs” precisa ser **client component** (`'use client'`) porque:
+        - Usa Framer Motion (`useScroll`, `useTransform`, `AnimatePresence`).  
+        - Renderiza React Three Fiber (R3F) e listeners de mouse/scroll.
+
+- [ ] **Reutilização em outras páginas?**  
+      - Ghost 3D (`<GhostModel />`) deve ser isolado em componente próprio para reaproveitar em outras sessões (hero, transições, etc.).  
+      - A lógica de frases rotativas pode ser extraída para um hook (`useRotatingPhrases`) ou componente genérico.
+
+- [ ] **Divisão modular no projeto (Next.js - App Router)?**  
+      - Estrutura sugerida:
+        - `app/(site)/about/_sections/AboutBeliefs.tsx` (wrapper da sessão).  
+        - `app/(site)/about/_sections/components/BeliefTitle.tsx` (título fixo).  
+        - `app/(site)/about/_sections/components/BeliefPhrases.tsx` (frases + lógica de rotação).  
+        - `app/(site)/about/_sections/components/BeliefFinalManifest.tsx` (Ghost + manifesto final).  
+        - `shared/3d/GhostModel.tsx` (componente R3F para o fantasma).
+
+- [ ] **Algum fallback necessário?**  
+      - Fallback de loading para o modelo 3D (ex.: skeleton ou placeholder geométrico) enquanto o GLB é carregado.  
+      - Em navegadores que não suportam WebGL, exibir uma versão estática (SVG/PNG) do Ghost.
+
+- [ ] **Animações controladas via hook?**  
+      - Sim:
+        - Hook para controle de frases (`useRotatingPhrases`).  
+        - Hook para sincronizar `scrollYProgress` com Ghost e BG (`useBeliefsScrollSync`).  
+        - Hook (ou lógica interna) para capturar `mousemove` no canvas e aplicar LERP em posição/rotação do Ghost.
+
+---
 
 
+# **SEÇÃO 07 — FECHAMENTO / CONFIRMAÇÃO**
 
-
-# 🟣 SEÇÃO 05 — O QUE ME MOVE
-
-**Função:** Criar vínculo emocional e manifesto.  
-Momento mais íntimo, quase carta aberta com narrativa sequencial.
+**Função:** Convite claro e humano.  
+Conectar narrativa com ação, sem agressividade.
 
 ---
 
 ## Layout — Desktop
 
 ### Estrutura Geral
-- **Altura alvo:** ≈140vh (permite scroll para acomodar a sequência animada).
-- **Fundo:** `backgroundDark` (#040013).
-- **Grid:**
-  - Container de 12 colunas, max-width ≈ 1200px
-  - Área de conteúdo: colunas 2–12
+- **Altura alvo:** 80–100vh
+- **Fundo:** `backgroundDark` (#040013)
+- **Container:** 12 colunas, max-width ≈ 1120px
+- **Padding vertical:** 80–100px
+- **Padding lateral:** 32–40px
 
-### Composição Visual
+### Composição
 
-**Seção dividida em 3 momentos:**
+#### Área de Conteúdo (Centralizada)
+- Colunas 3–11
+- Display: flex, flex-direction: column, align-items: center
+- Text-align: center
 
-#### 1. Título Fixo (Sempre visível no topo)
-- Posicionamento: colunas 2–10, centralizado horizontalmente
-- Permanece fixo durante toda a sequência
-- Margin-top: 10–12vh
-- Margin-bottom: 8–10vh
+#### Título Principal
+- Primeira linha com destaque em `primary`
+- Margin-bottom: 32–40px
 
 **Texto:**
-> Acredito no **design que muda o dia** de alguém.  
-> Não pelo choque, **mas pela conexão.**
+> Hoje sou **Diretor de Criação**,  
+> com mais de **10 anos de estrada**.
 
 **Estilo:**
-- Font-size: Display Black
-- Line-height: 1.2
+- Font-size: 40–48px
+- Line-height: 1.25
 - Font-weight: 700
-- Palavras em `primary`: "design que muda o dia" e "mas pela conexão"
-- Max-width: 900px
-- Text-align: center
+- "Diretor de Criação" e "10 anos de estrada" em `primary`
+- Max-width: 800px
 
-#### 2. Área de Frases Rotativas (Centro da tela)
-- Posicionamento: colunas 3–11
-- Min-height: 40vh (espaço para frases transitarem)
-- Display: flex, justify-content: center, align-items: center
+#### Parágrafos de Contexto
+- Dois blocos de texto
+- Spacing entre blocos: 24–32px
+- Margin-bottom total: 48–56px
 
-**Frases que alternam (uma por vez):**
-1. "Um vídeo que **respira**."
-2. "Uma marca que se **reconhece**."
-3. "Um detalhe que **fica**."
-4. "**Crio** para gerar presença."
-5. "**Mesmo** quando não estou ali."
-6. "**Mesmo** quando ninguém percebe o esforço."
+**Bloco 1:**
+> Já liderei marcas, agências, eventos  
+> e **criei experiências** para todos os canais.
 
-**Estilo de cada frase:**
-- Font-size: 32–38px
-- Line-height: 1.4
-- Font-weight: 500
-- Palavras em `primary` destacadas em negrito
-- Text-align: center
+**Bloco 2:**
+> Agora, quero criar algo que permaneça —  
+> **com você**.
+
+**Estilo:**
+- Font-size: 20–24px
+- Line-height: 1.5
+- Font-weight: 400
+- Opacity: 0.92
+- "criei experiências" e "com você" em `primary`
 - Max-width: 700px
-- Opacity transition entre frases
 
-#### 3. Reveal Final — Ghost + Manifesto
-- Aparece após todas as frases rotativas
-- Posicionamento: colunas 2–12
-- Layout: Grid 2 colunas (desktop)
-  - Coluna esquerda (6 cols): Ghost animado
-  - Coluna direita (6 cols): Texto "ISSO É GHOST DESIGN"
+#### CTAs (Call-to-Actions)
+- Layout: flex row, gap 20–24px
+- Alinhamento: center
+- Margin-top: 56–64px
 
-**Ghost:**
-- Max-width: 320–380px
-- Centralizado verticalmente com o texto
-- Implementa animação de olhos seguindo cursor (código existente)
+**Botão 1: "fale comigo"**
+- Primary button style
+- Background: `primary` (#5B5FFF)
+- Color: white
+- Padding: 16–20px 36–44px
+- Border-radius: 50px (pill shape)
+- Font-size: 16–18px
+- Font-weight: 600
+- Ícone: seta diagonal (arrow-up-right) à direita do texto
 
-**Texto "ISSO É GHOST DESIGN":**
-- Alinhamento: à esquerda ou centralizado com o Ghost
-- Font-size: 56–64px
-- Line-height: 1.1
-- Font-weight: 700
-- "GHOST DESIGN" em `primary`
-- "ISSO É" em branco
+**Botão 2: "baixar curriculum"**
+- Secondary/Ghost button style
+- Background: transparent
+- Border: 2px solid `primary`
+- Color: `primary`
+- Padding: 16–20px 36–44px
+- Border-radius: 50px
+- Font-size: 16–18px
+- Font-weight: 600
+- Ícone: seta diagonal (arrow-up-right) à direita do texto
 
 ---
 
 ## Layout — Mobile
 
 ### Estrutura
-- **1 coluna**, padding lateral: 20–24px
-- **Altura:** Flexível, >120vh
+- **1 coluna**, largura 100%
+- **Padding lateral:** 20–24px
+- **Padding vertical:** 60–80px
+- **Altura:** Flexível
 
-### Título Fixo
-- Centralizado, margin-top: 8vh
+### Conteúdo
+
+#### Título Principal
+- Centralizado
 - Font-size: 28–34px
-- Max-width: 100%
-- Margin-bottom: 6–8vh
-- Quebras de linha ajustadas para mobile:
-  - "Acredito no **design que muda o dia** de alguém."
-  - "Não pelo choque, **mas pela conexão.**"
+- Line-height: 1.3
+- Margin-bottom: 24–28px
+- Quebras de linha ajustadas:
+  - "Hoje sou **Diretor de Criação**,"
+  - "com mais de **10 anos de estrada**."
 
-### Área de Frases Rotativas
-- Min-height: 35vh
-- Font-size: 22–26px
+#### Parágrafos
+- Font-size: 17–19px
+- Line-height: 1.6
+- Spacing entre blocos: 20–24px
+- Margin-bottom: 40–48px
 - Max-width: 100%
-- Padding: 0 16px
-- Frases permanecem centralizadas
 
-### Reveal Final
-- **Layout em coluna** (não mais grid)
-- **Ghost primeiro:**
-  - Centralizado
-  - Max-width: 200–240px
-  - Margin-bottom: 32–40px
-- **Texto "ISSO É GHOST DESIGN":**
-  - Centralizado
-  - Font-size: 36–42px
-  - Line-height: 1.15
-  - Quebra de linha opcional:
-    - "ISSO É"
-    - "GHOST DESIGN."
+#### CTAs
+- **Layout:** flex column (empilhados verticalmente)
+- **Gap:** 16px
+- **Largura:** 100% cada botão (max-width: 320px opcional)
+- **Order:**
+  1. "fale comigo" (primary)
+  2. "baixar curriculum" (secondary)
+
+**Estilo dos botões (mobile):**
+- Padding: 14–16px 28–32px
+- Font-size: 15–16px
+- Mantém pill shape
 
 ---
 
 ## Responsividade Detalhada
 
 ### Small (`sm`: 640px–767px)
-- Título fixo: 28–30px
-- Frases rotativas: 20–22px
-- Ghost: 180–200px
-- Texto final: 32–36px
+- Título: 28–30px
+- Texto: 16–17px
+- CTAs empilhados, largura 100%
+- Gap entre CTAs: 14px
 
 ### Medium (`md`: 768px–1023px)
-- Título fixo: 34–38px
-- Frases rotativas: 24–28px
-- Ghost: 220–260px
-- Texto final: 40–46px
-- Considerar layout em coluna ainda
+- Título: 32–36px
+- Texto: 18–20px
+- CTAs ainda empilhados ou começam a ficar lado a lado
+- Max-width dos botões: 280px cada
 
 ### Large (`lg`: 1024px–1279px)
-- **Transição para grid 2 colunas no reveal final**
-- Título fixo: 40–44px
-- Frases rotativas: 30–34px
-- Ghost: 280–320px
-- Texto final: 48–54px
+- **CTAs lado a lado** (flex row)
+- Título: 38–42px
+- Texto: 20–22px
+- Gap entre CTAs: 20px
 
 ### Extra Large (`xl`: 1280px+)
-- Título fixo: 48–52px
-- Frases rotativas: 36–38px
-- Ghost: 320–380px
-- Texto final: 60–64px
-- Max respiro entre elementos
+- Título: 44–48px
+- Texto: 22–24px
+- Gap entre CTAs: 24px
+- Máximo respiro e espaçamento
 
 ---
 
-## Animação & Sequência Temporal
+## Comportamento dos Botões
 
-### Timing da Sequência
+### Estados
 
-**Fase 1: Título Fixo (0s)**
-- Fade-in ao carregar a seção
-- Permanece visível durante toda a experiência
-- Animação inicial:
-  - `opacity: 0 → 1`
-  - `filter: blur(10px) → blur(0)`
-  - Duration: 1.2s
-  - Easing: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`
+**Default:**
+- Primary: background `primary`, color white
+- Secondary: border `primary`, color `primary`, background transparent
 
-**Fase 2: Frases Rotativas (Início após 1.5s)**
+**Hover (Desktop):**
+- **Primary:**
+  - Background: lighten `primary` em 8–10%
+  - Transform: `translateY(-2px)`
+  - Box-shadow: `0 8px 20px rgba(91, 95, 255, 0.3)`
+- **Secondary:**
+  - Background: `rgba(91, 95, 255, 0.1)`
+  - Border-color: lighten `primary` em 10%
+  - Transform: `translateY(-2px)`
+- **Transition:** 0.3s ease
+- **Cursor:** pointer
 
-Cada frase tem um ciclo de:
-- **Entrada:** 0.8s
-- **Permanência:** 2.5s
-- **Saída:** 0.6s
-- **Pausa entre frases:** 0.3s
+**Active:**
+- Transform: `translateY(0)`
+- Transition mais rápida: 0.15s
 
-**Total por frase:** ≈4.2s  
-**Total de 6 frases:** ≈25s
+**Focus (Acessibilidade):**
+- Outline: 3px solid `primary` com offset 3px
+- Sem remoção do outline padrão
 
-**Animação de cada frase:**
+**Disabled (se aplicável):**
+- Opacity: 0.5
+- Cursor: not-allowed
+- Sem hover effects
+
+### Ícones
+- **Biblioteca:** Lucide React ou similar
+- **Nome:** `ArrowUpRight`
+- **Size:** 18–20px
+- **Position:** à direita do texto com margin-left: 8–10px
+- **Animação no hover:** 
+  - Ícone: `translate(2px, -2px)` (movimento diagonal)
+  - Duration: 0.3s
+
+---
+
+## Interação & Motion
+
+### Animação de Entrada (Scroll)
+
+**Título:**
+- Trigger: 20% da seção no viewport
+- `opacity: 0 → 1`
+- `translateY: 30px → 0`
+- `filter: blur(8px) → blur(0)`
+- Duration: 0.8s
+- Easing: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`
+
+**Parágrafos:**
+- Delay: 0.2s após título
+- Mesma animação do título
+- Duration: 0.7s
+
+**CTAs:**
+- Delay: 0.3s após parágrafos
+- `opacity: 0 → 1`
+- `translateY: 20px → 0`
+- Stagger: 0.1s entre botões
+- Duration: 0.6s
+- Easing: ease-out
+
+### Sensação de "Respirar"
+- **Sem loops ou animações contínuas**
+- Uma vez que entra, permanece estático
+- Apenas hover effects nos botões
+- Movimento só retorna ao scroll
+
+### prefers-reduced-motion
+- Todas as animações reduzidas para fade-in simples
+- Duration: 0.3s
+- Sem translateY ou blur
+- Sem stagger
+
+---
+
+## Hierarquia Visual & Fluxo
+
+### Sequência de Leitura
+1. **Título** → estabelece credibilidade ("Diretor de Criação, 10 anos")
+2. **Experiência** → valida através de histórico
+3. **Proposta** → convite pessoal ("com você")
+4. **Ação** → CTAs claros e acessíveis
+
+### Linha Horizontal (Opcional)
+- Entre título e parágrafos
+- Ou acima/abaixo da seção
+- Width: 100% do container ou 60%
+- Height: 1px
+- Color: `rgba(255, 255, 255, 0.1)`
+- Margin: 40–48px vertical
+
+---
+
+## Conteúdo dos CTAs
+
+### Botão 1: "fale comigo"
+- **Ação:** Scroll suave até seção de contato (formulário)
+- **Comportamento:** 
+  - `document.querySelector('#contato').scrollIntoView({ behavior: 'smooth' })`
+  - Ou abre modal de contato
+  - Ou link mailto (menos recomendado)
+
+### Botão 2: "baixar curriculum"
+- **Ação:** Download direto do CV em PDF
+- **Comportamento:**
+  - `<a href="/path/curriculum.pdf" download="GhostDesign_Curriculum.pdf">`
+  - Ou abre em nova aba: `target="_blank" rel="noopener noreferrer"`
+- **Analytics:** Track download event
+
+---
+
+## Seções Subsequentes
+
+Após esta seção, na ordem:
+
+1. **Marcas / Clientes** (fundo escuro mantido ou transição gradual)
+2. **Contato** (formulário em fundo claro — contraste forte)
+3. **Footer** (retorna ao fundo escuro)
+
+### Transição para Seção de Marcas
+- Padding-top generoso: 80–120px
+- Pode ter linha divisória sutil
+- Mantém fundo escuro ou inicia transição gradual
+
+---
+
+## Notas de Implementação
+
+### Acessibilidade
+- Heading hierarchy: `<h2>` para título principal
+- Botões com `aria-label` descritivos se necessário
+- Focus visible em todos os elementos interativos
+- Contraste mínimo AA/AAA
+
+### Performance
+- Lazy load de assets se fora do viewport inicial
+- Intersection Observer para animações
+- `will-change` apenas durante animações
+
+### Analytics
+- Track impressions da seção
+- Track clicks em cada CTA
+- Track downloads do curriculum
+- Eventos: `section_view`, `cta_click`, `cv_download`
+
+### SEO
+- Conteúdo semântico bem estruturado
+- Texto alternativo em ícones (se relevante)
+- Schema.org markup para pessoa/profissional (opcional)
+
+---
+
+## Variações Opcionais
+
+### Versão com Linha do Tempo
+- Adicionar mini timeline visual de carreira
+- Apenas se não interferir na simplicidade
+
+### Versão com Depoimento
+- Quote curto de cliente/parceiro
+- Posicionado entre parágrafos e CTAs
+- Estilo ghost/sutil
+
+### Versão com Social Proof
+- Logos pequenos de 3-5 marcas principais
+- Acima ou abaixo dos CTAs
+- Escala de cinza, opacity 0.6
+
+**Recomendação:** manter versão minimal e direta conforme especificado inicialmente.
 
 
+
+------
+
+
+🎬 **MOTION TOKENS (RESUMO)**  
+- Duração padrão: `0.9s`  
+- Duração longa: `1.4–1.6s`  
+- Delay padrão: `0.2–0.4s`  
+- Easing principal: `cubic-bezier(0.22, 1, 0.36, 1)` (`ghostIn`)  
+- Escala: **proibida**  
+- Bounce: **proibido**  
+- Rotate: **proibido**  
+- Opacity nunca é brusca.  
+- Imagens nunca chegam a 100% — usar máx `0.85–0.9`.
+
+---
+
+📱 **BREAKPOINTS (COMPORTAMENTO NA /SOBRE)**  
+
+| Breakpoint | Min width | Regra principal                                             |
+|------------|-----------|-------------------------------------------------------------|
+| sm         | 640px     | Fonte maior, 1 coluna em todas as seções                   |
+| md         | 768px     | Ainda 1 coluna; ajustes de respiro e hierarquia            |
+| lg         | 1024px    | Layout completo com colunas duplas onde previsto           |
+| xl         | 1280px    | Mais respiro lateral e grids de 3 colunas (listas)         |
+
+*Mapeamento técnico: ver tokens breakpoints na Parte 2.*
+
+---
+
+🚫 **REGRAS ABSOLUTAS — PÁGINA /SOBRE**  
+❌ Texto diretamente sobre imagem/vídeo sem overlay escuro 80%+  
+❌ Blur excessivo que prejudique leitura  
+❌ Scale / bounce / rotate em conteúdo  
+
+✅ **Exceções controladas:**  
+- Hero (texto sobre vídeo com overlay sólido).  
+- Seção 04 (texto em card escuro sobre vídeo).  
+- Alternância fluida desktop texto ↔ mídia  
+- Mobile-first (texto sempre antes da imagem)  
+- Ritmo frase ↔ imagem, sem colagens visuais.
+
+---
+
+🧩 **EXPERIÊNCIA FINAL (NARRATIVA)**  
+O usuário não percebe a técnica.  
+Não vê o esforço.  
+Não sente ruído.  
+
+Mas sente presença.  
+Sente fluidez.  
+Sente confiança.  
+
+Isso é o protótipo interativo da página SOBRE.
+
+---
+
+---
+
+## **PARTE 2 — DESIGN SYSTEM TÉCNICO (IMPLEMENTAÇÃO)**
+
+🧠 **GHOST DESIGN SYSTEM — TÉCNICO**  
+_Tokens + Componentes_  
+portifoliodanilo.com  
+
+### 1. VISÃO GERAL  
+Ghost Design é um sistema silencioso de interface.  
+Ele prioriza:  
+- Presença sem ruído  
+- Movimento como respiração  
+- Design como guia invisível  
+
+Este documento é a fonte técnica oficial para design, frontend e motion.
+
+### 2. DESIGN TOKENS  
+#### 2.1 Color Tokens  
+```ts
+export const colors = {
+  primary: '#0048ff',
+  accent: '#4fe6ff',
+  ghostPurple: '#8705f2',
+  background: '#000022',
+  backgroundDark: '#040013',
+  backgroundLight: '#f0f0f0',
+  textPrimary: '#fcffff',
+  textSecondary: '#a1a3a3',
+  textInverse: '#0e0e0e',
+  neutral: '#0b0d3a',
+  neutralLight: '#F5F5F5',
+};
+```
+
+#### 2.2 Typography Tokens  
+```ts
+export const typography = {
+  fontFamily: {
+    primary: '"Inter", system-ui, sans-serif',
+  },
+  fontSize: {
+    xs: '12px',
+    sm: '14px',
+    md: '16px',
+    lg: '20px',
+    xl: '28px',
+    xxl: '40px',
+    display: '56px',
+  },
+  fontWeight: {
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+  },
+  lineHeight: {
+    tight: 1.2,
+    normal: 1.5,
+    relaxed: 1.7,
+  },
+};
+```
+
+#### 2.3 Spacing Tokens  
+```ts
+export const spacing = {
+  xs: '4px',
+  sm: '8px',
+  md: '16px',
+  lg: '24px',
+  xl: '40px',
+  xxl: '64px',
+  section: '120px',
+};
+```
+
+#### 2.4 Motion Tokens (CRÍTICO)  
+```ts
+export const motion = {
+  duration: {
+    fast: '0.6s',
+    base: '0.9s',
+    slow: '1.4s',
+  },
+  delay: {
+    none: '0s',
+    short: '0.2s',
+    base: '0.4s',
+    long: '1s',
+  },
+  easing: {
+    ghost: 'cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+};
+```
+
+**🚫 Proibido:**  
+- scale  
+- bounce  
+- rotate  
+
+**Permitido:**  
+- opacity  
+- blur  
+- translateY (máx 18px)  
+
+### 3. COMPONENTES BASE  
+#### 3.1 `<GhostText />`  
+_Uso: Manifestos, frases-chave_  
+```tsx
+<GhostText as="p" delay={0.4}>
+  Você não vê tudo o que eu faço.
+</GhostText>
+```  
+**Comportamento**  
+- Fade + blur.  
+- Entrada por tempo ou viewport.  
+- Nunca reanima depois de visível.  
+
+#### 3.2 `<GhostHeading />`  
+```tsx
+<GhostHeading level="h1">
+  Sou Danilo Novais.
+</GhostHeading>
+```  
+- Alinhamento fluido.  
+- Peso médio.  
+- Tracking negativo leve.  
+
+#### 3.3 `<GhostSection />`  
+_Wrapper padrão de seção._  
+```tsx
+<GhostSection height="100vh">
+  {children}
+</GhostSection>
+```  
+**Regras**  
+- Uma seção = uma intenção.  
+- Nunca empilhar múltiplas animações diferentes na mesma área.  
+
+#### 3.4 `<GhostList />`  
+```tsx
+<GhostList
+  items={[
+    'Direção criativa que organiza o caos',
+    'Design estratégico que guia decisões',
+  ]}
+/>
+```  
+- Entrada item a item.  
+- Stagger fixo: 0.18s.  
+- Hover só altera opacity/cor do texto.  
+
+#### 3.5 `<GhostMedia />`  
+```tsx
+<GhostMedia type="video" src="/sobre/AI.mp4" />
+```  
+**Regras**  
+- Opacity máx 0.85.  
+- Blur permanente sutil.  
+- Nunca texto diretamente sobre a mídia; se houver, usar overlay sólido.  
+
+#### 3.6 `<GhostCTA />`  
+```tsx
+<GhostCTA href="/contato">
+  Fale comigo
+</GhostCTA>
+```  
+- Sem glow exagerado.  
+- Hover silencioso (opacity/cor).  
+- Sempre com tom humano, nunca agressivo.  
+
+### 4. LAYOUT SYSTEM  
+#### 4.1 Grid Invisível  
+**Desktop (lg+)**  
+- 12 colunas virtuais.  
+- Texto tipicamente em colunas 2–7.  
+- Mídia em colunas 8–12.  
+
+**Mobile (sm / md)**  
+- 1 coluna.  
+- Texto sempre antes da imagem/vídeo.  
+
+*Objetivo: o usuário não percebe o grid, apenas o ritmo.*
+
+#### 4.2 Section Heights  
+
+| Tipo        | Altura alvo |
+|-------------|-------------|
+| Hero        | 100vh       |
+| Conteúdo    | 120–140vh   |
+| Fechamento  | 80–100vh    |
+
+*Valores são referências, não travas rígidas. A prioridade é fluxo narrativo.*
+
+#### 4.3 Layout Responsivo por Seção  
+- **Seção 01**  
+  - Mobile: 1 coluna, texto centralizado.  
+  - Desktop: texto à direita sobre vídeo com overlay.  
+- **Seção 02 (Origem)**  
+  - Mobile: blocos texto → mídia empilhados.  
+  - Desktop: alternância texto ↔ mídia em 2 colunas.  
+- **Seção 03 (O que eu faço)**  
+  - Mobile: lista em 1 coluna.  
+  - Desktop: grid de 2–3 colunas de cards.  
+- **Seção 04 (Como eu trabalho)**  
+  - Mobile: texto em faixa escura sobre vídeo recortado (lado direito).  
+  - Desktop: texto à esquerda, vídeo/ghost em evidência à direita.  
+- **Seção 05 (O que me move)**  
+  - Mobile: texto centralizado + ghost abaixo.  
+  - Desktop: texto à esquerda, ghost à direita.  
+- **Seção 06 (Fechamento)**  
+  - Mobile: CTAs empilhados.  
+  - Desktop: CTAs lado a lado, com texto central.  
+
+### 5. BREAKPOINTS (TÉCNICO)  
+```ts
+export const breakpoints = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+};
+```
+
+### 6. ACESSIBILIDADE & PERFORMANCE  
+- Respeitar `prefers-reduced-motion` em todas as animações.  
+- Nenhuma animação rodando fora do viewport.  
+- **Vídeos:**  
+  - `loading="lazy"` (quando possível).  
+  - `muted`, `autoplay`, `loop`.  
+- Sem re-render em scroll contínuo:  
+  - Usar observers (`IntersectionObserver`) em vez de listeners de scroll diretos.  
+- Contraste sempre AA+:  
+  - Especialmente em hero e seção 04 (texto sobre vídeo com overlay).  
+
+### 7. REGRAS ABSOLUTAS DO SISTEMA  
+❌ Texto direto sobre imagem/vídeo sem overlay  
+❌ Animações chamativas (glow, bounce, scale)  
+❌ Motion decorativo desconectado da narrativa  
+
+✅ Ritmo  
+✅ Silêncio  
+✅ Presença  
+
+### 8. MANIFESTO TÉCNICO  
+O melhor design:  
+- não explica  
+- não chama atenção  
+- não se impõe  
+
+Ele permanece.  
+
+Isso é Ghost Design System.
+
+🧩 **REGRA FINAL**  
+Se algo:  
+- não está aqui  
+- não respeita este documento  
+- ou altera o ritmo Ghost  
+
+➡ É BUG.  
+
+Ghost Design não é estilo.  
+É comportamento.
+
+
+
+### Checklist de Acessibilidade
+
+**Antes do Deploy:**
+
+- [ ] Contraste de cores validado (WCAG AA/AAA)
+- [ ] Navegação completa por teclado (Tab, Enter, Esc, Setas)
+- [ ] Hierarquia semântica correta (H1 único, sequência H2-H6)
+- [ ] ALT texts descritivos em todas as imagens
+- [ ] `aria-label` em elementos interativos sem texto
+- [ ] `prefers-reduced-motion` implementado
+- [ ] Focus visível em todos os elementos interativos
+- [ ] Testado com screen reader (NVDA/JAWS/VoiceOver)
+- [ ] Zoom 200% sem quebra de layout
+- [ ] Landmarks semânticos (`<main>`, `<nav>`, `<section>`)
+- [ ] Vídeos com `aria-hidden` quando decorativos
+- [ ] Formulários com labels associados
+- [ ] Skip links para navegação rápida
+
+----
+
+## Observações Finais
+
+### Fonte Única da Verdade
+
+Este documento consolida **TODO** o conteúdo da página /sobre. Nenhuma decisão fora deste documento é válida sem atualização prévia deste arquivo.
+
+### Princípios de Implementação
+
+1. **Mobile-first:** começar pela menor tela, expandir progressivamente
+2. **Progressive enhancement:** funcionalidade básica primeiro, melhorias depois
+3. **Performance:** lazy load, GPU transforms, otimização de assets
+4. **Modularidade:** componentes reutilizáveis e isolados
+5. **Manutenibilidade:** código limpo, comentado, documentado
+6. **Acessibilidade:** WCAG AA mínimo, AAA preferencial
+
+### Stack Técnica Recomendada
+
+**Framework & Ferramentas:**
+- **Framework:** Next.js 14+ (App Router)
+- **Linguagem:** TypeScript
+- **Animações:** Framer Motion 11+, GSAP 3.13+ + ScrollTrigger
+- **Smooth Scroll:** Lenis
+- **Styling:** Tailwind CSS 3.4+
+- **Fonts:** Self-hosted (TT Norms Pro)
+- **Assets:** Supabase Storage
+- **Otimização de Imagens:** Next/Image com sharp
+
+**Estrutura de Pastas:**
+
+```
+/app
+  /sobre
+    page.tsx
+    /components
+      Header.tsx
+      Hero.tsx
+      OrigemCriativa.tsx
+      AboutWhatIDo.tsx
+      AboutMethod.tsx
+      AboutBeliefs.tsx
+      Footer.tsx
+    /lib
+      animations.ts
+      gsap-config.ts
+    layout.tsx
+
+
+### Performance Targets
+
+| Métrica | Target | Ferramenta |
+|---------|--------|------------|
+| Lighthouse Performance | ≥ 90 | Lighthouse |
+| First Contentful Paint (FCP) | < 1.8s | PageSpeed Insights |
+| Largest Contentful Paint (LCP) | < 2.5s | PageSpeed Insights |
+| Cumulative Layout Shift (CLS) | < 0.1 | PageSpeed Insights |
+| Time to Interactive (TTI) | < 3.8s | PageSpeed Insights |
+| Total Blocking Time (TBT) | < 200ms | Lighthouse |
+
+**Otimizações críticas:**
+- Lazy load de vídeos fora do viewport
+- Preload de fontes críticas
+- Code splitting por seção
+- Compressão de imagens (WebP com fallback)
+- Minificação de CSS/JS
+- CDN para assets estáticos
+
+### Versionamento
+
+**Formato:** Semantic Versioning (MAJOR.MINOR.PATCH)
+
+- **MAJOR:** Mudanças estruturais na página
+- **MINOR:** Novas seções ou funcionalidades
+- **PATCH:** Correções e ajustes
+
+**Changelog:**
+```
+v1.0.0 (2026-01-13)
+- Lançamento inicial da documentação completa
+- Design System unificado
+- Grid system otimizado (4/8/12 colunas)
+- 6 seções principais documentadas
+- Especificações de acessibilidade WCAG AA/AAA
+```
+
+### Contato e Manutenção
+
+**Responsável:** Danilo Novais  
+**Domínio:** portifoliodanilo.com  
+**Última atualização:** Janeiro 2026  
+**Próxima revisão:** Trimestral
+
+---
+
+**Documento oficial — Página Sobre**  
+**Ghost Design — presença que guia sem aparecer**
+
+
+## **Ghost Interativo**
+---
+
+## Responsividade
+
+### Variações por Dispositivo
+
+**Filosofia:** Mobile-first com expansão progressiva
+
+#### Desktop (≥ 1024px)
+
+**Características:**
+- Grid 12 colunas (max-width: 1440–1680px)
+- Espaço negativo como elemento ativo do Ghost Design
+- Seções em 2 colunas (texto ↔ mídia)
+- Vídeos/imagens com opacidade reduzida e overlays
+- Animações complexas (parallax, scroll-driven)
+
+**Composição Grid Desktop:**
+```tsx
+<section className="w-full">
+  <div className="max-w-[1680px] mx-auto px-16 xl:px-24 py-24">
+    <div className="grid grid-cols-12 gap-8">
+      {/* Conteúdo distribuído em 12 colunas */}
+    </div>
+  </div>
+</section>
+```
+
+#### Tablet (768px–1023px)
+
+**Características:**
+- Transição suave entre layouts
+- Grid 8 colunas
+- Conteúdos densos mantêm 1 coluna
+- Listas/grids começam divisão 2 colunas
+- Foco em legibilidade
+
+**Composição Tablet:**
+```tsx
+<section className="w-full">
+  <div className="max-w-[1680px] mx-auto px-12 py-20">
+    <div className="grid grid-cols-8 gap-6">
+      {/* Conteúdo em 8 colunas */}
+    </div>
+  </div>
+</section>
+```
+
+#### Mobile (< 768px)
+
+**Características:**
+- 1 coluna em toda página
+- Grid 4 colunas para alinhamento interno
+- Texto sempre antes de imagem/vídeo
+- Tipografia maior para leitura confortável
+- Espaçamentos verticais aumentados
+- Vídeos recortados focando elemento principal
+- Animações simplificadas
+
+**Composição Mobile:**
+```tsx
+<section className="w-full">
+  <div className="max-w-[1680px] mx-auto px-6 py-16">
+    <div className="grid grid-cols-4 gap-4">
+      {/* Conteúdo em 4 colunas */}
+      <div className="col-span-4">
+        {/* Full width */}
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+### Breakpoints Padrão
+
+| Breakpoint | Range | Colunas | Padding | Gap | Comportamento |
+|------------|-------|---------|---------|-----|---------------|
+| `mobile` | < 768px | 4 | 24px (px-6) | 16px (gap-4) | 1 coluna, texto centralizado |
+| `tablet` | 768px–1023px | 8 | 48px (px-12) | 24px (gap-6) | Transição 1-2 colunas |
+| `desktop` | 1024px–1599px | 12 | 64px (px-16) | 32px (gap-8) | Grid completo |
+| `wide` | ≥ 1600px | 12 | 96px (px-24) | 40px (gap-10) | Max respiro |
+
+### Regras de Alinhamento
+
+**Mobile (< 768px):**
+```css
+/* Padrão para todas as seções */
+.section-mobile {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Exceções controladas por classe */
+.section-mobile.text-left {
+  text-align: left;
+  align-items: flex-start;
+}
+```
+
+**Desktop (≥ 1024px):**
+```css
+/* Padrão */
+.section-desktop {
+  text-align: left;
+  align-items: flex-start;
+}
+
+/* Destaques e frases */
+.section-desktop.text-center {
+  text-align: center;
+  align-items: center;
+}
+```
+
+### Exemplo de Seção Responsiva Completa
+
+```tsx
+<section className="w-full bg-background py-16 md:py-20 lg:py-24">
+  {/* Container responsivo */}
+  <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
+    {/* Grid responsivo */}
+    <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 md:gap-6 lg:gap-8">
+      {/* Título - Full width mobile, 8 cols desktop */}
+      <div className="col-span-4 md:col-span-8 lg:col-span-8 text-center md:text-left">
+        <h2 className="text-h2 mb-6">Título da Seção</h2>
+      </div>
+      
+      {/* Conteúdo - Full mobile, 4 cols desktop cada */}
+      <div className="col-span-4 md:col-span-4 lg:col-span-6">
+        <p className="text-body">Conteúdo esquerda...</p>
+      </div>
+      
+      <div className="col-span-4 md:col-span-4 lg:col-span-6">
+        <img src="..." className="w-full rounded-2xl" alt="..." />
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## Acessibilidade
+
+### Princípios WCAG 2.1
+
+**Nível de conformidade:** AA (mínimo), AAA (preferencial)
+
+#### Contraste de Cores
+
+| Combinação | Ratio | Status |
+|------------|-------|--------|
+| `#fcffff` sobre `#040013` | 21:1 | ✅ AAA |
+| `#0048ff` sobre `#040013` | 8.2:1 | ✅ AAA |
+| `#4fe6ff` sobre `#040013` | 14.5:1 | ✅ AAA |
+| `#a1a3a3` sobre `#040013` | 7.1:1 | ✅ AAA |
+
+**Ferramenta de teste:** WebAIM Contrast Checker
+
+#### Hierarquia Semântica
+
+```html
+<!-- Estrutura correta -->
+<main>
+  <section aria-labelledby="hero-title">
+    <h1 id="hero-title">Sou Danilo Novais.</h1>
+    <!-- Conteúdo -->
+  </section>
+  
+  <section aria-labelledby="origin-title">
+    <h2 id="origin-title">Origem</h2>
+    
+    <article>
+      <h3>O Que Permanece</h3>
+      <!-- Conteúdo -->
+    </article>
+  </section>
+</main>
+```
+
+**Regras:**
+- Um único `<h1>` por página (Hero)
+- Hierarquia sequencial sem pulos (h1 → h2 → h3)
+- `aria-labelledby` conectando seções aos títulos
+- Landmarks semânticos (`<main>`, `<section>`, `<article>`)
+
+#### Navegação por Teclado
+
+**Elementos interativos:**
+```tsx
+// Botões
+<button
+  className="..."
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      handleClick();
+    }
+  }}
+>
+  CTA
+</button>
+
+// Links
+
+  href="..."
+  className="focus:outline-none focus:ring-2 focus:ring-bluePrimary focus:ring-offset-2"
+>
+  Link
+</a>
+
+// Cards clicáveis
+<article
+  tabIndex={0}
+  role="button"
+  aria-label="Card título"
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') handleClick();
+  }}
+>
+  {/* Conteúdo */}
+</article>
+```
+
+**Estados de foco:**
+```css
+/* Focus visível */
+*:focus {
+  outline: 2px solid #0048ff;
+  outline-offset: 4px;
+}
+
+/* Focus dentro de elementos dark */
+.dark *:focus {
+  outline-color: #4fe6ff;
+}
+
+/* Remove outline apenas se mouse */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+```
+
+# Textos Alternativos
+
+**Imagens decorativas:**
+```tsx
+<img src="..." alt="" aria-hidden="true" />
+```
+
+**Imagens informativas:**
+```tsx
+<img 
+  src="sobre-1.webp" 
+  alt="Detalhes que sobrevivem ao tempo — essência preservada em elementos visuais minimalistas" 
+/>
+```
+
+**Vídeos de fundo:**
+```tsx
+<video
+  aria-hidden="true"
+  role="presentation"
+  muted
+  autoPlay
+  loop
+  playsInline
+>
+  <source src="..." type="video/mp4" />
+</video>
+```
+
+#### Reduced Motion
+
+**Implementação completa:**
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+/* Mantém apenas fade simples */
+  .preserve-fade {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+}
+```
+
+**React/Framer Motion:**
+```tsx
+import { useReducedMotion } from 'framer-motion';
+
+const MyComponent = () => {
+  const shouldReduceMotion = useReducedMotion();
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ 
+        duration: shouldReduceMotion ? 0.2 : 0.6 
+      }}
+    >
+      {/* Conteúdo */}
+    </motion.div>
+  );
+};
+```
+
+#### Screen Readers
+
+**Anúncios de carregamento:**
+```tsx
+<div role="status" aria-live="polite" aria-atomic="true">
+  {loading ? "Carregando conteúdo..." : "Conteúdo carregado"}
+</div>
+```
+
+**Elementos ocultos visualmente:**
+```css
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+```
+
+**Uso:**
+```tsx
+<button>
+  <span className="sr-only">Abrir menu</span>
+  <HamburgerIcon aria-hidden="true" />
+</button>
+```

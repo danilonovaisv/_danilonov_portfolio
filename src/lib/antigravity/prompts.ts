@@ -59,7 +59,7 @@ export const ATOMIC_PROMPTS: AtomicPrompt[] = [
       'src/app/portfolio/page.tsx',
     ],
     actions: [
-      'Padronizar um único componente Container com Tailwind (ex.: mx-auto max-w-[...px] px-4 md:px-6) para refletir exatamente o grid das imagens Ghost.',
+      'Padronizar um único componente Container com Tailwind (ex.: mx-auto max-w-screen-xl px-4 md:px-6) para refletir exatamente o grid das imagens Ghost.',
       'Garantir que todas as seções principais de Home, Sobre e Portfólio sejam diretamente embrulhadas por esse Container, sem paddings laterais adicionais em cada seção.',
       'Ajustar ClientLayout (se usado) para não duplicar margens/paddings já definidos em Container.',
       'Confirmar que globals.css e Tailwind estão corretamente importados em layout.tsx.',

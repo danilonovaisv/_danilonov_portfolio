@@ -31,7 +31,7 @@ export default function SiteFooter() {
 
   return (
     <footer
-      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-0 pb-[env(safe-area-inset-bottom,0)]"
+      className="w-full bg-[#0057FF] text-white lg:fixed lg:bottom-0 lg:left-0 lg:z-10 relative z-0 footer-safe-area"
       aria-label="Rodapé do site"
     >
       <div className="std-grid flex flex-col lg:flex-row items-center justify-between py-12 lg:py-0 lg:h-[64px] gap-10 lg:gap-0">

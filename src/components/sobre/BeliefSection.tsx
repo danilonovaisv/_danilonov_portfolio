@@ -42,7 +42,7 @@ const BeliefLine: React.FC<BeliefLineProps> = ({
     <div className="overflow-visible mb-1 md:mb-2 w-full">
       <motion.span
         style={{ x: lineX }}
-        className="block text-[#82f6fa] font-h2 text-4xl md:text-6xl lg:text-[5.5vw] xl:text-[6.5vw] leading-none tracking-[-0.04em] text-left whitespace-pre-line select-none font-black italic max-w-fit pr-[0.15em] py-2"
+        className="block text-white font-h2 text-4xl md:text-6xl lg:text-[5.5vw] xl:text-[6.5vw] leading-none tracking-[-0.04em] text-left whitespace-pre-line select-none font-black italic max-w-fit pr-[0.15em] py-2"
       >
         {line}
       </motion.span>
@@ -52,7 +52,7 @@ const BeliefLine: React.FC<BeliefLineProps> = ({
 
 interface BeliefSectionProps {
   text: string;
-  bgColor: string;
+  bgColor: string; // Espera uma cor HEX
   isFirst?: boolean;
 }
 
@@ -87,13 +87,15 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   const lines = text.split('\n');
 
   return (
-    <section
+    <motion.section
       ref={containerRef}
       aria-label={text.replace(/\n/g, ' ')}
-      className={`relative w-full h-screen flex justify-start overflow-hidden ${isFirst
+      style={{ backgroundColor: bgColor }}
+      className={`relative w-full h-screen flex justify-start overflow-hidden ${
+        isFirst
           ? 'items-center pt-0'
           : 'items-start pt-[20vh] md:pt-[20vh] lg:pt-[15vh]'
-        } ${bgColor}`}
+      }`}
     >
       <div className="std-grid max-w-none">
         <motion.div
@@ -111,6 +113,6 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
           ))}
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };

@@ -3,7 +3,7 @@
 const SUPABASE_PROJECT_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ??
   process.env.SUPABASE_URL ??
-  'https://aymuvxysygrwoicsjgxj.supabase.co';
+  'https://umkmwbkwvulxtdodzmzf.supabase.co';
 
 export const SUPABASE_STORAGE_URL = `${SUPABASE_PROJECT_URL.replace(
   /\/$/,

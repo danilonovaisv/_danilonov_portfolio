@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useScroll, useTransform, useSpring } from 'framer-motion';
+import { useMotionGate } from '@/hooks/useMotionGate';
 
 /**
  * Linear Interpolation Function
@@ -23,6 +24,7 @@ interface UseParallaxReturn {
 export function useParallax(): UseParallaxReturn {
   const galleryRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useMotionGate();
 
   // Refs for state to avoid re-renders in the loop
   const state = useRef({
@@ -32,6 +34,8 @@ export function useParallax(): UseParallaxReturn {
   });
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     const gallery = galleryRef.current;
     const track = trackRef.current;
     const isMobile = window.innerWidth < 1024; // Simple mobile check

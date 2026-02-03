@@ -152,6 +152,33 @@ const aboutMethodVideo: SiteAssetRole = {
   subPath: 'method',
 };
 
+const aboutBeliefsAssets: SiteAssetRole[] = [
+  {
+    key: SITE_ASSET_KEYS.about.beliefs.ghostModel,
+    label: 'Ghost Model (3D)',
+    description: 'Modelo 3D GLB exubido na seção Crenças',
+    page: 'about',
+    asset_type: 'file',
+    subPath: 'beliefs',
+  },
+  {
+    key: SITE_ASSET_KEYS.about.beliefs.skillsVideo,
+    label: 'Vídeo Skills (Desktop)',
+    description: 'Vídeo de background da seção Crenças (versão pesada)',
+    page: 'about',
+    asset_type: 'video',
+    subPath: 'beliefs',
+  },
+  {
+    key: SITE_ASSET_KEYS.about.beliefs.skillsVideoMobile,
+    label: 'Vídeo Skills (Mobile)',
+    description: 'Vídeo de background da seção Crenças (versão leve)',
+    page: 'about',
+    asset_type: 'video',
+    subPath: 'beliefs',
+  },
+];
+
 const aboutCurriculum: SiteAssetRole = {
   key: 'about.curriculum_pdf',
   label: 'Currículo para download',
@@ -188,6 +215,110 @@ const homeHeroVideo: SiteAssetRole = {
   asset_type: 'video',
 };
 
+const projectAssets: SiteAssetRole[] = [
+  // Campaign
+  {
+    key: SITE_ASSET_KEYS.projects.campaign.cover,
+    label: 'Campaign • Cover',
+    description: 'Capa do projeto Campaign',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'campaign',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.campaign.hero,
+    label: 'Campaign • Hero',
+    description: 'Hero do projeto Campaign',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'campaign',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.campaign.thumb,
+    label: 'Campaign • Thumb',
+    description: 'Thumbnail do projeto Campaign',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'campaign',
+  },
+  // Key Vision
+  {
+    key: SITE_ASSET_KEYS.projects.keyVision.cover,
+    label: 'Key Vision • Cover',
+    description: 'Capa do projeto Key Vision',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'key-vision',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.keyVision.hero,
+    label: 'Key Vision • Hero',
+    description: 'Hero do projeto Key Vision',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'key-vision',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.keyVision.thumb,
+    label: 'Key Vision • Thumb',
+    description: 'Thumbnail do projeto Key Vision',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'key-vision',
+  },
+  // Brand Video
+  {
+    key: SITE_ASSET_KEYS.projects.brandVideo.hero,
+    label: 'Brand Video • Hero',
+    description: 'Hero do projeto Brand Video',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'brand-video',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.brandVideo.thumb,
+    label: 'Brand Video • Thumb',
+    description: 'Thumbnail do projeto Brand Video',
+    page: 'projects',
+    asset_type: 'video',
+    subPath: 'brand-video',
+  },
+  // Advertising Video
+  {
+    key: SITE_ASSET_KEYS.projects.advertisingVideo.hero,
+    label: 'Advertising Video • Hero',
+    description: 'Hero do projeto Advertising Video',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'advertising-video',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.advertisingVideo.thumb,
+    label: 'Advertising Video • Thumb',
+    description: 'Thumbnail do projeto Advertising Video',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'advertising-video',
+  },
+  // Creative Direction
+  {
+    key: SITE_ASSET_KEYS.projects.creativeDirection.hero,
+    label: 'Creative Direction • Hero',
+    description: 'Hero do projeto Creative Direction',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'creative-direction',
+  },
+  {
+    key: SITE_ASSET_KEYS.projects.creativeDirection.thumb,
+    label: 'Creative Direction • Thumb',
+    description: 'Thumbnail do projeto Creative Direction',
+    page: 'projects',
+    asset_type: 'image',
+    subPath: 'creative-direction',
+  },
+];
+
 export const siteAssetRoleGroups: SiteAssetRoleGroup[] = [
   { label: 'Global • Logos', roles: globalLogos },
   { label: 'Global • Fonts', roles: globalFonts },
@@ -199,7 +330,9 @@ export const siteAssetRoleGroups: SiteAssetRoleGroup[] = [
     label: 'Sobre • Método & Curriculum',
     roles: [aboutMethodVideo, aboutCurriculum],
   },
+  { label: 'Sobre • Crenças', roles: aboutBeliefsAssets },
   { label: 'Portfólio • Hero vídeos', roles: portfolioHeroVideos },
+  { label: 'Portfólio • Projetos', roles: projectAssets },
 ];
 
 const allSiteAssetRoles = siteAssetRoleGroups.flatMap((group) => group.roles);

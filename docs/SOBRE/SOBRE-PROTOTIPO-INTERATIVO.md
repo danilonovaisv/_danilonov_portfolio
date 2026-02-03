@@ -330,7 +330,7 @@ const variants = {
 ```
 
 **Texto:**
-- Alinhado à direita dentro do bloco
+- Alinhado à direita encontado no grid da pagina
 - Posicionado 10% acima do centro vertical
 - Sem CTA
 
@@ -382,7 +382,7 @@ sente quando
 funciona.
 ```
 
-**Subtítulo (H2):**
+**Subtítulo (H3):**
 ```
 Crio design que observa, entende
 e guia experiências com intenção,
@@ -813,7 +813,9 @@ gsap.from(".service-card", {
 
 ---
 
-# **5. Como Eu Trabalho
+
+
+# **5. Como Eu Trabalho - About Method
 
 **Função:** Gerar confiança racional através do método. Mostrar que criatividade é suportada por processo.
 
@@ -821,7 +823,7 @@ gsap.from(".service-card", {
 
 **Layout:**
 - Altura: ~120vh
-- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/AboutMethod.mp4`
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/method/about.method.desktop_video.mp4`
   - `object-fit: cover`, 100% largura/altura
   - Loop contínuo, sem controles
 - Overlay: gradiente linear
@@ -863,7 +865,7 @@ gsap.from(".service-card", {
 </section>
 ```
 
-**Título:**
+**Título font-h1:**
 - Alinhado à esquerda
 - Duas linhas:
   - "**Criatividade** com **método**."
@@ -874,8 +876,11 @@ gsap.from(".service-card", {
 - Font-weight: 700
 - Margin-bottom: 32–40px
 
-**Texto Introdutório:**
+**Texto Introdutório font-h3 branca:**
 - Três frases em parágrafos separados
+"Antes da estética, existe intenção."
+"Antes do layout, existe lógica."
+"Antes do impacto, existe silêncio."
 - Font-size: 18–20px
 - Line-height: 1.6
 - Opacity: 0.9
@@ -885,23 +890,6 @@ gsap.from(".service-card", {
 **Lista de Processo:**
 - 6 itens em cards verticais
 
-```tsx
-<div className="space-y-5">
-  {processItems.map((item, index) => (
-    <div 
-      key={index}
-      className="bg-surface/70 backdrop-blur-md border-l-4 border-bluePrimary rounded-lg p-6"
-    >
-      <span className="text-lg font-bold text-bluePrimary mr-4">
-        {String(index + 1).padStart(2, '0')}
-      </span>
-      <span className="text-body text-white">
-        {item.text}
-      </span>
-    </div>
-  ))}
-</div>
-```
 
 **Especificações do Card:**
 - Fundo: `rgba(26, 26, 46, 0.7)` com `backdrop-filter: blur(12px)`
@@ -915,49 +903,15 @@ gsap.from(".service-card", {
 #### Mobile
 
 **Layout:**
-- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/sobre_page/aboutmetodo-mob.mp4`
+- Vídeo: `https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/method/about.method.desktop_video.mp4`
   - `object-position: right center`
   - Gradiente vertical no fim
   - Sem overlay pesado
 - 1 coluna, padding px-6
 - Conteúdo iniciando no meio do vídeo para baixo
+`
 
-**Composição Mobile:**
-
-```tsx
-<section className="relative w-full min-h-screen">
-  {/* Vídeo Background */}
-  <video 
-    className="absolute inset-0 w-full h-full object-cover object-right"
-    src="..."
-    autoPlay
-    loop
-    muted
-    playsInline
-  />
-  
-  {/* Gradient Overlay (bottom only) */}
-  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background to-transparent" />
-  
-  {/* Conteúdo */}
-  <div className="relative px-6 py-20 flex flex-col justify-end min-h-screen">
-    <div className="text-center space-y-8">
-      {/* Título */}
-      <h2 className="text-h2">...</h2>
-      
-      {/* Texto intro */}
-      <p className="text-body">...</p>
-      
-      {/* Lista */}
-      <div className="space-y-4">
-        {/* Cards */}
-      </div>
-    </div>
-  </div>
-</section>
-```
-
-**Título:**
+**Título font-h1:**
 - Centralizado
 - Font-size: 32–36px
 - Margin-bottom: 24–32px
@@ -1067,260 +1021,243 @@ gsap.from(".service-card", {
 
 # **6. O Que Me Move - About Biliefed
 
-**Função:** Criar vínculo emocional através de manifesto pessoal. Momento mais íntimo da página.
 
-#### Desktop
+## 1. Objetivo da Página/Sessão
+- [ ] **Qual a principal função desta página/sessão?**  
+      Gerar vínculo emocional através de um manifesto pessoal, mostrando a visão de design do Danilo de forma íntima, sensível e memorável, conectando o visitante com o “porquê” por trás do trabalho.
+- [ ] **Qual ação o usuário deve realizar aqui?**  
+      Sentir identificação com o manifesto, reforçar confiança no estilo/abordagem do estúdio e seguir naturalmente o fluxo da página até as seções de prova social (clientes) e contato, mais propenso a entrar em contato ou continuar explorando.
+- [ ] **Como essa seção contribui para os objetivos do site?**  
+      Consolida a identidade do “Ghost Design” como conceito autoral, diferencia o estúdio pelo posicionamento emocional e prepara o usuário para enxergar o resto do site (cases, serviços, contato) sob essa lente de conexão, não apenas estética.
 
-**Layout:**
-- Altura: ~140vh
-- Fundo: `#040013`
-- Container 12 colunas (max-width: 1440px)
+---
 
-**Estrutura em 3 Momentos:**
+## 2. Estrutura de Conteúdo
+- [ ] **Título principal (headline)**  
+      - Texto:  
+        > “Acredito no **design que muda o dia** de alguém.  
+        > Não pelo choque, **mas pela conexão.**”  
+      - Sempre visível (sticky), funciona como “âncora” conceitual da sessão.
 
-**1. Título Fixo (sempre visível)**
-```tsx
-<section className="relative w-full min-h-[140vh] bg-background">
-  <div className="max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24 py-24">
-    {/* Título Fixo */}
-    <div className="sticky top-24 mb-20">
-      <h2 className="text-display text-center max-w-4xl mx-auto">
-        Acredito no <span className="text-bluePrimary">design que muda o dia</span> de alguém.
-        <br />
-        Não pelo choque, <span className="text-bluePrimary">mas pela conexão.</span>
-      </h2>
-    </div>
-    
-    {/* Área de Frases Rotativas */}
-    <div className="min-h-[40vh] flex items-center justify-center">
-      {/* Frases */}
-    </div>
-    
-    {/* Reveal Final */}
-    <div className="grid grid-cols-12 gap-12 mt-32">
-      {/* Ghost + Manifesto */}
-    </div>
-  </div>
-</section>
-```
+- [ ] **Subtítulo ou descrição**  
+      - Não há subtítulo textual explícito; o “subtexto” é construído pela sequência de frases rotativas e pelo manifesto final “ISSO É GHOST DESIGN.”  
 
-**Título:**
-- Colunas 2–10, centralizado
-- Margin-top: 10–12vh
-- Margin-bottom: 8–10vh
-- Permanece fixo durante sequência
+- [ ] **Elementos visuais (imagens, ícones, vídeos)**  
+      - Fantasma 3D (Ghost) central, renderizado com React Three Fiber + Drei.  
+      - Ghost fica **centrado acima do texto** nas fases de manifesto, flutuando de forma contínua.  
+      - O fantasma nunca para completamente:  
+        - Flutuação leve e constante.  
+        - Ganha velocidade e inclinação suave conforme o cursor se move e conforme o usuário rola a página.  
+        - Responde de forma fluida e etérea, como se “sentisse” o toque/scroll.  
+        - Entra junto com a **primeira frase** da área de manifesto e permanece centralizado na sessão.  
+        - Quando a **última frase** entra, ele cresce ~10% de escala e fica visivelmente mais animado (mais wobble/tilt e resposta mais intensa ao scroll).  
+      - No final, o manifesto “ISSO É / GHOST / DESIGN.” sela o conceito entrada suave usando 'Morphing Text', deixe o texto em três linhas, cada linha com comportamento responsivo automatico, ocupando toda a area horizontal do gride, deixando um espaçamento pequeno entre as linhas.
 
-**Texto:**
-```
-Acredito no design que muda o dia de alguém.
-Não pelo choque, mas pela conexão.
-```
+- [ ] **Chamada para ação (CTA)**  
+      - CTA implícito (emocional): reforçar a percepção de valor do estúdio.  
+      - Não há botão direto aqui; o CTA funcional acontece em seções posteriores (Clientes/Contato), mas essa sessão prepara o usuário emocionalmente para clicar lá.
 
-**Estilo:**
-- Font-size: Display Black (clamp(2.5rem, 5vw + 1rem, 5.5rem))
-- Line-height: 1.2
-- Font-weight: 900
-- Destaques: "design que muda o dia", "mas pela conexão" em `bluePrimary`
-- Max-width: 900px
-- Text-align: center
+- [ ] **Texto de apoio - font-h1 - blueAccent**  
+      - **Frases rotativas (manifesto em camadas):**
+        1. “Um vídeo que respira.”
+        2. “Uma marca que se reconhece.”
+        3. “Um detalhe que fica.”
+        4. “Crio para gerar presença.”
+        5. “Mesmo quando não estou ali.”
+        6. “Mesmo quando ninguém percebe o esforço.”
+     
+      - Manifesto final:  
+        > ISSO É  
+        > GHOST DESIGN.
 
-**2. Área de Frases Rotativas**
+- [ ] **Layout desejado (colunas, cards, seções com fundo alternado, etc.)**  
+      - **Desktop:**
+        - Altura total da sessão: ~140vh.  
+        - Fundo base: `#040013` (mapeado como `bg-background`).  
+        - Container de conteúdo em 12 colunas (`max-width ~1440–1680px`, centrado, com `px-6 md:px-12 lg:px-16 xl:px-24`).  
+        - Estrutura em 3 momentos:
+          1. **Título Fixo** com layout de colunas 2–10, centralizado, `mt ~10–12vh` e `mb ~8–10vh`, `position: sticky` no topo (`top-24`).  
+          2. **Área de Frases Rotativas** centralizada em blocos, com Ghost 3D centrado acima do texto, ambos dentro de uma área de altura mínima (`min-h-[40vh]`) para criar respiro visual.  
+          3. **Reveal Final — Ghost + Manifesto**  
+             - Grid `grid-cols-12` com gap generoso (ex: `gap-12`).  
+             - Ghost em destaque (pode permanecer centralizado, acima dos textos, podendo ocultar um pouco de alguma palavra
+            ).  
+             - Manifesto “ISSO É GHOST DESIGN.” centralizada, ocupando colunas equivalentes a metade do grid, com tipografia grande e impactante.
 
-```tsx
-<div className="relative min-h-[40vh] flex items-center justify-center">
-  <AnimatePresence mode="wait">
-    <motion.p
-      key={currentPhrase}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.8 }}
-      className="text-4xl font-medium text-center max-w-3xl"
-    >
-      {phrases[currentPhrase]}
-    </motion.p>
-  </AnimatePresence>
-</div>
-```
+      - **Mobile:**
+        - Layout em 1 coluna (`flex-col`), padding `px-6`, altura flexível (>120vh).  
+        - Ordem: título → frases rotativas + ghost → manifesto final.  
+        - Ghost centralizado acima do manifesto no eixo vertical.
 
-**Frases (uma por vez):**
-1. "Um vídeo que **respira**."
-2. "Uma marca que se **reconhece**."
-3. "Um detalhe que **fica**."
-4. "**Crio** para gerar presença."
-5. "**Mesmo** quando não estou ali."
-6. "**Mesmo** quando ninguém percebe o esforço."
+---
 
-**Estilo:**
-- Font-size: 32–38px
-- Line-height: 1.4
-- Font-weight: 500
-- Palavras em `bluePrimary` destacadas em negrito
-- Text-align: center
-- Max-width: 700px
+## 3. Identidade Visual
+- [ ] **Cores usadas**  
+      - Fundo base: `#040013` (`bg-background`).  
+      - Acentos principais:  
+        - `bluePrimary` (azul real) — usado para realçar palavras-chave e o trecho “GHOST DESIGN”.  
+      - Transições de fundo durante o manifesto podem seguir uma paleta inspirada no sistema de crenças, por exemplo:  
+        ```ts
+        COLORS = [
+          'bg-bluePrimary',      // Azul Real
+          'bg-purpleDetails',    // Roxo Vibrante
+          'bg-pinkDetails',      // Rosa Choque
+          'bg-bluePrimary',      // Azul Real
+          'bg-purpleDetails',    // Roxo Vibrante
+        ];
+        ```  
+      - Essas cores podem ser usadas para **fades suaves de BG** sincronizados com a troca de frases, reforçando a sensação de fluxo.
 
+- [ ] **Tipografia (fontes e pesos)**  
+      - Headline e manifesto:  
+        - Fonte display (ex: `font-display` ou `font-black`).  
+        - `font-weight: 900` nas chamadas principais.  
+        - Tamanhos com `clamp`, por exemplo:  
+          - Desktop headline: `clamp(2.5rem, 5vw + 1rem, 5.5rem)`  
+          - Manifesto final: entre `text-[42px]` (mobile) e `text-[64px]`+ (desktop).  
+      - Frases rotativas:  
+        - `font-weight: 500`  
+        - Tamanho entre `32–38px` no desktop; `22–26px` no mobile.
 
+- [ ] **Ícones ou gráficos customizados**  
+      - Ghost 3D (releitura do “Ghost w/ Tophat” em GLB, estilizado para o universo Ghost Design).  
+      - Olhar/rotação do Ghost transmite “atenção” ao usuario (leve inclinação reagindo ao mouse/scroll).
 
+---
 
+## 4. Interatividade & Animações
+- [ ] **Animações de entrada/scroll (Framer Motion ou GSAP)**  
+      - Título fixo: fade-in com blur suave na entrada (ex: `opacity: 0 → 1`, `blur(10px) → blur(0px)` em ~1.2s, ease curva customizada).  
+      - Frases rotativas:  
+        - Cada frase entra de baixo (`y: 20 → 0`), aumenta opacidade, remove blur.  
+        - Sai para cima (`y: 0 → -20`) com blur.  
+        - Ciclo total de ~4.2s por frase (entrada, permanência, saída, pausa).  
+      - Reveal final (Ghost + manifesto):  
+        - Container entra com `opacity: 0 → 1`, `y: 40 → 0`.  
+        - Pode ser via `whileInView` ou sincronizado com scrollYProgress.
 
- **3. Reveal Final — Ghost + Manifesto**
+- [ ] **Hover effects / microinterações**  
+      - Ghost reage sutilmente quando o usuário passa o mouse próximo ou sobre ele (wobble leve, micro tilt).  
+      - Textos-chave em `bluePrimary` podem ter micro animação (leve glow ou sublinhado animado) em hover sem virar distração.
 
-```tsx
-<div className="grid grid-cols-12 gap-12 items-center mt-32">
-  {/* Ghost Animado - Esquerda */}
-  <div className="col-span-6 flex justify-center">
-    <div className="w-[380px] h-[380px]">
-      {/* Ghost SVG com animação de olhos seguindo cursor */}
-    </div>
-  </div>
-  
-  {/* Manifesto - Direita */}
-  <div className="col-span-6">
-    <h2 className="text-[64px] font-black leading-[1.1]">
-      ISSO É<br />
-      <span className="text-bluePrimary">GHOST<br />DESIGN.</span>
-    </h2>
-  </div>
-</div>
-```
+- [ ] **Comportamentos especiais com o mouse ou touch**  
+      - Ghost 3D:
+        - Flutuação padrão contínua.  
+        - **Mouse move (desktop):**  
+          - Ghost inclina levemente (rotationX/rotationZ) e desloca posição x/y seguindo o cursor de forma amortecida (LERP), nunca brusca.  
+        - **Touch (mobile/tablet):**  
+          - Resposta baseada em scroll/posição do dedo; não precisa de hover, mas pode intensificar a animação quando o usuário interage com a área.  
 
-#### Mobile
+- [ ] **Animações vinculadas ao scroll (scroll sync)**  
+      - Ghost sincronizado com `scrollYProgress` da sessão:
+        - Rotação lenta no eixo Y enquanto o usuário percorre a sessão.  
+        - Para `scrollProgress > ~0.8` (entrada da última frase / manifesto final):  
+          - Aumenta escala ~10% (1.0 → 1.1).  
+          - Ganha wobble extra (oscilações adicionais baseadas em tempo + scroll).  
+          - Aproxima levemente no eixo Z para sensação de “chegar mais perto”.  
+      - Fundo (BG) pode interpolar entre cores da paleta `COLORS` conforme o progresso das frases, com animações suaves (ease bezier).
 
-**Layout:**
-- 1 coluna, padding px-6
-- Altura flexível (>120vh)
+---
 
-**Composição Mobile:**
+## 5. Responsividade
+- [ ] **Comportamento no mobile**  
+      - Layout em coluna única, tudo centralizado.  
+      - Ghost centralizado, com tamanho entre `200–240px`.  
+      - Título ~28–34px; frases ~22–26px; manifesto final ~36–42px.  
+      - Interações orientadas a scroll em vez de hover; animação do Ghost responde mais ao `scrollYProgress` do que ao mouse.
 
-```tsx
-<section className="w-full min-h-screen bg-background py-16">
-  <div className="max-w-[1680px] mx-auto px-6">
-    {/* Título Fixo */}
-    <h2 className="text-h1 text-center mb-16">
-      Acredito no <span className="text-bluePrimary">design que muda o dia</span> de alguém.
-      <br />
-      Não pelo choque, <span className="text-bluePrimary">mas pela conexão.</span>
-    </h2>
-    
-    {/* Frases Rotativas */}
-    <div className="min-h-[35vh] flex items-center justify-center mb-16">
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={currentPhrase}
-          className="text-2xl font-medium text-center"
-        >
-          {phrases[currentPhrase]}
-        </motion.p>
-      </AnimatePresence>
-    </div>
-    
-    {/* Reveal Final - Coluna */}
-    <div className="flex flex-col items-center space-y-10">
-      {/* Ghost */}
-      <div className="w-[240px] h-[240px]">
-        {/* Ghost SVG */}
-      </div>
-      
-      {/* Manifesto */}
-      <h2 className="text-[42px] font-black text-center leading-tight">
-        ISSO É<br />
-        <span className="text-bluePrimary">GHOST<br />DESIGN.</span>
-      </h2>
-    </div>
-  </div>
-</section>
-```
+- [ ] **Comportamento no tablet**  
+      - Transição gradual de 1 para 2 colunas no reveal final.  
+      - Ghost entre `220–260px`.  
+      - Tipografia intermediária: título 34–38px, frases 24–28px, manifesto 40–46px.  
 
-**Título Fixo:**
-- Centralizado, margin-top: 8vh
-- Font-size: 28–34px
-- Max-width: 100%
-- Margin-bottom: 6–8vh
+- [ ] **Comportamento no desktop**  
+      - Título sticky no topo (colunas 2–10).  
+      - Área de frases com Ghost 3D centralizada.  
+      - Reveal final em grid 2 colunas (Ghost + Manifesto) mantendo o layout original da referência.  
+      - Ghost entre `320–380px` no desktop grande.
 
-**Frases Rotativas:**
-- Min-height: 35vh
-- Font-size: 22–26px
-- Padding: 0 16px
+- [ ] **Ajustes específicos para telas grandes ou pequenas**  
+      - Telas muito grandes (1440px+): aumentar levemente spacing vertical entre blocos e máximo de fonte do manifesto.  
+      - Telas muito pequenas (<360px): reduzir margens verticais e fontes levemente para evitar quebra em excesso.
 
-**Reveal Final:**
-- Layout coluna
-- Ghost: 200–240px, margin-bottom: 32–40px
-- Texto: 36–42px, centralizado
+---
 
-#### Animação e Sequência
+## 6. Acessibilidade & SEO
+- [ ] **Tags semânticas corretas (h1, h2, etc.)**  
+      - Sessão envolta em `<section>` com `aria-labelledby` apontando para o título.  
+      - Título principal da sessão como `<h2>` (assumindo que o `<h1>` já existe no topo da página).  
+      - Frases e manifesto como `<p>` e `<h3>` conforme a hierarquia.
 
-**Fase 1: Título Fixo (0s)**
-```tsx
-<motion.h2
-  initial={{ opacity: 0, filter: "blur(10px)" }}
-  animate={{ opacity: 1, filter: "blur(0px)" }}
-  transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
->
-  {/* Conteúdo */}
-</motion.h2>
-```
+- [ ] **Imagens com ALT**  
+      - Ghost 3D deve ter descrição acessível (por exemplo, via `aria-label` no container da cena 3D):  
+        - `"Ilustração 3D de um fantasma estilizado representando o conceito Ghost Design."`
 
-**Fase 2: Frases Rotativas (após 1.5s)**
+- [ ] **Contraste adequado**  
+      - Texto branco sobre fundo `#040013` + acentos em `bluePrimary` → garantir contraste AA/AAA.  
+      - Evitar texto em `purpleDetails` ou `pinkDetails` diretamente sobre azul sem checar contraste.
 
-Cada frase tem um ciclo de:
-- **Entrada:** 0.8s
-- **Permanência:** 2.5s
-- **Saída:** 0.6s
-- **Pausa entre frases:** 0.3s
+- [ ] **Navegabilidade por teclado**  
+      - A seção é principalmente de leitura; mas o container 3D não pode “travar” o foco.  
+      - Garantir que a cena 3D não capture tab-focus de forma desnecessária.  
+      - Se houver controles, devem ser alcançáveis e visíveis.
 
-**Total por frase:** ~4.2s  
-**Total 6 frases:** ~25s
+- [ ] **Meta tags e estrutura amigável para buscadores**  
+      - Descrição da página (em outra camada SEO) pode mencionar “Manifesto Ghost Design, crenças e visão de projeto de Danilo Novais”.  
+      - Estrutura de headings coerente ajuda motores de busca a entenderem que esta é a seção de manifesto/valores.
 
-```tsx
-useEffect(() => {
-  const timer = setInterval(() => {
-    setCurrentPhrase((prev) => (prev + 1) % phrases.length);
-  }, 4200);
-  
-  return () => clearInterval(timer);
-}, []);
-```
+---
 
-**Animação de cada frase:**
-```tsx
-<motion.p
-  initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-  exit={{ opacity: 0, y: -20, filter: "blur(4px)" }}
-  transition={{ 
-    duration: 0.8,
-    ease: [0.22, 1, 0.36, 1]
-  }}
->
-  {phrase}
-</motion.p>
-```
+## 7. Integrações ou Recursos Especiais
+- [ ] **Componentes dinâmicos? (Ex: carrossel, tabs, sliders)**  
+      - Frases rotativas implementadas como componente controlado por estado (timer com `setInterval` / `setTimeout`).  
+      - Cena 3D do Ghost como componente separado (`<GhostModel />`) reutilizável.
 
-**Fase 3: Reveal Final**
-```tsx
-<motion.div
-  initial={{ opacity: 0, y: 40 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1, delay: 0.3 }}
-  viewport={{ once: true }}
->
-  {/* Ghost + Manifesto */}
-</motion.div>
-```
+- [ ] **Dados vindos de API?**  
+      - Não há dependência obrigatória de API nessa sessão.  
+      - Tudo pode ser estático, com assets carregados via Supabase Storage / CDN.
 
-#### Responsividade
+- [ ] **Formulários? (Campos, validação, envio)**  
+      - Nenhum formulário nesta sessão.
 
-| Breakpoint | Ajustes |
-|------------|---------|
-| 640–767px | Título 28–30px, frases 20–22px, ghost 180–200px, manifesto 32–36px |
-| 768–1023px | Título 34–38px, frases 24–28px, ghost 220–260px, manifesto 40–46px |
-| 1024–1279px | Grid 2 colunas reveal, título 40–44px, frases 30–34px, ghost 280–320px |
-| 1280px+ | Título 48–52px, frases 36–38px, ghost 320–380px, manifesto 60–64px |
+- [ ] **Outros?**  
+      - Integração com Supabase Storage apenas para servir o modelo GLB do Ghost (e possíveis texturas).  
+      - Uso de Drei (`<Float />`, `<Environment />`) para suavizar implementação da cena 3D.
+
+---
+
+## 8. Considerações Técnicas
+- [ ] **Componente client/server?**  
+      - Sessão “About Beliefs” precisa ser **client component** (`'use client'`) porque:
+        - Usa Framer Motion (`useScroll`, `useTransform`, `AnimatePresence`).  
+        - Renderiza React Three Fiber (R3F) e listeners de mouse/scroll.
+
+- [ ] **Reutilização em outras páginas?**  
+      - Ghost 3D (`<GhostModel />`) deve ser isolado em componente próprio para reaproveitar em outras sessões (hero, transições, etc.).  
+      - A lógica de frases rotativas pode ser extraída para um hook (`useRotatingPhrases`) ou componente genérico.
+
+- [ ] **Divisão modular no projeto (Next.js - App Router)?**  
+      - Estrutura sugerida:
+        - `app/(site)/about/_sections/AboutBeliefs.tsx` (wrapper da sessão).  
+        - `app/(site)/about/_sections/components/BeliefTitle.tsx` (título fixo).  
+        - `app/(site)/about/_sections/components/BeliefPhrases.tsx` (frases + lógica de rotação).  
+        - `app/(site)/about/_sections/components/BeliefFinalManifest.tsx` (Ghost + manifesto final).  
+        - `shared/3d/GhostModel.tsx` (componente R3F para o fantasma).
+
+- [ ] **Algum fallback necessário?**  
+      - Fallback de loading para o modelo 3D (ex.: skeleton ou placeholder geométrico) enquanto o GLB é carregado.  
+      - Em navegadores que não suportam WebGL, exibir uma versão estática (SVG/PNG) do Ghost.
+
+- [ ] **Animações controladas via hook?**  
+      - Sim:
+        - Hook para controle de frases (`useRotatingPhrases`).  
+        - Hook para sincronizar `scrollYProgress` com Ghost e BG (`useBeliefsScrollSync`).  
+        - Hook (ou lógica interna) para capturar `mousemove` no canvas e aplicar LERP em posição/rotação do Ghost.
+
+---
 
 
-
-
-# **SEÇÃO 06 — FECHAMENTO / CONFIRMAÇÃO**
+# **SEÇÃO 07 — FECHAMENTO / CONFIRMAÇÃO**
 
 **Função:** Convite claro e humano.  
 Conectar narrativa com ação, sem agressividade.
@@ -1347,7 +1284,7 @@ Conectar narrativa com ação, sem agressividade.
 - Primeira linha com destaque em `primary`
 - Margin-bottom: 32–40px
 
-**Texto:**
+**Texto titulo font-display:**
 > Hoje sou **Diretor de Criação**,  
 > com mais de **10 anos de estrada**.
 
@@ -1355,7 +1292,7 @@ Conectar narrativa com ação, sem agressividade.
 - Font-size: 40–48px
 - Line-height: 1.25
 - Font-weight: 700
-- "Diretor de Criação" e "10 anos de estrada" em `primary`
+- "Diretor de Criação" e "12 anos de estrada" em `blueprimary`
 - Max-width: 800px
 
 #### Parágrafos de Contexto
@@ -1363,11 +1300,11 @@ Conectar narrativa com ação, sem agressividade.
 - Spacing entre blocos: 24–32px
 - Margin-bottom total: 48–56px
 
-**Bloco 1:**
+**Bloco 1 - font-h2:**
 > Já liderei marcas, agências, eventos  
 > e **criei experiências** para todos os canais.
 
-**Bloco 2:**
+**Bloco 2 - font-h2:**
 > Agora, quero criar algo que permaneça —  
 > **com você**.
 
