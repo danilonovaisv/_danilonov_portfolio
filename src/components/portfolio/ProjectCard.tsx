@@ -43,7 +43,7 @@ export const ProjectCard = ({
       className={cn(
         'group relative overflow-hidden border border-white/10 bg-white/5 cursor-pointer',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blueAccent',
-        'h-[320px] md:h-(--ghost-card-height-desktop) rounded-xl will-change-transform',
+        'h-[320px] md:h-[var(--ghost-card-height-desktop)] rounded-xl will-change-transform',
         'transition-transform duration-500 hover:scale-[1.02]',
         className
       )}
