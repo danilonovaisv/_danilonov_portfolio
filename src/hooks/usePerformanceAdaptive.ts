@@ -68,7 +68,10 @@ export function usePerformanceAdaptive(): PerformanceConfig {
       fireflyCount: 20,
       particleCount: 50,
       enablePostProcessing: true,
-      pixelRatio: Math.min(window.devicePixelRatio, 2),
+      pixelRatio:
+        typeof window !== 'undefined'
+          ? Math.min(window.devicePixelRatio, 2)
+          : 1,
     },
     medium: {
       quality: 'medium',

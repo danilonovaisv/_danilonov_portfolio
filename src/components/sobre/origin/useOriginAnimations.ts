@@ -1,254 +1,172 @@
 'use client';
 
-import { useEffect } from 'react';
+import { RefObject, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 
-interface AnimationProps {
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+interface UseOriginAnimationsProps {
   isClient: boolean;
-  archRef: React.RefObject<HTMLDivElement | null>;
-  archRightRef: React.RefObject<HTMLDivElement | null>;
+  archRef: RefObject<HTMLDivElement | null>;
+  archRightRef: RefObject<HTMLDivElement | null>;
   contentCount: number;
 }
 
+/**
+ * Hook that manages scroll-based mask reveal animations for the Origin section
+ * Implements pinned mask reveal effect where images dramatically emerge
+ * Tech: GSAP ScrollTrigger + Lenis compatible
+ */
 export function useOriginAnimations({
   isClient,
   archRef,
   archRightRef,
   contentCount,
-}: AnimationProps) {
+}: UseOriginAnimationsProps) {
   useEffect(() => {
     if (!isClient) return;
 
-    let rafId = 0;
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
-    });
+    const archEl = archRef.current;
+    const archRightEl = archRightRef.current;
 
-    const raf = (time: DOMHighResTimeStamp) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
+    if (!archEl || !archRightEl) return;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    const ctx = gsap.context(() => {
+      // Get all content blocks and images
+      const blocks = archEl.querySelectorAll('[data-origin-block]');
+      const images = archRightEl.querySelectorAll('.origin-img');
+      const maskOverlays = archRightEl.querySelectorAll('.origin-mask');
 
-    const mm = gsap.matchMedia();
+      if (blocks.length === 0 || images.length === 0) return;
 
-    mm.add('(min-width: 1024px)', () => {
-      if (!archRef.current || !archRightRef.current) return;
-
-      const wrappers = gsap.utils.toArray<HTMLElement>('.img-wrapper');
-      const images = gsap.utils.toArray<HTMLImageElement>('.img-wrapper img');
-      const infoBlocks = gsap.utils.toArray<HTMLElement>('.arch__info');
-      const bgColors = ['#040013', '#060018', '#08001e', '#0a001a'];
-
-      const mainTimeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: archRef.current,
-          start: 'top top',
-          end: 'bottom bottom',
-          pin: archRightRef.current,
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
+      // Set initial states for mask reveal with blur
+      images.forEach((img, i) => {
+        gsap.set(img, {
+          clipPath: i === 0 ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
+          opacity: i === 0 ? 1 : 0.85,
+          filter: i === 0 ? 'blur(0px)' : 'blur(4px)',
+        });
       });
 
-      gsap.set(images, {
-        clipPath: 'inset(0% 0% 0% 0%)',
-        objectPosition: '0px 0%',
-        scale: 1.15,
-        filter: 'blur(12px)',
+      // Set initial states for mask overlays
+      maskOverlays.forEach((mask, i) => {
+        gsap.set(mask, {
+          scaleY: i === 0 ? 0 : 1,
+          transformOrigin: 'top center',
+        });
+      });
+
+      // Create scroll triggers for each block with mask reveal
+      blocks.forEach((block, index) => {
+        ScrollTrigger.create({
+          trigger: block,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: () => revealImage(index, 'down'),
+          onEnterBack: () => revealImage(index, 'up'),
+        });
+      });
+
+      /**
+       * Mask reveal animation
+       * Images emerge from bottom (scroll down) or top (scroll up)
+       */
+      function revealImage(activeIndex: number, direction: 'up' | 'down') {
+        const duration = 0.8;
+        const ease = 'power3.inOut';
+
+        images.forEach((img, i) => {
+          if (i === activeIndex) {
+            // Reveal active image with mask + blur animation
+            gsap.to(img, {
+              clipPath: 'inset(0% 0% 0% 0%)',
+              opacity: 1,
+              filter: 'blur(0px)',
+              duration,
+              ease,
+            });
+          } else if (i < activeIndex) {
+            // Images before active - fully revealed but behind
+            gsap.to(img, {
+              clipPath: 'inset(0% 0% 0% 0%)',
+              opacity: 1,
+              filter: 'blur(0px)',
+              duration: duration * 0.5,
+              ease,
+            });
+          } else {
+            // Images after active - hidden with mask + blur
+            gsap.to(img, {
+              clipPath:
+                direction === 'down'
+                  ? 'inset(100% 0% 0% 0%)'
+                  : 'inset(0% 0% 100% 0%)',
+              opacity: 0.85,
+              filter: 'blur(4px)',
+              duration,
+              ease,
+            });
+          }
+        });
+
+        // Animate mask overlays for dramatic effect
+        maskOverlays.forEach((mask, i) => {
+          if (i === activeIndex) {
+            gsap.to(mask, {
+              scaleY: 0,
+              duration,
+              ease,
+            });
+          } else if (i > activeIndex) {
+            gsap.to(mask, {
+              scaleY: 1,
+              duration: duration * 0.5,
+              ease,
+            });
+          }
+        });
+      }
+
+      // Initial fade-in animation for the gallery container
+      gsap.from(archRightEl, {
         opacity: 0,
-        yPercent: 0,
-      });
-
-      wrappers.forEach((el, idx) => {
-        el.style.zIndex = (contentCount - idx).toString();
-      });
-
-      gsap.to(images[0], {
-        filter: 'blur(0px)',
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power2.out',
+        y: 60,
+        scale: 0.95,
+        duration: 1.2,
+        delay: 0.2,
+        ease: 'power3.out',
         scrollTrigger: {
-          trigger: archRef.current,
-          start: 'top 75%',
+          trigger: archEl,
+          start: 'top 85%',
           toggleActions: 'play none none reverse',
         },
       });
 
-      for (let i = 0; i < contentCount; i++) {
-        const currentWrapper = wrappers[i];
-        const currentImg = images[i];
-        const nextImage = images[i + 1];
-
-        if (i < contentCount - 1) {
-          const startPosition = i * 1.5;
-
-          mainTimeline.to(
-            'body',
-            {
-              backgroundColor: bgColors[i + 1] || bgColors[bgColors.length - 1],
-              duration: 1.5,
-              ease: 'none',
-            },
-            startPosition
-          );
-
-          mainTimeline.to(
-            currentWrapper,
-            {
-              clipPath: 'inset(0px 0px 100% 0px)',
-              duration: 1.5,
-              ease: 'none',
-            },
-            startPosition
-          );
-
-          mainTimeline.to(
-            currentImg,
-            {
-              objectPosition: '0px 60%',
-              yPercent: 15,
-              duration: 1.5,
-              ease: 'none',
-            },
-            startPosition
-          );
-
-          mainTimeline.to(
-            nextImage,
-            {
-              objectPosition: '0px 0%',
-              yPercent: -15,
-              filter: 'blur(0px)',
-              opacity: 1,
-              duration: 1.5,
-              ease: 'none',
-            },
-            startPosition
-          );
-        }
-      }
-
-      infoBlocks.forEach((block) => {
-        const h2 = block.querySelector('h2') as HTMLElement;
-        const p = block.querySelector('p') as HTMLElement;
-
-        if (h2) {
-          gsap.fromTo(
-            h2,
-            { y: 40, opacity: 0, filter: 'blur(12px)' },
-            {
-              y: 0,
-              opacity: 1,
-              filter: 'blur(0px)',
-              duration: 0.8,
-              ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-              scrollTrigger: {
-                trigger: block,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-
-        if (p) {
-          gsap.fromTo(
-            p,
-            { y: 30, opacity: 0, filter: 'blur(8px)' },
-            {
-              y: 0,
-              opacity: 1,
-              filter: 'blur(0px)',
-              duration: 0.8,
-              delay: 0.1,
-              ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-              scrollTrigger: {
-                trigger: block,
-                start: 'top 80%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
+      // Subtle parallax on the gallery
+      gsap.to(archRightEl, {
+        y: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: archEl,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        },
       });
-    });
-
-    mm.add('(max-width: 1023px)', () => {
-      const mobileImages = gsap.utils.toArray<HTMLElement>(
-        '.mobile-img-container'
-      );
-      const mobileTexts = gsap.utils.toArray<HTMLElement>(
-        '.mobile-text-container'
-      );
-      const bgColors = ['#040013', '#060018', '#08001e', '#0a001a'];
-
-      mobileImages.forEach((container, index) => {
-        const img = container.querySelector('img') as HTMLImageElement;
-        if (!img) return;
-
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: container,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          })
-          .fromTo(
-            img,
-            { y: -40, scale: 1.1 },
-            { y: 40, scale: 1, ease: 'none' }
-          )
-          .to(
-            'body',
-            {
-              backgroundColor: bgColors[index] || bgColors[bgColors.length - 1],
-              duration: 0.5,
-              ease: 'power2.inOut',
-            },
-            0
-          );
-      });
-
-      mobileTexts.forEach((text) => {
-        gsap.fromTo(
-          text,
-          { y: 80, opacity: 0, filter: 'blur(10px)' },
-          {
-            y: 0,
-            opacity: 1,
-            filter: 'blur(0px)',
-            duration: 1.0,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: text,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-      });
-    });
-
-    const refreshST = () => ScrollTrigger.refresh();
-    window.addEventListener('load', refreshST);
-    setTimeout(refreshST, 500);
+    }, archEl);
 
     return () => {
-      window.removeEventListener('load', refreshST);
-      if (rafId) cancelAnimationFrame(rafId);
-      mm.revert();
-      lenis.destroy();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => {
+        const triggerEl = trigger.vars.trigger;
+        if (triggerEl instanceof Element && triggerEl.closest('.arch')) {
+          trigger.kill();
+        }
+      });
     };
   }, [isClient, archRef, archRightRef, contentCount]);
 }

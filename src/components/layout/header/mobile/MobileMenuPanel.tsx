@@ -40,6 +40,7 @@ const MobileMenuPanel = forwardRef<HTMLElement, MobileMenuPanelProps>(
       <nav
         ref={ref}
         id="mobile-menu-panel"
+        aria-label="Navegação principal"
         className="fixed inset-0 bg-[#0048ff] backdrop-blur-xl flex flex-col justify-center px-8 z-50 pointer-events-auto sm:px-12 md:px-16"
         style={{
           paddingTop: 'env(safe-area-inset-top, 2rem)',

@@ -1,14 +1,12 @@
 import type { PortfolioProject, ProjectCategory } from '@/types/project';
+import { getGhostAssetUrl } from '@/utils/utils';
 
 // Asset Constants (conforme regras de integridade)
 const ASSETS = {
-  BRANDING:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Branding-Project.webp',
-  KEY_VISUAL:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Key-Visual.webp',
-  MOTION:
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/webdesigner-2.gif',
-  TECH: 'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/campaign/cover.webp',
+  BRANDING: getGhostAssetUrl('site-assets/home/showcase/Branding-Project.webp'),
+  KEY_VISUAL: getGhostAssetUrl('site-assets/home/showcase/Key-Visual.webp'),
+  MOTION: getGhostAssetUrl('site-assets/home/showcase/webdesigner-2.gif'),
+  TECH: getGhostAssetUrl('site-assets/projects/campaign/cover.webp'),
 };
 
 export const PROJECT_CATEGORIES: Array<{
@@ -189,8 +187,7 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'branding',
     displayCategory: 'Branding',
     year: 2024,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/campaign/cover.webp',
+    image: getGhostAssetUrl('site-assets/projects/campaign/cover.webp'),
     type: 'B',
     layout: {
       cols: 'col-span-1',
@@ -211,8 +208,9 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'web',
     displayCategory: 'Web Design',
     year: 2023,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/portfolio-media/projects/creative-direction/hero.webp',
+    image: getGhostAssetUrl(
+      'portfolio-media/projects/creative-direction/hero.webp'
+    ),
     type: 'B',
     layout: {
       cols: 'col-span-1',
@@ -232,8 +230,7 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'institucional',
     displayCategory: 'Institucional',
     year: 2023,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/projects/key-visual/cover.webp',
+    image: getGhostAssetUrl('site-assets/projects/key-visual/cover.webp'),
     type: 'A',
     layout: {
       cols: 'col-span-2',
@@ -253,8 +250,7 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'motion',
     displayCategory: 'Motion',
     year: 2022,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/portfolio-media/projects/brand_video/hero.png',
+    image: getGhostAssetUrl('portfolio-media/projects/brand_video/hero.png'),
     type: 'B',
     layout: {
       cols: 'col-span-1',
@@ -274,8 +270,7 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'web',
     displayCategory: 'Web',
     year: 2024,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Key-Visual.webp',
+    image: getGhostAssetUrl('site-assets/home/showcase/Key-Visual.webp'),
     type: 'A',
     layout: {
       cols: 'col-span-1',
@@ -295,8 +290,7 @@ export const galleryProjects: PortfolioProject[] = [
     category: 'institucional',
     displayCategory: 'Accessibility',
     year: 2023,
-    image:
-      'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/home/showcase/Branding-Project.webp',
+    image: getGhostAssetUrl('site-assets/home/showcase/Branding-Project.webp'),
     type: 'B',
     layout: {
       cols: 'col-span-1',

@@ -10,6 +10,7 @@ import type { PortfolioProject } from '@/types/project';
 interface PortfolioShowcaseSectionProps {
   projects: PortfolioProject[];
   onProjectSelect?: (_project: PortfolioProject) => void;
+  onLoadMore?: () => void;
 }
 
 /**
@@ -17,7 +18,7 @@ interface PortfolioShowcaseSectionProps {
  * Grid de projetos com animações de parallax e overlays (Finch Style)
  * Atualizado conforme AUDITORIA_PORTFOLIO.md
  */
-export default function PortfolioShowcaseSection({ projects, onProjectSelect }: PortfolioShowcaseSectionProps) {
+export default function PortfolioShowcaseSection({ projects, onProjectSelect, onLoadMore }: PortfolioShowcaseSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = !!useReducedMotion();
 
@@ -65,16 +66,19 @@ export default function PortfolioShowcaseSection({ projects, onProjectSelect }: 
             />
           ))}
         </div>
-        
-        <div className="mt-8 flex items-center justify-center">
-          <button
-            type="button"
-            className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(2,132,199,0.25)] transition hover:bg-sky-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
-            aria-label="Ver mais projetos (placeholder)"
-          >
-            <span aria-hidden>←</span> veja mais <span aria-hidden>→</span>
-          </button>
-        </div>
+
+        {onLoadMore && (
+          <div className="mt-8 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={onLoadMore}
+              className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(2,132,199,0.25)] transition hover:bg-sky-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              aria-label="Carregar mais projetos"
+            >
+              <span aria-hidden>←</span> veja mais <span aria-hidden>→</span>
+            </button>
+          </div>
+        )}
 
       </Container>
     </section>
