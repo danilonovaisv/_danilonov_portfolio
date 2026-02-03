@@ -31,7 +31,9 @@ test.describe('Ghost System Verification', () => {
 
     // Check for content from Origin data
     await expect(
-      page.locator('h2', { hasText: /O que permanece/i }).filter({ visible: true })
+      page
+        .locator('h2', { hasText: /O que permanece/i })
+        .filter({ visible: true })
     ).toBeVisible();
     await expect(
       page.locator('p', { hasText: /Desde cedo, sempre prestei atenção/i })

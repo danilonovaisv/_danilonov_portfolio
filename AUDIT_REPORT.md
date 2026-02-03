@@ -18,18 +18,18 @@ O codebase apresenta uma arquitetura sólida utilizando Next.js 15, com boas pr�
 
 O uso de `any` anula os benefícios do TypeScript e pode esconder bugs em tempo de execução. Foram encontradas ocorrências que devem ser refatoradas para interfaces ou tipos explícitos:
 
-* **Prioridade:** Alta
-* **Ocorrências:**
-  * `src/app/admin/(protected)/landing-pages/[id]/page.tsx`: `useState<any>(null)`
-  * `src/components/ui/chart.tsx`: Múltiplos `any` nos parâmetros de renderização do Recharts.
-  * `src/components/layout/AssetLoaderWrapper.tsx`: `useState<any[]>([]);`
-  * `src/components/canvas/home/hero/Ghost.tsx`: Casts agressivos `(gl as any).autoRender`.
-  * `src/validations/post.schema.ts`: `z.any()` no schema de validação.
+- **Prioridade:** Alta
+- **Ocorrências:**
+  - `src/app/admin/(protected)/landing-pages/[id]/page.tsx`: `useState<any>(null)`
+  - `src/components/ui/chart.tsx`: Múltiplos `any` nos parâmetros de renderização do Recharts.
+  - `src/components/layout/AssetLoaderWrapper.tsx`: `useState<any[]>([]);`
+  - `src/components/canvas/home/hero/Ghost.tsx`: Casts agressivos `(gl as any).autoRender`.
+  - `src/validations/post.schema.ts`: `z.any()` no schema de validação.
 
 ### 2.2. Complexidade de CSS
 
-* **Prioridade:** Média
-* O arquivo `src/app/globals.css` é extenso. Recomenda-se modularizar estilos específicos em CSS Modules ou usar utilitários Tailwind onde possível para reduzir o bundle global.
+- **Prioridade:** Média
+- O arquivo `src/app/globals.css` é extenso. Recomenda-se modularizar estilos específicos em CSS Modules ou usar utilitários Tailwind onde possível para reduzir o bundle global.
 
 ---
 
@@ -39,14 +39,14 @@ O uso de `any` anula os benefícios do TypeScript e pode esconder bugs em tempo 
 
 O uso desta propriedade expõe a aplicação a riscos de XSS (Cross-Site Scripting) se o conteúdo não for higienizado.
 
-* **Locais:**
-  * `src/components/ui/chart.tsx`: Usado para injetar estilos dinâmicos (`<style>`). Embora o risco pareça controlado (conteúdo gerado via config interna), recomenda-se validar rigorosamente as chaves de configuração ou usar CSS Variables via `style={{ ... }}` no elemento raiz em vez de injetar blocos `<style>`.
-  * `src/components/ui/JsonLd.tsx`: **Falso Positivo**. Este uso é necessário e padrão para injetar JSON-LD no `<head>`.
+- **Locais:**
+  - `src/components/ui/chart.tsx`: Usado para injetar estilos dinâmicos (`<style>`). Embora o risco pareça controlado (conteúdo gerado via config interna), recomenda-se validar rigorosamente as chaves de configuração ou usar CSS Variables via `style={{ ... }}` no elemento raiz em vez de injetar blocos `<style>`.
+  - `src/components/ui/JsonLd.tsx`: **Falso Positivo**. Este uso é necessário e padrão para injetar JSON-LD no `<head>`.
 
 ### 3.2. Segredos e Variáveis de Ambiente
 
-* Os arquivos `.env*` estão corretamente listados no `.gitignore`.
-* Nenhuma credencial hardcoded foi detectada nos arquivos amostrados.
+- Os arquivos `.env*` estão corretamente listados no `.gitignore`.
+- Nenhuma credencial hardcoded foi detectada nos arquivos amostrados.
 
 ---
 
@@ -56,14 +56,14 @@ O uso desta propriedade expõe a aplicação a riscos de XSS (Cross-Site Scripti
 
 O Google e outros buscadores priorizam páginas com um único `<h1>` que descreve o tópico principal. O componente `HeroCopy.tsx` renderiza dois elementos `<h1>` no DOM, alternando a visibilidade via CSS (`display: none` / `hidden`).
 
-* **Problema:** Embora visualmente apenas um apareça, o HTML contém dois headers principais, diluindo a relevância semântica.
-* **Arquivo:** `src/components/home/hero/HeroCopy.tsx`
-* **Recomendação:** Unificar em um único `<h1>` e controlar as quebras de linha (`<br>`) e tamanhos de fonte via classes responsivas (ex: `hidden lg:block` no `<br>`).
+- **Problema:** Embora visualmente apenas um apareça, o HTML contém dois headers principais, diluindo a relevância semântica.
+- **Arquivo:** `src/components/home/hero/HeroCopy.tsx`
+- **Recomendação:** Unificar em um único `<h1>` e controlar as quebras de linha (`<br>`) e tamanhos de fonte via classes responsivas (ex: `hidden lg:block` no `<br>`).
 
 ### 4.2. Metadados
 
-* A configuração em `src/config/metadata.ts` e `src/app/layout.tsx` segue as boas práticas do Next.js App Router.
-* `sitemap.ts` e `robots.ts` estão presentes e configurados.
+- A configuração em `src/config/metadata.ts` e `src/app/layout.tsx` segue as boas práticas do Next.js App Router.
+- `sitemap.ts` e `robots.ts` estão presentes e configurados.
 
 ---
 

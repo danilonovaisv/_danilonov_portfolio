@@ -67,18 +67,23 @@ describe('HeroCopy Component Responsiveness', () => {
   it('should render both Desktop and Mobile text blocks with correct visibility classes', () => {
     const { container } = render(<HeroCopy />);
 
-    // Find the Desktop H1 (hidden lg:block)
-    const desktopH1 = container.querySelector('h1.lg\\:block');
-    expect(desktopH1).toBeInTheDocument();
-    expect(desktopH1).toHaveClass('hidden');
-    expect(desktopH1).toHaveTextContent('Você não');
-    expect(desktopH1).toHaveTextContent('vê o design.');
+    // Verify SEO/Semantic H1
+    const srH1 = container.querySelector('h1.sr-only');
+    expect(srH1).toBeInTheDocument();
+    expect(srH1).toHaveTextContent('Você não vê o design. Mas ele vê você.');
 
-    // Find the Mobile H1 (lg:hidden)
-    const mobileH1 = container.querySelector('h1.lg\\:hidden');
-    expect(mobileH1).toBeInTheDocument();
-    expect(mobileH1).toHaveTextContent('Você não');
-    expect(mobileH1).toHaveTextContent('vê o');
-    expect(mobileH1).toHaveTextContent('design.');
+    // Find the Desktop Visual Block (div.hidden.lg:block)
+    // Note: We search for the div that has both 'hidden' and 'lg:block' classes
+    const desktopVisual = container.querySelector('div.hidden.lg\\:block');
+    expect(desktopVisual).toBeInTheDocument();
+    expect(desktopVisual).toHaveTextContent('Você não vê');
+    expect(desktopVisual).toHaveTextContent('o design.');
+
+    // Find the Mobile Visual Block (div.lg:hidden)
+    const mobileVisual = container.querySelector('div.lg\\:hidden');
+    expect(mobileVisual).toBeInTheDocument();
+    expect(mobileVisual).toHaveTextContent('Você não');
+    expect(mobileVisual).toHaveTextContent('vê o');
+    expect(mobileVisual).toHaveTextContent('design.');
   });
 });
