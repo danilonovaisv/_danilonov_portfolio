@@ -73,8 +73,9 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
   }, [basePosition]);
 
   // --- Responsividade (Policy 4.3) ---
+  // Ajamais obstruir o texto. Tamanho reduzido.
   const isMobile = viewport.width < 5;
-  const baseScale = isMobile ? viewport.width * 0.18 : 0.6;
+  const baseScale = isMobile ? viewport.width * 0.14 : 0.45;
 
   // Handle touch interactions simply by updating mouseRef
   useEffect(() => {
@@ -200,7 +201,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
             receiveShadow
             geometry={nodes.Body_Ghost_White_0.geometry}
             material={materials.Ghost_White}
-            position={[0, 1.5578, 0]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
           />
           <mesh
@@ -209,7 +210,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
             receiveShadow
             geometry={nodes.Eyes_Eyes_0.geometry}
             material={materials.Eyes}
-            position={[0, 1.5578, 0]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
           />
           <mesh
@@ -218,7 +219,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
             receiveShadow
             geometry={nodes.Hat_Hat_Black_0.geometry}
             material={materials.Hat_Black}
-            position={[0, 2.9913, 0]}
+            position={[0, 1.4335, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
           />
           <mesh
@@ -227,9 +228,10 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
             receiveShadow
             geometry={nodes.Rim_Rim_Red_0.geometry}
             material={materials.Rim_Red}
-            position={[0, 2.3541, 0]}
+            position={[0, 0.7963, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
           />
+
         </group>
       </group>
     </Float>

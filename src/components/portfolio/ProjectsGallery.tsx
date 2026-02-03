@@ -1,10 +1,14 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import { useLERPScroll } from '@/hooks/useLERPScroll';
-import { ProjectCard } from './ProjectCard';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { ProjectCard, type ProjectCardSize } from './ProjectCard';
 import { PortfolioProject } from '@/types/project';
 import { galleryProjects } from '@/data/projects';
+import { cn } from '@/lib/utils';
+import styles from './ProjectsGallery.module.css';
 
 interface ProjectsGalleryProps {
   projects?: PortfolioProject[];
@@ -22,37 +26,83 @@ export const ProjectsGallery = ({
   onOpenProject
 }: ProjectsGalleryProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isMobile = useMediaQuery('(max-width: 640px)');
+  const useLerp = !prefersReducedMotion && !isMobile;
 
   // Initialize LERP Scroll
-  const { galleryRef } = useLERPScroll(trackRef);
+  const { galleryRef } = useLERPScroll(trackRef, useLerp);
 
   // Use passed projects or fallback to mock data
   const projectsToRender = projects || galleryProjects;
 
+  const sizePattern: ProjectCardSize[] = ['lg', 'md', 'sm', 'tall', 'md', 'wide', 'sm', 'md'];
+
+  const items = useMemo(() => {
+    const entries: Array<
+      | { kind: 'project'; project: PortfolioProject; size: ProjectCardSize }
+      | { kind: 'placeholder'; id: string; size: ProjectCardSize }
+    > = [];
+
+    projectsToRender.forEach((project, index) => {
+      const size = project.layout?.size ?? sizePattern[index % sizePattern.length];
+      entries.push({ kind: 'project', project, size });
+
+      if (!isMobile && index > 0 && index % 5 === 2) {
+        entries.push({
+          kind: 'placeholder',
+          id: `placeholder-${project.id}-${index}`,
+          size: sizePattern[(index + 3) % sizePattern.length],
+        });
+      }
+    });
+
+    return entries;
+  }, [projectsToRender, isMobile]);
+
   return (
-    <div
-      className="gallery relative z-0 w-full"
-      ref={galleryRef as React.RefObject<HTMLDivElement>}
+    <section
+      id="portfolio-gallery"
+      aria-labelledby="portfolio-gallery-heading"
+      className="relative w-full bg-background text-white"
     >
+      <h2 id="portfolio-gallery-heading" className="sr-only">
+        Projetos em destaque
+      </h2>
+
       <div
-        ref={trackRef}
-        className="fixed top-0 left-0 w-full will-change-transform"
+        className={cn('gallery', styles.gallery)}
+        ref={galleryRef as React.RefObject<HTMLDivElement>}
       >
-        <div className="std-grid py-24 sm:py-32">
-          <div className="col-span-full grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-8">
-            {projectsToRender.map((project, index) => (
-              <div key={project.id} className="w-full">
-                <ProjectCard
-                  project={project}
-                  index={index}
-                  onClick={onProjectSelect || onOpenProject}
-                  priority={index < 3}
-                />
-              </div>
-            ))}
-          </div>
+        <div
+          ref={trackRef}
+          className={cn(
+            styles.track,
+            useLerp ? 'fixed inset-0' : 'relative'
+          )}
+        >
+          {items.map((item, index) =>
+            item.kind === 'project' ? (
+              <ProjectCard
+                key={item.project.id}
+                project={item.project}
+                index={index}
+                size={item.size}
+                enableParallax={useLerp}
+                onClick={onProjectSelect || onOpenProject}
+                priority={index < 3}
+              />
+            ) : (
+              <div
+                key={item.id}
+                data-size={item.size}
+                className={styles.placeholder}
+                aria-hidden="true"
+              />
+            )
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

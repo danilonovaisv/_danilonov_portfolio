@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { HeroSection } from '@/components/portfolio/HeroSection';
+import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
 import { ProjectsGallery } from '@/components/portfolio/ProjectsGallery';
 import { PortfolioModal } from '@/components/portfolio/PortfolioModal';
 import { PortfolioProject } from '@/types/project';
 import ClientsBrandsSection from '@/components/home/clients/ClientsBrandsSection';
 import ContactSection from '@/components/home/contact/ContactSection';
+import SiteFooter from '@/components/layout/SiteFooter';
 import { showcaseProjects } from '@/data/projects';
 
 export default function PortfolioShowcasePage() {
@@ -27,18 +28,19 @@ export default function PortfolioShowcasePage() {
 
   return (
     <main className="bg-[#040013] min-h-screen">
-      <HeroSection />
+      <PortfolioHeroNew />
 
       <ProjectsGallery
         projects={showcaseProjects}
         onProjectSelect={handleOpenProject}
       />
 
-      {/* Legacy Sections covering the gallery track if needed */}
       <div className="relative z-10 bg-[#040013]">
         <ClientsBrandsSection />
         <ContactSection />
       </div>
+
+      <SiteFooter />
 
       <PortfolioModal
         isOpen={isModalOpen}

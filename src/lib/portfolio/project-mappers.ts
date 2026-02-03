@@ -82,12 +82,14 @@ function buildLayout(
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw',
+      size: 'md',
     },
     {
       cols: 'md:col-span-6 lg:col-span-6',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw',
+      size: 'md',
     },
     // Row pattern: 7 + 5 = 12
     {
@@ -95,12 +97,14 @@ function buildLayout(
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 58vw, 58vw',
+      size: 'lg',
     },
     {
       cols: 'md:col-span-3 lg:col-span-5',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 42vw, 42vw',
+      size: 'md',
     },
     // Row pattern: 4 + 4 + 4 = 12 (3 cards per row)
     {
@@ -108,18 +112,21 @@ function buildLayout(
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+      size: 'sm',
     },
     {
       cols: 'md:col-span-4 lg:col-span-4',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+      size: 'sm',
     },
     {
       cols: 'md:col-span-4 lg:col-span-4',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+      size: 'sm',
     },
     // Row pattern: 6 + 6 = 12 (2 equal cards)
     {
@@ -127,12 +134,14 @@ function buildLayout(
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, 50vw',
+      size: 'md',
     },
     {
       cols: 'md:col-span-4 lg:col-span-6',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
       sizes: '(max-width: 768px) 100vw, 50vw',
+      size: 'md',
     },
   ];
 
@@ -149,6 +158,7 @@ function buildLayout(
     height: 'min-h-[320px]',
     aspectRatio: 'aspect-[4/5]',
     sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+    size: 'sm',
   };
 }
 

@@ -17,7 +17,8 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
   return (
     <section
       ref={ref}
-      className={`w-full h-screen flex flex-col items-center justify-center overflow-hidden px-4 ${bgColor}`}
+      style={{ backgroundColor: bgColor }}
+      className="w-full h-screen flex flex-col items-center justify-center overflow-hidden px-4"
     >
       <motion.div
         className="flex flex-col items-center justify-center text-center text-white font-display leading-[0.78] w-full max-w-[98vw]"
@@ -26,13 +27,13 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
         viewport={{ once: false }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="text-[16vw] md:text-[14rem] tracking-tighter uppercase font-black">
+        <div className="text-[clamp(3rem,10vw,7.5rem)] font-bold tracking-[0.25em] uppercase leading-none">
           ISSO É
         </div>
-        <div className="text-[30vw] md:text-[25rem] font-black tracking-tighter uppercase">
+        <div className="text-[clamp(3rem,10vw,7.5rem)] font-bold tracking-[0.25em] uppercase leading-none mt-2">
           GHOST
         </div>
-        <div className="text-[24vw] md:text-[19rem] tracking-tighter uppercase font-black">
+        <div className="text-[clamp(3rem,10vw,7.5rem)] font-bold tracking-[0.25em] uppercase leading-none mt-2">
           DESIGN
         </div>
       </motion.div>

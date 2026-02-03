@@ -34,10 +34,9 @@ export const getBackdropVariants = (shouldReduceMotion: boolean | null) => ({
 });
 
 export const getContainerVariants = (shouldReduceMotion: boolean | null) => ({
-  hidden: { opacity: 0, scale: 0.98, y: 12 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
-    scale: 1,
     y: 0,
     transition: {
       duration: shouldReduceMotion ? 0 : MODAL_TIMELINE.CONTAINER,
@@ -47,7 +46,6 @@ export const getContainerVariants = (shouldReduceMotion: boolean | null) => ({
   },
   exit: {
     opacity: 0,
-    scale: 0.98,
     y: 8,
     transition: { duration: shouldReduceMotion ? 0 : 0.18, ease: easing },
   },

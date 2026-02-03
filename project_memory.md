@@ -25,6 +25,13 @@
 
 - O sistema está agora calibrado com as regras mais recentes. Auditorias de componentes podem ser realizadas seguindo os workflows de `./agent/workflows/`.
 
+- [2026-02-03] Executada auditoria de arquitetura e correção de testes E2E (`ghost-system.spec.ts`, `portfolio.spec.ts`).
+- [2026-02-03] Corrigido "Strict Mode Violation" em `ghost-system.spec.ts` (elementos duplicados no DOM).
+- [2026-02-03] Atualizado seletor em `portfolio.spec.ts` para refletir nova estrutura DOM (`article.group`).
+- [2026-02-03] Implementada lógica de retry em navegação para `ghost-system.spec.ts` para mitigar flakiness do dev server.
+- [2026-02-03] Testes E2E executados com sucesso (8/8 passed).
+
 ## [ALERTA DE BUGS]
 
-- Nenhum bug identificado nesta configuração.
+- Nenhum bug funcional bloqueante identificado nos testes E2E.
+- Script `scripts/antigravity_audit.py` identificado como incompatível (Python-only) e candidato a depreciação.

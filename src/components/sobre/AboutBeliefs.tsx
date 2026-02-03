@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react';
 import { cubicBezier, useScroll, useTransform } from 'framer-motion';
 import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
+import { Environment, Center } from '@react-three/drei';
 import { BeliefSection } from './BeliefSection';
 import { BeliefFinalSection } from './BeliefFinalSection';
 import { BeliefFixedHeader } from './BeliefFixedHeader';
@@ -28,7 +28,35 @@ const COLORS = [
   BRAND.colors.pinkDetails,
 ];
 
-const FINAL_COLOR = BRAND.colors.bluePrimary;
+
+
+import { ProceduralGhost } from './ProceduralGhost';
+
+class GLTFErrorBoundary extends React.Component<
+  { fallback: React.ReactNode; children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(_error: any) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error('GhostModel GLTF failed to load:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+
+    return this.props.children;
+  }
+}
 
 export const AboutBeliefs: React.FC = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -64,14 +92,14 @@ export const AboutBeliefs: React.FC = () => {
           />
         ))}
         <BeliefFinalSection
-          bgColor={FINAL_COLOR}
+          bgColor={BRAND.colors.bluePrimary}
           scrollProgress={scrollYProgress}
         />
       </div>
 
       {/* LAYER 3: Canvas 3D (Sticky - Top Layer) */}
-      {/* Z-Index 30: FANTASMA ACIMA DO TEXTO */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-30">
+      {/* Z-Index 50: FANTASMA ACIMA DO TEXTO (GARANTIDO) */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-50">
         <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto">
           <Canvas
             shadows
@@ -88,12 +116,24 @@ export const AboutBeliefs: React.FC = () => {
               penumbra={1}
               intensity={1}
             />
-            <Suspense fallback={null}>
-              <GhostModel
-                scrollProgress={scrollYProgress}
-                position={[0, 0, 0]}
-                rotation={[0, 0, 0]}
-              />
+            <Suspense fallback={
+              <Center>
+                <ProceduralGhost />
+              </Center>
+            }>
+              <GLTFErrorBoundary fallback={
+                <Center>
+                  <ProceduralGhost />
+                </Center>
+              }>
+                <Center>
+                  <GhostModel
+                    scrollProgress={scrollYProgress}
+                    position={[0, 0, 0]}
+                    rotation={[0, 0, 0]}
+                  />
+                </Center>
+              </GLTFErrorBoundary>
             </Suspense>
           </Canvas>
         </div>

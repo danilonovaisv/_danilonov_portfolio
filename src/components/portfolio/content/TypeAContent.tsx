@@ -197,14 +197,14 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
                     muted
                     loop
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    className="absolute inset-0 w-full h-full object-cover transition duration-300 hover:brightness-110"
                   />
                 ) : (
                   <Image
                     src={img}
                     alt={`${project.title} - Imagem ${i + 1}`}
                     fill
-                    className="object-cover hover:scale-105 transition-transform duration-500"
+                    className="object-cover transition duration-300 hover:brightness-110"
                     sizes="(max-width: 768px) 50vw, 33vw"
                   />
                 )}

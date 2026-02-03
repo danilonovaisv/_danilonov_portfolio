@@ -5,12 +5,10 @@
 
 // Main components
 export { default as PortfolioHeroNew } from './PortfolioHeroNew';
+export { default as PortfolioCTA } from './PortfolioCTA';
 export { ProjectsGallery } from './ProjectsGallery';
 export { ProjectCard } from './ProjectCard';
-export { default as PortfolioCard } from './PortfolioCard';
-export { PortfolioCardParallax } from './PortfolioCardParallax';
-export { default as CategoryFilter } from './CategoryFilter';
-export { default as PortfolioModalNew } from './PortfolioModalNew';
+export { PortfolioModal } from './PortfolioModal';
 
 // Content layouts
 export { default as TypeAContent } from './content/TypeAContent';

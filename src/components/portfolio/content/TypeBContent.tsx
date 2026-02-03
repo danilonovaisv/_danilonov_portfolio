@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Calendar, Building2, Tag } from 'lucide-react';
 import type { PortfolioProject } from '@/types/project';
-import AntigravityCTA from '@/components/ui/AntigravityCTA';
+import PortfolioCTA from '../PortfolioCTA';
 import {
   easing,
   fadeInUp,
@@ -195,13 +195,14 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
           </motion.div>
         )}
 
-        {/* CTA - Using AntigravityCTA component */}
+        {/* CTA */}
         <motion.div variants={fadeInUp} className="flex gap-3 mt-4">
           {project.detail?.externalUrl && (
-            <AntigravityCTA
+            <PortfolioCTA
               href={project.detail.externalUrl}
-              text="ver projeto"
+              label="ver projeto"
               className="relative"
+              external
             />
           )}
         </motion.div>
