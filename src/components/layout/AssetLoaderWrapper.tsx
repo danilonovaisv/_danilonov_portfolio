@@ -60,11 +60,7 @@ export default function AssetLoaderWrapper({
   // If assets haven't loaded yet, render the children without the provider
   // This allows the page to render while assets are being fetched
   if (!assetsLoaded) {
-    return (
-      <ErrorBoundary>
-        <ClientLayout>{children}</ClientLayout>
-      </ErrorBoundary>
-    );
+    return <ClientLayout>{children}</ClientLayout>;
   }
 
   return (

@@ -19,7 +19,7 @@
 
 ## Styling
 
-- ✅ Tailwind CSS como primeira opção
+- ✅ Tailwind CSS como primeira opção (Usar v3.4.x STABLE - NÃO USAR v4)
 - ✅ Usar classes utilitárias do Tailwind
 - ✅ CSS Modules para estilos específicos de componentes
 - ✅ Variáveis CSS para tokens de design (cores, espaçamentos, tipografia)

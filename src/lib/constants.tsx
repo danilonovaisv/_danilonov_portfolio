@@ -22,13 +22,9 @@ export type ProjectCategory = {
 // --- 1. ASSETS GLOBAIS ---
 export const ASSETS = {
   videoManifesto: getGhostAssetUrl('site-assets/home/home.manifesto_video.mp4'),
-  favicon: getGhostAssetUrl('site-assets/global/logos/global.favicon_dark.svg'),
-  logoLight: getGhostAssetUrl(
-    'site-assets/global/logos/global.logo_header_light.svg'
-  ),
-  logoDark: getGhostAssetUrl(
-    'site-assets/global/logos/global.logo_header_dark.svg'
-  ),
+  favicon: getGhostAssetUrl('logo_site/logo.svg'),
+  logoLight: getGhostAssetUrl('logo_site/faivcon-02.svg'),
+  logoDark: getGhostAssetUrl('logo_site/faivcon.svg'),
 };
 
 // --- 2. CONTEÚDO DA HOME (TEXTOS) ---
@@ -58,9 +54,7 @@ export const FEATURED_PROJECTS = [
     client: 'Magic',
     category: 'branding & campanha',
     displayCategory: 'branding & campanha',
-    imageUrl: getGhostAssetUrl(
-      'site-assets/home/showcase/Branding-Project.webp'
-    ),
+    imageUrl: getGhostAssetUrl('project-images/Brand-Identity%20copy.webp'),
     isHero: true,
     year: '2023',
   },
@@ -70,9 +64,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'branding',
     displayCategory: 'branding',
-    imageUrl: getGhostAssetUrl(
-      'site-assets/home/showcase/Branding-Project.webp'
-    ),
+    imageUrl: getGhostAssetUrl('project-images/Branding-Project.webp'),
     isHero: false,
     year: '2022',
   },
@@ -82,7 +74,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'campanha',
     displayCategory: 'campanha',
-    imageUrl: getGhostAssetUrl('site-assets/home/showcase/Key-Visual.webp'),
+    imageUrl: getGhostAssetUrl('project-images/Key-Visual.webp'),
     isHero: false,
     year: '2021',
   },
@@ -92,7 +84,7 @@ export const FEATURED_PROJECTS = [
     client: 'Cliente confidencial',
     category: 'web & motion',
     displayCategory: 'web & motion',
-    imageUrl: getGhostAssetUrl('site-assets/home/showcase/webdesigner-2.gif'),
+    imageUrl: getGhostAssetUrl('project-images/webdesigner-2%202.gif'),
     isHero: false,
     year: '2023',
   },
@@ -103,21 +95,19 @@ export const CATEGORIES: ProjectCategory[] = [
   {
     id: 'brand-campaigns',
     label: 'Brand & Campaigns',
-    posterUrl: getGhostAssetUrl(
-      'site-assets/home/showcase/Branding-Project.webp'
-    ),
+    posterUrl: getGhostAssetUrl('project-images/Branding-Project.webp'),
     thumbnailUrl: '',
   },
   {
     id: 'videos-motions',
     label: 'Videos & Motions',
-    posterUrl: getGhostAssetUrl('site-assets/home/showcase/webdesigner-2.gif'),
+    posterUrl: getGhostAssetUrl('project-images/webdesigner-2%202.gif'),
     thumbnailUrl: '',
   },
   {
     id: 'websites-webcampaigns-tech',
     label: 'Web Campaigns, Websites & Tech',
-    posterUrl: getGhostAssetUrl('site-assets/projects/campaign/cover.webp'),
+    posterUrl: getGhostAssetUrl('project-images/WelcomeAd_800x500px.webp'),
     thumbnailUrl: '',
   },
 ];
@@ -126,51 +116,51 @@ export const CATEGORIES: ProjectCategory[] = [
 export const CLIENT_LOGOS = [
   {
     name: 'Client 1',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.1.svg'),
+    src: getGhostAssetUrl('client-logos/client1.svg'),
   },
   {
     name: 'Client 2',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.2.svg'),
+    src: getGhostAssetUrl('client-logos/client2.svg'),
   },
   {
     name: 'Client 3',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.3.svg'),
+    src: getGhostAssetUrl('client-logos/client3.svg'),
   },
   {
     name: 'Client 4',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.4.svg'),
+    src: getGhostAssetUrl('client-logos/client4.svg'),
   },
   {
     name: 'Client 5',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.5.svg'),
+    src: getGhostAssetUrl('client-logos/client5.svg'),
   },
   {
     name: 'Client 6',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.6.svg'),
+    src: getGhostAssetUrl('client-logos/client6.svg'),
   },
   {
     name: 'Client 7',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.7.svg'),
+    src: getGhostAssetUrl('client-logos/client7.svg'),
   },
   {
     name: 'Client 8',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.8.svg'),
+    src: getGhostAssetUrl('client-logos/client8.svg'),
   },
   {
     name: 'Client 9',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.9.svg'),
+    src: getGhostAssetUrl('client-logos/client9.svg'),
   },
   {
     name: 'Client 10',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.10.svg'),
+    src: getGhostAssetUrl('client-logos/client10.svg'),
   },
   {
     name: 'Client 11',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.11.svg'),
+    src: getGhostAssetUrl('client-logos/client11.svg'),
   },
   {
     name: 'Client 12',
-    src: getGhostAssetUrl('site-assets/clients/clients.strip.12.svg'),
+    src: getGhostAssetUrl('client-logos/client12.svg'),
   },
 ];
 

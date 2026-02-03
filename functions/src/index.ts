@@ -70,7 +70,7 @@ async function initializeNextApp(): Promise<void> {
         hostname: '0.0.0.0',
         port: parseInt(process.env.PORT || '8080', 10),
         // conf: { distDir: 'next_build' }, // Removed: using next.config.js instead
-        dir: resolve(__dirname, '../next_build'),
+        dir: resolve(__dirname, '../'),
       });
 
       await nextApp.prepare();

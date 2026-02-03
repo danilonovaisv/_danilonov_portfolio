@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, MotionValue } from 'framer-motion';
 
 interface BeliefFinalSectionProps {
   bgColor: string;
+  scrollProgress?: MotionValue<number>;
 }
 
 export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
   bgColor,
+  scrollProgress: _scrollProgress,
 }) => {
   const ref = useRef<HTMLElement>(null);
 
@@ -22,7 +24,7 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
         initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         viewport={{ once: false }}
-        transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="text-[16vw] md:text-[14rem] tracking-tighter uppercase font-black">
           ISSO É

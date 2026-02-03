@@ -10,72 +10,22 @@
         "*.local"
       ],
       "predeploy": [
-        "rm -rf functions/next_build || true",
-        "mkdir -p functions/next_build/.next",
-        "rsync -av .next/standalone/ functions/next_build/ --exclude cache",
-        "rsync -av .next/static functions/next_build/.next/static",
-        "rsync -av public functions/next_build/public",
-        "pnpm --prefix \"$RESOURCE_DIR\" run build",
-        "pnpm --prefix \"$RESOURCE_DIR\" run lint || true"
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
       ],
       "source": "functions"
     }
   ],
   "hosting": {
-    "site": "portfolio-danilo-novais",
-    "public": "deploy-public",
+    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "headers": [
-      {
-        "source": "/_next/static/**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
-        "source": "/assets/**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=31536000, immutable"
-          }
-        ]
-      },
-      {
-        "source": "/**",
-        "headers": [
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          },
-          {
-            "key": "Referrer-Policy",
-            "value": "strict-origin-when-cross-origin"
-          },
-          {
-            "key": "Permissions-Policy",
-            "value": "camera=(), microphone=(), geolocation=()"
-          }
-        ]
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "function": {
-          "codebase": "modern_ssr",
-          "functionId": "ssr_modern",
-          "region": "us-central1"
-        }
-      }
-    ]
+    "frameworksBackend": {
+      "region": "us-central1"
+    }
   },
   "emulators": {
     "functions": {

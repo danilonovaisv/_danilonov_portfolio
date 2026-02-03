@@ -63,7 +63,10 @@ export const AboutBeliefs: React.FC = () => {
             isFirst={index === 0}
           />
         ))}
-        <BeliefFinalSection bgColor={FINAL_COLOR} />
+        <BeliefFinalSection
+          bgColor={FINAL_COLOR}
+          scrollProgress={scrollYProgress}
+        />
       </div>
 
       {/* LAYER 3: Canvas 3D (Sticky - Top Layer) */}
