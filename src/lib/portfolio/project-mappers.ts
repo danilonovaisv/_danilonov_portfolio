@@ -75,7 +75,7 @@ function buildLayout(
    * - Altura fixa no desktop para uniformidade visual
    * - Pattern: [5+7], [7+5], [4+4+4], [6+6], [8+4], [4+8]
    */
-  const pairedLayouts = [
+  const pairedLayouts: ProjectGridLayout[] = [
     // Row pattern: 6 + 6 = 12 (Ensures first row is full width)
     {
       cols: 'md:col-span-6 lg:col-span-6',

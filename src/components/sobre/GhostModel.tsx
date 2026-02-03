@@ -72,6 +72,8 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
   // Ajamais obstruir o texto. Tamanho reduzido.
   const isMobile = viewport.width < 5;
   const baseScale = isMobile ? viewport.width * 0.14 : 0.45;
+  // Mobile Shift: Move Up significantly to clear footer text
+  const mobileYOffset = isMobile ? 1.2 : 0;
 
   // Handle touch interactions simply by updating mouseRef
   useEffect(() => {
@@ -127,7 +129,7 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     );
     animRef.current.position.y = THREE.MathUtils.lerp(
       animRef.current.position.y,
-      mouse.y * mouseInfluence,
+      (mouse.y * mouseInfluence) + mobileYOffset,
       0.05
     );
 

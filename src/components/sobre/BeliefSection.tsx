@@ -24,13 +24,57 @@ interface BeliefLineProps {
  * Isso permite usar hooks (useTransform) corretamente,
  * pois hooks não podem ser chamados dentro de loops/callbacks.
  */
-const BeliefLine: React.FC<BeliefLineProps> = ({
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  return isMobile;
+};
+
+const BeliefBlockMobile: React.FC<{
+  text: string;
+  scrollYProgress: MotionValue<number>;
+  animationRange: number[];
+  exitRange: number[];
+}> = ({ text, scrollYProgress, animationRange, exitRange }) => {
+  // Mobile Animation: Right (Entry) -> Center (Hold) -> Left (Exit)
+  // Entry: 100% -> 0%
+  // Exit: 0% -> -100%
+  const x = useTransform(
+    scrollYProgress,
+    [animationRange[0], animationRange[1], exitRange[0], exitRange[1]],
+    ['100%', '0%', '0%', '-100%'],
+    { ease: ghostEase }
+  );
+
+  const opacity = useTransform(
+    scrollYProgress,
+    [animationRange[0], animationRange[1] * 1.5, exitRange[0], exitRange[1]], // Fade in slightly faster
+    [0, 1, 1, 0]
+  );
+
+  return (
+    <motion.div
+      style={{ x, opacity }}
+      className="w-full text-center px-6"
+    >
+      <span className="block text-blueAccent font-bold text-[clamp(2rem,6vw,3rem)] leading-[1.2] tracking-tighter text-wrap text-center select-none shadow-black/50 drop-shadow-md">
+        {text.replace(/\n/g, ' ')}
+      </span>
+    </motion.div>
+  );
+}
+
+const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
   line,
   index,
   scrollYProgress,
   animationRange,
 }) => {
-  // Cada linha entra da esquerda para a direita (X: -100% -> 0)
   const lineX = useTransform(
     scrollYProgress,
     [animationRange[0] + index * 0.02, animationRange[1] + index * 0.02],
@@ -62,28 +106,23 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   isFirst = false,
 }) => {
   const containerRef = useRef<HTMLElement>(null);
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   });
 
-  // Intervalo de animação de entrada e saída:
-  // Ajustado para garantir que o primeiro item já inicie visível ou entre suavemente.
-  // [0, 0.3] para o primeiro garante que comece a animar cedo.
   const animationRange = isFirst ? [0, 0.3] : [0.22, 0.45];
   const exitRange = isFirst ? [0.9, 1.0] : [0.8, 0.95];
 
-  const opacity = useTransform(
+  const desktopOpacity = useTransform(
     scrollYProgress,
     [animationRange[0], animationRange[1], exitRange[0], exitRange[1]],
     [0, 1, 1, 0]
   );
 
-  // Y acompanha o scroll para dar a sensação de ancoragem na parte superior da cor
   const yScroll = useTransform(scrollYProgress, [0.7, 0.95], ['0vh', '-100vh']);
-
-  // Dividindo o texto por linhas para entrada staggered
   const lines = text.split('\n');
 
   return (
@@ -91,26 +130,37 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
       ref={containerRef}
       aria-label={text.replace(/\n/g, ' ')}
       style={{ backgroundColor: bgColor }}
-      className={`relative w-full h-screen flex justify-start overflow-hidden ${isFirst
-        ? 'items-center pt-0'
-        : 'items-start pt-[20vh] md:pt-[20vh] lg:pt-[15vh]'
-        }`}
+      className={`relative w-full h-screen flex overflow-hidden
+        ${isMobile
+          ? 'items-end pb-[15vh] justify-center' // Mobile: Bottom Center
+          : `items-start justify-start ${isFirst ? 'pt-0 items-center' : 'pt-[20vh] md:pt-[20vh] lg:pt-[15vh]'}` // Desktop: Top Left/Center
+        }
+      `}
     >
-      <div className="std-grid max-w-none">
-        <motion.div
-          style={{ y: yScroll, opacity }}
-          className="relative z-30 w-full flex flex-col justify-start"
-        >
-          {lines.map((line, i) => (
-            <BeliefLine
-              key={i}
-              line={line}
-              index={i}
-              scrollYProgress={scrollYProgress}
-              animationRange={animationRange}
-            />
-          ))}
-        </motion.div>
+      <div className="std-grid max-w-none w-full">
+        {isMobile ? (
+          <BeliefBlockMobile
+            text={text}
+            scrollYProgress={scrollYProgress}
+            animationRange={animationRange}
+            exitRange={exitRange}
+          />
+        ) : (
+          <motion.div
+            style={{ y: yScroll, opacity: desktopOpacity }}
+            className="relative z-30 w-full flex flex-col justify-start"
+          >
+            {lines.map((line, i) => (
+              <BeliefLineDesktop
+                key={i}
+                line={line}
+                index={i}
+                scrollYProgress={scrollYProgress}
+                animationRange={animationRange}
+              />
+            ))}
+          </motion.div>
+        )}
       </div>
     </motion.section>
   );

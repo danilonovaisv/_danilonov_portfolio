@@ -42,8 +42,8 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
       className="sticky top-0 z-30 flex h-screen pointer-events-none"
     >
       <div className="std-grid w-full h-full">
-        <div className="flex h-full items-start md:items-center justify-end pt-16 md:pt-0">
-          <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
+        <div className="flex h-full items-start justify-center md:justify-end pt-8 md:pt-0 md:items-center">
+          <div className="flex flex-col items-center text-center md:items-end md:text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-0 md:pr-0">
             {/* Primeira parte: "Acredito no..." */}
             {/* Primeira parte: "Acredito no..." */}
             <h1 className="text-white text-[clamp(2.3rem,4vw,3.8rem)] font-bold leading-[1.2] tracking-tighter mb-4 md:mb-8 whitespace-nowrap">
@@ -70,7 +70,7 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
             </h1>
 
             {/* Segunda parte: "Não pelo choque..." */}
-            <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
+            <div className="flex flex-col items-center gap-1 text-center text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap md:items-end md:text-right">
               <div className="overflow-visible">
                 <MorphText progress={progress} range={[0.22, 0.32]}>
                   Não pelo choque,
