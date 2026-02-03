@@ -50,13 +50,13 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
                 Acredito no
               </MorphText>
             </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.12, 0.22]}>
+            <div className="overflow-hidden">
+              <motion.span style={{ y: y2 }} className="block text-bluePrimary">
                 design que
               </MorphText>
             </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.14, 0.24]}>
+            <div className="overflow-hidden">
+              <motion.span style={{ y: y3 }} className="block text-bluePrimary">
                 muda o dia
               </MorphText>
             </div>
@@ -66,20 +66,14 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
               </MorphText>
             </div>
           </h1>
-
-          {/* Segunda parte: "Não pelo choque..." */}
-          <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h2 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.22, 0.32]}>
-                Não pelo choque,
-              </MorphText>
-            </div>
-            <div className="overflow-visible">
-              <MorphText progress={progress} range={[0.24, 0.34]}>
-                mas pela conexão.
-              </MorphText>
-            </div>
-          </div>
+          <motion.h2
+            style={{ y: h2Y, opacity: h2Opacity }}
+            className="text-white text-xs md:text-xl lg:text-4xl font-h2 leading-none tracking-normal font-bold"
+          >
+            Não pelo choque,
+            <br />
+            <span className="text-bluePrimary">mas pela conexão.</span>
+          </motion.h2>
         </div>
       </div>
     </motion.header>

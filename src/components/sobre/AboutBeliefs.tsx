@@ -20,12 +20,12 @@ const PHRASES = [
 import { BRAND } from '@/config/brand';
 
 const COLORS = [
-  BRAND.colors.bluePrimary,
-  BRAND.colors.purpleDetails,
-  BRAND.colors.pinkDetails,
-  BRAND.colors.bluePrimary,
-  BRAND.colors.purpleDetails,
-  BRAND.colors.pinkDetails,
+  'bg-bluePrimary', // Azul Real
+  'bg-purpleDetails', // Roxo Vibrante
+  'bg-pinkDetails', // Rosa Choque
+  'bg-bluePrimary', // Azul Real
+  'bg-purpleDetails', // Roxo Vibrante
+  'bg-pinkDetails', // Rosa Choque
 ];
 
 const FINAL_COLOR = BRAND.colors.bluePrimary;
@@ -99,6 +99,37 @@ export const AboutBeliefs: React.FC = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+// Sub-component to handle background classes efficiently
+import { MotionValue } from 'framer-motion';
+
+const BackgroundController = ({ progress, colors, finalColor }: { progress: MotionValue<number>, colors: string[], finalColor: string }) => {
+  const [currentClass, setCurrentClass] = React.useState(colors[0]);
+
+  useTransform(progress, (p: number) => {
+    // Simple logic to detect active section
+    // 6 sections + 1 final. Range 0 to 1.
+    // Approx 0.0 - 0.16 -> Section 1
+    // 0.16 - 0.32 -> Section 2
+    // etc.
+    const total = colors.length; // 6
+    const step = 0.8 / total; // ~0.133 per section, leaving 0.2 for final
+
+    if (p >= 0.8) {
+      if (currentClass !== finalColor) setCurrentClass(finalColor);
+    } else {
+      const index = Math.floor(p / step);
+      const targetColor = colors[Math.min(index, total - 1)] || colors[0];
+      if (currentClass !== targetColor) setCurrentClass(targetColor);
+    }
+  });
+
+  return (
+    <div
+      className={`absolute inset-0 z-0 w-full h-full pointer-events-none transition-colors duration-700 ease-in-out ${currentClass}`}
+    />
   );
 };
 

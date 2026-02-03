@@ -28,8 +28,7 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
   return (
     <motion.section
       ref={ref}
-      className="w-full h-screen overflow-hidden"
-      style={{ backgroundColor: bgColor }}
+      className={`w-full h-screen overflow-hidden ${bgColor}`}
     >
       <motion.div
         style={{
@@ -37,37 +36,16 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
           scale,
           filter: blur,
         }}
-        className="std-grid relative flex h-full w-full flex-col justify-center pointer-events-none z-20"
+        className="std-grid flex h-full w-full items-center"
       >
-        <div className="w-full flex flex-col space-y-0 md:-space-y-4 lg:-space-y-8 font-display font-black uppercase text-white leading-none">
-          {/* Linha 1: ISSO É */}
-          <div className="w-full flex justify-between items-center text-[18vw] md:text-[14vw] tracking-tighter">
-            <span>I</span>
-            <span>S</span>
-            <span>S</span>
-            <span>O</span>
-            <span className="w-[0.5em] inline-block" /> {/* Espaço visual */}
-            <span>É</span>
-          </div>
-
-          {/* Linha 2: GHOST */}
-          <div className="w-full flex justify-between items-center text-[18vw] md:text-[14vw] tracking-tighter">
-            <span>G</span>
-            <span>H</span>
-            <span>O</span>
-            <span>S</span>
-            <span>T</span>
-          </div>
-
-          {/* Linha 3: DESIGN. */}
-          <div className="w-full flex justify-between items-center text-[18vw] md:text-[14vw] tracking-tighter">
-            <span>D</span>
-            <span>E</span>
-            <span>S</span>
-            <span>I</span>
-            <span>G</span>
-            <span>N</span>
-            <span>.</span>
+        <div className="grid w-full items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+          <div className="hidden lg:flex items-center justify-center" aria-hidden="true" />
+          <div className="flex flex-col items-center text-center text-white font-display leading-[0.9] tracking-tight uppercase font-black lg:items-start lg:text-left">
+            <span className="text-[clamp(2.5rem,5vw,4rem)]">ISSO É</span>
+            <span className="text-[clamp(3.5rem,9vw,6rem)] text-bluePrimary">
+              GHOST
+            </span>
+            <span className="text-[clamp(3rem,8vw,5.5rem)]">DESIGN.</span>
           </div>
         </div>
       </motion.div>
