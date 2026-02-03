@@ -15,9 +15,9 @@ type InteractionRef = MutableRefObject<{
 type ProjectCardProps = {
   project: Project;
   index: number;
-  viewRef: RefObject<HTMLDivElement>;
+  viewRef: RefObject<HTMLDivElement | null>;
   interactionRef: InteractionRef;
-  onOpen: (project: Project) => void;
+  onOpen: (_project: Project) => void;
 };
 
 const clamp = (value: number, min: number, max: number) =>
@@ -105,7 +105,7 @@ export function ProjectCard({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blueAccent',
         'transition-transform duration-500 will-change-transform',
         'backdrop-blur-sm shadow-[0_0_0_1px_rgba(255,255,255,0.05)]',
-        'grid-card aspect-[4/5] lg:aspect-[3/4]',
+        'aspect-[4/5] lg:aspect-[3/4]',
         'cursor-pointer'
       )}
       initial={{ opacity: 0, y: 12 }}

@@ -1,6 +1,9 @@
 import type { Project, ProjectDetailsLink } from '@/types/portfolio-grid';
 import type { PortfolioProject } from '@/types/project';
 
+const FALLBACK_THUMB =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="%230b1224"/><text x="2" y="1.8" font-size="1" fill="%23ffffff" text-anchor="middle">img</text></svg>';
+
 const buildHighlights = (project: PortfolioProject) =>
   project.detail?.highlights?.filter((entry): entry is string => Boolean(entry)) ??
   project.tags?.filter((entry): entry is string => Boolean(entry)) ??
@@ -42,7 +45,7 @@ export function mapPortfolioProjectsToGrid(projects: PortfolioProject[]): Projec
         project.detail?.description ??
         project.subtitle ??
         project.client,
-      thumbnailUrl: project.image,
+      thumbnailUrl: project.image || FALLBACK_THUMB,
       landingPageUrl: project.landingPageSlug
         ? `/portfolio/${project.landingPageSlug}`
         : undefined,

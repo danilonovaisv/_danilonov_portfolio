@@ -4,7 +4,7 @@ import type { Project } from '@/types/portfolio-grid';
 type PortfolioModalState = {
   project: Project | null;
   isOpen: boolean;
-  open: (project: Project) => void;
+  open: (_project: Project) => void;
   close: () => void;
 };
 
