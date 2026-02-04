@@ -223,7 +223,7 @@ export async function generateAdScenes(
             })
         ]);
 
-        const images = results.map(res => res.data[0].url).filter(url => url !== undefined) as string[];
+        const images = results.map((res: OpenAI.Images.ImagesResponse) => res.data[0].url).filter((url: string | undefined): url is string => url !== undefined);
 
         return { success: true, images };
 
