@@ -44,6 +44,7 @@ const cspHeader = `
     form-action 'self';
     frame-ancestors 'none';
     connect-src 'self' ${supabaseAndExternalHosts} https://*.supabase.co https://*.firebaseio.com https://dl.polyhaven.org ws://localhost:3000 ws://127.0.0.1:3000;
+    media-src 'self' blob: data: ${supabaseAndExternalHosts} https://*.supabase.co;
 `
   .replace(/\s{2,}/g, ' ')
   .trim();

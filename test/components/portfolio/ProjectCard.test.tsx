@@ -25,12 +25,12 @@ jest.mock('framer-motion', () => {
 
     return {
         motion: {
-            div: ({ children, className, ...props }: Record<string, unknown>) => (
+            div: ({ children, className, initial: _initial, whileInView: _whileInView, viewport: _viewport, transition: _transition, ...props }: any) => (
                 <div className={className as string} {...props}>
                     {children as React.ReactNode}
                 </div>
             ),
-            button: ({ children, className, ...props }: Record<string, unknown>) => (
+            button: ({ children, className, initial: _initial, whileInView: _whileInView, viewport: _viewport, transition: _transition, ...props }: any) => (
                 <button className={className as string} {...props}>
                     {children as React.ReactNode}
                 </button>
@@ -47,13 +47,14 @@ jest.mock('framer-motion', () => {
 // Mock Next/Image
 jest.mock('next/image', () => ({
     __esModule: true,
-    default: ({ src, alt, className, ...props }: Record<string, unknown>) => (
+    default: ({ src, alt, className, fill: _fill, priority, sizes: _sizes, ...props }: any) => (
         <span
             role="img"
             aria-label={alt as string}
             data-src={src as string}
             data-nimg="1"
             className={className as string}
+            data-priority={priority ? 'true' : undefined}
             {...props}
         />
     ),

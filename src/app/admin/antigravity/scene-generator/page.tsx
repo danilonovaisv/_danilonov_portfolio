@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 import { generateAdScenes } from '../actions';
 import { Loader2, ImageIcon, Download } from 'lucide-react';
+import Image from 'next/image';
 
 const initialState = {
     success: false,
@@ -103,7 +104,13 @@ export default function SceneGeneratorPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* First image large */}
                             <div className="md:col-span-2 aspect-video relative group rounded-lg overflow-hidden border border-white/10 bg-black">
-                                <img src={state.images[0]} alt="Cena 1" className="object-cover w-full h-full" />
+                                <Image
+                                    src={state.images[0]}
+                                    alt="Cena 1"
+                                    fill
+                                    className="object-cover"
+                                    unoptimized
+                                />
                                 <div className="absolute top-2 left-2 bg-black/60 backdrop-blur px-2 py-1 rounded text-xs text-white">Wide Shot</div>
                                 <a href={state.images[0]} download target="_blank" aria-label="Download Wide Shot" className="absolute bottom-4 right-4 p-2 bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Download size={16} />
@@ -113,7 +120,13 @@ export default function SceneGeneratorPage() {
                             {/* Other images smaller */}
                             {state.images.slice(1).map((img, idx) => (
                                 <div key={idx} className="aspect-square relative group rounded-lg overflow-hidden border border-white/10 bg-black">
-                                    <img src={img} alt={`Cena ${idx + 2}`} className="object-cover w-full h-full" />
+                                    <Image
+                                        src={img}
+                                        alt={`Cena ${idx + 2}`}
+                                        fill
+                                        className="object-cover"
+                                        unoptimized
+                                    />
                                     <div className="absolute top-2 left-2 bg-black/60 backdrop-blur px-2 py-1 rounded text-xs text-white">
                                         {idx === 0 ? 'Medium Shot' : 'Close Up'}
                                     </div>

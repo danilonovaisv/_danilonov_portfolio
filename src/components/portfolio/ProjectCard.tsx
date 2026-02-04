@@ -43,21 +43,21 @@ export const ProjectCard = ({
 
   const motionProps = reduceMotion
     ? {
-        initial: { opacity: 0 },
-        whileInView: { opacity: 1 },
-        viewport: { once: true },
-        transition: { duration: 0.2 },
-      }
+      initial: { opacity: 0 },
+      whileInView: { opacity: 1 },
+      viewport: { once: true },
+      transition: { duration: 0.2 },
+    }
     : {
-        initial: { opacity: 0, y: 12 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: '-10% 0px -10% 0px' },
-        transition: {
-          duration: 0.6,
-          delay: Math.min(0.18, index * 0.03),
-          ease: [0.22, 1, 0.36, 1] as const,
-        },
-      };
+      initial: { opacity: 0, y: 12 },
+      whileInView: { opacity: 1, y: 0 },
+      viewport: { once: true, margin: '-10% 0px -10% 0px' },
+      transition: {
+        duration: 0.6,
+        delay: Math.min(0.18, index * 0.03),
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    };
 
   const imageSrc = project.videoPreview ?? (project.image || ASSET_PLACEHOLDER);
   const sizes =
@@ -70,6 +70,7 @@ export const ProjectCard = ({
       type="button"
       data-size={size}
       onClick={() => onClick?.(project)}
+      aria-label={`Ver projeto ${project.title}`}
       aria-haspopup={onClick ? 'dialog' : undefined}
       className={cn(
         styles.card,
