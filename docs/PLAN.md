@@ -1,63 +1,67 @@
-# Plano — Portfolio (Showcase) Ghost 3.0
+# Plan: Antigravity AI Implementation
 
-## Contexto
-- Escopo: alinhar `/portfolio` ao documento `docs/PORTFOLIO/PORTFOLIO-PROTOTIPO-INTERATIVO.md`.
-- Alvo: componentes em `src/components/portfolio`, além do wiring em `src/app/portfolio`.
-- Requisitos-chave: grid editorial 12 col + parallax LERP, modal com timeline canônico, A11y (focus trap/ESC/restore focus), reduced motion, performance mobile-first.
+## Context
 
-## Objetivos
-1. Hero com vídeo em loop (desktop/mobile) + overlay forte + CTA alinhado na base.
-2. Projects Gallery com track fixo + LERP + parallax interno por card + grid denso (12 col) + placeholders opcionais apenas no desktop.
-3. Modal com Type A/B seguindo timeline canônico (sem scale/rotate) + focus trap + ESC + restore focus.
-4. Encerramento da página com Brands/Contact/Footer via `SiteClosure`.
-5. Limpeza de `src/components/portfolio`: remover componentes não utilizados após migração.
+Create a new "Antigravity Agents" section in the Admin panel to license creativity workflow tools using AI (OpenAI/Gemini).
 
-## Etapas
-1. **Inventário e uso atual**
-   - Mapear todos os componentes em `src/components/portfolio` e sua utilização real (rg).
-   - Identificar duplicações (Hero/Modal/ProjectCard) e a versão correta para o novo fluxo.
+## Objectives
 
-2. **Definir contratos e mapeamentos**
-   - Criar tipo/shape para cards do grid conforme spec (cover + layout col/row spans + kind).
-   - Mapear `PortfolioProject` → novo shape para o gallery (sem quebrar Supabase/fallback).
+1. Add new "Antigravity AI" section to Admin.
+2. Implement **Portfolio Copy Agent** (Text Generation).
+3. Implement **Ad Scene Generator** (Image Generation).
+4. Ensure seamless integration with existing Admin Shell and Design System.
 
-3. **Hero Section**
-   - Ajustar `PortfolioHeroNew` (ou substituir) para:
-     - Vídeo responsivo com poster/fallback.
-     - Overlay de leitura.
-     - Título + CTA em uma linha visual na base.
-     - Sem escala/rotate.
+## Architecture & Tech Stack
 
-4. **Projects Gallery (LERP + Grid Editorial)**
-   - Implementar track fixo + LERP via hook com `prefers-reduced-motion`.
-   - Grid 12 col + `grid-auto-flow: dense` + spans via dados.
-   - Cards com wrapper 135% e parallax interno via rAF.
-   - Mobile: lista 1 coluna, sem placeholders, sem fixed track se reduced.
+- **Framework**: Next.js App Router (Server Components + Client Components).
+- **Styling**: Tailwind CSS + Shadcn UI (match existing admin design).
+- **AI**: OpenAI API (GPT-4o for text, DALL-E 3 for images).
+- **State**: React Server Actions for API calls.
 
-5. **Modal Type A / Type B**
-   - Consolidar um único modal (remover duplicados).
-   - Aplicar timeline canônico (backdrop → container → mídia → título → meta → secundário) com easing Ghost.
-   - Focus trap, ESC, click no backdrop, restore focus.
-   - Sem scale/rotate, apenas opacity/translateY.
+## Phase 1: Foundation & Navigation
 
-6. **Wiring da página `/portfolio`**
-   - Atualizar `src/app/portfolio/PortfolioClient.tsx` para usar Hero + Gallery + Modal + SiteClosure.
-   - Manter metadata no server.
+- [ ] **Dependencies**: Install `openai`.
+- [ ] **Config**: Add `antigravity` to `src/config/admin-navigation.ts`.
+- [ ] **Shell**: Update `src/components/admin/AdminShell.tsx` with new navigation item (Icon: Sparkles/Bot).
 
-7. **Limpeza da pasta**
-   - Remover componentes/arquivos não usados em `src/components/portfolio` após migração.
-   - Atualizar `src/components/portfolio/index.ts` e imports afetados.
+## Phase 2: Feature Implementation
 
-8. **Verificação**
-   - Rodar scripts exigidos pelo workflow:
-     - `python .agent/skills/vulnerability-scanner/scripts/security_scan.py .`
-     - `python .agent/skills/lint-and-validate/scripts/lint_runner.py .`
+### 2.1 Dashboard (`/admin/antigravity`)
 
-## Riscos / Decisões
-- **AntigravityCTA**: possui rotate/scale proibidos. Solução: criar CTA específico do portfolio ou adicionar modo “ghost” sem transform e sem rotação.
-- **R3F portfolio-grid**: não compatível com spec. Será removido do `/portfolio`.
-- **Parallax em mobile**: será desabilitado com `prefers-reduced-motion` e fallback para layout normal.
+- [ ] Create page with 2 selection cards:
+  - Portfolio Copy Agent
+  - Ad Scene Generator
 
-## Resultado esperado
-- `/portfolio` com hero + gallery + modal + brands/contact/footer, comportamento e motion alinhados ao protótipo canônico, alta legibilidade e performance.
-- `src/components/portfolio` enxuta e sem arquivos mortos.
+### 2.2 Portfolio Copy Agent (`/admin/antigravity/copy-agent`)
+
+- [ ] **UI**: Form with:
+  - Context input (Textarea).
+  - Project Images (Upload/URL) - *Optional implementation first iteration*.
+  - "Generate" button.
+- [ ] **Action**: `generateProjectCopy(data)`
+  - Inject "SYSTEM PROMPT — PORTFOLIO ART DIRECTION COPY AGENT".
+  - Call OpenAI GPT-4o.
+- [ ] **Display**: Markdown renderer for output.
+
+### 2.3 Ad Scene Generator (`/admin/antigravity/scene-generator`)
+
+- [ ] **UI**: Form with:
+  - Original Art Upload.
+  - Piece Type (Select).
+  - Scene Description (Input).
+  - "Generate" button.
+- [ ] **Action**: `generateAdScenes(data)`
+  - Inject "SYSTEM PROMPT — REALISTIC AD SCENE GENERATOR".
+  - Call OpenAI DALL-E 3 (or compatible image gen).
+  - *Constraint*: DALL-E 3 might not support direct "in-painting" of specific uploaded art perfectly in one go without editing API. We will implement the prompt generation logic to describe the scene as requested, and if possible use image editing endpoints or fallback to high-fidelity generation instructions.
+- [ ] **Gallery**: Display generated images.
+
+## Phase 3: Verification
+
+- [ ] Verify Navigation.
+- [ ] Test Server Actions (Mock first to save credits during dev).
+- [ ] styling consistency.
+
+## Environment Variables
+
+- `OPENAI_API_KEY` (Required in `.env.local`)

@@ -22,6 +22,7 @@ import {
 } from '@/components/portfolio/modal/variants';
 import { applyImageFallback, isVideo } from '@/utils/utils';
 import { sanitizeTailwindValue } from '@/lib/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 interface TypeBContentProps {
   project: PortfolioProject;
@@ -72,8 +73,17 @@ const TypeBContent: FC<TypeBContentProps> = ({ project }) => {
             muted
             loop
             playsInline
+            poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 w-full h-full object-cover"
-          />
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </video>
         ) : (
           <Image
             src={project.image}

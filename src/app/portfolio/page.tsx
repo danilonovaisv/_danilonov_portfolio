@@ -10,12 +10,19 @@ import { BRAND } from '@/config/brand';
 
 export const revalidate = 60;
 
+type PortfolioPageProps = {
+  params?: Promise<Record<string, string>>;
+  searchParams?: Promise<{ category?: string | string[] }>;
+};
+
 export async function generateMetadata({
   searchParams,
-}: {
-  searchParams?: { category?: string };
-}): Promise<Metadata> {
-  const category = searchParams?.category?.toLowerCase();
+}: PortfolioPageProps): Promise<Metadata> {
+  const resolved = await searchParams;
+  const categoryRaw = Array.isArray(resolved?.category)
+    ? resolved?.category[0]
+    : (resolved as { category?: string })?.category;
+  const category = categoryRaw?.toLowerCase();
   const categoryMeta: Record<
     string,
     { label: string; description: string }
@@ -45,9 +52,8 @@ export async function generateMetadata({
     metaForCategory?.description ??
     'Explore uma seleção curada de projetos de Branding, Motion Design e Creative Development de Danilo Novais, com foco em presença, narrativa e performance.';
 
-  const url = category
-    ? `https://${BRAND.domain}/portfolio?category=${category}`
-    : `https://${BRAND.domain}/portfolio`;
+  const baseUrl = `https://${BRAND.domain}/portfolio`;
+  const url = category ? `${baseUrl}?category=${category}` : baseUrl;
 
   return {
     title,
@@ -75,8 +81,9 @@ export async function generateMetadata({
       images: ['/portfolio/opengraph-image'],
     },
     alternates: {
-      canonical: url,
+      canonical: category ? baseUrl : url,
     },
+    robots: category ? { index: false, follow: true } : undefined,
   };
 }
 
@@ -146,7 +153,7 @@ function buildFallbackProjects(): PortfolioProject[] {
   });
 }
 
-export default async function PortfolioPage() {
+export default async function PortfolioPage(_props: PortfolioPageProps) {
   let projects: PortfolioProject[] = [];
 
   try {

@@ -18,6 +18,7 @@ import {
   getContentVariants,
 } from '@/components/portfolio/modal/variants';
 import { applyImageFallback, isVideo } from '@/utils/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 interface TypeAContentProps {
   project: PortfolioProject;
@@ -48,8 +49,17 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
             muted
             loop
             playsInline
+            poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 w-full h-full object-cover"
-          />
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </video>
         ) : (
           <Image
             src={project.image}
@@ -202,8 +212,17 @@ const TypeAContent: FC<TypeAContentProps> = ({ project }) => {
                     muted
                     loop
                     playsInline
+                    poster={DEFAULT_VIDEO_POSTER}
                     className="absolute inset-0 w-full h-full object-cover transition duration-300 hover:brightness-110"
-                  />
+                  >
+                    <track
+                      kind="captions"
+                      src={DEFAULT_CAPTIONS}
+                      srcLang="pt-BR"
+                      label="Português"
+                      default
+                    />
+                  </video>
                 ) : (
                   <Image
                     src={img}

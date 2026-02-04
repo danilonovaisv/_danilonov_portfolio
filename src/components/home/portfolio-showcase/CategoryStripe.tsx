@@ -8,6 +8,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GHOST_EASE } from '@/config/motion';
 import { applyImageFallback } from '@/utils/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 const GHOST_SPRING = { damping: 30, stiffness: 200, mass: 1 } as const;
 
@@ -48,6 +49,7 @@ export function CategoryStripe({
   const smoothProgress = useSpring(scrollYProgress, GHOST_SPRING);
   const parallaxY = useTransform(smoothProgress, [0, 1], [-20, 20]);
   const isVideo = category.thumbnail.endsWith('.mp4');
+  const shouldEagerLoad = index < 3;
 
   return (
     <motion.div
@@ -107,8 +109,17 @@ export function CategoryStripe({
                     loop
                     muted
                     playsInline
+                    poster={DEFAULT_VIDEO_POSTER}
                     className="object-cover w-full h-full"
-                  />
+                  >
+                    <track
+                      kind="captions"
+                      src={DEFAULT_CAPTIONS}
+                      srcLang="pt-BR"
+                      label="Português"
+                      default
+                    />
+                  </video>
                 ) : (
                   <Image
                     src={category.thumbnail}
@@ -116,7 +127,8 @@ export function CategoryStripe({
                     fill
                     className="object-cover"
                     sizes="288px"
-                    loading="lazy"
+                    loading={shouldEagerLoad ? 'eager' : 'lazy'}
+                    priority={shouldEagerLoad}
                     onError={applyImageFallback}
                   />
                 )}
@@ -167,8 +179,17 @@ export function CategoryStripe({
                 loop
                 muted
                 playsInline
+                poster={DEFAULT_VIDEO_POSTER}
                 className="object-cover w-full h-full"
-              />
+              >
+                <track
+                  kind="captions"
+                  src={DEFAULT_CAPTIONS}
+                  srcLang="pt-BR"
+                  label="Português"
+                  default
+                />
+              </video>
             ) : (
               <Image
                 src={category.thumbnail}
@@ -176,7 +197,8 @@ export function CategoryStripe({
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw"
-                loading="lazy"
+                loading={shouldEagerLoad ? 'eager' : 'lazy'}
+                priority={shouldEagerLoad}
                 onError={applyImageFallback}
               />
             )}

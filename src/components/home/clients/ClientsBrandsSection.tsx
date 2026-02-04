@@ -59,6 +59,7 @@ export default function ClientsBrandsSection() {
         >
           {logos.map((logo) => {
             const isSvg = logo.src?.toLowerCase().endsWith('.svg');
+            const shouldEagerLoad = logo.id <= 3;
 
             return (
               <motion.li
@@ -84,7 +85,8 @@ export default function ClientsBrandsSection() {
                     fill
                     className="w-full h-full object-contain filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 will-change-transform"
                     sizes="(max-width: 640px) 112px, (max-width: 768px) 128px, 160px"
-                    loading="lazy"
+                    loading={shouldEagerLoad ? 'eager' : 'lazy'}
+                    priority={shouldEagerLoad}
                     unoptimized={isSvg}
                   />
                 </div>

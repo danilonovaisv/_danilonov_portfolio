@@ -75,6 +75,7 @@ export default function SiteFooter() {
               aria-label={social.label}
             >
               {social.icon}
+              <span className="sr-only">{social.label}</span>
             </a>
           ))}
         </div>

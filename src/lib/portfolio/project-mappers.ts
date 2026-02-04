@@ -199,6 +199,8 @@ export function mapDbProjectToPortfolioProject(
   project: DbProjectWithTags,
   index: number
 ): PortfolioProject {
+  const normalizedSlug = project.slug?.replace(/_/g, '-');
+  const normalizedLandingSlug = project.landing_page?.slug?.replace(/_/g, '-');
   const type = determineProjectType(project);
   const layout = buildLayout(type, index);
   const category = getProjectCategory(project.project_type);
@@ -216,7 +218,7 @@ export function mapDbProjectToPortfolioProject(
 
   return {
     id: project.id,
-    slug: project.slug,
+    slug: normalizedSlug ?? project.slug,
     title: project.title,
     subtitle: project.short_label ?? project.client_name,
     client: project.client_name,
@@ -233,7 +235,7 @@ export function mapDbProjectToPortfolioProject(
     featuredOnHome: project.featured_on_home,
     featuredOnPortfolio: project.featured_on_portfolio,
     videoPreview: toVideoPreview(gallery),
-    landingPageSlug: project.landing_page?.slug,
+    landingPageSlug: normalizedLandingSlug ?? project.landing_page?.slug,
   };
 }
 
@@ -241,6 +243,7 @@ export function mapStaticProjectToPortfolioProject(
   project: StaticProject,
   index: number
 ): PortfolioProject {
+  const normalizedSlug = project.slug?.replace(/_/g, '-');
   const type = determineProjectType(project);
   const layout = buildLayout(type, index);
   const category = getProjectCategory(project.category);
@@ -254,7 +257,7 @@ export function mapStaticProjectToPortfolioProject(
 
   return {
     id: `static-${project.id}`,
-    slug: project.slug,
+    slug: normalizedSlug ?? project.slug,
     title: project.title,
     subtitle: project.client,
     client: project.client,

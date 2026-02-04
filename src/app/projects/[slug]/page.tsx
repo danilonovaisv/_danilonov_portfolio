@@ -1,14 +1,25 @@
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import ProjectRenderer from '@/components/projects/ProjectRenderer';
+import SiteFooter from '@/components/layout/SiteFooter';
 import { Metadata } from 'next';
+import { BRAND } from '@/config/brand';
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
+type ProjectPageProps = {
+  params?: Promise<{ slug: string }>;
+  searchParams?: Promise<{ from?: string | string[] }>;
+};
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: ProjectPageProps): Promise<Metadata> {
+  const resolvedParams = (await params) ?? {};
+  const { slug } = resolvedParams;
+  const resolvedSearch = await searchParams;
+  const fromParam = Array.isArray(resolvedSearch?.from)
+    ? resolvedSearch.from[0]
+    : resolvedSearch?.from;
   const supabase = await createClient();
 
   const { data: project } = await supabase
@@ -19,6 +30,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!project) return { title: 'Projeto não encontrado' };
 
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? `https://${BRAND.domain}`;
+  const url = `${siteUrl.replace(/\/$/, '')}/projects/${slug}`;
+
   return {
     title: `${project.title} | Danilo Novais`,
     description: `Landing page do projeto ${project.title} por Danilo Novais, com visão criativa, direção de arte e foco em narrativa visual e performance digital.`,
@@ -26,11 +41,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: project.title,
       images: project.cover ? [{ url: project.cover }] : [],
     },
+    alternates: {
+      canonical: url,
+    },
+    robots: fromParam ? { index: false, follow: true } : undefined,
   };
 }
 
-export default async function ProjectPage({ params }: Props) {
-  const { slug } = await params;
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { slug } = (await params) ?? {};
   const supabase = await createClient();
 
   const { data: project, error } = await supabase
@@ -46,6 +65,7 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <div className="min-h-screen">
       <ProjectRenderer project={project} />
+      <SiteFooter />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { LandingPageBlock } from '@/types/landing-page';
 import ReactMarkdown from 'react-markdown';
 import { sanitizeTailwindValue } from '@/lib/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -162,6 +163,8 @@ export default function BlockRenderer({
             src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&loop=1&playlist=${youtubeId}&controls=1&modestbranding=1&rel=0`}
             title="YouTube video player"
             className="absolute inset-0 w-full h-full"
+            width={1280}
+            height={720}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -181,7 +184,16 @@ export default function BlockRenderer({
             loop={autoplay}
             controls={true}
             playsInline
-          />
+            poster={DEFAULT_VIDEO_POSTER}
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </video>
         </div>
       );
     }

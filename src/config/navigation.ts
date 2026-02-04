@@ -21,7 +21,8 @@ export const NAVIGATION = {
       { label: 'home', href: '#hero' },
       { label: 'sobre', href: '/sobre' },
       { label: 'portfólio', href: '/portfolio' },
-      { label: 'contato', href: '#contact' },
+      { label: 'contato', href: '/contato' },
+      { label: 'privacidade', href: '/privacidade' },
     ],
   },
 };

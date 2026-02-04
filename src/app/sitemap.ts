@@ -7,7 +7,11 @@ import { listProjects } from '@/lib/supabase/queries/projects';
 export const dynamic = 'force-static';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = `https://${BRAND.domain}`;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const siteUrl = isProduction
+    ? process.env.NEXT_PUBLIC_SITE_URL ?? `https://${BRAND.domain}`
+    : 'http://localhost:3000';
+  const baseUrl = siteUrl.replace(/\/$/, '');
   let projectUrls: MetadataRoute.Sitemap = [];
 
   try {
@@ -15,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const dbProjects = await listProjects({}, supabase);
 
     projectUrls = dbProjects.map((project) => ({
-      url: `${baseUrl}/portfolio/${project.slug}`,
+      url: `${baseUrl}/portfolio/${project.slug.replace(/_/g, '-')}`,
       lastModified: new Date(project.updated_at || new Date()),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
@@ -30,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const landingPageUrls = (
         landingPages as { slug: string; updated_at?: string }[]
       ).map((page) => ({
-        url: `${baseUrl}/projects/${page.slug}`,
+        url: `${baseUrl}/projects/${page.slug.replace(/_/g, '-')}`,
         lastModified: new Date(page.updated_at || new Date()),
         changeFrequency: 'monthly' as const,
         priority: 0.6,
@@ -69,6 +73,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contato`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/privacidade`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.4,
     },
     ...projectUrls,
   ];

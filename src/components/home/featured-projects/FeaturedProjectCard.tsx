@@ -113,7 +113,7 @@ export default function FeaturedProjectCard({
   if (project.landingPageSlug) {
     return (
       <Link
-        href={`/projects/${project.landingPageSlug}?from=home`}
+        href={`/projects/${project.landingPageSlug}`}
         className={commonClasses}
       >
         <CardContent />

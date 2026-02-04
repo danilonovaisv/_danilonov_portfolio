@@ -14,17 +14,29 @@ import {
 } from '@/lib/portfolio/project-mappers';
 import type { PortfolioProject } from '@/types/project';
 import { isVideo } from '@/utils/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 async function getProject(slug: string): Promise<PortfolioProject | undefined> {
   // Try database first
   try {
     const supabase = createStaticClient();
     const dbProjects = await listProjects({}, supabase);
-    const dbProject = dbProjects.find((p) => p.slug === slug);
+    const normalizedSlug = slug.replace(/-/g, '_');
+    const dbProject = dbProjects.find(
+      (p) =>
+        p.slug === slug ||
+        p.slug === normalizedSlug ||
+        p.slug?.replace(/_/g, '-') === slug
+    );
 
     if (dbProject) {
       // Find its index for layout mapping
-      const index = dbProjects.findIndex((p) => p.slug === slug);
+      const index = dbProjects.findIndex(
+        (p) =>
+          p.slug === slug ||
+          p.slug === normalizedSlug ||
+          p.slug?.replace(/_/g, '-') === slug
+      );
       return mapDbProjectToPortfolioProject(dbProject, index);
     }
   } catch (error) {
@@ -59,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = `https://${BRAND.domain}/portfolio/${slug}`;
 
   return {
-    title: project.title,
+    title: `${project.title} | ${BRAND.name}`,
     description,
     keywords: [
       ...(project.tags || []),
@@ -192,8 +204,17 @@ export default async function ProjectPage({ params }: Props) {
               muted
               loop
               playsInline
+              poster={DEFAULT_VIDEO_POSTER}
               className="absolute inset-0 w-full h-full object-cover"
-            />
+            >
+              <track
+                kind="captions"
+                src={DEFAULT_CAPTIONS}
+                srcLang="pt-BR"
+                label="Português"
+                default
+              />
+            </video>
           ) : (
             <Image
               src={project.image}

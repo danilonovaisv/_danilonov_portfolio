@@ -78,6 +78,21 @@ const nextConfig = {
     ];
   },
 
+  async redirects() {
+    return [
+      {
+        source: '/portfolio/key_vision',
+        destination: '/portfolio/key-vision',
+        permanent: true,
+      },
+      {
+        source: '/portfolio/brand_video',
+        destination: '/portfolio/brand-video',
+        permanent: true,
+      },
+    ];
+  },
+
   /**
    * Configuração de imagens (Supabase)
    * Mantida INTACTA

@@ -67,7 +67,40 @@ export function SiteAssetsProvider({
 
 export function useSiteAssetUrl(key: string, fallback?: string) {
   const context = useContext(SiteAssetsContext);
-  return context?.getUrl(key) ?? fallback;
+
+  // Fallbacks para vídeos conhecidos quando o asset não vem do Supabase (ex.: falha de fetch)
+  const fallbackPaths: Record<string, string> = {
+    'home.manifesto_video':
+      'site-assets/home/home.manifesto_video.mp4',
+    'about.hero.desktop_video.mp4':
+      'site-assets/about/about.hero.desktop_video.mp4',
+    'about.hero.mobile_video.mp4':
+      'site-assets/about/about.hero.mobile_video.mp4',
+    'about.method_video': 'site-assets/about/about.method_video.mp4',
+    'portfolio.hero_desktop_video':
+      'site-assets/portfolio/portfolio.hero_desktop_video.mp4',
+    'portfolio.hero_mobile_video':
+      'site-assets/portfolio/portfolio.hero_mobile_video.mp4',
+    'about.beliefs.VIDEO-SKILLS-FINAL_compressed.mp4':
+      'site-assets/about/beliefs/VIDEO-SKILLS-FINAL_compressed.mp4',
+    'about.beliefs.VIDEO-SKILLS-MOBILE-FINAL.mp4':
+      'site-assets/about/beliefs/VIDEO-SKILLS-MOBILE-FINAL.mp4',
+  };
+
+  if (context?.getUrl(key)) return context.getUrl(key);
+
+  if (fallback) return fallback;
+
+  if (fallbackPaths[key]) {
+    // Reutiliza o helper global do BRAND (Supabase URL) via import dinâmico para evitar ciclo.
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ??
+      process.env.SUPABASE_URL?.replace(/\/$/, '') ??
+      'https://umkmwbkwvulxtdodzmzf.supabase.co';
+    return `${baseUrl}/storage/v1/object/public/${fallbackPaths[key]}`;
+  }
+
+  return undefined;
 }
 
 export function useSiteAssetsByPrefix(prefix: string) {
