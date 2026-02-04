@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     siteName: BRAND.name,
     images: [
       {
-        url: '/opengraph-image',
+        url: '/contato/opengraph-image',
         width: 1200,
         height: 630,
         alt: 'Contato | Danilo Novais',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: 'Contato | Danilo Novais',
     description:
       'Entre em contato para projetos de branding, motion e experiências digitais.',
-    images: ['/opengraph-image'],
+    images: ['/contato/opengraph-image'],
   },
   alternates: {
     canonical: `https://${BRAND.domain}/contato`,

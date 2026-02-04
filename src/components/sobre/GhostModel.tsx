@@ -33,12 +33,14 @@ interface GhostModelProps extends React.ComponentProps<'group'> {
   scale?: number | [number, number, number];
 }
 
+const GHOST_URL =
+  'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb';
+const GHOST_MESH_ROTATION: [number, number, number] = [-Math.PI / 2, 0, 0];
+
 export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
   const prefersReducedMotion = useReducedMotion();
 
-  const { scene } = useGLTF(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  ) as unknown as GLTFResult;
+  const { nodes, materials } = useGLTF(GHOST_URL) as unknown as GLTFResult;
 
   const { gl, viewport } = useThree();
   const groupRef = useRef<THREE.Group>(null);
@@ -55,24 +57,52 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     return new THREE.Vector3(0, 0, 0);
   }, [props.position]);
 
-  // Clone scene to avoid mutation issues if reused
-  const ghostScene = useMemo(() => {
-    const clonedScene = scene.clone();
-    clonedScene.traverse((child) => {
-      if (child instanceof THREE.Mesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-        if (child.material) {
-          const mat = child.material as THREE.MeshStandardMaterial;
-          mat.emissive = new THREE.Color('#0048ff');
-          mat.emissiveIntensity = 0.35;
-          mat.roughness = 0.3;
-          mat.metalness = 0.05;
-        }
-      }
-    });
-    return clonedScene;
-  }, [scene]);
+  const ghostMaterial = useMemo(() => {
+    const material = materials.Ghost_White.clone();
+    material.color = new THREE.Color('#f6f8ff');
+    material.emissive = new THREE.Color('#d9e4ff');
+    material.emissiveIntensity = 0.06;
+    material.roughness = 0.5;
+    material.metalness = 0.02;
+    return material;
+  }, [materials.Ghost_White]);
+
+  const eyesMaterial = useMemo(() => {
+    const material = materials.Eyes.clone();
+    material.color = new THREE.Color('#121212');
+    material.roughness = 0.32;
+    material.metalness = 0.01;
+    return material;
+  }, [materials.Eyes]);
+
+  const hatMaterial = useMemo(() => {
+    const material = materials.Hat_Black.clone();
+    material.color = new THREE.Color('#06080d');
+    material.roughness = 0.42;
+    material.metalness = 0.16;
+    material.emissive = new THREE.Color('#040915');
+    material.emissiveIntensity = 0.1;
+    return material;
+  }, [materials.Hat_Black]);
+
+  const rimMaterial = useMemo(() => {
+    const material = materials.Rim_Red.clone();
+    material.color = new THREE.Color('#ff3246');
+    material.emissive = new THREE.Color('#ff2b57');
+    material.emissiveIntensity = 0.22;
+    material.roughness = 0.36;
+    material.metalness = 0.08;
+    return material;
+  }, [materials.Rim_Red]);
+
+  useEffect(() => {
+    return () => {
+      ghostMaterial.dispose();
+      eyesMaterial.dispose();
+      hatMaterial.dispose();
+      rimMaterial.dispose();
+    };
+  }, [eyesMaterial, ghostMaterial, hatMaterial, rimMaterial]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -95,13 +125,11 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     }
   }, [basePosition]);
 
-  // --- Responsividade (Policy 4.3) ---
   const isMobile = viewport.width < 5;
-  // Prioritize prop scale, then responsive default
-  const defaultScale = isMobile ? viewport.width * 0.18 : 1.3;
-  const baseScale = props.scale ? (props.scale as number) : defaultScale;
+  const defaultScale = isMobile ? Math.min(1.02, viewport.width * 0.2) : 1.28;
+  const baseScale: number | [number, number, number] =
+    props.scale ?? defaultScale;
 
-  // Handle touch interactions simply by updating mouseRef
   useEffect(() => {
     if (prefersReducedMotion) return;
     const handleTouchMove = (e: TouchEvent) => {
@@ -124,73 +152,92 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 
     const progress = scrollProgress?.get?.() ?? 0;
     const mouse = prefersReducedMotion ? { x: 0, y: 0 } : mouseRef.current;
-    const finalOffsetX = 0;
+
+    const desktopMouseX = viewport.width >= 5 ? mouse.x * 0.14 : 0;
+    const mobileParallaxX = viewport.width < 5 ? mouse.x * 0.06 : 0;
+    const targetContainerX = basePosition.x + desktopMouseX + mobileParallaxX;
 
     groupRef.current.position.x = THREE.MathUtils.lerp(
       groupRef.current.position.x,
-      basePosition.x + finalOffsetX,
+      targetContainerX,
       0.05
     );
+    groupRef.current.position.y = THREE.MathUtils.lerp(
+      groupRef.current.position.y,
+      basePosition.y,
+      0.08
+    );
+    groupRef.current.position.z = THREE.MathUtils.lerp(
+      groupRef.current.position.z,
+      basePosition.z,
+      0.08
+    );
 
-    // --- Animação de Flutuação Sutil (Substituindo <Float>) ---
     const elapsedTime = state.clock.getElapsedTime();
-    const floatY = prefersReducedMotion
+    const floatY = prefersReducedMotion ? 0 : Math.sin(elapsedTime * 1.18) * 0.055;
+    const floatX = prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.8) * 0.018;
+    const scrollLift = prefersReducedMotion
       ? 0
-      : Math.sin(elapsedTime * 1.2) * 0.06;
+      : THREE.MathUtils.clamp(progress * 0.14, 0, 0.14);
+    const mobileLift = viewport.width < 5 ? 0.06 : 0;
+    const targetY = mouse.y * 0.04 + floatY + scrollLift + mobileLift;
+    const targetX = floatX;
 
-    // --- Resposta ao Mouse (Posição e Rotação) ---
-    const mouseInfluence = prefersReducedMotion ? 0 : 0.14;
-
-    // Movimento suave seguindo o cursor
     animRef.current.position.x = THREE.MathUtils.lerp(
       animRef.current.position.x,
-      mouse.x * mouseInfluence,
-      0.05
+      targetX,
+      0.06
     );
-    // Combina a resposta ao mouse com a animação de flutuação
     animRef.current.position.y = THREE.MathUtils.lerp(
       animRef.current.position.y,
-      mouse.y * mouseInfluence + floatY,
-      0.05
+      targetY,
+      0.06
     );
-
-    // Lerp rotações X e Z baseadas no mouse (Tilt suave)
-    animRef.current.rotation.x = THREE.MathUtils.lerp(
-      animRef.current.rotation.x,
-      -mouse.y * mouseInfluence * 0.6,
-      0.05
+    animRef.current.position.z = THREE.MathUtils.lerp(
+      animRef.current.position.z,
+      0,
+      0.06
     );
-    animRef.current.rotation.z = THREE.MathUtils.lerp(
-      animRef.current.rotation.z,
-      -mouse.x * mouseInfluence * 0.35,
-      0.05
-    );
-
-    // --- Efeitos de Final de Seção ---
-    let targetScale = 1;
-    if (!prefersReducedMotion && progress > 0.82) {
-      const intensity = Math.min(1, (progress - 0.82) * 4);
-      animRef.current.position.z = THREE.MathUtils.lerp(
-        animRef.current.position.z,
-        0.6 * intensity,
-        0.05
-      );
-      targetScale = 1 + 0.08 * intensity;
-    } else {
-      animRef.current.position.z = THREE.MathUtils.lerp(
-        animRef.current.position.z,
-        0,
-        0.05
-      );
-    }
-
-    animRef.current.scale.setScalar(targetScale);
+    animRef.current.rotation.x = 0;
+    animRef.current.rotation.y = 0;
+    animRef.current.rotation.z = 0;
   });
 
   return (
     <group ref={groupRef} {...props} scale={baseScale} dispose={null}>
       <group ref={animRef}>
-        <primitive object={ghostScene} />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Body_Ghost_White_0.geometry}
+          material={ghostMaterial}
+          position={[0, 1.558, 0]}
+          rotation={GHOST_MESH_ROTATION}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Eyes_Eyes_0.geometry}
+          material={eyesMaterial}
+          position={[0, 1.558, 0]}
+          rotation={GHOST_MESH_ROTATION}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Hat_Hat_Black_0.geometry}
+          material={hatMaterial}
+          position={[0, 2.991, 0]}
+          rotation={GHOST_MESH_ROTATION}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Rim_Rim_Red_0.geometry}
+          material={rimMaterial}
+          position={[0, 2.354, 0]}
+          rotation={GHOST_MESH_ROTATION}
+        />
       </group>
     </group>
   );
@@ -199,7 +246,5 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 // Preload only in the browser to avoid Node/SSG environments where
 // Web Workers (used by meshopt decoding) are unavailable.
 if (typeof window !== 'undefined') {
-  useGLTF.preload(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  );
+  useGLTF.preload(GHOST_URL);
 }
