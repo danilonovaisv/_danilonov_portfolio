@@ -54,15 +54,15 @@ function getProjectCategory(projectType?: string): ProjectCategory {
 function determineProjectType(
   project: DbProjectWithTags | StaticProject
 ): ProjectType {
-  if ('featured_on_home' in project) {
-    // It's a DbProjectWithTags
-    if (project.featured_on_home || project.featured_on_portfolio) {
-      return 'A';
-    }
-  }
-  // For StaticProject, or if not featured, default to 'B'
-  // You might want to refine this logic based on your static data structure
-  return 'B';
+  // Conforme o Protótipo Interativo 3.2:
+  // Tipo A (Zoom): Para projetos simples (uma imagem principal)
+  // Tipo B (Case): Para projetos complexos (gallery ou descrição longa)
+
+  const hasGallery = 'gallery' in project && Array.isArray(project.gallery) && project.gallery.length > 0;
+  const description = 'description' in project ? project.description : project.title;
+  const isComplex = hasGallery || (description && description.length > 200);
+
+  return isComplex ? 'B' : 'A';
 }
 
 function buildLayout(

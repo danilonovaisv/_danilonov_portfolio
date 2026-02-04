@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import type { PortfolioProject } from '@/types/project';
 import PortfolioHeroNew from '@/components/portfolio/PortfolioHeroNew';
 import { ProjectsGallery } from '@/components/portfolio/ProjectsGallery';
@@ -14,16 +15,21 @@ type PortfolioClientProps = {
 };
 
 export default function PortfolioClient({ projects }: PortfolioClientProps) {
+  const router = useRouter();
   const [selectedProject, setSelectedProject] =
     useState<PortfolioProject | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
 
   const handleOpenProject = useCallback((project: PortfolioProject) => {
+    if (project.landingPageSlug) {
+      router.push(`/projects/${project.landingPageSlug}`);
+      return;
+    }
     lastFocusedRef.current = document.activeElement as HTMLElement | null;
     setSelectedProject(project);
     setIsModalOpen(true);
-  }, []);
+  }, [router]);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);

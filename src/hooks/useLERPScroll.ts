@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
+import { useEffect, useRef, useState } from 'react';
 import { lerp } from '@/utils/math';
 
 /**
  * LERP-based scroll smoother for a fixed gallery track.
  * It keeps the track translated with an eased scroll value and
  * updates the wrapper height so the page retains native scroll.
- * The gallery becomes fixed after scrolling past the hero section.
+ * The gallery becomes fixed only when it enters the viewport.
  */
 type TrackRef =
   | React.RefObject<HTMLElement | null>
   | React.MutableRefObject<HTMLElement | null>;
 
 export const useLERPScroll = (trackRef: TrackRef, enabled = true) => {
+  const [isSticky, setIsSticky] = useState(false);
   const startY = useRef(0);
   const endY = useRef(0);
   const rafId = useRef<number | null>(null);
@@ -23,6 +23,7 @@ export const useLERPScroll = (trackRef: TrackRef, enabled = true) => {
 
   useEffect(() => {
     if (!enabled) {
+      setIsSticky(false);
       return undefined;
     }
 
@@ -48,17 +49,24 @@ export const useLERPScroll = (trackRef: TrackRef, enabled = true) => {
 
     const updateHeight = () => {
       // Total scrollable height = track height + hero offset
+      // Added a small buffer to avoid jitter at the end
       gallery.style.height = `${track.clientHeight + heroOffset.current}px`;
     };
 
     const animate = () => {
       startY.current = lerp(startY.current, endY.current, 0.05);
 
+      // Determine sticky state based on eased scroll
+      const active = startY.current >= heroOffset.current;
+      setIsSticky(active);
+
       // Only translate when scrolled past hero
       const scrollOffset = Math.max(0, startY.current - heroOffset.current);
-      track.style.transform = `translateY(-${scrollOffset}px)`;
+      if (track) {
+        track.style.transform = `translateY(-${scrollOffset}px)`;
+      }
 
-      if (Math.abs(startY.current - endY.current) > 0.5) {
+      if (Math.abs(startY.current - endY.current) > 0.1) {
         rafId.current = requestAnimationFrame(animate);
       } else {
         rafId.current = null;
@@ -106,12 +114,12 @@ export const useLERPScroll = (trackRef: TrackRef, enabled = true) => {
         rafId.current = null;
       }
 
-      // Reset inline styles so SSR/hydration don't keep stale transforms
-      track.style.transform = '';
-      gallery.style.height = 'auto';
+      // Reset inline styles
+      if (track) track.style.transform = '';
+      if (gallery) gallery.style.height = 'auto';
     };
   }, [enabled, trackRef]);
 
-  return { galleryRef } as const;
+  return { galleryRef, isSticky } as const;
 };
 
