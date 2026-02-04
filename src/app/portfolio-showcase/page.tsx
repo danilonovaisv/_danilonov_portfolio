@@ -32,7 +32,7 @@ export default function PortfolioShowcasePage() {
   };
 
   return (
-    <main className="bg-[#040013] min-h-screen">
+    <div className="bg-[#040013] min-h-screen">
       <PortfolioHeroNew />
 
       <ProjectsGallery
@@ -52,6 +52,6 @@ export default function PortfolioShowcasePage() {
         onClose={handleCloseModal}
         project={selectedProject}
       />
-    </main>
+    </div>
   );
 }

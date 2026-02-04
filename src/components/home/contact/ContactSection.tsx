@@ -138,6 +138,7 @@ export default function ContactSection() {
                   className="flex h-14 w-14 items-center justify-center rounded-full border border-[#0e0e0e]/30 bg-transparent text-[#0e0e0e] transition-all hover:border-[#0048ff] hover:bg-[#0048ff] hover:text-white hover:scale-110"
                 >
                   {social.icon}
+                  <span className="sr-only">{social.label}</span>
                 </a>
               ))}
             </div>
@@ -155,6 +156,7 @@ export default function ContactSection() {
                 className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#0e0e0e]/30 bg-transparent text-[#0e0e0e] shadow-sm transition-all duration-200 active:scale-90 active:bg-[#0048ff] active:border-[#0048ff] active:text-white"
               >
                 {social.icon}
+                <span className="sr-only">{social.label}</span>
               </a>
             ))}
           </div>

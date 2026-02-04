@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { DEFAULT_CAPTIONS } from '@/lib/video';
 
 interface VideoManifestoProps {
   src: string;
@@ -114,7 +115,15 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
               playsInline
               preload="metadata"
               aria-label="Vídeo showreel demonstrando projetos de design gráfico"
-            />
+            >
+              <track
+                kind="captions"
+                src={DEFAULT_CAPTIONS}
+                srcLang="pt-BR"
+                label="Português"
+                default
+              />
+            </motion.video>
 
             {/* Overlay */}
             <div className="video-overlay absolute inset-0 pointer-events-none" />

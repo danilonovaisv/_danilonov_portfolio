@@ -10,36 +10,75 @@ import { BRAND } from '@/config/brand';
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: 'Portfólio',
-  description:
-    'Explore uma seleção curada de projetos de Branding, Motion Design e Creative Development de Danilo Novais.',
-  openGraph: {
-    title: 'Portfólio | Danilo Novais',
-    description: 'Seleção curada de projetos criativos e tecnológicos.',
-    url: `https://${BRAND.domain}/portfolio`,
-    siteName: BRAND.name,
-    images: [
-      {
-        url: '/portfolio/opengraph-image',
-        width: 1200,
-        height: 630,
-        alt: 'Portfólio | Danilo Novais',
-      },
-    ],
-    locale: 'pt_BR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Portfólio | Danilo Novais',
-    description: 'Seleção curada de projetos criativos e tecnológicos.',
-    images: ['/portfolio/opengraph-image'],
-  },
-  alternates: {
-    canonical: `https://${BRAND.domain}/portfolio`,
-  },
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams?: { category?: string };
+}): Promise<Metadata> {
+  const category = searchParams?.category?.toLowerCase();
+  const categoryMeta: Record<
+    string,
+    { label: string; description: string }
+  > = {
+    branding: {
+      label: 'Branding & Identidade',
+      description:
+        'Seleção de projetos de branding, identidade visual e campanhas que traduzem posicionamento em presença, forma e consistência.',
+    },
+    motion: {
+      label: 'Motion & Vídeo',
+      description:
+        'Projetos de motion design, vídeo e direção criativa com ritmo editorial, narrativa e impacto visual.',
+    },
+    web: {
+      label: 'Web & Digital',
+      description:
+        'Experiências web e digitais com foco em performance, interatividade e design que conecta pessoas e marcas.',
+    },
+  };
+
+  const metaForCategory = category ? categoryMeta[category] : undefined;
+  const title = metaForCategory
+    ? `Portfólio ${metaForCategory.label} | Danilo Novais`
+    : 'Portfólio | Danilo Novais';
+  const description =
+    metaForCategory?.description ??
+    'Explore uma seleção curada de projetos de Branding, Motion Design e Creative Development de Danilo Novais, com foco em presença, narrativa e performance.';
+
+  const url = category
+    ? `https://${BRAND.domain}/portfolio?category=${category}`
+    : `https://${BRAND.domain}/portfolio`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: BRAND.name,
+      images: [
+        {
+          url: '/portfolio/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: 'Portfólio | Danilo Novais',
+        },
+      ],
+      locale: 'pt_BR',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/portfolio/opengraph-image'],
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
 
 const FALLBACK_CATEGORY_MAP: Record<string, ProjectCategory> = {
   'branding & campanha': 'branding',

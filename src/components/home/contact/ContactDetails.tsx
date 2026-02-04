@@ -95,6 +95,7 @@ const ContactDetails: FC = () => {
               aria-label={social.platform}
             >
               {social.icon}
+              <span className="sr-only">{social.platform}</span>
             </a>
           </Button>
         ))}

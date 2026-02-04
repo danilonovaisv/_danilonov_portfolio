@@ -11,12 +11,13 @@ import { SiteClosure } from '@/components/layout/SiteClosure';
 import { BRAND } from '@/config/brand';
 
 export const metadata: Metadata = {
-  title: 'Sobre',
+  title: 'Sobre | Danilo Novais',
   description:
-    'Conheça a trajetória, o método e a visão de Danilo Novais por trás do design e desenvolvimento criativo.',
+    'Conheça a trajetória, o método e a visão de Danilo Novais — Creative Developer focado em branding, motion e experiências digitais que conectam pessoas e marcas.',
   openGraph: {
     title: 'Sobre | Danilo Novais',
-    description: 'Trajetória, método e visão criativa de Danilo Novais.',
+    description:
+      'Trajetória, método e visão criativa de Danilo Novais com foco em experiências digitais, branding e motion design.',
     url: `https://${BRAND.domain}/sobre`,
     siteName: BRAND.name,
     images: [
@@ -33,7 +34,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Sobre | Danilo Novais',
-    description: 'Trajetória, método e visão criativa de Danilo Novais.',
+    description:
+      'Trajetória, método e visão criativa de Danilo Novais com foco em experiências digitais, branding e motion design.',
     images: ['/opengraph-image'],
   },
   alternates: {

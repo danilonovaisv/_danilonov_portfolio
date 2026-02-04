@@ -13,6 +13,7 @@ import { ABOUT_CONTENT } from '@/config/content';
 import { motionTokens, motionSprings } from './motion';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 export function AboutHero() {
   const prefersReducedMotion = useReducedMotion();
@@ -53,12 +54,25 @@ export function AboutHero() {
       '/public/videos/about.hero.mobile_video.mp4'
   );
 
+  const heroSrTitle = [
+    ABOUT_CONTENT.hero.title.text,
+    ABOUT_CONTENT.hero.title.highlight,
+    ...ABOUT_CONTENT.hero.manifesto.flatMap((item) => [
+      item.text,
+      item.highlight,
+      item.textEnd,
+    ]),
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <section
       ref={containerRef}
       className="relative min-h-screen bg-background overflow-hidden"
       aria-label="Hero - Manifesto"
     >
+      <h1 className="sr-only">{heroSrTitle}</h1>
       {/* Background Video - Desktop - Forçar exibição mesmo se o URL estiver vazio */}
       <motion.video
         ref={videoRef}
@@ -68,10 +82,18 @@ export function AboutHero() {
         loop={shouldPlayVideo}
         playsInline
         preload="metadata"
-        poster="/images/about-hero-poster.jpg"
+        poster={DEFAULT_VIDEO_POSTER}
         className="hidden lg:block absolute inset-0 w-full h-full object-cover opacity-[0.55]"
         aria-hidden="true"
-      />
+      >
+        <track
+          kind="captions"
+          src={DEFAULT_CAPTIONS}
+          srcLang="pt-BR"
+          label="Português"
+          default
+        />
+      </motion.video>
       <span className="sr-only">
         Vídeo de fundo na seção sobre, com ambientação ghost/azul.
       </span>
@@ -109,16 +131,19 @@ export function AboutHero() {
                   }}
                   className="mb-12 flex flex-col items-end gap-1"
                 >
-                  <h1 className="text-[clamp(44px,4.5vw,64px)] font-medium leading-[1.08] tracking-[-0.02em] text-text-light text-right">
+                  <div
+                    aria-hidden="true"
+                    className="text-[clamp(44px,4.5vw,64px)] font-medium leading-[1.08] tracking-[-0.02em] text-text-light text-right"
+                  >
                     {ABOUT_CONTENT.hero.title.text}
                     {ABOUT_CONTENT.hero.title.highlight && (
                       <span className="text-bluePrimary font-semibold ml-2">
                         {ABOUT_CONTENT.hero.title.highlight}
                       </span>
                     )}
-                  </h1>
+                  </div>
 
-                  <div className="flex flex-col items-end">
+                  <div className="flex flex-col items-end" aria-hidden="true">
                     {ABOUT_CONTENT.hero.manifesto.map((item, index) => (
                       <p
                         key={index}
@@ -146,9 +171,9 @@ export function AboutHero() {
                     delay: 0.4,
                   }}
                 >
-                  <h3 className="type-h3 text-white text-right font-medium max-w-[620px]">
+                  <p className="type-h3 text-white text-right font-medium max-w-[620px]">
                     {ABOUT_CONTENT.hero.description.join(' ')}
-                  </h3>
+                  </p>
                 </motion.div>
               </div>
             </motion.div>
@@ -171,11 +196,19 @@ export function AboutHero() {
             loop={shouldPlayVideo}
             playsInline
             preload="metadata"
-            poster="/images/about-hero-poster-mobile.jpg"
+            poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 w-full h-full object-cover object-top opacity-[0.78]"
             style={{ y: mediaY }}
             aria-hidden="true"
-          />
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </motion.video>
           <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10" />
         </div>
         <div className="relative z-10 px-6 pt-10 pb-20 text-center">
@@ -206,7 +239,10 @@ export function AboutHero() {
               }}
               className="space-y-4"
             >
-              <h1 className="font-h1 text-[clamp(2rem,4vw+1rem,3.5rem)] font-bold text-white leading-tight flex flex-col gap-1">
+              <div
+                aria-hidden="true"
+                className="font-h1 text-[clamp(2rem,4vw+1rem,3.5rem)] font-bold text-white leading-tight flex flex-col gap-1"
+              >
                 <span>
                   Sou <span className="text-bluePrimary">Danilo Novais.</span>
                 </span>
@@ -218,7 +254,7 @@ export function AboutHero() {
                   Mas sente quando{' '}
                   <span className="text-bluePrimary">funciona.</span>
                 </span>
-              </h1>
+              </div>
             </motion.div>
             <motion.div
               variants={motionTokens.fadeGhost}

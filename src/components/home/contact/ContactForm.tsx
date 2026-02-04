@@ -145,6 +145,7 @@ const ContactForm: React.FC = () => {
               type="text"
               name="_honey"
               className="hidden"
+              hidden
               aria-hidden="true"
               tabIndex={-1}
               title="Ignore this field"

@@ -43,12 +43,12 @@ export default function ClientLayout({
 
   if (isAdmin) {
     return (
-      <main
+      <div
         id="main-content"
         className="admin-surface relative min-h-screen bg-slate-950 text-slate-50"
       >
         {children}
-      </main>
+      </div>
     );
   }
 

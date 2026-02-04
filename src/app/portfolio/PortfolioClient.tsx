@@ -48,7 +48,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
         Pular para os projetos
       </a>
 
-      <main id="main-content">
+      <div>
         <PortfolioHeroNew />
 
         <ProjectsGallery projects={projects} onProjectSelect={handleOpenProject} />
@@ -57,7 +57,7 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
           <ClientsBrandsSection />
           <ContactSection />
         </div>
-      </main>
+      </div>
 
       <SiteFooter />
 

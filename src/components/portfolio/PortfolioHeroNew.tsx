@@ -14,6 +14,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import PortfolioCTA from './PortfolioCTA';
+import { DEFAULT_CAPTIONS } from '@/lib/video';
 
 const HERO_POSTER = `data:image/svg+xml;utf8,${encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
@@ -70,6 +71,13 @@ export default function PortfolioHeroNew() {
             onError={() => setVideoFailed(true)}
           >
             <source src={videoSrc} type="video/mp4" />
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
           </video>
         ) : (
           <Image

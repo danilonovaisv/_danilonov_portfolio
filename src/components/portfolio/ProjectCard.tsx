@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useParallaxCard } from '@/hooks/useParallaxGallery';
 import { ASSET_PLACEHOLDER, applyImageFallback, isVideo } from '@/utils/utils';
 import styles from './ProjectsGallery.module.css';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 export type ProjectCardSize = 'sm' | 'md' | 'lg' | 'wide' | 'tall';
 
@@ -69,7 +70,6 @@ export const ProjectCard = ({
       type="button"
       data-size={size}
       onClick={() => onClick?.(project)}
-      aria-label={`Ver projeto ${project.title}`}
       aria-haspopup={onClick ? 'dialog' : undefined}
       className={cn(
         styles.card,
@@ -89,8 +89,17 @@ export const ProjectCard = ({
             muted
             loop
             playsInline
+            poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 h-full w-full object-cover"
-          />
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </video>
         ) : (
           <Image
             src={imageSrc}

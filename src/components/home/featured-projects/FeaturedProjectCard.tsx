@@ -7,6 +7,7 @@ import { ArrowIcon } from '@/components/ui/ArrowIcon';
 import Link from 'next/link';
 import type { PortfolioProject } from '@/types/project';
 import { applyImageFallback, isVideo } from '@/utils/utils';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 interface FeaturedProjectCardProps {
   project: PortfolioProject;
@@ -45,8 +46,17 @@ export default function FeaturedProjectCard({
             muted
             loop
             playsInline
+            poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 opacity-90 md:group-hover:opacity-100"
-          />
+          >
+            <track
+              kind="captions"
+              src={DEFAULT_CAPTIONS}
+              srcLang="pt-BR"
+              label="Português"
+              default
+            />
+          </video>
         ) : (
           <Image
             src={project.image}
@@ -104,7 +114,6 @@ export default function FeaturedProjectCard({
     return (
       <Link
         href={`/projects/${project.landingPageSlug}?from=home`}
-        aria-label={`Ver Landing Page: ${project.title}`}
         className={commonClasses}
       >
         <CardContent />
@@ -117,7 +126,6 @@ export default function FeaturedProjectCard({
       <button
         type="button"
         onClick={handleClick}
-        aria-label={`Ver detalhes do projeto ${project.title}`}
         className={commonClasses}
       >
         <CardContent />
@@ -128,7 +136,6 @@ export default function FeaturedProjectCard({
   return (
     <Link
       href={`/portfolio/${project.slug}`}
-      aria-label={`Ver projeto: ${project.title}`}
       className={commonClasses}
     >
       <CardContent />

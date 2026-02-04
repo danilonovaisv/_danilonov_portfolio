@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function FloatingCardsPage() {
   return (
-    <main className="min-h-screen bg-[#0f0f23]">
+    <div className="min-h-screen bg-[#0f0f23]">
       {/* Header Spacer */}
       <div className="h-32 w-full" />
 
@@ -25,6 +25,6 @@ export default function FloatingCardsPage() {
 
       {/* Footer Spacer */}
       <div className="h-64 w-full bg-linear-to-t from-black to-transparent" />
-    </main>
+    </div>
   );
 }

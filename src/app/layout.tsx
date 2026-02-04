@@ -41,6 +41,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
+        <meta charSet="utf-8" />
         <JsonLd logoUrl={jsonLdLogoUrl} />
       </head>
       <body

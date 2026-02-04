@@ -96,25 +96,25 @@ export default function BlockRenderer({
             components={{
               p: ({ children }) => <p className={textClasses}>{children}</p>,
               h1: ({ children }) => (
-                <h1
-                  className={`${config?.textAlign || ''} font-bold text-4xl md:text-6xl mb-8`}
-                >
-                  {children}
-                </h1>
-              ),
-              h2: ({ children }) => (
                 <h2
-                  className={`${config?.textAlign || ''} font-bold text-3xl md:text-5xl mb-6`}
+                  className={`${config?.textAlign || ''} font-bold text-4xl md:text-6xl mb-8`}
                 >
                   {children}
                 </h2>
               ),
-              h3: ({ children }) => (
+              h2: ({ children }) => (
                 <h3
-                  className={`${config?.textAlign || ''} font-bold text-2xl md:text-4xl mb-4`}
+                  className={`${config?.textAlign || ''} font-bold text-3xl md:text-5xl mb-6`}
                 >
                   {children}
                 </h3>
+              ),
+              h3: ({ children }) => (
+                <h4
+                  className={`${config?.textAlign || ''} font-bold text-2xl md:text-4xl mb-4`}
+                >
+                  {children}
+                </h4>
               ),
               ul: ({ children }) => (
                 <ul
@@ -192,9 +192,9 @@ export default function BlockRenderer({
       <div className="w-full relative rounded-2xl overflow-hidden bg-slate-900/50">
         <Image
           src={url}
-          alt="Project Media"
-          width={0}
-          height={0}
+          alt="Project media"
+          width={1600}
+          height={900}
           sizes="(max-width: 768px) 100vw, 80vw"
           className="w-full h-auto object-contain"
         />

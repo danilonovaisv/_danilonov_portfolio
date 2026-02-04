@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!project) return siteMetadata;
 
-  const description = `Case study: ${project.title} for ${project.client}. Category: ${project.displayCategory}.`;
+  const description = `Case study: ${project.title} for ${project.client}. ${project.displayCategory} com foco em presença, narrativa e resultado, reunindo processo, direção criativa e execução digital.`;
   const url = `https://${BRAND.domain}/portfolio/${slug}`;
 
   return {

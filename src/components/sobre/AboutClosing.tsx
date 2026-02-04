@@ -6,6 +6,7 @@ import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { ABOUT_CONTENT } from '@/config/content';
 
 import { motionTokens } from './motion';
+import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 export function AboutClosing() {
   const prefersReducedMotion = useReducedMotion();
@@ -55,7 +56,16 @@ export function AboutClosing() {
               playsInline
               preload="auto"
               aria-label="Demonstração visual de experiências"
-            />
+              poster={DEFAULT_VIDEO_POSTER}
+            >
+              <track
+                kind="captions"
+                src={DEFAULT_CAPTIONS}
+                srcLang="pt-BR"
+                label="Português"
+                default
+              />
+            </video>
             {/* Mobile Video - Mantém aspecto nativo sem corte */}
             <video
               className="md:hidden w-full h-auto"
@@ -66,7 +76,16 @@ export function AboutClosing() {
               playsInline
               preload="auto"
               aria-label="Demonstração visual de experiências"
-            />
+              poster={DEFAULT_VIDEO_POSTER}
+            >
+              <track
+                kind="captions"
+                src={DEFAULT_CAPTIONS}
+                srcLang="pt-BR"
+                label="Português"
+                default
+              />
+            </video>
           </div>
         </div>
 
