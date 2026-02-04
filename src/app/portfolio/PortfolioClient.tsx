@@ -9,6 +9,7 @@ import { PortfolioModal } from '@/components/portfolio/PortfolioModal';
 import ClientsBrandsSection from '@/components/home/clients/ClientsBrandsSection';
 import ContactSection from '@/components/home/contact/ContactSection';
 import SiteFooter from '@/components/layout/SiteFooter';
+import AntigravityCTA from '@/components/ui/AntigravityCTA';
 
 type PortfolioClientProps = {
   projects: PortfolioProject[];
@@ -52,6 +53,17 @@ export default function PortfolioClient({ projects }: PortfolioClientProps) {
         <PortfolioHeroNew />
 
         <ProjectsGallery projects={projects} onProjectSelect={handleOpenProject} />
+
+        {/* CTA Section - After Cards, Following AntigravityCTA Pattern */}
+        <section className="relative z-20 bg-background py-16 md:py-24">
+          <div className="mx-auto flex justify-center px-4 md:px-12">
+            <AntigravityCTA
+              text="vamos trabalhar juntos"
+              href="#contact"
+              className="relative"
+            />
+          </div>
+        </section>
 
         <div className="relative z-30 bg-background">
           <ClientsBrandsSection />

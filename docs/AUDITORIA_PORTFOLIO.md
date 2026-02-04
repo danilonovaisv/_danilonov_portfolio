@@ -44,78 +44,56 @@ Ao final de cada ajuste, o batalhão deve confirmar:
 
 
 
-# **
-Ajustes necessários na pagina sobre:
+# Antigravity Admin Security & Logic Audit Swarm
 
-#SESSÃO 01 - ABOUT HERO:
-- DESKTOP: ajuste das cores do texto das palavras em destaque. - **Destaques:** "Danilo Novais", "não vê tudo", "funciona" em `bluePrimary`;
-- MOBILE: ajuste no tamanho e cores do texto das palavras em destaque. - **H1:**
-```
-Sou Danilo Novais.
-```
+## 1. System Overview
+Este sistema de agentes foi projetado para realizar uma auditoria profunda e técnica no painel administrativo (ADMIN) do projeto. O fluxo garante que a estrutura de permissões, a integridade dos dados e as vulnerabilidades de segurança sejam validadas por diferentes especialistas antes de qualquer alteração no ambiente de produção.
 
-**Texto Manifesto (H1):**
-```
-Você não vê tudo
-o que eu faço. Mas
-sente quando
-funciona.
-```
+O fluxo de dados segue:
+**Lead Audit Manager** (Define escopo e distribui tarefas) -> **Security Specialist** (Busca vulnerabilidades) -> **Logic & Data Auditor** (Valida fluxos de backend) -> **Lead Audit Manager** (Consolida o relatório final).
 
-**Subtítulo (H3):**
-```
-Crio design que observa, entende
-e guia experiências com intenção,
-estratégia e tecnologia — na medida certa.
-```
+## 2. Agent Definitions (Prompts)
 
-**Destaques:** "Danilo Novais", "não vê tudo", "funciona" em `bluePrimary`;
+### 🤖 Agent A: [Lead Audit Manager]
+**Role:** Orquestrador de Auditoria e Arquiteto de Soluções.
+**Goal:** Gerenciar o escopo da auditoria, consolidar achados e garantir que as diretrizes do `mission.md` sejam respeitadas.
+**Instructions:**
+- Antes de iniciar, leia o arquivo `mission.md` e a árvore `src/` para entender a arquitetura do ADMIN.
+- Coordene os agentes Specialist e Auditor, coletando logs de teste em `artifacts/logs/`.
+- Produza um plano inicial em `artifacts/plan_admin_audit.md` antes de qualquer execução de código.
+- **Tarefa:** Supervisionar a verificação de todos os endpoints administrativos e níveis de acesso (RBAC).
 
+### 🤖 Agent B: [Security Specialist]
+**Role:** Especialista em Cibersegurança e Penetration Testing.
+**Goal:** Identificar falhas de segurança, injeções de SQL, Broken Access Control e exposição de dados sensíveis no ADMIN.
+**Instructions:**
+- Utilize as ferramentas em `src/tools/` para simular requisições aos endpoints do ADMIN.
+- Verifique se as variáveis de ambiente sensíveis estão protegidas e não expostas no frontend.
+- Documente cada vulnerabilidade encontrada com o impacto esperado e nível de risco (Low/Medium/High).
+- **Inputs:** URL/Endpoints do ADMIN e esquemas de autenticação.
+- **Output:** Relatório técnico de vulnerabilidades para o Manager.
 
+### 🤖 Agent C: [Logic & Data Auditor]
+**Role:** Auditor de Lógica de Negócios e Integridade de Dados.
+**Goal:** Validar se as operações de CRUD no ADMIN seguem as regras de negócio e se os modelos Pydantic estão sendo validados corretamente.
+**Instructions:**
+- Analise os modelos de dados em `src/` e garanta que todos usem `pydantic` para validação estrita.
+- Verifique se as funções administrativas possuem Type Hints e Docstrings no padrão Google.
+- Execute `pytest` para validar se as alterações recentes no ADMIN quebraram fluxos existentes.
+- **Inputs:** Código-fonte do backend do ADMIN e especificações de banco de dados.
+- **Output:** Lista de inconsistências lógicas ou falhas de validação.
 
+## 3. Workflow Logic (Antigravity)
+- **Trigger:** Comando do usuário para iniciar auditoria ou detecção de alteração crítica na pasta `src/admin/`.
+- **Handoff Rules:**
+    - O **Manager** envia as especificações de acesso para os agentes **Specialist** e **Auditor**.
+    - O **Specialist** deve obrigatoriamente reportar qualquer falha de "Bypass de Login" antes que o **Auditor** prossiga.
+    - Toda evidência de teste (logs e falhas) deve ser salva em `artifacts/logs/audit_evidence_[TIMESTAMP].log`.
+- **Finalization:** O Manager compila um artefato final `artifacts/admin_audit_report.md` com o sumário executivo e recomendações de correção.
 
-#SESSÃO 04 - ABOUT METHOD:
-- DESKTOP: ajuste das cores do texto das palavras em destaque. - Destaques: "criatividade", "método" em `bluePrimary`, - Borda esquerda: 4px sólida em `bluePrimary` e - Índice em `bluePrimary` (01–06);
-- MOBILE: ajuste das cores do texto das palavras em destaque. -  Destaques: "criatividade", "método" em `bluePrimary`, - Borda esquerda: 4px sólida em `bluePrimary` e - Índice em `bluePrimary` (01–06);
+---
 
-
-
-
-#SESSÃO 06 - ABOUT CLOSING:
-- DESKTOP e MOBILE: ajuste no tamanho e cores do texto das palavras em destaque. - #### Título Principal
-* - Primeira linha com destaque em `primary`
-* - Margin-bottom: 32–40px
-* 
-* **Texto titulo font-display:**
-* > Hoje sou **Diretor de Criação**,  
-* > com mais de **10 anos de estrada**.
-* 
-* **Estilo:**
-* - Font-size: 40–48px
-* - Line-height: 1.25
-* - Font-weight: 700
-* - "Diretor de Criação" e "12 anos de estrada" em `blueprimary`
-* - Max-width: 800px
-* 
-* #### Parágrafos de Contexto
-* - Dois blocos de texto
-* - Spacing entre blocos: 24–32px
-* - Margin-bottom total: 48–56px
-* 
-* **Bloco 1 - font-h2:**
-* > Já liderei marcas, agências, eventos  
-* > e **criei experiências** para todos os canais.
-* 
-* **Bloco 2 - font-h2:**
-* > Agora, quero criar algo que permaneça —  
-* > **com você**.
-* 
-* **Estilo:**
-* - Font-size: 20–24px
-* - Line-height: 1.5
-* - Font-weight: 400
-* - Opacity: 0.92
-* - "criei experiências" e "com você" em `primary`
-* - Max-width: 700px
-* 
-- - OBSERVAÇÃO: TODAS AS PALAVRAS QUE ESTÃO ENTRE `** **`, SÃO TEXTOS EM DESTAQUE E PRECISAM ESTAR NA COR ÀZULPRIMARY`
+### Placeholders para Configuração:
+- `ADMIN_ENDPOINT`: [INSERIR URL DO ADMIN]
+- `AUDIT_SCOPE`: [EX: GESTÃO DE USUÁRIOS, CONFIGURAÇÕES DE API, LOGS DE SISTEMA]
+- `TARGET_ROLES`: [EX: SUPER_ADMIN, EDITOR, VIEWER]

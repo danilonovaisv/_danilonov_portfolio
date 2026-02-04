@@ -168,44 +168,8 @@ export function CategoryStripe({
           </div>
         </div>
 
-        {/* Mobile Card - Enhanced with thumbnail preview and better touch targets */}
+        {/* Mobile Card - Simplified per UI refinement spec (no thumbnails) */}
         <div className="lg:hidden flex flex-col gap-4 py-5 border-t border-blueAccent/40 active:bg-white/5 transition-colors duration-200 rounded-lg -mx-2 px-2">
-          {/* Thumbnail Preview - Mobile */}
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-            {isVideo ? (
-              <video
-                src={category.thumbnail}
-                autoPlay
-                loop
-                muted
-                playsInline
-                poster={DEFAULT_VIDEO_POSTER}
-                className="object-cover w-full h-full"
-              >
-                <track
-                  kind="captions"
-                  src={DEFAULT_CAPTIONS}
-                  srcLang="pt-BR"
-                  label="Português"
-                  default
-                />
-              </video>
-            ) : (
-              <Image
-                src={category.thumbnail}
-                alt={title.join(' ')}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw"
-                loading={shouldEagerLoad ? 'eager' : 'lazy'}
-                priority={shouldEagerLoad}
-                onError={applyImageFallback}
-              />
-            )}
-            {/* Gradient overlay for text legibility */}
-            <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent" />
-          </div>
-
           {/* Title + Arrow Row */}
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col flex-1">

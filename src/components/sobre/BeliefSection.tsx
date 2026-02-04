@@ -103,10 +103,9 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
       aria-label={text.replace(/\n/g, ' ')}
       style={{ backgroundColor: bgColor }}
       className={`relative w-full h-screen flex overflow-hidden
-        ${
-          isMobile
-            ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
-            : `items-center justify-start pl-8 lg:pl-16`
+        ${isMobile
+          ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
+          : `items-center justify-start pl-8 lg:pl-16`
         }
       `}
     >
@@ -206,11 +205,11 @@ const MobilePhrase: React.FC<MobilePhraseProps> = ({
   const exitStart = endPoint - segmentSize * 0.25;
   const exitEnd = endPoint - 0.02;
 
-  // X: Entra da esquerda, sai para a esquerda
+  // X: Entra da DIREITA, mantém centro, sai para a DIREITA (Antigravity Spec)
   const x = useTransform(
     scrollYProgress,
     [entryStart, entryEnd, exitStart, exitEnd],
-    ['-100%', '0%', '0%', '-100%'],
+    ['100%', '0%', '0%', '100%'],
     { ease: ghostEase }
   );
 
@@ -225,9 +224,9 @@ const MobilePhrase: React.FC<MobilePhraseProps> = ({
   return (
     <motion.div
       style={{ x, opacity }}
-      className="absolute bottom-0 left-0 right-0 px-6"
+      className="absolute bottom-0 left-0 right-0 px-6 mb-[20%]"
     >
-      <span className="block text-blueAccent italic font-semibold text-[clamp(2rem,7vw,3rem)] leading-[1.15] tracking-[-0.01em] text-left select-none drop-shadow-[0_4px_20px_rgba(79,230,255,0.25)]">
+      <span className="block text-blueAccent italic font-semibold text-[clamp(2rem,7vw,3rem)] leading-[1.15] tracking-[-0.01em] text-center select-none drop-shadow-[0_4px_20px_rgba(79,230,255,0.25)]">
         {text.replace(/\n/g, ' ')}
       </span>
     </motion.div>

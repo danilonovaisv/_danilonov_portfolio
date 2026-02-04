@@ -9,5 +9,7 @@ export const ADMIN_NAVIGATION = {
   midia: '/admin/midia',
   'landing-pages': '/admin/landing-pages',
   config: '/admin/config',
-  antigravity: '/admin/antigravity',
+  copyAgent: '/admin/copy-agent',
+  sceneGenerator: '/admin/scene-generator',
 } as const;
+

@@ -107,8 +107,9 @@ export const AboutBeliefs: React.FC = () => {
       </div>
 
       {/* LAYER 3: Canvas 3D (Sticky - Top Layer Z-50) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-50">
-        <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto">
+      {/* Mobile: Ghost positioned 20% from top | Desktop: Centered */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-50 md:top-0 top-[20%]">
+        <div className="sticky top-0 md:top-0 w-full h-screen md:h-screen overflow-hidden pointer-events-auto">
           <Canvas
             shadows
             dpr={[1, 2]}

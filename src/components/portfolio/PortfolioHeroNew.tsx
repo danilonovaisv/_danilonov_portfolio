@@ -13,7 +13,6 @@ import { PORTFOLIO_CONTENT } from '@/config/content';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
-import PortfolioCTA from './PortfolioCTA';
 import { DEFAULT_CAPTIONS } from '@/lib/video';
 
 const HERO_POSTER = `data:image/svg+xml;utf8,${encodeURIComponent(
@@ -105,24 +104,17 @@ export default function PortfolioHeroNew() {
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background via-background/80 to-transparent" />
       </div>
 
-      {/* Hero Content - Title & CTA Fixed Bottom - Single Visual Line */}
+      {/* Hero Content - Title Centered */}
       <div className="absolute bottom-0 left-0 w-full z-30 pb-10 md:pb-16 px-4 md:px-12">
-        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-center gap-6 md:flex-row md:items-end md:justify-between md:gap-12">
-          {/* Title - "portfólio showcase" */}
-          <div className="flex-1 text-center md:text-left">
-            <h1
-              id="portfolio-hero-heading"
-              className="text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none font-bold"
-            >
-              <span className="text-[#4fe6ff] mr-3 md:mr-6">portfólio</span>
-              <span className="text-white">showcase</span>
-            </h1>
-          </div>
-
-          {/* CTA - "vamos trabalhar juntos" - Aligned to bottom baseline */}
-          <div className="shrink-0 flex justify-center md:justify-end">
-            <PortfolioCTA label="vamos trabalhar juntos" href="#contact" />
-          </div>
+        <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-center">
+          {/* Title - "portfólio showcase" - Centered */}
+          <h1
+            id="portfolio-hero-heading"
+            className="text-4xl sm:text-6xl md:text-8xl tracking-tighter leading-none font-bold text-center"
+          >
+            <span className="text-[#4fe6ff] italic font-light mr-3 md:mr-6">portfólio</span>
+            <span className="text-white font-bold">showcase</span>
+          </h1>
         </div>
       </div>
     </section>

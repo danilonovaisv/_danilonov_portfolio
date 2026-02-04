@@ -8,7 +8,8 @@ import {
   Tag,
   Images,
   Settings,
-  Sparkles,
+  PenTool,
+  ImageIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { signOut } from '@/lib/supabase/auth-actions';
@@ -39,9 +40,14 @@ const navItems = [
   },
   { href: ADMIN_NAVIGATION.config, label: 'Configurações', icon: Settings },
   {
-    href: ADMIN_NAVIGATION.antigravity,
-    label: 'Antigravity AI',
-    icon: Sparkles,
+    href: ADMIN_NAVIGATION.copyAgent,
+    label: 'Copy Agent',
+    icon: PenTool,
+  },
+  {
+    href: ADMIN_NAVIGATION.sceneGenerator,
+    label: 'Scene Generator',
+    icon: ImageIcon,
   },
 ];
 
@@ -70,9 +76,8 @@ export function AdminShell({ children, userEmail }: Props) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition hover:bg-white/5 ${
-                    active ? 'bg-white/10 text-white' : 'text-slate-300'
-                  }`}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition hover:bg-white/5 ${active ? 'bg-white/10 text-white' : 'text-slate-300'
+                    }`}
                 >
                   <Icon size={18} />
                   {item.label}
