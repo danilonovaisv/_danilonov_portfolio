@@ -12,7 +12,7 @@ cd "$PROJECT_ROOT"
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
   . "$NVM_DIR/nvm.sh"
-  nvm use 22 >/dev/null
+  nvm use 20 >/dev/null
 fi
 
 export PATH="$PROJECT_ROOT/node_modules/.bin:$PATH"

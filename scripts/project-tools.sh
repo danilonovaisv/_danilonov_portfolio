@@ -35,8 +35,8 @@ success() {
 detect_package_manager() {
   if [ -f "yarn.lock" ]; then
     PACKAGE_MANAGER="yarn"
-  elif [ -f "npm-lock.yaml" ]; then
-    PACKAGE_MANAGER="npm"
+  elif [ -f "pnpm-lock.yaml" ]; then
+    PACKAGE_MANAGER="pnpm"
   else
     PACKAGE_MANAGER="npm"
   fi
@@ -52,7 +52,7 @@ check_env() {
   node -v || warn "Node não encontrado"
   npm -v || warn "npm não encontrado"
   yarn -v || warn "yarn não encontrado"
-  npm -v || warn "npm não encontrado"
+  pnpm -v || warn "pnpm não encontrado"
 }
 
 install_deps() {
@@ -67,7 +67,7 @@ install_deps() {
       yarn install
       ;;
     npm)
-      pnpm install
+      npm install
       ;;
   esac
 
@@ -85,8 +85,8 @@ check_outdated() {
     yarn)
       yarn outdated || true
       ;;
-    npm)
-      npm outdated || true
+    pnpm)
+      pnpm outdated || true
       ;;
   esac
 }
@@ -102,8 +102,8 @@ update_safe() {
     yarn)
       yarn upgrade
       ;;
-    npm)
-      npm update
+    pnpm)
+      pnpm update
       ;;
   esac
 
@@ -127,8 +127,8 @@ update_aggressive() {
     yarn)
       yarn install
       ;;
-    npm)
-      npm install
+    pnpm)
+      pnpm install
       ;;
   esac
 
@@ -150,9 +150,9 @@ deep_clean() {
       rm -f "$LOCKFILE_YARN"
       yarn install
       ;;
-    npm)
-      rm -f "$LOCKFILE_npm"
-      npm install
+    pnpm)
+      rm -f "pnpm-lock.yaml"
+      pnpm install
       ;;
   esac
 
