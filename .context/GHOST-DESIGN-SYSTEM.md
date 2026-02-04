@@ -1,4 +1,5 @@
 # 🫥 Ghost Design System — Tokens + Regras Globais
+
 Versão: **extraído/reorganizado** • Data: **2026-02-03**
 
 > Este arquivo centraliza **tokens**, **princípios de motion**, **grid/spacing**, **componentes base** e **regras absolutas**.
@@ -7,25 +8,26 @@ Versão: **extraído/reorganizado** • Data: **2026-02-03**
 ---
 
 ## 1) Design System (conceitual)
+
 # **2. DESIGN SYSTEM**
 
 ### 2.1 Color Palette
 
-| Token          | Value     | Uso                                                      |
-| -------------- | --------- | -------------------------------------------------------- |
-| bluePrimary    | `#0048ff` | Cor primária da marca, CTAs, links, elementos interativos |
-| blueAccent     | `#4fe6ff` | Destaques secundários, brilhos “ghost”/atmosfera        |
-| purpleDetails  | `#8705f2` | Pequenos detalhes e highlights                           |
-| pinkDetails    | `#f501d3` | Pequenos detalhes, ênfases pontuais                      |
-| background     | `#040013` | Fundo escuro principal                                   |
-| backgroundLight| `#f0f0f0` | Seções claras (forms, blocos alternados)                 |
-| text           | `#fcffff` | Texto principal em fundo escuro                          |
-| textInverse    | `#0e0e0e` | Texto em fundos claros                                   |
-| textEmphasis   | `#2E85F2` | Palavras destacadas no meio do texto                     |
-| textHighlight  | `#4fe6ff` | Destaques curtos, intros breves                          |
-| textSecondary  | `#a1a3a3` | Infos secundárias, metadata                              |
-| neutral        | `#0b0d3a` | Gradientes, fundos sutis                                 |
-| neutralLight   | `#F5F5F5` | Fundos de seções secundárias                             |
+| Token           | Value     | Uso                                                       |
+| --------------- | --------- | --------------------------------------------------------- |
+| bluePrimary     | `#0048ff` | Cor primária da marca, CTAs, links, elementos interativos |
+| blueAccent      | `#4fe6ff` | Destaques secundários, brilhos “ghost”/atmosfera          |
+| purpleDetails   | `#8705f2` | Pequenos detalhes e highlights                            |
+| pinkDetails     | `#f501d3` | Pequenos detalhes, ênfases pontuais                       |
+| background      | `#040013` | Fundo escuro principal                                    |
+| backgroundLight | `#f0f0f0` | Seções claras (forms, blocos alternados)                  |
+| text            | `#fcffff` | Texto principal em fundo escuro                           |
+| textInverse     | `#0e0e0e` | Texto em fundos claros                                    |
+| textEmphasis    | `#2E85F2` | Palavras destacadas no meio do texto                      |
+| textHighlight   | `#4fe6ff` | Destaques curtos, intros breves                           |
+| textSecondary   | `#a1a3a3` | Infos secundárias, metadata                               |
+| neutral         | `#0b0d3a` | Gradientes, fundos sutis                                  |
+| neutralLight    | `#F5F5F5` | Fundos de seções secundárias                              |
 
 > Obs: `textEmphasis` estava com `##2E85F2` e `textHilght` com typo — normalizei para `textHighlight`.
 
@@ -37,112 +39,110 @@ Versão: **extraído/reorganizado** • Data: **2026-02-03**
 
 Tokens de texto **responsivos** (usando `clamp`) para manter coerência em todos os breakpoints:
 
-| Token     | Mobile (~<640px) | Desktop (~≥1024px) | Peso   | Uso                                                                 |
-| --------- | ---------------- | ------------------ | ------ | ------------------------------------------------------------------- |
-| display   | 2.5rem (40px)    | 4.5rem (72px)      | Black  | Frases grandes no meio da página, não-semânticas (Big Phrase)      |
-| h1        | 2rem (32px)      | 3.5rem (56px)      | Bold   | Hero headlines, títulos principais                                  |
-| h2        | 1.5rem (24px)    | 2.5rem (40px)      | Bold   | Títulos de seção                                                    |
-| h3        | 1.25rem (20px)   | 1.75rem (28px)     | Medium | Títulos de cards, subtítulos                                       |
-| body      | 1rem (16px)      | 1.125rem (18px)    | Regular| Texto corrido                                                       |
-| small     | 0.875rem (14px)  | 0.875rem (14px)    | Reg/Med| Labels, legendas                                                   |
-| micro     | 0.75rem (12px)   | 0.75rem (12px)     | Mono   | Tags, infos de sistema                                              |
+| Token   | Mobile (~<640px) | Desktop (~≥1024px) | Peso    | Uso                                                           |
+| ------- | ---------------- | ------------------ | ------- | ------------------------------------------------------------- |
+| display | 2.5rem (40px)    | 4.5rem (72px)      | Black   | Frases grandes no meio da página, não-semânticas (Big Phrase) |
+| h1      | 2rem (32px)      | 3.5rem (56px)      | Bold    | Hero headlines, títulos principais                            |
+| h2      | 1.5rem (24px)    | 2.5rem (40px)      | Bold    | Títulos de seção                                              |
+| h3      | 1.25rem (20px)   | 1.75rem (28px)     | Medium  | Títulos de cards, subtítulos                                  |
+| body    | 1rem (16px)      | 1.125rem (18px)    | Regular | Texto corrido                                                 |
+| small   | 0.875rem (14px)  | 0.875rem (14px)    | Reg/Med | Labels, legendas                                              |
+| micro   | 0.75rem (12px)   | 0.75rem (12px)     | Mono    | Tags, infos de sistema                                        |
 
 #### Tokens em CSS com `clamp()`
 
 ['css
 :root {
-  --font-display: clamp(2.5rem, 5vw, 4.5rem);
-  --font-h1:      clamp(2rem, 4vw, 3.5rem);
-  --font-h2:      clamp(1.5rem, 3vw, 2.5rem);
-  --font-h3:      clamp(1.25rem, 2vw, 1.75rem);
-  --font-body:    clamp(1rem, 1.2vw, 1.125rem);
-  --font-small:   0.875rem;
-  --font-micro:   0.75rem;
+--font-display: clamp(2.5rem, 5vw, 4.5rem);
+--font-h1: clamp(2rem, 4vw, 3.5rem);
+--font-h2: clamp(1.5rem, 3vw, 2.5rem);
+--font-h3: clamp(1.25rem, 2vw, 1.75rem);
+--font-body: clamp(1rem, 1.2vw, 1.125rem);
+--font-small: 0.875rem;
+--font-micro: 0.75rem;
 }
 
 body {
-  font-family: "TT Norms Pro", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+font-family: "TT Norms Pro", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
 }
 
 .display-text {
-  font-size: var(--font-display);
-  font-weight: 900;
-  line-height: 1.1;
+font-size: var(--font-display);
+font-weight: 900;
+line-height: 1.1;
 }
 
 .h1 {
-  font-size: var(--font-h1);
-  font-weight: 700;
-  line-height: 1.1;
+font-size: var(--font-h1);
+font-weight: 700;
+line-height: 1.1;
 }
 
 .h2 {
-  font-size: var(--font-h2);
-  font-weight: 600;
-  line-height: 1.15;
+font-size: var(--font-h2);
+font-weight: 600;
+line-height: 1.15;
 }
 
 .h3 {
-  font-size: var(--font-h3);
-  font-weight: 500;
-  line-height: 1.2;
+font-size: var(--font-h3);
+font-weight: 500;
+line-height: 1.2;
 }
 
 .body {
-  font-size: var(--font-body);
-  font-weight: 400;
-  line-height: 1.5;
+font-size: var(--font-body);
+font-weight: 400;
+line-height: 1.5;
 }
 
 .small {
-  font-size: var(--font-small);
+font-size: var(--font-small);
 }
 
 .micro {
-  font-size: var(--font-micro);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
-    monospace;
+font-size: var(--font-micro);
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+monospace;
 }
 
 Versão conceitual em Tailwind
 
 // tailwind.config.js
 module.exports = {
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['"TT Norms Pro"', "ui-sans-serif", "system-ui"],
-      },
-      fontSize: {
-        display: [
-          "clamp(2.5rem, 5vw, 4.5rem)",
-          { lineHeight: "1.1", fontWeight: "700" },
-        ],
-        h1: [
-          "clamp(2rem, 4vw, 3.5rem)",
-          { lineHeight: "1.1", fontWeight: "700" },
-        ],
-        h2: [
-          "clamp(1.5rem, 3vw, 2.5rem)",
-          { lineHeight: "1.15", fontWeight: "700" },
-        ],
-        h3: [
-          "clamp(1.25rem, 2vw, 1.75rem)",
-          { lineHeight: "1.2", fontWeight: "500" },
-        ],
-        body: [
-          "clamp(1rem, 1.2vw, 1.125rem)",
-          { lineHeight: "1.5", fontWeight: "400" },
-        ],
-        small: ["0.875rem", { lineHeight: "1.4" }],
-        micro: ["0.75rem", { lineHeight: "1.4" }],
-      },
-    },
-  },
+theme: {
+extend: {
+fontFamily: {
+sans: ['"TT Norms Pro"', "ui-sans-serif", "system-ui"],
+},
+fontSize: {
+display: [
+"clamp(2.5rem, 5vw, 4.5rem)",
+{ lineHeight: "1.1", fontWeight: "700" },
+],
+h1: [
+"clamp(2rem, 4vw, 3.5rem)",
+{ lineHeight: "1.1", fontWeight: "700" },
+],
+h2: [
+"clamp(1.5rem, 3vw, 2.5rem)",
+{ lineHeight: "1.15", fontWeight: "700" },
+],
+h3: [
+"clamp(1.25rem, 2vw, 1.75rem)",
+{ lineHeight: "1.2", fontWeight: "500" },
+],
+body: [
+"clamp(1rem, 1.2vw, 1.125rem)",
+{ lineHeight: "1.5", fontWeight: "400" },
+],
+small: ["0.875rem", { lineHeight: "1.4" }],
+micro: ["0.75rem", { lineHeight: "1.4" }],
+},
+},
+},
 };']
-
-
 
 ### 2.3 Spacing, Grid & Layout (OPTIMIZED)
 
@@ -150,12 +150,12 @@ O sistema de Grid foi otimizado para **12 colunas** no desktop e **4 colunas** n
 
 #### 📐 The Ghost Grid System
 
-| Breakpoint | Columns | Gutter (Gap) | Margin (X-Padding) | Container Max |
-| --- | --- | --- | --- | --- |
-| **Mobile** (<768px) | **4** | `16px` (gap-4) | `24px` (px-6) | 100% |
-| **Tablet** (768px+) | **8** | `24px` (gap-6) | `48px` (px-12) | 100% |
-| **Desktop** (1024px+) | **12** | `32px` (gap-8) | `64px` (px-16) | 1440px |
-| **Wide** (1600px+) | **12** | `40px` (gap-10) | `96px` (px-24) | 1680px |
+| Breakpoint            | Columns | Gutter (Gap)    | Margin (X-Padding) | Container Max |
+| --------------------- | ------- | --------------- | ------------------ | ------------- |
+| **Mobile** (<768px)   | **4**   | `16px` (gap-4)  | `24px` (px-6)      | 100%          |
+| **Tablet** (768px+)   | **8**   | `24px` (gap-6)  | `48px` (px-12)     | 100%          |
+| **Desktop** (1024px+) | **12**  | `32px` (gap-8)  | `64px` (px-16)     | 1440px        |
+| **Wide** (1600px+)    | **12**  | `40px` (gap-10) | `96px` (px-24)     | 1680px        |
 
 #### 🧱 Tailwind Composition
 
@@ -166,7 +166,6 @@ O sistema de Grid foi otimizado para **12 colunas** no desktop e **4 colunas** n
 <div className="w-full max-w-[1680px] mx-auto px-6 md:px-12 lg:px-16 xl:px-24">
   {children}
 </div>
-
 ```
 
 **2. Section Grid (Padrão):**
@@ -175,21 +174,18 @@ O sistema de Grid foi otimizado para **12 colunas** no desktop e **4 colunas** n
 // Grid responsivo automático
 <section className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 md:gap-8 w-full py-16 md:py-24">
   {/* Ex: Card ocupando full no mobile e 4 colunas no desktop */}
-  <div className="col-span-4 md:col-span-4 lg:col-span-4">
-    Card Content
-  </div>
+  <div className="col-span-4 md:col-span-4 lg:col-span-4">Card Content</div>
 </section>
-
 ```
 
 **3. Z-Index Layering (Ghost Philosophy):**
 Para garantir que o 3D não bloqueie a interatividade.
 
-* `z-0`: **Canvas WebGL** (Background interativo).
-* `z-10`: **Glass Layers** (Paineis com backdrop-blur).
-* `z-20`: **Content** (Textos, Imagens).
-* `z-50`: **Navigation/Header** (Sticky).
-* `z-100`: **Modals/Overlays**.
+- `z-0`: **Canvas WebGL** (Background interativo).
+- `z-10`: **Glass Layers** (Paineis com backdrop-blur).
+- `z-20`: **Content** (Textos, Imagens).
+- `z-50`: **Navigation/Header** (Sticky).
+- `z-100`: **Modals/Overlays**.
 
 #### 📱 Mobile Alignment Rules
 
@@ -208,7 +204,7 @@ No breakpoint `< md` (Mobile First):
 **The "Ghost" Easing:**
 Sensação de peso e elegância. Movimento rápido no início, frenagem suave no final.
 
-* `ease: [0.22, 1, 0.36, 1]`
+- `ease: [0.22, 1, 0.36, 1]`
 
 **Padrões de Código:**
 
@@ -234,27 +230,31 @@ const containerVars = {
 
 ---
 
-
 ---
 
 ## 2) Design System técnico (implementação)
+
 ## **PARTE 2 — DESIGN SYSTEM TÉCNICO (IMPLEMENTAÇÃO)**
 
 🧠 **GHOST DESIGN SYSTEM — TÉCNICO**  
 _Tokens + Componentes_  
-portifoliodanilo.com  
+portifoliodanilo.com
 
-### 1. VISÃO GERAL  
+### 1. VISÃO GERAL
+
 Ghost Design é um sistema silencioso de interface.  
-Ele prioriza:  
-- Presença sem ruído  
-- Movimento como respiração  
-- Design como guia invisível  
+Ele prioriza:
+
+- Presença sem ruído
+- Movimento como respiração
+- Design como guia invisível
 
 Este documento é a fonte técnica oficial para design, frontend e motion.
 
-### 2. DESIGN TOKENS  
-#### 2.1 Color Tokens  
+### 2. DESIGN TOKENS
+
+#### 2.1 Color Tokens
+
 ```ts
 export const colors = {
   primary: '#0048ff',
@@ -271,7 +271,8 @@ export const colors = {
 };
 ```
 
-#### 2.2 Typography Tokens  
+#### 2.2 Typography Tokens
+
 ```ts
 export const typography = {
   fontFamily: {
@@ -299,7 +300,8 @@ export const typography = {
 };
 ```
 
-#### 2.3 Spacing Tokens  
+#### 2.3 Spacing Tokens
+
 ```ts
 export const spacing = {
   xs: '4px',
@@ -312,7 +314,8 @@ export const spacing = {
 };
 ```
 
-#### 2.4 Motion Tokens (CRÍTICO)  
+#### 2.4 Motion Tokens (CRÍTICO)
+
 ```ts
 export const motion = {
   duration: {
@@ -332,51 +335,61 @@ export const motion = {
 };
 ```
 
-**🚫 Proibido:**  
-- scale  
-- bounce  
-- rotate  
+**🚫 Proibido:**
 
-**Permitido:**  
-- opacity  
-- blur  
-- translateY (máx 18px)  
+- scale
+- bounce
+- rotate
 
-### 3. COMPONENTES BASE  
-#### 3.1 `<GhostText />`  
-_Uso: Manifestos, frases-chave_  
+**Permitido:**
+
+- opacity
+- blur
+- translateY (máx 18px)
+
+### 3. COMPONENTES BASE
+
+#### 3.1 `<GhostText />`
+
+_Uso: Manifestos, frases-chave_
+
 ```tsx
 <GhostText as="p" delay={0.4}>
   Você não vê tudo o que eu faço.
 </GhostText>
-```  
-**Comportamento**  
-- Fade + blur.  
-- Entrada por tempo ou viewport.  
-- Nunca reanima depois de visível.  
+```
 
-#### 3.2 `<GhostHeading />`  
+**Comportamento**
+
+- Fade + blur.
+- Entrada por tempo ou viewport.
+- Nunca reanima depois de visível.
+
+#### 3.2 `<GhostHeading />`
+
 ```tsx
-<GhostHeading level="h1">
-  Sou Danilo Novais.
-</GhostHeading>
-```  
-- Alinhamento fluido.  
-- Peso médio.  
-- Tracking negativo leve.  
+<GhostHeading level="h1">Sou Danilo Novais.</GhostHeading>
+```
 
-#### 3.3 `<GhostSection />`  
-_Wrapper padrão de seção._  
+- Alinhamento fluido.
+- Peso médio.
+- Tracking negativo leve.
+
+#### 3.3 `<GhostSection />`
+
+_Wrapper padrão de seção._
+
 ```tsx
-<GhostSection height="100vh">
-  {children}
-</GhostSection>
-```  
-**Regras**  
-- Uma seção = uma intenção.  
-- Nunca empilhar múltiplas animações diferentes na mesma área.  
+<GhostSection height="100vh">{children}</GhostSection>
+```
 
-#### 3.4 `<GhostList />`  
+**Regras**
+
+- Uma seção = uma intenção.
+- Nunca empilhar múltiplas animações diferentes na mesma área.
+
+#### 3.4 `<GhostList />`
+
 ```tsx
 <GhostList
   items={[
@@ -384,74 +397,84 @@ _Wrapper padrão de seção._
     'Design estratégico que guia decisões',
   ]}
 />
-```  
-- Entrada item a item.  
-- Stagger fixo: 0.18s.  
-- Hover só altera opacity/cor do texto.  
+```
 
-#### 3.5 `<GhostMedia />`  
+- Entrada item a item.
+- Stagger fixo: 0.18s.
+- Hover só altera opacity/cor do texto.
+
+#### 3.5 `<GhostMedia />`
+
 ```tsx
 <GhostMedia type="video" src="/portfolio/AI.mp4" />
-```  
-**Regras**  
-- Opacity máx 0.85.  
-- Blur permanente sutil.  
-- Nunca texto diretamente sobre a mídia; se houver, usar overlay sólido.  
+```
 
-#### 3.6 `<GhostCTA />`  
+**Regras**
+
+- Opacity máx 0.85.
+- Blur permanente sutil.
+- Nunca texto diretamente sobre a mídia; se houver, usar overlay sólido.
+
+#### 3.6 `<GhostCTA />`
+
 ```tsx
-<GhostCTA href="/contato">
-  Fale comigo
-</GhostCTA>
-```  
-- Sem glow exagerado.  
-- Hover silencioso (opacity/cor).  
-- Sempre com tom humano, nunca agressivo.  
+<GhostCTA href="/contato">Fale comigo</GhostCTA>
+```
 
-### 4. LAYOUT SYSTEM  
-#### 4.1 Grid Invisível  
-**Desktop (lg+)**  
-- 12 colunas virtuais.  
-- Texto tipicamente em colunas 2–7.  
-- Mídia em colunas 8–12.  
+- Sem glow exagerado.
+- Hover silencioso (opacity/cor).
+- Sempre com tom humano, nunca agressivo.
 
-**Mobile (sm / md)**  
-- 1 coluna.  
-- Texto sempre antes da imagem/vídeo.  
+### 4. LAYOUT SYSTEM
 
-*Objetivo: o usuário não percebe o grid, apenas o ritmo.*
+#### 4.1 Grid Invisível
 
-#### 4.2 Section Heights  
+**Desktop (lg+)**
 
-| Tipo        | Altura alvo |
-|-------------|-------------|
-| Hero        | 100vh       |
-| Conteúdo    | 120–140vh   |
-| Fechamento  | 80–100vh    |
+- 12 colunas virtuais.
+- Texto tipicamente em colunas 2–7.
+- Mídia em colunas 8–12.
 
-*Valores são referências, não travas rígidas. A prioridade é fluxo narrativo.*
+**Mobile (sm / md)**
 
-#### 4.3 Layout Responsivo por Seção  
-- **Seção 01**  
-  - Mobile: 1 coluna, texto centralizado.  
-  - Desktop: texto à direita sobre vídeo com overlay.  
-- **Seção 02 (Origem)**  
-  - Mobile: blocos texto → mídia empilhados.  
-  - Desktop: alternância texto ↔ mídia em 2 colunas.  
-- **Seção 03 (O que eu faço)**  
-  - Mobile: lista em 1 coluna.  
-  - Desktop: grid de 2–3 colunas de cards.  
-- **Seção 04 (Como eu trabalho)**  
-  - Mobile: texto em faixa escura sobre vídeo recortado (lado direito).  
-  - Desktop: texto à esquerda, vídeo/ghost em evidência à direita.  
-- **Seção 05 (O que me move)**  
-  - Mobile: texto centralizado + ghost abaixo.  
-  - Desktop: texto à esquerda, ghost à direita.  
-- **Seção 06 (Fechamento)**  
-  - Mobile: CTAs empilhados.  
-  - Desktop: CTAs lado a lado, com texto central.  
+- 1 coluna.
+- Texto sempre antes da imagem/vídeo.
 
-### 5. BREAKPOINTS (TÉCNICO)  
+_Objetivo: o usuário não percebe o grid, apenas o ritmo._
+
+#### 4.2 Section Heights
+
+| Tipo       | Altura alvo |
+| ---------- | ----------- |
+| Hero       | 100vh       |
+| Conteúdo   | 120–140vh   |
+| Fechamento | 80–100vh    |
+
+_Valores são referências, não travas rígidas. A prioridade é fluxo narrativo._
+
+#### 4.3 Layout Responsivo por Seção
+
+- **Seção 01**
+  - Mobile: 1 coluna, texto centralizado.
+  - Desktop: texto à direita sobre vídeo com overlay.
+- **Seção 02 (Origem)**
+  - Mobile: blocos texto → mídia empilhados.
+  - Desktop: alternância texto ↔ mídia em 2 colunas.
+- **Seção 03 (O que eu faço)**
+  - Mobile: lista em 1 coluna.
+  - Desktop: grid de 2–3 colunas de cards.
+- **Seção 04 (Como eu trabalho)**
+  - Mobile: texto em faixa escura sobre vídeo recortado (lado direito).
+  - Desktop: texto à esquerda, vídeo/ghost em evidência à direita.
+- **Seção 05 (O que me move)**
+  - Mobile: texto centralizado + ghost abaixo.
+  - Desktop: texto à esquerda, ghost à direita.
+- **Seção 06 (Fechamento)**
+  - Mobile: CTAs empilhados.
+  - Desktop: CTAs lado a lado, com texto central.
+
+### 5. BREAKPOINTS (TÉCNICO)
+
 ```ts
 export const breakpoints = {
   sm: '640px',
@@ -461,48 +484,51 @@ export const breakpoints = {
 };
 ```
 
-### 6. ACESSIBILIDADE & PERFORMANCE  
-- Respeitar `prefers-reduced-motion` em todas as animações.  
-- Nenhuma animação rodando fora do viewport.  
-- **Vídeos:**  
-  - `loading="lazy"` (quando possível).  
-  - `muted`, `autoplay`, `loop`.  
-- Sem re-render em scroll contínuo:  
-  - Usar observers (`IntersectionObserver`) em vez de listeners de scroll diretos.  
-- Contraste sempre AA+:  
-  - Especialmente em hero e seção 04 (texto sobre vídeo com overlay).  
+### 6. ACESSIBILIDADE & PERFORMANCE
 
-### 7. REGRAS ABSOLUTAS DO SISTEMA  
+- Respeitar `prefers-reduced-motion` em todas as animações.
+- Nenhuma animação rodando fora do viewport.
+- **Vídeos:**
+  - `loading="lazy"` (quando possível).
+  - `muted`, `autoplay`, `loop`.
+- Sem re-render em scroll contínuo:
+  - Usar observers (`IntersectionObserver`) em vez de listeners de scroll diretos.
+- Contraste sempre AA+:
+  - Especialmente em hero e seção 04 (texto sobre vídeo com overlay).
+
+### 7. REGRAS ABSOLUTAS DO SISTEMA
+
 ❌ Texto direto sobre imagem/vídeo sem overlay  
 ❌ Animações chamativas (glow, bounce, scale)  
-❌ Motion decorativo desconectado da narrativa  
+❌ Motion decorativo desconectado da narrativa
 
 ✅ Ritmo  
 ✅ Silêncio  
-✅ Presença  
+✅ Presença
 
-### 8. MANIFESTO TÉCNICO  
-O melhor design:  
-- não explica  
-- não chama atenção  
-- não se impõe  
+### 8. MANIFESTO TÉCNICO
 
-Ele permanece.  
+O melhor design:
+
+- não explica
+- não chama atenção
+- não se impõe
+
+Ele permanece.
 
 Isso é Ghost Design System.
 
 🧩 **REGRA FINAL**  
-Se algo:  
-- não está aqui  
-- não respeita este documento  
-- ou altera o ritmo Ghost  
+Se algo:
 
-➡ É BUG.  
+- não está aqui
+- não respeita este documento
+- ou altera o ritmo Ghost
+
+➡ É BUG.
 
 Ghost Design não é estilo.  
 É comportamento.
-
-
 
 ### Checklist de Acessibilidade
 
@@ -522,7 +548,7 @@ Ghost Design não é estilo.
 - [ ] Formulários com labels associados
 - [ ] Skip links para navegação rápida
 
-----
+---
 
 ## Observações Finais
 
@@ -542,6 +568,7 @@ Este documento consolida **TODO** o conteúdo da página /portfolio. Nenhuma dec
 ### Stack Técnica Recomendada
 
 **Framework & Ferramentas:**
+
 - **Framework:** Next.js 14+ (App Router)
 - **Linguagem:** TypeScript
 - **Animações:** Framer Motion 11+, GSAP 3.13+ + ScrollTrigger
@@ -551,21 +578,19 @@ Este documento consolida **TODO** o conteúdo da página /portfolio. Nenhuma dec
 - **Assets:** Supabase Storage
 - **Otimização de Imagens:** Next/Image com sharp
 
-
-
-
 ### Performance Targets
 
-| Métrica | Target | Ferramenta |
-|---------|--------|------------|
-| Lighthouse Performance | ≥ 90 | Lighthouse |
-| First Contentful Paint (FCP) | < 1.8s | PageSpeed Insights |
-| Largest Contentful Paint (LCP) | < 2.5s | PageSpeed Insights |
-| Cumulative Layout Shift (CLS) | < 0.1 | PageSpeed Insights |
-| Time to Interactive (TTI) | < 3.8s | PageSpeed Insights |
-| Total Blocking Time (TBT) | < 200ms | Lighthouse |
+| Métrica                        | Target  | Ferramenta         |
+| ------------------------------ | ------- | ------------------ |
+| Lighthouse Performance         | ≥ 90    | Lighthouse         |
+| First Contentful Paint (FCP)   | < 1.8s  | PageSpeed Insights |
+| Largest Contentful Paint (LCP) | < 2.5s  | PageSpeed Insights |
+| Cumulative Layout Shift (CLS)  | < 0.1   | PageSpeed Insights |
+| Time to Interactive (TTI)      | < 3.8s  | PageSpeed Insights |
+| Total Blocking Time (TBT)      | < 200ms | Lighthouse         |
 
 **Otimizações críticas:**
+
 - Lazy load de vídeos fora do viewport
 - Preload de fontes críticas
 - Code splitting por seção
@@ -582,6 +607,7 @@ Este documento consolida **TODO** o conteúdo da página /portfolio. Nenhuma dec
 - **PATCH:** Correções e ajustes
 
 **Changelog:**
+
 ```
 v1.0.0 (2026-01-13)
 - Lançamento inicial da documentação completa
@@ -603,8 +629,8 @@ v1.0.0 (2026-01-13)
 **Documento oficial — Página Sobre**  
 **Ghost Design — presença que guia sem aparecer**
 
-
 ## **Ghost Interativo**
+
 ---
 
 ## Responsividade
@@ -616,6 +642,7 @@ v1.0.0 (2026-01-13)
 #### Desktop (≥ 1024px)
 
 **Características:**
+
 - Grid 12 colunas (max-width: 1440–1680px)
 - Espaço negativo como elemento ativo do Ghost Design
 - Seções em 2 colunas (texto ↔ mídia)
@@ -623,6 +650,7 @@ v1.0.0 (2026-01-13)
 - Animações complexas (parallax, scroll-driven)
 
 **Composição Grid Desktop:**
+
 ```tsx
 <section className="w-full">
   <div className="max-w-[1680px] mx-auto px-16 xl:px-24 py-24">
@@ -636,6 +664,7 @@ v1.0.0 (2026-01-13)
 #### Tablet (768px–1023px)
 
 **Características:**
+
 - Transição suave entre layouts
 - Grid 8 colunas
 - Conteúdos densos mantêm 1 coluna
@@ -643,12 +672,11 @@ v1.0.0 (2026-01-13)
 - Foco em legibilidade
 
 **Composição Tablet:**
+
 ```tsx
 <section className="w-full">
   <div className="max-w-[1680px] mx-auto px-12 py-20">
-    <div className="grid grid-cols-8 gap-6">
-      {/* Conteúdo em 8 colunas */}
-    </div>
+    <div className="grid grid-cols-8 gap-6">{/* Conteúdo em 8 colunas */}</div>
   </div>
 </section>
 ```
@@ -656,6 +684,7 @@ v1.0.0 (2026-01-13)
 #### Mobile (< 768px)
 
 **Características:**
+
 - 1 coluna em toda página
 - Grid 4 colunas para alinhamento interno
 - Texto sempre antes de imagem/vídeo
@@ -665,14 +694,13 @@ v1.0.0 (2026-01-13)
 - Animações simplificadas
 
 **Composição Mobile:**
+
 ```tsx
 <section className="w-full">
   <div className="max-w-[1680px] mx-auto px-6 py-16">
     <div className="grid grid-cols-4 gap-4">
       {/* Conteúdo em 4 colunas */}
-      <div className="col-span-4">
-        {/* Full width */}
-      </div>
+      <div className="col-span-4">{/* Full width */}</div>
     </div>
   </div>
 </section>
@@ -680,16 +708,17 @@ v1.0.0 (2026-01-13)
 
 ### Breakpoints Padrão
 
-| Breakpoint | Range | Colunas | Padding | Gap | Comportamento |
-|------------|-------|---------|---------|-----|---------------|
-| `mobile` | < 768px | 4 | 24px (px-6) | 16px (gap-4) | 1 coluna, texto centralizado |
-| `tablet` | 768px–1023px | 8 | 48px (px-12) | 24px (gap-6) | Transição 1-2 colunas |
-| `desktop` | 1024px–1599px | 12 | 64px (px-16) | 32px (gap-8) | Grid completo |
-| `wide` | ≥ 1600px | 12 | 96px (px-24) | 40px (gap-10) | Max respiro |
+| Breakpoint | Range         | Colunas | Padding      | Gap           | Comportamento                |
+| ---------- | ------------- | ------- | ------------ | ------------- | ---------------------------- |
+| `mobile`   | < 768px       | 4       | 24px (px-6)  | 16px (gap-4)  | 1 coluna, texto centralizado |
+| `tablet`   | 768px–1023px  | 8       | 48px (px-12) | 24px (gap-6)  | Transição 1-2 colunas        |
+| `desktop`  | 1024px–1599px | 12      | 64px (px-16) | 32px (gap-8)  | Grid completo                |
+| `wide`     | ≥ 1600px      | 12      | 96px (px-24) | 40px (gap-10) | Max respiro                  |
 
 ### Regras de Alinhamento
 
 **Mobile (< 768px):**
+
 ```css
 /* Padrão para todas as seções */
 .section-mobile {
@@ -706,6 +735,7 @@ v1.0.0 (2026-01-13)
 ```
 
 **Desktop (≥ 1024px):**
+
 ```css
 /* Padrão */
 .section-desktop {
@@ -732,12 +762,12 @@ v1.0.0 (2026-01-13)
       <div className="col-span-4 md:col-span-8 lg:col-span-8 text-center md:text-left">
         <h2 className="text-h2 mb-6">Título da Seção</h2>
       </div>
-      
+
       {/* Conteúdo - Full mobile, 4 cols desktop cada */}
       <div className="col-span-4 md:col-span-4 lg:col-span-6">
         <p className="text-body">Conteúdo esquerda...</p>
       </div>
-      
+
       <div className="col-span-4 md:col-span-4 lg:col-span-6">
         <img src="..." className="w-full rounded-2xl" alt="..." />
       </div>
@@ -756,12 +786,12 @@ v1.0.0 (2026-01-13)
 
 #### Contraste de Cores
 
-| Combinação | Ratio | Status |
-|------------|-------|--------|
-| `#fcffff` sobre `#040013` | 21:1 | ✅ AAA |
-| `#0048ff` sobre `#040013` | 8.2:1 | ✅ AAA |
+| Combinação                | Ratio  | Status |
+| ------------------------- | ------ | ------ |
+| `#fcffff` sobre `#040013` | 21:1   | ✅ AAA |
+| `#0048ff` sobre `#040013` | 8.2:1  | ✅ AAA |
 | `#4fe6ff` sobre `#040013` | 14.5:1 | ✅ AAA |
-| `#a1a3a3` sobre `#040013` | 7.1:1 | ✅ AAA |
+| `#a1a3a3` sobre `#040013` | 7.1:1  | ✅ AAA |
 
 **Ferramenta de teste:** WebAIM Contrast Checker
 
@@ -774,10 +804,10 @@ v1.0.0 (2026-01-13)
     <h1 id="hero-title">Sou Danilo Novais.</h1>
     <!-- Conteúdo -->
   </section>
-  
+
   <section aria-labelledby="origin-title">
     <h2 id="origin-title">Origem</h2>
-    
+
     <article>
       <h3>O Que Permanece</h3>
       <!-- Conteúdo -->
@@ -787,6 +817,7 @@ v1.0.0 (2026-01-13)
 ```
 
 **Regras:**
+
 - Um único `<h1>` por página (Hero)
 - Hierarquia sequencial sem pulos (h1 → h2 → h3)
 - `aria-labelledby` conectando seções aos títulos
@@ -795,6 +826,7 @@ v1.0.0 (2026-01-13)
 #### Navegação por Teclado
 
 **Elementos interativos:**
+
 ```tsx
 // Botões
 <button
@@ -830,6 +862,7 @@ v1.0.0 (2026-01-13)
 ```
 
 **Estados de foco:**
+
 ```css
 /* Focus visível */
 *:focus {
@@ -851,28 +884,24 @@ v1.0.0 (2026-01-13)
 # Textos Alternativos
 
 **Imagens decorativas:**
+
 ```tsx
 <img src="..." alt="" aria-hidden="true" />
 ```
 
 **Imagens informativas:**
+
 ```tsx
-<img 
-  src="sobre-1.webp" 
-  alt="Detalhes que sobrevivem ao tempo — essência preservada em elementos visuais minimalistas" 
+<img
+  src="sobre-1.webp"
+  alt="Detalhes que sobrevivem ao tempo — essência preservada em elementos visuais minimalistas"
 />
 ```
 
 **Vídeos de fundo:**
+
 ```tsx
-<video
-  aria-hidden="true"
-  role="presentation"
-  muted
-  autoPlay
-  loop
-  playsInline
->
+<video aria-hidden="true" role="presentation" muted autoPlay loop playsInline>
   <source src="..." type="video/mp4" />
 </video>
 ```
@@ -892,7 +921,7 @@ v1.0.0 (2026-01-13)
     scroll-behavior: auto !important;
   }
 
-/* Mantém apenas fade simples */
+  /* Mantém apenas fade simples */
   .preserve-fade {
     animation-duration: 0.2s !important;
     transition-duration: 0.2s !important;
@@ -901,18 +930,19 @@ v1.0.0 (2026-01-13)
 ```
 
 **React/Framer Motion:**
+
 ```tsx
 import { useReducedMotion } from 'framer-motion';
 
 const MyComponent = () => {
   const shouldReduceMotion = useReducedMotion();
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        duration: shouldReduceMotion ? 0.2 : 0.6 
+      transition={{
+        duration: shouldReduceMotion ? 0.2 : 0.6,
       }}
     >
       {/* Conteúdo */}
@@ -924,13 +954,15 @@ const MyComponent = () => {
 #### Screen Readers
 
 **Anúncios de carregamento:**
+
 ```tsx
 <div role="status" aria-live="polite" aria-atomic="true">
-  {loading ? "Carregando conteúdo..." : "Conteúdo carregado"}
+  {loading ? 'Carregando conteúdo...' : 'Conteúdo carregado'}
 </div>
 ```
 
 **Elementos ocultos visualmente:**
+
 ```css
 .sr-only {
   position: absolute;
@@ -946,6 +978,7 @@ const MyComponent = () => {
 ```
 
 **Uso:**
+
 ```tsx
 <button>
   <span className="sr-only">Abrir menu</span>
@@ -956,6 +989,7 @@ const MyComponent = () => {
 ## 🚫 PROIBIÇÕES ABSOLUTAS
 
 ### Na Página Grid
+
 - ❌ Animações agressivas
 - ❌ Autoplay de áudio
 - ❌ Carrosséis automáticos não controláveis
@@ -963,12 +997,14 @@ const MyComponent = () => {
 - ❌ Scroll hijacking
 
 ### No Hero
+
 - ❌ Vídeo com som (mesmo muted=false)
 - ❌ Autoplay sem controles
 - ❌ Vídeo muito pesado (>10MB)
 - ❌ Ausência de fallback para imagem
 
 ### No Modal/Página Interna
+
 - ❌ Animação por scroll interno
 - ❌ Parallax dentro do modal
 - ❌ Blur decorativo excessivo
@@ -979,4 +1015,3 @@ const MyComponent = () => {
 - ❌ Popups dentro de popups
 
 ---
-

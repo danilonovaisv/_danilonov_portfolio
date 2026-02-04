@@ -9,22 +9,22 @@
   --color-backgroundLight: #f0f0f0;
   --color-text: #fcffff;
   --color-textInverse: #0e0e0e;
-  --color-textEmphasis: #2E85F2;
+  --color-textEmphasis: #2e85f2;
   --color-textHighlight: #4fe6ff;
   --color-textSecondary: #a1a3a3;
   --color-neutral: #0b0d3a;
-  --color-neutralLight: #F5F5F5;
+  --color-neutralLight: #f5f5f5;
   --color-contactForeground: #fcffff;
-  
+
   /* Aliases para compatibilidade */
   --color-primary: #0048ff;
   --color-accent: #4fe6ff;
-  
+
   /* Font families */
   --font-family-sans: 'TT Norms Pro', ui-sans-serif, system-ui, sans-serif;
   --font-family-mono: 'PPSupplyMono', monospace;
   --font-family-outfit: 'Outfit', sans-serif;
-  
+
   /* Min-widths */
   --size-cta-mobile: 181px;
   --size-cta-tablet: 201px;

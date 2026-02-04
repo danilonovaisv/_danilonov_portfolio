@@ -10,7 +10,7 @@ const config: Config = {
     './src/ui/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-extend: {
+    extend: {
       //As cores e fontes principais estão definidas em @theme no globals.css
       // Esta extensão serve principalmente para outros elementos do tema
       minWidth: {

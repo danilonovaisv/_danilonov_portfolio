@@ -1,7 +1,8 @@
 # 🎬 PROTÓTIPO INTERATIVO — PÁGINA PORTFOLIO (Showcase)
+
 Versão: **3.2 (reorganizado)** • Data: **2026-02-03**  
 Produção: https://portfoliodanilo.com  
-Repo: https://github.com/danilonovaisv/_danilonov_portfolio  
+Repo: https://github.com/danilonovaisv/_danilonov_portfolio
 
 > Este arquivo é a **fonte canônica** para a página **/portfolio**: estrutura, comportamento, animações e contratos de dados.
 >
@@ -10,18 +11,21 @@ Repo: https://github.com/danilonovaisv/_danilonov_portfolio
 ---
 
 ## Sumário
-1. Contexto e objetivo  
-2. IA da página (ordem das seções)  
-3. Especificação por seção (Header → Hero → Gallery → Card)  
-4. Modal / Página interna (Tipo A / Tipo B)  
-5. Implementação (Next.js App Router + React)  
-6. Contrato de dados (Project) + exemplos  
-7. Checklists (validação + acessibilidade)  
+
+1. Contexto e objetivo
+2. IA da página (ordem das seções)
+3. Especificação por seção (Header → Hero → Gallery → Card)
+4. Modal / Página interna (Tipo A / Tipo B)
+5. Implementação (Next.js App Router + React)
+6. Contrato de dados (Project) + exemplos
+7. Checklists (validação + acessibilidade)
 
 ---
 
 ## 1) Contexto e objetivo
+
 Criar a **página Portfolio Showcase completa** com:
+
 - Hero Section com vídeo em loop
 - Grid de projetos com **Parallax Lerp** (scroll suave)
 - Modal/Página Interna de Projeto (**2 tipos**)
@@ -31,7 +35,9 @@ Criar a **página Portfolio Showcase completa** com:
 ---
 
 ## 2) IA da página
+
 Ordem final (canônica):
+
 1. Header
 2. Hero (vídeo + título + CTA)
 3. Projects Gallery (híbrido: grid editorial + parallax lerp)
@@ -41,6 +47,7 @@ Ordem final (canônica):
 7. Footer
 
 ### Referências visuais (layout)
+
 - Desktop: `PORTFOLIO-PAGE-LAYOUYT.jpeg`
 - Mobile: `PORTFOLIO-PAGE-MOBILE.jpeg`
 
@@ -49,6 +56,7 @@ Ordem final (canônica):
 ---
 
 ## 3) Especificação por seção (estrutura + comportamento)
+
 ## Estrutura da Página
 
 ### Ordem das Seções
@@ -66,7 +74,7 @@ Ordem final (canônica):
 
 ## Seções Detalhadas
 
-# **1. Header
+# \*\*1. Header
 
 **Comportamento:** Idêntico à página Home
 
@@ -91,16 +99,15 @@ Ordem final (canônica):
 
 ---
 
+---
 
-
-----
-
-# **🎥 HERO SECTION — VÍDEO LOOPING
+# \*\*🎥 HERO SECTION — VÍDEO LOOPING
 
 **video hero desktop:** https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-videos/video-heroPort.mp4
 **video hero mobile:** https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-videos/video-heroPort-mobile.mp4
 
 ### Estrutura HTML/JSX
+
 ```tsx
 <section className="hero-section relative h-screen overflow-hidden">
   <video
@@ -112,9 +119,9 @@ Ordem final (canônica):
   >
     <source src="[URL_DO_VIDEO]" type="video/mp4" />
   </video>
-  
+
   <div className="overlay absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
-  
+
   <div className="content relative h-full flex flex-col items-center justify-center text-white px-4">
     <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
       <span className="text-blue-400">portfólio</span> showcase
@@ -129,6 +136,7 @@ Ordem final (canônica):
 ### Especificações Técnicas
 
 **Vídeo:**
+
 - `autoPlay`: inicia automaticamente
 - `loop`: repete infinitamente
 - `muted`: sem som (necessário para autoplay)
@@ -139,15 +147,17 @@ Ordem final (canônica):
 **video hero mobile:** https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/project-videos/video-heroPort-mobile.mp4
 
 **Overlay:**
+
 - Gradient vertical: `from-black/60 via-black/40 to-black/60`
 - Garante legibilidade do texto sobre qualquer vídeo
 
 **Título:**
+
 - "portfólio" em azul (`text-blue-400`)
 - "showcase" em branco
 
-
 **CTA:**
+
 - Cor: `bg-blue-500`
 - Hover: `hover:bg-blue-600`
 - Border radius: `rounded-full`
@@ -155,6 +165,7 @@ Ordem final (canônica):
 - Efeito scale no hover: `hover:scale-105`
 
 - **ALINHAMENTO: O texto "portfólio showcase" e o botão de chamada para ação (CTA) "vamos trabalhar juntos" estão alinhados horizontalmente em um mesmo nível, formando uma única linha visual. Eles são posicionados centralizados na parte inferior da HERO.**
+
 ---
 
 ## 🎨 GALLERY COM PARALLAX LERP
@@ -162,6 +173,7 @@ Ordem final (canônica):
 ### 🧠 Conceito do Parallax Lerp
 
 O sistema usa **Linear Interpolation (Lerp)** para criar:
+
 - Scroll suave e fluido
 - Movimento parallax independente em cada imagem
 - Performance otimizada com `requestAnimationFrame`
@@ -169,11 +181,11 @@ O sistema usa **Linear Interpolation (Lerp)** para criar:
 ### 📐 Estrutura HTML/CSS
 
 ```html
-<section class="gallery" ref={galleryRef}>
-  <div class="gallery-track" ref={trackRef}>
-    <div class="card" ref={cardRef}>
+<section class="gallery" ref="{galleryRef}">
+  <div class="gallery-track" ref="{trackRef}">
+    <div class="card" ref="{cardRef}">
       <div class="card-image-wrapper">
-        <img src="[URL]" alt="Project">
+        <img src="[URL]" alt="Project" />
       </div>
       <div class="card-overlay">
         <!-- Conteúdo -->
@@ -187,6 +199,7 @@ O sistema usa **Linear Interpolation (Lerp)** para criar:
 ### 🧱 Layout do Grid (Ref 2 + Layout Final)
 
 A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência 2) com:
+
 - **Spans por card** (col/row) definidos via dados (ex.: `size: 'sm' | 'md' | 'lg' | 'wide' | 'tall'`).
 - `grid-auto-flow: dense` para preencher “buracos” e manter a composição coesa.
 - **Placeholders neutros** opcionais (quando necessário para manter o ritmo do layout, como no mock).
@@ -225,7 +238,10 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
   border-radius: 14px;
   cursor: pointer;
   background: #0b0d3a; /* neutral token */
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
   contain: layout paint; /* reduz custo de reflow */
 }
 
@@ -269,20 +285,42 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
   padding: 18px;
   opacity: 0;
   transition: opacity 0.25s ease;
-  background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.35) 55%, transparent 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.35) 55%,
+    transparent 100%
+  );
 }
 
 .card:focus-visible .card-overlay,
 @media (hover: hover) and (pointer: fine) {
-  .card:hover .card-overlay { opacity: 1; }
+  .card:hover .card-overlay {
+    opacity: 1;
+  }
 }
 
 /* Spans (desktop) — exemplos */
-.card[data-size="sm"]   { grid-column: span 4; grid-row: span 22; } /* ~264px */
-.card[data-size="md"]   { grid-column: span 6; grid-row: span 26; }
-.card[data-size="lg"]   { grid-column: span 8; grid-row: span 30; }
-.card[data-size="wide"] { grid-column: span 12; grid-row: span 22; }
-.card[data-size="tall"] { grid-column: span 4; grid-row: span 34; }
+.card[data-size='sm'] {
+  grid-column: span 4;
+  grid-row: span 22;
+} /* ~264px */
+.card[data-size='md'] {
+  grid-column: span 6;
+  grid-row: span 26;
+}
+.card[data-size='lg'] {
+  grid-column: span 8;
+  grid-row: span 30;
+}
+.card[data-size='wide'] {
+  grid-column: span 12;
+  grid-row: span 22;
+}
+.card[data-size='tall'] {
+  grid-column: span 4;
+  grid-row: span 34;
+}
 
 /* Tablet: menos variação, 8 colunas */
 @media (max-width: 1024px) {
@@ -290,17 +328,32 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
     grid-template-columns: repeat(8, minmax(0, 1fr));
     grid-auto-rows: 12px;
   }
-  .card[data-size="sm"]   { grid-column: span 4; grid-row: span 22; }
-  .card[data-size="md"]   { grid-column: span 8; grid-row: span 26; }
-  .card[data-size="lg"]   { grid-column: span 8; grid-row: span 30; }
-  .card[data-size="wide"] { grid-column: span 8; grid-row: span 22; }
-  .card[data-size="tall"] { grid-column: span 4; grid-row: span 34; }
+  .card[data-size='sm'] {
+    grid-column: span 4;
+    grid-row: span 22;
+  }
+  .card[data-size='md'] {
+    grid-column: span 8;
+    grid-row: span 26;
+  }
+  .card[data-size='lg'] {
+    grid-column: span 8;
+    grid-row: span 30;
+  }
+  .card[data-size='wide'] {
+    grid-column: span 8;
+    grid-row: span 22;
+  }
+  .card[data-size='tall'] {
+    grid-column: span 4;
+    grid-row: span 34;
+  }
 }
 
 /* Mobile: lista (Ref 2) — leitura e toque */
 @media (max-width: 640px) {
   .gallery-track {
-    position: relative;     /* remove fixed no mobile se necessário por performance */
+    position: relative; /* remove fixed no mobile se necessário por performance */
     inset: auto;
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
@@ -320,7 +373,12 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
 
   .card-overlay {
     opacity: 1; /* no mobile, overlay sempre visível e mais leve */
-    background: linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.18) 65%, transparent 100%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.18) 65%,
+      transparent 100%
+    );
   }
 }
 ```
@@ -347,22 +405,22 @@ const parallax = (cardElement) => {
 
   // Diferença entre altura do card e altura da imagem
   const diff = cardElement.offsetHeight - wrapper.offsetHeight;
-  
+
   // Posição do card na viewport
   const { top } = cardElement.getBoundingClientRect();
-  
+
   // Progresso (0 = topo da tela, 1 = fundo da tela)
   const progress = top / window.innerHeight;
-  
+
   // Posição Y do parallax
   const yPos = diff * progress;
-  
+
   wrapper.style.transform = `translateY(${yPos}px)`;
 };
 
 // Ativa parallax em todos os cards
 const activateParallax = () => {
-  cardsRef.current.forEach(card => {
+  cardsRef.current.forEach((card) => {
     if (card) parallax(card);
   });
 };
@@ -373,19 +431,19 @@ const updateScroll = () => {
 
   // Lerp entre posição atual e posição alvo
   startYRef.current = lerp(startYRef.current, endYRef.current, easing);
-  
+
   // Atualiza altura da galeria (para criar espaço de scroll)
   galleryRef.current.style.height = `${trackRef.current.clientHeight}px`;
-  
+
   // Move o track
   trackRef.current.style.transform = `translateY(-${startYRef.current}px)`;
-  
+
   // Ativa parallax em cada card
   activateParallax();
-  
+
   // Continua o loop
   rafRef.current = requestAnimationFrame(updateScroll);
-  
+
   // Para o loop quando chegar muito perto do target
   if (Math.abs(startYRef.current - window.scrollY) < 0.1) {
     cancelAnimationFrame(rafRef.current);
@@ -406,7 +464,7 @@ useEffect(() => {
 
   // Inicializa
   updateScroll();
-  
+
   window.addEventListener('scroll', handleScroll);
   window.addEventListener('resize', handleResize);
 
@@ -444,12 +502,13 @@ useEffect(() => {
 ## 🃏 PROJECT CARD — ANATOMIA COMPLETA
 
 ### Estrutura Visual
+
 ```tsx
 <div className="card" onClick={onClick}>
   <div className="card-image-wrapper">
     <img src={project.image} alt={project.title} />
   </div>
-  
+
   <div className="card-overlay">
     <h3>{project.title}</h3>
     <div className="card-meta">
@@ -458,7 +517,7 @@ useEffect(() => {
       <span>{project.year}</span>
     </div>
     <div className="card-tags">
-      {project.tags.map(tag => (
+      {project.tags.map((tag) => (
         <span key={tag}>{tag}</span>
       ))}
     </div>
@@ -469,6 +528,7 @@ useEffect(() => {
 ### Estados do Card
 
 #### Default
+
 ```css
 .card {
   transform: none;
@@ -480,6 +540,7 @@ useEffect(() => {
 ```
 
 #### Hover
+
 ```css
 .card:hover {
   transform: translateY(-4px);
@@ -488,35 +549,39 @@ useEffect(() => {
 
 .card-overlay {
   opacity: 1;
-  background: linear-gradient(to top, 
-    rgba(0, 0, 0, 0.9) 0%, 
-    rgba(0, 0, 0, 0.5) 50%, 
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
     transparent 100%
   );
 }
 ```
 
 #### Active (clique)
+
 - Trigger modal/página interna
 - Card permanece visível no fundo
 - Backdrop escurece a página
 
 ---
 
-
 ---
 
 ## 4) Modal / Página interna (Tipo A e Tipo B)
+
 ## 🎭 MODAL / PÁGINA INTERNA — TIPOS
 
 ### 🅐 TIPO A — ZOOM VIEWER
 
 **Quando usar:**
+
 - Projeto visual simples
 - Uma peça principal forte
 - Foco em observação
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────┐
 │  [X]                               │
@@ -534,23 +599,24 @@ useEffect(() => {
 ```
 
 **Código:**
+
 ```tsx
 <div className="modal-type-a">
   <div className="media-container">
     <img src={project.image} alt={project.title} />
   </div>
-  
+
   <div className="info-container">
     <h2>{project.title}</h2>
-    
+
     <div className="meta">
       <span>{project.client}</span>
       <span>•</span>
       <span>{project.year}</span>
     </div>
-    
+
     <div className="tags">
-      {project.tags.map(tag => (
+      {project.tags.map((tag) => (
         <span key={tag}>{tag}</span>
       ))}
     </div>
@@ -563,11 +629,13 @@ useEffect(() => {
 ### 🅑 TIPO B — PÁGINA INTERNA DE PROJETO
 
 **Quando usar:**
+
 - Projeto complexo
 - Múltiplas entregas
 - Contexto necessário
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────┐
 │  [X]                               │
@@ -588,34 +656,33 @@ useEffect(() => {
 ```
 
 **Código:**
+
 ```tsx
 <div className="modal-type-b">
   <div className="hero-section">
     <div className="hero-media">
       <img src={project.image} alt={project.title} />
     </div>
-    
+
     <div className="hero-info">
       <h2>{project.title}</h2>
-      
+
       <div className="meta">
         <span>{project.client}</span>
         <span>•</span>
         <span>{project.year}</span>
       </div>
-      
+
       <div className="tags">
-        {project.tags.map(tag => (
+        {project.tags.map((tag) => (
           <span key={tag}>{tag}</span>
         ))}
       </div>
-      
-      <p className="description">
-        {project.description}
-      </p>
+
+      <p className="description">{project.description}</p>
     </div>
   </div>
-  
+
   {project.gallery && (
     <div className="gallery-section">
       {project.gallery.map((img, idx) => (
@@ -633,6 +700,7 @@ useEffect(() => {
 ### 📍 ABERTURA DO MODAL
 
 #### T = 0ms — Estado Inicial
+
 ```ts
 // Backdrop
 opacity: 0
@@ -650,6 +718,7 @@ opacity: 0
 ---
 
 #### T = 0 → 180ms — Backdrop Aparece
+
 ```ts
 backdrop {
   opacity: 0 → 1
@@ -658,6 +727,7 @@ backdrop {
 ```
 
 **CSS/Framer Motion:**
+
 ```tsx
 <motion.div
   className="backdrop"
@@ -671,6 +741,7 @@ backdrop {
 ---
 
 #### T = 120 → 380ms — Container Aparece
+
 ```ts
 modalContainer {
   opacity: 0 → 1
@@ -682,6 +753,7 @@ modalContainer {
 ```
 
 **CSS/Framer Motion:**
+
 ```tsx
 <motion.div
   className="modal-container"
@@ -691,7 +763,7 @@ modalContainer {
   transition={{
     opacity: { duration: 0.26 },
     scale: { duration: 0.26, ease: [0.22, 1, 0.36, 1] },
-    y: { duration: 0.26, ease: [0.22, 1, 0.36, 1] }
+    y: { duration: 0.26, ease: [0.22, 1, 0.36, 1] },
   }}
 />
 ```
@@ -699,6 +771,7 @@ modalContainer {
 ---
 
 #### T = 380 → 520ms — Pausa Consciente
+
 - **Nenhuma animação**
 - Usuário reconhece contexto
 - Estabilização visual
@@ -707,6 +780,7 @@ modalContainer {
 ---
 
 #### T = 520 → 760ms — Mídia Principal
+
 ```ts
 mainMedia {
   opacity: 0 → 1
@@ -719,6 +793,7 @@ mainMedia {
 ```
 
 **Implementação:**
+
 ```tsx
 <motion.div
   className="main-media"
@@ -727,7 +802,7 @@ mainMedia {
   transition={{
     delay: 0.52,
     duration: 0.24,
-    ease: 'easeOut'
+    ease: 'easeOut',
   }}
 >
   <img src={project.image} alt={project.title} />
@@ -737,6 +812,7 @@ mainMedia {
 ---
 
 #### T = 760 → 960ms — Título
+
 ```ts
 projectTitle {
   opacity: 0 → 1
@@ -747,13 +823,14 @@ projectTitle {
 ```
 
 **Implementação:**
+
 ```tsx
 <motion.h2
   initial={{ opacity: 0, y: 6 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{
     delay: 0.76,
-    duration: 0.2
+    duration: 0.2,
   }}
 >
   {project.title}
@@ -763,6 +840,7 @@ projectTitle {
 ---
 
 #### T = 960 → 1120ms — Meta Informações
+
 ```ts
 projectMeta {
   opacity: 0 → 1
@@ -773,6 +851,7 @@ projectMeta {
 ```
 
 **Implementação:**
+
 ```tsx
 <motion.div
   className="meta"
@@ -780,7 +859,7 @@ projectMeta {
   animate={{ opacity: 1, y: 0 }}
   transition={{
     delay: 0.96,
-    duration: 0.16
+    duration: 0.16,
   }}
 >
   <span>{project.client}</span>
@@ -792,6 +871,7 @@ projectMeta {
 ---
 
 #### T = 1120 → 1500ms — Conteúdo Secundário
+
 ```ts
 // Galeria, texto, bullets
 secondaryContent {
@@ -804,19 +884,22 @@ secondaryContent {
 ```
 
 **Implementação com Stagger:**
+
 ```tsx
-{project.gallery?.map((img, idx) => (
-  <motion.img
-    key={idx}
-    src={img}
-    initial={{ opacity: 0, y: 8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{
-      delay: 1.12 + (idx * 0.08),
-      duration: 0.2
-    }}
-  />
-))}
+{
+  project.gallery?.map((img, idx) => (
+    <motion.img
+      key={idx}
+      src={img}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: 1.12 + idx * 0.08,
+        duration: 0.2,
+      }}
+    />
+  ));
+}
 ```
 
 ---
@@ -824,6 +907,7 @@ secondaryContent {
 ### 📍 ESTADO IDLE (T > 1500ms)
 
 **Após entrada completa:**
+
 - ✅ Nenhuma animação contínua
 - ✅ Nada flutua
 - ✅ Nada pulsa
@@ -836,6 +920,7 @@ secondaryContent {
 ### 📍 FECHAMENTO DO MODAL
 
 #### T = 0 → 180ms — Container Sai
+
 ```ts
 modalContainer {
   opacity: 1 → 0
@@ -846,6 +931,7 @@ modalContainer {
 ```
 
 #### T = 0 → 150ms — Backdrop Sai
+
 ```ts
 backdrop {
   opacity: 1 → 0
@@ -854,6 +940,7 @@ backdrop {
 ```
 
 **Implementação:**
+
 ```tsx
 <AnimatePresence>
   {selectedProject && (
@@ -870,11 +957,13 @@ backdrop {
 ## 🖱️ INTERAÇÃO — FLUXO COMPLETO
 
 ### 1️⃣ Usuário rola a página
+
 - Parallax lerp ativo
 - Cards se movem suavemente
 - Imagens internas fazem parallax independente
 
 ### 2️⃣ Usuário passa mouse sobre card
+
 ```ts
 onMouseEnter={() => setIsHovered(true)}
 
@@ -886,6 +975,7 @@ onMouseEnter={() => setIsHovered(true)}
 ```
 
 ### 3️⃣ Usuário clica em um card
+
 ```ts
 onClick={() => setSelectedProject(project)}
 
@@ -897,6 +987,7 @@ onClick={() => setSelectedProject(project)}
 ```
 
 ### 4️⃣ Modal/Página Interna abre
+
 - Backdrop aparece (0→180ms)
 - Container aparece (120→380ms)
 - Pausa (380→520ms)
@@ -904,6 +995,7 @@ onClick={() => setSelectedProject(project)}
 - Scroll interno disponível após 1500ms
 
 ### 5️⃣ Usuário lê/explora o projeto
+
 - Scroll interno disponível
 - Botão fechar sempre visível (fixed position)
 - ESC funciona
@@ -912,11 +1004,13 @@ onClick={() => setSelectedProject(project)}
 ### 6️⃣ Usuário fecha modal
 
 **Gatilhos:**
+
 - Click no backdrop
 - Click no botão [X]
 - Tecla ESC
 
 **Código:**
+
 ```tsx
 const handleClose = () => {
   setSelectedProject(null);
@@ -933,12 +1027,15 @@ useEffect(() => {
 }, []);
 
 // Backdrop click
-<div onClick={(e) => {
-  if (e.target === e.currentTarget) handleClose();
-}} />
+<div
+  onClick={(e) => {
+    if (e.target === e.currentTarget) handleClose();
+  }}
+/>;
 ```
 
 **Resultado:**
+
 - Modal fecha com animação reversa
 - Foco retorna ao card original
 - Scroll da página é restaurado
@@ -946,21 +1043,23 @@ useEffect(() => {
 
 ---
 
-
 ---
 
 ## 5) Implementação (React / Next.js)
+
 > Objetivo aqui é **mapeamento de implementação** + blocos de código essenciais.
 > Tokens e regras globais ficam no **Design System**.
 
 ## ⚛️ IMPLEMENTAÇÃO REACT COMPLETA
 
 ### Estado Global
+
 ```tsx
 const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 ```
 
 ### Hero Section
+
 ```tsx
 <section className="relative h-screen overflow-hidden">
   <video
@@ -972,9 +1071,9 @@ const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   >
     <source src="video.mp4" type="video/mp4" />
   </video>
-  
+
   <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
-  
+
   <div className="relative h-full flex flex-col items-center justify-center text-white px-4">
     <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center">
       <span className="text-blue-400">portfólio</span> showcase
@@ -988,6 +1087,7 @@ const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 ```
 
 ### Gallery com Parallax
+
 ```tsx
 <section ref={galleryRef} className="gallery">
   <div
@@ -1007,19 +1107,24 @@ const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 ```
 
 ### Modal com Portal
+
 ```tsx
 import { createPortal } from 'react-dom';
 
-{selectedProject && createPortal(
-  <PortfolioModal
-    project={selectedProject}
-    onClose={() => setSelectedProject(null)}
-  />,
-  document.body
-)}
+{
+  selectedProject &&
+    createPortal(
+      <PortfolioModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />,
+      document.body
+    );
+}
 ```
 
 ### useEffect — Parallax Setup
+
 ```tsx
 useEffect(() => {
   const handleScroll = () => startScroll();
@@ -1038,6 +1143,7 @@ useEffect(() => {
 ```
 
 ### useEffect — Modal Body Lock
+
 ```tsx
 useEffect(() => {
   if (selectedProject) {
@@ -1054,6 +1160,7 @@ useEffect(() => {
 ## 🎨 ESTILO — CSS/TAILWIND COMPLETO
 
 ### Hero Section
+
 ```css
 .hero-section {
   position: relative;
@@ -1093,6 +1200,7 @@ useEffect(() => {
 ```
 
 ### Gallery & Track
+
 ```css
 .gallery {
   /* Height dinâmica via JS */
@@ -1124,6 +1232,7 @@ useEffect(() => {
 ```
 
 ### Card
+
 ```css
 .card {
   position: relative;
@@ -1132,7 +1241,9 @@ useEffect(() => {
   background: #f3f4f6;
   border-radius: 0.5rem;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -1176,6 +1287,7 @@ useEffect(() => {
 ```
 
 ### Modal
+
 ```css
 .modal-backdrop {
   position: fixed;
@@ -1247,6 +1359,7 @@ useEffect(() => {
 ## 📱 RESPONSIVO — BREAKPOINTS
 
 ### Desktop (≥1024px)
+
 ```css
 .gallery-track {
   grid-template-columns: repeat(3, 1fr);
@@ -1265,6 +1378,7 @@ useEffect(() => {
 ```
 
 ### Tablet (768px - 1023px)
+
 ```css
 .gallery-track {
   grid-template-columns: repeat(2, 1fr);
@@ -1281,6 +1395,7 @@ useEffect(() => {
 ```
 
 ### Mobile (<768px)
+
 ```css
 .gallery-track {
   grid-template-columns: repeat(1, 1fr);
@@ -1310,8 +1425,6 @@ useEffect(() => {
 
 ---
 
-
-
 # **Seções Subsequentes**
 
 Após esta seção, na ordem:
@@ -1321,6 +1434,7 @@ Após esta seção, na ordem:
 3. **Footer** (BG blueprimary - sessão igual as paginas anteriores)
 
 ### Transição para Seção de Marcas
+
 - Padding-top generoso: 80–120px
 - Pode ter linha divisória sutil
 - Mantém fundo escuro ou inicia transição gradual
@@ -1330,23 +1444,27 @@ Após esta seção, na ordem:
 ## Notas de Implementação
 
 ### Acessibilidade
+
 - Heading hierarchy: `<h2>` para título principal
 - Botões com `aria-label` descritivos se necessário
 - Focus visible em todos os elementos interativos
 - Contraste mínimo AA/AAA
 
 ### Performance
+
 - Lazy load de assets se fora do viewport inicial
 - Intersection Observer para animações
 - `will-change` apenas durante animações
 
 ### Analytics
+
 - Track impressions da seção
 - Track clicks em cada CTA
 - Track downloads do curriculum
 - Eventos: `section_view`, `cta_click`, `cv_download`
 
 ### SEO
+
 - Conteúdo semântico bem estruturado
 - Texto alternativo em ícones (se relevante)
 - Schema.org markup para pessoa/profissional (opcional)
@@ -1356,27 +1474,32 @@ Após esta seção, na ordem:
 ## Variações Opcionais
 
 ### Versão com Linha do Tempo
+
 - Adicionar mini timeline visual de carreira
 - Apenas se não interferir na simplicidade
 
 ### Versão com Depoimento
+
 - Quote curto de cliente/parceiro
 - Posicionado entre parágrafos e CTAs
 - Estilo ghost/sutil
 
 ### Versão com Social Proof
+
 - Logos pequenos de 3-5 marcas principais
 - Acima ou abaixo dos CTAs
 - Escala de cinza, opacity 0.6
 
 **Recomendação:** manter versão minimal e direta conforme especificado inicialmente.
 
-
 ### Estrutura sugerida no repo
+
 **Rotas**
+
 - `src/app/portfolio/page.tsx`
 
 **Componentes**
+
 - `src/components/portfolio/HeroPortfolio.tsx`
 - `src/components/portfolio/ProjectsGallery.tsx`
 - `src/components/portfolio/ProjectCard.tsx`
@@ -1385,17 +1508,21 @@ Após esta seção, na ordem:
 - `src/components/portfolio/PortfolioModal/ProjectTypeB.tsx`
 
 **Hooks (opcional, recomendado)**
+
 - `src/components/portfolio/hooks/useParallaxLerp.ts`
 - `src/components/portfolio/hooks/useBodyLock.ts`
 - `src/components/portfolio/hooks/useFocusReturn.ts`
 
 **Data**
+
 - `src/content/projects.ts` (ou `src/data/projects.ts`)
 
 ---
 
 ## 6) Contrato de dados (Project) + exemplos
+
 ### Estrutura de Projeto
+
 ```typescript
 interface Project {
   id: number;
@@ -1416,6 +1543,7 @@ interface Project {
 ```
 
 ### Exemplo de Projeto Tipo A
+
 ```typescript
 {
   id: 1,
@@ -1430,6 +1558,7 @@ interface Project {
 ```
 
 ### Exemplo de Projeto Tipo B
+
 ```typescript
 {
   id: 2,
@@ -1457,25 +1586,28 @@ interface Project {
 }
 ```
 
-
 ## 📚 REFERÊNCIAS TÉCNICAS
 
 ### Parallax Lerp Original
+
 - CodePen: https://codepen.io/danilonovaisv/pen/VYjejyb
 - Técnica: Vertical Scrolling Parallax com Lerp
 - Autor: danilonovaisv
 
 ### Ghost Design System
+
 - Filosofia: Presença sem peso
 - Motion: Editorial e silencioso
 - Foco: Conteúdo sobre efeito
 
 ### Framer Motion
+
 - Docs: https://www.framer.com/motion/
 - AnimatePresence para mount/unmount
 - Variants para animações complexas
 
 ### Performance
+
 - Web Vitals: https://web.dev/vitals/
 - requestAnimationFrame: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
 
@@ -1483,15 +1615,16 @@ interface Project {
 
 ## 🔄 VERSIONAMENTO
 
-
 ---
 
 ## 7) Checklists
 
 ### 7.1 Checklist de validação (funcional + Ghost QA)
+
 ## ✅ CHECKLIST DE VALIDAÇÃO COMPLETO
 
 ### Hero Section
+
 - [ ] Vídeo carrega e faz loop corretamente
 - [ ] Overlay garante legibilidade do texto
 - [ ] CTA tem hover state claro
@@ -1499,6 +1632,7 @@ interface Project {
 - [ ] Performance ok (vídeo <10MB)
 
 ### Grid de Projetos
+
 - [ ] Cards respondem a hover suavemente
 - [ ] Parallax lerp funciona em todos os cards
 - [ ] Imagens carregam progressivamente
@@ -1507,6 +1641,7 @@ interface Project {
 - [ ] Scroll é natural (não hijacked)
 
 ### Modal/Página Interna
+
 - [ ] Abertura silenciosa e orientada
 - [ ] Pausa perceptível após container (380-520ms)
 - [ ] Mídia aparece antes do texto
@@ -1517,6 +1652,7 @@ interface Project {
 - [ ] Não parece landing page
 
 ### Interação
+
 - [ ] Click no card abre modal correto
 - [ ] ESC fecha modal
 - [ ] Click no backdrop fecha modal
@@ -1527,6 +1663,7 @@ interface Project {
 - [ ] Parallax retoma após fechar modal
 
 ### Acessibilidade
+
 - [ ] `role="dialog"` presente
 - [ ] `aria-modal="true"` presente
 - [ ] `aria-label` em botões
@@ -1536,6 +1673,7 @@ interface Project {
 - [ ] prefers-reduced-motion respeitado
 
 ### Ghost System
+
 - [ ] Não parece landing page
 - [ ] Mantém contexto do portfólio
 - [ ] Leitura confortável
@@ -1546,8 +1684,8 @@ interface Project {
 
 ---
 
-
 ### 7.2 Checklist de acessibilidade (pré-deploy)
+
 **Antes do Deploy:**
 
 - [ ] Contraste de cores validado (WCAG AA/AAA)
@@ -1564,5 +1702,4 @@ interface Project {
 - [ ] Formulários com labels associados
 - [ ] Skip links para navegação rápida
 
-----
-
+---
