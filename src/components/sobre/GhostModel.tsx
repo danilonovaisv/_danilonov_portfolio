@@ -34,9 +34,8 @@ interface GhostModelProps extends React.ComponentProps<'group'> {
 }
 
 export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
-  const { nodes, materials } = useGLTF(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  ) as unknown as GLTFResult;
+  const ghostModelUrl = '/site.assets/3d/ghost-transformed.glb';
+  const { nodes, materials } = useGLTF(ghostModelUrl) as unknown as GLTFResult;
 
   const prefersReducedMotion = usePrefersReducedMotion();
   const { gl, viewport } = useThree();
@@ -274,7 +273,5 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
 // Preload only in the browser to avoid Node/SSG environments where
 // Web Workers (used by meshopt decoding) are unavailable.
 if (typeof window !== 'undefined') {
-  useGLTF.preload(
-    'https://umkmwbkwvulxtdodzmzf.supabase.co/storage/v1/object/public/site-assets/about/beliefs/ghost-transformed.glb'
-  );
+  useGLTF.preload('/site.assets/3d/ghost-transformed.glb');
 }
