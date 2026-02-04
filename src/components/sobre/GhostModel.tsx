@@ -14,18 +14,18 @@ import { MotionValue } from 'framer-motion';
 
 type GLTFResult = GLTF & {
   nodes: {
-    Body_Ghost_White_0: THREE.Mesh;
-    Eyes_Eyes_0: THREE.Mesh;
-    Hat_Hat_Black_0: THREE.Mesh;
-    Rim_Rim_Red_0: THREE.Mesh;
-  };
+    Body_Ghost_White_0: THREE.Mesh
+    Eyes_Eyes_0: THREE.Mesh
+    Hat_Hat_Black_0: THREE.Mesh
+    Rim_Rim_Red_0: THREE.Mesh
+  }
   materials: {
-    Ghost_White: THREE.MeshStandardMaterial;
-    Eyes: THREE.MeshStandardMaterial;
-    Hat_Black: THREE.MeshStandardMaterial;
-    Rim_Red: THREE.MeshStandardMaterial;
-  };
-};
+    Ghost_White: THREE.MeshStandardMaterial
+    Eyes: THREE.MeshStandardMaterial
+    Hat_Black: THREE.MeshStandardMaterial
+    Rim_Red: THREE.MeshStandardMaterial
+  }
+}
 
 // Definição da interface com scrollProgress
 interface GhostModelProps extends React.ComponentProps<'group'> {
@@ -193,11 +193,9 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
       {/* Grupo Pai: Recebe as props de posicionamento global, mas tem escala controlada responsivamente */}
       <group ref={groupRef} {...props} scale={baseScale} dispose={null}>
         {/* Grupo Interno: Recebe as animações (rotação, mouse sway) relativas ao pai */}
-        <group ref={animRef}>
+        <group {...props} dispose={null}>
           <mesh
             name="Body_Ghost_White_0"
-            castShadow
-            receiveShadow
             geometry={nodes.Body_Ghost_White_0.geometry}
             material={materials.Ghost_White}
             position={[0, 1.56, 0]}
@@ -205,8 +203,6 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
           />
           <mesh
             name="Eyes_Eyes_0"
-            castShadow
-            receiveShadow
             geometry={nodes.Eyes_Eyes_0.geometry}
             material={materials.Eyes}
             position={[0, 1.56, 0]}
@@ -214,8 +210,6 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
           />
           <mesh
             name="Hat_Hat_Black_0"
-            castShadow
-            receiveShadow
             geometry={nodes.Hat_Hat_Black_0.geometry}
             material={materials.Hat_Black}
             position={[0, 2.99, 0]}
@@ -223,8 +217,6 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
           />
           <mesh
             name="Rim_Rim_Red_0"
-            castShadow
-            receiveShadow
             geometry={nodes.Rim_Rim_Red_0.geometry}
             material={materials.Rim_Red}
             position={[0, 2.35, 0]}

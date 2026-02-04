@@ -52,6 +52,7 @@ jest.mock('next/image', () => ({
             role="img"
             aria-label={alt as string}
             data-src={src as string}
+            data-nimg="1"
             className={className as string}
             {...props}
         />
