@@ -72,7 +72,6 @@ docs/*.png
 .cursor/
 .Jules/
 .clj-kondo/
-.context/
 .idea/
 .lingma/
 .lsp/
