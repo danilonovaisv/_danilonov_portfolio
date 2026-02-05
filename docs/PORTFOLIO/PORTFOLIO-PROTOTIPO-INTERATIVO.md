@@ -1,5 +1,5 @@
 # 🎬 PROTÓTIPO INTERATIVO — PÁGINA PORTFOLIO (Showcase)
-Versão: **3.2 (reorganizado)** • Data: **2026-02-03**  
+Versão: **3.3 (layout + hover azul)** • Data: **2026-02-05**  
 Produção: https://portfoliodanilo.com  
 Repo: https://github.com/danilonovaisv/_danilonov_portfolio  
 
@@ -188,8 +188,10 @@ O sistema usa **Linear Interpolation (Lerp)** para criar:
 
 A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência 2) com:
 - **Spans por card** (col/row) definidos via dados (ex.: `size: 'sm' | 'md' | 'lg' | 'wide' | 'tall'`).
-- `grid-auto-flow: dense` para preencher “buracos” e manter a composição coesa.
-- **Placeholders neutros** opcionais (quando necessário para manter o ritmo do layout, como no mock).
+- Ritmo atualizado para a referência Arino: **3 colunas no desktop (12 col → spans de 4/6/12)**, **2 colunas no tablet (8 col → spans de 4/6/8)** e **1 coluna no mobile**.
+- `grid-auto-flow: dense` mantém composição coesa.
+- **Sem placeholders** na versão 3.3 (todos os itens são projetos reais).
+- Interação: sem elemento que segue o cursor; hover/focus aplicam filtro azul primário no card inteiro para destacar seleção.
 
 > Importante: o **parallax** (Ref 1) continua existindo, mas o **arranjo visual e responsivo** do grid é guiado pela Referência 2 e pelo layout final.
 
@@ -209,11 +211,11 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
 
   /* Desktop: composição editorial */
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-auto-rows: 12px; /* “unidade” de altura para row-span */
+  grid-auto-rows: minmax(220px, 1fr); /* unidade base para altura */
   grid-auto-flow: dense;
 
-  gap: 12px;
-  padding: 12px;
+  gap: 16px; /* cards mais próximos */
+  padding: 0;
 
   will-change: transform;
 }
@@ -222,19 +224,36 @@ A _Projects Gallery_ deve usar **CSS Grid editorial** (semelhante à Referência
 .card {
   position: relative;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 0; /* sem cantos arredondados */
   cursor: pointer;
   background: #0b0d3a; /* neutral token */
   transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
   contain: layout paint; /* reduz custo de reflow */
 }
 
+/* Overlay azul primário (hover/focus) */
+.cardOverlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 72, 255, 0.72) 0%,
+    rgba(0, 72, 255, 0.6) 48%,
+    rgba(0, 0, 0, 0.28) 100%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.25s ease, background 0.25s ease;
+}
+.card:hover .cardOverlay,
+.card:focus-visible .cardOverlay {
+  opacity: 1; /* card inteiro recebe filtro azul */
+}
+
 /* Hover (desktop) */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-    filter: saturate(1.05);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34);
+    filter: saturate(1.12);
   }
 }
 
@@ -1565,4 +1584,3 @@ interface Project {
 - [ ] Skip links para navegação rápida
 
 ----
-

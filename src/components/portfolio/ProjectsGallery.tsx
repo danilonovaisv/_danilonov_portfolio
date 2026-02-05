@@ -53,33 +53,19 @@ export const ProjectsGallery = ({
     return projects.filter((p) => pillar.categories.includes(p.category));
   }, [projects, activeFilter]);
 
-  const sizePattern: ProjectCardSize[] = ['lg', 'md', 'sm', 'wide', 'md', 'sm', 'md', 'lg'];
+  const sizePattern = useMemo<ProjectCardSize[]>(
+    () => ['md', 'md', 'md', 'lg', 'md', 'md', 'wide', 'md'],
+    []
+  );
 
-  const items = useMemo(() => {
-    const entries: Array<
-      | { kind: 'project'; project: PortfolioProject; size: ProjectCardSize }
-      | { kind: 'placeholder'; id: string; size: ProjectCardSize }
-    > = [];
-
-    filteredProjects.forEach((project, index) => {
-      const size = project.layout?.size ?? sizePattern[index % sizePattern.length];
-      entries.push({ kind: 'project', project, size });
-
-      // Only add placeholders when temos volume suficiente para manter ritmo editorial
-      const shouldAddPlaceholders =
-        !isMobile && activeFilter === 'all' && filteredProjects.length >= 10;
-
-      if (shouldAddPlaceholders && index > 0 && index % 5 === 2) {
-        entries.push({
-          kind: 'placeholder',
-          id: `placeholder-${project.id}-${index}`,
-          size: sizePattern[(index + 3) % sizePattern.length],
-        });
-      }
-    });
-
-    return entries;
-  }, [filteredProjects, isMobile, activeFilter]);
+  const items = useMemo(
+    () =>
+      filteredProjects.map((project, index) => ({
+        project,
+        size: project.layout?.size ?? sizePattern[index % sizePattern.length],
+      })),
+    [filteredProjects, sizePattern]
+  );
 
   return (
     <section
@@ -135,26 +121,17 @@ export const ProjectsGallery = ({
             )}
           >
             <AnimatePresence mode="popLayout">
-              {items.map((item, index) =>
-                item.kind === 'project' ? (
-                  <ProjectCard
-                    key={item.project.id}
-                    project={item.project}
-                    index={index}
-                    size={item.size}
-                    enableParallax={useLerp && isSticky}
-                    onClick={onProjectSelect || onOpenProject}
-                    priority={index < 3}
-                  />
-                ) : (
-                  <div
-                    key={item.id}
-                    data-size={item.size}
-                    className={styles.placeholder}
-                    aria-hidden="true"
-                  />
-                )
-              )}
+              {items.map((item, index) => (
+                <ProjectCard
+                  key={item.project.id}
+                  project={item.project}
+                  index={index}
+                  size={item.size}
+                  enableParallax={useLerp && isSticky}
+                  onClick={onProjectSelect || onOpenProject}
+                  priority={index < 3}
+                />
+              ))}
             </AnimatePresence>
           </div>
         </Container>
