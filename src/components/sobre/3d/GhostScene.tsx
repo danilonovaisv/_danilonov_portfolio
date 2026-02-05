@@ -2,13 +2,12 @@ import React, { ReactNode, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import {
   Environment,
-  ScrollControls,
-  Scroll,
   Sparkles,
   ContactShadows,
 } from '@react-three/drei';
 import GhostModel from './GhostModel';
 import { ProceduralGhost } from './ProceduralGhost';
+import { MotionValue } from 'framer-motion';
 
 interface ThreeErrorBoundaryProps {
   children?: ReactNode;
@@ -43,18 +42,17 @@ const DirectionalLight = 'directionalLight' as any;
 const PointLight = 'pointLight' as any;
 
 interface GhostSceneProps {
-  children?: ReactNode;
-  pages?: number;
+  scrollProgress: MotionValue<number>;
 }
 
-const GhostScene: React.FC<GhostSceneProps> = ({ children, pages = 6 }) => {
+const GhostScene: React.FC<GhostSceneProps> = ({ scrollProgress }) => {
   return (
     <Canvas
       shadows
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true }}
       camera={{ position: [0, 0, 5], fov: 45 }}
-      style={{ width: '100%', height: '100vh' }}
+      style={{ width: '100%', height: '100%' }}
     >
       <AmbientLight intensity={0.5} />
       <DirectionalLight position={[2, 5, 2]} intensity={1.5} castShadow />
@@ -70,21 +68,12 @@ const GhostScene: React.FC<GhostSceneProps> = ({ children, pages = 6 }) => {
         color="#ffffff"
       />
 
-      <ScrollControls pages={pages} damping={0.1}>
-        {/* Layer 3D - The Ghost follows the scroll */}
-        <Scroll>
-          <ThreeErrorBoundary fallback={<ProceduralGhost />}>
-            <Suspense fallback={<ProceduralGhost />}>
-              <GhostModel />
-            </Suspense>
-          </ThreeErrorBoundary>
-        </Scroll>
-
-        {/* Layer HTML - The Text Content */}
-        <Scroll html style={{ width: '100%', height: '100%' }}>
-          {children}
-        </Scroll>
-      </ScrollControls>
+      {/* Layer 3D - The Ghost follows the scroll prop (Native scroll) */}
+      <ThreeErrorBoundary fallback={<ProceduralGhost />}>
+        <Suspense fallback={<ProceduralGhost />}>
+          <GhostModel scrollProgress={scrollProgress} />
+        </Suspense>
+      </ThreeErrorBoundary>
 
       <ContactShadows
         position={[0, -2.2, 0]}

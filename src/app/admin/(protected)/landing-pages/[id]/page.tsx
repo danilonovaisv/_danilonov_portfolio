@@ -4,7 +4,6 @@ import { useEffect, useState, use } from 'react';
 
 import { createClientComponentClient } from '@/lib/supabase/client';
 import LandingPageForm from '@/components/admin/LandingPageForm';
-import { LandingPageBlock } from '@/types/landing-page';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -15,7 +14,7 @@ interface LandingPage {
   title: string;
   slug: string;
   cover: string;
-  content: LandingPageBlock[];
+  content: unknown;
 }
 
 export default function EditLandingPage({ params }: Props) {
@@ -47,9 +46,9 @@ export default function EditLandingPage({ params }: Props) {
     <div className="space-y-8">
       <div>
         <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
-          Projetos
+          Portfolio Projects
         </p>
-        <h1 className="text-3xl font-semibold">Editar Landing Page</h1>
+        <h1 className="text-3xl font-semibold">Editar Projeto de Portfólio</h1>
       </div>
 
       <LandingPageForm initialData={data} />

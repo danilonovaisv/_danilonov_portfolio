@@ -7,26 +7,30 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { LandingPageBlock } from '@/types/landing-page';
+import {
+  parseLandingPageContent,
+  resolveSiteAssetUrl,
+} from '@/lib/projects/template-schema';
 import BlockRenderer from './BlockRenderer';
+import MasterProjectTemplate from './templates/MasterProjectTemplate';
 
 interface ProjectRendererProps {
   project: {
     title: string;
-    cover: string;
-    content: LandingPageBlock[];
+    slug?: string;
+    cover?: string | null;
+    content: unknown;
   };
 }
 
-export default function ProjectRenderer({ project }: ProjectRendererProps) {
-  // Resolve cover URL
-  const supabaseBaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '';
-  const coverUrl =
-    project.cover && !project.cover.startsWith('http')
-      ? supabaseBaseUrl
-        ? `${supabaseBaseUrl}/storage/v1/object/public/site-assets/${project.cover}`
-        : ''
-      : project.cover || '';
+function LegacyProjectRenderer({
+  project,
+  blocks,
+}: {
+  project: { title: string; cover?: string | null };
+  blocks: LandingPageBlock[];
+}) {
+  const coverUrl = resolveSiteAssetUrl(project.cover ?? '');
 
   const searchParams = useSearchParams();
   const from = searchParams.get('from');
@@ -36,13 +40,12 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
 
   return (
     <div className="bg-[#040013] text-white selection:bg-blue-600 selection:text-white">
-      {/* Hero Section */}
-      <section className="relative h-[90vh] w-full flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden">
         {coverUrl && (
           <motion.div
-            initial={{ scale: 1.1, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 16, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-0 z-0"
           >
             <Image
@@ -56,15 +59,15 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
           </motion.div>
         )}
 
-        <div className="absolute top-0 left-0 z-50 p-6 md:p-10 w-full flex justify-between items-start pointer-events-none">
+        <div className="pointer-events-none absolute top-0 left-0 z-50 flex w-full items-start justify-between p-6 md:p-10">
           <Link
             href={backUrl}
-            className="pointer-events-auto group flex items-center gap-3 text-white/50 hover:text-white transition-colors duration-300"
+            className="pointer-events-auto group flex items-center gap-3 text-white/50 transition-colors duration-300 hover:text-white"
           >
-            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center bg-black/20 backdrop-blur-md group-hover:bg-white/10 transition-all">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/20 backdrop-blur-md transition-all group-hover:bg-white/10">
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             </div>
-            <span className="text-sm font-medium uppercase tracking-widest opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+            <span className="-translate-x-2 text-sm font-medium uppercase tracking-widest opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
               {backLabel}
             </span>
           </Link>
@@ -72,56 +75,52 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
 
         <div className="std-grid relative z-10 text-center">
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter"
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="text-6xl font-bold tracking-tighter md:text-8xl lg:text-9xl"
           >
             {project.title}
           </motion.h1>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
             className="mt-12 flex justify-center"
           >
-            <div className="w-px h-24 bg-linear-to-b from-blue-600 to-transparent" />
+            <div className="h-24 w-px bg-linear-to-b from-blue-600 to-transparent" />
           </motion.div>
         </div>
       </section>
 
-      {/* Dynamic Content Sections */}
-      <div className="space-y-32 md:space-y-64 pb-32">
-        {project.content && Array.isArray(project.content) ? (
-          (project.content as LandingPageBlock[]).map(
-            (block: LandingPageBlock, index: number) => (
-              <BlockRenderer
-                key={block.id ?? `block-${index}`}
-                block={block}
-                index={index}
-              />
-            )
-          )
+      <div className="space-y-32 pb-32 md:space-y-64">
+        {blocks.length > 0 ? (
+          blocks.map((block, index) => (
+            <BlockRenderer
+              key={block.id ?? `block-${index}`}
+              block={block}
+              index={index}
+            />
+          ))
         ) : (
-          <div className="text-center text-slate-500 py-20">
+          <div className="py-20 text-center text-slate-500">
             Sem conteúdo disponível.
           </div>
         )}
       </div>
 
-      {/* Footer / CTA */}
-      <section className="py-32 border-t border-white/5">
-        <div className="std-grid text-center space-y-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-blue-400 font-bold">
+      <section className="border-t border-white/5 py-32">
+        <div className="std-grid space-y-8 text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.3em] text-blue-400">
             Obrigado por assistir
           </p>
-          <h2 className="text-4xl md:text-6xl font-bold">
+          <h2 className="text-4xl font-bold md:text-6xl">
             Quer criar algo incrível?
           </h2>
           <div className="flex justify-center pt-8">
             <Link
               href="/#contact"
-              className="inline-block px-12 py-5 bg-blue-600 rounded-full text-lg font-bold hover:bg-white hover:text-blue-600 transition-all duration-500"
+              className="inline-block rounded-full bg-blue-600 px-12 py-5 text-lg font-bold transition-all duration-500 hover:bg-white hover:text-blue-600"
             >
               Vamos Conversar
             </Link>
@@ -130,4 +129,18 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
       </section>
     </div>
   );
+}
+
+export default function ProjectRenderer({ project }: ProjectRendererProps) {
+  const parsed = parseLandingPageContent(project.content, {
+    slug: project.slug,
+    title: project.title,
+    cover: project.cover,
+  });
+
+  if (parsed.template === 'master-project-v1') {
+    return <MasterProjectTemplate project={parsed.data} />;
+  }
+
+  return <LegacyProjectRenderer project={project} blocks={parsed.blocks} />;
 }
