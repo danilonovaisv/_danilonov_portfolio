@@ -26,16 +26,9 @@ export type DbLandingPage = {
   title: string;
   slug: string;
   cover: string | null;
-  content: LandingPageBlock[] | null;
+  content: unknown;
   created_at: string;
 };
-
-/** Block structure for landing page content */
-export interface LandingPageBlock {
-  id: string;
-  type: string;
-  config: Record<string, unknown>;
-}
 
 export type DbTag = {
   id: string;

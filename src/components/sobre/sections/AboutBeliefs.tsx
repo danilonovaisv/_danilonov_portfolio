@@ -1,14 +1,12 @@
 'use client';
-import React from 'react';
-import { useMotionValue } from 'framer-motion';
+import React, { Suspense } from 'react';
+import { cubicBezier, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { BeliefSection, BeliefMobileTextLayer } from '../beliefs/BeliefSection';
 import { BeliefFinalSection } from '../beliefs/BeliefFinalSection';
 import { BeliefFixedHeader } from '../beliefs/BeliefFixedHeader';
 import { BeliefFinalSectionOverlay } from '../beliefs/BeliefFinalSectionOverlay';
 import GhostScene from '../3d/GhostScene';
 import { BRAND } from '@/config/brand';
-import { useScroll as useDreiScroll } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
 
 const PHRASES = [
   'Um\nvídeo\nque\nrespira.',
@@ -28,73 +26,71 @@ const COLORS = [
   BRAND.colors.pinkDetails,
 ];
 
-// Bridge component needs to be inside Canvas to access useDreiScroll
-const ScrollBridge = ({ opacityMV }: { opacityMV: any }) => {
-  const scroll = useDreiScroll();
-
-  useFrame(() => {
-    // Logic: [0.05, 0.12, 0.85, 0.95] -> [0, 1, 1, 0]
-    const off = scroll.offset;
-    let opacity = 0;
-
-    if (off < 0.05) opacity = 0;
-    else if (off < 0.12) opacity = (off - 0.05) / (0.12 - 0.05);
-    else if (off < 0.85) opacity = 1;
-    else if (off < 0.95) opacity = 1 - (off - 0.85) / (0.95 - 0.85);
-    else opacity = 0;
-
-    opacityMV.set(opacity);
-  });
-  return null;
-}
-
 export const AboutBeliefs: React.FC = () => {
-  const headerOpacityMV = useMotionValue(0);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end end'],
+  });
 
-  // Determine pages count: Phrases + Final Section buffer
-  const pages = PHRASES.length + 2;
+  // Easing Ghost Padrão
+  const ghostEase = cubicBezier(0.22, 1, 0.36, 1);
+
+  // Opacidade do Header Fixo
+  const headerOpacity = useTransform(
+    scrollYProgress,
+    [0.05, 0.12, 0.85, 0.95],
+    [0, 1, 1, 0],
+    { ease: ghostEase }
+  );
 
   return (
-    <section className="relative w-full h-screen bg-black">
-      <GhostScene pages={pages}>
-        <ScrollBridge opacityMV={headerOpacityMV} />
+    <section ref={containerRef} className="relative w-full">
+      {/* LAYER 1: Backgrounds coloridos (Behind Everything) */}
+      <div className="relative pointer-events-none z-10 w-full">
+        <BeliefFixedHeader opacity={headerOpacity} progress={scrollYProgress} />
 
-        {/* Content that scrolls with the page */}
-        <div className="w-full">
-
-          {/* Fixed Header: We put it outside the flow but inside the Scroll html context */}
-          <div className="fixed top-0 left-0 w-full z-20 pointer-events-none">
-            <BeliefFixedHeader opacity={headerOpacityMV} progress={headerOpacityMV} />
-          </div>
-
-          {PHRASES.map((phrase, index) => (
-            <BeliefSection
-              key={index}
-              text={phrase}
-              bgColor={COLORS[index] || COLORS[0]}
-              isFirst={index === 0}
-            />
-          ))}
-
-          <BeliefFinalSection
-            scrollProgress={headerOpacityMV}
-            bgColor={BRAND.colors.bluePrimary}
+        {PHRASES.map((phrase, index) => (
+          <BeliefSection
+            key={index}
+            text={phrase}
+            bgColor={COLORS[index] || COLORS[0]}
+            isFirst={index === 0}
           />
+        ))}
+        <BeliefFinalSection
+          scrollProgress={scrollYProgress}
+          bgColor={BRAND.colors.bluePrimary}
+        />
+      </div>
 
-          {/* Render Mobile Text Layer if needed, or hide if redundant */}
-          <div className="block md:hidden">
-            <BeliefMobileTextLayer
-              phrases={PHRASES}
-              scrollYProgress={headerOpacityMV} // Using opacity MV as proxy for now
-            />
+      {/* LAYER 2: Texto Mobile Fixed no Footer */}
+      <BeliefMobileTextLayer
+        phrases={PHRASES}
+        scrollYProgress={scrollYProgress}
+      />
+
+      {/* LAYER 4: Final Text Overlay (Z-40) - Background for Ghost */}
+      <div className="absolute bottom-0 left-0 w-full h-screen pointer-events-none z-40">
+        <BeliefFinalSectionOverlay />
+      </div>
+
+      {/* LAYER 3: Canvas 3D (Sticky - Top Layer Z-50) */}
+      {/* Mobile: Ghost positioned to align vertically with text block in footer */}
+      {/* Desktop: Centered in viewport */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-50">
+        <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto flex items-center justify-center">
+
+          {/* 3D Scene Wrapper - Responsive Positioning */}
+          <div className="w-full h-full md:absolute md:inset-0 relative">
+            {/* Mobile specific positioning if needed can be handled via CSS or Drei Canvas props, 
+                 but standard full screen canvas usually works best with camera adjustments inside.
+             */}
+            <GhostScene scrollProgress={scrollYProgress} />
           </div>
-        </div>
 
-        {/* Final Overlay at the very end of scroll flow */}
-        <div className="absolute bottom-0 left-0 w-full h-screen pointer-events-none z-40">
-          <BeliefFinalSectionOverlay />
         </div>
-      </GhostScene>
+      </div>
     </section>
   );
 };

@@ -5,12 +5,37 @@ import Link from 'next/link';
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { Plus, Edit, Trash2, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  LEGACY_PROJECT_TEMPLATE,
+  MASTER_PROJECT_TEMPLATE,
+  type ProjectTemplateId,
+} from '@/types/project-template';
 
-interface LandingPage {
+type LandingPageRecord = {
   id: string;
   title: string;
   slug: string;
   created_at: string;
+  content: unknown;
+};
+
+type LandingPage = Omit<LandingPageRecord, 'content'> & {
+  template: ProjectTemplateId;
+};
+
+function getTemplateFromContent(content: unknown): ProjectTemplateId {
+  if (Array.isArray(content)) return LEGACY_PROJECT_TEMPLATE;
+
+  if (
+    content &&
+    typeof content === 'object' &&
+    'template' in content &&
+    (content as { template?: string }).template === MASTER_PROJECT_TEMPLATE
+  ) {
+    return MASTER_PROJECT_TEMPLATE;
+  }
+
+  return LEGACY_PROJECT_TEMPLATE;
 }
 
 export default function LandingPagesListPage() {
@@ -27,11 +52,20 @@ export default function LandingPagesListPage() {
       setLoading(true);
       const { data, error } = await supabase
         .from('landing_pages')
-        .select('id, title, slug, created_at')
+        .select('id, title, slug, created_at, content')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPages(data || []);
+
+      const normalized = (data as LandingPageRecord[] | null)?.map((page) => ({
+        id: page.id,
+        title: page.title,
+        slug: page.slug,
+        created_at: page.created_at,
+        template: getTemplateFromContent(page.content),
+      }));
+
+      setPages(normalized || []);
     } catch (err) {
       console.error('Error fetching landing pages:', err);
     } finally {
@@ -63,14 +97,14 @@ export default function LandingPagesListPage() {
           <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
             Gerenciamento
           </p>
-          <h1 className="text-3xl font-semibold">Landing Pages de Projetos</h1>
+          <h1 className="text-3xl font-semibold">Portfolio Projects</h1>
         </div>
         <Link
           href="/admin/landing-pages/new"
-          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition-all"
+          className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition-all hover:bg-blue-700"
         >
           <Plus size={18} />
-          Nova Página
+          Novo Projeto
         </Link>
       </div>
 
@@ -78,7 +112,7 @@ export default function LandingPagesListPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">Carregando...</div>
         ) : pages.length > 0 ? (
-          <table className="min-w-full text-sm text-left">
+          <table className="min-w-full text-left text-sm">
             <thead>
               <tr className="border-b border-white/10 text-slate-400">
                 <th className="px-6 py-4 font-medium uppercase tracking-wider">
@@ -88,9 +122,12 @@ export default function LandingPagesListPage() {
                   Slug
                 </th>
                 <th className="px-6 py-4 font-medium uppercase tracking-wider">
+                  Template
+                </th>
+                <th className="px-6 py-4 font-medium uppercase tracking-wider">
                   Criação
                 </th>
-                <th className="px-6 py-4 font-medium uppercase tracking-wider text-right">
+                <th className="px-6 py-4 text-right font-medium uppercase tracking-wider">
                   Ações
                 </th>
               </tr>
@@ -103,13 +140,26 @@ export default function LandingPagesListPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="hover:bg-white/2 transition-colors group"
+                    className="group transition-colors hover:bg-white/2"
                   >
-                    <td className="px-6 py-4 text-white font-medium">
+                    <td className="px-6 py-4 font-medium text-white">
                       {page.title}
                     </td>
-                    <td className="px-6 py-4 text-slate-400 font-mono text-xs">
+                    <td className="px-6 py-4 font-mono text-xs text-slate-400">
                       /{page.slug}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                          page.template === MASTER_PROJECT_TEMPLATE
+                            ? 'bg-blue-500/15 text-blue-200 border border-blue-400/30'
+                            : 'bg-slate-700/50 text-slate-300 border border-white/10'
+                        }`}
+                      >
+                        {page.template === MASTER_PROJECT_TEMPLATE
+                          ? 'Template Mestre'
+                          : 'Legacy'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-slate-500">
                       {new Date(page.created_at).toLocaleDateString('pt-BR')}
@@ -119,22 +169,23 @@ export default function LandingPagesListPage() {
                         <Link
                           href={`/projects/${page.slug}`}
                           target="_blank"
-                          className="p-2 text-slate-400 hover:text-white transition-colors"
+                          className="p-2 text-slate-400 transition-colors hover:text-white"
                           title="Ver página pública"
                         >
                           <ExternalLink size={18} />
                         </Link>
                         <Link
                           href={`/admin/landing-pages/${page.id}`}
-                          className="p-2 text-slate-400 hover:text-blue-400 transition-colors"
+                          className="p-2 text-slate-400 transition-colors hover:text-blue-400"
                           title="Editar"
                         >
                           <Edit size={18} />
                         </Link>
                         <button
                           onClick={() => handleDelete(page.id)}
-                          className="p-2 text-slate-400 hover:text-red-400 transition-colors"
+                          className="p-2 text-slate-400 transition-colors hover:text-red-400"
                           title="Excluir"
+                          type="button"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -147,12 +198,12 @@ export default function LandingPagesListPage() {
           </table>
         ) : (
           <div className="p-12 text-center">
-            <p className="text-slate-400 mb-4">Nenhuma landing page criada.</p>
+            <p className="mb-4 text-slate-400">Nenhum projeto criado.</p>
             <Link
               href="/admin/landing-pages/new"
-              className="text-blue-400 hover:underline text-sm"
+              className="text-sm text-blue-400 hover:underline"
             >
-              Criar minha primeira página
+              Criar meu primeiro projeto
             </Link>
           </div>
         )}

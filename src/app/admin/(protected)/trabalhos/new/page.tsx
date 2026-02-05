@@ -14,7 +14,7 @@ export default async function NewProjectPage() {
       .order('sort_order', { ascending: true, nullsFirst: false }),
     supabase
       .from('landing_pages')
-      .select('id, title, slug')
+      .select('id, title, slug, content')
       .order('title', { ascending: true }),
   ]);
 
