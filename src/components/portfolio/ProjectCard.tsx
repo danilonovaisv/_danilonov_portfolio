@@ -65,6 +65,7 @@ export const ProjectCard = ({
   const sizes =
     project.layout?.sizes ??
     '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+  const headingId = `project-card-${project.id}-title`;
 
   return (
     <motion.button
@@ -72,8 +73,8 @@ export const ProjectCard = ({
       type="button"
       data-size={size}
       onClick={() => onClick?.(project)}
-      aria-label={`Ver projeto ${project.title}`}
       aria-haspopup={onClick ? 'dialog' : undefined}
+      aria-labelledby={headingId}
       className={cn(
         styles.card,
         'group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
@@ -117,7 +118,7 @@ export const ProjectCard = ({
           <p className="text-[11px] uppercase tracking-[0.18em] text-white/70">
             {project.displayCategory}
           </p>
-          <h3 className="mt-1 text-xl font-semibold leading-tight">
+          <h3 id={headingId} className="mt-1 text-xl font-semibold leading-tight">
             {project.title}
           </h3>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-white/70">

@@ -30,7 +30,8 @@ const CATEGORIES = [
     id: 'websites-tech',
     title: ['Web Campaigns,', 'Websites & Tech'],
     slug: 'web',
-    thumbnail: getAssetUrl('site-assets/home/showcase/webdesigner-2.gif'),
+    // GIF substituído por frame estático WebP para reduzir LCP e peso inicial
+    thumbnail: getAssetUrl('site-assets/home/showcase/Branding-Project.webp'),
     alignment: 'left' as const,
     showLabel: false,
   },

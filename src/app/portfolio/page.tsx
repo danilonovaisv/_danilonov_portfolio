@@ -81,9 +81,9 @@ export async function generateMetadata({
       images: ['/portfolio/opengraph-image'],
     },
     alternates: {
-      canonical: category ? baseUrl : url,
+      canonical: url,
     },
-    robots: category ? { index: false, follow: true } : undefined,
+    robots: { index: true, follow: true },
   };
 }
 

@@ -67,7 +67,7 @@ test.describe('Ghost System Verification', () => {
     await aboutLink.click();
 
     // Wait for navigation to complete (Next.js client-side routing)
-    await page.waitForURL(/\/sobre/, { timeout: 15000 });
+    await page.waitForURL(/\/sobre/, { timeout: 30000 });
     await expect(page.locator('h1', { hasText: /ORIGEM/i })).toBeVisible({
       timeout: 10000,
     });

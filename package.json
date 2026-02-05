@@ -84,7 +84,7 @@
     "@react-three/fiber": "^9.5.0",
     "@react-three/postprocessing": "^3.0.4",
     "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.95.0",
+    "@supabase/supabase-js": "^2.95.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
