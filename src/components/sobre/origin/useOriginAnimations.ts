@@ -4,7 +4,6 @@ import { RefObject, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -16,11 +15,6 @@ interface UseOriginAnimationsProps {
   contentCount: number;
 }
 
-/**
- * Hook that manages scroll-based mask reveal animations for the Origin section
- * Implements pinned mask reveal effect where images dramatically emerge
- * Tech: GSAP ScrollTrigger + Lenis compatible
- */
 export function useOriginAnimations({
   isClient,
   archRef,
@@ -36,105 +30,74 @@ export function useOriginAnimations({
     if (!archEl || !archRightEl) return;
 
     const ctx = gsap.context(() => {
-      // Get all content blocks and images
       const blocks = archEl.querySelectorAll('[data-origin-block]');
       const images = archRightEl.querySelectorAll('.origin-img');
       const maskOverlays = archRightEl.querySelectorAll('.origin-mask');
 
       if (blocks.length === 0 || images.length === 0) return;
 
-      // Set initial states for mask reveal with blur
-      images.forEach((img, i) => {
-        gsap.set(img, {
-          clipPath: i === 0 ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)',
-          opacity: i === 0 ? 1 : 0.85,
-          filter: i === 0 ? 'blur(0px)' : 'blur(4px)',
-        });
+      gsap.set(images, {
+        clipPath: 'inset(100% 0% 0% 0%)',
+        opacity: 0.85,
+        filter: 'blur(4px)',
+      });
+      gsap.set(images[0], {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        opacity: 1,
+        filter: 'blur(0px)',
       });
 
-      // Set initial states for mask overlays
-      maskOverlays.forEach((mask, i) => {
-        gsap.set(mask, {
-          scaleY: i === 0 ? 0 : 1,
-          transformOrigin: 'top center',
-        });
-      });
+      gsap.set(maskOverlays, { scaleY: 1, transformOrigin: 'top center' });
+      gsap.set(maskOverlays[0], { scaleY: 0 });
 
-      // Create scroll triggers for each block with mask reveal
-      // Create scroll triggers for each block with mask reveal
       blocks.forEach((block, index) => {
-        const isLast = index === blocks.length - 1;
-
         ScrollTrigger.create({
           trigger: block,
-          start: isLast ? 'top 85%' : 'top center',
-          end: 'bottom center',
+          start: 'top center',
           onEnter: () => revealImage(index, 'down'),
           onEnterBack: () => revealImage(index, 'up'),
         });
       });
 
-      /**
-       * Mask reveal animation
-       * Images emerge from bottom (scroll down) or top (scroll up)
-       */
       function revealImage(activeIndex: number, direction: 'up' | 'down') {
         const duration = 0.8;
         const ease = 'power3.inOut';
 
         images.forEach((img, i) => {
-          if (i === activeIndex) {
-            // Reveal the active image with mask + blur animation
-            gsap.to(img, {
-              clipPath: 'inset(0% 0% 0% 0%)',
-              opacity: 1,
-              filter: 'blur(0px)',
-              duration,
-              ease,
-            });
-          } else if (i < activeIndex) {
-            // Images before active - fully revealed but behind
-            gsap.to(img, {
-              clipPath: 'inset(0% 0% 0% 0%)',
-              opacity: 1,
-              filter: 'blur(0px)',
-              duration: duration * 0.5,
-              ease,
-            });
-          } else {
-            // Images after active - hidden with mask + blur
-            gsap.to(img, {
-              clipPath:
-                direction === 'down'
-                  ? 'inset(100% 0% 0% 0%)'
-                  : 'inset(0% 0% 100% 0%)',
-              opacity: 0.85,
-              filter: 'blur(4px)',
-              duration,
-              ease,
-            });
-          }
+          const isActive = i === activeIndex;
+          gsap.to(img, {
+            clipPath: isActive ? 'inset(0% 0% 0% 0%)' : (i < activeIndex ? 'inset(0% 0% 0% 0%)' : (direction === 'down' ? 'inset(100% 0% 0% 0%)' : 'inset(0% 0% 100% 0%)')),
+            opacity: isActive ? 1 : 0.85,
+            filter: isActive ? 'blur(0px)' : 'blur(4px)',
+            duration,
+            ease,
+          });
         });
 
-        // Animate mask overlays for dramatic effect
         maskOverlays.forEach((mask, i) => {
-          if (i === activeIndex) {
-            gsap.to(mask, {
-              scaleY: 0,
-              duration,
-              ease,
-            });
-          } else if (i > activeIndex) {
-            gsap.to(mask, {
-              scaleY: 1,
-              duration: duration * 0.5,
-              ease,
-            });
-          }
+          gsap.to(mask, {
+            scaleY: i <= activeIndex ? 0 : 1,
+            duration,
+            ease,
+          });
         });
       }
 
-      // Initial fade-in animation for the gallery container
+      // Sync Exit: Lock gallery exit to the last text block's scroll
+      const lastBlock = blocks[blocks.length - 1];
+      if (lastBlock) {
+        gsap.to(archRightEl, {
+          opacity: 0,
+          y: -100, // Float up with the text
+          scrollTrigger: {
+            trigger: lastBlock,
+            start: 'center center', // Start fading when text is centered
+            end: 'bottom top', // Finish when text leaves viewport
+            scrub: true,
+          },
+        });
+      }
+
       gsap.from(archRightEl, {
         opacity: 0,
         y: 60,
@@ -149,7 +112,6 @@ export function useOriginAnimations({
         },
       });
 
-      // Subtle parallax on the gallery
       gsap.to(archRightEl, {
         y: -40,
         ease: 'none',
@@ -164,12 +126,7 @@ export function useOriginAnimations({
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => {
-        const triggerEl = trigger.vars.trigger;
-        if (triggerEl instanceof Element && triggerEl.closest('.arch')) {
-          trigger.kill();
-        }
-      });
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [isClient, archRef, archRightRef, contentCount]);
 }

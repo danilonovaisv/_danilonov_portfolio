@@ -41,59 +41,72 @@ Ao final de cada ajuste, o batalhão deve confirmar:
 
 # *-- AUDITORIA DE COMPONENTE E DETALHAMENTO DE AJUSTES A SEREM REALIZADOS SE INICIA AQUI---*
 
+AJUSTE A SESSÃO `ABOUT ORIGIN`, A SINCRONIA DE ENTRADA DO TEXTO E IMAGEM
 
-
-
-# Antigravity Admin Security & Logic Audit Swarm
-
-## 1. System Overview
-Este sistema de agentes foi projetado para realizar uma auditoria profunda e técnica no painel administrativo (ADMIN) do projeto. O fluxo garante que a estrutura de permissões, a integridade dos dados e as vulnerabilidades de segurança sejam validadas por diferentes especialistas antes de qualquer alteração no ambiente de produção.
-
-O fluxo de dados segue:
-**Lead Audit Manager** (Define escopo e distribui tarefas) -> **Security Specialist** (Busca vulnerabilidades) -> **Logic & Data Auditor** (Valida fluxos de backend) -> **Lead Audit Manager** (Consolida o relatório final).
-
-## 2. Agent Definitions (Prompts)
-
-### 🤖 Agent A: [Lead Audit Manager]
-**Role:** Orquestrador de Auditoria e Arquiteto de Soluções.
-**Goal:** Gerenciar o escopo da auditoria, consolidar achados e garantir que as diretrizes do `mission.md` sejam respeitadas.
-**Instructions:**
-- Antes de iniciar, leia o arquivo `mission.md` e a árvore `src/` para entender a arquitetura do ADMIN.
-- Coordene os agentes Specialist e Auditor, coletando logs de teste em `artifacts/logs/`.
-- Produza um plano inicial em `artifacts/plan_admin_audit.md` antes de qualquer execução de código.
-- **Tarefa:** Supervisionar a verificação de todos os endpoints administrativos e níveis de acesso (RBAC).
-
-### 🤖 Agent B: [Security Specialist]
-**Role:** Especialista em Cibersegurança e Penetration Testing.
-**Goal:** Identificar falhas de segurança, injeções de SQL, Broken Access Control e exposição de dados sensíveis no ADMIN.
-**Instructions:**
-- Utilize as ferramentas em `src/tools/` para simular requisições aos endpoints do ADMIN.
-- Verifique se as variáveis de ambiente sensíveis estão protegidas e não expostas no frontend.
-- Documente cada vulnerabilidade encontrada com o impacto esperado e nível de risco (Low/Medium/High).
-- **Inputs:** URL/Endpoints do ADMIN e esquemas de autenticação.
-- **Output:** Relatório técnico de vulnerabilidades para o Manager.
-
-### 🤖 Agent C: [Logic & Data Auditor]
-**Role:** Auditor de Lógica de Negócios e Integridade de Dados.
-**Goal:** Validar se as operações de CRUD no ADMIN seguem as regras de negócio e se os modelos Pydantic estão sendo validados corretamente.
-**Instructions:**
-- Analise os modelos de dados em `src/` e garanta que todos usem `pydantic` para validação estrita.
-- Verifique se as funções administrativas possuem Type Hints e Docstrings no padrão Google.
-- Execute `pytest` para validar se as alterações recentes no ADMIN quebraram fluxos existentes.
-- **Inputs:** Código-fonte do backend do ADMIN e especificações de banco de dados.
-- **Output:** Lista de inconsistências lógicas ou falhas de validação.
-
-## 3. Workflow Logic (Antigravity)
-- **Trigger:** Comando do usuário para iniciar auditoria ou detecção de alteração crítica na pasta `src/admin/`.
-- **Handoff Rules:**
-    - O **Manager** envia as especificações de acesso para os agentes **Specialist** e **Auditor**.
-    - O **Specialist** deve obrigatoriamente reportar qualquer falha de "Bypass de Login" antes que o **Auditor** prossiga.
-    - Toda evidência de teste (logs e falhas) deve ser salva em `artifacts/logs/audit_evidence_[TIMESTAMP].log`.
-- **Finalization:** O Manager compila um artefato final `artifacts/admin_audit_report.md` com o sumário executivo e recomendações de correção.
+Na maioria dos componentes React, a renderização de texto e imagens é controlada pelo navegador. A "sincronia" que você quer ajustar geralmente se refere à **tempo de carregamento** e à **ordem de exibição**.
 
 ---
 
-### Placeholders para Configuração:
-- `ADMIN_ENDPOINT`: [INSERIR URL DO ADMIN]
-- `AUDIT_SCOPE`: [EX: GESTÃO DE USUÁRIOS, CONFIGURAÇÕES DE API, LOGS DE SISTEMA]
-- `TARGET_ROLES`: [EX: SUPER_ADMIN, EDITOR, VIEWER]
+### Como ajustar isso em um componente React (TypeScript)
+
+Você pode usar o `useEffect` para controlar o tempo de carregamento ou a ordem de execução.
+
+#### Exemplo: Usando `useEffect` com um delay
+
+```typescript
+// ... importações necessárias ...
+import { useEffect, useState } from 'react';
+
+function AboutOriginSection() {
+  const [isContentReady, setIsContentReady] = useState(false);
+
+  useEffect(() => {
+    // Simula o carregamento do texto
+    setTimeout(() => {
+      console.log("Texto 'about origin' carregado.");
+      setIsContentReady(true);
+    }, 500); // Ajuste o tempo (em ms) conforme necessário
+
+    // Simula o carregamento da imagem
+    setTimeout(() => {
+      console.log("Imagem 'about origin' carregada.");
+    }, 1000); // Ajuste o tempo (em ms) conforme necessário
+  }, []); // O array vazio significa que a função de efeito será executada apenas uma vez, no monte do componente
+
+  return (
+    <div className="about-origin-section">
+      {isContentReady ? (
+        <>
+          {/* Texto */}
+          <p className="about-origin-text">
+            A origem deste projeto foi inspirada em...
+          </p>
+          
+          {/* Imagem */}
+          <img 
+            src="path_para_imagem_about_origin" 
+            alt="Descrição da imagem sobre a origem"
+            className={isContentReady ? "about-origin-image loaded" : ""}
+          />
+        </>
+      ) : (
+        <p>Carregando conteúdo...</p>
+      )}
+    </div>
+  );
+}
+
+export default AboutOriginSection;
+```
+
+
+### Passos para ajustar a sincronia:
+
+1.  **Identifique o tempo de carregamento**: Use `console.log` ou ferramentas de depuração (como o DevTools do Chrome) para medir o tempo entre o carregamento do texto e da imagem.
+2.  **Ajuste os `setTimeout`**: No código acima, os `setTimeout`s controlam o tempo de carregamento. Ajuste os valores (500ms, 1000ms) para corresponder ao tempo real do seu componente.
+3.  **Verifique a ordem de renderização**: Garanta que o texto seja renderizado antes ou ao mesmo tempo que a imagem, conforme necessário para seu design.
+4.  **Teste em diferentes condições**: Certifique-se de testar o componente em diferentes navegadores, dispositivos e conexões lentas para garantir uma experiência consistente.
+
+---
+
+

@@ -1,9 +1,8 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState, type ChangeEvent } from 'react';
 import { generateProjectCopy } from './actions';
 import { Loader2, Copy, Check, PenTool } from 'lucide-react';
-import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const initialState = {
@@ -18,6 +17,12 @@ export default function CopyAgentPage() {
     initialState
   );
   const [copied, setCopied] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+
+  const handleImagesChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setSelectedImages(files);
+  };
 
   const handleCopy = () => {
     if (state.content) {
@@ -52,7 +57,11 @@ export default function CopyAgentPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Input Column */}
             <div className="space-y-6">
-              <form action={formAction} className="space-y-4">
+              <form
+                action={formAction}
+                className="space-y-4"
+                encType="multipart/form-data"
+              >
                 <div className="space-y-2">
                   <label
                     htmlFor="context"
@@ -77,6 +86,38 @@ Desafios:`}
                     Quanto mais detalhes sobre a intenção e o conceito, melhor o
                     resultado.
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label
+                    htmlFor="referenceImages"
+                    className="block text-sm font-medium text-slate-300"
+                  >
+                    Imagens de Referência (Opcional)
+                  </label>
+                  <input
+                    id="referenceImages"
+                    name="referenceImages"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    multiple
+                    onChange={handleImagesChange}
+                    className="block w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-indigo-500/20 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-indigo-300 hover:file:bg-indigo-500/30 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                    aria-describedby="referenceImages-help"
+                  />
+                  <p id="referenceImages-help" className="text-xs text-slate-500">
+                    Envie até 4 imagens (PNG, JPG, WEBP ou GIF, máximo de 8MB cada)
+                    para o agent considerar o visual na escrita.
+                  </p>
+                  {selectedImages.length > 0 && (
+                    <ul className="rounded-lg border border-white/5 bg-slate-950/50 p-3 text-xs text-slate-400 space-y-1 max-h-32 overflow-y-auto">
+                      {selectedImages.map((file) => (
+                        <li key={`${file.name}-${file.lastModified}`}>
+                          {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
 
                 <button

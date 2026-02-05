@@ -106,13 +106,13 @@ const GhostModel: React.FC<GhostModelProps> = ({ scrollProgress }) => {
     );
 
     // Look slightly above center to maintain eye contact
-    // state.camera.lookAt(0, group.current.position.y, 0); 
+    // state.camera.lookAt(0, group.current.position.y, 0);
     // disabled lookAt to allow manual camera control if needed, or keep it if required.
     // The original code had lookAt, but with offset X it might look weird if camera rotates.
     // If camera is fixed at 0,0,6 and ghost moves X, looking at 0,y,0 is fine.
   });
 
-  const responsiveScale = Math.min(viewport.width / 3.5, 1.6);
+  const responsiveScale = Math.min(viewport.width / 1.5, 0.3);
 
   return (
     <group ref={group} scale={responsiveScale} dispose={null}>
@@ -168,3 +168,4 @@ const GhostModel: React.FC<GhostModelProps> = ({ scrollProgress }) => {
 useGLTF.preload(GHOST_URL);
 
 export default GhostModel;
+

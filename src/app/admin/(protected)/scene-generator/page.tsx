@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { generateAdScenes } from './actions';
-import { AI_MODELS } from './types';
+import { AI_MODELS, normalizeAIModels } from './types';
 import { Loader2, ImageIcon, Download, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
@@ -17,6 +17,10 @@ export default function SceneGeneratorPage() {
     generateAdScenes,
     initialState
   );
+  const modelOptions = normalizeAIModels(AI_MODELS);
+  const defaultModelId =
+    modelOptions.find((model) => model.id === 'dall-e-3' && model.available)
+      ?.id ?? modelOptions.find((model) => model.available)?.id;
 
   return (
     <div className="space-y-6">
@@ -50,43 +54,54 @@ export default function SceneGeneratorPage() {
                     Modelo de IA
                   </label>
                   <div className="grid grid-cols-1 gap-2">
-                    {AI_MODELS.map((model) => (
-                      <label
-                        key={model.id}
-                        className={`relative flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-all ${model.available
-                          ? 'border-white/10 hover:border-emerald-500/50 hover:bg-white/5'
-                          : 'border-white/5 opacity-50 cursor-not-allowed'
+                    {modelOptions.length > 0 ? (
+                      modelOptions.map((model) => (
+                        <label
+                          key={model.id}
+                          className={`relative flex items-center gap-3 rounded-lg border p-3 cursor-pointer transition-all ${
+                            model.available
+                              ? 'border-white/10 hover:border-emerald-500/50 hover:bg-white/5'
+                              : 'border-white/5 opacity-50 cursor-not-allowed'
                           }`}
-                      >
-                        <input
-                          type="radio"
-                          name="model"
-                          value={model.id}
-                          defaultChecked={model.id === 'dall-e-3'}
-                          disabled={!model.available}
-                          className="sr-only peer"
-                        />
-                        <div className="shrink-0 w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center peer-checked:bg-emerald-500/20 peer-checked:text-emerald-400 transition-colors">
-                          <Sparkles size={16} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-white">
-                              {model.name}
-                            </span>
-                            {!model.available && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">
-                                Em breve
-                              </span>
-                            )}
+                        >
+                          <input
+                            type="radio"
+                            name="model"
+                            value={model.id}
+                            defaultChecked={model.id === defaultModelId}
+                            disabled={!model.available}
+                            className="sr-only peer"
+                          />
+                          <div className="shrink-0 w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center peer-checked:bg-emerald-500/20 peer-checked:text-emerald-400 transition-colors">
+                            <Sparkles size={16} />
                           </div>
-                          <p className="text-xs text-slate-500 truncate">
-                            {model.description}
-                          </p>
-                        </div>
-                        <div className="absolute inset-0 rounded-lg ring-2 ring-emerald-500 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
-                      </label>
-                    ))}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-white">
+                                {model.name}
+                              </span>
+                              {!model.available && (
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 text-slate-400">
+                                  Em breve
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-slate-500 truncate">
+                              {model.description}
+                            </p>
+                          </div>
+                          <div className="absolute inset-0 rounded-lg ring-2 ring-emerald-500 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity" />
+                        </label>
+                      ))
+                    ) : (
+                      <>
+                        <input type="hidden" name="model" value="dall-e-3" />
+                        <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
+                          Não foi possível carregar os modelos de IA. O sistema usará
+                          DALL-E 3 como fallback.
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
 

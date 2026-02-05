@@ -1,11 +1,21 @@
 export type AIModel = 'nano-banana' | 'dall-e-3' | 'sora' | 'flow' | 'whisky';
 
-export const AI_MODELS: {
+export type AIModelOption = {
   id: AIModel;
   name: string;
   description: string;
   available: boolean;
-}[] = [
+};
+
+const AI_MODEL_IDS = new Set<AIModel>([
+  'nano-banana',
+  'dall-e-3',
+  'sora',
+  'flow',
+  'whisky',
+]);
+
+export const AI_MODELS: AIModelOption[] = [
   {
     id: 'dall-e-3',
     name: 'DALL-E 3',
@@ -37,6 +47,35 @@ export const AI_MODELS: {
     available: false,
   },
 ];
+
+function isAIModelOption(value: unknown): value is AIModelOption {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const option = value as Partial<AIModelOption>;
+  return (
+    typeof option.id === 'string' &&
+    AI_MODEL_IDS.has(option.id as AIModel) &&
+    typeof option.name === 'string' &&
+    typeof option.description === 'string' &&
+    typeof option.available === 'boolean'
+  );
+}
+
+export function normalizeAIModels(value: unknown): AIModelOption[] {
+  if (Array.isArray(value)) {
+    const normalized = value.filter(isAIModelOption);
+    return normalized.length > 0 ? normalized : AI_MODELS;
+  }
+
+  if (value && typeof value === 'object') {
+    const normalized = Object.values(value).filter(isAIModelOption);
+    return normalized.length > 0 ? normalized : AI_MODELS;
+  }
+
+  return AI_MODELS;
+}
 
 export type SceneGeneratorState = {
   success: boolean;

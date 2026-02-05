@@ -1,9 +1,7 @@
 'use server';
 
 import OpenAI from 'openai';
-import { AIModel, AI_MODELS, SceneGeneratorState } from './types';
-
-
+import { AIModel, AI_MODELS, SceneGeneratorState, normalizeAIModels } from './types';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -18,9 +16,15 @@ export async function generateAdScenes(
   prevState: SceneGeneratorState,
   formData: FormData
 ): Promise<SceneGeneratorState> {
+  const modelOptions = normalizeAIModels(AI_MODELS);
+  const fallbackModel =
+    modelOptions.find((item) => item.id === 'dall-e-3' && item.available)?.id ??
+    modelOptions.find((item) => item.available)?.id ??
+    'dall-e-3';
+
   const description = formData.get('description') as string;
   const pieceType = formData.get('pieceType') as string;
-  const model = (formData.get('model') as AIModel) || 'dall-e-3';
+  const model = ((formData.get('model') as AIModel) || fallbackModel) as AIModel;
 
   if (!description || !pieceType) {
     return {
@@ -34,7 +38,14 @@ export async function generateAdScenes(
   }
 
   // Check if model is available
-  const selectedModel = AI_MODELS.find((m) => m.id === model);
+  const selectedModel = modelOptions.find((item) => item.id === model);
+  if (!selectedModel) {
+    return {
+      success: false,
+      error: `Modelo inválido (${model}). Atualize a página e tente novamente.`,
+    };
+  }
+
   if (!selectedModel?.available) {
     return {
       success: false,
