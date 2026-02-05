@@ -8,7 +8,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GHOST_EASE } from '@/config/motion';
 import { applyImageFallback } from '@/utils/utils';
-import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
+import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 const GHOST_SPRING = { damping: 30, stiffness: 200, mass: 1 } as const;
 
@@ -79,12 +79,6 @@ export function CategoryStripe({
             isHovered ? 'gap-10' : 'gap-6'
           )}
         >
-          {category.showLabel && (
-            <span className="absolute left-6 lg:left-8 text-sm font-normal text-blueAccent/80 whitespace-nowrap">
-              [what we love working on]
-            </span>
-          )}
-
           <motion.div
             className="relative overflow-hidden rounded-lg shrink-0"
             initial={false}
@@ -112,13 +106,7 @@ export function CategoryStripe({
                     poster={DEFAULT_VIDEO_POSTER}
                     className="object-cover w-full h-full"
                   >
-                    <track
-                      kind="captions"
-                      src={DEFAULT_CAPTIONS}
-                      srcLang="pt-BR"
-                      label="Português"
-                      default
-                    />
+
                   </video>
                 ) : (
                   <Image
@@ -183,7 +171,7 @@ export function CategoryStripe({
               ))}
             </div>
             {/* Touch target: 48px minimum for accessibility */}
-            <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-[#0048ff] active:bg-[#8705f2] active:scale-95 transition-all duration-200">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 bg-[#0048ff] active:bg-purpleDetails active:scale-95 transition-all duration-200">
               <ArrowUpRight className="w-5 h-5 text-white" />
             </div>
           </div>

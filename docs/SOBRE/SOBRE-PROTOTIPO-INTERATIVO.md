@@ -1058,7 +1058,8 @@ Consolida a identidade do “Ghost Design” como conceito autoral, diferencia o
   - Ganha velocidade e inclinação suave conforme o cursor se move (desktop) e conforme o usuário rola a página (desktop/mobile).  
   - Responde de forma fluida e etérea, como se “sentisse” o toque/scroll.  
   - Entra junto com a **primeira frase** da área de manifesto e permanece presente durante a sessão.  
-  - Quando a **última frase** entra, ele cresce ~10% de escala e fica visivelmente mais animado (mais wobble/tilt e resposta mais intensa ao scroll).  
+  - Quando a **última frase** entra, ele cresce ~10% de escala, ajusta sua posição alinhando-se no centro, horizontal e vertical, da seção. e fica visivelmente mais animado (mais wobble/tilt e resposta mais intensa ao scroll).
+  - animação de saida seguindo scroll da sessão junto com o texto o manifesto “ISSO É / GHOST / DESIGN.” ;  
 
 **Regra de alinhamento (obrigatória) — Desktop e Mobile:**
 - O Ghost 3D deve ficar **sempre alinhado verticalmente ao centro do bloco de texto à sua esquerda**.
@@ -1109,7 +1110,7 @@ Consolida a identidade do “Ghost Design” como conceito autoral, diferencia o
   - **`BeliefFixedHeader` sticky no topo-direita** da sessão, com `text-right`.  
   - **Bloco principal em composição “texto + ghost” lado a lado (row)** dentro de um container próprio:
     - **Texto à direita**
-    - **Ghost 3D à esquerda**
+    - **Ghost 3D à esquerda** alinhado no canto superior esquerdo, 20% abaixo do topo da sessão. 
     - Ghost **sempre alinhado verticalmente ao centro do bloco de texto à esquerda**.
   - **Texto animado rotativo** fica **sempre no rodapé da sessão**, centralizado na página, com quebra de linha somente quando necessário.
   - Ordem (percepção do usuário): header sticky (top-right) → bloco principal (texto + ghost) → manifesto final.
@@ -1147,8 +1148,8 @@ ts COLORS = [ 'bg-bluePrimary', 'bg-purpleDetails', 'bg-pinkDetails', 'bg-bluePr
   - Sai para cima (`y: 0 → -20`) + blur.  
   - Ciclo ~4.2s por frase.
 
-- **Frases rotativas — Mobile (ATUALIZADO: muda posição + animação):**
-  - O texto animado fica **sempre no rodapé da sessão**, **centralizado na página**.
+- **Frases rotativas — Mobile:**
+  - O texto animado fica **sempre 20% acima do rodapé da sessão**, **centralizado na página**.
   - **Entrada:** entra pela direita  
     - `x: +24 → 0`, `opacity: 0 → 1`, `blur: 10px → 0`
   - **Permanência:** estável, centralizado no rodapé.  

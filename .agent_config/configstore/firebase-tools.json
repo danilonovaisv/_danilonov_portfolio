@@ -7,7 +7,7 @@
     "node8DeploysDisabledAfter": 1613390400000,
     "node8RuntimeDisabledAfter": 1615809600000,
     "node8WarnAfter": 1600128000000,
-    "fetched": 1769831723368
+    "fetched": 1770262268128
   },
   "gemini": true,
   "usage": true,
@@ -24,14 +24,14 @@
     "exp": 1769835329
   },
   "tokens": {
-    "expires_at": 1769893147276,
+    "expires_at": 1770265866980,
     "refresh_token": "1//0h2b0hmmUmndvCgYIARAAGBESNwF-L9IrBoY2u2lpcIMRN-wacUdMiCyon2QBKIRz1019M8qXENi8bsolkF4Q46gmqI_7mpMiB4M",
     "scopes": [],
-    "access_token": "ya29.a0AUMWg_LBOkbIyCAPk_O9vtBRZbobPtjojA1Qtd5rtQU4vdnI9boqnxrMjDWU-eb2j9CvMRvpEAohghwIcrLeDzkMYwwiwiY8DP8c3BQeiG_SyteQ7_-Fz7M50PM5mMeQRNQjauQSKwhFEXnmd7iihX8RuxZEQ4Y88_M_gU5_gEvoRZDDRk1xFKGFsz2nt21bpL-c3AJBXZzSmQaCgYKAd4SARcSFQHGX2MiV1L8BjDz_RtKT_mPSXZ88g0213",
+    "access_token": "ya29.a0AUMWg_LGJQRwqzE1-OKYYwwCoggWOW1y3BcNRanHD1iZC7UP2425CUu4vYwkOn10kj2KhdhE3Njhf_ZXMDTVuKZek1Xz3FtpZ5nEaoyGixmiv-YvsWL1nRgtqc_Dfxdu3L2ukvIAp3uXJ8hJOkH14-4Vh26Kpab-9MRhWSiAqQ0Ex0hszO4SvaYOHCAxSqkOuNTxozaL9vScYAaCgYKAX0SARcSFQHGX2Misb0JfKfIwwWzplkMDRVrrA0213",
     "expires_in": 3599,
-    "scope": "https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/userinfo.email openid",
+    "scope": "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/firebase https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/cloudplatformprojects.readonly openid",
     "token_type": "Bearer",
-    "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg2MzBhNzFiZDZlYzFjNjEyNTdhMjdmZjJlZmQ5MTg3MmVjYWIxZjYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE4NDQ0NjMxMDU1MzM4MDgwNzIxIiwiZW1haWwiOiJkYW5ub3ZhaXN2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiUFA1emtxbk9YaHF5SzlPYkdzZThZZyIsImlhdCI6MTc2OTg4OTU0OCwiZXhwIjoxNzY5ODkzMTQ4fQ.ca_aWFec9g7en45n3QwblmqcRuwiqOchv5hE2Wrnst6j7BDL1RNVVO_DsOMqUx8SLTu43su6oRqIWP4gHbApCb7Gqk9nu_BsUOXVYFwi8TDDVXwRKQ_ghRZ1MIjC6y2EyOmmEIq4VKjGBb1veytBPl1fCUr8SU61Tt4dj3pK72Q55MrFEkCCTgxzTTNjBXA_AdTsIZtbGE7XNK80gfDeYf7ZbLUskRUVgS0hMevtpxZ-o90LycdCarzkQV4maJNKf03Sscxbpo_MeizQFk89x0Q6GNpgSRMtRIp3b_gQLPnP7nWDIDM9H2XKqLw0zbsBaWwaFIqoD_lTv4oQLVBxCw"
+    "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ijg2MzBhNzFiZDZlYzFjNjEyNTdhMjdmZjJlZmQ5MTg3MmVjYWIxZjYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNTYzNTg0MzM1ODY5LWZncmhnbWQ0N2JxbmVraWo1aThiNXByMDNobzg0OWU2LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE4NDQ0NjMxMDU1MzM4MDgwNzIxIiwiZW1haWwiOiJkYW5ub3ZhaXN2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiNmViY3FEVHdCWE0zVGgzTE1ldEdkdyIsImlhdCI6MTc3MDI2MjI2NywiZXhwIjoxNzcwMjY1ODY3fQ.Ky8LNTJ1GYw1-9bzUOROvPF61kwIoTnouv46CEsvdYKmJeoAGyH6jrL0i6_ZuPBINTpREJ3fFUV6wP7QOybxOiJA2SUXPyWN76hIKkhiGIs29_GF9k-FFFrQmwWFP4CFeDprzk85qT11Cc1152cicialQ9sSNwUxAclOesrFwFcBvHSaPq4ssVzNscnfJ1kqUDYu7mARCwSc2MZmeBlkL41X_n1ybF9k_Lbe8U8t0SY_R3Xszmt19dTh14CX9h8hCcsA8r39iTHEj_LBvClIPMlYAutfG6vrNfcF215In78IM77tv8m70BQeiNJ9M-bgmzczfHgM_3zyZY110mXAFw"
   },
   "apiEnablementCache": {
     "portfolio-danilo-novais": {
@@ -112,5 +112,6 @@
         "projectRoot": "/Users/danilonovais/_danilonov_portfolio"
       }
     }
-  }
+  },
+  "lastError": 1770263143317
 }

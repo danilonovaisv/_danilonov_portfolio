@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
@@ -9,6 +9,10 @@ import { z } from 'zod';
 import { createClientComponentClient } from '@/lib/supabase/client';
 import { uploadToBucket } from '@/lib/supabase/storage';
 import type { DbProject, DbTag, DbLandingPage } from '@/types/admin';
+import {
+  LEGACY_PROJECT_TEMPLATE,
+  MASTER_PROJECT_TEMPLATE,
+} from '@/types/project-template';
 
 const projectSchema = z.object({
   title: z.string().min(3),
@@ -33,7 +37,7 @@ type FormValues = z.infer<typeof projectSchema>;
 type Props = {
   project?: DbProject;
   tags: DbTag[];
-  landingPages: Pick<DbLandingPage, 'id' | 'title' | 'slug'>[];
+  landingPages: Pick<DbLandingPage, 'id' | 'title' | 'slug' | 'content'>[];
   selectedTagIds?: string[];
 };
 
@@ -72,6 +76,25 @@ export function ProjectForm({
   });
 
   const selectedTags = form.watch('tags') || [];
+  const landingPagesWithTemplate = useMemo(
+    () =>
+      landingPages.map((page) => {
+        const template =
+          page.content &&
+          typeof page.content === 'object' &&
+          'template' in page.content &&
+          (page.content as { template?: string }).template ===
+            MASTER_PROJECT_TEMPLATE
+            ? MASTER_PROJECT_TEMPLATE
+            : LEGACY_PROJECT_TEMPLATE;
+
+        return {
+          ...page,
+          template,
+        };
+      }),
+    [landingPages]
+  );
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
     setError(null);
@@ -302,9 +325,12 @@ export function ProjectForm({
             {...form.register('landing_page_id')}
           >
             <option value="">Nenhuma (Default)</option>
-            {landingPages.map((lp) => (
+            {landingPagesWithTemplate.map((lp) => (
               <option key={lp.id} value={lp.id}>
-                {lp.title} (/{lp.slug})
+                {lp.title} (/{lp.slug}) ·{' '}
+                {lp.template === MASTER_PROJECT_TEMPLATE
+                  ? 'Template Mestre'
+                  : 'Legacy'}
               </option>
             ))}
           </select>

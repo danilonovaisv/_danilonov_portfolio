@@ -78,7 +78,7 @@ export default function HomeHero() {
         {/* Mobile: Bottom absolute | Desktop: Sticky bottom */}
         <div className="absolute inset-0 z-50 pointer-events-none">
           <div className="flex items-end justify-center w-full h-screen md:sticky md:top-0">
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pb-12 lg:pb-20 pointer-events-auto">
+            <div className="absolute bottom-12 left-0 w-full flex justify-center md:relative md:bottom-auto md:left-auto md:w-auto md:block md:pb-12 lg:pb-20 pointer-events-auto">
               <HeroCTA isLoaded={isLoaded} />
             </div>
           </div>

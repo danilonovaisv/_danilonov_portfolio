@@ -12,4 +12,3 @@ export const ADMIN_NAVIGATION = {
   copyAgent: '/admin/copy-agent',
   sceneGenerator: '/admin/scene-generator',
 } as const;
-

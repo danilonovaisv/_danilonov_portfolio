@@ -86,6 +86,7 @@ export default function DesktopFluidHeader({
               <nav
                 aria-label="Navegação principal"
                 className="flex items-center gap-7"
+                data-testid="site-navigation"
               >
                 {nav.map((item) => {
                   const hash = item.href.startsWith('/#')

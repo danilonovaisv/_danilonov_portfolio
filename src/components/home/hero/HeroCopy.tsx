@@ -19,13 +19,11 @@ import styles from './HeroCopy.module.css';
 const textContainerAnimation: Variants = {
   initial: {
     opacity: 0,
-    scale: 0.92,
     y: 60,
     filter: 'blur(10px)',
   },
   animate: {
     opacity: 1,
-    scale: [0.92, 1.02, 1],
     y: 0,
     filter: 'blur(0px)',
     transition: {
@@ -74,11 +72,6 @@ export default function HeroCopy({
     <Container className={isMask ? styles.maskText : styles.baseText}>
       <div className="flex flex-col items-center">
         {/* Tag decorativa */}
-        <span
-          className={`block mb-3 lg:mb-4 tracking-[0.25em] uppercase font-bold text-accent text-micro ${isMask ? '' : styles.tag}`}
-        >
-          {HOME_CONTENT.hero.tag}
-        </span>
 
         {/* Headline - Desktop (2 linhas) */}
         {/* Headline - Desktop (2 linhas) */}
