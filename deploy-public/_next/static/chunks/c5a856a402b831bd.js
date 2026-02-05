@@ -133,7 +133,7 @@
         i = e.hash || '',
         l = e.query || '',
         s = !1;
-      ((t = t ? encodeURIComponent(t).replace(/%3A/i, ':') + '@' : ''),
+      ((t = t ? encodeURIComponent(t).replace(/%3A/gi, ':') + '@' : ''),
         e.host
           ? (s = t + e.host)
           : r &&
