@@ -61,10 +61,13 @@ export function useOriginAnimations({
       });
 
       // Create scroll triggers for each block with mask reveal
+      // Create scroll triggers for each block with mask reveal
       blocks.forEach((block, index) => {
+        const isLast = index === blocks.length - 1;
+
         ScrollTrigger.create({
           trigger: block,
-          start: 'top center',
+          start: isLast ? 'top 85%' : 'top center',
           end: 'bottom center',
           onEnter: () => revealImage(index, 'down'),
           onEnterBack: () => revealImage(index, 'up'),

@@ -37,9 +37,7 @@ class ThreeErrorBoundary extends React.Component<
   }
 }
 
-const AmbientLight = 'ambientLight' as any;
-const DirectionalLight = 'directionalLight' as any;
-const PointLight = 'pointLight' as any;
+
 
 interface GhostSceneProps {
   scrollProgress: MotionValue<number>;
