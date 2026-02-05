@@ -53,7 +53,7 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
     <div className="overflow-visible mb-1 md:mb-2 w-full">
       <motion.span
         style={{ x: lineX }}
-        className="block text-blueAccent italic font-semibold text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[1.2] text-left whitespace-pre-line select-none tracking-[-0.01em] max-w-fit"
+        className="block text-blueAccent italic font-semibold text-[clamp(2.75rem,4.5vw,2.5rem)] leading-[1.2] text-left whitespace-pre-line select-none tracking-[-0.01em] max-w-fit"
       >
         {line}
       </motion.span>

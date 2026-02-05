@@ -7,12 +7,12 @@ import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
 
-import { ORIGIN_CONTENT, FallbackImage } from './origin/data';
+import { ORIGIN_CONTENT, FallbackImage } from '../origin/data';
 import {
   OriginInfoBlock,
   OriginStickyGallery,
-} from './origin/OriginComponents';
-import { useOriginAnimations } from './origin/useOriginAnimations';
+} from '../origin/OriginComponents';
+import { useOriginAnimations } from '../origin/useOriginAnimations';
 
 function AboutOrigin() {
   const containerRef = useRef<HTMLDivElement>(null);

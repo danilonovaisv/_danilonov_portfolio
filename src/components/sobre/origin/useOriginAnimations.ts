@@ -81,7 +81,7 @@ export function useOriginAnimations({
 
         images.forEach((img, i) => {
           if (i === activeIndex) {
-            // Reveal active image with mask + blur animation
+            // Reveal the active image with mask + blur animation
             gsap.to(img, {
               clipPath: 'inset(0% 0% 0% 0%)',
               opacity: 1,

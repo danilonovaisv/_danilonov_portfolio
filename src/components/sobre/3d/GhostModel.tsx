@@ -57,41 +57,52 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     return new THREE.Vector3(0, 0, 0);
   }, [props.position]);
 
+  // BLACK GHOST STYLE - Dark ethereal appearance with blue accents
   const ghostMaterial = useMemo(() => {
     const material = materials.Ghost_White.clone();
-    material.color = new THREE.Color('#f6f8ff');
-    material.emissive = new THREE.Color('#d9e4ff');
-    material.emissiveIntensity = 0.06;
-    material.roughness = 0.5;
-    material.metalness = 0.02;
+    // Dark smoky base color
+    material.color = new THREE.Color('#1a1a2e');
+    // Subtle blue ethereal glow
+    material.emissive = new THREE.Color('#0048ff');
+    material.emissiveIntensity = 0.08;
+    material.roughness = 0.65;
+    material.metalness = 0.05;
+    // Enable transparency for ghostly effect
+    material.transparent = true;
+    material.opacity = 0.92;
     return material;
   }, [materials.Ghost_White]);
 
   const eyesMaterial = useMemo(() => {
     const material = materials.Eyes.clone();
-    material.color = new THREE.Color('#121212');
-    material.roughness = 0.32;
-    material.metalness = 0.01;
+    // Bright cyan accent for eyes
+    material.color = new THREE.Color('#4fe6ff');
+    material.emissive = new THREE.Color('#4fe6ff');
+    material.emissiveIntensity = 0.6;
+    material.roughness = 0.2;
+    material.metalness = 0.1;
     return material;
   }, [materials.Eyes]);
 
   const hatMaterial = useMemo(() => {
     const material = materials.Hat_Black.clone();
-    material.color = new THREE.Color('#06080d');
-    material.roughness = 0.42;
-    material.metalness = 0.16;
-    material.emissive = new THREE.Color('#040915');
-    material.emissiveIntensity = 0.1;
+    // Deep void black for hat
+    material.color = new THREE.Color('#040013');
+    material.roughness = 0.38;
+    material.metalness = 0.2;
+    material.emissive = new THREE.Color('#0048ff');
+    material.emissiveIntensity = 0.04;
     return material;
   }, [materials.Hat_Black]);
 
   const rimMaterial = useMemo(() => {
     const material = materials.Rim_Red.clone();
-    material.color = new THREE.Color('#ff3246');
-    material.emissive = new THREE.Color('#ff2b57');
-    material.emissiveIntensity = 0.22;
-    material.roughness = 0.36;
-    material.metalness = 0.08;
+    // Blue primary accent for rim (replacing red per Ghost System brand)
+    material.color = new THREE.Color('#0048ff');
+    material.emissive = new THREE.Color('#4fe6ff');
+    material.emissiveIntensity = 0.35;
+    material.roughness = 0.28;
+    material.metalness = 0.15;
     return material;
   }, [materials.Rim_Red]);
 

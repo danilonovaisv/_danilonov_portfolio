@@ -10,7 +10,7 @@ import {
 } from 'framer-motion';
 
 import { ABOUT_CONTENT } from '@/config/content';
-import { motionTokens, motionSprings } from './motion';
+import { motionTokens, motionSprings } from '../shared/motion';
 import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';

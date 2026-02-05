@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import AntigravityCTA from '@/components/ui/AntigravityCTA';
 import { ABOUT_CONTENT } from '@/config/content';
 
-import { motionTokens } from './motion';
+import { motionTokens } from '../shared/motion';
 import { DEFAULT_CAPTIONS, DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
 export function AboutClosing() {
