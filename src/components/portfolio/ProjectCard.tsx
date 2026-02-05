@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PortfolioProject } from '@/types/project';
 import { cn } from '@/lib/utils';
-import { useParallaxCard } from '@/hooks/useParallaxGallery';
 import { ASSET_PLACEHOLDER, applyImageFallback, isVideo } from '@/utils/utils';
 import styles from './ProjectsGallery.module.css';
 import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
@@ -19,7 +18,6 @@ interface ProjectCardProps {
   className?: string;
   priority?: boolean;
   size?: ProjectCardSize;
-  enableParallax?: boolean;
 }
 
 /**
@@ -33,14 +31,8 @@ export const ProjectCard = ({
   className = '',
   priority = false,
   size = 'md',
-  enableParallax = true,
 }: ProjectCardProps) => {
   const reduceMotion = useReducedMotion();
-  const { wrapperRef, cardRef } = useParallaxCard<HTMLDivElement, HTMLButtonElement>(
-
-    enableParallax
-  );
-
   const motionProps = reduceMotion
     ? {
       initial: { opacity: 0 },
@@ -69,7 +61,6 @@ export const ProjectCard = ({
 
   return (
     <motion.button
-      ref={cardRef}
       type="button"
       data-size={size}
       onClick={() => onClick?.(project)}
@@ -82,10 +73,7 @@ export const ProjectCard = ({
       )}
       {...motionProps}
     >
-      <div
-        ref={wrapperRef}
-        className={cn(styles.cardImageWrapper, enableParallax ? 'motion-safe:will-change-transform' : '')}
-      >
+      <div className={styles.cardImageWrapper}>
         {isVideo(imageSrc) ? (
           <video
             src={imageSrc}

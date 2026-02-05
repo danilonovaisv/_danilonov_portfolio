@@ -27,6 +27,10 @@ const projectSchema = z.object({
   featured_on_portfolio: z.boolean().optional(),
   featured_home_order: z.coerce.number().int().optional().nullable(),
   featured_portfolio_order: z.coerce.number().int().optional().nullable(),
+  preferred_size: z.preprocess(
+    (val) => (val === '' ? undefined : val),
+    z.enum(['sm', 'md', 'lg', 'wide']).optional().nullable()
+  ),
   is_published: z.boolean().optional(),
   landing_page_id: z.string().optional().nullable(),
   tags: z.array(z.string()).optional(),
@@ -69,6 +73,7 @@ export function ProjectForm({
       featured_on_portfolio: project?.featured_on_portfolio ?? false,
       featured_home_order: project?.featured_home_order ?? undefined,
       featured_portfolio_order: project?.featured_portfolio_order ?? undefined,
+      preferred_size: project?.preferred_size ?? null,
       is_published: project?.is_published ?? true,
       landing_page_id: project?.landing_page_id ?? '',
       tags: selectedTagIds,
@@ -309,6 +314,25 @@ export function ProjectForm({
             className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
             {...form.register('featured_portfolio_order')}
           />
+        </label>
+        <label className="flex flex-col gap-2">
+          <span className="text-sm text-slate-300">
+            Tamanho preferencial no grid
+          </span>
+          <select
+            className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm"
+            {...form.register('preferred_size')}
+          >
+            <option value="">Automático (padrão)</option>
+            <option value="sm">Pequeno (1/3 da linha)</option>
+            <option value="md">Médio (1/3 da linha)</option>
+            <option value="lg">Grande (2/3 da linha)</option>
+            <option value="wide">Full (linha inteira)</option>
+          </select>
+          <p className="text-[11px] text-slate-500 leading-relaxed">
+            Usado como preferência visual; o grid pode adaptar para fechar 12
+            colunas mantendo a mesma altura.
+          </p>
         </label>
       </div>
 

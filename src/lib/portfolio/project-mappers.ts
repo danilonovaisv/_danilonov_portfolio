@@ -65,9 +65,48 @@ function determineProjectType(
   return isComplex ? 'B' : 'A';
 }
 
+type PreferredSize = 'sm' | 'md' | 'lg' | 'wide';
+
+function applyPreferredSize(preferred?: PreferredSize): ProjectGridLayout | null {
+  if (!preferred) return null;
+
+  const base = {
+    height: 'min-h-[320px]',
+    aspectRatio: 'aspect-[4/5]',
+  };
+
+  switch (preferred) {
+    case 'sm':
+    case 'md':
+      return {
+        ...base,
+        cols: 'md:col-span-4 lg:col-span-4',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+        size: preferred,
+      };
+    case 'lg':
+      return {
+        ...base,
+        cols: 'md:col-span-6 lg:col-span-8',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 58vw, 66vw',
+        size: 'lg',
+      };
+    case 'wide':
+      return {
+        ...base,
+        cols: 'md:col-span-8 lg:col-span-12',
+        sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100vw',
+        size: 'wide',
+      };
+    default:
+      return null;
+  }
+}
+
 function buildLayout(
   projectType: ProjectType,
-  index: number
+  index: number,
+  preferredSize?: PreferredSize
 ): ProjectGridLayout {
   /**
    * Layout Pattern para Portfolio Grid:
@@ -75,6 +114,9 @@ function buildLayout(
    * - Altura fixa no desktop para uniformidade visual
    * - Pattern: [5+7], [7+5], [4+4+4], [6+6], [8+4], [4+8]
    */
+  const override = applyPreferredSize(preferredSize);
+  if (override) return override;
+
   const pairedLayouts: ProjectGridLayout[] = [
     // Row pattern: 6 + 6 = 12 (Ensures first row is full width)
     {
@@ -202,7 +244,7 @@ export function mapDbProjectToPortfolioProject(
   const normalizedSlug = project.slug?.replace(/_/g, '-');
   const normalizedLandingSlug = project.landing_page?.slug?.replace(/_/g, '-');
   const type = determineProjectType(project);
-  const layout = buildLayout(type, index);
+  const layout = buildLayout(type, index, project.preferred_size ?? undefined);
   const category = getProjectCategory(project.project_type);
   const tags = toTagsList(project.tags);
   const gallery = createGallery(project);

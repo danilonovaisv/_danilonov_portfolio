@@ -54,7 +54,7 @@ export const ProjectsGallery = ({
   }, [projects, activeFilter]);
 
   const sizePattern = useMemo<ProjectCardSize[]>(
-    () => ['md', 'md', 'md', 'lg', 'md', 'md', 'wide', 'md'],
+    () => ['lg', 'sm', 'sm', 'lg', 'sm', 'lg', 'sm', 'wide'],
     []
   );
 
@@ -127,7 +127,6 @@ export const ProjectsGallery = ({
                   project={item.project}
                   index={index}
                   size={item.size}
-                  enableParallax={useLerp && isSticky}
                   onClick={onProjectSelect || onOpenProject}
                   priority={index < 3}
                 />
