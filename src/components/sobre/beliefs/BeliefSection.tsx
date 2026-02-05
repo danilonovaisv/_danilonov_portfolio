@@ -1,5 +1,5 @@
+// BeliefSection.tsx
 'use client';
-
 import React, { useRef } from 'react';
 import {
   motion,
@@ -16,7 +16,7 @@ interface BeliefLineProps {
   line: string;
   index: number;
   scrollYProgress: MotionValue<number>;
-  animationRange: number[];
+  animationRange: [number, number];
 }
 
 /**
@@ -48,16 +48,13 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
     ['-100%', '0%'],
     { ease: ghostEase }
   );
-
   return (
-    <div className="overflow-visible mb-1 md:mb-2 w-full">
-      <motion.span
-        style={{ x: lineX }}
-        className="block text-blueAccent italic font-semibold text-[clamp(2.75rem,4.5vw,2.5rem)] leading-[1.2] text-left whitespace-pre-line select-none tracking-[-0.01em] max-w-fit"
-      >
-        {line}
-      </motion.span>
-    </div>
+    <motion.span
+      style={{ x: lineX }}
+      className="block text-blueAccent italic font-semibold text-[clamp(2.75rem,4.5vw,2.5rem)] leading-[1.2] text-left whitespace-pre-line select-none tracking-[-0.01em] max-w-fit"
+    >
+      {line}
+    </motion.span>
   );
 };
 
@@ -76,17 +73,22 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   text,
   bgColor,
   isFirst = false,
+  isMobileTextLayer = false, // Nova prop para controle explícito
 }) => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef(null);
   const isMobile = useIsMobile();
-
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   });
 
-  const animationRange = isFirst ? [0.05, 0.2] : [0.1, 0.25];
-  const exitRange = isFirst ? [0.75, 0.9] : [0.7, 0.85];
+  // Desktop Ranges
+  // isFirst: Atrasar entrada para garantir que o FixedHeader (parent 0-0.35) terminou.
+  // Como este componente usa scroll relativo a si mesmo (0-1), e é o primeiro,
+  // 0.5 aqui ≈ momento que o usuário já scrollou metade da primeira tela.
+
+  const animationRange: [number, number] = isFirst ? [0.55, 0.7] : [0.2, 0.35];
+  const exitRange: [number, number] = [0.8, 0.95];
 
   const desktopOpacity = useTransform(
     scrollYProgress,
@@ -95,6 +97,7 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
   );
 
   const yScroll = useTransform(scrollYProgress, [0.7, 0.95], ['0vh', '-100vh']);
+
   const lines = text.split('\n');
 
   return (
@@ -102,31 +105,27 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
       ref={containerRef}
       aria-label={text.replace(/\n/g, ' ')}
       style={{ backgroundColor: bgColor }}
-      className={`relative w-full h-screen flex overflow-hidden
-        ${isMobile
-          ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
-          : `items-center justify-start pl-8 lg:pl-16`
-        }
-      `}
+      className={`relative w-full h-screen flex overflow-hidden ${isMobile
+        ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
+        : 'items-center justify-start pl-8 lg:pl-16'
+        }`}
     >
       {/* Desktop: Texto inline */}
-      {!isMobile && (
-        <div className="std-grid max-w-none w-full">
-          <motion.div
-            style={{ y: yScroll, opacity: desktopOpacity }}
-            className="relative z-30 w-full flex flex-col justify-start max-w-[400px]"
-          >
-            {lines.map((line, i) => (
-              <BeliefLineDesktop
-                key={i}
-                line={line}
-                index={i}
-                scrollYProgress={scrollYProgress}
-                animationRange={animationRange}
-              />
-            ))}
-          </motion.div>
-        </div>
+      {!isMobile && !isMobileTextLayer && (
+        <motion.div
+          style={{ y: yScroll, opacity: desktopOpacity }}
+          className="relative z-30 w-full flex flex-col justify-start max-w-[400px]"
+        >
+          {lines.map((line, i) => (
+            <BeliefLineDesktop
+              key={i} // Adicionado key
+              line={line}
+              index={i}
+              scrollYProgress={scrollYProgress}
+              animationRange={animationRange}
+            />
+          ))}
+        </motion.div>
       )}
       {/* Mobile: Texto será renderizado em camada fixed no AboutBeliefs */}
     </motion.section>
@@ -147,7 +146,6 @@ export const BeliefMobileTextLayer: React.FC<MobileTextLayerProps> = ({
   scrollYProgress,
 }) => {
   const [isMobile, setIsMobile] = React.useState(false);
-
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -162,20 +160,18 @@ export const BeliefMobileTextLayer: React.FC<MobileTextLayerProps> = ({
   const segmentSize = 1 / (totalPhrases + 1); // +1 para a seção final
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
-      <div className="px-6 pb-[12vh]">
-        {phrases.map((phrase, index) => (
-          <MobilePhrase
-            key={index}
-            text={phrase}
-            index={index}
-            totalPhrases={totalPhrases}
-            segmentSize={segmentSize}
-            scrollYProgress={scrollYProgress}
-          />
-        ))}
-      </div>
-    </div>
+    <>
+      {phrases.map((phrase, index) => (
+        <MobilePhrase
+          key={index} // Adicionado key
+          text={phrase}
+          index={index}
+          totalPhrases={totalPhrases}
+          segmentSize={segmentSize}
+          scrollYProgress={scrollYProgress}
+        />
+      ))}
+    </>
   );
 };
 
@@ -190,22 +186,26 @@ interface MobilePhraseProps {
 const MobilePhrase: React.FC<MobilePhraseProps> = ({
   text,
   index,
-  segmentSize,
+  totalPhrases,
   scrollYProgress,
 }) => {
-  // Calcular ranges para cada frase
-  // Cada frase aparece em seu "segmento" do scroll
-  const startPoint = index * segmentSize;
-  const endPoint = (index + 1) * segmentSize;
+  // MobilePhrase: Calcula seus próprios segmentos baseados no range útil [0.35 - 0.95]
+  const usefulRangeStart = 0.35;
+  const usefulRangeEnd = 0.95;
+  const totalRange = usefulRangeEnd - usefulRangeStart;
+  const adjustedSegmentSize = totalRange / totalPhrases;
 
-  // Entry: 5% depois do início do segmento
-  // Exit: 5% antes do fim do segmento
-  const entryStart = startPoint + 0.02;
-  const entryEnd = startPoint + segmentSize * 0.25;
-  const exitStart = endPoint - segmentSize * 0.25;
-  const exitEnd = endPoint - 0.02;
+  const startPoint = usefulRangeStart + index * adjustedSegmentSize;
+  const endPoint = startPoint + adjustedSegmentSize;
 
-  // X: Entra da DIREITA (+24px), mantém centro, sai para a ESQUERDA (-24px)
+  // Entry: 10% do segmento
+  // Exit: 10% do segmento
+  const entryStart = startPoint;
+  const entryEnd = startPoint + adjustedSegmentSize * 0.15;
+  const exitStart = endPoint - adjustedSegmentSize * 0.15;
+  const exitEnd = endPoint;
+
+  // X: Entra da DIREITA (+24px), mantém centro (0px), sai para a ESQUERDA (-24px)
   const x = useTransform(
     scrollYProgress,
     [entryStart, entryEnd, exitStart, exitEnd],
@@ -224,11 +224,14 @@ const MobilePhrase: React.FC<MobilePhraseProps> = ({
   return (
     <motion.div
       style={{ x, opacity }}
-      className="absolute bottom-0 left-0 right-0 px-6 mb-[20%]"
+      className="fixed bottom-[20%] left-0 right-0 z-[60] text-center pointer-events-none px-4"
     >
-      <span className="block text-blueAccent italic font-semibold text-[clamp(2rem,7vw,3rem)] leading-[1.15] tracking-[-0.01em] text-center select-none drop-shadow-[0_4px_20px_rgba(79,230,255,0.25)]">
-        {text.replace(/\n/g, ' ')}
+      <span className="text-blueAccent italic font-semibold text-[clamp(2rem,6vw,3.5rem)] leading-[1.1] tracking-[-0.01em] block w-full mx-auto">
+        {text}
       </span>
     </motion.div>
   );
 };
+
+// Exportar o hook para uso em outros componentes
+export { useIsMobile };

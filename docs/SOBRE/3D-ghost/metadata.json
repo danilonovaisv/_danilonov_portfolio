@@ -1,5 +1,0 @@
-{
-  "name": "Ethereal Ghost 3D Experience",
-  "description": "A scroll-based immersive 3D animation featuring a translucent, glowing ghost model with reactive motion and cinematic lighting using React Three Fiber and Framer Motion.",
-  "requestFramePermissions": []
-}

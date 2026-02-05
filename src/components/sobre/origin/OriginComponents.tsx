@@ -13,17 +13,17 @@ interface OriginInfoBlockProps {
 /**
  * Individual content block with subtitle marker, title, text, and mobile image
  * Mobile: Layout intercalado (texto → imagem) com ordem via CSS
+ * Desktop: Static content acts as scroll anchor for GSAP
  */
 export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
   const isRightAligned = block.textAlign === 'right';
 
   return (
     <div
-      className={`${styles.arch__info} min-h-[80vh] lg:min-h-screen flex flex-col py-12 lg:py-24 ${
-        isRightAligned
-          ? 'lg:items-end lg:justify-end lg:text-right'
-          : 'lg:items-end lg:justify-start lg:text-left'
-      }`}
+      className={`${styles.arch__info} min-h-screen flex flex-col justify-start pt-[20vh] pb-[20vh] ${isRightAligned
+        ? 'lg:items-end lg:justify-start lg:text-right'
+        : 'lg:items-end lg:justify-start lg:text-left'
+        }`}
       data-origin-block={block.id}
     >
       {/* Mobile: Stack vertical intercalado - Texto primeiro, depois Imagem */}
@@ -53,7 +53,7 @@ export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
               delay: 0.2,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-body text-white/70 leading-relaxed whitespace-pre-line"
+            className="text-body text-white/70 leading-relaxed whitespace-pre-line text-pretty"
           >
             {block.paragraph}
           </motion.p>
@@ -73,42 +73,22 @@ export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
               alt={block.title}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 0vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
               priority={block.id === 1}
             />
           )}
         </motion.div>
       </div>
 
-      {/* Desktop: Text Content Only (images in sticky gallery) */}
-      <div className="hidden lg:block lg:max-w-md">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-20%' }}
-          transition={{
-            duration: 0.6,
-            delay: 0.1,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="text-h2 font-bold text-[#0048ff] mb-6 tracking-wide"
-        >
+      {/* Desktop: Text Content Only (controlled by native scroll) */}
+      <div className="hidden lg:block lg:max-w-md relative z-10 transition-opacity duration-500">
+        <h2 className="text-h2 font-bold text-[#0048ff] mb-6 tracking-wide translate-y-0 opacity-100">
           {block.title}
-        </motion.h2>
+        </h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-20%' }}
-          transition={{
-            duration: 0.6,
-            delay: 0.2,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="text-body text-white/70 leading-relaxed whitespace-pre-line"
-        >
+        <p className="text-body text-white/70 leading-relaxed whitespace-pre-line text-pretty translate-y-0 opacity-100">
           {block.paragraph}
-        </motion.p>
+        </p>
       </div>
     </div>
   );
@@ -137,7 +117,7 @@ export function OriginStickyGallery({
 }: OriginStickyGalleryProps) {
   return (
     <div
-      className={`${styles.arch__right} hidden lg:flex col-span-6 h-screen sticky top-0`}
+      className={`${styles.arch__right} hidden lg:flex col-span-6 h-screen sticky top-0 items-start justify-center pt-[20vh] pointer-events-none`}
       ref={archRightRef}
     >
       {/* Gallery container - 500px height per spec */}
@@ -148,22 +128,24 @@ export function OriginStickyGallery({
         {blocks.map((block, index) => (
           <div
             key={block.id}
-            className={`${styles['img-wrapper']} origin-img`}
+            className={`${styles['img-wrapper']} origin-img absolute inset-0 w-full h-full`}
             data-img-index={index}
             data-z-index={index + 1}
+            style={{ zIndex: index + 1 }}
           >
             {block.img && (
               <Image
                 src={block.img}
                 alt={block.title}
                 fill
-                className="object-cover"
-                sizes="(min-width: 1024px) 500px, 0vw"
+                className="object-cover rounded-3xl"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 priority={index === 0}
+                quality={90}
               />
             )}
             {/* Mask overlay for reveal effect */}
-            <div className="origin-mask" />
+            <div className="origin-mask absolute inset-0 bg-void z-10 origin-top" />
           </div>
         ))}
       </div>
