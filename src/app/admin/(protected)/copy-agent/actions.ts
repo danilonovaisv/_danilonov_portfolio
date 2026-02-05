@@ -4,13 +4,13 @@ import OpenAI from 'openai';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY || '',
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 export type CopyAgentState = {
-    success: boolean;
-    content?: string;
-    error?: string;
+  success: boolean;
+  content?: string;
+  error?: string;
 };
 
 /**
@@ -18,20 +18,20 @@ export type CopyAgentState = {
  * Generates high-end art direction portfolio copy.
  */
 export async function generateProjectCopy(
-    prevState: CopyAgentState,
-    formData: FormData
+  prevState: CopyAgentState,
+  formData: FormData
 ): Promise<CopyAgentState> {
-    const context = formData.get('context') as string;
+  const context = formData.get('context') as string;
 
-    if (!context) {
-        return { success: false, error: 'O contexto do projeto é obrigatório.' };
-    }
+  if (!context) {
+    return { success: false, error: 'O contexto do projeto é obrigatório.' };
+  }
 
-    if (!process.env.OPENAI_API_KEY) {
-        return { success: false, error: 'Chave da API OpenAI não configurada.' };
-    }
+  if (!process.env.OPENAI_API_KEY) {
+    return { success: false, error: 'Chave da API OpenAI não configurada.' };
+  }
 
-    const SYSTEM_PROMPT = `[
+  const SYSTEM_PROMPT = `[
 # SYSTEM PROMPT — PORTFOLIO ART DIRECTION COPY AGENT
 
 You are a specialized creative writing agent focused on crafting high-level textual presentations for Art Direction portfolio projects.
@@ -121,25 +121,28 @@ Make the project feel intentional, curated and timeless.
 The reader should finish the page feeling that the work was not made to impress — but to last.
 ]`;
 
-    try {
-        const response = await openai.chat.completions.create({
-            model: 'gpt-4o',
-            messages: [
-                { role: 'system', content: SYSTEM_PROMPT },
-                { role: 'user', content: `CONTEXTO DO PROJETO:\n${context}` },
-            ],
-            temperature: 0.7,
-        });
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `CONTEXTO DO PROJETO:\n${context}` },
+      ],
+      temperature: 0.7,
+    });
 
-        const content = response.choices[0]?.message?.content || '';
+    const content = response.choices[0]?.message?.content || '';
 
-        return { success: true, content };
-    } catch (error: unknown) {
-        console.error('OpenAI API Error:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Erro ao gerar texto. Tente novamente.';
-        return {
-            success: false,
-            error: errorMessage,
-        };
-    }
+    return { success: true, content };
+  } catch (error: unknown) {
+    console.error('OpenAI API Error:', error);
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : 'Erro ao gerar texto. Tente novamente.';
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
 }

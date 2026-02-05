@@ -91,7 +91,8 @@ export default function JsonLd({
     '@id': `${baseUrl}/#website`,
     name: `${BRAND.name} | Creative Developer`,
     url: baseUrl,
-    description: 'Você não vê o design. Mas ele vê você. Portfólio de experiências digitais premium.',
+    description:
+      'Você não vê o design. Mas ele vê você. Portfólio de experiências digitais premium.',
     inLanguage: 'pt-BR',
     publisher: {
       '@id': `${baseUrl}/#person`,
@@ -144,7 +145,8 @@ export default function JsonLd({
       '@type': 'ContactPage',
       '@id': `${baseUrl}/contato#contact`,
       name: 'Contato | Danilo Novais',
-      description: 'Entre em contato para projetos de branding, motion e experiências digitais.',
+      description:
+        'Entre em contato para projetos de branding, motion e experiências digitais.',
       url: `${baseUrl}/contato`,
       mainEntity: {
         '@id': `${baseUrl}/#person`,
@@ -187,11 +189,7 @@ export default function JsonLd({
     };
   }
 
-  const graph = [
-    personSchema,
-    websiteSchema,
-    ...Object.values(pageSchemas),
-  ];
+  const graph = [personSchema, websiteSchema, ...Object.values(pageSchemas)];
 
   return (
     <script

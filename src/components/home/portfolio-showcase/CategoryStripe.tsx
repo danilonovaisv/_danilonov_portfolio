@@ -79,11 +79,7 @@ export function CategoryStripe({
             isHovered ? 'gap-10' : 'gap-6'
           )}
         >
-          {category.showLabel && (
-            <span className="absolute left-6 lg:left-8 text-sm font-normal text-blueAccent/80 whitespace-nowrap">
-              [what we love working on]
-            </span>
-          )}
+
 
           <motion.div
             className="relative overflow-hidden rounded-lg shrink-0"

@@ -103,9 +103,10 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
       aria-label={text.replace(/\n/g, ' ')}
       style={{ backgroundColor: bgColor }}
       className={`relative w-full h-screen flex overflow-hidden
-        ${isMobile
-          ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
-          : `items-center justify-start pl-8 lg:pl-16`
+        ${
+          isMobile
+            ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
+            : `items-center justify-start pl-8 lg:pl-16`
         }
       `}
     >

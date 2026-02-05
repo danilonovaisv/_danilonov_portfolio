@@ -185,8 +185,12 @@ export function GhostModel({ scrollProgress, ...props }: GhostModelProps) {
     );
 
     const elapsedTime = state.clock.getElapsedTime();
-    const floatY = prefersReducedMotion ? 0 : Math.sin(elapsedTime * 1.18) * 0.055;
-    const floatX = prefersReducedMotion ? 0 : Math.cos(elapsedTime * 0.8) * 0.018;
+    const floatY = prefersReducedMotion
+      ? 0
+      : Math.sin(elapsedTime * 1.18) * 0.055;
+    const floatX = prefersReducedMotion
+      ? 0
+      : Math.cos(elapsedTime * 0.8) * 0.018;
     const scrollLift = prefersReducedMotion
       ? 0
       : THREE.MathUtils.clamp(progress * 0.14, 0, 0.14);

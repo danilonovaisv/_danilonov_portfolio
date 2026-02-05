@@ -1,3 +1,4 @@
+// Note: ImageResponse API requires inline styles - external CSS is not supported
 import { ImageResponse } from 'next/og';
 import { BRAND } from '@/config/brand';
 
@@ -41,9 +42,7 @@ export default async function Image() {
             <h1 style={styles.title}>Vamos Conversar?</h1>
             <p style={styles.subtitle}>Branding • Motion • Creative Development</p>
 
-            <div style={styles.cta}>
-                Contato direto para projetos criativos
-            </div>
+            <div style={styles.cta}>Contato direto para projetos criativos</div>
         </div>,
         {
             ...size,

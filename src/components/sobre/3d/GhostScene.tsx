@@ -1,11 +1,10 @@
-
 import React, { ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
 import {
   Environment,
   ScrollControls,
   Sparkles,
-  ContactShadows
+  ContactShadows,
 } from '@react-three/drei';
 import { GhostModel } from './GhostModel';
 
@@ -18,7 +17,10 @@ interface ThreeErrorBoundaryState {
   hasError: boolean;
 }
 
-class ThreeErrorBoundary extends React.Component<ThreeErrorBoundaryProps, ThreeErrorBoundaryState> {
+class ThreeErrorBoundary extends React.Component<
+  ThreeErrorBoundaryProps,
+  ThreeErrorBoundaryState
+> {
   constructor(props: ThreeErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -50,11 +52,7 @@ const GhostScene: React.FC = () => {
 
       <AmbientLight intensity={0.5} />
 
-      <DirectionalLight
-        position={[2, 5, 2]}
-        intensity={1.5}
-        castShadow
-      />
+      <DirectionalLight position={[2, 5, 2]} intensity={1.5} castShadow />
 
       <PointLight position={[-5, 2, 2]} intensity={1} />
 

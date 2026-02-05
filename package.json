@@ -83,7 +83,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "firebase": "^12.8.0",
-    "firebase-admin": "^13.6.0",
+    "firebase-admin": "^13.6.1",
     "firebase-frameworks": "^0.11.8",
     "firebase-functions": "^7.0.5",
     "framer-motion": "^12.31.0",

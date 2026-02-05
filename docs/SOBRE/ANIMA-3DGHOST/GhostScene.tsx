@@ -4,7 +4,6 @@ import { Canvas } from '@react-three/fiber';
 import { 
   Environment, 
   ScrollControls, 
-  Sparkles, 
   ContactShadows
 } from '@react-three/drei';
 import GhostModel from './GhostModel';
@@ -18,68 +17,62 @@ interface ThreeErrorBoundaryState {
   hasError: boolean;
 }
 
+// Fix: Use React.Component explicitly to ensure proper inheritance of props and state in TypeScript
 class ThreeErrorBoundary extends React.Component<ThreeErrorBoundaryProps, ThreeErrorBoundaryState> {
+  public state: ThreeErrorBoundaryState = { hasError: false };
+
   constructor(props: ThreeErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(): ThreeErrorBoundaryState {
     return { hasError: true };
   }
 
   render() {
+    // Fix: Accessing this.props and this.state which are now correctly recognized through React.Component
     if (this.state.hasError) return this.props.fallback;
     return this.props.children;
   }
 }
-
-const AmbientLight = 'ambientLight' as any;
-const DirectionalLight = 'directionalLight' as any;
-const PointLight = 'pointLight' as any;
-const Fog = 'fog' as any;
 
 const GhostScene: React.FC = () => {
   return (
     <Canvas 
       shadows 
       dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }} // Alpha true permite ver o que está atrás do canvas
-      camera={{ position: [0, 0, 5], fov: 45 }}
+      gl={{ antialias: true, alpha: true }}
+      camera={{ position: [0, 0, 6], fov: 35 }}
     >
-      {/* Background transparente para mostrar o Overlay que está na camada de baixo */}
+      <color attach="background" args={['transparent' as any]} />
       
-      <AmbientLight intensity={0.5} />
+      <ambientLight intensity={0.5} />
       
-      <DirectionalLight 
-        position={[2, 5, 2]} 
+      {/* Standard cinematic light */}
+      <spotLight 
+        position={[10, 10, 10]} 
+        angle={0.15} 
+        /* Fix: Changed '平衡umbra' to 'penumbra' to resolve TypeScript error */
+        penumbra={1} 
         intensity={1.5} 
-        castShadow
+        castShadow 
       />
       
-      <PointLight position={[-5, 2, 2]} intensity={1} />
+      <pointLight position={[-5, 5, -5]} intensity={1} />
       
       <Environment preset="city" />
-      
-      <Sparkles 
-        count={60} 
-        scale={10} 
-        size={1.5} 
-        speed={0.3} 
-        opacity={0.2} 
-        color="#ffffff" 
-      />
 
-      <ScrollControls pages={4} damping={0.1}>
+      <ScrollControls pages={4} damping={0.15}>
         <ThreeErrorBoundary fallback={null}>
           <GhostModel />
         </ThreeErrorBoundary>
       </ScrollControls>
 
+      {/* Subtle floor shadow */}
       <ContactShadows 
-        position={[0, -2.2, 0]} 
+        position={[0, -2.5, 0]} 
         opacity={0.2} 
-        scale={10} 
+        scale={15} 
         blur={2} 
         far={4} 
       />
