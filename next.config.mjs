@@ -38,8 +38,8 @@ const cspHeader = `
     script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:;
     worker-src 'self' blob:;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: ${supabaseAndExternalHosts};
-    font-src 'self';
+    img-src 'self' blob: data: ${supabaseAndExternalHosts} https://grainy-gradients.vercel.app;
+    font-src 'self' https://assets.codepen.io ${supabaseHosts};
     object-src 'none';
     base-uri 'self';
     form-action 'self';

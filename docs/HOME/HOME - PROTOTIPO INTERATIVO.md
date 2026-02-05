@@ -46,6 +46,7 @@ Create a premium institutional portfolio that demonstrates design excellence not
 
 ```
 Homepage
+├── Header
 ├── Hero (Entrada Imersiva)
 ├── Vídeo Manifesto
 ├── Portfolio Showcase (Categorias)

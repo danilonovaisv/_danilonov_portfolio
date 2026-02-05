@@ -31,12 +31,12 @@ export function AboutClosing() {
         initial={prefersReducedMotion ? 'visible' : 'hidden'}
         whileInView="visible"
         viewport={{ once: true, margin: '-80px' }}
-        className="w-full flex-col items-center text-center"
+        className="w-full flex flex-col items-center text-center"
       >
         {/* Bloco 1: Título Principal e Linhas */}
         <div className="w-full">
           <div className="mb-10 h-px w-full bg-blueAccent/30" />
-          <h2 className="font-display text-[clamp(40px,5vw,48px)] font-bold leading-tight text-white max-w-[800px]">
+          <h2 className="font-display text-[clamp(40px,5vw,48px)] font-bold leading-tight text-white max-w-[800px] mx-auto text-center">
             Hoje sou{' '}
             <span className="text-bluePrimary">Diretor de Criação</span>,
             <br />
