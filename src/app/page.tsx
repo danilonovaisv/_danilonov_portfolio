@@ -5,6 +5,7 @@ import FeaturedProjectsSection from '@/components/home/featured-projects/Feature
 import HomeHero from '@/components/home/hero/HomeHero';
 import PortfolioShowcase from '@/components/home/portfolio-showcase/PortfolioShowcase';
 import { VideoManifesto } from '@/components/home/hero/VideoManifesto';
+import AboutWhatIDo from '@/components/sobre/sections/AboutWhatIDo';
 import ClientsBrandsSection from '@/components/home/clients/ClientsBrandsSection';
 import ContactSection from '@/components/home/contact/ContactSection';
 import { BRAND } from '@/config/brand';
@@ -77,6 +78,7 @@ export default async function HomePage() {
       <JsonLd pageType="home" />
       <HomeHero />
       <VideoManifesto src={BRAND.assets.video.manifesto} />
+      <AboutWhatIDo />
       <PortfolioShowcase />
       <FeaturedProjectsSection projects={featuredProjects} />
       <ClientsBrandsSection />
