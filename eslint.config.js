@@ -26,6 +26,9 @@ export default [
       // Type definition files
       'src/lib/database.types.ts',
       'src/lib/supabase.types.ts',
+      // Ghost files cleanup (appear in CI but deleted locally)
+      'src/components/sobre/AboutBeliefs.tsx',
+      'src/components/sobre/BeliefFixedHeader.tsx',
       // Utility scripts (standalone TS files not part of main build)
       'scripts/**',
       // Static/deployed assets (not source code)
