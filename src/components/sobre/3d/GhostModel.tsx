@@ -5,6 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, Float } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { MotionValue } from 'framer-motion';
+import { useRealtimeAsset } from '@/hooks/useRealtimeAssets';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -36,7 +37,10 @@ const GhostModel: React.FC<GhostModelProps> = ({
   const group = useRef<THREE.Group>(null);
   const { viewport } = useThree();
 
-  const { nodes, materials } = useGLTF(GHOST_URL) as unknown as GLTFResult;
+  const { asset } = useRealtimeAsset('about.beliefs.ghost_model');
+  const modelUrl = asset?.publicUrl || GHOST_URL;
+
+  const { nodes, materials } = useGLTF(modelUrl) as unknown as GLTFResult;
 
   // Configuração responsiva refinada para Mobile/Desktop - Posições Absolutas
   const config = useMemo(

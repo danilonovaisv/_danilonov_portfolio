@@ -1,7 +1,7 @@
 # clawdbot.config.yaml - Otimizado para pnpm + Next.js
 profiles:
   pnpm-next-portfolio:
-    working_dir: '.'
+    working_dir: '/Users/danilonovais/PORTFOLIO-DANILO-FINAL'
     package_manager: 'pnpm' # CRUCIAL para comandos corretos
     models:
       primary: 'claude-3-5-sonnet-20241022'

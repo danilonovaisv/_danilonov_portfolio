@@ -6,12 +6,10 @@
 
 'use client';
 
-import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useReducedMotion } from 'framer-motion';
 import { PORTFOLIO_CONTENT } from '@/config/content';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 
@@ -29,25 +27,19 @@ const HERO_POSTER = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
+import { DynamicAssetVideo } from '@/components/DynamicAssetVideo';
+
 export default function PortfolioHeroNew() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const prefersReducedMotion = useReducedMotion();
-  const [videoFailed, setVideoFailed] = useState(false);
-  const desktopVideo = useSiteAssetUrl(
-    SITE_ASSET_KEYS.heroVideos.portfolioDesktop,
-    PORTFOLIO_CONTENT.hero.video.desktop ?? undefined
-  );
-  const mobileVideo = useSiteAssetUrl(
-    SITE_ASSET_KEYS.heroVideos.portfolioMobile,
-    PORTFOLIO_CONTENT.hero.video.mobile ?? undefined
-  );
 
-  // Seleciona o vídeo correto baseado no dispositivo
-  const videoSrc = isMobile ? mobileVideo : desktopVideo;
-  const shouldShowVideo = useMemo(
-    () => Boolean(videoSrc) && !prefersReducedMotion && !videoFailed,
-    [prefersReducedMotion, videoFailed, videoSrc]
-  );
+  const videoAssetKey = isMobile
+    ? SITE_ASSET_KEYS.heroVideos.portfolioMobile
+    : SITE_ASSET_KEYS.heroVideos.portfolioDesktop;
+
+  const fallbackVideo = isMobile
+    ? (PORTFOLIO_CONTENT.hero.video.mobile ?? undefined)
+    : (PORTFOLIO_CONTENT.hero.video.desktop ?? undefined);
 
   return (
     <section
@@ -55,23 +47,15 @@ export default function PortfolioHeroNew() {
       aria-labelledby="portfolio-hero-heading"
       className="relative h-screen w-full overflow-hidden bg-background z-10"
     >
-      {/* Video Background - Responsivo Desktop/Mobile */}
+      {/* Video Background - Responsivo Desktop/Mobile com Sincronização Realtime */}
       <div className="absolute inset-0 z-0">
-        {shouldShowVideo ? (
-          <video
-            key={videoSrc}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
+        {!prefersReducedMotion ? (
+          <DynamicAssetVideo
+            assetKey={videoAssetKey}
+            fallbackUrl={fallbackVideo}
             poster={HERO_POSTER}
             className="h-full w-full object-cover"
-            onError={() => setVideoFailed(true)}
-          >
-            <source src={videoSrc} type="video/mp4" />
-
-          </video>
+          />
         ) : (
           <Image
             src={HERO_POSTER}

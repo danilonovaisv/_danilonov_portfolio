@@ -11,6 +11,7 @@ type DynamicAssetImageProps = {
   width?: number;
   height?: number;
   priority?: boolean;
+  fallbackUrl?: string; // Optional fallback if asset is not in DB
 };
 
 /**
@@ -24,9 +25,10 @@ export function DynamicAssetImage({
   width,
   height,
   priority = false,
+  fallbackUrl,
 }: DynamicAssetImageProps) {
   const { asset, loading, error } = useRealtimeAsset(assetKey);
-  const [displayUrl, setDisplayUrl] = useState<string | null>(null);
+  const [displayUrl, setDisplayUrl] = useState<string | null>(fallbackUrl || null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
@@ -40,7 +42,9 @@ export function DynamicAssetImage({
     }
   }, [asset?.publicUrl, displayUrl]);
 
-  if (loading) {
+  const finalUrl = displayUrl || fallbackUrl;
+
+  if (loading && !fallbackUrl) {
     return (
       <div
         className={`animate-pulse bg-slate-800/50 ${className}`}
@@ -49,7 +53,7 @@ export function DynamicAssetImage({
     );
   }
 
-  if (error || !displayUrl) {
+  if ((error || !finalUrl) && !loading) {
     return (
       <div
         className={`flex items-center justify-center bg-slate-900/50 text-slate-500 text-sm ${className}`}
@@ -63,15 +67,14 @@ export function DynamicAssetImage({
   return (
     <div className={`relative ${className}`} style={{ width, height }}>
       <Image
-        src={displayUrl}
+        src={finalUrl!}
         alt={alt}
         fill={!width && !height}
         width={width}
         height={height}
         priority={priority}
-        className={`object-cover transition-opacity duration-300 ${
-          isTransitioning ? 'opacity-0' : 'opacity-100'
-        }`}
+        className={`object-cover transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'
+          }`}
       />
     </div>
   );

@@ -1,10 +1,10 @@
 'use client';
 
 import { RefObject } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { OriginBlock } from './data';
 import styles from '@/styles/about-origin.module.css';
+import { DynamicAssetImage } from '@/components/DynamicAssetImage';
 
 interface OriginInfoBlockProps {
   block: OriginBlock & { img?: string };
@@ -20,11 +20,10 @@ export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
 
   return (
     <div
-      className={`${styles.arch__info} min-h-screen flex flex-col justify-start pt-[20vh] pb-[20vh] ${
-        isRightAligned
-          ? 'lg:items-end lg:justify-start lg:text-right'
-          : 'lg:items-end lg:justify-start lg:text-left'
-      }`}
+      className={`${styles.arch__info} min-h-screen flex flex-col justify-start pt-[20vh] pb-[20vh] ${isRightAligned
+        ? 'lg:items-end lg:justify-start lg:text-right'
+        : 'lg:items-end lg:justify-start lg:text-left'
+        }`}
       data-origin-block={block.id}
     >
       {/* Mobile: Stack vertical intercalado - Texto primeiro, depois Imagem */}
@@ -40,7 +39,7 @@ export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
               delay: 0.1,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="text-h2 font-bold text-[#0048ff] mb-4"
+            className="text-h2 font-bold text-bluePrimary mb-4"
           >
             {block.title}
           </motion.h2>
@@ -68,22 +67,19 @@ export function OriginInfoBlock({ block }: OriginInfoBlockProps) {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className={`${styles['mobile-img-container']} overflow-hidden`}
         >
-          {block.img && (
-            <Image
-              src={block.img}
-              alt={block.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority={block.id === 1}
-            />
-          )}
+          <DynamicAssetImage
+            assetKey={block.assetKey}
+            alt={block.title}
+            fallbackUrl={block.img}
+            className="w-full h-full"
+            priority={block.id === 1}
+          />
         </motion.div>
       </div>
 
       {/* Desktop: Text Content Only (controlled by native scroll) */}
       <div className="hidden lg:block lg:max-w-md relative z-10 transition-opacity duration-500">
-        <h2 className="text-h2 font-bold text-[#0048ff] mb-6 tracking-wide translate-y-0 opacity-100">
+        <h2 className="text-h2 font-bold text-bluePrimary mb-6 tracking-wide translate-y-0 opacity-100">
           {block.title}
         </h2>
 
@@ -135,17 +131,13 @@ export function OriginStickyGallery({
             data-z-index={index + 1}
             style={{ zIndex: index + 1 }}
           >
-            {block.img && (
-              <Image
-                src={block.img}
-                alt={block.title}
-                fill
-                className="object-cover rounded-3xl"
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                priority={index === 0}
-                quality={90}
-              />
-            )}
+            <DynamicAssetImage
+              assetKey={block.assetKey}
+              alt={block.title}
+              fallbackUrl={block.img}
+              className="w-full h-full rounded-3xl overflow-hidden"
+              priority={index === 0}
+            />
             {/* Mask overlay for reveal effect */}
             <div className="origin-mask absolute inset-0 bg-void z-10 origin-top" />
           </div>

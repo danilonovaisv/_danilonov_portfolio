@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import {
   motion,
   useReducedMotion,
@@ -11,9 +11,10 @@ import {
 
 import { ABOUT_CONTENT } from '@/config/content';
 import { motionTokens, motionSprings } from '../shared/motion';
-import { useSiteAssetUrl } from '@/contexts/site-assets';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
+
+import { DynamicAssetVideo } from '@/components/DynamicAssetVideo';
 
 export function AboutHero() {
   const prefersReducedMotion = useReducedMotion();
@@ -22,15 +23,6 @@ export function AboutHero() {
     target: containerRef,
     offset: ['start end', 'end start'],
   });
-
-  // REDUCE PLAYBACK SPEED FOR SUBTLE LOOK
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const mobileVideoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.playbackRate = 0.4;
-    if (mobileVideoRef.current) mobileVideoRef.current.playbackRate = 0.4;
-  }, []);
 
   const smoothProgress = useSpring(scrollYProgress, motionSprings.ghost);
 
@@ -41,18 +33,6 @@ export function AboutHero() {
   );
 
   const shouldPlayVideo = !prefersReducedMotion;
-
-  // Forçar uso dos URLs padrão do HOME_CONTENT caso os assets do Supabase não estejam disponíveis
-  const desktopVideo = useSiteAssetUrl(
-    SITE_ASSET_KEYS.heroVideos.aboutDesktop,
-    ABOUT_CONTENT.hero.videos.desktop ||
-      '/public/videos/about.hero.desktop_video.mp4'
-  );
-  const mobileVideo = useSiteAssetUrl(
-    SITE_ASSET_KEYS.heroVideos.aboutMobile,
-    ABOUT_CONTENT.hero.videos.mobile ||
-      '/public/videos/about.hero.mobile_video.mp4'
-  );
 
   const heroSrTitle = [
     ABOUT_CONTENT.hero.title.text,
@@ -73,19 +53,19 @@ export function AboutHero() {
       aria-label="Hero - Manifesto"
     >
       <h1 className="sr-only">{heroSrTitle}</h1>
-      {/* Background Video - Desktop - Forçar exibição mesmo se o URL estiver vazio */}
-      <motion.video
-        ref={videoRef}
-        src={desktopVideo || '/public/videos/about.hero.desktop_video.mp4'}
+
+      {/* Background Video - Desktop - Sincronização Realtime */}
+      <DynamicAssetVideo
+        assetKey={SITE_ASSET_KEYS.heroVideos.aboutDesktop}
+        fallbackUrl={ABOUT_CONTENT.hero.videos.desktop || undefined}
+        playbackRate={0.4}
         autoPlay={shouldPlayVideo}
         muted
         loop={shouldPlayVideo}
-        playsInline
-        preload="metadata"
         poster={DEFAULT_VIDEO_POSTER}
         className="hidden lg:block absolute inset-0 w-full h-full object-cover opacity-[0.55]"
-        aria-hidden="true"
-      ></motion.video>
+        style={{ zIndex: 0 }}
+      />
 
       {/* Desktop Overlay - Contrast Exception Control */}
       <div
@@ -100,7 +80,6 @@ export function AboutHero() {
             {/* Columns 1-6: Empty Space / Negative Space for Video Presence */}
             <div className="col-span-6" aria-hidden="true" />
 
-            {/* Columns 7-12: Content Block */}
             {/* Columns 7-12: Content Block */}
             <motion.div
               initial="hidden"
@@ -170,26 +149,23 @@ export function AboutHero() {
         </div>
       </div>
 
-      {/* Gradient Bottom Decay */}
       {/* Gradient Bottom Decay - Suaviza transição para próxima sessão */}
       <div className="absolute bottom-0 left-0 w-full h-[30vh] md:h-[40vh] bg-linear-to-t from-background via-background/80 to-transparent pointer-events-none z-20" />
 
-      {/* Mobile Hero Video */}
+      {/* Mobile Hero Video - Sincronização Realtime */}
       <div className="lg:hidden">
         <div className="relative aspect-square w-full overflow-hidden">
-          <motion.video
-            ref={mobileVideoRef}
-            src={mobileVideo}
+          <DynamicAssetVideo
+            assetKey={SITE_ASSET_KEYS.heroVideos.aboutMobile}
+            fallbackUrl={ABOUT_CONTENT.hero.videos.mobile || undefined}
+            playbackRate={0.4}
             autoPlay={shouldPlayVideo}
             muted
             loop={shouldPlayVideo}
-            playsInline
-            preload="metadata"
             poster={DEFAULT_VIDEO_POSTER}
             className="absolute inset-0 w-full h-full object-cover object-top opacity-[0.78]"
-            style={{ y: mediaY }}
-            aria-hidden="true"
-          ></motion.video>
+            style={{ y: mediaY } as any}
+          />
           <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10" />
         </div>
         <div className="relative z-10 px-6 pt-10 pb-20 text-center">

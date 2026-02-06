@@ -24,6 +24,7 @@ export interface OriginBlock {
   fallback: FallbackImage;
   textAlign: 'left' | 'right';
   img?: string;
+  assetKey: string;
 }
 
 /**
@@ -44,6 +45,7 @@ eu era atraído pelos vestígios, pelos detalhes que sobreviviam ao tempo.
 A essência das coisas sempre falou mais alto do que a superfície.`,
     fallback: 'about/origin/about.origin_image.1.webp',
     textAlign: 'right',
+    assetKey: 'about.origin_image.1',
   },
   {
     id: 2,
@@ -59,6 +61,7 @@ Com cada tentativa, aprendi a dar forma ao invisível —
 até que os conceitos começaram a falar por si.`,
     fallback: 'about/origin/about.origin_image.2.webp',
     textAlign: 'left',
+    assetKey: 'about.origin_image.2',
   },
   {
     id: 3,
@@ -75,6 +78,7 @@ mas que todos sentem.
 Transformar sem que se perceba a transformação: isso é potência.`,
     fallback: 'about/origin/about.origin_image.3.webp',
     textAlign: 'right',
+    assetKey: 'about.origin_image.3',
   },
   {
     id: 4,
@@ -84,11 +88,12 @@ Transformar sem que se perceba a transformação: isso é potência.`,
 e hoje uso inteligência artificial para expandir o alcance
 sem perder a essência humana da criação.
 
-Minha trajetória uniu intuição com método, arte com estratégia.
+Minha trajetória uniu intuição com método, arte comestratégia.
 O futuro pede novas ferramentas — e eu as abracei.
 Mas nunca deixei que a tecnologia apagasse o que me move:
 a sensibilidade, o olhar atento, a busca pelo significado.`,
     fallback: 'about/origin/about.origin_image.4.webp',
     textAlign: 'left',
+    assetKey: 'about.origin_image.4',
   },
 ];

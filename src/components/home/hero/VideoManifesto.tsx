@@ -1,16 +1,20 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { useRealtimeAsset } from '@/hooks/useRealtimeAssets';
 
 interface VideoManifestoProps {
   src: string;
+  assetKey?: string;
 }
 
-export function VideoManifesto({ src }: VideoManifestoProps) {
+export function VideoManifesto({ src, assetKey }: VideoManifestoProps) {
+  const { asset } = useRealtimeAsset(assetKey || '');
   const [muted, setMuted] = useState(true);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [videoQuality, setVideoQuality] = useState<'hd' | 'sd'>('hd');
+  const shouldReduceMotion = useReducedMotion();
 
   const sectionRef = useRef<HTMLElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -34,21 +38,17 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Mutar ao sair da seção E desmutar ao entrar
+  // Mutar sempre por padrão; som só habilita via ação explícita do usuário (botão)
   useEffect(() => {
     if (!sectionRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          // Entra na viewport: ativa som
-          setMuted(false);
-        } else {
-          // Sai da viewport: muta som
+        if (!entry.isIntersecting) {
           setMuted(true);
         }
       },
-      { threshold: 0.5 } // 50% visível para ativar
+      { threshold: 0.5 }
     );
 
     observer.observe(sectionRef.current);
@@ -83,18 +83,20 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
     videoRef.current.muted = muted;
   }, [muted]);
 
-  const videoSrc =
-    videoQuality === 'hd' ? src : src.replace('.mp4', '-720p.mp4');
+  const baseSrc = asset?.publicUrl || src;
+  // Usa SD somente se existir um variant explícito; evita 404 silencioso.
+  const sdVariant = asset?.variants?.sd as string | undefined;
+  const videoSrc = videoQuality === 'sd' && sdVariant ? sdVariant : baseSrc;
 
-  const posterSrc = src.replace('.mp4', '-poster.jpg');
+  const posterSrc = baseSrc.replace('.mp4', '-poster.jpg');
 
   return (
     <motion.section
       ref={sectionRef}
       className="video-manifesto w-full overflow-hidden rounded-[2px]"
-      initial={{ opacity: 0, scale: 1.1, rotate: -1, y: 40 }}
-      whileInView={{ opacity: 1, scale: 1, rotate: 0, y: 0 }}
-      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.1, rotate: -1, y: 40 }}
+      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, rotate: 0, y: 0 }}
+      transition={shouldReduceMotion ? { duration: 0.2 } : { duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
       viewport={{ once: true, amount: 0.2 }}
     >
       <div
@@ -125,7 +127,7 @@ export function VideoManifesto({ src }: VideoManifestoProps) {
             <button
               type="button"
               className="toggle-sound absolute top-4 right-4 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors focus-visible:outline-2 focus-visible:outline-[#4fe6ff] focus-visible:outline-offset-2"
-              onClick={() => setMuted((m) => !m)}
+              onClick={() => setMuted((m: boolean) => !m)}
               aria-label={
                 muted ? 'Ativar som do vídeo' : 'Desativar som do vídeo'
               }

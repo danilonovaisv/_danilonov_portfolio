@@ -1,8 +1,14 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import Image from 'next/image';
 import { HOME_CONTENT } from '@/config/content';
+
+/**
+ * ClientsBrandsSection - Exibe logotipos das marcas/clientes
+ * Segue o Ghost System v3.0 com animações sutis e responsividade
+ */
+import { DynamicAssetImage } from '@/components/DynamicAssetImage';
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 /**
  * ClientsBrandsSection - Exibe logotipos das marcas/clientes
@@ -57,9 +63,9 @@ export default function ClientsBrandsSection() {
           }}
           className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 md:gap-12 items-center justify-items-center w-full"
         >
-          {logos.map((logo) => {
-            const isSvg = logo.src?.toLowerCase().endsWith('.svg');
+          {logos.map((logo, index) => {
             const shouldEagerLoad = logo.id <= 3;
+            const assetKey = SITE_ASSET_KEYS.clients.strips[index];
 
             return (
               <motion.li
@@ -79,15 +85,12 @@ export default function ClientsBrandsSection() {
                 }}
               >
                 <div className="group relative w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-20 flex items-center justify-center">
-                  <Image
-                    src={logo.src || ''}
+                  <DynamicAssetImage
+                    assetKey={assetKey}
                     alt={logo.alt}
-                    fill
-                    className="w-full h-full object-contain filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 will-change-transform"
-                    sizes="(max-width: 640px) 112px, (max-width: 768px) 128px, 160px"
-                    loading={shouldEagerLoad ? 'eager' : 'lazy'}
+                    fallbackUrl={logo.src || ''}
                     priority={shouldEagerLoad}
-                    unoptimized={isSvg}
+                    className="w-full h-full object-contain filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 will-change-transform"
                   />
                 </div>
               </motion.li>

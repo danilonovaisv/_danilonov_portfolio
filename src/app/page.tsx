@@ -57,6 +57,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { SITE_ASSET_KEYS } from '@/config/site-assets';
+
 export default async function HomePage() {
   let featuredProjects: PortfolioProject[] = [];
   try {
@@ -74,7 +76,10 @@ export default async function HomePage() {
     <>
       <JsonLd pageType="home" />
       <HomeHero />
-      <VideoManifesto src={BRAND.assets.video.manifesto} />
+      <VideoManifesto
+        src={BRAND.assets.video.manifesto}
+        assetKey={SITE_ASSET_KEYS.heroVideos.homeManifesto}
+      />
       <PortfolioShowcase />
       <FeaturedProjectsRealtime initialProjects={featuredProjects} />
       <SiteClosure />
