@@ -14,7 +14,13 @@ import {
   normalizeAIModels,
   type OutputRatio,
 } from './types';
-import { Loader2, ImageIcon, Download, Sparkles, UploadCloud } from 'lucide-react';
+import {
+  Loader2,
+  ImageIcon,
+  Download,
+  Sparkles,
+  UploadCloud,
+} from 'lucide-react';
 import Image from 'next/image';
 import { FieldTooltip } from '@/components/admin/FieldTooltip';
 
@@ -184,7 +190,8 @@ export default function SceneGeneratorPage() {
                     <ul className="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-white/5 bg-slate-950/50 p-3 text-xs text-slate-400">
                       {selectedImages.map((file) => (
                         <li key={`${file.name}-${file.lastModified}`}>
-                          {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                          {file.name} ({(file.size / (1024 * 1024)).toFixed(2)}{' '}
+                          MB)
                         </li>
                       ))}
                     </ul>
@@ -203,10 +210,14 @@ export default function SceneGeneratorPage() {
                     max={4}
                     name="batchSize"
                     value={batchSize}
-                    onChange={(event) => setBatchSize(Number(event.target.value))}
+                    onChange={(event) =>
+                      setBatchSize(Number(event.target.value))
+                    }
                     className="w-full accent-emerald-500"
                   />
-                  <p className="text-xs text-slate-400">{batchSize} variações</p>
+                  <p className="text-xs text-slate-400">
+                    {batchSize} variações
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -253,12 +264,20 @@ export default function SceneGeneratorPage() {
                     name="pieceType"
                     className="w-full rounded-lg border border-white/10 bg-slate-950 px-4 py-2.5 text-sm text-slate-200 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   >
-                    <option value="Instagram Post">Instagram Post (Social)</option>
-                    <option value="Outdoor Billboard">Outdoor / Painel Urbano</option>
+                    <option value="Instagram Post">
+                      Instagram Post (Social)
+                    </option>
+                    <option value="Outdoor Billboard">
+                      Outdoor / Painel Urbano
+                    </option>
                     <option value="Business Card">Cartão de Visita</option>
                     <option value="Poster">Cartaz / Poster</option>
-                    <option value="Product Packaging">Embalagem de Produto</option>
-                    <option value="Website Interface">Interface Web (Monitor)</option>
+                    <option value="Product Packaging">
+                      Embalagem de Produto
+                    </option>
+                    <option value="Website Interface">
+                      Interface Web (Monitor)
+                    </option>
                   </select>
                 </div>
 

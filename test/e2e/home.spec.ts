@@ -29,7 +29,9 @@ test.describe('Home Page', () => {
     await expect(featuredSection).toBeVisible({ timeout: 10000 });
 
     // Should have at least the CTA card or some project cards
-    await expect(featuredSection.locator('.card-shell, a[href^="/portfolio/"]')).not.toHaveCount(0);
+    await expect(
+      featuredSection.locator('.card-shell, a[href^="/portfolio/"]')
+    ).not.toHaveCount(0);
 
     // Take a screenshot for verification
     await page.screenshot({ path: 'test-results/home-page.png' });

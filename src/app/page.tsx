@@ -5,8 +5,6 @@ import FeaturedProjectsRealtime from '@/components/home/featured-projects/Featur
 import HomeHero from '@/components/home/hero/HomeHero';
 import PortfolioShowcase from '@/components/home/portfolio-showcase/PortfolioShowcase';
 import { VideoManifesto } from '@/components/home/hero/VideoManifesto';
-import ClientsBrandsSection from '@/components/home/clients/ClientsBrandsSection';
-import ContactSection from '@/components/home/contact/ContactSection';
 import { BRAND } from '@/config/brand';
 import { listProjects } from '@/lib/supabase/queries/projects';
 import { mapDbProjectToPortfolioProject } from '@/lib/portfolio/project-mappers';
@@ -79,8 +77,6 @@ export default async function HomePage() {
       <VideoManifesto src={BRAND.assets.video.manifesto} />
       <PortfolioShowcase />
       <FeaturedProjectsRealtime initialProjects={featuredProjects} />
-      <ClientsBrandsSection />
-      <ContactSection />
       <SiteClosure />
     </>
   );

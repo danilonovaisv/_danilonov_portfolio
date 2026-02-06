@@ -43,10 +43,10 @@ export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
     >
       <div className="std-grid w-full h-full">
         <div className="flex h-full items-start md:items-center justify-end pt-32 md:pt-0 col-span-12">
-          <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
+          <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[600px] lg:max-w-[850px] pr-[5%] md:pr-0">
             {/* Primeira parte: "Acredito no..." */}
-            <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[750px] pr-4 md:pr-0">
-              <h2 className="text-white text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display leading-[1.1] tracking-tighter mb-4 md:mb-8 uppercase font-black mix-blend-difference whitespace-nowrap">
+            <div className="flex flex-col items-end text-right w-full">
+              <h2 className="text-white text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display leading-[0.85] tracking-tighter mb-4 md:mb-12 uppercase font-black mix-blend-difference whitespace-nowrap">
                 <div className="overflow-visible">
                   <MorphText progress={progress} range={[0.1, 0.2]}>
                     Acredito no

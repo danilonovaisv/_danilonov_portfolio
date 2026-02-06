@@ -54,13 +54,13 @@ const GhostModel: React.FC<GhostModelProps> = ({
       floatBase: isMobile ? 0.08 : 0.05,
       floatAmplitude: 0.1,
       tiltBase: 0.15,
-      // Escala ajustada
-      baseScale: isMobile ? 0.22 : 0.35,
-      scaleBoost: 0.1, // +10% apenas
+      // Escala ajustada para maior presença
+      baseScale: isMobile ? 0.22 : 0.55,
+      scaleBoost: 0.15, // +15% no final
       scrollResponse: isMobile ? 0.2 : 0.5,
 
       // Saída (Exit)
-      exitY: 5, // Sobe para sair
+      exitY: 6, // Sobe para sair
     }),
     [isMobile, viewport.width, viewport.height]
   );

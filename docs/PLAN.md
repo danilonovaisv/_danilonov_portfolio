@@ -1,53 +1,51 @@
-# Orchestration Plan: Responsive 3D Ghost Motion & UI Sync
+# PLAN: Ajuste de Alinhamento e Estética - Ghost System v3
 
-## 1. System Overview
+Este plano visa sincronizar a interface do portfólio com o design especificado na imagem de referência, focando no alinhamento de grid, tamanho de fontes e posicionamento do elemento 3D Ghost.
 
-**Objective**: Synchronize 3D Ghost Model animation with UI text elements and ensure responsive fidelity across Mobile/Desktop.
+## 📋 Tarefas
 
-## 2. Orchestration Team (Antigravity Agents)
+### 1. Ajuste do Texto à Esquerda (BeliefSection)
 
-| Agent | ID | Role | Responsibilities |
-|---|---|---|---|
-| **Motion Orchestrator** | `@motion_choreographer` | UX/UI Motion | Define animation timing (duration, easing), Sync `3D_ELEMENT` fade-in with `FIXED_TEXT`. |
-| **Frontend Specialist** | `@ghost_architect` | Responsive 3D | Implement precise positioning logic in `GhostModel.tsx` for Mobile/Desktop views. |
-| **QA Inspector** | `@audit_sentinel` | Fidelity | Validate implementation against reference images ("Redline" check). |
+- **Arquivo**: `src/components/sobre/beliefs/BeliefSection.tsx`
+- **Ação**:
+  - Aumentar o tamanho da fonte (`text-clamp`) para desktop.
+  - Ajustar o `padding-left` ou alinhamento para que o texto comece exatamente na linha do grid (conforme as linhas amarelas da imagem).
+  - Verificar o `leading` (espaçamento entre linhas).
 
-## 3. Implementation Workflow
+### 2. Redimensionamento e Reposicionamento do Ghost (GhostModel)
 
-### Phase 1: Planning (Current)
+- **Arquivo**: `src/components/sobre/3d/GhostModel.tsx`
+- **Ação**:
+  - Aumentar a `baseScale` para desktop (de `0.35` para `0.45` ou `0.5`).
+  - Ajustar `targetY` e `targetX` no `isFinalPhase` para elevar o Ghost e centralizá-lo conforme a caixa azul da imagem.
 
-- [x] Analyze `AboutBeliefs.tsx` and `GhostModel.tsx`.
-- [x] Define Agent Responsibilities.
-- [ ] Approval of Plan.
+### 3. Ajuste do Texto à Direita (BeliefFixedHeader)
 
-### Phase 2: Execution (Sequential Handoff)
+- **Arquivo**: `src/components/sobre/beliefs/BeliefFixedHeader.tsx`
+- **Ação**:
+  - Validar o alinhamento do bloco de texto com o grid à direita.
+  - Garantir que a hierarquia "Acredito no..." vs "Não pelo choque..." esteja visualmente equilibrada.
 
-#### Step 2.1: Motion Orchestration (Agent A)
+### 4. Verificação Final
 
-- **Target File**: `GhostScene.tsx`, `AboutBeliefs.tsx`
-- **Action**:
-  - Set `GhostScene` entry transition to match text.
-  - Define Global Easing: `cubicBezier(0.22, 1, 0.36, 1)`.
-  - Ensure `opacity` and `filter` transitions are synchronized.
-  - **New Constraint**: Sync fade-in with "surgir junto com a entrada do texto fixo".
+- **Ação**:
+  - Rodar `lint_runner.py` para garantir integridade.
+  - Se possível, rodar `lighthouse_audit.py` (ou pelo menos garantir que não quebramos a performance).
 
-#### Step 2.2: Responsive Positioning (Agent B)
+## 🤖 Agentes Envolvidos
 
-- **Target File**: `GhostModel.tsx`
-- **Action**:
-  - Refactor `config` object to be more declarative for Mobile vs Desktop.
-  - **Mobile**: Adjust `baseX`, `startY` to prevent overlap with footer text. (Ref: `ghost-3D-position-mobile.jpg`)
-  - **Desktop**: Center/Right alignment. (Ref: `ghost-3D-position-desktop.jpg`)
-  - **Final**: Implement ending state. (Ref: `ghost-3D-desktop-mobile-final.jpg`)
-  - Implement `useThree` viewport logic to handle resizing dynamically.
+| Agente | Responsabilidade |
+| :--- | :--- |
+| **@ghost_architect** | Orquestração e estrutura dos componentes de layout. |
+| **@spectral_artist** | Ajustes no modelo 3D (Escala e Posição). |
+| **@motion_choreographer** | Sincronização das animações de entrada/saída. |
+| **@test-engineer** | Auditoria de lint e conformidade. |
 
-#### Step 2.3: Visual QA (Agent C)
+## 🚦 Status
 
-- **Action**:
-  - Run `lint_runner.py` to ensure Type Safety.
-  - Verify `App` build.
-  - User Manual Check: Compare against `ghost-3D-position-*.jpg`.
+- [ ] Implementação do Texto Esquerdo
+- [ ] Implementação do Ghost 3D
+- [ ] Implementação do Texto Direito
+- [ ] Validação de Lint
 
-## 4. Verification
-
-- `checklist.py` must pass.
+✅ **Pronto para iniciar?** (Aguardando aprovação do usuário)

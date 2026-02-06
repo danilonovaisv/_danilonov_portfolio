@@ -162,9 +162,7 @@ export function AdminShell({ children, userEmail }: Props) {
                           href={item.href}
                           onClick={() => setMobileMenuOpen(false)}
                           className={`flex min-h-12 items-center gap-3 rounded-lg px-3 py-2 text-sm transition hover:bg-white/5 ${
-                            active
-                              ? 'bg-white/10 text-white'
-                              : 'text-slate-300'
+                            active ? 'bg-white/10 text-white' : 'text-slate-300'
                           }`}
                         >
                           <Icon size={18} />

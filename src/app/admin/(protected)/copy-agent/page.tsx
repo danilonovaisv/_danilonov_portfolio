@@ -86,7 +86,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Rebranding Orion Systems"
                     />
                     {fieldErrors.projectName && (
-                      <p className="text-xs text-red-300">{fieldErrors.projectName}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.projectName}
+                      </p>
                     )}
                   </div>
 
@@ -104,7 +106,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Orion Systems"
                     />
                     {fieldErrors.clientName && (
-                      <p className="text-xs text-red-300">{fieldErrors.clientName}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.clientName}
+                      </p>
                     )}
                   </div>
 
@@ -123,7 +127,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Reposicionar a marca para o segmento enterprise sem perder percepção de inovação."
                     />
                     {fieldErrors.objective && (
-                      <p className="text-xs text-red-300">{fieldErrors.objective}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.objective}
+                      </p>
                     )}
                   </div>
 
@@ -137,11 +143,15 @@ export default function CopyAgentPage() {
                       id="targetAudience"
                       name="targetAudience"
                       required
-                      className={inputClass(Boolean(fieldErrors.targetAudience))}
+                      className={inputClass(
+                        Boolean(fieldErrors.targetAudience)
+                      )}
                       placeholder="Ex: Diretores de marketing B2B e tomadores de decisão em tecnologia."
                     />
                     {fieldErrors.targetAudience && (
-                      <p className="text-xs text-red-300">{fieldErrors.targetAudience}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.targetAudience}
+                      </p>
                     )}
                   </div>
 
@@ -160,7 +170,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Sistema modular com contraste alto, tipografia condensada e presença silenciosa."
                     />
                     {fieldErrors.visualConcept && (
-                      <p className="text-xs text-red-300">{fieldErrors.visualConcept}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.visualConcept}
+                      </p>
                     )}
                   </div>
 
@@ -179,7 +191,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Harmonizar linguagem premium com prazos curtos e múltiplos touchpoints."
                     />
                     {fieldErrors.keyChallenges && (
-                      <p className="text-xs text-red-300">{fieldErrors.keyChallenges}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.keyChallenges}
+                      </p>
                     )}
                   </div>
 
@@ -196,7 +210,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Brand system, key visual, guideline, assets digitais"
                     />
                     {fieldErrors.deliverables && (
-                      <p className="text-xs text-red-300">{fieldErrors.deliverables}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.deliverables}
+                      </p>
                     )}
                   </div>
 
@@ -213,7 +229,9 @@ export default function CopyAgentPage() {
                       placeholder="Ex: Editorial, sofisticado e conciso"
                     />
                     {fieldErrors.toneOfVoice && (
-                      <p className="text-xs text-red-300">{fieldErrors.toneOfVoice}</p>
+                      <p className="text-xs text-red-300">
+                        {fieldErrors.toneOfVoice}
+                      </p>
                     )}
                   </div>
                 </div>

@@ -2,10 +2,15 @@ import type { LandingPageBlock } from '@/types/landing-page';
 
 export const LEGACY_PROJECT_TEMPLATE = 'legacy-blocks' as const;
 export const MASTER_PROJECT_TEMPLATE = 'master-project-v1' as const;
+export const MASTER_PROJECT_TEMPLATE_V2 = 'master-project-v2' as const;
+
+export type MasterProjectTemplateId =
+  | typeof MASTER_PROJECT_TEMPLATE
+  | typeof MASTER_PROJECT_TEMPLATE_V2;
 
 export type ProjectTemplateId =
   | typeof LEGACY_PROJECT_TEMPLATE
-  | typeof MASTER_PROJECT_TEMPLATE;
+  | MasterProjectTemplateId;
 
 export type MasterProjectMediaKind = 'image' | 'video';
 
@@ -17,6 +22,14 @@ export type MasterProjectGalleryLayout =
   | 'feature'
   | 'split-left'
   | 'split-right';
+
+export type MasterProjectV2GalleryLayoutType =
+  | 'grid_2_col'
+  | 'grid_1_col'
+  | 'grid_feat'
+  | 'grid_features_3'
+  | 'grid_quote'
+  | 'grid_split';
 
 export interface MasterProjectAsset {
   src: string;
@@ -32,6 +45,23 @@ export interface MasterProjectGalleryItem extends MasterProjectAsset {
   eyebrow?: string;
   description?: string;
   quote?: string;
+}
+
+export interface MasterProjectV2FeatureItem {
+  id?: string;
+  title: string;
+  description?: string;
+}
+
+export interface MasterProjectV2GalleryItem extends MasterProjectAsset {
+  id: string;
+  layout_type: MasterProjectV2GalleryLayoutType;
+  title?: string;
+  eyebrow?: string;
+  description?: string;
+  quote?: string;
+  media_align?: 'left' | 'right';
+  features?: MasterProjectV2FeatureItem[];
 }
 
 export interface MasterProjectTemplateNavigation {
@@ -72,9 +102,33 @@ export interface MasterProjectTemplateData {
   seo?: MasterProjectTemplateSeo;
 }
 
+export interface MasterProjectTemplateV2Data {
+  schema_version: '2.0';
+  template: typeof MASTER_PROJECT_TEMPLATE_V2;
+  project_slug: string;
+  hero_cover_image: MasterProjectAsset;
+  hero_logo_image?: MasterProjectAsset;
+  project_title: string;
+  project_subtitle?: string;
+  project_client?: string;
+  project_year?: number;
+  project_tags: string[];
+  project_services?: string[];
+  project_summary?: string;
+  intro_headline?: string;
+  intro_body?: string[];
+  highlight_color: string;
+  theme_color?: string;
+  gallery_grid: MasterProjectV2GalleryItem[];
+  navigation?: MasterProjectTemplateNavigation;
+  cta?: MasterProjectTemplateCta;
+  seo?: MasterProjectTemplateSeo;
+}
+
 export type LandingPageStructuredContent =
   | LandingPageBlock[]
-  | MasterProjectTemplateData;
+  | MasterProjectTemplateData
+  | MasterProjectTemplateV2Data;
 
 export type ParsedLandingPageContent =
   | {
@@ -84,4 +138,8 @@ export type ParsedLandingPageContent =
   | {
       template: typeof MASTER_PROJECT_TEMPLATE;
       data: MasterProjectTemplateData;
+    }
+  | {
+      template: typeof MASTER_PROJECT_TEMPLATE_V2;
+      data: MasterProjectTemplateV2Data;
     };

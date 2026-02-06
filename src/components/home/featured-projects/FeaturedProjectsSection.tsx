@@ -42,7 +42,7 @@ export default function FeaturedProjectsSection({
     const source = projects.filter(
       (project) => project.featuredOnHome ?? project.isFeatured
     );
-    return [...source].sort(() => 0.5 - Math.random());
+    return source;
   }, [projects]);
 
   // Card variants sem scale (Ghost Design System proíbe scale em elementos principais)
@@ -53,11 +53,11 @@ export default function FeaturedProjectsSection({
     visible: reducedMotion
       ? { opacity: 1 }
       : {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          transition: ghostTransition(0, duration.normal),
-        },
+        opacity: 1,
+        y: 0,
+        filter: 'blur(0px)',
+        transition: ghostTransition(0, duration.normal),
+      },
   };
 
   return (

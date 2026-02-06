@@ -58,35 +58,43 @@ export function useRealtimeAsset(assetKey: string) {
     }
 
     function setupRealtimeSubscription() {
-      channel = supabase
-        .channel(`asset:${assetKey}`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'site_assets',
-            filter: `key=eq.${assetKey}`,
-          },
-          (payload: { eventType: string; new: DbAsset; old: DbAsset }) => {
-            if (payload.eventType === 'DELETE') {
-              setAsset(null);
-              return;
-            }
+      try {
+        channel = supabase
+          .channel(`asset:${assetKey}`)
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'site_assets',
+              filter: `key=eq.${assetKey}`,
+            },
+            (payload: { eventType: string; new: DbAsset; old: DbAsset }) => {
+              if (payload.eventType === 'DELETE') {
+                setAsset(null);
+                return;
+              }
 
-            const newData = payload.new as DbAsset;
-            if (newData && newData.is_active) {
-              const publicUrl = newData.file_path?.startsWith('http')
-                ? newData.file_path
-                : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${newData.bucket}/${newData.file_path}`;
+              const newData = payload.new as DbAsset;
+              if (newData && newData.is_active) {
+                const publicUrl = newData.file_path?.startsWith('http')
+                  ? newData.file_path
+                  : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${newData.bucket}/${newData.file_path}`;
 
-              setAsset({ ...newData, publicUrl } as RealtimeAsset);
-            } else if (payload.eventType === 'UPDATE' && !newData.is_active) {
-              setAsset(null);
+                setAsset({ ...newData, publicUrl } as RealtimeAsset);
+              } else if (payload.eventType === 'UPDATE' && !newData.is_active) {
+                setAsset(null);
+              }
             }
-          }
-        )
-        .subscribe();
+          )
+          .subscribe((status: string, err?: Error) => {
+            if (status === 'CHANNEL_ERROR') {
+              console.error('[useRealtimeAsset] Subscription error:', err);
+            }
+          });
+      } catch (subError) {
+        console.error('[useRealtimeAsset] Failed to subscribe:', subError);
+      }
     }
 
     fetchInitial();
@@ -150,54 +158,62 @@ export function useRealtimeAssets(page?: string) {
     }
 
     function setupRealtimeSubscription() {
-      const channelName = page ? `assets:${page}` : 'assets:all';
+      try {
+        const channelName = page ? `assets:${page}` : 'assets:all';
 
-      const channelBuilder = supabase.channel(channelName).on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'site_assets',
-          ...(page ? { filter: `page=eq.${page}` } : {}),
-        },
-        (payload: { eventType: string; new: DbAsset; old: DbAsset }) => {
-          if (payload.eventType === 'INSERT') {
-            const newData = payload.new as DbAsset;
-            if (newData.is_active) {
-              const publicUrl = newData.file_path?.startsWith('http')
-                ? newData.file_path
-                : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${newData.bucket}/${newData.file_path}`;
+        const channelBuilder = supabase.channel(channelName).on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'site_assets',
+            ...(page ? { filter: `page=eq.${page}` } : {}),
+          },
+          (payload: { eventType: string; new: DbAsset; old: DbAsset }) => {
+            if (payload.eventType === 'INSERT') {
+              const newData = payload.new as DbAsset;
+              if (newData.is_active) {
+                const publicUrl = newData.file_path?.startsWith('http')
+                  ? newData.file_path
+                  : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${newData.bucket}/${newData.file_path}`;
 
-              setAssets((prev) => [
-                ...prev,
-                { ...newData, publicUrl } as RealtimeAsset,
-              ]);
-            }
-          } else if (payload.eventType === 'UPDATE') {
-            const updatedData = payload.new as DbAsset;
-            setAssets((prev) => {
-              if (!updatedData.is_active) {
-                return prev.filter((a) => a.id !== updatedData.id);
+                setAssets((prev) => [
+                  ...prev,
+                  { ...newData, publicUrl } as RealtimeAsset,
+                ]);
               }
+            } else if (payload.eventType === 'UPDATE') {
+              const updatedData = payload.new as DbAsset;
+              setAssets((prev) => {
+                if (!updatedData.is_active) {
+                  return prev.filter((a) => a.id !== updatedData.id);
+                }
 
-              const publicUrl = updatedData.file_path?.startsWith('http')
-                ? updatedData.file_path
-                : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${updatedData.bucket}/${updatedData.file_path}`;
+                const publicUrl = updatedData.file_path?.startsWith('http')
+                  ? updatedData.file_path
+                  : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${updatedData.bucket}/${updatedData.file_path}`;
 
-              return prev.map((a) =>
-                a.id === updatedData.id
-                  ? ({ ...updatedData, publicUrl } as RealtimeAsset)
-                  : a
-              );
-            });
-          } else if (payload.eventType === 'DELETE') {
-            const oldData = payload.old as DbAsset;
-            setAssets((prev) => prev.filter((a) => a.id !== oldData.id));
+                return prev.map((a) =>
+                  a.id === updatedData.id
+                    ? ({ ...updatedData, publicUrl } as RealtimeAsset)
+                    : a
+                );
+              });
+            } else if (payload.eventType === 'DELETE') {
+              const oldData = payload.old as DbAsset;
+              setAssets((prev) => prev.filter((a) => a.id !== oldData.id));
+            }
           }
-        }
-      );
+        );
 
-      channel = channelBuilder.subscribe();
+        channel = channelBuilder.subscribe((status: string, err?: Error) => {
+          if (status === 'CHANNEL_ERROR') {
+            console.error('[useRealtimeAssets] Subscription error:', err);
+          }
+        });
+      } catch (subError) {
+        console.error('[useRealtimeAssets] Failed to subscribe:', subError);
+      }
     }
 
     fetchInitial();

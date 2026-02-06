@@ -11,8 +11,13 @@ import {
   parseLandingPageContent,
   resolveSiteAssetUrl,
 } from '@/lib/projects/template-schema';
+import {
+  MASTER_PROJECT_TEMPLATE,
+  MASTER_PROJECT_TEMPLATE_V2,
+} from '@/types/project-template';
 import BlockRenderer from './BlockRenderer';
 import MasterProjectTemplate from './templates/MasterProjectTemplate';
+import ProjectTemplateMasterRenderer from './templates/ProjectTemplateMasterRenderer';
 
 interface ProjectRendererProps {
   project: {
@@ -138,8 +143,12 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
     cover: project.cover,
   });
 
-  if (parsed.template === 'master-project-v1') {
+  if (parsed.template === MASTER_PROJECT_TEMPLATE) {
     return <MasterProjectTemplate project={parsed.data} />;
+  }
+
+  if (parsed.template === MASTER_PROJECT_TEMPLATE_V2) {
+    return <ProjectTemplateMasterRenderer project={parsed.data} />;
   }
 
   return <LegacyProjectRenderer project={project} blocks={parsed.blocks} />;

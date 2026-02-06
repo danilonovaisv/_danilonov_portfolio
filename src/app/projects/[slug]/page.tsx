@@ -10,6 +10,10 @@ import {
   parseLandingPageContent,
   resolveSiteAssetUrl,
 } from '@/lib/projects/template-schema';
+import {
+  MASTER_PROJECT_TEMPLATE,
+  MASTER_PROJECT_TEMPLATE_V2,
+} from '@/types/project-template';
 
 type LandingPageRecord = {
   id: string;
@@ -108,23 +112,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     cover: project.cover,
   });
 
+  const parsedMaster =
+    parsed.template === MASTER_PROJECT_TEMPLATE ||
+    parsed.template === MASTER_PROJECT_TEMPLATE_V2
+      ? parsed.data
+      : null;
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? `https://${BRAND.domain}`;
   const projectUrl = `${siteUrl.replace(/\/$/, '')}/projects/${slug}`;
 
   const projectCategory =
-    parsed.template === 'master-project-v1'
-      ? parsed.data.project_tags[0] || 'Creative Project'
-      : 'Creative Project';
+    parsedMaster?.project_tags[0] || 'Creative Project';
 
   const projectClient =
-    parsed.template === 'master-project-v1'
-      ? parsed.data.project_client || BRAND.name
-      : BRAND.name;
+    parsedMaster?.project_client || BRAND.name;
 
   const projectYear =
-    parsed.template === 'master-project-v1'
-      ? (parsed.data.project_year ?? new Date().getFullYear())
-      : new Date().getFullYear();
+    parsedMaster?.project_year ?? new Date().getFullYear();
 
   const projectDescription = getProjectSeoDescription(parsed, project.title);
   const projectImage =
@@ -153,9 +157,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     },
     genre: projectCategory,
     keywords:
-      parsed.template === 'master-project-v1'
-        ? parsed.data.project_tags
-        : ['Creative Development', 'Danilo Novais'],
+      parsedMaster?.project_tags ?? ['Creative Development', 'Danilo Novais'],
   };
 
   return (

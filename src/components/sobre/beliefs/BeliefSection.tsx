@@ -51,7 +51,7 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
   return (
     <motion.span
       style={{ x: lineX }}
-      className="block text-blueAccent italic font-semibold text-[clamp(2.75rem,4.5vw,2.5rem)] leading-[1.2] text-left whitespace-pre-line select-none tracking-[-0.01em] max-w-fit"
+      className="block text-blueAccent italic font-semibold text-[clamp(2.5rem,7vw,6.5rem)] leading-[0.9] text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
     >
       {line}
     </motion.span>
@@ -105,11 +105,10 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
       ref={containerRef}
       aria-label={text.replace(/\n/g, ' ')}
       style={{ backgroundColor: bgColor }}
-      className={`relative w-full h-screen flex overflow-hidden ${
-        isMobile
-          ? 'items-end justify-start' // Mobile: espaço para texto fixed no footer
-          : 'items-center justify-start pl-8 lg:pl-16'
-      }`}
+      className={`relative w-full h-screen flex overflow-hidden ${isMobile
+        ? 'items-end justify-start pb-32' // Mobile: espaço para texto fixed no footer
+        : 'items-center justify-start px-[5%] md:px-[7.5%] lg:px-[10%]'
+        }`}
     >
       {/* Desktop: Texto inline */}
       {!isMobile && !isMobileTextLayer && (
@@ -233,7 +232,7 @@ const MobilePhrase: React.FC<MobilePhraseProps> = ({
   return (
     <motion.div
       style={{ x, opacity, filter: blur }}
-      className="fixed bottom-[20%] left-0 right-0 z-[60] text-center pointer-events-none px-4"
+      className="fixed bottom-[20%] left-0 right-0 z-60 text-center pointer-events-none px-4"
     >
       <span className="text-blueAccent italic font-semibold text-[clamp(2rem,6vw,3.5rem)] leading-[1.1] tracking-[-0.01em] block w-full mx-auto">
         {text}

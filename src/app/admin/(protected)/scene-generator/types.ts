@@ -84,9 +84,21 @@ export const OUTPUT_RATIO_PRESETS: Array<{
   description: string;
 }> = [
   { id: '1:1', label: 'Quadrado', description: 'Feeds e composições centrais' },
-  { id: '16:9', label: 'Horizontal', description: 'Hero, vídeo e outdoor digital' },
-  { id: '9:16', label: 'Vertical', description: 'Stories, Reels e mobile-first' },
-  { id: '4:5', label: 'Retrato', description: 'Social ads e posters verticais' },
+  {
+    id: '16:9',
+    label: 'Horizontal',
+    description: 'Hero, vídeo e outdoor digital',
+  },
+  {
+    id: '9:16',
+    label: 'Vertical',
+    description: 'Stories, Reels e mobile-first',
+  },
+  {
+    id: '4:5',
+    label: 'Retrato',
+    description: 'Social ads e posters verticais',
+  },
 ];
 
 export type SceneGenerationPayload = {

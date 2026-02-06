@@ -42,14 +42,8 @@ const copyInputSchema = z.object({
     .string()
     .min(12, 'Liste os principais desafios criativos/técnicos.')
     .max(600, 'Use no máximo 600 caracteres.'),
-  deliverables: z
-    .string()
-    .max(300, 'Use no máximo 300 caracteres.')
-    .optional(),
-  toneOfVoice: z
-    .string()
-    .max(180, 'Use no máximo 180 caracteres.')
-    .optional(),
+  deliverables: z.string().max(300, 'Use no máximo 300 caracteres.').optional(),
+  toneOfVoice: z.string().max(180, 'Use no máximo 180 caracteres.').optional(),
 });
 
 type CopyInput = z.infer<typeof copyInputSchema>;

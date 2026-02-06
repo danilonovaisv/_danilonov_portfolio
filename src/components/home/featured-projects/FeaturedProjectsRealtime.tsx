@@ -8,12 +8,13 @@ import type { Database } from '@/lib/supabase.types';
 import FeaturedProjectsSection from './FeaturedProjectsSection';
 import type { DbProjectWithTags } from '@/lib/supabase/queries/projects';
 
-type HomeProjectRow = Database['public']['Tables']['portfolio_projects']['Row'] & {
-  tags?: Array<{
-    tag?: { id: string; slug: string; label: string; kind: string } | null;
-  }> | null;
-  landing_page?: { slug: string } | null;
-};
+type HomeProjectRow =
+  Database['public']['Tables']['portfolio_projects']['Row'] & {
+    tags?: Array<{
+      tag?: { id: string; slug: string; label: string; kind: string } | null;
+    }> | null;
+    landing_page?: { slug: string } | null;
+  };
 
 type FeaturedProjectsRealtimeProps = {
   initialProjects: PortfolioProject[];
@@ -33,10 +34,16 @@ export default function FeaturedProjectsRealtime({
       )
       .eq('featured_on_home', true)
       .eq('is_published', true)
-      .order('updated_at', { ascending: false });
+      .order('featured_portfolio_order', {
+        ascending: true,
+        nullsFirst: false,
+      });
 
     if (error) {
-      console.error('[FeaturedProjectsRealtime] Failed to load projects:', error.message);
+      console.error(
+        '[FeaturedProjectsRealtime] Failed to load projects:',
+        error.message
+      );
       return;
     }
 
@@ -53,26 +60,41 @@ export default function FeaturedProjectsRealtime({
   useEffect(() => {
     void loadFeaturedProjects();
 
-    const channel = supabase
-      .channel('featured-home-projects')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'portfolio_projects' },
-        () => {
-          void loadFeaturedProjects();
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'portfolio_project_tags' },
-        () => {
-          void loadFeaturedProjects();
-        }
-      )
-      .subscribe();
+    let channel: any = null;
+
+    try {
+      channel = supabase
+        .channel('featured-home-projects')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'portfolio_projects' },
+          () => {
+            void loadFeaturedProjects();
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'portfolio_project_tags' },
+          () => {
+            void loadFeaturedProjects();
+          }
+        )
+        .subscribe((status: string, err?: Error) => {
+          if (status === 'CHANNEL_ERROR') {
+            console.error('[FeaturedProjectsRealtime] Subscription error:', err);
+          }
+        });
+    } catch (error) {
+      console.error(
+        '[FeaturedProjectsRealtime] Failed to initialize realtime channel:',
+        error
+      );
+    }
 
     return () => {
-      void supabase.removeChannel(channel);
+      if (channel) {
+        void supabase.removeChannel(channel);
+      }
     };
   }, [loadFeaturedProjects, supabase]);
 
