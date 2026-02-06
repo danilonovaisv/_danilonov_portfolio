@@ -35,8 +35,6 @@
 
 @import '../styles/fonts.css';
 
-@import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 /* Restante do CSS permanece igual */
@@ -65,8 +63,8 @@
   /* Ghost Cards */
   --ghost-card-height-desktop: 480px;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: #040013;
+  --foreground: #fcffff;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
@@ -100,7 +98,7 @@
 
 body {
   font-family: var(--font-family-sans);
-  background-color: var(--color-background);
+  background-color: var(--color-background) !important;
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -354,7 +352,7 @@ html.admin-page body {
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
+  --color-background: #040013;
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -426,6 +424,6 @@ html.admin-page body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[var(--color-background)] text-[var(--color-text)];
   }
 }

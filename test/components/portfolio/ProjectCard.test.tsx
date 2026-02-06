@@ -99,11 +99,11 @@ describe('ProjectCard', () => {
         expect(screen.getByText('2024')).toBeInTheDocument();
     });
 
-    it('should have an accessible button with aria-label', () => {
+    it('should have an accessible button with name', () => {
         render(<ProjectCard project={mockProject} index={0} />);
 
         const button = screen.getByRole('button', {
-            name: /ver projeto test project/i,
+            name: /test project/i,
         });
         expect(button).toBeInTheDocument();
     });

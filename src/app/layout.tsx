@@ -34,16 +34,25 @@ export default function RootLayout({
   setVar('--favicon-light-url', BRAND.assets.logos.favicon);
   setVar('--favicon-dark-url', BRAND.assets.logos.favicon);
 
+  // Ensure background and text colors are properly set as CSS variables
+  setVar('--color-background', BRAND.colors.background);
+  setVar('--color-text', BRAND.colors.text);
+
   const inlineStyle = cssVars as CSSProperties;
 
   return (
-    <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className="dark"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
       </head>
       <body
         suppressHydrationWarning
-        className="antialiased bg-background text-text pb-0 lg:pb-[64px] overflow-x-hidden"
+        className="antialiased bg-[var(--color-background)] text-[var(--color-text)] pb-0 lg:pb-[64px] overflow-x-hidden"
         style={inlineStyle}
       >
         <a
