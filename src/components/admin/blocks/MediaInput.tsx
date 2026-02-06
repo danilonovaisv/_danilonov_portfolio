@@ -79,7 +79,7 @@ export function MediaInput({
           {youtubeId ? (
             <div className="aspect-video w-full bg-black">
               <iframe
-                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=0&mute=1&modestbranding=1`}
+                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0`}
                 title="YouTube preview"
                 className="w-full h-full border-none"
                 allowFullScreen

@@ -1,12 +1,14 @@
-import type { LandingPageBlock } from '@/types/landing-page';
+import type { BlockType, LandingPageBlock } from '@/types/landing-page';
 import {
   LEGACY_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
   type MasterProjectAsset,
   type MasterProjectGalleryItem,
   type MasterProjectTemplateData,
   type MasterProjectTemplateV2Data,
+  type MasterProjectTemplateV3Data,
   type MasterProjectV2FeatureItem,
   type MasterProjectV2GalleryItem,
   type ParsedLandingPageContent,
@@ -19,6 +21,21 @@ type TemplateFallback = {
 };
 
 const DEFAULT_HIGHLIGHT = '#0048ff';
+const VIDEO_FILE_PATTERN = /\.(mp4|webm|ogg|mov)$/i;
+const YOUTUBE_PATTERN =
+  /(youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtube\.com\/shorts\/)/i;
+const V3_BLOCK_TYPES: BlockType[] = [
+  'text',
+  'image',
+  'video',
+  'video-autoplay',
+  'image-text',
+  'text-image',
+  'image-image',
+  'image-video',
+  'video-text',
+  'quote-band',
+];
 
 const asRecord = (value: unknown): Record<string, unknown> | null => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
@@ -37,6 +54,13 @@ const asNumber = (value: unknown): number | undefined => {
     const parsed = Number(value);
     if (Number.isFinite(parsed)) return parsed;
   }
+  return undefined;
+};
+
+const asBoolean = (value: unknown): boolean | undefined => {
+  if (typeof value === 'boolean') return value;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
   return undefined;
 };
 
@@ -116,6 +140,60 @@ const asGalleryLayoutV2 = (
 
 const asMediaAlign = (value: unknown): 'left' | 'right' =>
   value === 'right' ? 'right' : 'left';
+
+const asBlockType = (value: unknown): BlockType =>
+  V3_BLOCK_TYPES.includes(value as BlockType) ? (value as BlockType) : 'text';
+
+const inferMediaType = (
+  src?: string,
+  fallback?: unknown
+): LandingPageBlock['content']['mediaType'] => {
+  if (fallback === 'image' || fallback === 'video' || fallback === 'youtube') {
+    return fallback;
+  }
+
+  if (!src) return undefined;
+  if (YOUTUBE_PATTERN.test(src)) return 'youtube';
+  if (VIDEO_FILE_PATTERN.test(src)) return 'video';
+  return 'image';
+};
+
+const asTextAlign = (
+  value: unknown
+): 'left' | 'center' | 'right' | 'justify' | undefined => {
+  if (value === 'left') return 'left';
+  if (value === 'center') return 'center';
+  if (value === 'right') return 'right';
+  if (value === 'justify') return 'justify';
+  return undefined;
+};
+
+const normalizeTextConfig = (
+  value: unknown
+): LandingPageBlock['content']['textConfig'] | undefined => {
+  const record = asRecord(value);
+  if (!record) return undefined;
+
+  return {
+    fontSize: asString(record.fontSize),
+    fontWeight: asString(record.fontWeight),
+    color: asString(record.color),
+    textAlign: asTextAlign(record.textAlign),
+  };
+};
+
+const blockNeedsPrimaryMedia = (type: BlockType): boolean =>
+  type === 'image' ||
+  type === 'video' ||
+  type === 'video-autoplay' ||
+  type === 'image-text' ||
+  type === 'text-image' ||
+  type === 'image-image' ||
+  type === 'image-video' ||
+  type === 'video-text';
+
+const blockNeedsSecondaryMedia = (type: BlockType): boolean =>
+  type === 'image-image' || type === 'image-video';
 
 const normalizeAsset = (
   value: unknown,
@@ -222,6 +300,47 @@ const normalizeGalleryItemV2 = (
   };
 };
 
+const normalizeLandingBlock = (
+  value: unknown,
+  index: number,
+  fallbackAlt: string
+): LandingPageBlock | null => {
+  const record = asRecord(value);
+  if (!record) return null;
+
+  const type = asBlockType(record.type);
+  const contentRecord = asRecord(record.content) ?? {};
+
+  const media = asString(contentRecord.media ?? record.src);
+  const media2 = asString(contentRecord.media2 ?? record.src2);
+
+  if (blockNeedsPrimaryMedia(type) && !media) return null;
+  if (blockNeedsSecondaryMedia(type) && !media2) return null;
+
+  const normalized: LandingPageBlock = {
+    id: asString(record.id) ?? `block-${index + 1}`,
+    type,
+    content: {
+      text: asString(contentRecord.text ?? record.title),
+      text2: asString(contentRecord.text2),
+      textConfig: normalizeTextConfig(contentRecord.textConfig),
+      textConfig2: normalizeTextConfig(contentRecord.textConfig2),
+      media,
+      media2,
+      alt: asString(contentRecord.alt ?? record.alt) ?? fallbackAlt,
+      alt2: asString(contentRecord.alt2 ?? record.alt2),
+      poster: asString(contentRecord.poster ?? record.poster),
+      poster2: asString(contentRecord.poster2 ?? record.poster2),
+      mediaType: inferMediaType(media, contentRecord.mediaType),
+      mediaType2: inferMediaType(media2, contentRecord.mediaType2),
+      autoplay: asBoolean(contentRecord.autoplay),
+      bandColor: asString(contentRecord.bandColor ?? record.bandColor),
+    },
+  };
+
+  return normalized;
+};
+
 export function resolveSiteAssetUrl(value?: string | null): string {
   if (!value) return '';
   if (value.startsWith('http://') || value.startsWith('https://')) return value;
@@ -320,6 +439,53 @@ export function createDefaultMasterProjectTemplateV2(
   };
 }
 
+export function createDefaultMasterProjectTemplateV3(
+  fallback: TemplateFallback = {}
+): MasterProjectTemplateV3Data {
+  const title = fallback.title ?? 'Novo Projeto';
+
+  return {
+    schema_version: '3.0',
+    template: MASTER_PROJECT_TEMPLATE_V3,
+    project_slug: fallback.slug ?? '',
+    hero_cover_image: {
+      src: fallback.cover ?? '',
+      alt: `Capa do projeto ${title}`,
+      kind: 'image',
+    },
+    hero_logo_image: {
+      src: '',
+      alt: `Logo do projeto ${title}`,
+      kind: 'image',
+    },
+    project_title: title,
+    project_subtitle: '',
+    project_client: '',
+    project_year: undefined,
+    project_tags: [],
+    project_services: [],
+    project_summary: '',
+    intro_headline: '',
+    intro_body: [],
+    highlight_color: DEFAULT_HIGHLIGHT,
+    theme_color: DEFAULT_HIGHLIGHT,
+    gallery_grid: [],
+    navigation: {
+      back_label: 'voltar',
+      next_label: 'próximo projeto',
+      next_project_slug: '',
+    },
+    cta: {
+      label: 'vamos trabalhar juntos →',
+      href: '/#contact',
+    },
+    seo: {
+      description: '',
+      og_image: fallback.cover ?? '',
+    },
+  };
+}
+
 export function isMasterProjectTemplateData(
   value: unknown
 ): value is MasterProjectTemplateData {
@@ -344,6 +510,19 @@ export function isMasterProjectTemplateV2Data(
     asString(record.template) === MASTER_PROJECT_TEMPLATE_V2 &&
     asString(record.project_title) !== undefined &&
     asRecord(record.hero_cover_image) !== null &&
+    Array.isArray(record.gallery_grid)
+  );
+}
+
+export function isMasterProjectTemplateV3Data(
+  value: unknown
+): value is MasterProjectTemplateV3Data {
+  const record = asRecord(value);
+  if (!record) return false;
+
+  return (
+    asString(record.template) === MASTER_PROJECT_TEMPLATE_V3 &&
+    asString(record.project_title) !== undefined &&
     Array.isArray(record.gallery_grid)
   );
 }
@@ -513,6 +692,104 @@ function normalizeMasterTemplateV2(
   };
 }
 
+const hasV3BlockType = (value: unknown): boolean => {
+  if (!Array.isArray(value)) return false;
+
+  return value.some((item) => {
+    const record = asRecord(item);
+    if (!record) return false;
+    const type = asString(record.type);
+    return type ? V3_BLOCK_TYPES.includes(type as BlockType) : false;
+  });
+};
+
+function normalizeMasterTemplateV3(
+  value: unknown,
+  fallback: TemplateFallback = {}
+): MasterProjectTemplateV3Data | null {
+  const record = asRecord(value);
+  if (!record) return null;
+
+  const template = asString(record.template);
+  const hasMasterFields =
+    template === MASTER_PROJECT_TEMPLATE_V3 ||
+    Array.isArray(record.gallery_grid);
+
+  if (!hasMasterFields) return null;
+
+  const defaults = createDefaultMasterProjectTemplateV3(fallback);
+  const fallbackAlt = `Capa do projeto ${fallback.title ?? defaults.project_title}`;
+  const heroCoverRecord = asRecord(record.hero_cover_image);
+  const heroLogoRecord = asRecord(record.hero_logo_image);
+
+  const galleryGrid = Array.isArray(record.gallery_grid)
+    ? record.gallery_grid
+        .map((item, index) => normalizeLandingBlock(item, index, fallbackAlt))
+        .filter((item): item is LandingPageBlock => item !== null)
+    : defaults.gallery_grid;
+
+  const navigationRecord = asRecord(record.navigation);
+  const ctaRecord = asRecord(record.cta);
+  const seoRecord = asRecord(record.seo);
+
+  return {
+    schema_version: '3.0',
+    template: MASTER_PROJECT_TEMPLATE_V3,
+    project_slug:
+      asString(record.project_slug) ?? fallback.slug ?? defaults.project_slug,
+    hero_cover_image: heroCoverRecord
+      ? normalizeAsset(
+          heroCoverRecord,
+          fallbackAlt,
+          fallback.cover ?? defaults.hero_cover_image?.src
+        )
+      : defaults.hero_cover_image,
+    hero_logo_image: heroLogoRecord
+      ? normalizeAsset(heroLogoRecord, `${defaults.project_title} logo`)
+      : defaults.hero_logo_image,
+    project_title:
+      asString(record.project_title) ??
+      fallback.title ??
+      defaults.project_title,
+    project_subtitle:
+      asString(record.project_subtitle) ?? defaults.project_subtitle,
+    project_client: asString(record.project_client) ?? defaults.project_client,
+    project_year: asNumber(record.project_year) ?? defaults.project_year,
+    project_tags: asStringArray(record.project_tags),
+    project_services: asStringArray(record.project_services),
+    project_summary:
+      asString(record.project_summary) ??
+      asString(record.summary) ??
+      defaults.project_summary,
+    intro_headline: asString(record.intro_headline) ?? defaults.intro_headline,
+    intro_body: asIntroParagraphs(record.intro_body ?? record.intro_paragraphs),
+    highlight_color:
+      asString(record.highlight_color) ?? defaults.highlight_color,
+    theme_color: asString(record.theme_color) ?? defaults.theme_color,
+    gallery_grid: galleryGrid,
+    navigation: {
+      back_label:
+        asString(navigationRecord?.back_label) ??
+        defaults.navigation?.back_label,
+      next_label:
+        asString(navigationRecord?.next_label) ??
+        defaults.navigation?.next_label,
+      next_project_slug:
+        asString(navigationRecord?.next_project_slug) ??
+        defaults.navigation?.next_project_slug,
+    },
+    cta: {
+      label: asString(ctaRecord?.label) ?? defaults.cta?.label,
+      href: asString(ctaRecord?.href) ?? defaults.cta?.href,
+    },
+    seo: {
+      description:
+        asString(seoRecord?.description) ?? defaults.seo?.description,
+      og_image: asString(seoRecord?.og_image) ?? defaults.seo?.og_image,
+    },
+  };
+}
+
 const hasV2LayoutType = (value: unknown): boolean => {
   if (!Array.isArray(value)) return false;
   return value.some((item) => Boolean(asString(asRecord(item)?.layout_type)));
@@ -524,6 +801,21 @@ export function parseLandingPageContent(
 ): ParsedLandingPageContent {
   const record = asRecord(content);
   const template = asString(record?.template);
+
+  if (
+    template === MASTER_PROJECT_TEMPLATE_V3 ||
+    (template !== MASTER_PROJECT_TEMPLATE &&
+      template !== MASTER_PROJECT_TEMPLATE_V2 &&
+      hasV3BlockType(record?.gallery_grid))
+  ) {
+    const masterV3 = normalizeMasterTemplateV3(content, fallback);
+    if (masterV3) {
+      return {
+        template: MASTER_PROJECT_TEMPLATE_V3,
+        data: masterV3,
+      };
+    }
+  }
 
   if (
     template === MASTER_PROJECT_TEMPLATE_V2 ||
@@ -562,11 +854,12 @@ export function getProjectOgImage(
 ): string | null {
   if (
     parsed.template === MASTER_PROJECT_TEMPLATE ||
-    parsed.template === MASTER_PROJECT_TEMPLATE_V2
+    parsed.template === MASTER_PROJECT_TEMPLATE_V2 ||
+    parsed.template === MASTER_PROJECT_TEMPLATE_V3
   ) {
     return (
       parsed.data.seo?.og_image ||
-      parsed.data.hero_cover_image.src ||
+      parsed.data.hero_cover_image?.src ||
       fallbackCover ||
       null
     );
@@ -581,7 +874,8 @@ export function getProjectSeoDescription(
 ): string {
   if (
     parsed.template === MASTER_PROJECT_TEMPLATE ||
-    parsed.template === MASTER_PROJECT_TEMPLATE_V2
+    parsed.template === MASTER_PROJECT_TEMPLATE_V2 ||
+    parsed.template === MASTER_PROJECT_TEMPLATE_V3
   ) {
     return (
       parsed.data.seo?.description ||

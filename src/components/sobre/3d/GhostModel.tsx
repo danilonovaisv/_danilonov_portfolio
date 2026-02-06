@@ -31,9 +31,9 @@ interface GhostModelProps {
 }
 
 const GhostModel: React.FC<GhostModelProps> = ({
-  scrollProgress,
-  isMobile,
-}) => {
+                                                 scrollProgress,
+                                                 isMobile,
+                                               }) => {
   const group = useRef<THREE.Group>(null);
   const { viewport } = useThree();
 
@@ -47,7 +47,7 @@ const GhostModel: React.FC<GhostModelProps> = ({
     () => ({
       // Desktop: Centralizado (0)
       // Mobile: Canto esquerdo superior (ajuste negativo em X, positivo em Y)
-      baseX: isMobile ? -viewport.width / 3.5 : 0,
+      baseX: isMobile ? -viewport.width / 3 : 0,
 
       // Desktop: Centralizado (0)
       // Mobile: 17% do topo (alinhado com titulo)
@@ -55,8 +55,8 @@ const GhostModel: React.FC<GhostModelProps> = ({
       endY: isMobile ? viewport.height * 0.17 : 0, // Mantém posição fixa até o final
 
       // Intensidade flutuante
-      floatBase: isMobile ? 0.08 : 0.05,
-      floatAmplitude: 0.1,
+      floatBase: isMobile ? 0.09 : 0.05,
+      floatAmplitude: 0.2,
       tiltBase: 0.15,
       // Escala ajustada para maior presença
       baseScale: isMobile ? 0.22 : 0.55,

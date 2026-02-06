@@ -13,6 +13,7 @@ import {
 import {
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
 } from '@/types/project-template';
 
 type LandingPageRecord = {
@@ -114,7 +115,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const parsedMaster =
     parsed.template === MASTER_PROJECT_TEMPLATE ||
-    parsed.template === MASTER_PROJECT_TEMPLATE_V2
+    parsed.template === MASTER_PROJECT_TEMPLATE_V2 ||
+    parsed.template === MASTER_PROJECT_TEMPLATE_V3
       ? parsed.data
       : null;
 

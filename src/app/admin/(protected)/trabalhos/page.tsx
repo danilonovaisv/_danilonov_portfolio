@@ -3,7 +3,7 @@ export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
 import Link from 'next/link';
-import Image from 'next/image'; // Added import for next/image
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import { togglePublish } from '@/lib/supabase/queries/projects';
 import { ADMIN_NAVIGATION } from '@/config/admin-navigation';
@@ -37,11 +37,10 @@ export default async function TrabalhosPage(props: Props) {
   let query = supabase
     .from('portfolio_projects')
     .select(
-      'id, title, client_name, year, featured_on_home, featured_home_order, featured_on_portfolio, featured_portfolio_order, is_published, thumbnail_path, url_landscape, url_square, project_type, slug, tags:portfolio_project_tags(tag:portfolio_tags(label, slug)), landing_page:landing_pages(slug)'
+      'id, title, client_name, year, featured_on_home, featured_home_order, featured_on_portfolio, featured_portfolio_order, is_published, thumbnail_path, url_landscape, url_square, project_type, slug'
     )
     .order('updated_at', { ascending: false });
 
-  if (tagFilter) query = query.eq('tags.tag.slug', tagFilter);
   if (yearFilter) query = query.eq('year', yearFilter);
   if (typeFilter) query = query.eq('project_type', typeFilter);
   if (statusFilter === 'published') query = query.eq('is_published', true);
@@ -49,19 +48,66 @@ export default async function TrabalhosPage(props: Props) {
   if (search)
     query = query.or(`title.ilike.%${search}%,client_name.ilike.%${search}%`);
 
-  const [{ data: projects }, { data: tags }] = await Promise.all([
-    query,
-    supabase
-      .from('portfolio_tags')
-      .select('id, label, slug')
-      .order('sort_order', { ascending: true, nullsFirst: false }),
-  ]);
+  const [{ data: baseProjects, error: projectsError }, { data: tags }] =
+    await Promise.all([
+      query,
+      supabase
+        .from('portfolio_tags')
+        .select('id, label, slug')
+        .order('sort_order', { ascending: true, nullsFirst: false }),
+    ]);
+
+  if (projectsError) {
+    console.error('[admin/trabalhos] Erro ao listar projetos:', projectsError);
+  }
+
+  const projectIds = (baseProjects ?? []).map((project) => project.id);
+  const { data: projectTagRows, error: projectTagsError } =
+    projectIds.length > 0
+      ? await supabase
+          .from('portfolio_project_tags')
+          .select('project_id, tag_id')
+          .in('project_id', projectIds)
+      : { data: [], error: null };
+
+  if (projectTagsError) {
+    console.error(
+      '[admin/trabalhos] Erro ao listar tags dos projetos:',
+      projectTagsError
+    );
+  }
+
+  const tagsById = new Map((tags ?? []).map((tag) => [tag.id, tag]));
+  const tagsByProject = new Map<
+    string,
+    Array<{ tag: { label: string; slug: string } }>
+  >();
+
+  for (const relation of projectTagRows ?? []) {
+    const tag = tagsById.get(relation.tag_id);
+    if (!tag) continue;
+
+    const current = tagsByProject.get(relation.project_id) ?? [];
+    current.push({ tag: { label: tag.label, slug: tag.slug } });
+    tagsByProject.set(relation.project_id, current);
+  }
+
+  const projects = (baseProjects ?? []).map((project) => ({
+    ...project,
+    tags: tagsByProject.get(project.id) ?? [],
+  }));
+
+  const filteredProjects = tagFilter
+    ? projects.filter((project) =>
+        project.tags.some((relation) => relation.tag.slug === tagFilter)
+      )
+    : projects;
 
   const uniqueYears = Array.from(
-    new Set((projects ?? []).map((p) => p.year).filter(Boolean))
+    new Set(filteredProjects.map((p) => p.year).filter(Boolean))
   ).sort((a, b) => (b ?? 0) - (a ?? 0));
   const uniqueTypes = Array.from(
-    new Set((projects ?? []).map((p) => p.project_type).filter(Boolean))
+    new Set(filteredProjects.map((p) => p.project_type).filter(Boolean))
   );
 
   return (
@@ -95,6 +141,12 @@ export default async function TrabalhosPage(props: Props) {
       />
 
       <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-900/60">
+        {projectsError ? (
+          <div className="border-b border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+            Falha ao carregar projetos. Verifique permissões/filtros no
+            Supabase e recarregue a página.
+          </div>
+        ) : null}
         <table className="min-w-full text-sm">
           <thead>
             <tr className="text-left text-slate-400">
@@ -111,7 +163,7 @@ export default async function TrabalhosPage(props: Props) {
             </tr>
           </thead>
           <tbody>
-            {projects?.map((project) => (
+            {filteredProjects.map((project) => (
               <tr key={project.id} className="border-t border-white/5">
                 <td className="px-4 py-3 font-medium text-white">
                   <div className="flex items-center gap-3">
@@ -248,7 +300,7 @@ export default async function TrabalhosPage(props: Props) {
                 </td>
               </tr>
             ))}
-            {!projects?.length && (
+            {!filteredProjects.length && (
               <tr>
                 <td
                   className="px-4 py-6 text-center text-slate-400"

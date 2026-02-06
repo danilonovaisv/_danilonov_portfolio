@@ -97,7 +97,11 @@ export default function SceneGeneratorPage() {
         <div className="mx-auto max-w-5xl space-y-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-1">
-              <form action={formAction} className="space-y-5">
+              <form
+                action={formAction}
+                className="space-y-5"
+                encType="multipart/form-data"
+              >
                 <div className="space-y-2">
                   <FieldTooltip
                     label="Modelo de IA"

@@ -9,6 +9,7 @@ import {
   LEGACY_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
   type ProjectTemplateId,
 } from '@/types/project-template';
 
@@ -35,6 +36,7 @@ function getTemplateFromContent(content: unknown): ProjectTemplateId {
     const template = (content as { template?: string }).template;
     if (template === MASTER_PROJECT_TEMPLATE) return MASTER_PROJECT_TEMPLATE;
     if (template === MASTER_PROJECT_TEMPLATE_V2) return MASTER_PROJECT_TEMPLATE_V2;
+    if (template === MASTER_PROJECT_TEMPLATE_V3) return MASTER_PROJECT_TEMPLATE_V3;
   }
 
   return LEGACY_PROJECT_TEMPLATE;
@@ -154,12 +156,15 @@ export default function LandingPagesListPage() {
                       <span
                         className={`inline-flex rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
                           page.template === MASTER_PROJECT_TEMPLATE ||
-                          page.template === MASTER_PROJECT_TEMPLATE_V2
+                          page.template === MASTER_PROJECT_TEMPLATE_V2 ||
+                          page.template === MASTER_PROJECT_TEMPLATE_V3
                             ? 'bg-blue-500/15 text-blue-200 border border-blue-400/30'
                             : 'bg-slate-700/50 text-slate-300 border border-white/10'
                         }`}
                       >
-                        {page.template === MASTER_PROJECT_TEMPLATE
+                        {page.template === MASTER_PROJECT_TEMPLATE_V3
+                          ? 'Template Mestre V3'
+                          : page.template === MASTER_PROJECT_TEMPLATE
                           ? 'Template Mestre V1'
                           : page.template === MASTER_PROJECT_TEMPLATE_V2
                             ? 'Template Mestre V2'

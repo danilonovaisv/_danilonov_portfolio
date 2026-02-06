@@ -3,10 +3,12 @@ import type { LandingPageBlock } from '@/types/landing-page';
 export const LEGACY_PROJECT_TEMPLATE = 'legacy-blocks' as const;
 export const MASTER_PROJECT_TEMPLATE = 'master-project-v1' as const;
 export const MASTER_PROJECT_TEMPLATE_V2 = 'master-project-v2' as const;
+export const MASTER_PROJECT_TEMPLATE_V3 = 'master-project-v3-alpa' as const;
 
 export type MasterProjectTemplateId =
   | typeof MASTER_PROJECT_TEMPLATE
-  | typeof MASTER_PROJECT_TEMPLATE_V2;
+  | typeof MASTER_PROJECT_TEMPLATE_V2
+  | typeof MASTER_PROJECT_TEMPLATE_V3;
 
 export type ProjectTemplateId =
   | typeof LEGACY_PROJECT_TEMPLATE
@@ -125,10 +127,34 @@ export interface MasterProjectTemplateV2Data {
   seo?: MasterProjectTemplateSeo;
 }
 
+export interface MasterProjectTemplateV3Data {
+  schema_version: '3.0';
+  template: typeof MASTER_PROJECT_TEMPLATE_V3;
+  project_slug: string;
+  hero_cover_image?: MasterProjectAsset;
+  hero_logo_image?: MasterProjectAsset;
+  project_title: string;
+  project_subtitle?: string;
+  project_client?: string;
+  project_year?: number;
+  project_tags: string[];
+  project_services?: string[];
+  project_summary?: string;
+  intro_headline?: string;
+  intro_body?: string[];
+  highlight_color: string;
+  theme_color?: string;
+  gallery_grid: LandingPageBlock[];
+  navigation?: MasterProjectTemplateNavigation;
+  cta?: MasterProjectTemplateCta;
+  seo?: MasterProjectTemplateSeo;
+}
+
 export type LandingPageStructuredContent =
   | LandingPageBlock[]
   | MasterProjectTemplateData
-  | MasterProjectTemplateV2Data;
+  | MasterProjectTemplateV2Data
+  | MasterProjectTemplateV3Data;
 
 export type ParsedLandingPageContent =
   | {
@@ -142,4 +168,8 @@ export type ParsedLandingPageContent =
   | {
       template: typeof MASTER_PROJECT_TEMPLATE_V2;
       data: MasterProjectTemplateV2Data;
+    }
+  | {
+      template: typeof MASTER_PROJECT_TEMPLATE_V3;
+      data: MasterProjectTemplateV3Data;
     };

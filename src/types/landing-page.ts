@@ -7,7 +7,8 @@ export type BlockType =
   | 'text-image'
   | 'image-image'
   | 'image-video'
-  | 'video-text';
+  | 'video-text'
+  | 'quote-band';
 
 export interface TextConfig {
   fontSize?: string; // e.g., 'text-lg', 'text-4xl', or custom values
@@ -23,9 +24,14 @@ export interface LandingPageBlockContent {
   textConfig2?: TextConfig;
   media?: string;
   media2?: string;
+  alt?: string;
+  alt2?: string;
+  poster?: string;
+  poster2?: string;
   mediaType?: 'image' | 'video' | 'youtube';
   mediaType2?: 'image' | 'video' | 'youtube';
   autoplay?: boolean;
+  bandColor?: string;
 }
 
 export interface LandingPageBlock {

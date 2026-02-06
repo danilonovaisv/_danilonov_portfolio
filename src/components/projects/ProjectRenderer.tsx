@@ -14,10 +14,12 @@ import {
 import {
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
 } from '@/types/project-template';
 import BlockRenderer from './BlockRenderer';
 import MasterProjectTemplate from './templates/MasterProjectTemplate';
 import ProjectTemplateMasterRenderer from './templates/ProjectTemplateMasterRenderer';
+import ProjectTemplateALPARenderer from './templates/ProjectTemplateALPARenderer';
 
 interface ProjectRendererProps {
   project: {
@@ -149,6 +151,10 @@ export default function ProjectRenderer({ project }: ProjectRendererProps) {
 
   if (parsed.template === MASTER_PROJECT_TEMPLATE_V2) {
     return <ProjectTemplateMasterRenderer project={parsed.data} />;
+  }
+
+  if (parsed.template === MASTER_PROJECT_TEMPLATE_V3) {
+    return <ProjectTemplateALPARenderer project={parsed.data} />;
   }
 
   return <LegacyProjectRenderer project={project} blocks={parsed.blocks} />;

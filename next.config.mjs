@@ -59,7 +59,14 @@ const nextConfig = {
 
   // Removido experimental.turbopack pois causa warning
   experimental: {
-    // any needed experimental flags
+    serverActions: {
+      bodySizeLimit: '32mb',
+      allowedOrigins: [
+        'https://portfoliodanilo.com',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+      ],
+    },
   },
 
   // Fallback for environment variables if .env.local is locked

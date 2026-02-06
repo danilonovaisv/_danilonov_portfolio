@@ -23,6 +23,7 @@ const ALLOWED_REFERENCE_IMAGE_TYPES = new Set([
 ]);
 const MAX_REFERENCE_IMAGES = 8;
 const MAX_REFERENCE_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
+const MAX_TOTAL_REFERENCE_IMAGES_BYTES = 32 * 1024 * 1024; // matches serverActions limit
 
 const OUTPUT_RATIO_SIZE_MAP: Record<
   OutputRatio,
@@ -132,6 +133,15 @@ export async function generateAdScenes(
         requestPayload: prevState.requestPayload,
       };
     }
+  }
+
+  const totalSize = referenceImages.reduce((acc, image) => acc + image.size, 0);
+  if (totalSize > MAX_TOTAL_REFERENCE_IMAGES_BYTES) {
+    return {
+      success: false,
+      error: 'Tamanho total das referências excede 32MB. Reduza ou envie menos arquivos.',
+      requestPayload: prevState.requestPayload,
+    };
   }
 
   const requestPayload: SceneGenerationPayload = {

@@ -14,6 +14,7 @@ import {
   LEGACY_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
 } from '@/types/project-template';
 
 const projectSchema = z.object({
@@ -97,10 +98,13 @@ export function ProjectForm({
           ((page.content as { template?: string }).template ===
             MASTER_PROJECT_TEMPLATE ||
             (page.content as { template?: string }).template ===
-              MASTER_PROJECT_TEMPLATE_V2)
+              MASTER_PROJECT_TEMPLATE_V2 ||
+            (page.content as { template?: string }).template ===
+              MASTER_PROJECT_TEMPLATE_V3)
             ? ((page.content as { template?: string }).template as
                 | typeof MASTER_PROJECT_TEMPLATE
-                | typeof MASTER_PROJECT_TEMPLATE_V2)
+                | typeof MASTER_PROJECT_TEMPLATE_V2
+                | typeof MASTER_PROJECT_TEMPLATE_V3)
             : LEGACY_PROJECT_TEMPLATE;
 
         return {
@@ -440,9 +444,11 @@ export function ProjectForm({
                 {lp.title} (/{lp.slug}) ·{' '}
                 {lp.template === MASTER_PROJECT_TEMPLATE
                   ? 'Template Mestre V1'
+                  : lp.template === MASTER_PROJECT_TEMPLATE_V3
+                    ? 'Template Mestre V3'
                   : lp.template === MASTER_PROJECT_TEMPLATE_V2
                     ? 'Template Mestre V2'
-                  : 'Legacy'}
+                    : 'Legacy'}
               </option>
             ))}
           </select>

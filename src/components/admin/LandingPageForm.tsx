@@ -35,13 +35,16 @@ import {
   LEGACY_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE_V2,
+  MASTER_PROJECT_TEMPLATE_V3,
   type MasterProjectTemplateData,
   type MasterProjectTemplateV2Data,
+  type MasterProjectTemplateV3Data,
   type ProjectTemplateId,
 } from '@/types/project-template';
 import {
   createDefaultMasterProjectTemplate,
   createDefaultMasterProjectTemplateV2,
+  createDefaultMasterProjectTemplateV3,
   parseLandingPageContent,
 } from '@/lib/projects/template-schema';
 import MasterProjectTemplateEditor, {
@@ -50,6 +53,9 @@ import MasterProjectTemplateEditor, {
 import MasterProjectTemplateV2Editor, {
   type MasterProjectTemplateV2Draft,
 } from './MasterProjectTemplateV2Editor';
+import MasterProjectTemplateV3Editor, {
+  type MasterProjectTemplateV3Draft,
+} from './MasterProjectTemplateV3Editor';
 
 interface LandingPageFormProps {
   initialData?: {
@@ -62,6 +68,9 @@ interface LandingPageFormProps {
 }
 
 const storageMarker = '/site-assets/';
+const VIDEO_FILE_PATTERN = /\.(mp4|webm|ogg|mov)$/i;
+const YOUTUBE_URL_PATTERN =
+  /(youtu\.be\/|youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtube\.com\/shorts\/)/i;
 
 const toStoragePath = (value?: string): string => {
   if (!value) return '';
@@ -192,6 +201,62 @@ const stripMasterV2Draft = (
   })),
 });
 
+const toMasterV3Draft = (
+  value: MasterProjectTemplateV3Data
+): MasterProjectTemplateV3Draft => ({
+  ...value,
+  hero_cover_image: value.hero_cover_image
+    ? {
+        ...value.hero_cover_image,
+        file: null,
+        previewUrl: '',
+      }
+    : undefined,
+  hero_logo_image: value.hero_logo_image
+    ? {
+        ...value.hero_logo_image,
+        file: null,
+        previewUrl: '',
+      }
+    : undefined,
+  gallery_grid: value.gallery_grid.map((block) => ({
+    ...block,
+    file: null,
+    file2: null,
+    previewUrl: '',
+    previewUrl2: '',
+  })),
+});
+
+const stripMasterV3Draft = (
+  value: MasterProjectTemplateV3Draft
+): MasterProjectTemplateV3Data => ({
+  ...value,
+  hero_cover_image: value.hero_cover_image
+    ? {
+        src: value.hero_cover_image.src,
+        alt: value.hero_cover_image.alt,
+        kind: value.hero_cover_image.kind,
+        poster: value.hero_cover_image.poster,
+      }
+    : undefined,
+  hero_logo_image: value.hero_logo_image
+    ? {
+        src: value.hero_logo_image.src,
+        alt: value.hero_logo_image.alt,
+        kind: value.hero_logo_image.kind,
+        poster: value.hero_logo_image.poster,
+      }
+    : undefined,
+  gallery_grid: value.gallery_grid.map((block) => ({
+    id: block.id,
+    type: block.type,
+    content: {
+      ...block.content,
+    },
+  })),
+});
+
 export default function LandingPageForm({ initialData }: LandingPageFormProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -209,7 +274,7 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
   const [title, setTitle] = useState(initialData?.title || '');
   const [slug, setSlug] = useState(initialData?.slug || '');
   const [template, setTemplate] = useState<ProjectTemplateId>(
-    initialData ? initialParsed.template : MASTER_PROJECT_TEMPLATE_V2
+    initialData ? initialParsed.template : MASTER_PROJECT_TEMPLATE_V3
   );
 
   const [cover, setCover] = useState<File | null>(null);
@@ -260,6 +325,19 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
         initialParsed.template === MASTER_PROJECT_TEMPLATE_V2
           ? initialParsed.data
           : createDefaultMasterProjectTemplateV2({
+              slug: initialData?.slug,
+              title: initialData?.title,
+              cover: initialData?.cover,
+            })
+      )
+    );
+
+  const [masterTemplateV3, setMasterTemplateV3] =
+    useState<MasterProjectTemplateV3Draft>(
+      toMasterV3Draft(
+        initialParsed.template === MASTER_PROJECT_TEMPLATE_V3
+          ? initialParsed.data
+          : createDefaultMasterProjectTemplateV3({
               slug: initialData?.slug,
               title: initialData?.title,
               cover: initialData?.cover,
@@ -556,6 +634,148 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
     };
   };
 
+  const saveMasterTemplateV3 = async () => {
+    const nextTemplate = {
+      ...masterTemplateV3,
+      project_slug: slug,
+      project_title: masterTemplateV3.project_title || title,
+    };
+
+    const isVideoLike = (value?: string) =>
+      Boolean(
+        value && (VIDEO_FILE_PATTERN.test(value) || YOUTUBE_URL_PATTERN.test(value))
+      );
+
+    if (
+      nextTemplate.hero_logo_image &&
+      nextTemplate.hero_logo_image.kind !== 'video' &&
+      !nextTemplate.hero_logo_image.alt.trim()
+    ) {
+      throw new Error('Logo da Hero precisa de alt text quando for imagem.');
+    }
+
+    for (const block of nextTemplate.gallery_grid) {
+      const primaryNeedsImageAlt =
+        block.type === 'image' ||
+        block.type === 'image-text' ||
+        block.type === 'text-image' ||
+        block.type === 'image-image' ||
+        block.type === 'image-video';
+      const secondaryNeedsImageAlt = block.type === 'image-image';
+
+      if (
+        primaryNeedsImageAlt &&
+        !isVideoLike(block.content.media) &&
+        !block.content.alt?.trim()
+      ) {
+        throw new Error(`Alt text obrigatório no bloco "${block.id}" (mídia 1).`);
+      }
+
+      if (
+        secondaryNeedsImageAlt &&
+        !isVideoLike(block.content.media2) &&
+        !block.content.alt2?.trim()
+      ) {
+        throw new Error(`Alt text obrigatório no bloco "${block.id}" (mídia 2).`);
+      }
+    }
+
+    let heroCoverSrc = nextTemplate.hero_cover_image?.src || '';
+    if (nextTemplate.hero_cover_image?.file) {
+      const path = await handleFileUpload(
+        nextTemplate.hero_cover_image.file,
+        `master-v3-cover-${uuidv4()}`
+      );
+      if (path) heroCoverSrc = path;
+    } else if (heroCoverSrc) {
+      heroCoverSrc = toStoragePath(heroCoverSrc);
+    }
+
+    let heroLogo = nextTemplate.hero_logo_image;
+    if (heroLogo?.file) {
+      const path = await handleFileUpload(heroLogo.file, `master-v3-logo-${uuidv4()}`);
+      if (path) {
+        heroLogo = {
+          ...heroLogo,
+          src: path,
+          file: null,
+          previewUrl: '',
+        };
+      }
+    } else if (heroLogo?.src) {
+      heroLogo = {
+        ...heroLogo,
+        src: toStoragePath(heroLogo.src),
+      };
+    }
+
+    const galleryGrid = await Promise.all(
+      nextTemplate.gallery_grid.map(async (block) => {
+        let media = block.content.media;
+        let media2 = block.content.media2;
+
+        if (block.file) {
+          const path = await handleFileUpload(block.file, `master-v3-${block.id}-media1`);
+          if (path) media = path;
+        } else if (media) {
+          media = toStoragePath(media);
+        }
+
+        if (block.file2) {
+          const path = await handleFileUpload(block.file2, `master-v3-${block.id}-media2`);
+          if (path) media2 = path;
+        } else if (media2) {
+          media2 = toStoragePath(media2);
+        }
+
+        return {
+          ...block,
+          file: null,
+          file2: null,
+          previewUrl: '',
+          previewUrl2: '',
+          content: {
+            ...block.content,
+            media,
+            media2,
+            poster: block.content.poster
+              ? toStoragePath(block.content.poster)
+              : block.content.poster,
+            poster2: block.content.poster2
+              ? toStoragePath(block.content.poster2)
+              : block.content.poster2,
+          },
+        };
+      })
+    );
+
+    const coverPath = heroCoverSrc || initialData?.cover || '';
+    const cleanTemplate = stripMasterV3Draft({
+      ...nextTemplate,
+      hero_cover_image: nextTemplate.hero_cover_image
+        ? {
+            ...nextTemplate.hero_cover_image,
+            src: heroCoverSrc,
+            file: null,
+            previewUrl: '',
+          }
+        : undefined,
+      hero_logo_image: heroLogo,
+      gallery_grid: galleryGrid,
+      seo: {
+        ...nextTemplate.seo,
+        og_image: nextTemplate.seo?.og_image
+          ? toStoragePath(nextTemplate.seo.og_image)
+          : coverPath,
+      },
+    });
+
+    return {
+      coverPath,
+      content: cleanTemplate,
+    };
+  };
+
   const handleSave = async () => {
     if (!title || !slug) {
       alert('Título e Slug são obrigatórios.');
@@ -570,7 +790,9 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
           ? await saveMasterTemplateV1()
           : template === MASTER_PROJECT_TEMPLATE_V2
             ? await saveMasterTemplateV2()
-            : await saveLegacyContent();
+            : template === MASTER_PROJECT_TEMPLATE_V3
+              ? await saveMasterTemplateV3()
+              : await saveLegacyContent();
 
       const payload = {
         title,
@@ -630,7 +852,9 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
               ? `${masterTemplate.gallery_grid.length} itens no gallery_grid`
               : template === MASTER_PROJECT_TEMPLATE_V2
                 ? `${masterTemplateV2.gallery_grid.length} blocos no gallery_grid`
-              : `${sections.length} blocos adicionados`}
+                : template === MASTER_PROJECT_TEMPLATE_V3
+                  ? `${masterTemplateV3.gallery_grid.length} blocos no gallery_grid`
+                  : `${sections.length} blocos adicionados`}
           </span>
           <button
             onClick={handleSave}
@@ -661,6 +885,9 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
                   setTemplate(event.target.value as ProjectTemplateId)
                 }
               >
+                <option value={MASTER_PROJECT_TEMPLATE_V3}>
+                  Template Mestre V3 (ALPA)
+                </option>
                 <option value={MASTER_PROJECT_TEMPLATE_V2}>
                   Template Mestre V2 (MLPE)
                 </option>
@@ -670,8 +897,9 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
                 <option value={LEGACY_PROJECT_TEMPLATE}>Legacy Blocks</option>
               </select>
               <p className="text-[11px] leading-relaxed text-slate-500">
-                O V2 usa `layout_type` + renderer modular (MLPE). O V1 mantém o
-                template anterior e o Legacy mantém o builder antigo por blocos.
+                O V3 (ALPA) usa blocos atômicos/composições com hero limpa e
+                zoom de assets. O V2 mantém o MLPE, o V1 o template anterior e
+                o Legacy mantém o builder antigo por blocos.
               </p>
             </div>
 
@@ -699,6 +927,15 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
                     !masterTemplateV2.project_title
                   ) {
                     setMasterTemplateV2((prev) => ({
+                      ...prev,
+                      project_title: nextTitle,
+                    }));
+                  }
+                  if (
+                    template === MASTER_PROJECT_TEMPLATE_V3 &&
+                    !masterTemplateV3.project_title
+                  ) {
+                    setMasterTemplateV3((prev) => ({
                       ...prev,
                       project_title: nextTitle,
                     }));
@@ -731,6 +968,12 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
                     }
                     if (template === MASTER_PROJECT_TEMPLATE_V2) {
                       setMasterTemplateV2((prev) => ({
+                        ...prev,
+                        project_slug: nextSlug,
+                      }));
+                    }
+                    if (template === MASTER_PROJECT_TEMPLATE_V3) {
+                      setMasterTemplateV3((prev) => ({
                         ...prev,
                         project_slug: nextSlug,
                       }));
@@ -806,6 +1049,11 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
             <MasterProjectTemplateV2Editor
               value={masterTemplateV2}
               onChange={setMasterTemplateV2}
+            />
+          ) : template === MASTER_PROJECT_TEMPLATE_V3 ? (
+            <MasterProjectTemplateV3Editor
+              value={masterTemplateV3}
+              onChange={setMasterTemplateV3}
             />
           ) : (
             <>

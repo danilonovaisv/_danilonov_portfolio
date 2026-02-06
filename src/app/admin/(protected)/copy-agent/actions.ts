@@ -16,6 +16,7 @@ const ALLOWED_REFERENCE_IMAGE_TYPES = new Set([
 ]);
 const MAX_REFERENCE_IMAGES = 4;
 const MAX_REFERENCE_IMAGE_SIZE_BYTES = 8 * 1024 * 1024;
+const MAX_TOTAL_REFERENCE_IMAGES_BYTES = 32 * 1024 * 1024; // matches serverActions limit
 
 const copyInputSchema = z.object({
   projectName: z
@@ -129,6 +130,15 @@ export async function generateProjectCopy(
         fieldErrors: {},
       };
     }
+  }
+
+  const totalSize = referenceImages.reduce((acc, image) => acc + image.size, 0);
+  if (totalSize > MAX_TOTAL_REFERENCE_IMAGES_BYTES) {
+    return {
+      success: false,
+      error: 'Tamanho total das imagens excede 32MB. Envie menos arquivos ou comprima.',
+      fieldErrors: {},
+    };
   }
 
   if (!process.env.OPENAI_API_KEY) {

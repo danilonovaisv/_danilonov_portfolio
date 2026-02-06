@@ -40,10 +40,10 @@ export const DynamicAssetVideo = forwardRef<HTMLVideoElement, DynamicAssetVideoP
     ) => {
         const { asset, loading, error } = useRealtimeAsset(assetKey);
         const [displayUrl, setDisplayUrl] = useState<string | null>(fallbackUrl || null);
-        const internalVideoRef = useRef<HTMLVideoElement>(null);
+        const internalVideoRef = useRef<HTMLVideoElement | null>(null);
 
         // Expose the internal video ref to forwarded ref
-        useImperativeHandle(ref, () => internalVideoRef.current || null);
+        useImperativeHandle(ref, () => internalVideoRef.current);
 
         useEffect(() => {
             if (asset?.publicUrl && asset.publicUrl !== displayUrl) {

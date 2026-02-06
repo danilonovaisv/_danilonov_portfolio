@@ -42,9 +42,9 @@ type MasterProjectTemplateV2EditorProps = {
   onChange: (_next: MasterProjectTemplateV2Draft) => void;
 };
 
-const splitCommaList = (value: string): string[] =>
+const splitTokenList = (value: string): string[] =>
   value
-    .split(',')
+    .split(/[\s,]+/)
     .map((item) => item.trim())
     .filter(Boolean);
 
@@ -315,14 +315,14 @@ export default function MasterProjectTemplateV2Editor({
           </label>
 
           <label className="space-y-1">
-            <span className={labelClasses}>Theme color (Liquid Ether)</span>
+            <span className={labelClasses}>Cor do tema (Liquid Ether)</span>
             <div className="flex gap-2">
               <input
                 type="color"
                 className="h-10 w-12 rounded border border-white/10 bg-transparent"
                 value={value.theme_color || '#0048ff'}
                 onChange={(event) => update({ theme_color: event.target.value })}
-                title="Theme color"
+                title="Cor do tema"
               />
               <input
                 className={inputClasses}
@@ -362,31 +362,31 @@ export default function MasterProjectTemplateV2Editor({
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <span className={labelClasses}>Tags (separadas por vírgula)</span>
+            <span className={labelClasses}>Tags (separadas por espaço ou vírgula)</span>
             <input
               className={inputClasses}
               value={value.project_tags.join(', ')}
               onChange={(event) =>
-                update({ project_tags: splitCommaList(event.target.value) })
+                update({ project_tags: splitTokenList(event.target.value) })
               }
             />
           </label>
 
           <label className="space-y-1 md:col-span-2">
             <span className={labelClasses}>
-              Serviços (separados por vírgula)
+              Serviços (separados por espaço ou vírgula)
             </span>
             <input
               className={inputClasses}
               value={(value.project_services || []).join(', ')}
               onChange={(event) =>
-                update({ project_services: splitCommaList(event.target.value) })
+                update({ project_services: splitTokenList(event.target.value) })
               }
             />
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <span className={labelClasses}>Resumo (summary)</span>
+            <span className={labelClasses}>Resumo</span>
             <textarea
               className={`${inputClasses} min-h-28`}
               value={value.project_summary || ''}
@@ -409,7 +409,7 @@ export default function MasterProjectTemplateV2Editor({
 
           <label className="space-y-1 md:col-span-2">
             <span className={labelClasses}>
-              Parágrafos da intro (1 por linha)
+              Parágrafos da introdução (1 por linha)
             </span>
             <textarea
               className={`${inputClasses} min-h-32`}
@@ -428,7 +428,7 @@ export default function MasterProjectTemplateV2Editor({
         </h3>
         <div className="grid gap-4 xl:grid-cols-2">
           <MediaField
-            label="Hero Cover"
+            label="Capa da Hero"
             value={value.hero_cover_image}
             onChange={(next) => update({ hero_cover_image: next })}
           />
@@ -642,7 +642,7 @@ export default function MasterProjectTemplateV2Editor({
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="space-y-1">
-                    <span className={labelClasses}>Layout type</span>
+                    <span className={labelClasses}>Tipo de layout</span>
                     <select
                       className={inputClasses}
                       value={item.layout_type}
@@ -653,11 +653,11 @@ export default function MasterProjectTemplateV2Editor({
                         })
                       }
                     >
-                      <option value="grid_2_col">Grid 2 col</option>
-                      <option value="grid_1_col">Grid 1 col</option>
+                      <option value="grid_2_col">Grid 2 colunas</option>
+                      <option value="grid_1_col">Grid 1 coluna</option>
                       <option value="grid_feat">Full Highlight</option>
-                      <option value="grid_features_3">Features 3</option>
-                      <option value="grid_quote">Quote</option>
+                      <option value="grid_features_3">Destaques 3</option>
+                      <option value="grid_quote">Citação</option>
                       <option value="grid_split">Split</option>
                     </select>
                   </label>
@@ -768,7 +768,7 @@ export default function MasterProjectTemplateV2Editor({
                   ) : null}
 
                   <label className="space-y-1">
-                    <span className={labelClasses}>Eyebrow</span>
+                    <span className={labelClasses}>Sobretítulo</span>
                     <input
                       className={inputClasses}
                       value={item.eyebrow || ''}
@@ -807,7 +807,7 @@ export default function MasterProjectTemplateV2Editor({
                   </label>
 
                   <label className="space-y-1 md:col-span-2">
-                    <span className={labelClasses}>Quote</span>
+                    <span className={labelClasses}>Citação</span>
                     <input
                       className={inputClasses}
                       value={item.quote || ''}
@@ -822,7 +822,7 @@ export default function MasterProjectTemplateV2Editor({
                   {isFeatures ? (
                     <label className="space-y-1 md:col-span-2">
                       <span className={labelClasses}>
-                        Features (1 por linha: título | descrição)
+                        Destaques (1 por linha: título | descrição)
                       </span>
                       <textarea
                         className={`${inputClasses} min-h-24`}
@@ -851,7 +851,7 @@ export default function MasterProjectTemplateV2Editor({
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={preview}
-                        alt={item.alt || 'Preview'}
+                        alt={item.alt || 'Pré-visualização'}
                         className="h-48 w-full object-cover"
                       />
                     )}

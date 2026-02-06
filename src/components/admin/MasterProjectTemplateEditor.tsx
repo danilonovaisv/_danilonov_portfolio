@@ -38,9 +38,9 @@ type MasterProjectTemplateEditorProps = {
   onChange: (_next: MasterProjectTemplateDraft) => void;
 };
 
-const splitCommaList = (value: string): string[] =>
+const splitTokenList = (value: string): string[] =>
   value
-    .split(',')
+    .split(/[\s,]+/)
     .map((item) => item.trim())
     .filter(Boolean);
 
@@ -308,12 +308,12 @@ export default function MasterProjectTemplateEditor({
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <span className={labelClasses}>Tags (separadas por vírgula)</span>
+            <span className={labelClasses}>Tags (separadas por espaço ou vírgula)</span>
             <input
               className={inputClasses}
               value={value.project_tags.join(', ')}
               onChange={(event) =>
-                update({ project_tags: splitCommaList(event.target.value) })
+                update({ project_tags: splitTokenList(event.target.value) })
               }
             />
           </label>
@@ -326,7 +326,7 @@ export default function MasterProjectTemplateEditor({
               className={inputClasses}
               value={(value.project_services || []).join(', ')}
               onChange={(event) =>
-                update({ project_services: splitCommaList(event.target.value) })
+                update({ project_services: splitTokenList(event.target.value) })
               }
             />
           </label>

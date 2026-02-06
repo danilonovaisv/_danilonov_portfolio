@@ -160,7 +160,7 @@ export default function BlockRenderer({
       return (
         <div className="w-full relative rounded-2xl overflow-hidden bg-slate-900/50 border border-white/5 aspect-video">
           <iframe
-            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&loop=1&playlist=${youtubeId}&controls=1&modestbranding=1&rel=0`}
+            src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&modestbranding=1&rel=0`}
             title="YouTube video player"
             className="absolute inset-0 w-full h-full"
             width={1280}
@@ -180,9 +180,9 @@ export default function BlockRenderer({
             src={url}
             className="w-full h-auto"
             autoPlay={autoplay}
-            muted={false} // Autoplay with sound per user request
+            muted={true}
             loop={autoplay}
-            controls={true}
+            controls={false}
             playsInline
             poster={DEFAULT_VIDEO_POSTER}
           ></video>
