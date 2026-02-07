@@ -1,3 +1,5 @@
+import { logAdminAudit } from '@/lib/admin/audit';
+import { requireAdminAccess } from '@/lib/admin/server-access';
 import { createClient } from '@/lib/supabase/server';
 import type { DbProject, DbTag } from '@/types/admin';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -77,7 +79,7 @@ export async function getProject(id: string) {
 export async function upsertProject(
   payload: Partial<DbProject> & { id?: string; tagIds?: string[] }
 ) {
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
 
   const { tagIds, ...projectData } = payload;
 
@@ -87,7 +89,16 @@ export async function upsertProject(
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: payload.id ? 'project.update' : 'project.create',
+      resource: 'portfolio_projects',
+      resourceId: payload.id ?? null,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
 
   if (tagIds && data?.id) {
     await supabase
@@ -106,6 +117,13 @@ export async function upsertProject(
     }
   }
 
+  await logAdminAudit(supabase, user, {
+    action: payload.id ? 'project.update' : 'project.create',
+    resource: 'portfolio_projects',
+    resourceId: data?.id ?? payload.id ?? null,
+    status: 'success',
+  });
+
   return data as DbProject;
 }
 
@@ -113,19 +131,50 @@ export async function togglePublish(formData: FormData) {
   'use server';
   const projectId = formData.get('id') as string;
   const nextStatus = (formData.get('nextStatus') as string) === 'true';
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
   const { error } = await supabase
     .from('portfolio_projects')
     .update({ is_published: nextStatus })
     .eq('id', projectId);
-  if (error) throw error;
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: 'project.toggle_publish',
+      resource: 'portfolio_projects',
+      resourceId: projectId,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
+  await logAdminAudit(supabase, user, {
+    action: 'project.toggle_publish',
+    resource: 'portfolio_projects',
+    resourceId: projectId,
+    status: 'success',
+    metadata: { is_published: nextStatus },
+  });
 }
 
 export async function deleteProject(projectId: string) {
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
   const { error } = await supabase
     .from('portfolio_projects')
     .delete()
     .eq('id', projectId);
-  if (error) throw error;
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: 'project.delete',
+      resource: 'portfolio_projects',
+      resourceId: projectId,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
+  await logAdminAudit(supabase, user, {
+    action: 'project.delete',
+    resource: 'portfolio_projects',
+    resourceId: projectId,
+    status: 'success',
+  });
 }

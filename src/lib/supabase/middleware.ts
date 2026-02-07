@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { isAdminUser, shouldEnforceAdminRole } from '@/lib/admin/authz';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY =
@@ -81,13 +82,11 @@ export async function updateSession(request: NextRequest) {
       return redirectResponse;
     }
 
-    // Se precisar de papel admin, reative o check abaixo.
-    // const userRole = user.app_metadata?.role || 'user';
-    // if (userRole !== 'admin') {
-    //   const url = request.nextUrl.clone();
-    //   url.pathname = '/';
-    //   return NextResponse.redirect(url);
-    // }
+    if (shouldEnforceAdminRole() && !isAdminUser(user)) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/';
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

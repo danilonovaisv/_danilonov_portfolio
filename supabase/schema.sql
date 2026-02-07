@@ -65,6 +65,22 @@ create table if not exists public.site_assets (
   updated_at timestamptz not null default timezone('utc', now())
 );
 
+create table if not exists public.admin_audit_log (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default timezone('utc', now()),
+  actor_user_id uuid null references auth.users(id) on delete set null,
+  actor_email text null,
+  action text not null,
+  resource text not null,
+  resource_id text null,
+  status text not null check (status in ('success', 'denied', 'error')),
+  ip_address text null,
+  user_agent text null,
+  metadata jsonb not null default '{}'::jsonb,
+  error_code text null,
+  error_message text null
+);
+
 -- Triggers de atualização
 drop trigger if exists trg_set_timestamp_portfolio_projects on public.portfolio_projects;
 create trigger trg_set_timestamp_portfolio_projects
@@ -102,27 +118,63 @@ create index if not exists idx_portfolio_tags_sort
 create index if not exists idx_site_assets_page
   on public.site_assets (page, is_active, sort_order);
 
+create index if not exists idx_admin_audit_log_created_at
+  on public.admin_audit_log (created_at desc);
+
+create index if not exists idx_admin_audit_log_actor_user_id
+  on public.admin_audit_log (actor_user_id);
+
+create index if not exists idx_admin_audit_log_action
+  on public.admin_audit_log (action);
+
 -- RLS
 alter table public.portfolio_projects enable row level security;
 alter table public.portfolio_tags enable row level security;
 alter table public.portfolio_project_tags enable row level security;
 alter table public.site_assets enable row level security;
+alter table public.admin_audit_log enable row level security;
 
 create policy "Public read published projects"
   on public.portfolio_projects for select
   using (is_published = true);
 
-create policy "Auth manage projects"
+create policy "Admin manage projects"
   on public.portfolio_projects for all
-  using (auth.role() = 'authenticated');
+  using (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  )
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
 create policy "Public read tags"
   on public.portfolio_tags for select
   using (true);
 
-create policy "Auth manage tags"
+create policy "Admin manage tags"
   on public.portfolio_tags for all
-  using (auth.role() = 'authenticated');
+  using (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  )
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
 create policy "Public read published project tags"
   on public.portfolio_project_tags for select
@@ -133,17 +185,60 @@ create policy "Public read published project tags"
     )
   );
 
-create policy "Auth manage project tags"
+create policy "Admin manage project tags"
   on public.portfolio_project_tags for all
-  using (auth.role() = 'authenticated');
+  using (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  )
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
 create policy "Public read active assets"
   on public.site_assets for select
   using (is_active = true);
 
-create policy "Auth manage assets"
+create policy "Admin manage assets"
   on public.site_assets for all
-  using (auth.role() = 'authenticated');
+  using (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  )
+  with check (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
+
+create policy "Admin read audit log"
+  on public.admin_audit_log for select
+  using (
+    auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
+
+create policy "Authenticated insert audit log"
+  on public.admin_audit_log for insert
+  with check (
+    auth.role() = 'authenticated'
+    and actor_user_id = auth.uid()
+  );
 
 -- Buckets de storage
 insert into storage.buckets (id, name, public)
@@ -159,18 +254,46 @@ create policy "Public read portfolio-media/site-assets"
   on storage.objects for select
   using (bucket_id in ('portfolio-media', 'site-assets'));
 
-create policy "Auth upload portfolio-media/site-assets"
+create policy "Admin upload portfolio-media/site-assets"
   on storage.objects for insert
-  with check (bucket_id in ('portfolio-media', 'site-assets') and auth.role() = 'authenticated');
+  with check (
+    bucket_id in ('portfolio-media', 'site-assets')
+    and auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
-create policy "Auth update portfolio-media/site-assets"
+create policy "Admin update portfolio-media/site-assets"
   on storage.objects for update
-  using (bucket_id in ('portfolio-media', 'site-assets') and auth.role() = 'authenticated')
-  with check (bucket_id in ('portfolio-media', 'site-assets') and auth.role() = 'authenticated');
+  using (
+    bucket_id in ('portfolio-media', 'site-assets')
+    and auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  )
+  with check (
+    bucket_id in ('portfolio-media', 'site-assets')
+    and auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
-create policy "Auth delete portfolio-media/site-assets"
+create policy "Admin delete portfolio-media/site-assets"
   on storage.objects for delete
-  using (bucket_id in ('portfolio-media', 'site-assets') and auth.role() = 'authenticated');
+  using (
+    bucket_id in ('portfolio-media', 'site-assets')
+    and auth.role() = 'authenticated'
+    and (
+      coalesce(auth.jwt() ->> 'role', '') in ('admin', 'owner', 'super_admin')
+      or coalesce(auth.jwt() -> 'app_metadata' ->> 'role', '') in ('admin', 'owner', 'super_admin')
+    )
+  );
 
 -- Realtime publication (zero-deploy sync)
 do $$

@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { createClientComponentClient } from '@/lib/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import {
   Trash2,
@@ -56,6 +55,7 @@ import MasterProjectTemplateV2Editor, {
 import MasterProjectTemplateV3Editor, {
   type MasterProjectTemplateV3Draft,
 } from './MasterProjectTemplateV3Editor';
+import { saveLandingPageAction } from '@/app/admin/(protected)/landing-pages/actions';
 
 interface LandingPageFormProps {
   initialData?: {
@@ -259,7 +259,6 @@ const stripMasterV3Draft = (
 
 export default function LandingPageForm({ initialData }: LandingPageFormProps) {
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   const initialParsed = useMemo(
     () =>
@@ -801,18 +800,10 @@ export default function LandingPageForm({ initialData }: LandingPageFormProps) {
         content: persisted.content,
       };
 
-      if (initialData?.id) {
-        const { error } = await supabase
-          .from('landing_pages')
-          .update(payload)
-          .eq('id', initialData.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('landing_pages')
-          .insert({ ...payload, created_at: new Date().toISOString() });
-        if (error) throw error;
-      }
+      await saveLandingPageAction({
+        id: initialData?.id,
+        ...payload,
+      });
 
       router.push('/admin/landing-pages');
       router.refresh();

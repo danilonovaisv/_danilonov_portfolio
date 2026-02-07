@@ -5,8 +5,9 @@ import {
   buildAssetFilePath,
   getFileExtension,
 } from '@/lib/supabase/asset-paths';
+import { logAdminAudit } from '@/lib/admin/audit';
+import { requireAdminAccess } from '@/lib/admin/server-access';
 import { normalizeStoragePath } from '@/lib/supabase/urls';
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 type AssetPayload = {
@@ -26,7 +27,7 @@ type AssetPayload = {
 };
 
 export async function upsertAsset(payload: AssetPayload) {
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
   const normalizedPath = payload.file_path
     ? normalizeStoragePath(payload.file_path, payload.bucket ?? 'site-assets')
     : null;
@@ -39,7 +40,22 @@ export async function upsertAsset(payload: AssetPayload) {
     },
     { onConflict: 'key' }
   );
-  if (error) throw error;
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: 'asset.upsert',
+      resource: 'site_assets',
+      resourceId: payload.key,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
+  await logAdminAudit(supabase, user, {
+    action: 'asset.upsert',
+    resource: 'site_assets',
+    resourceId: payload.key,
+    status: 'success',
+  });
   refreshAssetRoutes();
 }
 
@@ -49,7 +65,7 @@ type AssignAssetRolePayload = {
 };
 
 export async function assignAssetRole(payload: AssignAssetRolePayload) {
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
   const { data: existing, error: fetchError } = await supabase
     .from('site_assets')
     .select('bucket,file_path')
@@ -92,6 +108,13 @@ export async function assignAssetRole(payload: AssignAssetRolePayload) {
     .eq('id', payload.assetId);
 
   if (updateError) throw updateError;
+  await logAdminAudit(supabase, user, {
+    action: 'asset.assign_role',
+    resource: 'site_assets',
+    resourceId: payload.assetId,
+    status: 'success',
+    metadata: { role: payload.role.key },
+  });
   refreshAssetRoutes();
 }
 
@@ -100,7 +123,7 @@ export async function removeAsset(payload: {
   bucket: string;
   file_path?: string | null;
 }) {
-  const supabase = await createClient();
+  const { supabase, user } = await requireAdminAccess();
   if (payload.file_path) {
     const normalizedPath = normalizeStoragePath(
       payload.file_path,
@@ -117,7 +140,22 @@ export async function removeAsset(payload: {
     .from('site_assets')
     .delete()
     .eq('id', payload.id);
-  if (error) throw error;
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: 'asset.delete',
+      resource: 'site_assets',
+      resourceId: payload.id,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
+  await logAdminAudit(supabase, user, {
+    action: 'asset.delete',
+    resource: 'site_assets',
+    resourceId: payload.id,
+    status: 'success',
+  });
   refreshAssetRoutes();
 }
 

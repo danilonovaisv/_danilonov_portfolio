@@ -3,16 +3,16 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, type Resolver, type SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 
-import { createClientComponentClient } from '@/lib/supabase/client';
+import { upsertTagAction } from '@/app/admin/(protected)/tags/actions';
 import type { DbTag } from '@/types/admin';
 
 const tagSchema = z.object({
   label: z.string().min(2),
   slug: z.string().min(2),
-  kind: z.string().default('category'),
+  kind: z.enum(['category', 'discipline', 'industry']).default('category'),
   description: z.string().optional(),
   sort_order: z.coerce.number().int().optional(),
 });
@@ -27,14 +27,18 @@ export function TagForm({ tag, onSaved }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  type FormValues = z.infer<typeof tagSchema>;
+  type FormValues = z.input<typeof tagSchema>;
+  const normalizedKind: NonNullable<FormValues['kind']> =
+    tag?.kind === 'category' || tag?.kind === 'discipline' || tag?.kind === 'industry'
+      ? tag.kind
+      : 'category';
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(tagSchema) as Resolver<FormValues>,
+    resolver: zodResolver(tagSchema),
     defaultValues: {
       label: tag?.label ?? '',
       slug: tag?.slug ?? '',
-      kind: tag?.kind ?? 'category',
+      kind: normalizedKind,
       description: tag?.description ?? '',
       sort_order: tag?.sort_order ?? undefined,
     },
@@ -44,18 +48,11 @@ export function TagForm({ tag, onSaved }: Props) {
     setError(null);
     startTransition(async () => {
       try {
-        const supabase = createClientComponentClient();
-        const { error: upsertError } = await supabase
-          .from('portfolio_tags')
-          .upsert(
-            {
-              id: tag?.id,
-              ...values,
-            },
-            { onConflict: 'id' }
-          );
-
-        if (upsertError) throw upsertError;
+        const payload = tagSchema.parse(values);
+        await upsertTagAction({
+          id: tag?.id,
+          ...payload,
+        });
         router.refresh();
         onSaved?.();
       } catch (err) {

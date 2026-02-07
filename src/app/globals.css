@@ -424,6 +424,6 @@ html.admin-page body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-[var(--color-background)] text-[var(--color-text)];
+    @apply bg-(--color-background) text-(--color-text);
   }
 }

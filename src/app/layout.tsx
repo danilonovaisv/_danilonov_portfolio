@@ -52,7 +52,7 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="antialiased bg-[var(--color-background)] text-[var(--color-text)] pb-0 lg:pb-[64px] overflow-x-hidden"
+        className="antialiased bg-(--color-background) text-(--color-text) pb-0 lg:pb-[64px] overflow-x-hidden"
         style={inlineStyle}
       >
         <a

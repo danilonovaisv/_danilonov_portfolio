@@ -9,6 +9,7 @@ import { AdminShell } from '@/components/admin/AdminShell';
 import { AdminErrorDisplay } from '@/components/admin/AdminErrorDisplay';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { isAdminUser, shouldEnforceAdminRole } from '@/lib/admin/authz';
 
 export const metadata: Metadata = {
   robots: {
@@ -42,6 +43,10 @@ export default async function ProtectedLayout({
       // O middleware já redireciona para /admin/login se não houver usuário.
       // Adicionamos um redirecionamento explícito aqui como safeguard.
       redirect('/admin/login');
+    }
+
+    if (shouldEnforceAdminRole() && !isAdminUser(user)) {
+      redirect('/');
     }
 
     return (
