@@ -94,6 +94,9 @@ test-results/
 .github/workflows/*
 !.github/workflows/firebase-deploy.yml
 !.github/workflows/ai-healing.yml
+!.github/workflows/codeql.yml
+!.github/codeql/
+!.github/codeql/codeql-config.yml
 
 # Additional Caches
 .next-old/
@@ -110,3 +113,4 @@ site_assets_backup-*.json
 firepit-log.txt
 .cache/
 artifacts/
+deploy-public/
