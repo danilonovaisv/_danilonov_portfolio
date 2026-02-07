@@ -25,6 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         language:
+          - actions
           - javascript-typescript
           - python
 
@@ -36,10 +37,8 @@ jobs:
         uses: github/codeql-action/init@33119e582d3ab4ed79c2610af108cb08ff983917
         with:
           languages: ${{ matrix.language }}
+          build-mode: none
           config-file: ./.github/codeql/codeql-config.yml
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@33119e582d3ab4ed79c2610af108cb08ff983917
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@33119e582d3ab4ed79c2610af108cb08ff983917
