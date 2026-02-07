@@ -39,6 +39,7 @@ const GhostScene: React.FC<GhostSceneProps> = ({ scrollProgress }) => {
         shadows
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true }}
+        // 🟣 [CONFIG VISUAL]: Câmera - Posição Z=6 define o quão perto/longe o objeto parece estar. FOV=35 define a distorção da perspectiva.
         camera={{ position: [0, 0, 6], fov: 35 }}
       >
         {/* Low Ambient for higher contrast shadows */}
@@ -69,6 +70,7 @@ const GhostScene: React.FC<GhostSceneProps> = ({ scrollProgress }) => {
           <GhostModel scrollProgress={scrollProgress} isMobile={isMobile} />
         </Suspense>
         {/* Stronger, grounded shadow */}
+        {/* 🟣 [CONFIG VISUAL]: Sombra de contato - Scale=18 define o tamanho da mancha no chão. Opacity=0.6 a intensidade. */}
         <ContactShadows
           position={[0, -2.5, 0]}
           opacity={0.6}

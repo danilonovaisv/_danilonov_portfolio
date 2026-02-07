@@ -1,4 +1,4 @@
-# Plano de Ajustes e Melhorias - Frontend Audit
+console-ninja.showWelcomeMessageInTools# Plano de Ajustes e Melhorias - Frontend Audit
 
 ## 1. Visão Geral
 

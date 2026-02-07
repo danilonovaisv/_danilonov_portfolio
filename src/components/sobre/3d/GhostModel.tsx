@@ -47,6 +47,7 @@ const GhostModel: React.FC<GhostModelProps> = ({
     () => ({
       // Desktop: Centralizado (0)
       // Mobile: Canto esquerdo superior (ajuste negativo em X, positivo em Y)
+      // 🟣 [CONFIG VISUAL]: Posição Base X - Define onde o Ghost começa horizontalmente (Desktop vs Mobile)
       baseX: isMobile ? -viewport.width / 3 : viewport.width / 3.5,
 
       // Desktop: Centralizado (0)
@@ -58,12 +59,16 @@ const GhostModel: React.FC<GhostModelProps> = ({
       floatBase: isMobile ? 0.09 : 0.05,
       floatAmplitude: 0.2,
       tiltBase: 0.15,
+      tiltBase: 0.15,
       // Escala ajustada para maior presença
+      // 🟣 [CONFIG VISUAL]: Escala Base - Tamanho inicial do Ghost (0.22 mobile, 0.65 desktop)
       baseScale: isMobile ? 0.22 : 0.65,
+      // 🟣 [CONFIG VISUAL]: Boost de Escala - Quanto o Ghost cresce na fase final (+15%)
       scaleBoost: 0.15, // +15% no final
       scrollResponse: isMobile ? 0.2 : 0.5,
 
       // Saída (Exit)
+      // 🟣 [CONFIG VISUAL]: Posição de Saída Y - Define o quanto ele sobe ao sair da tela
       exitY: 6, // Sobe para sair
     }),
     [isMobile, viewport.width, viewport.height]

@@ -50,8 +50,10 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
   );
   return (
     <motion.span
-      style={{ x: lineX }}
-      className="block text-blueAccent italic font-semibold text-[clamp(4rem,9vw,8.5rem)] leading-[0.85] text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
+      // 🟣 [CONFIG VISUAL]: Define a cor do texto das linhas (desktop)
+      className="block text-blueAccent italic font-semibold text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
+      // 🟣 [CONFIG VISUAL]: Define o tamanho da fonte (Desktop: clamp de 4rem a 8.5rem)
+      style={{ x: lineX, fontSize: 'clamp(4rem,9vw,8.5rem)', lineHeight: 0.85 }}
     >
       {line}
     </motion.span>
@@ -104,12 +106,12 @@ export const BeliefSection: React.FC<BeliefSectionProps> = ({
     <motion.section
       ref={containerRef}
       aria-label={text.replace(/\n/g, ' ')}
+      // 🟣 [CONFIG VISUAL]: Define a cor de fundo da seção
       style={{ backgroundColor: bgColor }}
-      className={`relative w-full h-screen flex overflow-hidden ${
-        isMobile
+      className={`relative w-full h-screen flex overflow-hidden ${isMobile
           ? 'items-end justify-start pb-32' // Mobile: espaço para texto fixed no footer
           : 'items-center justify-start px-[5%] md:px-[7.5%] lg:px-[10%]'
-      }`}
+        }`}
     >
       {/* Desktop: Texto inline */}
       {!isMobile && !isMobileTextLayer && (
@@ -235,6 +237,7 @@ const MobilePhrase: React.FC<MobilePhraseProps> = ({
       style={{ x, opacity, filter: blur }}
       className="fixed bottom-[25%] left-0 right-0 z-60 text-center pointer-events-none px-8"
     >
+      {/* 🟣 [CONFIG VISUAL]: Define cor e tamanho do texto (Mobile: clamp 2rem-3.5rem) */}
       <span className="text-blueAccent italic font-semibold text-[clamp(2rem,6vw,3.5rem)] leading-[1.4] tracking-widest block w-full mx-auto">
         {text}
       </span>
