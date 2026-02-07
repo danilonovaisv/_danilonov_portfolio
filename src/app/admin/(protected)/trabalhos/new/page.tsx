@@ -2,16 +2,16 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
-import { createClient } from '@/lib/supabase/server';
+import { requireAdminAccess } from '@/lib/admin/server-access';
 import { ProjectForm } from '@/components/admin/ProjectForm';
 
 export default async function NewProjectPage() {
-  const supabase = await createClient();
+  const { supabase } = await requireAdminAccess();
   const [{ data: tags }, { data: landingPages }] = await Promise.all([
     supabase
       .from('portfolio_tags')
       .select('*')
-      .order('sort_order', { ascending: true, nullsFirst: false }),
+      .order('label', { ascending: true }),
     supabase
       .from('landing_pages')
       .select('id, title, slug, content')

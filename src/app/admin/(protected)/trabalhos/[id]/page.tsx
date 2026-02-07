@@ -3,7 +3,7 @@ export const runtime = 'nodejs';
 export const fetchCache = 'force-no-store';
 
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { requireAdminAccess } from '@/lib/admin/server-access';
 import { ProjectForm } from '@/components/admin/ProjectForm';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 export default async function EditProjectPage(props: Props) {
   const params = await props.params;
   const { id } = params;
-  const supabase = await createClient();
+  const { supabase } = await requireAdminAccess();
 
   const [
     { data: project, error: projectError },
@@ -28,7 +28,7 @@ export default async function EditProjectPage(props: Props) {
     supabase
       .from('portfolio_tags')
       .select('*')
-      .order('sort_order', { ascending: true, nullsFirst: false }),
+      .order('label', { ascending: true }),
     supabase
       .from('landing_pages')
       .select('id, title, slug, content')

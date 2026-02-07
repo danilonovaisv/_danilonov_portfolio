@@ -238,10 +238,10 @@ export default function MasterProjectTemplate({
             ))}
           </motion.div>
 
-          <div className="flex items-center justify-between gap-4 pt-6 text-xs uppercase tracking-[0.14em] text-white/80">
+          <div className="relative z-20 grid gap-2 pt-8 text-xs uppercase tracking-[0.14em] text-white/80 sm:flex sm:items-center sm:justify-between sm:gap-4">
             <Link
               href="/portfolio"
-              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 transition-opacity hover:opacity-80"
+              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 transition-opacity hover:opacity-80 sm:justify-start"
             >
               <ArrowLeft className="h-4 w-4" />
               {backLabel}
@@ -249,7 +249,7 @@ export default function MasterProjectTemplate({
 
             <a
               href="#project-intro"
-              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 transition-opacity hover:opacity-80"
+              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 transition-opacity hover:opacity-80 sm:justify-center"
               aria-label="Ir para o conteúdo principal"
             >
               explorar
@@ -258,7 +258,7 @@ export default function MasterProjectTemplate({
 
             <Link
               href={nextHref}
-              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 text-right transition-opacity hover:opacity-80"
+              className="inline-flex min-h-12 items-center gap-2 px-2 py-2 text-left transition-opacity hover:opacity-80 sm:justify-end sm:text-right"
             >
               {nextLabel}
               <ArrowRight className="h-4 w-4" />

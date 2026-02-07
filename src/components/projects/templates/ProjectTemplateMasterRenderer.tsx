@@ -306,25 +306,25 @@ export default function ProjectTemplateMasterRenderer({
                   ease: GHOST_EASE,
                   delay: 0.16,
                 }}
-                className="flex flex-wrap items-center justify-between gap-3 pt-6 text-xs uppercase tracking-[0.15em] text-white/88"
+                className="relative z-20 grid gap-2 pt-8 text-xs uppercase tracking-[0.15em] text-white/88 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-3"
               >
                 <Link
                   href="/portfolio"
-                  className="inline-flex min-h-12 items-center gap-2 px-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  className="inline-flex min-h-12 items-center gap-2 px-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:justify-start"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   {backLabel}
                 </Link>
                 <a
                   href="#project-intro"
-                  className="inline-flex min-h-12 items-center gap-2 px-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  className="inline-flex min-h-12 items-center gap-2 px-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:justify-center"
                 >
                   explorar
                   <ArrowDown className="h-4 w-4" />
                 </a>
                 <Link
                   href={nextHref}
-                  className="inline-flex min-h-12 items-center gap-2 px-2 transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  className="inline-flex min-h-12 items-center gap-2 px-2 text-left transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:justify-end sm:text-right"
                 >
                   {nextLabel}
                   <ArrowRight className="h-4 w-4" />

@@ -1,5 +1,6 @@
 import type { User } from '@supabase/supabase-js';
 import { isAdminUser, shouldEnforceAdminRole } from '@/lib/admin/authz';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 
 export class AdminAccessError extends Error {
@@ -23,16 +24,25 @@ export function assertAdminAccess(user: User | null | undefined) {
 }
 
 export async function requireAdminAccess() {
-  const supabase = await createClient();
+  const requestScopedSupabase = await createClient();
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = await requestScopedSupabase.auth.getUser();
 
   if (error) {
     throw new AdminAccessError(error.message, 'unauthorized');
   }
 
   assertAdminAccess(user);
+
+  let supabase = requestScopedSupabase;
+
+  try {
+    supabase = createAdminClient();
+  } catch {
+    // Keep request-scoped client as fallback when service role is not configured.
+  }
+
   return { supabase, user };
 }

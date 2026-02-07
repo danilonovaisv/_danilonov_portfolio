@@ -3,6 +3,7 @@ import { requireAdminAccess } from '@/lib/admin/server-access';
 import { createClient } from '@/lib/supabase/server';
 import type { DbProject, DbTag } from '@/types/admin';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 
 type ProjectFilters = {
   tagSlug?: string;
@@ -28,8 +29,7 @@ export async function listProjects(
     .from('portfolio_projects')
     .select(
       '*, tags:portfolio_project_tags(tag:portfolio_tags(id, slug, label, kind)), landing_page:landing_pages(slug)'
-    )
-    .order('featured_portfolio_order', { ascending: true, nullsFirst: false });
+    );
 
   if (!filters.includeUnpublished) {
     query = query.eq('is_published', true);
@@ -153,6 +153,44 @@ export async function togglePublish(formData: FormData) {
     status: 'success',
     metadata: { is_published: nextStatus },
   });
+
+  revalidatePath('/admin/trabalhos');
+  revalidatePath('/');
+  revalidatePath('/portfolio');
+}
+
+export async function toggleFeaturedOnPortfolio(formData: FormData) {
+  'use server';
+  const projectId = formData.get('id') as string;
+  const nextStatus = (formData.get('nextStatus') as string) === 'true';
+  const { supabase, user } = await requireAdminAccess();
+  const { error } = await supabase
+    .from('portfolio_projects')
+    .update({ featured_on_portfolio: nextStatus })
+    .eq('id', projectId);
+
+  if (error) {
+    await logAdminAudit(supabase, user, {
+      action: 'project.toggle_featured_on_portfolio',
+      resource: 'portfolio_projects',
+      resourceId: projectId,
+      status: 'error',
+      errorMessage: error.message,
+    });
+    throw error;
+  }
+
+  await logAdminAudit(supabase, user, {
+    action: 'project.toggle_featured_on_portfolio',
+    resource: 'portfolio_projects',
+    resourceId: projectId,
+    status: 'success',
+    metadata: { featured_on_portfolio: nextStatus },
+  });
+
+  revalidatePath('/admin/trabalhos');
+  revalidatePath('/');
+  revalidatePath('/portfolio');
 }
 
 export async function deleteProject(projectId: string) {

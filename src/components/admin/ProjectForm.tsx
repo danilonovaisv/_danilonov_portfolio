@@ -10,6 +10,10 @@ import { createClientComponentClient } from '@/lib/supabase/client';
 import { uploadToBucket } from '@/lib/supabase/storage';
 import type { DbProject, DbTag, DbLandingPage } from '@/types/admin';
 import { FieldTooltip } from '@/components/admin/FieldTooltip';
+import { upsertTagAction } from '@/app/admin/(protected)/tags/actions';
+import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
+import { isVideo } from '@/utils/utils';
+import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
 import {
   LEGACY_PROJECT_TEMPLATE,
   MASTER_PROJECT_TEMPLATE,
@@ -27,9 +31,7 @@ const projectSchema = z.object({
   short_label: z.string().optional(),
   description: z.string().optional(),
   featured_on_home: z.boolean().optional(),
-  featured_on_portfolio: z.boolean().optional(),
   featured_home_order: z.coerce.number().int().optional().nullable(),
-  featured_portfolio_order: z.coerce.number().int().optional().nullable(),
   preferred_size: z.preprocess(
     (val) => (val === '' ? undefined : val),
     z.enum(['sm', 'md', 'lg', 'wide']).optional().nullable()
@@ -61,6 +63,13 @@ export function ProjectForm({
   const [landscapeVariant, setLandscapeVariant] = useState<File | null>(null);
   const [squareVariant, setSquareVariant] = useState<File | null>(null);
   const [gallery, setGallery] = useState<File[]>([]);
+  const [availableTags, setAvailableTags] = useState<DbTag[]>(() =>
+    [...tags].sort((a, b) =>
+      a.label.localeCompare(b.label, 'pt-BR', { sensitivity: 'base' })
+    )
+  );
+  const [newTagLabel, setNewTagLabel] = useState('');
+  const [isCreatingTag, setIsCreatingTag] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -77,9 +86,7 @@ export function ProjectForm({
       short_label: project?.short_label ?? '',
       description: project?.description ?? '',
       featured_on_home: project?.featured_on_home ?? false,
-      featured_on_portfolio: project?.featured_on_portfolio ?? false,
       featured_home_order: project?.featured_home_order ?? undefined,
-      featured_portfolio_order: project?.featured_portfolio_order ?? undefined,
       preferred_size: project?.preferred_size ?? null,
       is_published: project?.is_published ?? true,
       landing_page_id: project?.landing_page_id ?? '',
@@ -114,6 +121,29 @@ export function ProjectForm({
       }),
     [landingPages]
   );
+
+  const toErrorMessage = (err: unknown) => {
+    if (err instanceof Error) return err.message;
+    if (
+      err &&
+      typeof err === 'object' &&
+      'message' in err &&
+      typeof (err as { message?: unknown }).message === 'string'
+    ) {
+      return (err as { message: string }).message;
+    }
+    return 'Ocorreu um erro desconhecido';
+  };
+
+  const slugify = (value: string) =>
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 120);
 
   const onSubmit: SubmitHandler<FormValues> = (values) => {
     setError(null);
@@ -235,11 +265,53 @@ export function ProjectForm({
         router.push('/admin/trabalhos');
         router.refresh();
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Ocorreu um erro desconhecido'
-        );
+        setError(toErrorMessage(err));
       }
     });
+  };
+
+  const handleCreateTag = async () => {
+    const label = newTagLabel.trim();
+    if (!label) return;
+
+    const slug = slugify(label);
+    if (!slug) {
+      setError('Informe uma tag válida para gerar o slug.');
+      return;
+    }
+
+    setIsCreatingTag(true);
+    setError(null);
+
+    try {
+      await upsertTagAction({
+        label,
+        slug,
+        kind: 'category',
+      });
+
+      const supabase = createClientComponentClient();
+      const { data, error: fetchError } = await supabase
+        .from('portfolio_tags')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+      if (!data) throw new Error('Tag criada, mas não foi possível carregá-la.');
+
+      setAvailableTags((prev) =>
+        [...prev, data].sort((a, b) =>
+          a.label.localeCompare(b.label, 'pt-BR', { sensitivity: 'base' })
+        )
+      );
+      form.setValue('tags', [...selectedTags, data.id]);
+      setNewTagLabel('');
+    } catch (err) {
+      setError(toErrorMessage(err));
+    } finally {
+      setIsCreatingTag(false);
+    }
   };
 
   return (
@@ -263,7 +335,7 @@ export function ProjectForm({
             className="flex items-center gap-1"
           />
           <div className="flex flex-col gap-2">
-            {tags.length > 0 && (
+            {availableTags.length > 0 && (
               <select
                 className="rounded-md bg-slate-900/60 border border-white/10 px-3 py-2 text-sm text-slate-200"
                 defaultValue=""
@@ -275,7 +347,7 @@ export function ProjectForm({
                 }}
               >
                 <option value="">Usar slug das tags existentes</option>
-                {tags.map((tag) => (
+                {availableTags.map((tag) => (
                   <option key={tag.id} value={tag.slug}>
                     {tag.label} — {tag.slug}
                   </option>

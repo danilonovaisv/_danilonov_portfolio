@@ -4,9 +4,15 @@ export const fetchCache = 'force-no-store';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { createClient } from '@/lib/supabase/server';
-import { togglePublish } from '@/lib/supabase/queries/projects';
+import { requireAdminAccess } from '@/lib/admin/server-access';
+import {
+  toggleFeaturedOnPortfolio,
+  togglePublish,
+} from '@/lib/supabase/queries/projects';
 import { ADMIN_NAVIGATION } from '@/config/admin-navigation';
+import { buildSupabaseStorageUrl } from '@/lib/supabase/urls';
+import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
+import { isVideo } from '@/utils/utils';
 
 type Props = {
   searchParams: Promise<{
@@ -21,7 +27,7 @@ type Props = {
 export default async function TrabalhosPage(props: Props) {
   const searchParams = await props.searchParams;
 
-  const supabase = await createClient();
+  const { supabase } = await requireAdminAccess();
 
   const resolvedSearchParams = searchParams || {};
 
@@ -54,11 +60,16 @@ export default async function TrabalhosPage(props: Props) {
       supabase
         .from('portfolio_tags')
         .select('id, label, slug')
-        .order('sort_order', { ascending: true, nullsFirst: false }),
+        .order('label', { ascending: true }),
     ]);
 
   if (projectsError) {
-    console.error('[admin/trabalhos] Erro ao listar projetos:', projectsError);
+    console.error(
+      '[admin/trabalhos] Erro ao listar projetos:',
+      projectsError.message,
+      projectsError.details,
+      projectsError.hint
+    );
   }
 
   const projectIds = (baseProjects ?? []).map((project) => project.id);
@@ -73,7 +84,9 @@ export default async function TrabalhosPage(props: Props) {
   if (projectTagsError) {
     console.error(
       '[admin/trabalhos] Erro ao listar tags dos projetos:',
-      projectTagsError
+      projectTagsError.message,
+      projectTagsError.details,
+      projectTagsError.hint
     );
   }
 
@@ -144,7 +157,7 @@ export default async function TrabalhosPage(props: Props) {
         {projectsError ? (
           <div className="border-b border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
             Falha ao carregar projetos. Verifique permissões/filtros no Supabase
-            e recarregue a página.
+            e recarregue a página. {projectsError.message}
           </div>
         ) : null}
         <table className="min-w-full text-sm">
@@ -168,12 +181,9 @@ export default async function TrabalhosPage(props: Props) {
                 <td className="px-4 py-3 font-medium text-white">
                   <div className="flex items-center gap-3">
                     {project.thumbnail_path && (
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/portfolio-media/${project.thumbnail_path}`}
+                      <AdminMediaThumb
+                        path={project.thumbnail_path}
                         alt={project.title}
-                        width={64} // Assuming width of 16 * 4 = 64px at 1x scale
-                        height={40} // Assuming height of 10 * 4 = 40px at 1x scale
-                        className="h-10 w-16 rounded object-cover border border-white/10"
                       />
                     )}
                     <span>{project.title}</span>
@@ -223,6 +233,26 @@ export default async function TrabalhosPage(props: Props) {
                       </span>
                     )}
                   </div>
+                  <form action={toggleFeaturedOnPortfolio} className="mt-2">
+                    <input type="hidden" name="id" value={project.id} />
+                    <input
+                      type="hidden"
+                      name="nextStatus"
+                      value={project.featured_on_portfolio ? 'false' : 'true'}
+                    />
+                    <button
+                      type="submit"
+                      className={`rounded px-2 py-1 text-xs font-semibold ${
+                        project.featured_on_portfolio
+                          ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/30'
+                          : 'bg-slate-700 text-slate-200 border border-white/10'
+                      }`}
+                    >
+                      {project.featured_on_portfolio
+                        ? 'Em destaque'
+                        : 'Destacar'}
+                    </button>
+                  </form>
                 </td>
                 <td className="px-4 py-3 text-slate-300">
                   <div className="flex flex-col gap-1 text-xs">
@@ -262,7 +292,7 @@ export default async function TrabalhosPage(props: Props) {
                       <span className="text-slate-400">Portfólio:</span>
                       {project.featured_on_portfolio ? (
                         <span className="rounded bg-emerald-500/15 px-2 py-1 text-emerald-100">
-                          #{project.featured_portfolio_order ?? '—'}
+                          Ativo
                         </span>
                       ) : (
                         <span className="text-slate-500">—</span>
@@ -406,5 +436,40 @@ function Filters({
         </Link>
       </div>
     </form>
+  );
+}
+
+function resolveMediaUrl(path: string) {
+  return buildSupabaseStorageUrl('portfolio-media', path) ?? path;
+}
+
+function AdminMediaThumb({ path, alt }: { path: string; alt: string }) {
+  const src = resolveMediaUrl(path);
+
+  if (isVideo(src)) {
+    return (
+      <div className="h-10 w-16 overflow-hidden rounded border border-white/10 bg-black/30">
+        <video
+          src={src}
+          muted
+          playsInline
+          loop
+          autoPlay
+          poster={DEFAULT_VIDEO_POSTER}
+          className="h-full w-full object-cover"
+          aria-label={alt}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={64}
+      height={40}
+      className="h-10 w-16 rounded border border-white/10 object-cover"
+    />
   );
 }
