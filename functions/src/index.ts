@@ -94,6 +94,7 @@ export const ssr_modern = onRequest(
     region: 'us-central1',
     memory: '1GiB',
     timeoutSeconds: 60,
+    enforceAppCheck: true, // Rejeita requisições com tokens App Check ausentes ou inválidos.
   },
   async (req, res) => {
     try {
@@ -115,7 +116,7 @@ export const ssr_modern = onRequest(
         .status(500)
         .send(
           'Internal Server Error - SSR Failed: ' +
-            (err instanceof Error ? err.message : String(err))
+          (err instanceof Error ? err.message : String(err))
         );
     }
   }
