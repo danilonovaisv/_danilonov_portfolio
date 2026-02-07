@@ -114,3 +114,6 @@ firepit-log.txt
 .cache/
 artifacts/
 deploy-public/
+
+# Firebase local auth cache (never commit)
+.agent_config/configstore/firebase-tools.json
