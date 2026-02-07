@@ -104,51 +104,31 @@ function applyPreferredSize(preferred?: PreferredSize): ProjectGridLayout | null
 }
 
 function buildLayout(
-  projectType: ProjectType,
+  _projectType: ProjectType,
   index: number,
   preferredSize?: PreferredSize
 ): ProjectGridLayout {
-  /**
-   * Layout Pattern para Portfolio Grid:
-   * - Rows devem sempre somar 12 colunas (edge-to-edge)
-   * - Altura fixa no desktop para uniformidade visual
-   * - Pattern: [5+7], [7+5], [4+4+4], [6+6], [8+4], [4+8]
-   */
+  // Preferred size from admin has priority.
   const override = applyPreferredSize(preferredSize);
   if (override) return override;
 
-  const pairedLayouts: ProjectGridLayout[] = [
-    // Row pattern: 6 + 6 = 12 (Ensures first row is full width)
+  const automaticLayouts: ProjectGridLayout[] = [
+    // 2 cards row: 8 + 4
     {
-      cols: 'md:col-span-6 lg:col-span-6',
+      cols: 'md:col-span-8 lg:col-span-8',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw',
-      size: 'md',
-    },
-    {
-      cols: 'md:col-span-6 lg:col-span-6',
-      height: 'min-h-[320px]',
-      aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw',
-      size: 'md',
-    },
-    // Row pattern: 7 + 5 = 12
-    {
-      cols: 'md:col-span-5 lg:col-span-7',
-      height: 'min-h-[320px]',
-      aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 58vw, 58vw',
+      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 66vw',
       size: 'lg',
     },
     {
-      cols: 'md:col-span-3 lg:col-span-5',
+      cols: 'md:col-span-4 lg:col-span-4',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 42vw, 42vw',
-      size: 'md',
+      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+      size: 'sm',
     },
-    // Row pattern: 4 + 4 + 4 = 12 (3 cards per row)
+    // 3 cards row: 4 + 4 + 4
     {
       cols: 'md:col-span-4 lg:col-span-4',
       height: 'min-h-[320px]',
@@ -170,38 +150,31 @@ function buildLayout(
       sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
       size: 'sm',
     },
-    // Row pattern: 6 + 6 = 12 (2 equal cards)
+    // Additional editorial rhythm
     {
-      cols: 'md:col-span-4 lg:col-span-6',
+      cols: 'md:col-span-8 lg:col-span-8',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, 50vw',
-      size: 'md',
+      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 66vw',
+      size: 'lg',
     },
     {
-      cols: 'md:col-span-4 lg:col-span-6',
+      cols: 'md:col-span-4 lg:col-span-4',
       height: 'min-h-[320px]',
       aspectRatio: 'aspect-[4/5]',
-      sizes: '(max-width: 768px) 100vw, 50vw',
-      size: 'md',
+      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
+      size: 'sm',
+    },
+    {
+      cols: 'md:col-span-8 lg:col-span-12',
+      height: 'min-h-[320px]',
+      aspectRatio: 'aspect-[16/7]',
+      sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 100vw',
+      size: 'wide',
     },
   ];
 
-  // Para projetos do tipo A (featured), usar layouts variados
-  // Para tipo B, usar grid uniforme de 4 colunas
-  if (projectType === 'A') {
-    const layoutIndex = index % pairedLayouts.length;
-    return pairedLayouts[layoutIndex];
-  }
-
-  // Projetos tipo B: sempre 4 colunas (3 por linha no lg)
-  return {
-    cols: 'md:col-span-4 lg:col-span-4',
-    height: 'min-h-[320px]',
-    aspectRatio: 'aspect-[4/5]',
-    sizes: '(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw',
-    size: 'sm',
-  };
+  return automaticLayouts[index % automaticLayouts.length];
 }
 
 function toTagsList(tags?: DbProjectWithTags['tags'] | string[]): string[] {

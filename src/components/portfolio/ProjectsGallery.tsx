@@ -54,7 +54,7 @@ export const ProjectsGallery = ({
   }, [projects, activeFilter]);
 
   const sizePattern = useMemo<ProjectCardSize[]>(
-    () => ['lg', 'sm', 'sm', 'lg', 'sm', 'lg', 'sm', 'wide'],
+    () => ['lg', 'sm', 'sm', 'sm', 'sm', 'lg', 'sm', 'wide'],
     []
   );
 
