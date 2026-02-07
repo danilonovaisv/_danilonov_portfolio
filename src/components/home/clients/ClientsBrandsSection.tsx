@@ -7,7 +7,7 @@ import { HOME_CONTENT } from '@/config/content';
  * ClientsBrandsSection - Exibe logotipos das marcas/clientes
  * Segue o Ghost System v3.0 com animações sutis e responsividade
  */
-import { DynamicAssetImage } from '@/components/DynamicAssetImage';
+import { DynamicAssetImage } from '@/components/ui/shared/DynamicAssetImage';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 
 /**

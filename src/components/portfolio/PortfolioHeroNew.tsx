@@ -27,7 +27,7 @@ const HERO_POSTER = `data:image/svg+xml;utf8,${encodeURIComponent(
   </svg>`
 )}`;
 
-import { DynamicAssetVideo } from '@/components/DynamicAssetVideo';
+import { DynamicAssetVideo } from '@/components/ui/shared/DynamicAssetVideo';
 
 export default function PortfolioHeroNew() {
   const isMobile = useMediaQuery('(max-width: 768px)');

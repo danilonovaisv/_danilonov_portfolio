@@ -14,7 +14,7 @@ import { motionTokens, motionSprings } from '../shared/motion';
 import { SITE_ASSET_KEYS } from '@/config/site-assets';
 import { DEFAULT_VIDEO_POSTER } from '@/lib/video';
 
-import { DynamicAssetVideo } from '@/components/DynamicAssetVideo';
+import { DynamicAssetVideo } from '@/components/ui/shared/DynamicAssetVideo';
 
 export function AboutHero() {
   const prefersReducedMotion = useReducedMotion();

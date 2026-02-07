@@ -4,7 +4,7 @@ import { RefObject } from 'react';
 import { motion } from 'framer-motion';
 import type { OriginBlock } from './data';
 import styles from '@/styles/about-origin.module.css';
-import { DynamicAssetImage } from '@/components/DynamicAssetImage';
+import { DynamicAssetImage } from '@/components/ui/shared/DynamicAssetImage';
 
 interface OriginInfoBlockProps {
   block: OriginBlock & { img?: string };
