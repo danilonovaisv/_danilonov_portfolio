@@ -89,7 +89,11 @@ test-results/
 .agent/*
 !.agent/rules/
 !.agent/workflows/
-.github/
+.github/*
+!.github/workflows/
+.github/workflows/*
+!.github/workflows/firebase-deploy.yml
+!.github/workflows/ai-healing.yml
 
 # Additional Caches
 .next-old/
