@@ -78,7 +78,7 @@ export function Preloader({
             (className ?? '')
           }
           initial={{ opacity: 1, filter: 'blur(0px)', scale: 1 }}
-          exit={{ opacity: 0, filter: 'blur(20px)', scale: 1.05 }}
+          exit={{ opacity: 0, filter: 'blur(20px)' }}
           transition={{
             duration: reduced ? 0.3 : 1,
             ease: [0.22, 1, 0.36, 1],

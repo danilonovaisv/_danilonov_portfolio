@@ -12,6 +12,7 @@ import HeroCopy from './HeroCopy';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useWebGLSupport } from '@/hooks/useWebGLSupport';
+import { useMotionGate } from '@/hooks/useMotionGate';
 
 const CONFIG = {
   preloadMs: 2000,
@@ -22,6 +23,8 @@ export default function HomeHero() {
   const [isLoaded, setIsLoaded] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const supportsWebGL = useWebGLSupport();
+  const motionGate = useMotionGate();
+  const shouldRenderWebGL = supportsWebGL && !motionGate;
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), CONFIG.preloadMs);
@@ -66,7 +69,7 @@ export default function HomeHero() {
         {/* Camada: Ghost WebGL (Z-30) - Agora ativo em mobile com auto-performance */}
         <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
           <div className="sticky top-0 h-screen w-full">
-            {supportsWebGL ? (
+            {shouldRenderWebGL ? (
               <GhostSceneWrapper />
             ) : (
               <div className="absolute inset-0 z-0 animate-pulse opacity-20 bg-[radial-gradient(circle_at_50%_50%,#0a0029_0%,#040013_70%)]" />

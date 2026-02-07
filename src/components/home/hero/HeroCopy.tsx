@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { motion, Variants } from 'framer-motion';
 import type { Group } from 'three';
-import { GHOST_EASE } from '@/config/motion';
+import { GHOST_EASE, MOTION_TOKENS } from '@/config/motion';
 
 import { useGhostReveal } from '@/hooks/useGhostReveal';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -19,7 +19,7 @@ import styles from './HeroCopy.module.css';
 const textContainerAnimation: Variants = {
   initial: {
     opacity: 0,
-    y: 60,
+    y: MOTION_TOKENS.offset.standard,
     filter: 'blur(10px)',
   },
   animate: {
@@ -29,18 +29,18 @@ const textContainerAnimation: Variants = {
     transition: {
       duration: 1.2,
       ease: GHOST_EASE,
-      staggerChildren: 0.15,
+      staggerChildren: MOTION_TOKENS.stagger.normal,
     },
   },
 };
 
 const itemAnimation: Variants = {
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: MOTION_TOKENS.offset.standard },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
+      duration: MOTION_TOKENS.duration.normal,
       ease: GHOST_EASE,
     },
   },

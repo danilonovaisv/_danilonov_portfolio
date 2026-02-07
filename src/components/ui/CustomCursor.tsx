@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
+import { useMotionGate } from '@/hooks/useMotionGate';
 
 export interface CustomCursorProps {
   color?: string;
@@ -15,6 +16,7 @@ export default function CustomCursor({
   const cursorRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const motionGate = useMotionGate();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -25,6 +27,8 @@ export default function CustomCursor({
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
+
+  if (motionGate) return null;
 
   return (
     <motion.div
