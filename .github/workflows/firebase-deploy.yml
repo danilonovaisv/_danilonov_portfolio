@@ -88,6 +88,7 @@ jobs:
 
       - name: Deploy to Firebase
         run: |
+          firebase experiments:enable webframeworks
           firebase deploy --only hosting --project portfolio-danilo-novais --token ${{ secrets.FIREBASE_TOKEN }}
 
       - name: Deploy Functions
