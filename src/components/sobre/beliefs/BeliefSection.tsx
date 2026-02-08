@@ -50,7 +50,7 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
   return (
     <motion.span
       // 🟣 [CONFIG VISUAL]: Define a cor do texto das linhas (desktop)
-      className="block text-blueAccent font-semibold text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
+      className="block text-blueAccent italic font-bold text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
       // 🟣 [CONFIG VISUAL]: Define o tamanho da fonte (Desktop: clamp de 2.8rem a 6rem)
       style={{
         x: lineX,

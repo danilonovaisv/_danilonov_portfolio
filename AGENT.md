@@ -1,4 +1,4 @@
-#AGENT.md - Mission Control para Portfólio Danilo Novais
+# AGENT.md - Mission Control para Portfólio Danilo Novais
 
 Aviso Crítico: Este documento governa o comportamento de todos os Agentes Autônomos (Google Antigravity/Gemini/Claude) interagindo com este repositório. Desvios destas Diretivas são classificados como falhas sistêmicas.
 
@@ -13,7 +13,7 @@ Impacto Visual: A estética prioriza "High-End Editorial" (tipografia limpa, esp
 
 Integridade de Código: Manter uma arquitetura escalável, modular e tipada.
 
-2. CONTEXTO DO PROJETO (O Grafo de Conhecimento)
+1. CONTEXTO DO PROJETO (O Grafo de Conhecimento)
    Stack Tecnológico (Inferido e Obrigatório)
    Core: Next.js 14+ (App Router), TypeScript, React 18.
 
@@ -38,7 +38,7 @@ public/assets/: Modelos 3D (.glb - Obrigatoriamente com Compressão Draco) e Tex
 
 src/hooks/: Custom hooks para lógica reutilizável (ex: useScroll, useMousePosition).
 
-3. REGRAS OPERACIONAIS (Os Guardrails)
+1. REGRAS OPERACIONAIS (Os Guardrails)
    Conjunto de Regras A: WebGL e Performance (CRÍTICO)
    A Lei do "UseFrame": Nunca execute atualizações de estado do React (setState) ou cálculos pesados dentro de useFrame que causem re-renderização do componente. Use referências (useRef) para mutação direta de propriedades no loop de renderização.
 
@@ -48,31 +48,31 @@ Disposição de Recursos: Garanta que todos os Materiais, Geometrias e Texturas 
 
 Precisão de Shader: Sempre especifique precision mediump float; em shaders, a menos que alta precisão seja explicitamente necessária para cálculos de profundidade ou física, para garantir compatibilidade móvel.
 
-Conjunto de Regras B: Padrões de Codificação
+   Conjunto de Regras B: Padrões de Codificação
 Co-localização de Componentes: Se um componente possui shaders ou utilitários únicos, mantenha-os na mesma pasta: /HeroParticles ├── index.tsx ├── vertex.glsl ├── fragment.glsl └── utils.ts
 
 Segurança de Tipos: Proibido any. Use Zod para validar conteúdo vindo de qualquer CMS ou API. Defina interfaces claras para props de componentes.
 
 Estilização: Use Tailwind para layout (Flex/Grid), espaçamento e tipografia. Use CSS padrão ou styled-components apenas para interações de pseudo-elementos complexas não facilmente manipuladas por classes utilitárias.
 
-Conjunto de Regras C: Comportamento do Agente
+   Conjunto de Regras C: Comportamento do Agente
 Planeje Primeiro: Antes de escrever mais de 20 linhas de código ou refatorar um módulo core, crie um plano de implementação em docs/plans/feature-name.md.
 
 Verificação no Navegador: Quando estiver rodando no modo "Loki", você DEVE verificar as mudanças visuais tirando um screenshot usando o Subagente de Navegador e comparando com o estado anterior.
 
 Auto-Correção (Self-Annealing): Se um build falhar, analise o log de erros, proponha uma correção e, se um novo caso de borda for descoberto (ex: conflito de versão do Three.js), atualize este arquivo AGENT.md com a nova restrição.
 
-4. TOOLKIT E HABILIDADES (Skills)
+1. TOOLKIT E HABILIDADES (Skills)
    Habilidades Ativas (Auto-Carregadas)
    skill-webgl-optimizer: Analisar o grafo de cena (scene graph) para redução de draw calls.
 
-skill-shader-debugger: Realçar sintaxe e depurar erros de compilação GLSL.
+   skill-shader-debugger: Realçar sintaxe e depurar erros de compilação GLSL.
 
-skill-nextjs-router: Gerenciar layouts aninhados e templates do App Router.
+   skill-nextjs-router: Gerenciar layouts aninhados e templates do App Router.
 
-skill-asset-compressor: Script para automatizar a compressão de ativos na pasta public/.
+   skill-asset-compressor: Script para automatizar a compressão de ativos na pasta public/.
 
-Fluxo de Trabalho: Criando uma Nova Feature 3D
+   Fluxo de Trabalho: Criando uma Nova Feature 3D
 Definir: Descreva o objetivo visual (ex: "Partículas flutuantes que reagem ao movimento do mouse").
 
 Estruturar (Scaffold): Crie o componente em src/components/canvas/.
@@ -83,11 +83,13 @@ Integrar: Importe o componente na cena principal (Scene.tsx ou CanvasWrapper).
 
 Otimizar: Verifique draw calls e uso de memória de textura.
 
-5. BANCO DE MEMÓRIA (Contexto Persistente)
+1. BANCO DE MEMÓRIA (Contexto Persistente)
    Design Tokens: Cor Primária #E50914 (Referência Nestlé/Vermelho Vibrante), Secundária #121212 (Off-Black/Luxo), Acento #FFFFFF.
 
-Fontes: Inter (UI/Texto), Playfair Display ou similar Serifada Moderna (Títulos/Editorial).
+   Fontes: Inter (UI/Texto), Playfair Display ou similar Serifada Moderna (Títulos/Editorial).
 
-Problema Conhecido: OrbitControls entra em conflito com a rolagem nativa da página. Use Lenis para rolagem suave e desative OrbitControls na rolagem, ou use-o apenas em seções específicas "bloqueadas".
+   Problema Conhecido: OrbitControls entra em conflito com a rolagem nativa da página. Use Lenis para rolagem suave e desative OrbitControls na rolagem, ou use-o apenas em seções específicas "bloqueadas".
 
-Preferência de Animação: Animações de entrada devem ser sutis ("staggered fade-up") e não agressivas.
+   Preferência de Animação: Animações de entrada devem ser sutis ("staggered fade-up") e não agressivas.
+
+   Problema Conhecido (Build/Env): Arquivos .env ou .next podem ficar bloqueados por processos 'next dev' zumbis ou permissões. Se ocorrer erro EPERM no build, verifique processos rodando na porta 3000 e mate-os antes de tentar novamente. Use 'rm -rf' se 'pnpm clean' falhar.

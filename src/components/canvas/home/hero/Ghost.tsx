@@ -14,7 +14,8 @@ import { AnalogDecayShader } from '@/components/canvas/shaders/AnalogShader';
 import { GHOST_CONFIG } from '@/config/ghostConfig';
 
 import { GhostFireflies } from './GhostFireflies';
-import { GhostParticles } from './GhostParticles';
+import { HeroParticles } from '../../HeroParticles';
+// import { GhostParticles } from './GhostParticles'; // Deprecated for Loki Mode
 import { GhostBody } from './ghost/GhostBody';
 import { GhostEyes3D } from './ghost/GhostEyes3D';
 import { useGhostMovement } from './ghost/useGhostMovement';
@@ -97,10 +98,11 @@ export function Ghost({
   return (
     <>
       <GhostFireflies />
-      <GhostParticles
-        ghostGroup={groupRef}
-        movementRef={currentMovementRef}
-        count={_particleCount}
+      // Replaced GhostParticles with HeroParticles
+      <HeroParticles
+        count={5000} // High count for impact
+        baseColor={GHOST_CONFIG.particleColor}
+        hoverColor="#E50914"
       />
       <group ref={groupRef} name="ghost" scale={GHOST_CONFIG.ghostScale}>
         <GhostBody bodyRef={bodyRef} />

@@ -68,6 +68,14 @@ const nextConfig = {
     },
   },
 
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      use: ['raw-loader'],
+    });
+    return config;
+  },
+
   devIndicators: {
     allowedDevOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   },
