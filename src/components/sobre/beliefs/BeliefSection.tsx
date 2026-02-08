@@ -54,7 +54,7 @@ const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
       // 🟣 [CONFIG VISUAL]: Define o tamanho da fonte (Desktop: clamp de 2.8rem a 6rem)
       style={{
         x: lineX,
-        fontSize: 'clamp(2.8rem,6.8vw,6rem)',
+        fontSize: 'clamp(2.6rem,5.8vw,6rem)',
         lineHeight: 0.85,
       }}
     >
