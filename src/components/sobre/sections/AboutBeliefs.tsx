@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { useScroll } from 'framer-motion';
+import { useScroll, MotionValue } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
 // Importações dos sub-componentes (Certifique-se que os caminhos estão corretos)
-import { BeliefSection, BeliefMobileTextLayer } from '../beliefs/BeliefSection';
-import { BeliefFinalSection } from '../beliefs/BeliefFinalSection';
-import { BeliefFinalSectionOverlay } from '../beliefs/BeliefFinalSectionOverlay';
+import {
+  BeliefSection,
+  BeliefMobileTextLayer,
+  BeliefFinalSection,
+  BeliefFinalSectionOverlay,
+  BeliefFixedHeader
+} from '../beliefs';
 import { BRAND } from '@/config/brand';
 
 // [CORREÇÃO CRÍTICA]: Tratamento robusto para importação dinâmica.
@@ -55,8 +59,9 @@ export function AboutBeliefs() {
       className="relative w-full"
       style={{ minHeight: `${(PHRASES.length + 2) * 100}vh` }} // Garante altura baseada no conteúdo
     >
+      <BeliefFixedHeader scrollProgress={scrollYProgress} />
       {/* LAYER 1: Seções de Conteúdo (Texto Scrollável) */}
-      <div className="relative z-30">
+      <div className="relative z-20">
         {/* Adicionei verificações para evitar erro se PHRASES/COLORS estiverem vazios */}
         {PHRASES.map((phrase, index) => (
           <BeliefSection
@@ -84,8 +89,8 @@ export function AboutBeliefs() {
         <BeliefFinalSectionOverlay />
       </div>
 
-      {/* LAYER 3: Canvas 3D (Sticky - Top Layer Z-50) */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none z-50">
+      {/* LAYER 3: Canvas 3D (Sticky - Top Layer Z-60) */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-60">
         <div className="sticky top-0 w-full h-screen overflow-hidden pointer-events-auto flex md:items-center md:justify-center items-end justify-start">
           <div className="w-full h-full md:absolute md:inset-0 relative">
             <GhostScene scrollProgress={scrollYProgress} />

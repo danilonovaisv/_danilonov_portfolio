@@ -1,250 +1,71 @@
-// BeliefSection.tsx
-'use client';
-import React, { useRef } from 'react';
-import {
-  motion,
-  useScroll,
-  useTransform,
-  cubicBezier,
-  MotionValue,
-} from 'framer-motion';
+# Agent Instructions
 
-// Easing Ghost Padrão: cubic-bezier(0.22, 1, 0.36, 1)
-const ghostEase = cubicBezier(0.22, 1, 0.36, 1);
+> This file is mirrored across CLAUDE.md, AGENTS.md, and GEMINI.md so the same instructions load in any AI environment.
 
-interface BeliefLineProps {
-  line: string;
-  index: number;
-  scrollYProgress: MotionValue<number>;
-  animationRange: [number, number];
-}
+You operate within a 3-layer architecture that separates concerns to maximize reliability. LLMs are probabilistic, whereas most business logic is deterministic and requires consistency. This system fixes that mismatch.
 
-/**
- * Hook para detectar mobile
- */
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = React.useState(false);
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  return isMobile;
-};
+## The 3-Layer Architecture
 
-/**
- * Desktop: Texto animado na esquerda (linha por linha)
- */
-const BeliefLineDesktop: React.FC<BeliefLineProps> = ({
-  line,
-  index,
-  scrollYProgress,
-  animationRange,
-}) => {
-  const lineX = useTransform(
-    scrollYProgress,
-    [animationRange[0] + index * 0.02, animationRange[1] + index * 0.02],
-    ['-100%', '0%'],
-    { ease: ghostEase }
-  );
-  return (
-    <motion.span
-      // 🟣 [CONFIG VISUAL]: Define a cor do texto das linhas (desktop)
-      className="block text-blueAccent font-semibold text-left whitespace-pre-line select-none tracking-[-0.04em] max-w-fit"
-      // 🟣 [CONFIG VISUAL]: Define o tamanho da fonte (Desktop: clamp de 2rem a 6.5rem)
-      style={{ x: lineX, fontSize: 'clamp(4rem,9vw,8.5rem)', lineHeight: 0.85 }}
-    >
-      {line}
-    </motion.span>
-  );
-};
+**Layer 1: Directive (What to do)**
+- Basically just SOPs written in Markdown, live in `directives/`
+- Define the goals, inputs, tools/scripts to use, outputs, and edge cases
+- Natural language instructions, like you'd give a mid-level employee
 
-interface BeliefSectionProps {
-  text: string;
-  bgColor: string;
-  isFirst?: boolean;
-  /**
-   * Em mobile, o texto é renderizado em uma camada fixed separada.
-   * Esta prop controla se deve renderizar o texto inline (desktop) ou não (mobile usa camada fixed)
-   */
-  isMobileTextLayer?: boolean;
-}
+**Layer 2: Orchestration (Decision making)**
+- This is you. Your job: intelligent routing.
+- Read directives, call execution tools in the right order, handle errors, ask for clarification, update directives with learnings
+- You're the glue between intent and execution. E.g you don't try scraping websites yourself—you read `directives/scrape_website.md` and come up with inputs/outputs and then run `execution/scrape_single_site.py`
 
-export const BeliefSection: React.FC<BeliefSectionProps> = ({
-  text,
-  bgColor,
-  isFirst = false,
-  isMobileTextLayer = false, // Nova prop para controle explícito
-}) => {
-  const containerRef = useRef(null);
-  const isMobile = useIsMobile();
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
+**Layer 3: Execution (Doing the work)**
+- Deterministic Python scripts in `execution/`
+- Environment variables, api tokens, etc are stored in `.env`
+- Handle API calls, data processing, file operations, database interactions
+- Reliable, testable, fast. Use scripts instead of manual work. Commented well.
 
-  // Desktop Ranges
-  // isFirst: Atrasar entrada para garantir que o FixedHeader (parent 0-0.35) terminou.
-  // Como este componente usa scroll relativo a si mesmo (0-1), e é o primeiro,
-  // 0.5 aqui ≈ momento que o usuário já scrollou metade da primeira tela.
+**Why this works:** if you do everything yourself, errors compound. 90% accuracy per step = 59% success over 5 steps. The solution is push complexity into deterministic code. That way you just focus on decision-making.
 
-  const animationRange: [number, number] = isFirst ? [0.55, 0.7] : [0.2, 0.35];
-  const exitRange: [number, number] = [0.8, 0.95];
+## Operating Principles
 
-  const desktopOpacity = useTransform(
-    scrollYProgress,
-    [animationRange[0], animationRange[1], exitRange[0], exitRange[1]],
-    [0, 1, 1, 0]
-  );
+**1. Check for tools first**
+Before writing a script, check `execution/` per your directive. Only create new scripts if none exist.
 
-  const yScroll = useTransform(scrollYProgress, [0.7, 0.95], ['0vh', '-100vh']);
+**2. Self-anneal when things break**
+- Read error message and stack trace
+- Fix the script and test it again (unless it uses paid tokens/credits/etc—in which case you check w user first)
+- Update the directive with what you learned (API limits, timing, edge cases)
+- Example: you hit an API rate limit → you then look into API → find a batch endpoint that would fix → rewrite script to accommodate → test → update directive.
 
-  const lines = text.split('\n');
+**3. Update directives as you learn**
+Directives are living documents. When you discover API constraints, better approaches, common errors, or timing expectations—update the directive. But don't create or overwrite directives without asking unless explicitly told to. Directives are your instruction set and must be preserved (and improved upon over time, not extemporaneously used and then discarded).
 
-  return (
-    <motion.section
-      ref={containerRef}
-      aria-label={text.replace(/\n/g, ' ')}
-      // 🟣 [CONFIG VISUAL]: Define a cor de fundo da seção
-      style={{ backgroundColor: bgColor }}
-      className={`relative w-full h-screen flex overflow-hidden ${
-        isMobile
-          ? 'items-end justify-start pb-32' // Mobile: espaço para texto fixed no footer
-          : 'items-center justify-start px-[5%] md:px-[7.5%] lg:px-[10%]'
-      }`}
-    >
-      {/* Desktop: Texto inline */}
-      {!isMobile && !isMobileTextLayer && (
-        <motion.div
-          style={{ y: yScroll, opacity: desktopOpacity }}
-          className="relative z-30 w-full flex flex-col justify-start max-w-[80vw]"
-        >
-          {lines.map((line, i) => (
-            <BeliefLineDesktop
-              key={i} // Adicionado key
-              line={line}
-              index={i}
-              scrollYProgress={scrollYProgress}
-              animationRange={animationRange}
-            />
-          ))}
-        </motion.div>
-      )}
-      {/* Mobile: Texto será renderizado em camada fixed no AboutBeliefs */}
-    </motion.section>
-  );
-};
+## Self-annealing loop
 
-/**
- * Componente para texto mobile fixo no footer.
- * Renderizado em AboutBeliefs como camada separada.
- */
-interface MobileTextLayerProps {
-  phrases: string[];
-  scrollYProgress: MotionValue<number>;
-}
+Errors are learning opportunities. When something breaks:
+1. Fix it
+2. Update the tool
+3. Test tool, make sure it works
+4. Update directive to include new flow
+5. System is now stronger
 
-export const BeliefMobileTextLayer: React.FC<MobileTextLayerProps> = ({
-  phrases,
-  scrollYProgress,
-}) => {
-  const [isMobile, setIsMobile] = React.useState(false);
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+## File Organization
 
-  if (!isMobile) return null;
+**Deliverables vs Intermediates:**
+- **Deliverables**: Google Sheets, Google Slides, or other cloud-based outputs that the user can access
+- **Intermediates**: Temporary files needed during processing
 
-  // Divisão do scroll total em segmentos para cada frase
-  const totalPhrases = phrases.length;
-  const segmentSize = 1 / (totalPhrases + 1); // +1 para a seção final
+**Directory structure:**
+- `.tmp/` - All intermediate files (dossiers, scraped data, temp exports). Never commit, always regenerated.
+- `execution/` - Python scripts (the deterministic tools)
+- `directives/` - SOPs in Markdown (the instruction set)
+- `.env` - Environment variables and API keys
+- `credentials.json`, `token.json` - Google OAuth credentials (required files, in `.gitignore`)
 
-  return (
-    <>
-      {phrases.map((phrase, index) => (
-        <MobilePhrase
-          key={index} // Adicionado key
-          text={phrase}
-          index={index}
-          totalPhrases={totalPhrases}
-          segmentSize={segmentSize}
-          scrollYProgress={scrollYProgress}
-        />
-      ))}
-    </>
-  );
-};
+**Key principle:** Local files are only for processing. Deliverables live in cloud services (Google Sheets, Slides, etc.) where the user can access them. Everything in `.tmp/` can be deleted and regenerated.
 
-interface MobilePhraseProps {
-  text: string;
-  index: number;
-  totalPhrases: number;
-  segmentSize: number;
-  scrollYProgress: MotionValue<number>;
-}
+## Summary
 
-const MobilePhrase: React.FC<MobilePhraseProps> = ({
-  text,
-  index,
-  totalPhrases,
-  scrollYProgress,
-}) => {
-  // MobilePhrase: Calcula seus próprios segmentos baseados no range útil [0.35 - 0.95]
-  const usefulRangeStart = 0.35;
-  const usefulRangeEnd = 0.95;
-  const totalRange = usefulRangeEnd - usefulRangeStart;
-  const adjustedSegmentSize = totalRange / totalPhrases;
+You sit between human intent (directives) and deterministic execution (Python scripts). Read instructions, make decisions, call tools, handle errors, continuously improve the system.
 
-  const startPoint = usefulRangeStart + index * adjustedSegmentSize;
-  const endPoint = startPoint + adjustedSegmentSize;
+Be pragmatic. Be reliable. Self-anneal.
 
-  // Entry: 10% do segmento
-  // Exit: 10% do segmento
-  const entryStart = startPoint;
-  const entryEnd = startPoint + adjustedSegmentSize * 0.15;
-  const exitStart = endPoint - adjustedSegmentSize * 0.15;
-  const exitEnd = endPoint;
 
-  // X: Entra da DIREITA (+24px), mantém centro (0px), sai para a ESQUERDA (-24px)
-  const x = useTransform(
-    scrollYProgress,
-    [entryStart, entryEnd, exitStart, exitEnd],
-    ['24px', '0px', '0px', '-24px'],
-    { ease: ghostEase }
-  );
-
-  // Opacity: Fade in com entrada, fade out antes da próxima
-  const opacity = useTransform(
-    scrollYProgress,
-    [entryStart, entryEnd, exitStart, exitEnd],
-    [0, 1, 1, 0],
-    { ease: ghostEase }
-  );
-
-  // Blur: 10px na entrada/saída, 0 no centro
-  const blur = useTransform(
-    scrollYProgress,
-    [entryStart, entryEnd, exitStart, exitEnd],
-    ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)'],
-    { ease: ghostEase }
-  );
-
-  return (
-    <motion.div
-      style={{ x, opacity, filter: blur }}
-      className="fixed bottom-[25%] left-0 right-0 z-60 text-center pointer-events-none px-8"
-    >
-      {/* 🟣 [CONFIG VISUAL]: Define cor e tamanho do texto (Mobile: clamp 2rem-3.5rem) */}
-      <span className="text-blueAccent italic font-bold text-[clamp(2rem,6vw,3.5rem)] leading-[1.4] tracking-widest block w-full mx-auto">
-        {text}
-      </span>
-    </motion.div>
-  );
-};
-
-// Exportar o hook para uso em outros componentes
-export { useIsMobile };

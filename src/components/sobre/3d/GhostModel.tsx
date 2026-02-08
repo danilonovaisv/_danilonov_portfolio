@@ -130,6 +130,8 @@ const GhostModel: React.FC<GhostModelProps> = ({
       // Fase Final: mantém âncora central e centraliza X
       targetX = 0;
       targetY = config.startY;
+      // OBS: Se quiser que ele saia para cima, use: targetY = config.exitY;
+      // Por enquanto, mantemos no centro para compor com o texto final.
     }
 
     // Saída Suave (Exit Phase)
@@ -146,8 +148,8 @@ const GhostModel: React.FC<GhostModelProps> = ({
     // X Position Logic with Wiggle
     const wiggleX = isMobile
       ? Math.sin(state.clock.getElapsedTime() * 2.5) *
-        config.floatAmplitude *
-        0.5
+      config.floatAmplitude *
+      0.5
       : 0;
     const scrollDriftX =
       Math.sin(t * Math.PI * 2) * config.scrollResponse * 0.1;

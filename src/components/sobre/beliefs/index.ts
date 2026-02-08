@@ -1,5 +1,5 @@
-// Belief Section Components
-export { BeliefSection, BeliefMobileTextLayer } from './BeliefSection';
-export { BeliefFinalSection } from './BeliefFinalSection';
-export { BeliefFixedHeader } from './BeliefFixedHeader';
-export { BeliefFinalSectionOverlay } from './BeliefFinalSectionOverlay';
+export * from './BeliefSection';
+export * from './BeliefMobileTextLayer';
+export * from './BeliefFinalSection';
+export * from './BeliefFixedHeader';
+export * from './BeliefFinalSectionOverlay';

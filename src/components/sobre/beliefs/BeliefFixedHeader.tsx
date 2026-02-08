@@ -1,38 +1,97 @@
 'use client';
 
 import React from 'react';
-import { motion, MotionValue } from 'framer-motion';
+import { motion, MotionValue, useTransform, cubicBezier } from 'framer-motion';
 
 interface BeliefFixedHeaderProps {
-  opacity: MotionValue<number>;
+  scrollProgress: MotionValue<number>;
+}
+
+// Helper para encapsular a lógica de Morph (Blur + Opacity + Y)
+const MorphText: React.FC<{
+  children: React.ReactNode;
   progress: MotionValue<number>;
-}
+  range: [number, number];
+  className?: string;
+}> = ({ children, progress, range, className }) => {
+  const ghostEase = cubicBezier(0.22, 1, 0.36, 1);
+  const blur = useTransform(progress, range, ['blur(12px)', 'blur(0px)'], {
+    ease: ghostEase,
+  });
+  const opacity = useTransform(progress, range, [0, 1], { ease: ghostEase });
+  const y = useTransform(progress, range, [40, 0], { ease: ghostEase });
 
-export function BeliefFixedHeader({
-  opacity,
-  progress,
-}: BeliefFixedHeaderProps) {
   return (
-    <motion.div
-      className="fixed top-0 left-0 w-full p-6 z-50 pointer-events-none mix-blend-difference"
-      style={{ opacity }}
+    <motion.span
+      style={{ filter: blur, opacity, y }}
+      className={`block ${className || ''}`}
     >
-      <div className="flex justify-between items-center w-full max-w-[1920px] mx-auto text-white">
-        <span className="text-sm uppercase tracking-widest font-bold opacity-80 backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm">
-          MANIFESTO
-        </span>
-        <span className="text-sm uppercase tracking-widest opacity-60 backdrop-blur-sm bg-black/20 px-2 py-1 rounded-sm hidden md:block">
-          {new Date().getFullYear()}
-        </span>
-      </div>
-
-      {/* Top progress bar (optional visual cue) */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-white/20">
-        <motion.div
-          className="h-full bg-white origin-left"
-          style={{ scaleX: progress }}
-        />
-      </div>
-    </motion.div>
+      {children}
+    </motion.span>
   );
-}
+};
+
+export const BeliefFixedHeader: React.FC<BeliefFixedHeaderProps> = ({
+  scrollProgress,
+}) => {
+  // Opacity for the header container itself
+  // Fade IN: 0 -> 0.1
+  // Visible: 0.1 -> 0.75
+  // Fade OUT: 0.75 -> 0.9 (Changes to avoid overlap with Final Section)
+  const opacity = useTransform(scrollProgress, [0, 0.1, 0.75, 0.9], [0, 1, 1, 0]);
+
+  return (
+    <motion.header
+      style={{ opacity }}
+      className="sticky top-0 z-50 flex h-screen pointer-events-none"
+    >
+      <div className="std-grid w-full h-full">
+        <div className="flex h-full items-start md:items-center justify-end pt-32 md:pt-0 col-span-12">
+          <div className="flex flex-col items-end text-right w-full max-w-[280px] md:max-w-[500px] lg:max-w-[850px] pr-[5%] md:pr-0">
+            {/* Primeira parte: "Acredito no..." */}
+            <div className="flex flex-col items-end text-right w-full">
+              {/* 🟣 [CONFIG VISUAL]: Define a cor do título principal e o tamanho da fonte (5xl a 9xl) */}
+              <h2 className="text-white text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display leading-[0.85] tracking-tighter mb-4 md:mb-12 uppercase font-black mix-blend-difference whitespace-nowrap">
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.1, 0.2]}>
+                    Acredito no
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.12, 0.22]}>
+                    design que
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.14, 0.24]}>
+                    muda o dia
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.16, 0.26]}>
+                    de alguém.
+                  </MorphText>
+                </div>
+              </h2>
+
+              {/* Segunda parte: "Não pelo choque..." */}
+              {/* 🟣 [CONFIG VISUAL]: Define a cor e tamanho do subtítulo (sm a 4xl) */}
+              <div className="flex flex-col items-end gap-1 text-white text-sm md:text-2xl lg:text-4xl font-h1 leading-[1.2] tracking-normal font-bold whitespace-nowrap">
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.22, 0.32]}>
+                    Não pelo choque,
+                  </MorphText>
+                </div>
+                <div className="overflow-visible">
+                  <MorphText progress={scrollProgress} range={[0.24, 0.34]}>
+                    mas pela conexão.
+                  </MorphText>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.header>
+  );
+};

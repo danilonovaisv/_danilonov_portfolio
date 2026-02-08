@@ -5,7 +5,7 @@ import { ContactShadows } from '@react-three/drei';
 import GhostModel from './GhostModel'; // Caminho relativo para GhostModel
 import { MotionValue, motion, useTransform, cubicBezier } from 'framer-motion';
 // Importar o hook do BeliefSection.tsx
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '../beliefs/BeliefSection';
 
 interface GhostSceneProps {
   scrollProgress: MotionValue<number>;
