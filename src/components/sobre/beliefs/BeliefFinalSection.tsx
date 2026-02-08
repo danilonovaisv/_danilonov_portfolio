@@ -6,7 +6,10 @@ interface BeliefFinalSectionProps {
   bgColor: string;
 }
 
-export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({ scrollProgress, bgColor }) => {
+export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({
+  scrollProgress,
+  bgColor,
+}) => {
   const opacity = useTransform(scrollProgress, [0.8, 1], [0, 1]);
   const y = useTransform(scrollProgress, [0.8, 1], [100, 0]);
 
@@ -19,14 +22,14 @@ export const BeliefFinalSection: React.FC<BeliefFinalSectionProps> = ({ scrollPr
         style={{ y }}
         className="text-white text-lg md:text-xl max-w-2xl font-light leading-relaxed"
       >
-        A verdadeira inovação reside na intersecção entre arte e engenharia.
-        Não construímos apenas interfaces; esculpimos experiências.
+        A verdadeira inovação reside na intersecção entre arte e engenharia. Não
+        construímos apenas interfaces; esculpimos experiências.
       </motion.p>
 
       <motion.div
         initial={{ scaleY: 0 }}
         whileInView={{ scaleY: 1 }}
-        transition={{ duration: 1, ease: "circOut" }}
+        transition={{ duration: 1, ease: 'circOut' }}
         className="mt-8 w-px h-24 bg-white/20 origin-top"
       />
     </motion.div>

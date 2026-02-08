@@ -10,7 +10,7 @@ import {
   BeliefMobileTextLayer,
   BeliefFinalSection,
   BeliefFinalSectionOverlay,
-  BeliefFixedHeader
+  BeliefFixedHeader,
 } from '../beliefs';
 import { BRAND } from '@/config/brand';
 

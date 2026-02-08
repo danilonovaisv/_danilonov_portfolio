@@ -90,7 +90,8 @@ export default function ClientsBrandsSection() {
                     alt={logo.alt}
                     fallbackUrl={logo.src || ''}
                     priority={shouldEagerLoad}
-                    className="w-full h-full object-contain filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100"
+                    objectFit="contain"
+                    className="w-full h-full filter brightness-0 invert opacity-60 transition-all duration-500 group-hover:opacity-100"
                   />
                 </div>
               </motion.li>
